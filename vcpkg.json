@@ -1,0 +1,25 @@
+{
+    "name": "container-system",
+    "version": "2.0.0",
+    "description": "Thread-safe serializable container library with advanced features",
+    "license": "BSD-3-Clause",
+    "dependencies": [
+        "fmt"
+    ],
+    "features": {
+        "tests": {
+            "description": "Build unit tests",
+            "dependencies": [
+                "gtest"
+            ]
+        },
+        "samples": {
+            "description": "Build sample applications",
+            "dependencies": []
+        },
+        "docs": {
+            "description": "Build documentation",
+            "dependencies": []
+        }
+    }
+}
