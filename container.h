@@ -9,9 +9,9 @@
 #pragma once
 
 // Core components
-#include "core/container.h"
-#include "core/value.h"
-#include "core/value_types.h"
+#include "container/core/container.h"
+#include "container/core/value.h"
+#include "container/core/value_types.h"
 
 // Note: Internal components like variant_value, thread_safe_container, and simd_processor
 // are not exposed in the public API

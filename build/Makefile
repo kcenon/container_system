@@ -65,6 +65,16 @@ CMAKE_BINARY_DIR = /Users/dongcheolshin/Sources/container_system/build
 #=============================================================================
 # Targets provided globally by CMake.
 
+# Special rule for the target test
+test:
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Running tests..."
+	/opt/homebrew/bin/ctest $(ARGS)
+.PHONY : test
+
+# Special rule for the target test
+test/fast: test
+.PHONY : test/fast
+
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Running CMake cache editor..."
@@ -173,6 +183,58 @@ container: cmake_check_build_system
 container/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/container.dir/build.make CMakeFiles/container.dir/build
 .PHONY : container/fast
+
+#=============================================================================
+# Target rules for targets named container_unit_tests
+
+# Build rule for target.
+container_unit_tests: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 container_unit_tests
+.PHONY : container_unit_tests
+
+# fast build rule for target.
+container_unit_tests/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/container_unit_tests.dir/build.make CMakeFiles/container_unit_tests.dir/build
+.PHONY : container_unit_tests/fast
+
+#=============================================================================
+# Target rules for targets named container_benchmark_tests
+
+# Build rule for target.
+container_benchmark_tests: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 container_benchmark_tests
+.PHONY : container_benchmark_tests
+
+# fast build rule for target.
+container_benchmark_tests/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/container_benchmark_tests.dir/build.make CMakeFiles/container_benchmark_tests.dir/build
+.PHONY : container_benchmark_tests/fast
+
+#=============================================================================
+# Target rules for targets named benchmark
+
+# Build rule for target.
+benchmark: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 benchmark
+.PHONY : benchmark
+
+# fast build rule for target.
+benchmark/fast:
+	$(MAKE) $(MAKESILENT) -f _deps/benchmark-build/src/CMakeFiles/benchmark.dir/build.make _deps/benchmark-build/src/CMakeFiles/benchmark.dir/build
+.PHONY : benchmark/fast
+
+#=============================================================================
+# Target rules for targets named benchmark_main
+
+# Build rule for target.
+benchmark_main: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 benchmark_main
+.PHONY : benchmark_main
+
+# fast build rule for target.
+benchmark_main/fast:
+	$(MAKE) $(MAKESILENT) -f _deps/benchmark-build/src/CMakeFiles/benchmark_main.dir/build.make _deps/benchmark-build/src/CMakeFiles/benchmark_main.dir/build
+.PHONY : benchmark_main/fast
 
 core/container.o: core/container.cpp.o
 .PHONY : core/container.o
@@ -318,6 +380,78 @@ internal/variant_value.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/container.dir/build.make CMakeFiles/container.dir/internal/variant_value.cpp.s
 .PHONY : internal/variant_value.cpp.s
 
+tests/benchmark_tests.o: tests/benchmark_tests.cpp.o
+.PHONY : tests/benchmark_tests.o
+
+# target to build an object file
+tests/benchmark_tests.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/container_benchmark_tests.dir/build.make CMakeFiles/container_benchmark_tests.dir/tests/benchmark_tests.cpp.o
+.PHONY : tests/benchmark_tests.cpp.o
+
+tests/benchmark_tests.i: tests/benchmark_tests.cpp.i
+.PHONY : tests/benchmark_tests.i
+
+# target to preprocess a source file
+tests/benchmark_tests.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/container_benchmark_tests.dir/build.make CMakeFiles/container_benchmark_tests.dir/tests/benchmark_tests.cpp.i
+.PHONY : tests/benchmark_tests.cpp.i
+
+tests/benchmark_tests.s: tests/benchmark_tests.cpp.s
+.PHONY : tests/benchmark_tests.s
+
+# target to generate assembly for a file
+tests/benchmark_tests.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/container_benchmark_tests.dir/build.make CMakeFiles/container_benchmark_tests.dir/tests/benchmark_tests.cpp.s
+.PHONY : tests/benchmark_tests.cpp.s
+
+tests/unit_tests.o: tests/unit_tests.cpp.o
+.PHONY : tests/unit_tests.o
+
+# target to build an object file
+tests/unit_tests.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/container_unit_tests.dir/build.make CMakeFiles/container_unit_tests.dir/tests/unit_tests.cpp.o
+.PHONY : tests/unit_tests.cpp.o
+
+tests/unit_tests.i: tests/unit_tests.cpp.i
+.PHONY : tests/unit_tests.i
+
+# target to preprocess a source file
+tests/unit_tests.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/container_unit_tests.dir/build.make CMakeFiles/container_unit_tests.dir/tests/unit_tests.cpp.i
+.PHONY : tests/unit_tests.cpp.i
+
+tests/unit_tests.s: tests/unit_tests.cpp.s
+.PHONY : tests/unit_tests.s
+
+# target to generate assembly for a file
+tests/unit_tests.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/container_unit_tests.dir/build.make CMakeFiles/container_unit_tests.dir/tests/unit_tests.cpp.s
+.PHONY : tests/unit_tests.cpp.s
+
+utilities/convert_string_stub.o: utilities/convert_string_stub.cpp.o
+.PHONY : utilities/convert_string_stub.o
+
+# target to build an object file
+utilities/convert_string_stub.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/container.dir/build.make CMakeFiles/container.dir/utilities/convert_string_stub.cpp.o
+.PHONY : utilities/convert_string_stub.cpp.o
+
+utilities/convert_string_stub.i: utilities/convert_string_stub.cpp.i
+.PHONY : utilities/convert_string_stub.i
+
+# target to preprocess a source file
+utilities/convert_string_stub.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/container.dir/build.make CMakeFiles/container.dir/utilities/convert_string_stub.cpp.i
+.PHONY : utilities/convert_string_stub.cpp.i
+
+utilities/convert_string_stub.s: utilities/convert_string_stub.cpp.s
+.PHONY : utilities/convert_string_stub.s
+
+# target to generate assembly for a file
+utilities/convert_string_stub.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/container.dir/build.make CMakeFiles/container.dir/utilities/convert_string_stub.cpp.s
+.PHONY : utilities/convert_string_stub.cpp.s
+
 values/bool_value.o: values/bool_value.cpp.o
 .PHONY : values/bool_value.o
 
@@ -426,7 +560,12 @@ help:
 	@echo "... install/strip"
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
+	@echo "... test"
+	@echo "... benchmark"
+	@echo "... benchmark_main"
 	@echo "... container"
+	@echo "... container_benchmark_tests"
+	@echo "... container_unit_tests"
 	@echo "... core/container.o"
 	@echo "... core/container.i"
 	@echo "... core/container.s"
@@ -445,6 +584,15 @@ help:
 	@echo "... internal/variant_value.o"
 	@echo "... internal/variant_value.i"
 	@echo "... internal/variant_value.s"
+	@echo "... tests/benchmark_tests.o"
+	@echo "... tests/benchmark_tests.i"
+	@echo "... tests/benchmark_tests.s"
+	@echo "... tests/unit_tests.o"
+	@echo "... tests/unit_tests.i"
+	@echo "... tests/unit_tests.s"
+	@echo "... utilities/convert_string_stub.o"
+	@echo "... utilities/convert_string_stub.i"
+	@echo "... utilities/convert_string_stub.s"
 	@echo "... values/bool_value.o"
 	@echo "... values/bool_value.i"
 	@echo "... values/bool_value.s"

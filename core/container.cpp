@@ -30,18 +30,18 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#include "container.h"
+#include "container/core/container.h"
 
 #include "utilities/core/formatter.h"
 // #include "utilities/io/file_handler.h" // Not available in current thread_system
 #include "utilities/conversion/convert_string.h"
 
-#include "value_types.h"
-#include "../values/bool_value.h"
-#include "../values/bytes_value.h"
-#include "../values/container_value.h"
-#include "../values/numeric_value.h"
-#include "../values/string_value.h"
+#include "container/core/value_types.h"
+#include "container/values/bool_value.h"
+#include "container/values/bytes_value.h"
+#include "container/values/container_value.h"
+#include "container/values/numeric_value.h"
+#include "container/values/string_value.h"
 
 #include <fcntl.h>
 #include <wchar.h>

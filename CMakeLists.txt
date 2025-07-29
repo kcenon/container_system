@@ -1,13 +1,16 @@
 cmake_minimum_required(VERSION 3.16)
 
 ##################################################
-# Container System Project
-# Independent, reusable container component
+# Container System CMakeLists.txt
+# 
+# Independent container system with advanced C++20 features
+# Provides type-safe, serializable data containers.
 ##################################################
 
-project(ContainerSystem 
+# Project definition
+project(container_system 
     VERSION 2.0.0
-    DESCRIPTION "Thread-safe serializable container library with advanced features"
+    DESCRIPTION "Advanced C++20 Container System with Thread-Safe Operations"
     LANGUAGES CXX
 )
 
@@ -19,47 +22,32 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Options
 option(BUILD_SHARED_LIBS "Build using shared libraries" OFF)
-option(BUILD_CONTAINER_TESTS "Build container tests" ON)
-option(BUILD_CONTAINER_SAMPLES "Build container samples" ON)
-option(BUILD_CONTAINER_DOCS "Build container documentation" OFF)
+option(USE_UNIT_TEST "Use unit test" ON)
+option(BUILD_CONTAINER_SAMPLES "Build container system samples" ON)
+option(USE_THREAD_SAFE_OPERATIONS "Enable thread-safe operations" ON)
+option(USE_LOCKFREE_BY_DEFAULT "Use lock-free implementations by default" OFF)
 
 # Output directories
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
+# Debug flags
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D_DEBUG")
+
+# Platform-specific settings
+if(WIN32)
+    add_definitions(-D_WIN32_WINNT=0x0A00) # Windows 10
+elseif(APPLE)
+    add_definitions(-DAPPLE_PLATFORM)
+endif()
+
 # Find required packages
 find_package(Threads REQUIRED)
+
+# vcpkg integration
+set(VCPKG_TARGET_TRIPLET "arm64-osx" CACHE STRING "VCPKG target triplet")
 find_package(fmt CONFIG REQUIRED)
-
-##################################################
-# External Dependencies Management
-##################################################
-
-# Option to use external thread_system utilities
-option(USE_EXTERNAL_THREAD_UTILITIES "Use external thread utilities" ON)
-
-if(USE_EXTERNAL_THREAD_UTILITIES)
-    # Try to find external ThreadSystem utilities
-    find_path(THREAD_UTILITIES_INCLUDE_DIR
-        NAMES utilities/conversion/convert_string.h
-        PATHS
-            ${CMAKE_PREFIX_PATH}/include/thread_system
-            ${CMAKE_CURRENT_SOURCE_DIR}/../thread_system/sources
-            ${CMAKE_CURRENT_SOURCE_DIR}/../messaging_system/thread_system/sources
-        NO_DEFAULT_PATH
-    )
-    
-    if(THREAD_UTILITIES_INCLUDE_DIR)
-        message(STATUS "Found thread utilities at: ${THREAD_UTILITIES_INCLUDE_DIR}")
-        set(THREAD_UTILITIES_FOUND TRUE)
-    else()
-        message(WARNING "Thread utilities not found - some features may be limited")
-        set(THREAD_UTILITIES_FOUND FALSE)
-    endif()
-else()
-    set(THREAD_UTILITIES_FOUND FALSE)
-endif()
 
 ##################################################
 # Source Files Configuration
@@ -109,20 +97,17 @@ set(ALL_FILES
 # Library Target Configuration
 ##################################################
 
-# Create library
-if(BUILD_SHARED_LIBS)
-    add_library(container SHARED ${ALL_FILES})
-else()
-    add_library(container STATIC ${ALL_FILES})
-endif()
+# Create static library
+add_library(container_system STATIC 
+    ${ALL_FILES}
+)
 
-# Create namespace alias
-add_library(ContainerSystem::container ALIAS container)
+# Create alias for consistent naming
+add_library(ContainerSystem::container ALIAS container_system)
 
 # Set target properties
-set_target_properties(container PROPERTIES
+set_target_properties(container_system PROPERTIES
     VERSION ${PROJECT_VERSION}
-    SOVERSION ${PROJECT_VERSION_MAJOR}
     POSITION_INDEPENDENT_CODE ON
     CXX_STANDARD 20
     CXX_STANDARD_REQUIRED ON
@@ -133,46 +118,31 @@ set_target_properties(container PROPERTIES
 # Include Directories
 ##################################################
 
-# Public include directories
-target_include_directories(container PUBLIC
+# Public include directories (for consumers of this library)
+target_include_directories(container_system PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-    $<INSTALL_INTERFACE:include/container_system>
-)
-
-# Thread utilities include (if available)
-if(THREAD_UTILITIES_FOUND)
-    target_include_directories(container PRIVATE
-        ${THREAD_UTILITIES_INCLUDE_DIR}
-    )
-    target_compile_definitions(container PRIVATE
-        HAS_THREAD_UTILITIES
-    )
-endif()
-
-##################################################
-# Dependencies
-##################################################
-
-# Standard dependencies
-target_link_libraries(container PUBLIC 
-    fmt::fmt
-    Threads::Threads
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../>
+    $<INSTALL_INTERFACE:include>
 )
 
 ##################################################
 # Compile Definitions
 ##################################################
 
-target_compile_definitions(container PRIVATE
+# Internal features are always enabled but not exposed
+target_compile_definitions(container_system PRIVATE
     CONTAINER_INTERNAL_FEATURES
 )
 
-# Thread utilities feature flag
-if(THREAD_UTILITIES_FOUND)
-    target_compile_definitions(container PUBLIC
-        CONTAINER_HAS_THREAD_UTILITIES
-    )
-endif()
+##################################################
+# Dependencies
+##################################################
+
+# fmt library for formatting
+target_link_libraries(container_system PUBLIC 
+    fmt::fmt
+    Threads::Threads
+)
 
 ##################################################
 # Platform-Specific Configuration
@@ -181,12 +151,12 @@ endif()
 # Check for SIMD support
 include(CheckCXXCompilerFlag)
 
-# AVX2 support (Intel/AMD)
+# AVX2 support
 if(NOT APPLE)
     check_cxx_compiler_flag("-mavx2" COMPILER_SUPPORTS_AVX2)
     if(COMPILER_SUPPORTS_AVX2)
-        target_compile_options(container PRIVATE $<$<CONFIG:Release>:-mavx2>)
-        target_compile_definitions(container PRIVATE HAS_AVX2)
+        target_compile_options(container_system PRIVATE $<$<CONFIG:Release>:-mavx2>)
+        target_compile_definitions(container_system PRIVATE HAS_AVX2)
     endif()
 endif()
 
@@ -194,22 +164,23 @@ endif()
 if(CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64|AMD64|i[3-6]86")
     check_cxx_compiler_flag("-msse4.2" COMPILER_SUPPORTS_SSE42)
     if(COMPILER_SUPPORTS_SSE42)
-        target_compile_options(container PRIVATE $<$<CONFIG:Release>:-msse4.2>)
-        target_compile_definitions(container PRIVATE HAS_SSE42)
+        target_compile_options(container_system PRIVATE $<$<CONFIG:Release>:-msse4.2>)
+        target_compile_definitions(container_system PRIVATE HAS_SSE42)
     endif()
 endif()
 
 # ARM NEON support
 if(CMAKE_SYSTEM_PROCESSOR MATCHES "arm|aarch64")
-    target_compile_definitions(container PRIVATE HAS_ARM_NEON)
+    target_compile_definitions(container_system PRIVATE HAS_ARM_NEON)
 endif()
 
 ##################################################
 # Compiler Options
 ##################################################
 
+# Add compiler warnings
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-    target_compile_options(container PRIVATE
+    target_compile_options(container_system PRIVATE
         -Wall
         -Wextra
         -Wpedantic
@@ -218,7 +189,7 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
         -Wno-unused-lambda-capture
     )
 elseif(MSVC)
-    target_compile_options(container PRIVATE
+    target_compile_options(container_system PRIVATE
         /W4
         /WX-
         /wd4100  # unreferenced formal parameter
@@ -228,87 +199,65 @@ endif()
 
 # Platform-specific definitions
 if(WIN32)
-    target_compile_definitions(container PRIVATE
-        _WIN32_WINNT=0x0601
+    target_compile_definitions(container_system PRIVATE
+        _WIN32_WINNT=0x0601  # Windows 7 or later
         WIN32_LEAN_AND_MEAN
         NOMINMAX
     )
 endif()
 
 ##################################################
-# Installation Rules
+# Installation Rules (when not building as submodule)
 ##################################################
 
-include(GNUInstallDirs)
+# Installation is handled by parent CMakeLists.txt
 
-# Install library
-install(TARGETS container
-    EXPORT ContainerSystemTargets
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-)
-
-# Install headers
-install(FILES ${MAIN_HEADER}
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/container_system
-)
-
-install(DIRECTORY core values
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/container_system
-    FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp" PATTERN "*.tpp"
-)
+# Export configuration is handled by parent CMakeLists.txt
 
 ##################################################
-# Package Configuration (for find_package)
+# Testing Support
 ##################################################
 
-include(CMakePackageConfigHelpers)
+# Enable testing features if building tests
+if(BUILD_UNIT_TESTS AND NOT BUILD_MESSAGING_SYSTEM_AS_SUBMODULE)
+    enable_testing()
+    # Tests are handled by the main unittest directory
+endif()
 
-# Create config file
-configure_package_config_file(
-    ${CMAKE_CURRENT_SOURCE_DIR}/cmake/ContainerSystemConfig.cmake.in
-    ${CMAKE_CURRENT_BINARY_DIR}/ContainerSystemConfig.cmake
-    INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/ContainerSystem
-)
+##################################################
+# Documentation
+##################################################
 
-write_basic_package_version_file(
-    ContainerSystemConfigVersion.cmake
-    VERSION ${PROJECT_VERSION}
-    COMPATIBILITY SameMajorVersion
-)
-
-install(FILES
-    ${CMAKE_CURRENT_BINARY_DIR}/ContainerSystemConfig.cmake
-    ${CMAKE_CURRENT_BINARY_DIR}/ContainerSystemConfigVersion.cmake
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/ContainerSystem
-)
-
-install(EXPORT ContainerSystemTargets
-    FILE ContainerSystemTargets.cmake
-    NAMESPACE ContainerSystem::
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/ContainerSystem
-)
+# Find Doxygen for documentation generation
+find_package(Doxygen)
+if(DOXYGEN_FOUND AND NOT BUILD_MESSAGING_SYSTEM_AS_SUBMODULE)
+    set(DOXYGEN_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/docs)
+    set(DOXYGEN_EXTRACT_ALL YES)
+    set(DOXYGEN_EXTRACT_PRIVATE YES)
+    
+    doxygen_add_docs(container_system_docs
+        ${CMAKE_CURRENT_SOURCE_DIR}/container
+        COMMENT "Generating container documentation"
+    )
+endif()
 
 ##################################################
 # Summary
 ##################################################
 
-message(STATUS "ContainerSystem configured:")
+message(STATUS "Container library configured:")
 message(STATUS "  Version: ${PROJECT_VERSION}")
-message(STATUS "  Build type: ${CMAKE_BUILD_TYPE}")
-message(STATUS "  Shared libs: ${BUILD_SHARED_LIBS}")
-message(STATUS "  Thread utilities: ${THREAD_UTILITIES_FOUND}")
-message(STATUS "  Tests: ${BUILD_CONTAINER_TESTS}")
-message(STATUS "  Samples: ${BUILD_CONTAINER_SAMPLES}")
-message(STATUS "  Documentation: ${BUILD_CONTAINER_DOCS}")
-
-if(CMAKE_SYSTEM_PROCESSOR MATCHES "arm|aarch64")
-    message(STATUS "  SIMD: ARM NEON")
-elseif(COMPILER_SUPPORTS_AVX2)
-    message(STATUS "  SIMD: AVX2")
+message(STATUS "  Module Directory: ${CMAKE_CURRENT_SOURCE_DIR}/container")
+message(STATUS "  Dependencies: utilities, fmt")
+message(STATUS "  Features:")
+message(STATUS "    - Thread-safe operations: ON")
+message(STATUS "    - Variant-based types: ON")
+if(COMPILER_SUPPORTS_AVX2)
+    message(STATUS "    - AVX2 SIMD: ON")
 elseif(COMPILER_SUPPORTS_SSE42)
-    message(STATUS "  SIMD: SSE4.2")
+    message(STATUS "    - SSE4.2 SIMD: ON")
+elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "arm|aarch64")
+    message(STATUS "    - ARM NEON SIMD: ON")
 else()
-    message(STATUS "  SIMD: Scalar fallback")
+    message(STATUS "    - SIMD: OFF (scalar fallback)")
 endif()

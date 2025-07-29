@@ -30,15 +30,15 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#include "values/container_value.h"
+#include "container/values/container_value.h"
 #include <algorithm>
 #include <cstring>
 #include "utilities/core/formatter.h"
 #include "utilities/conversion/convert_string.h"
-#include "values/bool_value.h"
-#include "values/bytes_value.h"
-#include "values/numeric_value.h"
-#include "values/string_value.h"
+#include "container/values/bool_value.h"
+#include "container/values/bytes_value.h"
+#include "container/values/numeric_value.h"
+#include "container/values/string_value.h"
 
 namespace container_module
 {

@@ -964,8 +964,7 @@ CMakeFiles/container.dir/values/container_value.cpp.o: \
   /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/unistd.h \
   /Users/dongcheolshin/Sources/container_system/core/value_types.h \
   /Users/dongcheolshin/Sources/thread_system/sources/utilities/core/formatter.h \
-  /Users/dongcheolshin/Sources/container_system/vcpkg_installed/arm64-osx/include/fmt/format.h \
-  /Users/dongcheolshin/Sources/container_system/vcpkg_installed/arm64-osx/include/fmt/base.h \
+  /opt/homebrew/include/fmt/format.h /opt/homebrew/include/fmt/base.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/sstream \
   /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/istream \
   /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/iomanip \

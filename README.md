@@ -1,6 +1,6 @@
-# Container Module
+# Container System
 
-High-performance, type-safe data containers with SIMD optimization and thread-safe operations.
+Advanced C++20 Container System with Thread-Safe Operations and High-Performance Features
 
 ## Overview
 
