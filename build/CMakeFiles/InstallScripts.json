@@ -1,9 +1,0 @@
-{
-	"InstallScripts" : 
-	[
-		"/Users/dongcheolshin/Sources/container_system/build/cmake_install.cmake",
-		"/Users/dongcheolshin/Sources/container_system/build/_deps/benchmark-build/cmake_install.cmake",
-		"/Users/dongcheolshin/Sources/container_system/build/_deps/benchmark-build/src/cmake_install.cmake"
-	],
-	"Parallel" : false
-}
