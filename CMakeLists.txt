@@ -242,6 +242,15 @@ if(DOXYGEN_FOUND AND NOT BUILD_MESSAGING_SYSTEM_AS_SUBMODULE)
 endif()
 
 ##################################################
+# Samples
+##################################################
+
+if(BUILD_CONTAINER_SAMPLES)
+    add_subdirectory(samples)
+    message(STATUS "Container samples will be built")
+endif()
+
+##################################################
 # Summary
 ##################################################
 
@@ -252,6 +261,7 @@ message(STATUS "  Dependencies: utilities, fmt")
 message(STATUS "  Features:")
 message(STATUS "    - Thread-safe operations: ON")
 message(STATUS "    - Variant-based types: ON")
+message(STATUS "    - Build samples: ${BUILD_CONTAINER_SAMPLES}")
 if(COMPILER_SUPPORTS_AVX2)
     message(STATUS "    - AVX2 SIMD: ON")
 elseif(COMPILER_SUPPORTS_SSE42)
