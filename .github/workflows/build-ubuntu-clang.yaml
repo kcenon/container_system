@@ -8,7 +8,6 @@ on:
   pull_request:
     branches:
       - main
-      - upgrade-from-messaging-system
   workflow_dispatch:
 
 jobs:
