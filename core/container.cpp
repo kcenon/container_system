@@ -584,11 +584,11 @@ namespace container_module
 	std::vector<uint8_t> value_container::serialize_array(void) const
 	{
 		auto [arr, err] = convert_string::to_array(serialize());
-		if (err.has_value())
+		if (!err.empty())
 		{
 			return {};
 		}
-		return arr.value();
+		return arr;
 	}
 
 	bool value_container::deserialize(const std::string& data_str,
@@ -633,11 +633,11 @@ namespace container_module
 									  bool parse_only_header)
 	{
 		auto [strVal, err] = convert_string::to_string(data_array);
-		if (err.has_value())
+		if (!err.empty())
 		{
 			return false;
 		}
-		return deserialize(strVal.value(), parse_only_header);
+		return deserialize(strVal, parse_only_header);
 	}
 
 	const std::string value_container::to_xml(void)

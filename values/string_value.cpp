@@ -61,11 +61,11 @@ namespace container_module
 			// Return the raw data as-is, ignoring placeholder expansions
 			auto [plain, err]
 				= utility_module::convert_string::to_string(data_);
-			if (err.has_value())
+			if (!err.empty())
 			{
 				return "";
 			}
-			return plain.value();
+			return plain;
 		}
 		// Return the placeholder-free version
 		return convert_specific_string(data_);

@@ -14,7 +14,7 @@ public:
     template<typename... Args>
     static std::string format(const std::string& format_str, Args&&... args) {
         try {
-            return fmt::format(format_str, std::forward<Args>(args)...);
+            return fmt::vformat(format_str, fmt::make_format_args(args...));
         } catch (const std::exception&) {
             return format_str; // Return original string if formatting fails
         }
@@ -23,7 +23,7 @@ public:
     template<typename OutputIt, typename... Args>
     static void format_to(OutputIt out, const std::string& format_str, Args&&... args) {
         try {
-            fmt::format_to(out, format_str, std::forward<Args>(args)...);
+            fmt::vformat_to(out, format_str, fmt::make_format_args(args...));
         } catch (const std::exception&) {
             // Fallback: just copy the format string
             std::copy(format_str.begin(), format_str.end(), out);

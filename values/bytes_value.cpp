@@ -70,10 +70,10 @@ namespace container_module
 	{
 		// Convert the raw data to base64
 		auto [encoded, err] = convert_string::to_base64(data_);
-		if (err.has_value())
+		if (!err.empty())
 		{
 			return "";
 		}
-		return encoded.value();
+		return encoded;
 	}
 } // namespace container_module

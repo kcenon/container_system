@@ -33,6 +33,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #pragma once
 
 #include "container/core/container.h"
+#include "container/values/bool_value.h"
+#include "container/values/numeric_value.h"
+#include "container/values/string_value.h"
 #include <functional>
 #include <memory>
 #include <chrono>
@@ -164,26 +167,26 @@ template<typename T>
 messaging_container_builder& messaging_container_builder::add_value(const std::string& key, T&& value) {
     if constexpr (std::is_same_v<std::decay_t<T>, bool>) {
         auto val = std::make_shared<bool_value>(key, value);
-        container_->add_value(val);
+        container_->add(val);
     } else if constexpr (std::is_integral_v<std::decay_t<T>>) {
         if constexpr (sizeof(T) <= 4) {
             auto val = std::make_shared<int_value>(key, static_cast<int32_t>(value));
-            container_->add_value(val);
+            container_->add(val);
         } else {
             auto val = std::make_shared<long_value>(key, static_cast<int64_t>(value));
-            container_->add_value(val);
+            container_->add(val);
         }
     } else if constexpr (std::is_floating_point_v<std::decay_t<T>>) {
         if constexpr (std::is_same_v<std::decay_t<T>, float>) {
             auto val = std::make_shared<float_value>(key, value);
-            container_->add_value(val);
+            container_->add(val);
         } else {
             auto val = std::make_shared<double_value>(key, value);
-            container_->add_value(val);
+            container_->add(val);
         }
     } else if constexpr (std::is_same_v<std::decay_t<T>, std::string>) {
         auto val = std::make_shared<string_value>(key, value);
-        container_->add_value(val);
+        container_->add(val);
     }
 
     return *this;

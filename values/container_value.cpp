@@ -381,7 +381,7 @@ namespace container_module
 		const std::string& name, const std::string& dataStr)
 	{
 		auto [val, err] = convert_string::from_base64(dataStr);
-		if (err.has_value())
+		if (!err.empty())
 		{
 			std::vector<uint8_t> empty;
 			return std::make_shared<bytes_value>(name, empty);
