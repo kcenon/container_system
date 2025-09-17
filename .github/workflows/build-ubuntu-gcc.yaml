@@ -92,18 +92,3 @@ jobs:
             echo "Running messaging integration example..."
             ./bin/examples/messaging_integration_example
           fi
-
-      - name: Package build artifacts
-        if: success()
-        run: |
-          mkdir -p artifacts
-          cp -r build/bin artifacts/ || true
-          cp -r build/lib artifacts/ || true
-
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
-        if: success()
-        with:
-          name: container-system-ubuntu-gcc-${{ github.sha }}
-          path: artifacts/
-          retention-days: 30

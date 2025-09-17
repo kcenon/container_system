@@ -46,18 +46,10 @@ jobs:
       - name: Generate Documentation
         run: doxygen Doxyfile
 
-      - name: Upload Documentation Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: container-system-documentation
-          path: ./documents/html
-          retention-days: 30
-
       - name: Deploy Documentation
         uses: peaceiris/actions-gh-pages@v4
-        if: github.ref == 'refs/heads/main'
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./documents/html
-          commit_message: "Update container system documentation via GitHub Actions"
+          commit_message: "Update documentation via GitHub Actions"
           enable_jekyll: false

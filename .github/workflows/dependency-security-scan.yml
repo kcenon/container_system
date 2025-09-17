@@ -47,12 +47,6 @@ jobs:
             -I . \
             . 2> cppcheck-results.xml || true
 
-      - name: Upload Cppcheck results
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: cppcheck-results
-          path: cppcheck-results.xml
 
       - name: Check vcpkg.json for known vulnerabilities
         run: |
@@ -119,9 +113,3 @@ jobs:
           echo "- Follow secure coding practices" >> security-report.md
           echo "- Regular security reviews of new code" >> security-report.md
 
-      - name: Upload security report
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: security-scan-report
-          path: security-report.md

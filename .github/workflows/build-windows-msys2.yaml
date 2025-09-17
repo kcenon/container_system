@@ -94,21 +94,3 @@ jobs:
             ./examples/advanced_container_example.exe
           fi
 
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: container-system-windows-msys2-${{ matrix.sys }}-${{ matrix.build_type }}
-          path: |
-            build/*.a
-            build/*.exe
-            build/examples/*.exe
-          retention-days: 7
-
-      - name: Upload test results
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: test-results-windows-msys2-${{ matrix.sys }}-${{ matrix.build_type }}
-          path: |
-            build/Testing/
-          retention-days: 3

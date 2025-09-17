@@ -76,21 +76,3 @@ jobs:
         run: |
           ctest --build-config ${{ matrix.build_type }} --output-on-failure --verbose
 
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: container-system-windows-vs-${{ matrix.platform }}-${{ matrix.build_type }}
-          path: |
-            build/${{ matrix.build_type }}/*.lib
-            build/${{ matrix.build_type }}/*.exe
-            build/examples/${{ matrix.build_type }}/*.exe
-          retention-days: 7
-
-      - name: Upload test results
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: test-results-windows-vs-${{ matrix.platform }}-${{ matrix.build_type }}
-          path: |
-            build/Testing/
-          retention-days: 3
