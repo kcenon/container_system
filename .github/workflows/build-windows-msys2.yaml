@@ -4,9 +4,11 @@ on:
   push:
     branches:
       - main
+      - upgrade-from-messaging-system
   pull_request:
     branches:
       - main
+      - upgrade-from-messaging-system
   workflow_dispatch:
 
 jobs:
@@ -181,7 +183,7 @@ jobs:
           rm -rf CMakeFiles
           cmake .. \
             -G "Ninja" \
-            -DBUILD_CONTAINER_AS_SUBMODULE=ON \
+            -DBUILD_MESSAGING_SYSTEM_AS_SUBMODULE=ON \
             -DCMAKE_INSTALL_PREFIX="../target" \
             -DCMAKE_BUILD_TYPE=$BUILD_TYPE \
             -DUSE_STD_FORMAT=ON \
@@ -197,7 +199,7 @@ jobs:
       - name: Run tests
         run: |
           cd build
-          if [ -f "bin/container_test.exe" ] || [ -f "bin/container_base_unit.exe" ] || find bin -name "*unit*.exe" -o -name "*test*.exe" | grep -q .; then
+          if [ -f "bin/all_tests.exe" ] || [ -f "bin/container_test.exe" ] || [ -f "bin/container_base_unit.exe" ] || find bin -name "*unit*.exe" -o -name "*test*.exe" | grep -q .; then
             echo "Running unit tests (vcpkg build successful)..."
             find bin -name "*unit*.exe" -o -name "*test*.exe" | while read test; do
               echo "Running $test..."
