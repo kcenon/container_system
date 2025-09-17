@@ -34,7 +34,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <algorithm>
 #include <cstring>
 #include "utilities/core/formatter.h"
-#include "utilities/conversion/convert_string.h"
+#include "utilities/core/convert_string.h"
 #include "container/values/bool_value.h"
 #include "container/values/bytes_value.h"
 #include "container/values/numeric_value.h"

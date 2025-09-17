@@ -4,8 +4,7 @@
 #include <sstream>
 #include <fmt/format.h>
 
-namespace utilities {
-namespace core {
+namespace utility_module {
 
 /**
  * @brief Simple formatter wrapper around fmt library
@@ -21,10 +20,19 @@ public:
         }
     }
 
+    template<typename OutputIt, typename... Args>
+    static void format_to(OutputIt out, const std::string& format_str, Args&&... args) {
+        try {
+            fmt::format_to(out, format_str, std::forward<Args>(args)...);
+        } catch (const std::exception&) {
+            // Fallback: just copy the format string
+            std::copy(format_str.begin(), format_str.end(), out);
+        }
+    }
+
     static std::string format(const std::string& format_str) {
         return format_str;
     }
 };
 
-} // namespace core
-} // namespace utilities
+} // namespace utility_module

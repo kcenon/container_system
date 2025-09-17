@@ -38,6 +38,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <vector>
 #include <string_view>
 #include <shared_mutex>
+#include <mutex>
 #include <atomic>
 
 namespace container_module

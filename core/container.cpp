@@ -33,8 +33,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "container/core/container.h"
 
 #include "utilities/core/formatter.h"
-// #include "utilities/io/file_handler.h" // Not available in current thread_system
-#include "utilities/conversion/convert_string.h"
+#include "utilities/core/convert_string.h"
 
 #include "container/core/value_types.h"
 #include "container/values/bool_value.h"

@@ -35,7 +35,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <sstream>
 #include <algorithm>
 #include "utilities/core/formatter.h"		// custom formatter
-#include "utilities/conversion/convert_string.h" // custom string conversion
+#include "utilities/core/convert_string.h" // custom string conversion
 
 namespace container_module
 {
