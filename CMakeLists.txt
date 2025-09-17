@@ -145,6 +145,14 @@ target_include_directories(container_system PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
+# Create a symbolic link for container/ include path
+if(NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/container)
+    execute_process(
+        COMMAND ${CMAKE_COMMAND} -E create_symlink . container
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+    )
+endif()
+
 ##################################################
 # Compile Definitions
 ##################################################
@@ -255,9 +263,10 @@ endif()
 ##################################################
 
 # Enable testing features if building tests
-if(BUILD_UNIT_TESTS AND NOT BUILD_MESSAGING_SYSTEM_AS_SUBMODULE)
+if(USE_UNIT_TEST AND NOT BUILD_MESSAGING_SYSTEM_AS_SUBMODULE)
     enable_testing()
-    # Tests are handled by the main unittest directory
+    add_subdirectory(tests)
+    message(STATUS "Container: Unit tests enabled")
 endif()
 
 ##################################################

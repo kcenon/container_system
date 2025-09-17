@@ -6,7 +6,10 @@ cmake_minimum_required(VERSION 3.16)
 
 # Example executables
 set(EXAMPLE_PROGRAMS
+    basic_container_example
     messaging_integration_example
+    advanced_container_example
+    real_world_scenarios
 )
 
 # Build each example program
@@ -17,6 +20,7 @@ foreach(EXAMPLE ${EXAMPLE_PROGRAMS})
     target_link_libraries(${EXAMPLE}
         PRIVATE
             container_system
+            Threads::Threads
     )
 
     # Set C++20 standard
