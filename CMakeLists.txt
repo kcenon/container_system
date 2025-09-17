@@ -21,7 +21,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Options
 option(BUILD_SHARED_LIBS "Build using shared libraries" OFF)
-option(USE_UNIT_TEST "Use unit test" ON)
+option(BUILD_TESTS "Build unit tests" ON)
 option(BUILD_CONTAINER_SAMPLES "Build container system samples" ON)
 option(USE_THREAD_SAFE_OPERATIONS "Enable thread-safe operations" ON)
 option(USE_LOCKFREE_BY_DEFAULT "Use lock-free implementations by default" OFF)
@@ -289,7 +289,7 @@ endif()
 ##################################################
 
 # Enable testing features if building tests
-if(USE_UNIT_TEST AND NOT BUILD_MESSAGING_SYSTEM_AS_SUBMODULE)
+if(BUILD_TESTS AND NOT BUILD_MESSAGING_SYSTEM_AS_SUBMODULE)
     enable_testing()
     add_subdirectory(tests)
     message(STATUS "Container: Unit tests enabled")
