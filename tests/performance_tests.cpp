@@ -13,10 +13,7 @@
 #include "core/container.h"
 #include "core/value.h"
 #include "values/string_value.h"
-#include "values/int_value.h"
-#include "values/long_value.h"
-#include "values/float_value.h"
-#include "values/double_value.h"
+#include "values/numeric_value.h"
 #include "values/bool_value.h"
 #include "values/bytes_value.h"
 #include "values/container_value.h"
@@ -134,7 +131,7 @@ TEST_F(PerformanceTest, ValueAdditionPerformance) {
                 for (int j = 0; j < values_per_container; ++j) {
                     std::string key = "key_" + std::to_string(i) + "_" + std::to_string(j);
                     auto value = std::make_shared<int_value>(key, i * j);
-                    container->add_value(value);
+                    container->add(value);
                 }
             }
         });
@@ -162,15 +159,15 @@ TEST_F(PerformanceTest, SerializationPerformance) {
     container->set_message_type("serialization_benchmark");
 
     // Add various types of values
-    container->add_value(std::make_shared<string_value>("string_data", "Lorem ipsum dolor sit amet, consectetur adipiscing elit"));
-    container->add_value(std::make_shared<int_value>("int_data", 123456789));
-    container->add_value(std::make_shared<long_value>("long_data", 9223372036854775807LL));
-    container->add_value(std::make_shared<double_value>("double_data", 3.141592653589793));
-    container->add_value(std::make_shared<bool_value>("bool_data", true));
+    container->add(std::make_shared<string_value>("string_data", "Lorem ipsum dolor sit amet, consectetur adipiscing elit"));
+    container->add(std::make_shared<int_value>("int_data", 123456789));
+    container->add(std::make_shared<long_value>("long_data", 9223372036854775807LL));
+    container->add(std::make_shared<double_value>("double_data", 3.141592653589793));
+    container->add(std::make_shared<bool_value>("bool_data", true));
 
     // Add binary data
     std::vector<uint8_t> binary_data(1024, 0xAB);
-    container->add_value(std::make_shared<bytes_value>("bytes_data", binary_data));
+    container->add(std::make_shared<bytes_value>("bytes_data", binary_data));
 
     std::vector<double> serialization_rates;
     const int num_runs = 10;
@@ -203,9 +200,9 @@ TEST_F(PerformanceTest, DeserializationPerformance) {
     original->set_target("deserialization_target", "perf_handler");
     original->set_message_type("deserialization_benchmark");
 
-    original->add_value(std::make_shared<string_value>("test_string", "Performance test data"));
-    original->add_value(std::make_shared<int_value>("test_int", 42));
-    original->add_value(std::make_shared<double_value>("test_double", 2.71828));
+    original->add(std::make_shared<string_value>("test_string", "Performance test data"));
+    original->add(std::make_shared<int_value>("test_int", 42));
+    original->add(std::make_shared<double_value>("test_double", 2.71828));
 
     std::string serialized_data = original->serialize();
 
@@ -251,9 +248,9 @@ TEST_F(PerformanceTest, ThreadSafetyStressTest) {
                 container->set_message_type("stress_test");
 
                 // Add random values
-                container->add_value(std::make_shared<int_value>("iteration", i));
-                container->add_value(std::make_shared<int_value>("thread_id", t));
-                container->add_value(std::make_shared<string_value>("data", "stress_test_data_" + std::to_string(i)));
+                container->add(std::make_shared<int_value>("iteration", i));
+                container->add(std::make_shared<int_value>("thread_id", t));
+                container->add(std::make_shared<string_value>("data", "stress_test_data_" + std::to_string(i)));
 
                 // Serialize occasionally
                 if (i % 100 == 0) {
@@ -309,9 +306,9 @@ TEST_F(PerformanceTest, MemoryUsageTest) {
         container->set_message_type("memory_benchmark");
 
         // Add some values
-        container->add_value(std::make_shared<int_value>("index", i));
-        container->add_value(std::make_shared<string_value>("description", "Memory test container " + std::to_string(i)));
-        container->add_value(std::make_shared<double_value>("value", i * 3.14159));
+        container->add(std::make_shared<int_value>("index", i));
+        container->add(std::make_shared<string_value>("description", "Memory test container " + std::to_string(i)));
+        container->add(std::make_shared<double_value>("value", i * 3.14159));
 
         containers.push_back(container);
     }
@@ -435,7 +432,7 @@ TEST_F(PerformanceTest, LargeScaleStressTest) {
     auto creation_start = std::chrono::high_resolution_clock::now();
     for (int i = 0; i < stress_containers; ++i) {
         auto container = std::make_shared<value_container>();
-        container->set_source("stress_client_" + std::to_string(i % 1000));
+        container->set_source("stress_client_" + std::to_string(i % 1000), "");
         container->set_target("stress_server", "batch_" + std::to_string(i / 1000));
         container->set_message_type("large_scale_stress_test");
 
@@ -443,19 +440,19 @@ TEST_F(PerformanceTest, LargeScaleStressTest) {
             std::string key = "key_" + std::to_string(j);
             switch (j % 5) {
                 case 0:
-                    container->add_value(std::make_shared<string_value>(key, "stress_test_" + std::to_string(i)));
+                    container->add(std::make_shared<string_value>(key, "stress_test_" + std::to_string(i)));
                     break;
                 case 1:
-                    container->add_value(std::make_shared<int_value>(key, i + j));
+                    container->add(std::make_shared<int_value>(key, i + j));
                     break;
                 case 2:
-                    container->add_value(std::make_shared<double_value>(key, (i + j) * 0.001));
+                    container->add(std::make_shared<double_value>(key, (i + j) * 0.001));
                     break;
                 case 3:
-                    container->add_value(std::make_shared<bool_value>(key, (i + j) % 2 == 0));
+                    container->add(std::make_shared<bool_value>(key, (i + j) % 2 == 0));
                     break;
                 case 4:
-                    container->add_value(std::make_shared<long_value>(key, static_cast<long>(i) * 1000000 + j));
+                    container->add(std::make_shared<long_value>(key, static_cast<long>(i) * 1000000 + j));
                     break;
             }
         }

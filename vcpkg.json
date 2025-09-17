@@ -4,7 +4,8 @@
     "description": "Thread-safe serializable container library with advanced features",
     "license": "BSD-3-Clause",
     "dependencies": [
-        "fmt"
+        "fmt",
+        "benchmark"
     ],
     "features": {
         "tests": {

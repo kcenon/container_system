@@ -23,6 +23,31 @@ else()
     set(GTEST_INCLUDE_DIRS "")
 endif()
 
+# Find benchmark library for performance tests
+find_package(benchmark QUIET)
+if(NOT benchmark_FOUND)
+    # Try pkg-config as fallback
+    find_package(PkgConfig QUIET)
+    if(PkgConfig_FOUND)
+        pkg_check_modules(BENCHMARK QUIET benchmark)
+        if(BENCHMARK_FOUND)
+            set(BENCHMARK_LIBRARIES ${BENCHMARK_LIBRARIES})
+            set(BENCHMARK_INCLUDE_DIRS ${BENCHMARK_INCLUDE_DIRS})
+        endif()
+    endif()
+endif()
+
+if(benchmark_FOUND)
+    set(BENCHMARK_LIBRARIES benchmark::benchmark)
+    set(BENCHMARK_INCLUDE_DIRS "")
+elseif(BENCHMARK_FOUND)
+    # Use pkg-config results
+else()
+    # Fallback to system library
+    find_library(BENCHMARK_LIBRARIES NAMES benchmark)
+    find_path(BENCHMARK_INCLUDE_DIRS benchmark/benchmark.h)
+endif()
+
 # Test source files
 set(TEST_SOURCES
     unit_tests.cpp
@@ -43,6 +68,14 @@ foreach(TEST_SOURCE ${TEST_SOURCES})
         ${GTEST_LIBRARIES}
         Threads::Threads
     )
+
+    # Add benchmark library for benchmark tests
+    if(${TEST_NAME} STREQUAL "benchmark_tests" AND BENCHMARK_LIBRARIES)
+        target_link_libraries(${TEST_NAME} ${BENCHMARK_LIBRARIES})
+        if(BENCHMARK_INCLUDE_DIRS)
+            target_include_directories(${TEST_NAME} PRIVATE ${BENCHMARK_INCLUDE_DIRS})
+        endif()
+    endif()
 
     # Include directories
     target_include_directories(${TEST_NAME} PRIVATE
