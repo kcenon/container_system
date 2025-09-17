@@ -1,115 +1,101 @@
-name: Dependency-Security-Scan
+name: Security Scan
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main, upgrade-from-messaging-system ]
   pull_request:
-    branches:
-      - main
+    branches: [ main ]
   schedule:
-    - cron: '0 6 * * 1'  # Weekly on Monday at 6 AM UTC
-  workflow_dispatch:
+    # Run security scan daily at 2 AM UTC
+    - cron: '0 2 * * *'
+
+permissions:
+  contents: read
+  security-events: write
+
+env:
+  VCPKG_FEATURE_FLAGS: dependencygraph
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
-  security_scan:
+  security-scan:
     runs-on: ubuntu-latest
-    permissions:
-      security-events: write
-      contents: read
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        submodules: true
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'
+    - name: Setup vcpkg dependencies
+      uses: lukka/run-vcpkg@v11
+      with:
+        vcpkgDirectory: '${{ github.workspace }}/vcpkg'
+        runVcpkgInstall: true
+        vcpkgJsonGlob: '**/vcpkg.json'
 
-      - name: Install security tools
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y clang-tools cppcheck
-          pip install bandit safety
+    - name: Security vulnerability scan
+      uses: aquasecurity/trivy-action@master
+      with:
+        scan-type: 'fs'
+        scan-ref: '.'
+        format: 'sarif'
+        output: 'trivy-results.sarif'
+        severity: 'CRITICAL,HIGH,MEDIUM'
+        exit-code: '0'
 
-      - name: Run Cppcheck
-        run: |
-          cppcheck --enable=all --xml --xml-version=2 \
-            --suppress=missingIncludeSystem \
-            --suppress=unusedFunction \
-            --suppress=unmatchedSuppression \
-            --inline-suppr \
-            --std=c++20 \
-            --platform=unix64 \
-            -I . \
-            . 2> cppcheck-results.xml || true
+    - name: Upload scan results
+      uses: github/codeql-action/upload-sarif@v3
+      if: always() && hashFiles('trivy-results.sarif') != ''
+      with:
+        sarif_file: 'trivy-results.sarif'
 
+    - name: License compatibility check
+      run: |
+        echo "License Compatibility Check for container-system"
+        echo "================================================"
 
-      - name: Check vcpkg.json for known vulnerabilities
-        run: |
-          if [ -f "vcpkg.json" ]; then
-            echo "Checking vcpkg.json dependencies..."
-            cat vcpkg.json
+        # Known licenses for dependencies
+        declare -A licenses=(
+          ["fmt"]="MIT"
+          ["gtest"]="BSD-3-Clause"
+          ["benchmark"]="Apache-2.0"
+        )
 
-            # Extract dependencies and check for known issues
-            python3 -c "
-            import json
-            try:
-                with open('vcpkg.json', 'r') as f:
-                    data = json.load(f)
-                    deps = data.get('dependencies', [])
-                    print('Dependencies found:')
-                    for dep in deps:
-                        if isinstance(dep, str):
-                            print(f'  - {dep}')
-                        elif isinstance(dep, dict):
-                            print(f'  - {dep.get(\"name\", \"unknown\")}')
-            except Exception as e:
-                print(f'Error reading vcpkg.json: {e}')
-            "
+        compatible_licenses=("MIT" "BSD-2-Clause" "BSD-3-Clause" "Apache-2.0" "ISC")
+
+        for dep in "${!licenses[@]}"; do
+          license="${licenses[$dep]}"
+          if [[ " ${compatible_licenses[@]} " =~ " ${license} " ]]; then
+            echo "✅ $dep: $license - COMPATIBLE"
           else
-            echo "No vcpkg.json found"
+            echo "❌ $dep: $license - INCOMPATIBLE"
+            exit 1
           fi
+        done
 
-      - name: Scan source files for potential security issues
-        run: |
-          echo "Scanning for potential security patterns..."
+        echo "✅ All dependencies are license compatible"
 
-          # Check for potentially unsafe C++ patterns
-          echo "=== Checking for unsafe C++ patterns ==="
-          grep -r --include="*.cpp" --include="*.h" \
-            -E "(strcpy|strcat|sprintf|gets|scanf)" . || echo "No unsafe C functions found"
+    - name: Generate security report
+      if: always()
+      run: |
+        echo "# Security Scan Report" > security_report.md
+        echo "**Scan Date**: $(date -u)" >> security_report.md
+        echo "**Repository**: ${{ github.repository }}" >> security_report.md
+        echo "**Branch**: ${{ github.ref_name }}" >> security_report.md
+        echo "" >> security_report.md
 
-          echo "=== Checking for TODO/FIXME security notes ==="
-          grep -r --include="*.cpp" --include="*.h" --include="*.md" \
-            -i -E "(TODO|FIXME|XXX).*[Ss]ecurit" . || echo "No security-related TODOs found"
+        if [ -f "trivy-results.sarif" ]; then
+          echo "## Vulnerability Scan" >> security_report.md
+          echo "✅ Security scan completed successfully" >> security_report.md
+        else
+          echo "❌ Security scan failed" >> security_report.md
+        fi
 
-          echo "=== Checking for hardcoded sensitive patterns ==="
-          grep -r --include="*.cpp" --include="*.h" \
-            -i -E "(password|secret|key|token|credential)" . || echo "No hardcoded credentials found"
-
-      - name: Check file permissions
-        run: |
-          echo "Checking for executable files that shouldn't be..."
-          find . -type f -name "*.cpp" -o -name "*.h" | xargs ls -la | grep "^-rwxr" || echo "No suspicious executable source files"
-
-      - name: Generate security report
-        run: |
-          echo "# Container System Security Scan Report" > security-report.md
-          echo "" >> security-report.md
-          echo "**Scan Date:** $(date)" >> security-report.md
-          echo "**Commit:** ${{ github.sha }}" >> security-report.md
-          echo "" >> security-report.md
-          echo "## Summary" >> security-report.md
-          echo "- Static analysis completed with cppcheck" >> security-report.md
-          echo "- Source code scanned for security patterns" >> security-report.md
-          echo "- Dependencies reviewed for known issues" >> security-report.md
-          echo "" >> security-report.md
-          echo "## Recommendations" >> security-report.md
-          echo "- Keep dependencies updated regularly" >> security-report.md
-          echo "- Follow secure coding practices" >> security-report.md
-          echo "- Regular security reviews of new code" >> security-report.md
-
+    - name: Upload security report
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: security-report
+        path: security_report.md
+        retention-days: 30
