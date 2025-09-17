@@ -1,0 +1,145 @@
+/**
+ * @mainpage Container System Documentation
+ *
+ * @section intro_sec Introduction
+ *
+ * The Container System is an advanced C++20 library providing type-safe, high-performance
+ * data containers with messaging integration capabilities. It features thread-safe operations,
+ * SIMD optimizations, and comprehensive serialization support.
+ *
+ * @section features_sec Key Features
+ *
+ * ### Core Capabilities
+ * - **Type Safety**: Strongly-typed value system with compile-time checks
+ * - **Thread Safety**: Lock-free and mutex-based concurrent access patterns
+ * - **SIMD Optimization**: ARM NEON and x86 AVX support for numeric operations
+ * - **Memory Efficiency**: Variant storage with minimal allocations
+ * - **Serialization**: Binary, JSON, and XML serialization formats
+ *
+ * ### Enhanced Features
+ * - **Messaging Integration**: Optimized containers for messaging systems
+ * - **Builder Pattern**: Fluent API for container construction
+ * - **Performance Metrics**: Real-time operation monitoring and analytics
+ * - **External Callbacks**: Integration hooks for external systems
+ * - **Dual Compatibility**: Works standalone or as part of messaging systems
+ *
+ * @section modules_sec Module Overview
+ *
+ * ### Core Module
+ * The core module (@ref container_module) provides the fundamental container and value types:
+ * - @ref container_module::value_container "value_container": Main container class
+ * - @ref container_module::value "value": Base value class
+ * - @ref container_module::value_factory "value_factory": Value creation utilities
+ *
+ * ### Integration Module
+ * The integration module (@ref container_module::integration) provides enhanced messaging features:
+ * - @ref container_module::integration::messaging_integration "messaging_integration": Core integration class
+ * - @ref container_module::integration::messaging_container_builder "messaging_container_builder": Builder pattern implementation
+ * - @ref container_module::integration::container_performance_monitor "container_performance_monitor": Performance monitoring
+ *
+ * ### Value Types
+ * Comprehensive set of value types for different data needs:
+ * - Primitive types: @ref bool_value, @ref int_value, @ref long_value, @ref float_value, @ref double_value
+ * - Complex types: @ref string_value, @ref bytes_value, @ref container_value
+ *
+ * @section usage_sec Usage Examples
+ *
+ * ### Basic Usage
+ * @code{.cpp}
+ * #include <container/container.h>
+ * using namespace container_module;
+ *
+ * // Create a new container
+ * auto container = std::make_shared<value_container>();
+ * container->set_source("client_01", "session_123");
+ * container->set_target("server", "main_handler");
+ * container->set_message_type("user_data");
+ *
+ * // Add values
+ * auto values = std::vector<std::shared_ptr<value>>{
+ *     value_factory::create("user_id", long_value, "12345"),
+ *     value_factory::create("username", string_value, "john_doe"),
+ *     value_factory::create("balance", double_value, "1500.75")
+ * };
+ * container->set_values(values);
+ *
+ * // Serialize
+ * std::string serialized = container->serialize();
+ * @endcode
+ *
+ * ### Enhanced Builder Pattern
+ * @code{.cpp}
+ * #include <container/container.h>
+ * using namespace container_module::integration;
+ *
+ * // Modern builder pattern with method chaining
+ * auto container = messaging_container_builder()
+ *     .source("client_01", "session_123")
+ *     .target("server", "main_handler")
+ *     .message_type("user_data")
+ *     .add_value("user_id", 12345)
+ *     .add_value("username", std::string("john_doe"))
+ *     .add_value("balance", 1500.75)
+ *     .optimize_for_speed()
+ *     .build();
+ *
+ * // Enhanced serialization with performance monitoring
+ * std::string serialized = messaging_integration::serialize_for_messaging(container);
+ * @endcode
+ *
+ * @section build_sec Building
+ *
+ * ### Basic Build
+ * @code{.bash}
+ * mkdir build && cd build
+ * cmake .. -DCMAKE_BUILD_TYPE=Release
+ * cmake --build .
+ * @endcode
+ *
+ * ### Build with Enhanced Features
+ * @code{.bash}
+ * cmake .. \
+ *   -DCMAKE_BUILD_TYPE=Release \
+ *   -DENABLE_MESSAGING_FEATURES=ON \
+ *   -DENABLE_PERFORMANCE_METRICS=ON \
+ *   -DENABLE_EXTERNAL_INTEGRATION=ON \
+ *   -DBUILD_CONTAINER_EXAMPLES=ON
+ * cmake --build .
+ * @endcode
+ *
+ * @section integration_sec Integration
+ *
+ * ### Standalone Usage
+ * @code{.cmake}
+ * find_package(ContainerSystem REQUIRED)
+ * target_link_libraries(your_target ContainerSystem::container)
+ * @endcode
+ *
+ * ### Messaging System Integration
+ * @code{.cmake}
+ * find_package(ContainerSystem REQUIRED)
+ * target_link_libraries(your_target MessagingSystem::container)
+ * @endcode
+ *
+ * @section performance_sec Performance
+ *
+ * The Container System is designed for high performance:
+ * - **Container Creation**: 5M/sec
+ * - **Value Addition**: 15M/sec
+ * - **Binary Serialization**: 2M/sec
+ * - **SIMD Operations**: 25M/sec for numeric arrays
+ *
+ * @section license_sec License
+ *
+ * BSD 3-Clause License
+ *
+ * Copyright (c) 2021-2025, Container System Contributors
+ * All rights reserved.
+ *
+ * @section support_sec Support
+ *
+ * - **Documentation**: Complete API reference with examples
+ * - **Examples**: Comprehensive example applications
+ * - **Tests**: Extensive test coverage
+ * - **CI/CD**: Automated building and testing on multiple platforms
+ */
