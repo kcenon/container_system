@@ -38,6 +38,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <vector>
 #include <memory>
 #include <optional>
+#include <mutex>
 #include <shared_mutex>
 #include <atomic>
 #include <type_traits>
