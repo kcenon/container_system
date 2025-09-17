@@ -30,7 +30,12 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt update
-        sudo apt install -y cmake build-essential ninja-build
+        sudo apt install -y cmake ninja-build
+
+        # Install GCC 11 (more stable with C++20)
+        sudo apt install -y gcc-11 g++-11
+        sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-11 110
+        sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-11 110
 
     - name: Setup vcpkg
       uses: lukka/run-vcpkg@v11
@@ -46,6 +51,8 @@ jobs:
           -DCMAKE_BUILD_TYPE=Release \
           -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake \
           -DVCPKG_TARGET_TRIPLET=x64-linux \
+          -DCMAKE_C_COMPILER=gcc-11 \
+          -DCMAKE_CXX_COMPILER=g++-11 \
           -DBUILD_CONTAINER_EXAMPLES=ON \
           -DBUILD_CONTAINER_SAMPLES=ON \
           -DUSE_UNIT_TEST=ON \

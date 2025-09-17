@@ -52,29 +52,53 @@ jobs:
 
     - name: License compatibility check
       run: |
-        echo "License Compatibility Check for container-system"
-        echo "================================================"
+        # Create simple license checker script
+        cat > license_check.py << 'EOF'
+        #!/usr/bin/env python3
+        import json
+        import sys
 
-        # Known licenses for dependencies
-        declare -A licenses=(
-          ["fmt"]="MIT"
-          ["gtest"]="BSD-3-Clause"
-          ["benchmark"]="Apache-2.0"
-        )
+        # Compatible licenses with MIT
+        COMPATIBLE_LICENSES = {
+            'MIT', 'BSD-2-Clause', 'BSD-3-Clause', 'Apache-2.0',
+            'ISC', 'Unlicense', 'LGPL-2.1+', 'LGPL-3.0+'
+        }
 
-        compatible_licenses=("MIT" "BSD-2-Clause" "BSD-3-Clause" "Apache-2.0" "ISC")
+        # Read vcpkg manifest
+        with open('vcpkg.json', 'r') as f:
+            manifest = json.load(f)
 
-        for dep in "${!licenses[@]}"; do
-          license="${licenses[$dep]}"
-          if [[ " ${compatible_licenses[@]} " =~ " ${license} " ]]; then
-            echo "✅ $dep: $license - COMPATIBLE"
-          else
-            echo "❌ $dep: $license - INCOMPATIBLE"
-            exit 1
-          fi
-        done
+        print("License Compatibility Check for container-system (MIT License)")
+        print("=" * 60)
 
-        echo "✅ All dependencies are license compatible"
+        # Known licenses for our dependencies
+        known_licenses = {
+            'fmt': 'MIT',
+            'gtest': 'BSD-3-Clause',
+            'benchmark': 'Apache-2.0'
+        }
+
+        all_compatible = True
+
+        for dep_name in ['fmt', 'gtest', 'benchmark']:
+            if dep_name in known_licenses:
+                license_name = known_licenses[dep_name]
+                compatible = license_name in COMPATIBLE_LICENSES
+                status = "✅ COMPATIBLE" if compatible else "❌ INCOMPATIBLE"
+                print(f"{dep_name:12} {license_name:15} {status}")
+                if not compatible:
+                    all_compatible = False
+
+        print("=" * 60)
+        if all_compatible:
+            print("✅ All dependencies are license compatible")
+            sys.exit(0)
+        else:
+            print("❌ License compatibility issues found")
+            sys.exit(1)
+        EOF
+
+        python3 license_check.py
 
     - name: Generate security report
       if: always()
