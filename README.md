@@ -1,6 +1,6 @@
 # Container System
 
-Advanced C++20 Container System with Thread-Safe Operations and High-Performance Features
+Advanced C++20 Container System with Thread-Safe Operations, High-Performance Features, and Messaging Integration
 
 ## Overview
 
@@ -14,6 +14,13 @@ The Container Module provides a comprehensive type-safe container system for the
 - **SIMD Optimization**: ARM NEON and x86 AVX support for numeric operations
 - **Memory Efficiency**: Variant storage with minimal allocations
 - **Serialization**: Binary, JSON, and XML serialization formats
+
+### 🚀 Enhanced Features
+- **Messaging Integration**: Optimized containers for messaging systems
+- **Builder Pattern**: Fluent API for container construction
+- **Performance Metrics**: Real-time operation monitoring and analytics
+- **External Callbacks**: Integration hooks for external systems
+- **Dual Compatibility**: Works standalone or as part of messaging systems
 
 ### 📦 Value Types
 
@@ -61,6 +68,28 @@ auto values = std::vector<std::shared_ptr<value>>{
 };
 
 container->set_values(values);
+```
+
+### Enhanced Builder Pattern
+
+```cpp
+#include <container/container.h>
+using namespace container_module::integration;
+
+// Modern builder pattern with method chaining
+auto container = messaging_container_builder()
+    .source("client_01", "session_123")
+    .target("server", "main_handler")
+    .message_type("user_data")
+    .add_value("user_id", 12345)
+    .add_value("username", std::string("john_doe"))
+    .add_value("balance", 1500.75)
+    .add_value("active", true)
+    .optimize_for_speed()
+    .build();
+
+// Enhanced serialization with performance monitoring
+std::string serialized = messaging_integration::serialize_for_messaging(container);
 ```
 
 ### Serialization and Deserialization
@@ -311,16 +340,52 @@ db.insert_query("INSERT INTO messages (data) VALUES ('" + data + "')");
 
 ## Building
 
-The Container module is built as part of the main messaging system:
+The Container System can be built standalone or as part of a larger messaging system:
+
+### Standalone Build
 
 ```bash
-# Build with container module
-./build.sh
+# Basic build
+mkdir build && cd build
+cmake .. -DCMAKE_BUILD_TYPE=Release
+cmake --build .
 
-# Build container tests only
-cd build
-make container_test
-./bin/container_test
+# Build with all enhanced features
+cmake .. \
+  -DCMAKE_BUILD_TYPE=Release \
+  -DENABLE_MESSAGING_FEATURES=ON \
+  -DENABLE_PERFORMANCE_METRICS=ON \
+  -DENABLE_EXTERNAL_INTEGRATION=ON \
+  -DBUILD_CONTAINER_EXAMPLES=ON
+cmake --build .
+
+# Run examples
+./bin/examples/messaging_integration_example
+```
+
+### Build Options
+
+| Option | Description | Default |
+|--------|-------------|---------|
+| `ENABLE_MESSAGING_FEATURES` | Enhanced messaging optimizations | ON |
+| `ENABLE_PERFORMANCE_METRICS` | Real-time performance monitoring | OFF |
+| `ENABLE_EXTERNAL_INTEGRATION` | External system callback hooks | ON |
+| `BUILD_CONTAINER_EXAMPLES` | Build example applications | ON |
+| `BUILD_CONTAINER_SAMPLES` | Build sample programs | ON |
+| `USE_THREAD_SAFE_OPERATIONS` | Enable thread-safe operations | ON |
+
+### Integration Build
+
+When used as part of a messaging system, the container provides compatibility aliases:
+
+```cmake
+# In your CMakeLists.txt
+find_package(ContainerSystem REQUIRED)
+
+# Use either alias depending on your context
+target_link_libraries(your_target ContainerSystem::container)
+# OR
+target_link_libraries(your_target MessagingSystem::container)
 ```
 
 ## Dependencies

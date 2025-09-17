@@ -8,9 +8,8 @@ cmake_minimum_required(VERSION 3.16)
 ##################################################
 
 # Project definition
-project(container_system 
-    VERSION 2.0.0
-    DESCRIPTION "Advanced C++20 Container System with Thread-Safe Operations"
+project(container_system
+    DESCRIPTION "Advanced C++20 Container System with Thread-Safe Operations and Messaging Integration"
     LANGUAGES CXX
 )
 
@@ -26,6 +25,11 @@ option(USE_UNIT_TEST "Use unit test" ON)
 option(BUILD_CONTAINER_SAMPLES "Build container system samples" ON)
 option(USE_THREAD_SAFE_OPERATIONS "Enable thread-safe operations" ON)
 option(USE_LOCKFREE_BY_DEFAULT "Use lock-free implementations by default" OFF)
+
+# New messaging system integration options
+option(ENABLE_MESSAGING_FEATURES "Enable messaging-specific optimizations" ON)
+option(ENABLE_EXTERNAL_INTEGRATION "Enable integration with external systems" ON)
+option(ENABLE_PERFORMANCE_METRICS "Enable performance metrics collection" OFF)
 
 # Output directories
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
@@ -85,12 +89,23 @@ set(INTERNAL_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/internal/simd_processor.cpp
 )
 
+# Integration files (conditional)
+set(INTEGRATION_FILES)
+if(ENABLE_MESSAGING_FEATURES OR ENABLE_EXTERNAL_INTEGRATION OR ENABLE_PERFORMANCE_METRICS)
+    list(APPEND INTEGRATION_FILES
+        ${CMAKE_CURRENT_SOURCE_DIR}/integration/messaging_integration.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/integration/messaging_integration.cpp
+    )
+    message(STATUS "Container: Integration modules included")
+endif()
+
 # Combine all files
-set(ALL_FILES 
+set(ALL_FILES
     ${MAIN_HEADER}
-    ${CORE_FILES} 
-    ${VALUE_FILES} 
+    ${CORE_FILES}
+    ${VALUE_FILES}
     ${INTERNAL_FILES}
+    ${INTEGRATION_FILES}
 )
 
 ##################################################
@@ -102,12 +117,12 @@ add_library(container_system STATIC
     ${ALL_FILES}
 )
 
-# Create alias for consistent naming
+# Create aliases for consistent naming and messaging system compatibility
 add_library(ContainerSystem::container ALIAS container_system)
+add_library(MessagingSystem::container ALIAS container_system)  # For messaging system compatibility
 
 # Set target properties
 set_target_properties(container_system PROPERTIES
-    VERSION ${PROJECT_VERSION}
     POSITION_INDEPENDENT_CODE ON
     CXX_STANDARD 20
     CXX_STANDARD_REQUIRED ON
@@ -125,6 +140,11 @@ target_include_directories(container_system PUBLIC
     $<INSTALL_INTERFACE:include>
 )
 
+# Private include directories (for building this library)
+target_include_directories(container_system PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
 ##################################################
 # Compile Definitions
 ##################################################
@@ -133,6 +153,22 @@ target_include_directories(container_system PUBLIC
 target_compile_definitions(container_system PRIVATE
     CONTAINER_INTERNAL_FEATURES
 )
+
+# Conditional compile definitions for new features
+if(ENABLE_MESSAGING_FEATURES)
+    target_compile_definitions(container_system PUBLIC HAS_MESSAGING_FEATURES)
+    message(STATUS "Container: Messaging features enabled")
+endif()
+
+if(ENABLE_EXTERNAL_INTEGRATION)
+    target_compile_definitions(container_system PUBLIC HAS_EXTERNAL_INTEGRATION)
+    message(STATUS "Container: External integration enabled")
+endif()
+
+if(ENABLE_PERFORMANCE_METRICS)
+    target_compile_definitions(container_system PUBLIC HAS_PERFORMANCE_METRICS)
+    message(STATUS "Container: Performance metrics enabled")
+endif()
 
 ##################################################
 # Dependencies
@@ -250,12 +286,18 @@ if(BUILD_CONTAINER_SAMPLES)
     message(STATUS "Container samples will be built")
 endif()
 
+# Build examples
+option(BUILD_CONTAINER_EXAMPLES "Build container system examples" ON)
+if(BUILD_CONTAINER_EXAMPLES)
+    add_subdirectory(examples)
+    message(STATUS "Container examples will be built")
+endif()
+
 ##################################################
 # Summary
 ##################################################
 
 message(STATUS "Container library configured:")
-message(STATUS "  Version: ${PROJECT_VERSION}")
 message(STATUS "  Module Directory: ${CMAKE_CURRENT_SOURCE_DIR}/container")
 message(STATUS "  Dependencies: utilities, fmt")
 message(STATUS "  Features:")
