@@ -43,6 +43,141 @@ The Container Module provides a comprehensive type-safe container system for the
 | `container_value` | 'e' | Nested container | Variable |
 | `string_value` | 'f' | UTF-8 string | Variable |
 
+## Quick Start
+
+### Prerequisites
+
+Install dependencies using the provided script:
+
+**Linux/macOS:**
+```bash
+# Install all required dependencies (vcpkg, cmake, etc.)
+./dependency.sh
+```
+
+**Windows (Command Prompt):**
+```cmd
+REM Install all required dependencies
+dependency.bat
+
+REM Install with Visual Studio Build Tools
+dependency.bat --install-vs
+```
+
+**Windows (PowerShell):**
+```powershell
+# Install all required dependencies
+.\dependency.ps1
+
+# Install with Visual Studio Build Tools and force reinstall
+.\dependency.ps1 -InstallVS -Force
+```
+
+### Build and Run
+
+Build the project with all features enabled:
+
+**Linux/macOS:**
+```bash
+# Build with default settings (Release mode, all features enabled)
+./build.sh
+
+# Build in Debug mode with verbose output
+./build.sh --debug --verbose
+
+# Build without tests or examples
+./build.sh --no-tests --no-examples
+
+# Clean build
+./build.sh --clean
+```
+
+**Windows (Command Prompt):**
+```cmd
+REM Build with default settings
+build.bat
+
+REM Build in Debug mode with verbose output
+build.bat --debug --verbose
+
+REM Build without tests or examples
+build.bat --no-tests --no-examples
+
+REM Clean build with Ninja generator
+build.bat --clean --ninja
+```
+
+**Windows (PowerShell):**
+```powershell
+# Build with default settings
+.\build.ps1
+
+# Build in Debug mode with verbose output
+.\build.ps1 -Debug -Verbose
+
+# Build without tests or examples
+.\build.ps1 -NoTests -NoExamples
+
+# Clean build for x86 platform
+.\build.ps1 -Clean -X86
+```
+
+### Run Examples
+
+**Linux/macOS:**
+```bash
+# Basic container operations
+./build/examples/basic_container_example
+
+# Advanced features with threading and performance monitoring
+./build/examples/advanced_container_example
+
+# Real-world scenarios (IoT, Finance, Gaming, CMS)
+./build/examples/real_world_scenarios
+
+# Messaging integration features (if enabled)
+./build/examples/messaging_integration_example
+```
+
+**Windows:**
+```cmd
+REM Basic container operations
+.\build\examples\Release\basic_container_example.exe
+
+REM Advanced features with threading and performance monitoring
+.\build\examples\Release\advanced_container_example.exe
+
+REM Real-world scenarios (IoT, Finance, Gaming, CMS)
+.\build\examples\Release\real_world_scenarios.exe
+
+REM Messaging integration features (if enabled)
+.\build\examples\Release\messaging_integration_example.exe
+```
+
+### Run Tests
+
+**Linux/macOS:**
+```bash
+# Run all tests
+cd build && ctest
+
+# Run specific test suites
+./build/unit_tests
+./build/test_messaging_integration
+./build/performance_tests
+```
+
+**Windows:**
+```cmd
+REM Run all tests
+cd build && ctest --build-config Release
+
+REM Run specific test suites
+.\build\Release\unit_tests.exe
+.\build\Release\test_messaging_integration.exe
+.\build\Release\performance_tests.exe
+```
+
 ## Usage Examples
 
 ### Basic Container Operations
@@ -337,6 +472,45 @@ db.connect("host=localhost dbname=messages");
 std::string data = container->serialize();
 db.insert_query("INSERT INTO messages (data) VALUES ('" + data + "')");
 ```
+
+## Platform Support
+
+The Container System provides full cross-platform support with native build scripts:
+
+### Supported Platforms
+
+| Platform | Architecture | Compiler | Build Scripts |
+|----------|-------------|-----------|---------------|
+| **Linux** | x86_64, ARM64 | GCC 9+, Clang 10+ | `dependency.sh`, `build.sh` |
+| **macOS** | x86_64, ARM64 (Apple Silicon) | Apple Clang, Clang | `dependency.sh`, `build.sh` |
+| **Windows** | x86, x64 | MSVC 2019+, Clang | `dependency.bat`, `build.bat`, `dependency.ps1`, `build.ps1` |
+
+### Build Tools
+
+| Tool | Linux/macOS | Windows |
+|------|-------------|---------|
+| **Build System** | CMake 3.16+ | CMake 3.16+ |
+| **Package Manager** | vcpkg | vcpkg |
+| **Generators** | Unix Makefiles, Ninja | Visual Studio 2019/2022, Ninja |
+| **Dependencies** | apt/yum/brew + vcpkg | vcpkg |
+
+### Windows-Specific Features
+
+- **Multiple Generators**: Visual Studio 2019/2022, Ninja
+- **Platform Support**: x86, x64 builds
+- **Automatic Dependency Installation**: Visual Studio Build Tools, CMake, vcpkg
+- **PowerShell Integration**: Advanced parameter validation and error handling
+- **Command Prompt Compatibility**: Traditional batch file support
+
+### SIMD Optimizations
+
+| Platform | SIMD Support | Auto-Detection |
+|----------|-------------|----------------|
+| Linux x86_64 | SSE4.2, AVX2 | ✓ |
+| macOS ARM64 | ARM NEON | ✓ |
+| macOS x86_64 | SSE4.2, AVX2 | ✓ |
+| Windows x64 | SSE4.2, AVX2 | ✓ |
+| Windows x86 | SSE4.2 | ✓ |
 
 ## Building
 
