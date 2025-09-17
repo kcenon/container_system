@@ -57,24 +57,7 @@ namespace container_module
      * Note: On some platforms (like macOS), int64_t and long long are the same type,
      * so we use conditional types to avoid duplication.
      */
-    #ifdef __APPLE__
-        // On macOS, int64_t is typedef'd to long long, so we skip the explicit long long types
-        using ValueVariant = std::variant<
-            std::monostate,                       // null_value (index 0)
-            bool,                                 // bool_value (index 1)
-            std::vector<uint8_t>,                 // bytes_value (index 2)
-            int16_t,                              // short_value (index 3)
-            uint16_t,                             // ushort_value (index 4)
-            int32_t,                              // int_value (index 5)
-            uint32_t,                             // uint_value (index 6)
-            int64_t,                              // long_value (index 7) - same as long long on macOS
-            uint64_t,                             // ulong_value (index 8) - same as unsigned long long on macOS
-            float,                                // float_value (index 9)
-            double,                               // double_value (index 10)
-            std::string,                          // string_value (index 11)
-            std::shared_ptr<thread_safe_container> // container_value (index 12)
-        >;
-    #else
+        // Use a unified variant definition that avoids type duplication
         using ValueVariant = std::variant<
             std::monostate,                       // null_value (index 0)
             bool,                                 // bool_value (index 1)
@@ -85,14 +68,13 @@ namespace container_module
             uint32_t,                             // uint_value (index 6)
             int64_t,                              // long_value (index 7)
             uint64_t,                             // ulong_value (index 8)
-            long long,                            // llong_value (index 9)
-            unsigned long long,                   // ullong_value (index 10)
+            std::conditional_t<!std::is_same_v<long long, int64_t>, long long, int>,  // llong_value (index 9) - only if different
+            std::conditional_t<!std::is_same_v<unsigned long long, uint64_t>, unsigned long long, unsigned>, // ullong_value (index 10) - only if different
             float,                                // float_value (index 11)
             double,                               // double_value (index 12)
             std::string,                          // string_value (index 13)
             std::shared_ptr<thread_safe_container> // container_value (index 14)
         >;
-    #endif
 
     /**
      * @brief Type-safe value wrapper with thread safety
@@ -304,11 +286,13 @@ namespace container_module
     template<>
     struct is_variant_type<uint64_t> : std::true_type {};
     
-    // Only define these on non-Apple platforms where they're different types
-    #ifndef __APPLE__
+    // Only define these where long long is different from int64_t
+    #if !std::is_same_v<long long, int64_t>
     template<>
     struct is_variant_type<long long> : std::true_type {};
-    
+    #endif
+
+    #if !std::is_same_v<unsigned long long, uint64_t>
     template<>
     struct is_variant_type<unsigned long long> : std::true_type {};
     #endif

@@ -51,7 +51,22 @@ find_package(Threads REQUIRED)
 
 # vcpkg integration
 set(VCPKG_TARGET_TRIPLET "arm64-osx" CACHE STRING "VCPKG target triplet")
-find_package(fmt CONFIG REQUIRED)
+find_package(fmt CONFIG)
+
+# If fmt is not found via vcpkg, try system installation
+if(NOT fmt_FOUND)
+    message(STATUS "fmt not found via vcpkg, trying system installation...")
+    find_package(PkgConfig QUIET)
+    if(PkgConfig_FOUND)
+        pkg_check_modules(FMT fmt)
+    endif()
+
+    if(NOT FMT_FOUND)
+        message(STATUS "fmt not found, will use std::format if available")
+        add_compile_definitions(USE_STD_FORMAT)
+        set(fmt_FOUND FALSE)
+    endif()
+endif()
 
 ##################################################
 # Source Files Configuration
@@ -182,11 +197,22 @@ endif()
 # Dependencies
 ##################################################
 
-# fmt library for formatting
-target_link_libraries(container_system PUBLIC 
-    fmt::fmt
+# Link libraries
+target_link_libraries(container_system PUBLIC
     Threads::Threads
 )
+
+# Link fmt library if available
+if(fmt_FOUND AND TARGET fmt::fmt)
+    target_link_libraries(container_system PUBLIC fmt::fmt)
+    message(STATUS "Container: Linking with fmt::fmt")
+elseif(FMT_FOUND)
+    target_link_libraries(container_system PUBLIC ${FMT_LIBRARIES})
+    target_include_directories(container_system PUBLIC ${FMT_INCLUDE_DIRS})
+    message(STATUS "Container: Linking with system fmt")
+else()
+    message(STATUS "Container: Using std::format (no fmt library)")
+endif()
 
 ##################################################
 # Platform-Specific Configuration
