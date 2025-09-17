@@ -42,7 +42,7 @@ jobs:
           fi
 
       - name: Cache vcpkg
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         id: vcpkg-cache
         with:
           path: |
@@ -101,7 +101,7 @@ jobs:
           cp -r build/lib artifacts/ || true
 
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: success()
         with:
           name: container-system-ubuntu-gcc-${{ github.sha }}

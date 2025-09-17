@@ -48,7 +48,7 @@ jobs:
             . 2> cppcheck-results.xml || true
 
       - name: Upload Cppcheck results
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: cppcheck-results
@@ -120,7 +120,7 @@ jobs:
           echo "- Regular security reviews of new code" >> security-report.md
 
       - name: Upload security report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: security-scan-report
