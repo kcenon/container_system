@@ -111,6 +111,8 @@ jobs:
                   -DCMAKE_INSTALL_PREFIX="..\target" `
                   -DCMAKE_BUILD_TYPE=$env:BUILD_TYPE `
                   -DBUILD_TESTS=OFF `
+                  -DBUILD_CONTAINER_SAMPLES=OFF `
+                  -DBUILD_CONTAINER_EXAMPLES=OFF `
                   -DBUILD_DOCUMENTATION=OFF `
                   -DUSE_STD_FORMAT:BOOL=ON `
                   -DUSE_STD_FORMAT_ENABLED:BOOL=ON `

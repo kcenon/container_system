@@ -121,6 +121,9 @@ jobs:
           echo "vcpkg build failed, falling back to system libraries..."
           cmake .. \
             -G Ninja \
+            -DBUILD_TESTS=OFF \
+            -DBUILD_CONTAINER_SAMPLES=OFF \
+            -DBUILD_CONTAINER_EXAMPLES=OFF \
             -DBUILD_MESSAGING_SYSTEM_AS_SUBMODULE=ON \
             -DCMAKE_INSTALL_PREFIX="../target" \
             -DCMAKE_BUILD_TYPE=$BUILD_TYPE \

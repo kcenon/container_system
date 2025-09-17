@@ -157,6 +157,8 @@ jobs:
           cmake .. \
             -G "Ninja" \
             -DBUILD_TESTS=ON \
+            -DBUILD_CONTAINER_SAMPLES=OFF \
+            -DBUILD_CONTAINER_EXAMPLES=OFF \
             -DCMAKE_INSTALL_PREFIX="../target" \
             -DCMAKE_BUILD_TYPE=$BUILD_TYPE \
             -DCMAKE_C_COMPILER=/mingw64/bin/gcc.exe \
@@ -183,6 +185,9 @@ jobs:
           rm -rf CMakeFiles
           cmake .. \
             -G "Ninja" \
+            -DBUILD_TESTS=OFF \
+            -DBUILD_CONTAINER_SAMPLES=OFF \
+            -DBUILD_CONTAINER_EXAMPLES=OFF \
             -DBUILD_MESSAGING_SYSTEM_AS_SUBMODULE=ON \
             -DCMAKE_INSTALL_PREFIX="../target" \
             -DCMAKE_BUILD_TYPE=$BUILD_TYPE \
