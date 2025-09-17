@@ -101,7 +101,9 @@ jobs:
           cd build
           cmake .. \
             -G Ninja \
-            -DBUILD_TESTS=ON \
+            -DUSE_UNIT_TEST=ON \
+            -DBUILD_CONTAINER_EXAMPLES=ON \
+            -DBUILD_CONTAINER_SAMPLES=ON \
             -DCMAKE_INSTALL_PREFIX="../target" \
             -DCMAKE_BUILD_TYPE=$BUILD_TYPE \
             -DCMAKE_TOOLCHAIN_FILE="$GITHUB_WORKSPACE/vcpkg/scripts/buildsystems/vcpkg.cmake" \
@@ -129,9 +131,9 @@ jobs:
       - name: Run tests
         run: |
           cd build
-          if [ -f "bin/container_base_unit" ]; then
+          if [ -f "bin/container_test" ] || [ -f "bin/container_base_unit" ] || find bin -name "*_unit" -executable | grep -q .; then
             echo "Running unit tests (vcpkg build successful)..."
-            find bin -name "*_unit" -executable | while read test; do
+            find bin -name "*unit*" -o -name "*test*" | grep -E "(unit|test)" | while read test; do
               echo "Running $test..."
               ./$test || echo "Test $test failed but continuing..."
             done

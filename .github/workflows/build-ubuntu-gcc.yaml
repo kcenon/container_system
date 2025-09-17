@@ -130,9 +130,9 @@ jobs:
       - name: Run tests
         run: |
           cd build
-          if [ -f "bin/unit_tests" ]; then
+          if [ -f "bin/container_test" ] || [ -f "bin/container_base_unit" ] || find bin -name "*_unit" -executable | grep -q .; then
             echo "Running unit tests (vcpkg build successful)..."
-            find bin -name "*unit*" -executable | while read test; do
+            find bin -name "*unit*" -o -name "*test*" | grep -E "(unit|test)" | while read test; do
               echo "Running $test..."
               ./$test || echo "Test $test failed but continuing..."
             done

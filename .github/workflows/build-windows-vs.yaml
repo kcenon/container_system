@@ -75,7 +75,9 @@ jobs:
           Push-Location build
 
           cmake .. -G "Visual Studio 17 2022" -A x64 `
-                  -DBUILD_TESTS=ON `
+                  -DUSE_UNIT_TEST=ON `
+                  -DBUILD_CONTAINER_EXAMPLES=ON `
+                  -DBUILD_CONTAINER_SAMPLES=ON `
                   -DCMAKE_INSTALL_PREFIX="..\target" `
                   -DCMAKE_BUILD_TYPE=$env:BUILD_TYPE `
                   -DCMAKE_TOOLCHAIN_FILE="$env:GITHUB_WORKSPACE\vcpkg\scripts\buildsystems\vcpkg.cmake" `
@@ -106,7 +108,7 @@ jobs:
                   -DBUILD_CONTAINER_AS_SUBMODULE=ON `
                   -DCMAKE_INSTALL_PREFIX="..\target" `
                   -DCMAKE_BUILD_TYPE=$env:BUILD_TYPE `
-                  -DBUILD_TESTS=OFF `
+                  -DUSE_UNIT_TEST=OFF `
                   -DBUILD_DOCUMENTATION=OFF `
                   -DUSE_STD_FORMAT:BOOL=ON `
                   -DUSE_STD_FORMAT_ENABLED:BOOL=ON `
@@ -132,9 +134,15 @@ jobs:
         run: |
           Push-Location build
 
-          if (Test-Path "bin\$env:BUILD_TYPE\container_base_unit.exe") {
+          $testFound = $false
+          if (Test-Path "bin\$env:BUILD_TYPE\container_test.exe") { $testFound = $true }
+          if (Test-Path "bin\$env:BUILD_TYPE\container_base_unit.exe") { $testFound = $true }
+          $unitTests = Get-ChildItem -Path "bin\$env:BUILD_TYPE" -Name "*unit*.exe", "*test*.exe" -ErrorAction SilentlyContinue
+          if ($unitTests.Count -gt 0) { $testFound = $true }
+
+          if ($testFound) {
             Write-Host "Running unit tests (vcpkg build successful)..."
-            Get-ChildItem -Path "bin\$env:BUILD_TYPE" -Name "*_unit.exe" | ForEach-Object {
+            Get-ChildItem -Path "bin\$env:BUILD_TYPE" -Name "*unit*.exe", "*test*.exe" -ErrorAction SilentlyContinue | ForEach-Object {
               Write-Host "Running $_ ..."
               $exitCode = & ".\bin\$env:BUILD_TYPE\$_"
               if ($exitCode -ne 0) {
