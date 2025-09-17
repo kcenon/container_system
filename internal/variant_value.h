@@ -68,12 +68,10 @@ namespace container_module
             uint32_t,                             // uint_value (index 6)
             int64_t,                              // long_value (index 7)
             uint64_t,                             // ulong_value (index 8)
-            std::conditional_t<!std::is_same_v<long long, int64_t>, long long, int>,  // llong_value (index 9) - only if different
-            std::conditional_t<!std::is_same_v<unsigned long long, uint64_t>, unsigned long long, unsigned>, // ullong_value (index 10) - only if different
-            float,                                // float_value (index 11)
-            double,                               // double_value (index 12)
-            std::string,                          // string_value (index 13)
-            std::shared_ptr<thread_safe_container> // container_value (index 14)
+            float,                                // float_value (index 9)
+            double,                               // double_value (index 10)
+            std::string,                          // string_value (index 11)
+            std::shared_ptr<thread_safe_container> // container_value (index 12)
         >;
 
     /**
@@ -286,16 +284,7 @@ namespace container_module
     template<>
     struct is_variant_type<uint64_t> : std::true_type {};
     
-    // Only define these where long long is different from int64_t
-    #if !std::is_same_v<long long, int64_t>
-    template<>
-    struct is_variant_type<long long> : std::true_type {};
-    #endif
-
-    #if !std::is_same_v<unsigned long long, uint64_t>
-    template<>
-    struct is_variant_type<unsigned long long> : std::true_type {};
-    #endif
+    // Note: long long and unsigned long long removed from variant to avoid type duplication
     
     template<>
     struct is_variant_type<float> : std::true_type {};
