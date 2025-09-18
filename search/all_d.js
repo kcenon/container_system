@@ -1,0 +1,26 @@
+var searchData=
+[
+  ['main_0',['main',['../d9/dd3/real__world__scenarios_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4',1,'main():&#160;real_world_scenarios.cpp'],['../d5/d4e/messaging__integration__example_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4',1,'main():&#160;messaging_integration_example.cpp'],['../d5/da6/basic__container__example_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4',1,'main():&#160;basic_container_example.cpp'],['../d8/d75/advanced__container__example_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4',1,'main():&#160;advanced_container_example.cpp']]],
+  ['main_20components_1',['Main Components',['../index.html#main_components',1,'']]],
+  ['mainpage_2edox_2',['mainpage.dox',['../d5/d4d/mainpage_8dox.html',1,'']]],
+  ['max_5ffloat_3',['max_float',['../db/dfe/classcontainer__module_1_1simd_1_1simd__processor.html#a69d802857a8d2a80b3c346dddbd2ece1',1,'container_module::simd::simd_processor']]],
+  ['max_5ffloat_5fscalar_4',['max_float_scalar',['../db/dfe/classcontainer__module_1_1simd_1_1simd__processor.html#af669762f3ce4138ab6aa440e26d6092c',1,'container_module::simd::simd_processor']]],
+  ['memory_20efficiency_5',['💾 Memory Efficiency',['../index.html#memory_usage',1,'']]],
+  ['message_5ftype_6',['message_type',['../d1/d1a/namespacecontainer__module.html#a12f29b039d3b848b78eae1f8e3e588d5',1,'container_module::MESSAGE_TYPE'],['../d9/dad/classcontainer__module_1_1value__container.html#a4fe0a956056a1b6b1dbebc597a5874fd',1,'container_module::value_container::message_type()'],['../d0/dcd/classcontainer__module_1_1integration_1_1messaging__container__builder.html#a56f2ae6cae82bd445e889788db53e2da',1,'container_module::integration::messaging_container_builder::message_type()']]],
+  ['message_5ftype_5f_7',['message_type_',['../d9/dad/classcontainer__module_1_1value__container.html#a7ef0716f980a26ccbccd5f6256517a79',1,'container_module::value_container']]],
+  ['message_5fversion_8',['MESSAGE_VERSION',['../d1/d1a/namespacecontainer__module.html#af754444045c7a6f35303b9d965dd5bff',1,'container_module']]],
+  ['messaging_20integration_20integration_9',['Messaging Integration (integration)',['../index.html#messaging_integration',1,'']]],
+  ['messaging_5fcontainer_5fbuilder_10',['messaging_container_builder',['../d0/dcd/classcontainer__module_1_1integration_1_1messaging__container__builder.html#a220090f1d93c7b054330b1b9cbd2e5c2',1,'container_module::integration::messaging_container_builder::messaging_container_builder()'],['../d0/dcd/classcontainer__module_1_1integration_1_1messaging__container__builder.html',1,'container_module::integration::messaging_container_builder']]],
+  ['messaging_5fintegration_11',['messaging_integration',['../d2/d81/classcontainer__module_1_1integration_1_1messaging__integration.html',1,'container_module::integration']]],
+  ['messaging_5fintegration_2ecpp_12',['messaging_integration.cpp',['../dd/df1/messaging__integration_8cpp.html',1,'']]],
+  ['messaging_5fintegration_2eh_13',['messaging_integration.h',['../df/dc2/messaging__integration_8h.html',1,'']]],
+  ['messaging_5fintegration_5fexample_2ecpp_14',['messaging_integration_example.cpp',['../d5/d4e/messaging__integration__example_8cpp.html',1,'']]],
+  ['metrics_15',['metrics',['../d5/dcf/structcontainer__module_1_1integration_1_1messaging__integration_1_1metrics.html',1,'container_module::integration::messaging_integration']]],
+  ['metrics_5f_16',['metrics_',['../d2/d81/classcontainer__module_1_1integration_1_1messaging__integration.html#a464dde1d3f2ab47fd19a20b81a495dec',1,'container_module::integration::messaging_integration']]],
+  ['min_5ffloat_17',['min_float',['../db/dfe/classcontainer__module_1_1simd_1_1simd__processor.html#a63a81dad99cc598e36fab9dbea439fd9',1,'container_module::simd::simd_processor']]],
+  ['min_5ffloat_5fscalar_18',['min_float_scalar',['../db/dfe/classcontainer__module_1_1simd_1_1simd__processor.html#a3d7d1ab11e2e682a2d3addf0e5fcae18',1,'container_module::simd::simd_processor']]],
+  ['minute_20setup_19',['🚀 5-Minute Setup',['../index.html#five_minute',1,'']]],
+  ['mission_20vision_20',['Mission &amp; Vision',['../index.html#mission',1,'']]],
+  ['modules_21',['Core Modules',['../index.html#container_modules',1,'']]],
+  ['mutex_5f_22',['mutex_',['../db/d1c/classcontainer__module_1_1variant__value.html#a9974fd6eb6cb1871c6ccbc1de60af706',1,'container_module::variant_value::mutex_'],['../db/de5/classcontainer__module_1_1thread__safe__container.html#a5a09002c850f0250965b89727d38ca59',1,'container_module::thread_safe_container::mutex_'],['../d9/dad/classcontainer__module_1_1value__container.html#a2a8bad607176993bcf46fa3d2a70a392',1,'container_module::value_container::mutex_']]]
+];

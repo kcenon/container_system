@@ -1,0 +1,7 @@
+<map id="container_module::variant_value::type_index" name="container_module::variant_value::type_index">
+<area shape="rect" id="Node000001" title="Get the current type index (corresponds to value_types enum)" alt="" coords="247,37,440,77"/>
+<area shape="rect" id="Node000002" href="$db/d1c/classcontainer__module_1_1variant__value.html#a5c5afd0733f589cfd58ffdd6c17d1574" title="Serialize to binary format." alt="" coords="5,5,199,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="233,45,199,41,199,36,234,40"/>
+<area shape="rect" id="Node000003" href="$db/d1c/classcontainer__module_1_1variant__value.html#a92903ea2ec428e99b7570296d08e9604" title="Convert to JSON representation." alt="" coords="5,69,199,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="234,75,199,79,199,74,233,69"/>
+</map>

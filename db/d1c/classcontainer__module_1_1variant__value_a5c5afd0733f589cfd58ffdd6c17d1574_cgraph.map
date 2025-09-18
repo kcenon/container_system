@@ -1,0 +1,19 @@
+<map id="container_module::variant_value::serialize" name="container_module::variant_value::serialize">
+<area shape="rect" id="Node000001" title="Serialize to binary format." alt="" coords="5,165,199,205"/>
+<area shape="rect" id="Node000002" href="$d5/df9/classcontainer__module_1_1value.html#ae2d6a5ff0505af3f3c56e50b2ece015e" title=" " alt="" coords="252,69,435,109"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="144,163,246,119,265,112,267,116,248,124,147,168"/>
+<area shape="rect" id="Node000007" href="$d5/df9/classcontainer__module_1_1value.html#a7f42c1131c431a101cc098c8ad9f2c7a" title=" " alt="" coords="252,133,435,173"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="198,170,238,165,239,170,199,175"/>
+<area shape="rect" id="Node000008" href="$db/d1c/classcontainer__module_1_1variant__value.html#aa4b4a97e4f043f1408769c9679e6ea75" title="Get the current type index (corresponds to value_types enum)" alt="" coords="247,197,440,237"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="199,195,233,200,233,205,198,201"/>
+<area shape="rect" id="Node000009" href="$db/d1c/classcontainer__module_1_1variant__value.html#aa7ebc0938ad6811801ef580ac713e830" title="Apply a visitor to the contained value." alt="" coords="247,261,440,301"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="147,203,248,247,267,254,265,259,246,252,144,208"/>
+<area shape="rect" id="Node000003" href="$d1/d1a/namespacecontainer__module.html#a83ed4416891be1a3f3191bf92b50b3e9" title="Convert a string&#45;based type indicator (e.g., &quot;4&quot;) to a value_types enum." alt="" coords="488,5,684,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="419,67,496,46,497,51,421,72"/>
+<area shape="rect" id="Node000005" href="$d1/daf/classutility__module_1_1formatter.html#a1833466f2e4df9a2dbab6204dbb95800" title=" " alt="" coords="493,69,679,109"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="435,87,479,87,479,92,435,92"/>
+<area shape="rect" id="Node000006" href="$d5/df9/classcontainer__module_1_1value.html#aad6ea2fdcbb516d7a72f577de0b6102f" title=" " alt="" coords="495,133,677,173"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="421,107,497,127,496,132,419,112"/>
+<area shape="rect" id="Node000004" href="$d1/d1a/namespacecontainer__module.html#ac03e62099dde8cbf072a3a4c635382bf" title="Compile&#45;time conversion from string to value_types." alt="" coords="732,5,900,45"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="684,23,718,23,718,28,684,28"/>
+</map>

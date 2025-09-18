@@ -1,0 +1,33 @@
+<map id="container_module::lockfree_reader" name="container_module::lockfree_reader">
+<area shape="rect" id="Node000001" title="Lock&#45;free reader for frequently accessed data." alt="" coords="209,1376,401,1496"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="186,1226,425,1306"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="308,1306,308,1360,303,1360,303,1306"/>
+<area shape="rect" id="Node000003" href="$db/de5/classcontainer__module_1_1thread__safe__container.html" title="Thread&#45;safe container with lock optimization." alt="" coords="213,856,397,1156"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="308,1156,308,1209,303,1209,303,1156"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="477,699,651,793"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="510,805,400,915,396,911,506,801"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="83,135,218,200"/>
+<area shape="poly" id="edge17_Node000001_Node000005" title=" " alt="" coords="120,202,85,244,48,297,19,360,11,392,8,426,8,1267,12,1298,25,1324,44,1347,69,1367,98,1383,129,1397,194,1416,193,1421,127,1402,95,1388,66,1371,41,1351,20,1327,7,1299,3,1268,3,426,6,391,14,358,43,295,81,240,116,199"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="154,200,163,401,176,537,199,674,220,758,245,840,240,841,214,759,193,675,171,538,158,402,148,201"/>
+<area shape="rect" id="Node000009" href="$db/d1c/classcontainer__module_1_1variant__value.html" title="Type&#45;safe value wrapper with thread safety." alt="" coords="305,277,490,577"/>
+<area shape="poly" id="edge10_Node000009_Node000005" title=" " alt="" coords="183,198,295,316,291,319,179,202"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="305,699,453,793"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="368,794,355,841,350,839,363,793"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="430,135,509,200"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="503,199,516,223,518,238,516,253,516,416,513,487,504,578,500,629,495,651,482,676,467,694,463,691,478,673,490,649,495,628,499,577,508,486,510,416,511,253,512,238,511,225,498,202"/>
+<area shape="poly" id="edge9_Node000009_Node000007" title=" " alt="" coords="463,201,446,262,441,261,458,200"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="404,5,535,85"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="472,99,472,134,467,134,467,99"/>
+<area shape="poly" id="edge8_Node000006_Node000009" title=" " alt="" coords="401,578,395,675,394,683,388,682,389,674,395,578"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="248,135,403,200"/>
+<area shape="poly" id="edge12_Node000003_Node000010" title=" " alt="" coords="316,201,295,278,274,388,263,475,260,562,265,674,282,840,277,840,260,675,255,562,258,475,269,387,289,277,311,199"/>
+<area shape="poly" id="edge11_Node000009_Node000010" title=" " alt="" coords="337,200,354,261,349,262,332,201"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="547,1219,709,1313"/>
+<area shape="poly" id="edge13_Node000001_Node000011" title=" " alt="" coords="548,1312,417,1380,415,1375,545,1307"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="615,966,759,1046"/>
+<area shape="poly" id="edge14_Node000011_Node000012" title=" " alt="" coords="680,1047,645,1203,640,1202,675,1046"/>
+<area shape="rect" id="Node000013" title=" " alt="" coords="783,713,806,779"/>
+<area shape="poly" id="edge15_Node000012_Node000013" title=" " alt="" coords="787,780,768,833,715,952,710,950,763,831,782,778"/>
+<area shape="rect" id="Node000014" title=" " alt="" coords="675,713,698,779"/>
+<area shape="poly" id="edge16_Node000012_Node000014" title=" " alt="" coords="689,779,689,949,684,949,684,779"/>
+</map>

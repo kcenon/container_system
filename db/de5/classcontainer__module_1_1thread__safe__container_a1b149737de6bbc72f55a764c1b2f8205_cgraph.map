@@ -1,0 +1,13 @@
+<map id="container_module::thread_safe_container::deserialize" name="container_module::thread_safe_container::deserialize">
+<area shape="rect" id="Node000001" title="Deserialize from binary." alt="" coords="5,69,209,109"/>
+<area shape="rect" id="Node000002" href="$db/d1c/classcontainer__module_1_1variant__value.html#a685feba0a8a4dea222199ecc08b9dc4a" title="Deserialize from binary format." alt="" coords="257,69,451,109"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="210,87,244,87,244,92,210,92"/>
+<area shape="rect" id="Node000003" href="$d5/df9/classcontainer__module_1_1value.html#a07e9bedf8ff1769675e58b9de91fb3da" title=" " alt="" coords="504,5,687,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="430,67,506,46,507,51,431,72"/>
+<area shape="rect" id="Node000005" href="$db/d1c/classcontainer__module_1_1variant__value.html#ace12a3bcee80f065b34870ebc6c85fde" title="Get the name of this value." alt="" coords="499,69,692,109"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="451,87,485,87,485,92,451,92"/>
+<area shape="rect" id="Node000006" href="$db/d1c/classcontainer__module_1_1variant__value.html#a8b51f904fba29cb2d346fd18704f2993" title="Type&#45;safe setter." alt="" coords="499,133,692,173"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="431,107,507,127,506,132,430,112"/>
+<area shape="rect" id="Node000004" href="$d5/df9/classcontainer__module_1_1value.html#aad6ea2fdcbb516d7a72f577de0b6102f" title=" " alt="" coords="740,5,923,45"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="687,23,726,23,726,28,687,28"/>
+</map>
