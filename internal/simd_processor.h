@@ -42,12 +42,18 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // Platform-specific SIMD headers
 #if defined(__x86_64__) || defined(_M_X64) || defined(__i386__) || defined(_M_IX86)
     #define HAS_X86_SIMD 1
-    #if defined(__AVX2__)
-        #define HAS_AVX2 1
+    #if defined(__AVX2__) || defined(HAS_AVX2)
+        #ifndef HAS_AVX2
+            #define HAS_AVX2 1
+        #endif
         #include <immintrin.h>
-    #elif defined(__SSE4_2__)
-        #define HAS_SSE42 1
+    #elif defined(__SSE4_2__) || defined(HAS_SSE42)
+        #ifndef HAS_SSE42
+            #define HAS_SSE42 1
+        #endif
         #include <nmmintrin.h>  // SSE4.2
+        #include <smmintrin.h>  // SSE4.1
+        #include <tmmintrin.h>  // SSSE3
     #elif defined(__SSE2__)
         #define HAS_SSE2 1
         #include <emmintrin.h>  // SSE2
@@ -56,6 +62,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     #if defined(HAS_SSE42) || defined(HAS_SSE2)
         #include <xmmintrin.h>  // SSE
         #include <emmintrin.h>  // SSE2
+        #include <pmmintrin.h>  // SSE3
     #elif defined(__SSE2__)
         #define HAS_SSE2 1
         #include <emmintrin.h>

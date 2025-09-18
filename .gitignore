@@ -1,6 +1,7 @@
 # Build directories
 build/
 build*/
+test_build/
 out/
 install/
 

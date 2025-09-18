@@ -82,6 +82,7 @@ namespace simd
     }
 
 #if defined(HAS_AVX2)
+    __attribute__((target("avx2")))
     float simd_processor::sum_floats_avx2(const float* data, size_t count)
     {
         __m256 sum_vec = _mm256_setzero_ps();
@@ -110,6 +111,7 @@ namespace simd
         return sum;
     }
 
+    __attribute__((target("avx2")))
     float simd_processor::min_float_avx2(const float* data, size_t count)
     {
         if (count == 0) return std::numeric_limits<float>::max();
@@ -138,6 +140,7 @@ namespace simd
         return min_val;
     }
 
+    __attribute__((target("avx2")))
     float simd_processor::max_float_avx2(const float* data, size_t count)
     {
         if (count == 0) return std::numeric_limits<float>::lowest();
@@ -168,6 +171,7 @@ namespace simd
 #endif
 
 #if defined(HAS_X86_SIMD) && (defined(HAS_SSE2) || defined(HAS_SSE42))
+    __attribute__((target("sse3")))
     float simd_processor::sum_floats_sse(const float* data, size_t count)
     {
         __m128 sum_vec = _mm_setzero_ps();
@@ -193,6 +197,7 @@ namespace simd
         return sum;
     }
 
+    __attribute__((target("sse2")))
     float simd_processor::min_float_sse(const float* data, size_t count)
     {
         if (count == 0) return std::numeric_limits<float>::max();
@@ -221,6 +226,7 @@ namespace simd
         return min_val;
     }
 
+    __attribute__((target("sse2")))
     float simd_processor::max_float_sse(const float* data, size_t count)
     {
         if (count == 0) return std::numeric_limits<float>::lowest();

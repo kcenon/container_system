@@ -1,6 +1,6 @@
 # Container System
 
-Advanced C++20 Container System with Thread-Safe Operations and High-Performance Features
+Advanced C++20 Container System with Thread-Safe Operations, High-Performance Features, and Messaging Integration
 
 ## Overview
 
@@ -14,6 +14,13 @@ The Container Module provides a comprehensive type-safe container system for the
 - **SIMD Optimization**: ARM NEON and x86 AVX support for numeric operations
 - **Memory Efficiency**: Variant storage with minimal allocations
 - **Serialization**: Binary, JSON, and XML serialization formats
+
+### 🚀 Enhanced Features
+- **Messaging Integration**: Optimized containers for messaging systems
+- **Builder Pattern**: Fluent API for container construction
+- **Performance Metrics**: Real-time operation monitoring and analytics
+- **External Callbacks**: Integration hooks for external systems
+- **Dual Compatibility**: Works standalone or as part of messaging systems
 
 ### 📦 Value Types
 
@@ -35,6 +42,141 @@ The Container Module provides a comprehensive type-safe container system for the
 | `bytes_value` | 'd' | Raw byte array | Variable |
 | `container_value` | 'e' | Nested container | Variable |
 | `string_value` | 'f' | UTF-8 string | Variable |
+
+## Quick Start
+
+### Prerequisites
+
+Install dependencies using the provided script:
+
+**Linux/macOS:**
+```bash
+# Install all required dependencies (vcpkg, cmake, etc.)
+./dependency.sh
+```
+
+**Windows (Command Prompt):**
+```cmd
+REM Install all required dependencies
+dependency.bat
+
+REM Install with Visual Studio Build Tools
+dependency.bat --install-vs
+```
+
+**Windows (PowerShell):**
+```powershell
+# Install all required dependencies
+.\dependency.ps1
+
+# Install with Visual Studio Build Tools and force reinstall
+.\dependency.ps1 -InstallVS -Force
+```
+
+### Build and Run
+
+Build the project with all features enabled:
+
+**Linux/macOS:**
+```bash
+# Build with default settings (Release mode, all features enabled)
+./build.sh
+
+# Build in Debug mode with verbose output
+./build.sh --debug --verbose
+
+# Build without tests or examples
+./build.sh --no-tests --no-examples
+
+# Clean build
+./build.sh --clean
+```
+
+**Windows (Command Prompt):**
+```cmd
+REM Build with default settings
+build.bat
+
+REM Build in Debug mode with verbose output
+build.bat --debug --verbose
+
+REM Build without tests or examples
+build.bat --no-tests --no-examples
+
+REM Clean build with Ninja generator
+build.bat --clean --ninja
+```
+
+**Windows (PowerShell):**
+```powershell
+# Build with default settings
+.\build.ps1
+
+# Build in Debug mode with verbose output
+.\build.ps1 -Debug -Verbose
+
+# Build without tests or examples
+.\build.ps1 -NoTests -NoExamples
+
+# Clean build for x86 platform
+.\build.ps1 -Clean -X86
+```
+
+### Run Examples
+
+**Linux/macOS:**
+```bash
+# Basic container operations
+./build/examples/basic_container_example
+
+# Advanced features with threading and performance monitoring
+./build/examples/advanced_container_example
+
+# Real-world scenarios (IoT, Finance, Gaming, CMS)
+./build/examples/real_world_scenarios
+
+# Messaging integration features (if enabled)
+./build/examples/messaging_integration_example
+```
+
+**Windows:**
+```cmd
+REM Basic container operations
+.\build\examples\Release\basic_container_example.exe
+
+REM Advanced features with threading and performance monitoring
+.\build\examples\Release\advanced_container_example.exe
+
+REM Real-world scenarios (IoT, Finance, Gaming, CMS)
+.\build\examples\Release\real_world_scenarios.exe
+
+REM Messaging integration features (if enabled)
+.\build\examples\Release\messaging_integration_example.exe
+```
+
+### Run Tests
+
+**Linux/macOS:**
+```bash
+# Run all tests
+cd build && ctest
+
+# Run specific test suites
+./build/unit_tests
+./build/test_messaging_integration
+./build/performance_tests
+```
+
+**Windows:**
+```cmd
+REM Run all tests
+cd build && ctest --build-config Release
+
+REM Run specific test suites
+.\build\Release\unit_tests.exe
+.\build\Release\test_messaging_integration.exe
+.\build\Release\performance_tests.exe
+```
 
 ## Usage Examples
 
@@ -61,6 +203,28 @@ auto values = std::vector<std::shared_ptr<value>>{
 };
 
 container->set_values(values);
+```
+
+### Enhanced Builder Pattern
+
+```cpp
+#include <container/container.h>
+using namespace container_module::integration;
+
+// Modern builder pattern with method chaining
+auto container = messaging_container_builder()
+    .source("client_01", "session_123")
+    .target("server", "main_handler")
+    .message_type("user_data")
+    .add_value("user_id", 12345)
+    .add_value("username", std::string("john_doe"))
+    .add_value("balance", 1500.75)
+    .add_value("active", true)
+    .optimize_for_speed()
+    .build();
+
+// Enhanced serialization with performance monitoring
+std::string serialized = messaging_integration::serialize_for_messaging(container);
 ```
 
 ### Serialization and Deserialization
@@ -309,18 +473,93 @@ std::string data = container->serialize();
 db.insert_query("INSERT INTO messages (data) VALUES ('" + data + "')");
 ```
 
+## Platform Support
+
+The Container System provides full cross-platform support with native build scripts:
+
+### Supported Platforms
+
+| Platform | Architecture | Compiler | Build Scripts |
+|----------|-------------|-----------|---------------|
+| **Linux** | x86_64, ARM64 | GCC 9+, Clang 10+ | `dependency.sh`, `build.sh` |
+| **macOS** | x86_64, ARM64 (Apple Silicon) | Apple Clang, Clang | `dependency.sh`, `build.sh` |
+| **Windows** | x86, x64 | MSVC 2019+, Clang | `dependency.bat`, `build.bat`, `dependency.ps1`, `build.ps1` |
+
+### Build Tools
+
+| Tool | Linux/macOS | Windows |
+|------|-------------|---------|
+| **Build System** | CMake 3.16+ | CMake 3.16+ |
+| **Package Manager** | vcpkg | vcpkg |
+| **Generators** | Unix Makefiles, Ninja | Visual Studio 2019/2022, Ninja |
+| **Dependencies** | apt/yum/brew + vcpkg | vcpkg |
+
+### Windows-Specific Features
+
+- **Multiple Generators**: Visual Studio 2019/2022, Ninja
+- **Platform Support**: x86, x64 builds
+- **Automatic Dependency Installation**: Visual Studio Build Tools, CMake, vcpkg
+- **PowerShell Integration**: Advanced parameter validation and error handling
+- **Command Prompt Compatibility**: Traditional batch file support
+
+### SIMD Optimizations
+
+| Platform | SIMD Support | Auto-Detection |
+|----------|-------------|----------------|
+| Linux x86_64 | SSE4.2, AVX2 | ✓ |
+| macOS ARM64 | ARM NEON | ✓ |
+| macOS x86_64 | SSE4.2, AVX2 | ✓ |
+| Windows x64 | SSE4.2, AVX2 | ✓ |
+| Windows x86 | SSE4.2 | ✓ |
+
 ## Building
 
-The Container module is built as part of the main messaging system:
+The Container System can be built standalone or as part of a larger messaging system:
+
+### Standalone Build
 
 ```bash
-# Build with container module
-./build.sh
+# Basic build
+mkdir build && cd build
+cmake .. -DCMAKE_BUILD_TYPE=Release
+cmake --build .
 
-# Build container tests only
-cd build
-make container_test
-./bin/container_test
+# Build with all enhanced features
+cmake .. \
+  -DCMAKE_BUILD_TYPE=Release \
+  -DENABLE_MESSAGING_FEATURES=ON \
+  -DENABLE_PERFORMANCE_METRICS=ON \
+  -DENABLE_EXTERNAL_INTEGRATION=ON \
+  -DBUILD_CONTAINER_EXAMPLES=ON
+cmake --build .
+
+# Run examples
+./bin/examples/messaging_integration_example
+```
+
+### Build Options
+
+| Option | Description | Default |
+|--------|-------------|---------|
+| `ENABLE_MESSAGING_FEATURES` | Enhanced messaging optimizations | ON |
+| `ENABLE_PERFORMANCE_METRICS` | Real-time performance monitoring | OFF |
+| `ENABLE_EXTERNAL_INTEGRATION` | External system callback hooks | ON |
+| `BUILD_CONTAINER_EXAMPLES` | Build example applications | ON |
+| `BUILD_CONTAINER_SAMPLES` | Build sample programs | ON |
+| `USE_THREAD_SAFE_OPERATIONS` | Enable thread-safe operations | ON |
+
+### Integration Build
+
+When used as part of a messaging system, the container provides compatibility aliases:
+
+```cmake
+# In your CMakeLists.txt
+find_package(ContainerSystem REQUIRED)
+
+# Use either alias depending on your context
+target_link_libraries(your_target ContainerSystem::container)
+# OR
+target_link_libraries(your_target MessagingSystem::container)
 ```
 
 ## Dependencies

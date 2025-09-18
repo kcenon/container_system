@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Dependency installation script for Container System
-# This script installs all required dependencies
+# Container System Dependency Installation Script
+# This script installs all required dependencies for the Container System module
 
 # Color codes for output
 RED='\033[0;31m'
@@ -202,7 +202,7 @@ install_cpp_deps() {
         cat > vcpkg.json << 'EOF'
 {
     "name": "container-system",
-    "version": "1.0.0",
+    "description": "Advanced C++20 Container System with Thread-Safe Operations and Messaging Integration",
     "dependencies": [
         "fmt",
         "gtest",
