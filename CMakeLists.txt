@@ -229,7 +229,8 @@ include(CheckCXXCompilerFlag)
 if(NOT APPLE)
     check_cxx_compiler_flag("-mavx2" COMPILER_SUPPORTS_AVX2)
     if(COMPILER_SUPPORTS_AVX2)
-        target_compile_options(container_system PRIVATE $<$<CONFIG:Release>:-mavx2>)
+        # Note: AVX2 functions use __attribute__((target("avx2"))) for per-function enabling
+        # This allows SIMD code to work in Debug mode without global flags
         target_compile_definitions(container_system PRIVATE HAS_AVX2)
     endif()
 endif()
@@ -238,7 +239,8 @@ endif()
 if(CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64|AMD64|i[3-6]86")
     check_cxx_compiler_flag("-msse4.2" COMPILER_SUPPORTS_SSE42)
     if(COMPILER_SUPPORTS_SSE42)
-        target_compile_options(container_system PRIVATE $<$<CONFIG:Release>:-msse4.2>)
+        # Note: SSE functions use __attribute__((target("sse2/sse3"))) for per-function enabling
+        # This allows SIMD code to work in Debug mode without global flags
         target_compile_definitions(container_system PRIVATE HAS_SSE42)
     endif()
 endif()
@@ -260,8 +262,13 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
         -Wpedantic
         -Wno-unused-parameter
         -Wno-unused-variable
-        -Wno-unused-lambda-capture
     )
+    # Clang-specific warnings
+    if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+        target_compile_options(container_system PRIVATE
+            -Wno-unused-lambda-capture
+        )
+    endif()
 elseif(MSVC)
     target_compile_options(container_system PRIVATE
         /W4
