@@ -114,12 +114,45 @@ if(TARGET performance_tests)
     )
 endif()
 
-# Create a combined test runner
+# Create individual test runners (thread_system style)
+add_executable(container_base_unit
+    unit_tests.cpp
+)
+
+add_executable(container_messaging_unit
+    test_messaging_integration.cpp
+)
+
+# Create a combined test runner for compatibility
 add_executable(all_tests
     unit_tests.cpp
     test_messaging_integration.cpp
 )
 
+# Link individual test runners
+target_link_libraries(container_base_unit
+    container_system
+    ${GTEST_LIBRARIES}
+    Threads::Threads
+)
+
+target_include_directories(container_base_unit PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/../
+    ${GTEST_INCLUDE_DIRS}
+)
+
+target_link_libraries(container_messaging_unit
+    container_system
+    ${GTEST_LIBRARIES}
+    Threads::Threads
+)
+
+target_include_directories(container_messaging_unit PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/../
+    ${GTEST_INCLUDE_DIRS}
+)
+
+# Link combined test runner
 target_link_libraries(all_tests
     container_system
     ${GTEST_LIBRARIES}
@@ -131,19 +164,28 @@ target_include_directories(all_tests PRIVATE
     ${GTEST_INCLUDE_DIRS}
 )
 
-# Set compile definitions for combined test
+# Set compile definitions for individual tests
 if(ENABLE_MESSAGING_FEATURES)
+    target_compile_definitions(container_base_unit PRIVATE HAS_MESSAGING_FEATURES)
+    target_compile_definitions(container_messaging_unit PRIVATE HAS_MESSAGING_FEATURES)
     target_compile_definitions(all_tests PRIVATE HAS_MESSAGING_FEATURES)
 endif()
 
 if(ENABLE_PERFORMANCE_METRICS)
+    target_compile_definitions(container_base_unit PRIVATE HAS_PERFORMANCE_METRICS)
+    target_compile_definitions(container_messaging_unit PRIVATE HAS_PERFORMANCE_METRICS)
     target_compile_definitions(all_tests PRIVATE HAS_PERFORMANCE_METRICS)
 endif()
 
 if(ENABLE_EXTERNAL_INTEGRATION)
+    target_compile_definitions(container_base_unit PRIVATE HAS_EXTERNAL_INTEGRATION)
+    target_compile_definitions(container_messaging_unit PRIVATE HAS_EXTERNAL_INTEGRATION)
     target_compile_definitions(all_tests PRIVATE HAS_EXTERNAL_INTEGRATION)
 endif()
 
+# Add individual tests
+add_test(NAME container_base_unit COMMAND container_base_unit)
+add_test(NAME container_messaging_unit COMMAND container_messaging_unit)
 add_test(NAME all_tests COMMAND all_tests)
 
 # Test coverage configuration (if supported)

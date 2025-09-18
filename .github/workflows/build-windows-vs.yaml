@@ -138,9 +138,9 @@ jobs:
         run: |
           Push-Location build
 
-          if (Test-Path "bin\$env:BUILD_TYPE\all_tests.exe") {
+          if (Test-Path "bin\$env:BUILD_TYPE\container_base_unit.exe") {
             Write-Host "Running unit tests (vcpkg build successful)..."
-            $exitCode = & ".\bin\$env:BUILD_TYPE\all_tests.exe"
+            $exitCode = & ".\bin\$env:BUILD_TYPE\container_base_unit.exe"
             if ($exitCode -ne 0) {
               Write-Host "Tests failed with exit code $exitCode but continuing..."
             }

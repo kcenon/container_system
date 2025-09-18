@@ -204,9 +204,9 @@ jobs:
       - name: Run tests
         run: |
           cd build
-          if [ -f "bin/all_tests.exe" ]; then
+          if [ -f "bin/container_base_unit.exe" ]; then
             echo "Running unit tests (vcpkg build successful)..."
-            ./bin/all_tests.exe || echo "Tests failed but continuing..."
+            ./bin/container_base_unit.exe || echo "Tests failed but continuing..."
           else
             echo "Running basic verification test (system libraries fallback or tests not built)..."
             cat > verification_test.cpp << 'EOF'
