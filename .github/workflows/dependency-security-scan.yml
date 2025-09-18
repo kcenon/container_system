@@ -28,12 +28,8 @@ jobs:
       with:
         submodules: true
 
-    - name: Setup and install vcpkg dependencies
-      uses: lukka/run-vcpkg@v11
-      with:
-        vcpkgDirectory: '${{ github.workspace }}/vcpkg'
-        runVcpkgInstall: true
-        vcpkgJsonGlob: '**/vcpkg.json'
+    # Skip vcpkg setup since this project doesn't use vcpkg.json
+    # Dependencies are managed through manual vcpkg or system packages
 
     - name: Dependency vulnerability scan
       uses: aquasecurity/trivy-action@master
@@ -56,34 +52,28 @@ jobs:
         # Create simple license checker script
         cat > license_check.py << 'EOF'
         #!/usr/bin/env python3
-        import json
         import sys
-        
-        # Compatible licenses with MIT
+
+        # Compatible licenses with BSD-3-Clause (container_system license)
         COMPATIBLE_LICENSES = {
             'MIT', 'BSD-2-Clause', 'BSD-3-Clause', 'Apache-2.0',
             'ISC', 'Unlicense', 'LGPL-2.1+', 'LGPL-3.0+'
         }
-        
-        # Read vcpkg manifest
-        with open('vcpkg.json', 'r') as f:
-            manifest = json.load(f)
-        
-        print("License Compatibility Check for thread-system (MIT License)")
+
+        print("License Compatibility Check for container_system (BSD-3-Clause License)")
         print("=" * 60)
-        
-        # Known licenses for our dependencies
+
+        # Known licenses for our dependencies (when using vcpkg or system packages)
         known_licenses = {
             'fmt': 'MIT',
-            'gtest': 'BSD-3-Clause', 
+            'gtest': 'BSD-3-Clause',
             'benchmark': 'Apache-2.0',
-            'spdlog': 'MIT',
-            'libiconv': 'LGPL-2.1+'
+            'spdlog': 'MIT'
         }
-        
+
         all_compatible = True
-        
-        for dep_name in ['fmt', 'gtest', 'benchmark', 'spdlog', 'libiconv']:
+
+        for dep_name in ['fmt', 'gtest', 'benchmark', 'spdlog']:
             if dep_name in known_licenses:
                 license_name = known_licenses[dep_name]
                 compatible = license_name in COMPATIBLE_LICENSES
@@ -91,7 +81,7 @@ jobs:
                 print(f"{dep_name:12} {license_name:15} {status}")
                 if not compatible:
                     all_compatible = False
-        
+
         print("=" * 60)
         if all_compatible:
             print("✅ All dependencies are license compatible")
@@ -100,7 +90,7 @@ jobs:
             print("❌ License compatibility issues found")
             sys.exit(1)
         EOF
-        
+
         python3 license_check.py
 
     - name: Generate security report
