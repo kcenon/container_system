@@ -23,7 +23,7 @@ jobs:
       VCPKG_BINARY_SOURCES: "clear;x-gha,readwrite"
       VCPKG_FEATURE_FLAGS: "manifests,registries,versions,binarycaching"
       VCPKG_DEFAULT_TRIPLET: x64-mingw-dynamic
-
+    
     steps:
       - name: Configure git
         shell: pwsh
@@ -31,7 +31,7 @@ jobs:
           git config --global core.autocrlf false
           git config --global core.eol lf
           git config --global core.longpaths true
-
+      
       - uses: actions/checkout@v4
         with:
           submodules: recursive
@@ -77,13 +77,13 @@ jobs:
           echo "Cleaning PATH to avoid conflicts..."
           # Remove Windows system paths that might interfere
           export PATH="/mingw64/bin:/usr/local/bin:/usr/bin:/bin:$PATH"
-
+          
           # Remove any strawberry perl or other conflicting paths
           export PATH=$(echo $PATH | tr ':' '\n' | grep -v -E 'strawberry|Perl|Python|Ruby' | tr '\n' ':')
-
+          
           echo "PATH=$PATH" >> $GITHUB_ENV
           echo "Current PATH: $PATH"
-
+          
           # Verify correct gcc/g++ is being used
           which gcc
           which g++
@@ -103,7 +103,7 @@ jobs:
             git pull
             cd ..
           fi
-
+          
           echo "Bootstrapping vcpkg..."
           ./vcpkg/bootstrap-vcpkg.sh
 
@@ -152,7 +152,7 @@ jobs:
         run: |
           export PATH="/mingw64/bin:$PATH"
           cd build
-
+          
           echo "Building with MSYS2 system packages..."
           cmake .. \
             -G "Ninja" \
@@ -216,11 +216,11 @@ jobs:
           #include <thread>
           #include <chrono>
           #include <atomic>
-
+          
           int main() {
               std::cout << "Container System CI Verification (MSYS2)\n";
               std::cout << "======================================\n";
-
+              
               std::atomic<bool> test_completed{false};
               {
                   std::jthread test_thread([&test_completed]() {
@@ -228,7 +228,7 @@ jobs:
                       test_completed = true;
                   });
               }
-
+              
               if (test_completed) {
                   std::cout << "✅ Core functionality verified on MSYS2\n";
                   return 0;

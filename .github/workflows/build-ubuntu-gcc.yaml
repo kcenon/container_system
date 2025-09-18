@@ -147,11 +147,11 @@ jobs:
           #include <thread>
           #include <chrono>
           #include <atomic>
-
+          
           int main() {
               std::cout << "Container System CI Verification\n";
               std::cout << "================================\n";
-
+              
               std::atomic<bool> test_completed{false};
               {
                   std::jthread test_thread([&test_completed]() {
@@ -159,7 +159,7 @@ jobs:
                       test_completed = true;
                   });
               }
-
+              
               if (test_completed) {
                   std::cout << "✅ Core functionality verified\n";
                   return 0;
