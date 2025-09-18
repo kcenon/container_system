@@ -19,7 +19,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-# Options
+# Option to control whether ContainerSystem is built as a standalone project or as a submodule
+# - OFF (default): Builds as standalone project with samples and tests
+# - ON: Builds only the core libraries for integration into other projects
+option(BUILD_CONTAINERSYSTEM_AS_SUBMODULE "Build ContainerSystem as submodule" OFF)
+option(BUILD_DOCUMENTATION "Build Doxygen documentation" ON)
 option(BUILD_SHARED_LIBS "Build using shared libraries" OFF)
 option(BUILD_TESTS "Build unit tests" ON)
 option(BUILD_CONTAINER_SAMPLES "Build container system samples" ON)
@@ -289,7 +293,7 @@ endif()
 ##################################################
 
 # Enable testing features if building tests
-if(BUILD_TESTS AND NOT BUILD_MESSAGING_SYSTEM_AS_SUBMODULE)
+if(BUILD_TESTS AND NOT BUILD_CONTAINERSYSTEM_AS_SUBMODULE)
     enable_testing()
     add_subdirectory(tests)
     message(STATUS "Container: Unit tests enabled")
@@ -354,19 +358,23 @@ else()
 endif()
 
 ##################################################
-# Samples
+# Samples and Examples (only when not building as submodule)
 ##################################################
 
-if(BUILD_CONTAINER_SAMPLES)
-    add_subdirectory(samples)
-    message(STATUS "Container samples will be built")
-endif()
+if(NOT BUILD_CONTAINERSYSTEM_AS_SUBMODULE)
+    if(BUILD_CONTAINER_SAMPLES)
+        add_subdirectory(samples)
+        message(STATUS "Container samples will be built")
+    endif()
 
-# Build examples
-option(BUILD_CONTAINER_EXAMPLES "Build container system examples" ON)
-if(BUILD_CONTAINER_EXAMPLES)
-    add_subdirectory(examples)
-    message(STATUS "Container examples will be built")
+    # Build examples
+    option(BUILD_CONTAINER_EXAMPLES "Build container system examples" ON)
+    if(BUILD_CONTAINER_EXAMPLES)
+        add_subdirectory(examples)
+        message(STATUS "Container examples will be built")
+    endif()
+else()
+    message(STATUS "Container samples and examples disabled (submodule mode)")
 endif()
 
 ##################################################

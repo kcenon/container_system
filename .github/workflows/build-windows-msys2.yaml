@@ -157,8 +157,6 @@ jobs:
           cmake .. \
             -G "Ninja" \
             -DBUILD_TESTS=ON \
-            -DBUILD_CONTAINER_SAMPLES=OFF \
-            -DBUILD_CONTAINER_EXAMPLES=OFF \
             -DCMAKE_INSTALL_PREFIX="../target" \
             -DCMAKE_BUILD_TYPE=$BUILD_TYPE \
             -DCMAKE_C_COMPILER=/mingw64/bin/gcc.exe \
@@ -185,10 +183,7 @@ jobs:
           rm -rf CMakeFiles
           cmake .. \
             -G "Ninja" \
-            -DBUILD_TESTS=OFF \
-            -DBUILD_CONTAINER_SAMPLES=OFF \
-            -DBUILD_CONTAINER_EXAMPLES=OFF \
-            -DBUILD_MESSAGING_SYSTEM_AS_SUBMODULE=ON \
+            -DBUILD_CONTAINERSYSTEM_AS_SUBMODULE=ON \
             -DCMAKE_INSTALL_PREFIX="../target" \
             -DCMAKE_BUILD_TYPE=$BUILD_TYPE \
             -DUSE_STD_FORMAT=ON \
@@ -206,7 +201,10 @@ jobs:
           cd build
           if [ -f "bin/container_base_unit.exe" ]; then
             echo "Running unit tests (vcpkg build successful)..."
-            ./bin/container_base_unit.exe || echo "Tests failed but continuing..."
+            find bin -name "*_unit.exe" -executable | while read test; do
+              echo "Running $test..."
+              ./$test || echo "Test $test failed but continuing..."
+            done
           else
             echo "Running basic verification test (system libraries fallback or tests not built)..."
             cat > verification_test.cpp << 'EOF'

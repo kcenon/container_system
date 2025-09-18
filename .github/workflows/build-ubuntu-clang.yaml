@@ -104,8 +104,6 @@ jobs:
           cmake .. \
             -G Ninja \
             -DBUILD_TESTS=ON \
-            -DBUILD_CONTAINER_SAMPLES=OFF \
-            -DBUILD_CONTAINER_EXAMPLES=OFF \
             -DCMAKE_INSTALL_PREFIX="../target" \
             -DCMAKE_BUILD_TYPE=$BUILD_TYPE \
             -DCMAKE_TOOLCHAIN_FILE="$GITHUB_WORKSPACE/vcpkg/scripts/buildsystems/vcpkg.cmake" \
@@ -121,10 +119,7 @@ jobs:
           echo "vcpkg build failed, falling back to system libraries..."
           cmake .. \
             -G Ninja \
-            -DBUILD_TESTS=OFF \
-            -DBUILD_CONTAINER_SAMPLES=OFF \
-            -DBUILD_CONTAINER_EXAMPLES=OFF \
-            -DBUILD_MESSAGING_SYSTEM_AS_SUBMODULE=ON \
+            -DBUILD_CONTAINERSYSTEM_AS_SUBMODULE=ON \
             -DCMAKE_INSTALL_PREFIX="../target" \
             -DCMAKE_BUILD_TYPE=$BUILD_TYPE \
             -DUSE_STD_FORMAT=ON \
@@ -138,7 +133,10 @@ jobs:
           cd build
           if [ -f "bin/container_base_unit" ]; then
             echo "Running unit tests (vcpkg build successful)..."
-            ./bin/container_base_unit || echo "Tests failed but continuing..."
+            find bin -name "*_unit" -executable | while read test; do
+              echo "Running $test..."
+              ./$test || echo "Test $test failed but continuing..."
+            done
           else
             echo "Running basic verification test (system libraries fallback)..."
             cat > verification_test.cpp << 'EOF'
