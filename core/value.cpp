@@ -35,7 +35,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <sstream>
 #include <algorithm>
 #include "utilities/core/formatter.h"		// custom formatter
-#include "utilities/conversion/convert_string.h" // custom string conversion
+#include "utilities/core/convert_string.h" // custom string conversion
 
 namespace container_module
 {
@@ -389,11 +389,11 @@ namespace container_module
 		const std::vector<uint8_t>& dat) const
 	{
 		auto [converted, err] = convert_string::to_string(dat);
-		if (err.has_value())
+		if (!err.empty())
 		{
 			return "";
 		}
-		std::string temp = converted.value();
+		std::string temp = converted;
 		convert_string::replace(temp, "</0x0A;>", "\r");
 		convert_string::replace(temp, "</0x0B;>", "\n");
 		convert_string::replace(temp, "</0x0C;>", " ");
@@ -408,17 +408,17 @@ namespace container_module
 		convert_string::replace(d, " ", "</0x0C;>");
 		convert_string::replace(d, "\t", "</0x0D;>");
 		auto [arr, err] = convert_string::to_array(d);
-		if (err.has_value())
+		if (!err.empty())
 		{
 			return {};
 		}
-		return arr.value();
+		return arr;
 	}
 
 	void value::set_byte_string(const std::string& dataStr)
 	{
 		auto [val, err] = convert_string::from_base64(dataStr);
-		if (err.has_value())
+		if (!err.empty())
 		{
 			data_.clear();
 			size_ = 0;
@@ -433,14 +433,14 @@ namespace container_module
 	void value::set_string(const std::string& dataStr)
 	{
 		auto [arr, err] = convert_string::to_array(dataStr);
-		if (err.has_value())
+		if (!err.empty())
 		{
 			data_.clear();
 			size_ = 0;
 			type_ = value_types::string_value;
 			return;
 		}
-		data_ = arr.value();
+		data_ = arr;
 		size_ = data_.size();
 		type_ = value_types::string_value;
 	}

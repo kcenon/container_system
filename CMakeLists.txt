@@ -8,9 +8,8 @@ cmake_minimum_required(VERSION 3.16)
 ##################################################
 
 # Project definition
-project(container_system 
-    VERSION 2.0.0
-    DESCRIPTION "Advanced C++20 Container System with Thread-Safe Operations"
+project(container_system
+    DESCRIPTION "Advanced C++20 Container System with Thread-Safe Operations and Messaging Integration"
     LANGUAGES CXX
 )
 
@@ -20,12 +19,21 @@ set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-# Options
+# Option to control whether ContainerSystem is built as a standalone project or as a submodule
+# - OFF (default): Builds as standalone project with samples and tests
+# - ON: Builds only the core libraries for integration into other projects
+option(BUILD_CONTAINERSYSTEM_AS_SUBMODULE "Build ContainerSystem as submodule" OFF)
+option(BUILD_DOCUMENTATION "Build Doxygen documentation" ON)
 option(BUILD_SHARED_LIBS "Build using shared libraries" OFF)
-option(USE_UNIT_TEST "Use unit test" ON)
+option(BUILD_TESTS "Build unit tests" ON)
 option(BUILD_CONTAINER_SAMPLES "Build container system samples" ON)
 option(USE_THREAD_SAFE_OPERATIONS "Enable thread-safe operations" ON)
 option(USE_LOCKFREE_BY_DEFAULT "Use lock-free implementations by default" OFF)
+
+# New messaging system integration options
+option(ENABLE_MESSAGING_FEATURES "Enable messaging-specific optimizations" ON)
+option(ENABLE_EXTERNAL_INTEGRATION "Enable integration with external systems" ON)
+option(ENABLE_PERFORMANCE_METRICS "Enable performance metrics collection" OFF)
 
 # Output directories
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
@@ -47,7 +55,22 @@ find_package(Threads REQUIRED)
 
 # vcpkg integration
 set(VCPKG_TARGET_TRIPLET "arm64-osx" CACHE STRING "VCPKG target triplet")
-find_package(fmt CONFIG REQUIRED)
+find_package(fmt CONFIG)
+
+# If fmt is not found via vcpkg, try system installation
+if(NOT fmt_FOUND)
+    message(STATUS "fmt not found via vcpkg, trying system installation...")
+    find_package(PkgConfig QUIET)
+    if(PkgConfig_FOUND)
+        pkg_check_modules(FMT fmt)
+    endif()
+
+    if(NOT FMT_FOUND)
+        message(STATUS "fmt not found, will use std::format if available")
+        add_compile_definitions(USE_STD_FORMAT)
+        set(fmt_FOUND FALSE)
+    endif()
+endif()
 
 ##################################################
 # Source Files Configuration
@@ -85,12 +108,23 @@ set(INTERNAL_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/internal/simd_processor.cpp
 )
 
+# Integration files (conditional)
+set(INTEGRATION_FILES)
+if(ENABLE_MESSAGING_FEATURES OR ENABLE_EXTERNAL_INTEGRATION OR ENABLE_PERFORMANCE_METRICS)
+    list(APPEND INTEGRATION_FILES
+        ${CMAKE_CURRENT_SOURCE_DIR}/integration/messaging_integration.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/integration/messaging_integration.cpp
+    )
+    message(STATUS "Container: Integration modules included")
+endif()
+
 # Combine all files
-set(ALL_FILES 
+set(ALL_FILES
     ${MAIN_HEADER}
-    ${CORE_FILES} 
-    ${VALUE_FILES} 
+    ${CORE_FILES}
+    ${VALUE_FILES}
     ${INTERNAL_FILES}
+    ${INTEGRATION_FILES}
 )
 
 ##################################################
@@ -102,12 +136,12 @@ add_library(container_system STATIC
     ${ALL_FILES}
 )
 
-# Create alias for consistent naming
+# Create aliases for consistent naming and messaging system compatibility
 add_library(ContainerSystem::container ALIAS container_system)
+add_library(MessagingSystem::container ALIAS container_system)  # For messaging system compatibility
 
 # Set target properties
 set_target_properties(container_system PROPERTIES
-    VERSION ${PROJECT_VERSION}
     POSITION_INDEPENDENT_CODE ON
     CXX_STANDARD 20
     CXX_STANDARD_REQUIRED ON
@@ -125,6 +159,19 @@ target_include_directories(container_system PUBLIC
     $<INSTALL_INTERFACE:include>
 )
 
+# Private include directories (for building this library)
+target_include_directories(container_system PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
+# Create a symbolic link for container/ include path
+if(NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/container)
+    execute_process(
+        COMMAND ${CMAKE_COMMAND} -E create_symlink . container
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+    )
+endif()
+
 ##################################################
 # Compile Definitions
 ##################################################
@@ -134,15 +181,42 @@ target_compile_definitions(container_system PRIVATE
     CONTAINER_INTERNAL_FEATURES
 )
 
+# Conditional compile definitions for new features
+if(ENABLE_MESSAGING_FEATURES)
+    target_compile_definitions(container_system PUBLIC HAS_MESSAGING_FEATURES)
+    message(STATUS "Container: Messaging features enabled")
+endif()
+
+if(ENABLE_EXTERNAL_INTEGRATION)
+    target_compile_definitions(container_system PUBLIC HAS_EXTERNAL_INTEGRATION)
+    message(STATUS "Container: External integration enabled")
+endif()
+
+if(ENABLE_PERFORMANCE_METRICS)
+    target_compile_definitions(container_system PUBLIC HAS_PERFORMANCE_METRICS)
+    message(STATUS "Container: Performance metrics enabled")
+endif()
+
 ##################################################
 # Dependencies
 ##################################################
 
-# fmt library for formatting
-target_link_libraries(container_system PUBLIC 
-    fmt::fmt
+# Link libraries
+target_link_libraries(container_system PUBLIC
     Threads::Threads
 )
+
+# Link fmt library if available
+if(fmt_FOUND AND TARGET fmt::fmt)
+    target_link_libraries(container_system PUBLIC fmt::fmt)
+    message(STATUS "Container: Linking with fmt::fmt")
+elseif(FMT_FOUND)
+    target_link_libraries(container_system PUBLIC ${FMT_LIBRARIES})
+    target_include_directories(container_system PUBLIC ${FMT_INCLUDE_DIRS})
+    message(STATUS "Container: Linking with system fmt")
+else()
+    message(STATUS "Container: Using std::format (no fmt library)")
+endif()
 
 ##################################################
 # Platform-Specific Configuration
@@ -155,7 +229,8 @@ include(CheckCXXCompilerFlag)
 if(NOT APPLE)
     check_cxx_compiler_flag("-mavx2" COMPILER_SUPPORTS_AVX2)
     if(COMPILER_SUPPORTS_AVX2)
-        target_compile_options(container_system PRIVATE $<$<CONFIG:Release>:-mavx2>)
+        # Note: AVX2 functions use __attribute__((target("avx2"))) for per-function enabling
+        # This allows SIMD code to work in Debug mode without global flags
         target_compile_definitions(container_system PRIVATE HAS_AVX2)
     endif()
 endif()
@@ -164,7 +239,8 @@ endif()
 if(CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64|AMD64|i[3-6]86")
     check_cxx_compiler_flag("-msse4.2" COMPILER_SUPPORTS_SSE42)
     if(COMPILER_SUPPORTS_SSE42)
-        target_compile_options(container_system PRIVATE $<$<CONFIG:Release>:-msse4.2>)
+        # Note: SSE functions use __attribute__((target("sse2/sse3"))) for per-function enabling
+        # This allows SIMD code to work in Debug mode without global flags
         target_compile_definitions(container_system PRIVATE HAS_SSE42)
     endif()
 endif()
@@ -186,8 +262,13 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
         -Wpedantic
         -Wno-unused-parameter
         -Wno-unused-variable
-        -Wno-unused-lambda-capture
     )
+    # Clang-specific warnings
+    if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+        target_compile_options(container_system PRIVATE
+            -Wno-unused-lambda-capture
+        )
+    endif()
 elseif(MSVC)
     target_compile_options(container_system PRIVATE
         /W4
@@ -219,9 +300,10 @@ endif()
 ##################################################
 
 # Enable testing features if building tests
-if(BUILD_UNIT_TESTS AND NOT BUILD_MESSAGING_SYSTEM_AS_SUBMODULE)
+if(BUILD_TESTS AND NOT BUILD_CONTAINERSYSTEM_AS_SUBMODULE)
     enable_testing()
-    # Tests are handled by the main unittest directory
+    add_subdirectory(tests)
+    message(STATUS "Container: Unit tests enabled")
 endif()
 
 ##################################################
@@ -230,24 +312,76 @@ endif()
 
 # Find Doxygen for documentation generation
 find_package(Doxygen)
-if(DOXYGEN_FOUND AND NOT BUILD_MESSAGING_SYSTEM_AS_SUBMODULE)
-    set(DOXYGEN_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/docs)
+if(DOXYGEN_FOUND)
+    # Configure Doxygen settings
+    set(DOXYGEN_PROJECT_NAME "Container System")
+    set(DOXYGEN_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/documents)
     set(DOXYGEN_EXTRACT_ALL YES)
     set(DOXYGEN_EXTRACT_PRIVATE YES)
-    
-    doxygen_add_docs(container_system_docs
-        ${CMAKE_CURRENT_SOURCE_DIR}/container
-        COMMENT "Generating container documentation"
+    set(DOXYGEN_GENERATE_HTML YES)
+    set(DOXYGEN_GENERATE_LATEX NO)
+    set(DOXYGEN_USE_MDFILE_AS_MAINPAGE README.md)
+    set(DOXYGEN_MARKDOWN_SUPPORT YES)
+    set(DOXYGEN_BUILTIN_STL_SUPPORT YES)
+    set(DOXYGEN_HAVE_DOT YES)
+    set(DOXYGEN_CLASS_GRAPH YES)
+    set(DOXYGEN_COLLABORATION_GRAPH YES)
+
+    # Input files and directories
+    set(DOXYGEN_INPUT
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${CMAKE_CURRENT_SOURCE_DIR}/core
+        ${CMAKE_CURRENT_SOURCE_DIR}/values
+        ${CMAKE_CURRENT_SOURCE_DIR}/internal
+        ${CMAKE_CURRENT_SOURCE_DIR}/integration
+        ${CMAKE_CURRENT_SOURCE_DIR}/examples
+        ${CMAKE_CURRENT_SOURCE_DIR}/README.md
+        ${CMAKE_CURRENT_SOURCE_DIR}/mainpage.dox
     )
+
+    # Exclude patterns
+    set(DOXYGEN_EXCLUDE
+        ${CMAKE_CURRENT_SOURCE_DIR}/build
+        ${CMAKE_CURRENT_SOURCE_DIR}/build_test
+        ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg
+        ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg_installed
+    )
+
+    # Create documentation target
+    doxygen_add_docs(container_system_docs
+        ${DOXYGEN_INPUT}
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+        COMMENT "Generating Container System API documentation"
+    )
+
+    # Add convenience target
+    add_custom_target(docs DEPENDS container_system_docs)
+
+    message(STATUS "Doxygen documentation generation enabled")
+    message(STATUS "  Run 'make container_system_docs' or 'make docs' to generate documentation")
+    message(STATUS "  Output directory: ${DOXYGEN_OUTPUT_DIRECTORY}")
+else()
+    message(STATUS "Doxygen not found - documentation generation disabled")
 endif()
 
 ##################################################
-# Samples
+# Samples and Examples (only when not building as submodule)
 ##################################################
 
-if(BUILD_CONTAINER_SAMPLES)
-    add_subdirectory(samples)
-    message(STATUS "Container samples will be built")
+if(NOT BUILD_CONTAINERSYSTEM_AS_SUBMODULE)
+    if(BUILD_CONTAINER_SAMPLES)
+        add_subdirectory(samples)
+        message(STATUS "Container samples will be built")
+    endif()
+
+    # Build examples
+    option(BUILD_CONTAINER_EXAMPLES "Build container system examples" ON)
+    if(BUILD_CONTAINER_EXAMPLES)
+        add_subdirectory(examples)
+        message(STATUS "Container examples will be built")
+    endif()
+else()
+    message(STATUS "Container samples and examples disabled (submodule mode)")
 endif()
 
 ##################################################
@@ -255,7 +389,6 @@ endif()
 ##################################################
 
 message(STATUS "Container library configured:")
-message(STATUS "  Version: ${PROJECT_VERSION}")
 message(STATUS "  Module Directory: ${CMAKE_CURRENT_SOURCE_DIR}/container")
 message(STATUS "  Dependencies: utilities, fmt")
 message(STATUS "  Features:")
