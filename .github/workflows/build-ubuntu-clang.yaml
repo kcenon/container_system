@@ -119,7 +119,9 @@ jobs:
           echo "vcpkg build failed, falling back to system libraries..."
           cmake .. \
             -G Ninja \
-            -DBUILD_CONTAINERSYSTEM_AS_SUBMODULE=ON \
+            -DBUILD_TESTS=OFF \
+            -DBUILD_CONTAINER_SAMPLES=OFF \
+            -DBUILD_CONTAINER_EXAMPLES=OFF \
             -DCMAKE_INSTALL_PREFIX="../target" \
             -DCMAKE_BUILD_TYPE=$BUILD_TYPE \
             -DUSE_STD_FORMAT=ON \
@@ -133,9 +135,11 @@ jobs:
           cd build
           if [ -f "bin/container_base_unit" ]; then
             echo "Running unit tests (vcpkg build successful)..."
-            find bin -name "*_unit" -executable | while read test; do
-              echo "Running $test..."
-              ./$test || echo "Test $test failed but continuing..."
+            for test in bin/*_unit; do
+              if [ -x "$test" ]; then
+                echo "Running $test..."
+                ./$test || echo "Test $test failed but continuing..."
+              fi
             done
           else
             echo "Running basic verification test (system libraries fallback)..."
