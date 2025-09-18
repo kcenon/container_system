@@ -43,12 +43,59 @@ jobs:
           vs-version: '17.0'
           msbuild-architecture: x64
 
-      - name: Setup and install vcpkg dependencies
-        uses: lukka/run-vcpkg@v11
+      - name: Cache vcpkg
+        uses: actions/cache@v3
+        id: vcpkg-cache
         with:
-          vcpkgDirectory: '${{ github.workspace }}/vcpkg'
-          runVcpkgInstall: true
-          vcpkgJsonGlob: '**/vcpkg.json'
+          path: |
+            ${{ github.workspace }}/vcpkg
+            !${{ github.workspace }}/vcpkg/buildtrees
+            !${{ github.workspace }}/vcpkg/packages
+            !${{ github.workspace }}/vcpkg/downloads
+          key: ${{ runner.os }}-vcpkg-${{ hashFiles('vcpkg.json') }}
+          restore-keys: |
+            ${{ runner.os }}-vcpkg-
+
+      - name: Set up vcpkg
+        shell: pwsh
+        run: |
+          if (!(Test-Path "vcpkg")) {
+            Write-Host "Cloning vcpkg repository..."
+            git clone https://github.com/Microsoft/vcpkg.git
+          } else {
+            Write-Host "Updating existing vcpkg repository..."
+            Push-Location vcpkg
+            git pull
+            Pop-Location
+          }
+
+          Write-Host "Bootstrapping vcpkg..."
+          .\vcpkg\bootstrap-vcpkg.bat
+
+      - name: Determine vcpkg commit
+        id: vcpkg-commit
+        shell: pwsh
+        run: |
+          Push-Location vcpkg
+          $commit = git rev-parse HEAD
+          echo "commit=$commit" >> $env:GITHUB_OUTPUT
+          Pop-Location
+
+      - name: Cache vcpkg installed
+        uses: actions/cache@v3
+        id: vcpkg-installed
+        with:
+          path: ${{ github.workspace }}/vcpkg_installed
+          key: ${{ runner.os }}-vcpkg-installed-${{ env.VCPKG_DEFAULT_TRIPLET }}-${{ hashFiles('vcpkg.json', 'vcpkg-configuration.json') }}-${{ steps.vcpkg-commit.outputs.commit }}
+          restore-keys: |
+            ${{ runner.os }}-vcpkg-installed-${{ env.VCPKG_DEFAULT_TRIPLET }}-
+
+      - name: Install dependencies with vcpkg (uses binary cache)
+        if: steps.vcpkg-installed.outputs.cache-hit != 'true'
+        shell: pwsh
+        run: |
+          Write-Host "Installing dependencies via vcpkg..."
+          .\vcpkg\vcpkg install --x-manifest-root=. --x-install-root="${{ github.workspace }}\vcpkg_installed" --triplet $env:VCPKG_DEFAULT_TRIPLET
 
       - name: Cache CMake build
         uses: actions/cache@v3
@@ -80,7 +127,7 @@ jobs:
                   -DBUILD_TESTS=ON `
                   -DCMAKE_INSTALL_PREFIX="..\target" `
                   -DCMAKE_BUILD_TYPE=$env:BUILD_TYPE `
-                  -DCMAKE_TOOLCHAIN_FILE="$env:GITHUB_WORKSPACE\vcpkg\scripts\buildsystems\vcpkg.cmake" `
+                  -DCMAKE_TOOLCHAIN_FILE="${{ github.workspace }}\vcpkg\scripts\buildsystems\vcpkg.cmake" `
                   -DVCPKG_TARGET_TRIPLET=$env:VCPKG_DEFAULT_TRIPLET
           
           Write-Host "Building project..."
