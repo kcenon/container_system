@@ -29,6 +29,7 @@ option(BUILD_TESTS "Build unit tests" ON)
 option(BUILD_CONTAINER_SAMPLES "Build container system samples" ON)
 option(USE_THREAD_SAFE_OPERATIONS "Enable thread-safe operations" ON)
 option(USE_LOCKFREE_BY_DEFAULT "Use lock-free implementations by default" OFF)
+option(USE_COMMON_SYSTEM "Enable common_system integration" ON)
 
 # New messaging system integration options
 option(ENABLE_MESSAGING_FEATURES "Enable messaging-specific optimizations" ON)
@@ -135,6 +136,14 @@ set(ALL_FILES
 add_library(container_system STATIC 
     ${ALL_FILES}
 )
+
+if(USE_COMMON_SYSTEM)
+    message(STATUS "Container System: Enabling common_system integration")
+    target_include_directories(container_system PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../common_system/include>
+    )
+    target_compile_definitions(container_system PUBLIC CONTAINER_USE_COMMON_SYSTEM)
+endif()
 
 # Create aliases for consistent naming and messaging system compatibility
 add_library(ContainerSystem::container ALIAS container_system)

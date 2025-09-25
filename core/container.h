@@ -41,6 +41,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <mutex>
 #include <atomic>
 
+#ifdef CONTAINER_USE_COMMON_SYSTEM
+#include <kcenon/common/patterns/result.h>
+#endif
+
 namespace container_module
 {
 	/**
@@ -206,14 +210,28 @@ namespace container_module
 		 * values are not fully parsed yet.
 		 */
 		bool deserialize(const std::string& data_string,
-						 bool parse_only_header = true);
+					 bool parse_only_header = true);
 
 		/**
 		 * @brief Deserialize from a raw byte array. If parse_only_header is
 		 * true, child values are not fully parsed.
 		 */
 		bool deserialize(const std::vector<uint8_t>& data_array,
-						 bool parse_only_header = true);
+					 bool parse_only_header = true);
+
+#ifdef CONTAINER_USE_COMMON_SYSTEM
+		/**
+		 * @brief Deserialize returning common_system result to carry error context.
+		 */
+		common::VoidResult deserialize_result(const std::string& data_string,
+					 bool parse_only_header = true);
+
+		/**
+		 * @brief Deserialize from raw bytes returning common_system result.
+		 */
+		common::VoidResult deserialize_result(const std::vector<uint8_t>& data_array,
+					 bool parse_only_header = true);
+#endif
 
 		/**
 		 * @brief Generate an XML representation of this container (header +
