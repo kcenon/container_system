@@ -34,6 +34,23 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "container/core/value.h"
 
+// Optional common system integration
+#ifdef CONTAINER_USE_COMMON_SYSTEM
+    #if __has_include(<kcenon/common/patterns/result.h>)
+        #include <kcenon/common/patterns/result.h>
+        #define CONTAINER_HAS_COMMON_RESULT 1
+    #elif __has_include(<common/patterns/result.h>)
+        #include <common/patterns/result.h>
+        #define CONTAINER_HAS_COMMON_RESULT 1
+        // Create namespace alias for compatibility
+        namespace kcenon::common = ::common;
+    #else
+        #define CONTAINER_HAS_COMMON_RESULT 0
+    #endif
+#else
+    #define CONTAINER_HAS_COMMON_RESULT 0
+#endif
+
 #include <memory>
 #include <vector>
 #include <string_view>
