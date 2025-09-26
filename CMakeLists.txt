@@ -29,6 +29,19 @@ option(BUILD_TESTS "Build unit tests" ON)
 option(BUILD_CONTAINER_SAMPLES "Build container system samples" ON)
 option(USE_THREAD_SAFE_OPERATIONS "Enable thread-safe operations" ON)
 option(USE_LOCKFREE_BY_DEFAULT "Use lock-free implementations by default" OFF)
+option(USE_COMMON_SYSTEM "Enable common_system integration" OFF)
+
+# When common_system integration is enabled, disable legacy samples/tests by default
+if(USE_COMMON_SYSTEM)
+    if(BUILD_TESTS)
+        message(STATUS "Container tests disabled when common_system integration is enabled")
+    endif()
+    if(BUILD_CONTAINER_SAMPLES)
+        message(STATUS "Container samples disabled when common_system integration is enabled")
+    endif()
+    set(BUILD_TESTS OFF CACHE BOOL "Build unit tests" FORCE)
+    set(BUILD_CONTAINER_SAMPLES OFF CACHE BOOL "Build container system samples" FORCE)
+endif()
 
 # New messaging system integration options
 option(ENABLE_MESSAGING_FEATURES "Enable messaging-specific optimizations" ON)
@@ -135,6 +148,14 @@ set(ALL_FILES
 add_library(container_system STATIC 
     ${ALL_FILES}
 )
+
+if(USE_COMMON_SYSTEM)
+    message(STATUS "Container System: Enabling common_system integration")
+    target_include_directories(container_system PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../common_system/include>
+    )
+    target_compile_definitions(container_system PUBLIC CONTAINER_USE_COMMON_SYSTEM)
+endif()
 
 # Create aliases for consistent naming and messaging system compatibility
 add_library(ContainerSystem::container ALIAS container_system)
@@ -372,13 +393,21 @@ if(NOT BUILD_CONTAINERSYSTEM_AS_SUBMODULE)
     if(BUILD_CONTAINER_SAMPLES)
         add_subdirectory(samples)
         message(STATUS "Container samples will be built")
+    elseif(USE_COMMON_SYSTEM)
+        message(STATUS "Container samples skipped when common_system integration is enabled")
     endif()
 
     # Build examples
     option(BUILD_CONTAINER_EXAMPLES "Build container system examples" ON)
+    if(USE_COMMON_SYSTEM)
+        set(BUILD_CONTAINER_EXAMPLES OFF CACHE BOOL "Build container system examples" FORCE)
+    endif()
+
     if(BUILD_CONTAINER_EXAMPLES)
         add_subdirectory(examples)
         message(STATUS "Container examples will be built")
+    elseif(USE_COMMON_SYSTEM)
+        message(STATUS "Container examples skipped when common_system integration is enabled")
     endif()
 else()
     message(STATUS "Container samples and examples disabled (submodule mode)")

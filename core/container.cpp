@@ -629,16 +629,42 @@ namespace container_module
 		return deserialize_values(clean, parse_only_header);
 	}
 
-	bool value_container::deserialize(const std::vector<uint8_t>& data_array,
-									  bool parse_only_header)
+bool value_container::deserialize(const std::vector<uint8_t>& data_array,
+					  bool parse_only_header)
+{
+	auto [strVal, err] = convert_string::to_string(data_array);
+	if (!err.empty())
 	{
-		auto [strVal, err] = convert_string::to_string(data_array);
-		if (!err.empty())
-		{
-			return false;
-		}
-		return deserialize(strVal, parse_only_header);
+		return false;
 	}
+	return deserialize(strVal, parse_only_header);
+}
+
+#ifdef CONTAINER_USE_COMMON_SYSTEM
+	kcenon::common::VoidResult value_container::deserialize_result(
+		const std::string& data_str,
+		bool parse_only_header)
+	{
+		if (deserialize(data_str, parse_only_header))
+		{
+			return kcenon::common::ok();
+		}
+		return kcenon::common::VoidResult(
+			kcenon::common::error_info{-1, "Failed to deserialize container", "container_system"});
+	}
+
+	kcenon::common::VoidResult value_container::deserialize_result(
+		const std::vector<uint8_t>& data_array,
+		bool parse_only_header)
+	{
+		if (deserialize(data_array, parse_only_header))
+		{
+			return kcenon::common::ok();
+		}
+		return kcenon::common::VoidResult(
+			kcenon::common::error_info{-1, "Failed to deserialize container", "container_system"});
+	}
+#endif
 
 	const std::string value_container::to_xml(void)
 	{

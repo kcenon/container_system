@@ -7,6 +7,10 @@
 #include <string>
 #include <vector>
 #include "container.h"
+#include "values/string_value.h"
+#include "values/bool_value.h"
+#include "values/bytes_value.h"
+#include "values/container_value.h"
 
 using namespace container_module;
 
@@ -19,15 +23,17 @@ int main() {
     auto container = std::make_shared<value_container>();
     container->set_message_type("user_profile");
     
-    // Set various types of values
-    container->set_value("user_id", std::make_shared<string_value>("12345"));
-    container->set_value("username", std::make_shared<string_value>("john_doe"));
-    container->set_value("age", std::make_shared<string_value>("30"));
-    container->set_value("is_active", std::make_shared<bool_value>(true));
-    container->set_value("balance", std::make_shared<string_value>("1000.50"));
+    // Set various types of values (note: all values need a name parameter)
+    container->add(std::make_shared<string_value>("user_id", "12345"));
+    container->add(std::make_shared<string_value>("username", "john_doe"));
+    container->add(std::make_shared<string_value>("age", "30"));
+    container->add(std::make_shared<bool_value>("is_active", true));
+    container->add(std::make_shared<string_value>("balance", "1000.50"));
     
-    std::cout << "Container message type: " << container->get_message_type() << std::endl;
-    std::cout << "Container size: " << container->size() << " values" << std::endl;
+    std::cout << "Container message type: " << container->message_type() << std::endl;
+    // Note: size() method is not available, using value count instead
+    auto values = container->value_array("");
+    std::cout << "Container has " << values.size() << " values" << std::endl;
     
     // 2. Reading values from container
     std::cout << "\n2. Reading Values:" << std::endl;
@@ -44,7 +50,7 @@ int main() {
     
     auto is_active = container->get_value("is_active");
     if (is_active) {
-        std::cout << "Is Active: " << (is_active->to_bool() ? "Yes" : "No") << std::endl;
+        std::cout << "Is Active: " << (is_active->to_boolean() ? "Yes" : "No") << std::endl;
     }
     
     // 3. Nested containers
@@ -52,17 +58,25 @@ int main() {
     
     auto address_container = std::make_shared<value_container>();
     address_container->set_message_type("address");
-    address_container->set_value("street", std::make_shared<string_value>("123 Main St"));
-    address_container->set_value("city", std::make_shared<string_value>("New York"));
-    address_container->set_value("zip", std::make_shared<string_value>("10001"));
-    
-    container->set_value("address", std::make_shared<container_value>(address_container));
+    address_container->add(std::make_shared<string_value>("street", "123 Main St"));
+    address_container->add(std::make_shared<string_value>("city", "New York"));
+    address_container->add(std::make_shared<string_value>("zip", "10001"));
+
+    // Create a container_value that holds the address container
+    auto address_value = std::make_shared<container_value>("address");
+    address_value->add(address_container->value_array(""));
+    container->add(address_value);
     
     auto address = container->get_value("address");
-    if (address && address->get_type() == value_types::container) {
-        auto addr_container = std::static_pointer_cast<container_value>(address)->get_container();
-        auto street = addr_container->get_value("street");
-        auto city = addr_container->get_value("city");
+    if (address && address->type() == value_types::container_value) {
+        // Get child values from the container_value
+        auto addr_values = address->children();
+        std::shared_ptr<value> street = nullptr;
+        std::shared_ptr<value> city = nullptr;
+        for (auto& val : addr_values) {
+            if (val->name() == "street") street = val;
+            if (val->name() == "city") city = val;
+        }
         
         if (street && city) {
             std::cout << "Address: " << street->to_string() << ", " << city->to_string() << std::endl;
@@ -73,12 +87,11 @@ int main() {
     std::cout << "\n4. Binary Data:" << std::endl;
     
     std::vector<uint8_t> binary_data = {0x48, 0x65, 0x6C, 0x6C, 0x6F}; // "Hello"
-    container->set_value("avatar", std::make_shared<bytes_value>(binary_data));
+    container->add(std::make_shared<bytes_value>("avatar", binary_data));
     
     auto avatar = container->get_value("avatar");
-    if (avatar && avatar->get_type() == value_types::bytes) {
-        auto bytes_val = std::static_pointer_cast<bytes_value>(avatar);
-        auto data = bytes_val->get_bytes();
+    if (avatar && avatar->type() == value_types::bytes_value) {
+        auto data = avatar->to_bytes();
         std::cout << "Avatar data size: " << data.size() << " bytes" << std::endl;
         std::cout << "Avatar data (as text): ";
         for (auto byte : data) {
@@ -98,8 +111,9 @@ int main() {
     std::cout << "\n6. Deserialization:" << std::endl;
     
     auto restored_container = std::make_shared<value_container>(serialized);
-    std::cout << "Restored container message type: " << restored_container->get_message_type() << std::endl;
-    std::cout << "Restored container size: " << restored_container->size() << " values" << std::endl;
+    std::cout << "Restored container message type: " << restored_container->message_type() << std::endl;
+    auto restored_values = restored_container->value_array("");
+    std::cout << "Restored container has " << restored_values.size() << " values" << std::endl;
     
     auto restored_username = restored_container->get_value("username");
     if (restored_username) {
@@ -110,9 +124,10 @@ int main() {
     std::cout << "\n7. Container Iteration:" << std::endl;
     
     std::cout << "All values in container:" << std::endl;
-    for (const auto& pair : *container) {
-        std::cout << "  " << pair.first << ": " << pair.second->to_string() 
-                  << " (type: " << static_cast<int>(pair.second->get_type()) << ")" << std::endl;
+    auto all_values = container->value_array("");
+    for (const auto& val : all_values) {
+        std::cout << "  " << val->name() << ": " << val->to_string()
+                  << " (type: " << static_cast<int>(val->type()) << ")" << std::endl;
     }
     
     std::cout << "\n=== Example completed successfully ===" << std::endl;
