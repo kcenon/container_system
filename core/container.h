@@ -223,13 +223,13 @@ namespace container_module
 		/**
 		 * @brief Deserialize returning common_system result to carry error context.
 		 */
-		common::VoidResult deserialize_result(const std::string& data_string,
+		kcenon::common::VoidResult deserialize_result(const std::string& data_string,
 					 bool parse_only_header = true);
 
 		/**
 		 * @brief Deserialize from raw bytes returning common_system result.
 		 */
-		common::VoidResult deserialize_result(const std::vector<uint8_t>& data_array,
+		kcenon::common::VoidResult deserialize_result(const std::vector<uint8_t>& data_array,
 					 bool parse_only_header = true);
 #endif
 

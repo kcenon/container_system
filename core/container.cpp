@@ -641,28 +641,28 @@ bool value_container::deserialize(const std::vector<uint8_t>& data_array,
 }
 
 #ifdef CONTAINER_USE_COMMON_SYSTEM
-	common::VoidResult value_container::deserialize_result(
+	kcenon::common::VoidResult value_container::deserialize_result(
 		const std::string& data_str,
 		bool parse_only_header)
 	{
 		if (deserialize(data_str, parse_only_header))
 		{
-			return common::ok();
+			return kcenon::common::ok();
 		}
-		return common::VoidResult(
-			common::error_info{-1, "Failed to deserialize container", "container_system"});
+		return kcenon::common::VoidResult(
+			kcenon::common::error_info{-1, "Failed to deserialize container", "container_system"});
 	}
 
-	common::VoidResult value_container::deserialize_result(
+	kcenon::common::VoidResult value_container::deserialize_result(
 		const std::vector<uint8_t>& data_array,
 		bool parse_only_header)
 	{
 		if (deserialize(data_array, parse_only_header))
 		{
-			return common::ok();
+			return kcenon::common::ok();
 		}
-		return common::VoidResult(
-			common::error_info{-1, "Failed to deserialize container", "container_system"});
+		return kcenon::common::VoidResult(
+			kcenon::common::error_info{-1, "Failed to deserialize container", "container_system"});
 	}
 #endif
 
