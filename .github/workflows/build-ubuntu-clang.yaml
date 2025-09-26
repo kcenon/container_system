@@ -104,6 +104,7 @@ jobs:
           cmake .. \
             -G Ninja \
             -DBUILD_TESTS=ON \
+            -DUSE_COMMON_SYSTEM=OFF \
             -DCMAKE_INSTALL_PREFIX="../target" \
             -DCMAKE_BUILD_TYPE=$BUILD_TYPE \
             -DCMAKE_TOOLCHAIN_FILE="$GITHUB_WORKSPACE/vcpkg/scripts/buildsystems/vcpkg.cmake" \
@@ -122,6 +123,7 @@ jobs:
             -DBUILD_TESTS=OFF \
             -DBUILD_CONTAINER_SAMPLES=OFF \
             -DBUILD_CONTAINER_EXAMPLES=OFF \
+            -DUSE_COMMON_SYSTEM=OFF \
             -DCMAKE_INSTALL_PREFIX="../target" \
             -DCMAKE_BUILD_TYPE=$BUILD_TYPE \
             -DUSE_STD_FORMAT=ON \

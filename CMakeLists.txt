@@ -29,7 +29,7 @@ option(BUILD_TESTS "Build unit tests" ON)
 option(BUILD_CONTAINER_SAMPLES "Build container system samples" ON)
 option(USE_THREAD_SAFE_OPERATIONS "Enable thread-safe operations" ON)
 option(USE_LOCKFREE_BY_DEFAULT "Use lock-free implementations by default" OFF)
-option(USE_COMMON_SYSTEM "Enable common_system integration" ON)
+option(USE_COMMON_SYSTEM "Enable common_system integration" OFF)
 
 # When common_system integration is enabled, disable legacy samples/tests by default
 if(USE_COMMON_SYSTEM)
