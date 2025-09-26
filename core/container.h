@@ -58,6 +58,43 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <mutex>
 #include <atomic>
 
+#ifdef CONTAINER_USE_COMMON_SYSTEM
+#if __has_include(<kcenon/common/patterns/result.h>)
+#include <kcenon/common/patterns/result.h>
+#elif __has_include(<common/patterns/result.h>)
+#include <common/patterns/result.h>
+#ifndef KCENON_COMMON_RESULT_FALLBACK_DEFINED
+#define KCENON_COMMON_RESULT_FALLBACK_DEFINED
+namespace kcenon {
+namespace common {
+using ::common::error_info;
+template<typename T>
+using Result = ::common::Result<T>;
+using VoidResult = ::common::VoidResult;
+using ::common::ok;
+using ::common::error;
+using ::common::is_ok;
+using ::common::is_error;
+using ::common::get_value;
+using ::common::get_error;
+using ::common::get_if_ok;
+using ::common::get_if_error;
+using ::common::value_or;
+using ::common::map;
+using ::common::and_then;
+using ::common::or_else;
+using ::common::try_catch;
+namespace error_codes {
+using namespace ::common::error_codes;
+} // namespace error_codes
+} // namespace common
+} // namespace kcenon
+#endif // KCENON_COMMON_RESULT_FALLBACK_DEFINED
+#else
+#error "Unable to locate common system result header."
+#endif
+#endif
+
 namespace container_module
 {
 	/**
@@ -223,14 +260,28 @@ namespace container_module
 		 * values are not fully parsed yet.
 		 */
 		bool deserialize(const std::string& data_string,
-						 bool parse_only_header = true);
+					 bool parse_only_header = true);
 
 		/**
 		 * @brief Deserialize from a raw byte array. If parse_only_header is
 		 * true, child values are not fully parsed.
 		 */
 		bool deserialize(const std::vector<uint8_t>& data_array,
-						 bool parse_only_header = true);
+					 bool parse_only_header = true);
+
+#ifdef CONTAINER_USE_COMMON_SYSTEM
+		/**
+		 * @brief Deserialize returning common_system result to carry error context.
+		 */
+		kcenon::common::VoidResult deserialize_result(const std::string& data_string,
+					 bool parse_only_header = true);
+
+		/**
+		 * @brief Deserialize from raw bytes returning common_system result.
+		 */
+		kcenon::common::VoidResult deserialize_result(const std::vector<uint8_t>& data_array,
+					 bool parse_only_header = true);
+#endif
 
 		/**
 		 * @brief Generate an XML representation of this container (header +
