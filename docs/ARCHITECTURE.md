@@ -33,3 +33,6 @@ Design Principles
 Build
 - C++20, CMake. Optional sanitizer/benchmark targets. Works standalone.
 
+Integration & Build Flags
+- With network_system: enable `BUILD_WITH_CONTAINER_SYSTEM` in network_system to use container adapters.
+- Adapters: `container_system_adapter` is consumed by network_system's `container_manager` for (de)serialization.
