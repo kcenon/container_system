@@ -12,6 +12,12 @@ set(EXAMPLE_PROGRAMS
     real_world_scenarios
 )
 
+# Result pattern example (requires BUILD_WITH_COMMON_SYSTEM)
+if(BUILD_WITH_COMMON_SYSTEM)
+    list(APPEND EXAMPLE_PROGRAMS result_pattern_example)
+    message(STATUS "Result pattern example enabled (BUILD_WITH_COMMON_SYSTEM=ON)")
+endif()
+
 # Build each example program
 foreach(EXAMPLE ${EXAMPLE_PROGRAMS})
     add_executable(${EXAMPLE} ${EXAMPLE}.cpp)
