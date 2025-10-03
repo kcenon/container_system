@@ -31,16 +31,9 @@ option(USE_THREAD_SAFE_OPERATIONS "Enable thread-safe operations" ON)
 option(USE_LOCKFREE_BY_DEFAULT "Use lock-free implementations by default" OFF)
 option(BUILD_WITH_COMMON_SYSTEM "Enable common_system integration" ON)
 
-# When common_system integration is enabled, disable legacy samples/tests by default
+# When common_system integration is enabled, samples and tests are now supported
 if(BUILD_WITH_COMMON_SYSTEM)
-    if(BUILD_TESTS)
-        message(STATUS "Container tests disabled when common_system integration is enabled")
-    endif()
-    if(BUILD_CONTAINER_SAMPLES)
-        message(STATUS "Container samples disabled when common_system integration is enabled")
-    endif()
-    set(BUILD_TESTS OFF CACHE BOOL "Build unit tests" FORCE)
-    set(BUILD_CONTAINER_SAMPLES OFF CACHE BOOL "Build container system samples" FORCE)
+    message(STATUS "Container system building with common_system integration")
 endif()
 
 # New messaging system integration options
