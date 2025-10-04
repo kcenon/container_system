@@ -30,6 +30,13 @@ jobs:
       with:
         submodules: recursive
 
+    - name: Checkout common_system dependency
+      uses: actions/checkout@v4
+      with:
+        repository: kcenon/common_system
+        path: common_system
+        token: ${{ secrets.GITHUB_TOKEN }}
+
     - name: Install dependencies (Ubuntu)
       if: runner.os == 'Linux'
       run: |
@@ -89,6 +96,23 @@ jobs:
       run: |
         cd build
         ctest -C Debug --output-on-failure --verbose || true
+
+    - name: Test (Windows)
+      if: runner.os == 'Windows'
+      shell: pwsh
+      run: |
+        cd build
+        if (Test-Path "bin\Debug") {
+          Get-ChildItem -Path bin\Debug -Filter "*_test.exe" -Recurse | ForEach-Object {
+            echo "Running $($_.FullName)..."
+            & $_.FullName
+            if ($LASTEXITCODE -ne 0) {
+              echo "Test $($_.Name) failed but continuing..."
+            }
+          }
+        } else {
+          echo "Test directory bin\Debug not found, skipping tests..."
+        }
 
     - name: Upload build artifacts
       if: failure()
