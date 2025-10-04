@@ -246,9 +246,13 @@ TEST_F(ContainerTest, ContainerHeaderSwap) {
 
 TEST_F(ContainerTest, MultipleValuesWithSameName) {
     // Add multiple values with same name
-    container->add(std::make_shared<string_value>(std::string("item"), std::string("first")));
-    container->add(std::make_shared<string_value>(std::string("item"), std::string("second")));
-    container->add(std::make_shared<string_value>(std::string("item"), std::string("third")));
+    std::string key = "item";
+    std::string val1 = "first";
+    std::string val2 = "second";
+    std::string val3 = "third";
+    container->add(std::make_shared<string_value>(key, val1));
+    container->add(std::make_shared<string_value>(key, val2));
+    container->add(std::make_shared<string_value>(key, val3));
     
     // Get all values
     auto items = container->value_array("item");
@@ -266,13 +270,15 @@ TEST_F(ContainerTest, MultipleValuesWithSameName) {
 TEST_F(ContainerTest, ContainerCopy) {
     // Setup original
     container->set_message_type("original");
-    container->add(std::make_shared<string_value>(std::string("key"), std::string("value")));
-    
+    std::string key = "key";
+    std::string value = "value";
+    container->add(std::make_shared<string_value>(key, value));
+
     // Deep copy
     auto copy = container->copy(true);
     EXPECT_EQ(copy->message_type(), "original");
     EXPECT_EQ(copy->get_value("key")->to_string(), "value");
-    
+
     // Shallow copy (header only)
     auto shallow = container->copy(false);
     EXPECT_EQ(shallow->message_type(), "original");
@@ -283,13 +289,14 @@ TEST_F(ContainerTest, ContainerCopy) {
 TEST_F(ContainerTest, LargeDataHandling) {
     // Create large string
     std::string large_data(1024 * 1024, 'X'); // 1MB of X's
+    std::string key = "large";
 
-    container->add(std::make_shared<string_value>(std::string("large"), large_data));
-    
+    container->add(std::make_shared<string_value>(key, large_data));
+
     // Serialize and deserialize
     std::string serialized = container->serialize();
     auto restored = std::make_unique<value_container>(serialized);
-    
+
     EXPECT_EQ(restored->get_value("large")->to_string(), large_data);
 }
 
@@ -391,8 +398,10 @@ TEST(ErrorHandlingTest, InvalidSerialization) {
 }
 
 TEST(ErrorHandlingTest, TypeConversionErrors) {
-    auto str_val = std::make_shared<string_value>(std::string("test"), std::string("not_a_number"));
-    
+    std::string key = "test";
+    std::string value = "not_a_number";
+    auto str_val = std::make_shared<string_value>(key, value);
+
     // String to int conversion should handle gracefully
     EXPECT_EQ(str_val->to_int(), 0); // Default value for failed conversion
 }
@@ -413,26 +422,25 @@ TEST(ErrorHandlingTest, NullValueConversions) {
 
 TEST(PerformanceTest, SerializationSpeed) {
     auto container = std::make_unique<value_container>();
-    
+
     // Add 1000 values
     for (int i = 0; i < 1000; ++i) {
-        container->add(std::make_shared<string_value>(
-            std::string("key") + std::to_string(i),
-            std::string("value") + std::to_string(i)
-        ));
+        std::string key = std::string("key") + std::to_string(i);
+        std::string value = std::string("value") + std::to_string(i);
+        container->add(std::make_shared<string_value>(key, value));
     }
-    
+
     // Measure serialization time
     auto start = std::chrono::high_resolution_clock::now();
     std::string serialized = container->serialize();
     auto end = std::chrono::high_resolution_clock::now();
-    
+
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
-    
+
     // Log performance
     std::cout << "Serialization of 1000 values: " << duration.count() << " microseconds" << std::endl;
     std::cout << "Serialized size: " << serialized.size() << " bytes" << std::endl;
-    
+
     // Basic performance expectation (should be fast)
     EXPECT_LT(duration.count(), 10000); // Less than 10ms
 }
@@ -441,22 +449,21 @@ TEST(PerformanceTest, DeserializationSpeed) {
     // Create and serialize container
     auto container = std::make_unique<value_container>();
     for (int i = 0; i < 1000; ++i) {
-        container->add(std::make_shared<string_value>(
-            std::string("key") + std::to_string(i),
-            std::string("value") + std::to_string(i)
-        ));
+        std::string key = std::string("key") + std::to_string(i);
+        std::string value = std::string("value") + std::to_string(i);
+        container->add(std::make_shared<string_value>(key, value));
     }
     std::string serialized = container->serialize();
-    
+
     // Measure deserialization time
     auto start = std::chrono::high_resolution_clock::now();
     auto restored = std::make_unique<value_container>(serialized);
     auto end = std::chrono::high_resolution_clock::now();
-    
+
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
-    
+
     std::cout << "Deserialization of 1000 values: " << duration.count() << " microseconds" << std::endl;
-    
+
     EXPECT_LT(duration.count(), 10000); // Less than 10ms
 }
 
@@ -480,32 +487,37 @@ TEST(EdgeCaseTest, EmptyContainer) {
 
 TEST(EdgeCaseTest, SpecialCharacters) {
     auto container = std::make_unique<value_container>();
-    
+
     // Test special characters in values
     std::string special = "Line1\nLine2\rLine3\tTab\0Null";
-    container->add(std::make_shared<string_value>(std::string("special"), special));
+    std::string special_key = "special";
+    container->add(std::make_shared<string_value>(special_key, special));
 
     // Test special characters in names (use simpler keys)
-    container->add(std::make_shared<string_value>(std::string("key_with_underscores"), std::string("value1")));
-    container->add(std::make_shared<string_value>(std::string("keyWithCamelCase"), std::string("value2")));
-    
+    std::string underscore_key = "key_with_underscores";
+    std::string underscore_value = "value1";
+    std::string camel_key = "keyWithCamelCase";
+    std::string camel_value = "value2";
+    container->add(std::make_shared<string_value>(underscore_key, underscore_value));
+    container->add(std::make_shared<string_value>(camel_key, camel_value));
+
     // Serialize and restore
     std::string serialized = container->serialize();
     auto restored = std::make_unique<value_container>(serialized);
-    
+
     // Verify special characters preserved
     auto special_val = restored->get_value("special");
     EXPECT_NE(special_val->type(), value_types::null_value);
     if (special_val->type() != value_types::null_value) {
         EXPECT_EQ(special_val->to_string(), special);
     }
-    
+
     auto underscore_val = restored->get_value("key_with_underscores");
     EXPECT_NE(underscore_val->type(), value_types::null_value);
     if (underscore_val->type() != value_types::null_value) {
         EXPECT_EQ(underscore_val->to_string(), "value1");
     }
-    
+
     auto camel_val = restored->get_value("keyWithCamelCase");
     EXPECT_NE(camel_val->type(), value_types::null_value);
     if (camel_val->type() != value_types::null_value) {
@@ -515,10 +527,14 @@ TEST(EdgeCaseTest, SpecialCharacters) {
 
 TEST(EdgeCaseTest, MaximumValues) {
     // Test maximum numeric values
-    auto max_int = std::make_shared<int_value>(std::string("max_int"), std::numeric_limits<int>::max());
-    auto min_int = std::make_shared<int_value>(std::string("min_int"), std::numeric_limits<int>::min());
-    auto max_llong = std::make_shared<llong_value>(std::string("max_llong"), std::numeric_limits<long long>::max());
-    
+    std::string max_int_key = "max_int";
+    std::string min_int_key = "min_int";
+    std::string max_llong_key = "max_llong";
+
+    auto max_int = std::make_shared<int_value>(max_int_key, std::numeric_limits<int>::max());
+    auto min_int = std::make_shared<int_value>(min_int_key, std::numeric_limits<int>::min());
+    auto max_llong = std::make_shared<llong_value>(max_llong_key, std::numeric_limits<long long>::max());
+
     EXPECT_EQ(max_int->to_int(), std::numeric_limits<int>::max());
     EXPECT_EQ(min_int->to_int(), std::numeric_limits<int>::min());
     EXPECT_EQ(max_llong->to_llong(), std::numeric_limits<long long>::max());
