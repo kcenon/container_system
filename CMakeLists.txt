@@ -30,6 +30,7 @@ option(BUILD_CONTAINER_SAMPLES "Build container system samples" ON)
 option(USE_THREAD_SAFE_OPERATIONS "Enable thread-safe operations" ON)
 option(USE_LOCKFREE_BY_DEFAULT "Use lock-free implementations by default" OFF)
 option(BUILD_WITH_COMMON_SYSTEM "Enable common_system integration" ON)
+set(COMMON_SYSTEM_ROOT "" CACHE PATH "Path to the common_system repository root")
 
 # When common_system integration is enabled, samples and tests are now supported
 if(BUILD_WITH_COMMON_SYSTEM)
@@ -144,8 +145,43 @@ add_library(container_system STATIC
 
 if(BUILD_WITH_COMMON_SYSTEM)
     message(STATUS "Container System: Enabling common_system integration")
+
+    set(_common_system_roots)
+    if(COMMON_SYSTEM_ROOT)
+        list(APPEND _common_system_roots ${COMMON_SYSTEM_ROOT})
+    endif()
+    if(DEFINED ENV{COMMON_SYSTEM_ROOT})
+        list(APPEND _common_system_roots $ENV{COMMON_SYSTEM_ROOT})
+    endif()
+    list(APPEND _common_system_roots
+        ${CMAKE_CURRENT_SOURCE_DIR}/../common_system
+        ${CMAKE_CURRENT_SOURCE_DIR}/common_system
+    )
+
+    set(COMMON_SYSTEM_INCLUDE_DIR "")
+    foreach(_root IN LISTS _common_system_roots)
+        if(NOT _root)
+            continue()
+        endif()
+
+        if(EXISTS ${_root}/include/kcenon/common/patterns/result.h)
+            set(COMMON_SYSTEM_INCLUDE_DIR ${_root}/include)
+            break()
+        elseif(EXISTS ${_root}/kcenon/common/patterns/result.h)
+            set(COMMON_SYSTEM_INCLUDE_DIR ${_root})
+            break()
+        endif()
+    endforeach()
+
+    if(NOT COMMON_SYSTEM_INCLUDE_DIR)
+        message(FATAL_ERROR
+            "common_system integration requested but header 'kcenon/common/patterns/result.h' "
+            "was not found. Set COMMON_SYSTEM_ROOT or ensure the dependency is present.")
+    endif()
+
+    message(STATUS "Container System: common_system include directory = ${COMMON_SYSTEM_INCLUDE_DIR}")
     target_include_directories(container_system PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../common_system/include>
+        $<BUILD_INTERFACE:${COMMON_SYSTEM_INCLUDE_DIR}>
     )
     target_compile_definitions(container_system PUBLIC BUILD_WITH_COMMON_SYSTEM)
 endif()
