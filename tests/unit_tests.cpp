@@ -246,9 +246,9 @@ TEST_F(ContainerTest, ContainerHeaderSwap) {
 
 TEST_F(ContainerTest, MultipleValuesWithSameName) {
     // Add multiple values with same name
-    container->add(std::make_shared<string_value>("item", "first"));
-    container->add(std::make_shared<string_value>("item", "second"));
-    container->add(std::make_shared<string_value>("item", "third"));
+    container->add(std::make_shared<string_value>(std::string("item"), std::string("first")));
+    container->add(std::make_shared<string_value>(std::string("item"), std::string("second")));
+    container->add(std::make_shared<string_value>(std::string("item"), std::string("third")));
     
     // Get all values
     auto items = container->value_array("item");
@@ -266,7 +266,7 @@ TEST_F(ContainerTest, MultipleValuesWithSameName) {
 TEST_F(ContainerTest, ContainerCopy) {
     // Setup original
     container->set_message_type("original");
-    container->add(std::make_shared<string_value>("key", "value"));
+    container->add(std::make_shared<string_value>(std::string("key"), std::string("value")));
     
     // Deep copy
     auto copy = container->copy(true);
@@ -283,8 +283,8 @@ TEST_F(ContainerTest, ContainerCopy) {
 TEST_F(ContainerTest, LargeDataHandling) {
     // Create large string
     std::string large_data(1024 * 1024, 'X'); // 1MB of X's
-    
-    container->add(std::make_shared<string_value>("large", large_data));
+
+    container->add(std::make_shared<string_value>(std::string("large"), large_data));
     
     // Serialize and deserialize
     std::string serialized = container->serialize();
@@ -303,7 +303,7 @@ TEST(ThreadSafetyTest, ConcurrentReads) {
     // Add test data
     for (int i = 0; i < 100; ++i) {
         container->add(std::make_shared<int_value>(
-            "key" + std::to_string(i), 
+            std::string("key") + std::to_string(i),
             i
         ));
     }
@@ -391,7 +391,7 @@ TEST(ErrorHandlingTest, InvalidSerialization) {
 }
 
 TEST(ErrorHandlingTest, TypeConversionErrors) {
-    auto str_val = std::make_shared<string_value>("test", "not_a_number");
+    auto str_val = std::make_shared<string_value>(std::string("test"), std::string("not_a_number"));
     
     // String to int conversion should handle gracefully
     EXPECT_EQ(str_val->to_int(), 0); // Default value for failed conversion
@@ -417,8 +417,8 @@ TEST(PerformanceTest, SerializationSpeed) {
     // Add 1000 values
     for (int i = 0; i < 1000; ++i) {
         container->add(std::make_shared<string_value>(
-            "key" + std::to_string(i),
-            "value" + std::to_string(i)
+            std::string("key") + std::to_string(i),
+            std::string("value") + std::to_string(i)
         ));
     }
     
@@ -442,8 +442,8 @@ TEST(PerformanceTest, DeserializationSpeed) {
     auto container = std::make_unique<value_container>();
     for (int i = 0; i < 1000; ++i) {
         container->add(std::make_shared<string_value>(
-            "key" + std::to_string(i),
-            "value" + std::to_string(i)
+            std::string("key") + std::to_string(i),
+            std::string("value") + std::to_string(i)
         ));
     }
     std::string serialized = container->serialize();
@@ -483,11 +483,11 @@ TEST(EdgeCaseTest, SpecialCharacters) {
     
     // Test special characters in values
     std::string special = "Line1\nLine2\rLine3\tTab\0Null";
-    container->add(std::make_shared<string_value>("special", special));
-    
+    container->add(std::make_shared<string_value>(std::string("special"), special));
+
     // Test special characters in names (use simpler keys)
-    container->add(std::make_shared<string_value>("key_with_underscores", "value1"));
-    container->add(std::make_shared<string_value>("keyWithCamelCase", "value2"));
+    container->add(std::make_shared<string_value>(std::string("key_with_underscores"), std::string("value1")));
+    container->add(std::make_shared<string_value>(std::string("keyWithCamelCase"), std::string("value2")));
     
     // Serialize and restore
     std::string serialized = container->serialize();
@@ -515,9 +515,9 @@ TEST(EdgeCaseTest, SpecialCharacters) {
 
 TEST(EdgeCaseTest, MaximumValues) {
     // Test maximum numeric values
-    auto max_int = std::make_shared<int_value>("max_int", std::numeric_limits<int>::max());
-    auto min_int = std::make_shared<int_value>("min_int", std::numeric_limits<int>::min());
-    auto max_llong = std::make_shared<llong_value>("max_llong", std::numeric_limits<long long>::max());
+    auto max_int = std::make_shared<int_value>(std::string("max_int"), std::numeric_limits<int>::max());
+    auto min_int = std::make_shared<int_value>(std::string("min_int"), std::numeric_limits<int>::min());
+    auto max_llong = std::make_shared<llong_value>(std::string("max_llong"), std::numeric_limits<long long>::max());
     
     EXPECT_EQ(max_int->to_int(), std::numeric_limits<int>::max());
     EXPECT_EQ(min_int->to_int(), std::numeric_limits<int>::min());
