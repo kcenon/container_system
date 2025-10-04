@@ -1,0 +1,15 @@
+<map id="container_module::value" name="container_module::value">
+<area shape="rect" id="Node000001" title="The base class for all values stored in the container system." alt="" coords="401,133,589,739"/>
+<area shape="rect" id="Node000003" href="$d7/d22/classcontainer__module_1_1bool__value.html" title="A specialized value for boolean data." alt="" coords="5,997,172,1177"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="393,533,340,587,285,649,232,717,186,788,160,840,139,894,109,997,104,996,134,892,155,837,181,785,227,714,281,646,336,583,389,529"/>
+<area shape="rect" id="Node000004" href="$df/df7/classcontainer__module_1_1bytes__value.html" title="A specialized value that stores an arbitrary byte array (Base64&#45;encoded in string form)." alt="" coords="196,1007,371,1167"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="400,738,312,1007,307,1006,395,737"/>
+<area shape="rect" id="Node000005" href="$da/d1c/classcontainer__module_1_1container__value.html" title="A specialized value that can hold child values, i.e. a hierarchical container." alt="" coords="395,787,595,1387"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="498,752,498,787,493,787,493,752"/>
+<area shape="rect" id="Node000006" href="$de/dc4/classcontainer__module_1_1numeric__value.html" title="A template class for storing and converting numeric types (integral or floating)." alt="" coords="619,787,811,1387"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="596,727,622,801,617,803,591,728"/>
+<area shape="rect" id="Node000007" href="$d5/d22/classcontainer__module_1_1string__value.html" title="A specialized value for storing textual data." alt="" coords="835,1017,1011,1157"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="601,524,658,578,718,642,775,711,826,785,855,843,880,904,912,1016,907,1017,874,906,851,846,821,788,771,714,714,645,654,582,597,528"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="421,5,570,85"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="498,99,498,133,493,133,493,99"/>
+</map>
