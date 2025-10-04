@@ -12,6 +12,7 @@
 #include <algorithm>
 #include <sstream>
 #include <fstream>
+#include <iomanip>
 
 #include "container.h"
 
@@ -216,7 +217,8 @@ private:
 
     std::atomic<int> transactions_processed_{0};
     std::atomic<int> fraud_alerts_{0};
-    std::atomic<double> total_amount_{0.0};
+    double total_amount_{0.0};
+    std::mutex amount_mutex_;
 
 public:
     void simulate_financial_scenario() {
@@ -283,8 +285,13 @@ public:
         std::cout << "Financial processing completed:" << std::endl;
         std::cout << "  Transactions processed: " << transactions_processed_.load() << std::endl;
         std::cout << "  Fraud alerts generated: " << fraud_alerts_.load() << std::endl;
+        double total;
+        {
+            std::lock_guard<std::mutex> lock(amount_mutex_);
+            total = total_amount_;
+        }
         std::cout << "  Total amount processed: $" << std::fixed << std::setprecision(2)
-                  << total_amount_.load() << std::endl;
+                  << total << std::endl;
     }
 
 private:
@@ -293,7 +300,10 @@ private:
         bool is_suspicious = (transaction.amount > 5000.0) ||
                            (transaction.account_from == transaction.account_to);
 
-        total_amount_ += transaction.amount;
+        {
+            std::lock_guard<std::mutex> lock(amount_mutex_);
+            total_amount_ += transaction.amount;
+        }
 
 #ifdef HAS_MESSAGING_FEATURES
         auto container = integration::messaging_container_builder()
@@ -675,7 +685,7 @@ private:
             .add_value("upload_timestamp", std::chrono::duration_cast<std::chrono::milliseconds>(
                 document.upload_time.time_since_epoch()).count())
             .add_value("tag_count", static_cast<int>(document.tags.size()))
-            .optimize_for_memory()
+            .optimize_for_size()
             .build();
 #else
         auto container = std::make_shared<value_container>();

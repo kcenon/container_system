@@ -43,6 +43,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <vector>
 #include <chrono>
 #include <thread>
+#include <iomanip>
 
 // Include the container system with new integration features
 #include "container/container.h"

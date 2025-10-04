@@ -8,6 +8,7 @@
 #include <map>
 #include <sstream>
 #include <iomanip>
+#include <condition_variable>
 
 #include "container.h"
 
@@ -438,23 +439,10 @@ public:
     void demonstrate_external_integration() {
         std::cout << "\n--- External Integration ---" << std::endl;
 
-        std::atomic<int> callback_invocations{0};
-        std::string last_callback_data;
-
-        // Register external callback
-        integration::messaging_integration::register_callback(
-            "data_logger",
-            [&callback_invocations, &last_callback_data](const std::string& data) {
-                callback_invocations++;
-                last_callback_data = data;
-                std::cout << "  External callback invoked: " << data << std::endl;
-            }
-        );
-
-        // Create containers that trigger callbacks
+        // Create containers for external systems
         for (int i = 0; i < 5; ++i) {
             auto container = integration::messaging_container_builder()
-                .source("integration_test", "callback_session")
+                .source("integration_test", "external_session")
                 .target("external_system", "logger")
                 .message_type("log_event")
                 .add_value("event_id", i)
@@ -462,21 +450,12 @@ public:
                 .add_value("message", std::string("Integration test event " + std::to_string(i)))
                 .build();
 
-            // Trigger callback
-            integration::messaging_integration::trigger_callback(
-                "data_logger",
-                "Event " + std::to_string(i) + ": " + container->message_type()
-            );
+            std::cout << "  Created log event " << i << ": " << container->message_type() << std::endl;
 
             std::this_thread::sleep_for(std::chrono::milliseconds(10));
         }
 
-        std::cout << "External integration completed:" << std::endl;
-        std::cout << "  Callback invocations: " << callback_invocations.load() << std::endl;
-        std::cout << "  Last callback data: " << last_callback_data << std::endl;
-
-        // Cleanup
-        integration::messaging_integration::unregister_callback("data_logger");
+        std::cout << "External integration completed" << std::endl;
 
         stats_.created += 5;
     }
