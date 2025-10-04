@@ -29,7 +29,7 @@ option(BUILD_TESTS "Build unit tests" ON)
 option(BUILD_CONTAINER_SAMPLES "Build container system samples" ON)
 option(USE_THREAD_SAFE_OPERATIONS "Enable thread-safe operations" ON)
 option(USE_LOCKFREE_BY_DEFAULT "Use lock-free implementations by default" OFF)
-option(BUILD_WITH_COMMON_SYSTEM "Enable common_system integration" ON)
+option(BUILD_WITH_COMMON_SYSTEM "Enable common_system integration" OFF)
 set(COMMON_SYSTEM_ROOT "" CACHE PATH "Path to the common_system repository root")
 
 # When common_system integration is enabled, samples and tests are now supported
