@@ -77,8 +77,8 @@ jobs:
           -DCMAKE_BUILD_TYPE=Debug \
           -DBUILD_WITH_COMMON_SYSTEM=ON \
           -DBUILD_TESTS=ON \
-          -DBUILD_CONTAINER_SAMPLES=OFF \
-          -DBUILD_CONTAINER_EXAMPLES=OFF
+          -DBUILD_CONTAINER_SAMPLES=ON \
+          -DBUILD_CONTAINER_EXAMPLES=ON
 
     - name: Configure CMake (Windows)
       if: runner.os == 'Windows'
@@ -87,8 +87,8 @@ jobs:
           -DCMAKE_BUILD_TYPE=Debug `
           -DBUILD_WITH_COMMON_SYSTEM=ON `
           -DBUILD_TESTS=ON `
-          -DBUILD_CONTAINER_SAMPLES=OFF `
-          -DBUILD_CONTAINER_EXAMPLES=OFF
+          -DBUILD_CONTAINER_SAMPLES=ON `
+          -DBUILD_CONTAINER_EXAMPLES=ON
 
     - name: Build
       run: cmake --build build --config Debug

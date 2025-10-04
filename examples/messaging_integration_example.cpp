@@ -63,15 +63,12 @@ void demonstrate_basic_usage() {
     container->set_message_type("user_data");
 
     // Add some values
-    auto values = std::vector<std::shared_ptr<value>>{
-        value_factory::create("user_id", long_value, "12345"),
-        value_factory::create("username", string_value, "john_doe"),
-        value_factory::create("balance", double_value, "1500.75"),
-        value_factory::create("active", bool_value, "true")
-    };
-    container->set_values(values);
+    container->add(std::make_shared<long_value>("user_id", 12345L));
+    container->add(std::make_shared<string_value>("username", "john_doe"));
+    container->add(std::make_shared<double_value>("balance", 1500.75));
+    container->add(std::make_shared<bool_value>("active", true));
 
-    std::cout << "Created container with " << container->values().size() << " values\n";
+    std::cout << "Created container with 4 values\n";
     std::cout << "Message type: " << container->message_type() << "\n";
     std::cout << "Source: " << container->source_id() << ":" << container->source_sub_id() << "\n";
     std::cout << "Target: " << container->target_id() << ":" << container->target_sub_id() << "\n";
@@ -103,14 +100,10 @@ void demonstrate_enhanced_features() {
 
     std::cout << "Built container using builder pattern\n";
     std::cout << "Message type: " << built_container->message_type() << "\n";
-    std::cout << "Values count: " << built_container->values().size() << "\n";
 
     // Enhanced serialization
     {
-        CONTAINER_PERF_MONITOR("enhanced_serialization");
         std::string serialized = messaging_integration::serialize_for_messaging(built_container);
-        CONTAINER_PERF_SET_SIZE(built_container->values().size());
-        CONTAINER_PERF_SET_RESULT(serialized.size());
 
         std::cout << "Enhanced serialization completed\n";
         std::cout << "Serialized size: " << serialized.size() << " bytes\n";
@@ -168,8 +161,7 @@ void demonstrate_external_callbacks() {
     });
 
     messaging_integration::register_serialization_callback([](const auto& container) {
-        std::cout << "Callback: Container serialized with "
-                  << container->values().size() << " values\n";
+        std::cout << "Callback: Container serialized\n";
     });
 
     // Create and serialize a container to trigger callbacks
