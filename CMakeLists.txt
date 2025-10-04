@@ -169,7 +169,6 @@ set_target_properties(container_system PROPERTIES
 # Public include directories (for consumers of this library)
 target_include_directories(container_system PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../>
     $<INSTALL_INTERFACE:include>
 )
 
