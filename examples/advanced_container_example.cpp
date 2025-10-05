@@ -80,11 +80,17 @@ public:
         container->set_message_type("user_profile_update");
 
         // Add different types of values
-        container->add(std::make_shared<string_value>("username", "john_doe"));
-        container->add(std::make_shared<int_value>("user_id", 12345));
-        container->add(std::make_shared<double_value>("account_balance", 1500.75));
-        container->add(std::make_shared<bool_value>("is_premium", true));
-        container->add(std::make_shared<long_value>("last_login",
+        std::string username_key = "username";
+        std::string username_val = "john_doe";
+        container->add(std::make_shared<string_value>(username_key, username_val));
+        std::string user_id_key = "user_id";
+        container->add(std::make_shared<int_value>(user_id_key, 12345));
+        std::string balance_key = "account_balance";
+        container->add(std::make_shared<double_value>(balance_key, 1500.75));
+        std::string premium_key = "is_premium";
+        container->add(std::make_shared<bool_value>(premium_key, true));
+        std::string login_key = "last_login";
+        container->add(std::make_shared<long_value>(login_key,
             std::chrono::duration_cast<std::chrono::seconds>(
                 std::chrono::system_clock::now().time_since_epoch()).count()));
 
@@ -246,10 +252,14 @@ public:
                     container->set_source("producer_" + std::to_string(p), "thread_" + std::to_string(p));
                     container->set_target("consumer_pool", "any_available");
                     container->set_message_type("work_item");
-                    container->add(std::make_shared<int_value>("producer_id", p));
-                    container->add(std::make_shared<int_value>("item_id", i));
-                    container->add(std::make_shared<int_value>("random_value", dis(gen)));
-                    container->add(std::make_shared<long_value>("timestamp",
+                    std::string prod_id_key = "producer_id";
+                    container->add(std::make_shared<int_value>(prod_id_key, p));
+                    std::string item_id_key = "item_id";
+                    container->add(std::make_shared<int_value>(item_id_key, i));
+                    std::string rand_key = "random_value";
+                    container->add(std::make_shared<int_value>(rand_key, dis(gen)));
+                    std::string ts_key = "timestamp";
+                    container->add(std::make_shared<long_value>(ts_key,
                         std::chrono::duration_cast<std::chrono::milliseconds>(
                             std::chrono::system_clock::now().time_since_epoch()).count()));
 #endif
@@ -352,7 +362,8 @@ public:
         std::string large_string(10000, 'A');
         auto large_container = std::make_shared<value_container>();
         large_container->set_message_type("large_data_test");
-        large_container->add(std::make_shared<string_value>("large_data", large_string));
+        std::string large_key = "large_data";
+        large_container->add(std::make_shared<string_value>(large_key, large_string));
 
         std::string large_serialized = large_container->serialize();
         auto large_deserialized = std::make_shared<value_container>(large_serialized);
@@ -383,8 +394,10 @@ public:
             container->set_source("high_freq_client", "session_" + std::to_string(i % 100));
             container->set_target("high_freq_server", "handler");
             container->set_message_type("ping");
-            container->add(std::make_shared<int_value>("sequence", i));
-            container->add(std::make_shared<long_value>("timestamp",
+            std::string seq_key = "sequence";
+            container->add(std::make_shared<int_value>(seq_key, i));
+            std::string ts_key = "timestamp";
+            container->add(std::make_shared<long_value>(ts_key,
                 std::chrono::duration_cast<std::chrono::microseconds>(
                     std::chrono::system_clock::now().time_since_epoch()).count()));
 
@@ -412,9 +425,13 @@ public:
 
             // Simulate large file data using string (bytes_value not implemented)
             std::string file_data(50000, static_cast<char>(i % 256));
-            container->add(std::make_shared<string_value>("file_content", file_data));
-            container->add(std::make_shared<string_value>("filename", "large_file_" + std::to_string(i) + ".dat"));
-            container->add(std::make_shared<int_value>("file_size", static_cast<int>(file_data.size())));
+            std::string content_key = "file_content";
+            container->add(std::make_shared<string_value>(content_key, file_data));
+            std::string filename_key = "filename";
+            std::string filename_val = "large_file_" + std::to_string(i) + ".dat";
+            container->add(std::make_shared<string_value>(filename_key, filename_val));
+            std::string size_key = "file_size";
+            container->add(std::make_shared<int_value>(size_key, static_cast<int>(file_data.size())));
 
             // Serialization test
             std::string serialized = container->serialize();

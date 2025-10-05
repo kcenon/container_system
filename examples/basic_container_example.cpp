@@ -42,34 +42,41 @@ void demonstrate_value_types() {
     container->set_message_type("value_types_demo");
 
     // String value
-    auto string_val = std::make_shared<string_value>("username", "john_doe");
+    std::string username_key = "username";
+    std::string username_val = "john_doe";
+    auto string_val = std::make_shared<string_value>(username_key, username_val);
     container->add(string_val);
     std::cout << "Added string value: username = " << string_val->to_string() << std::endl;
 
     // Integer value
-    auto int_val = std::make_shared<int_value>("user_id", 12345);
+    std::string user_id_key = "user_id";
+    auto int_val = std::make_shared<int_value>(user_id_key, 12345);
     container->add(int_val);
     std::cout << "Added int value: user_id = " << int_val->to_int() << std::endl;
 
     // Long value
     auto timestamp = std::chrono::duration_cast<std::chrono::seconds>(
         std::chrono::system_clock::now().time_since_epoch()).count();
-    auto long_val = std::make_shared<long_value>("timestamp", timestamp);
+    std::string timestamp_key = "timestamp";
+    auto long_val = std::make_shared<long_value>(timestamp_key, timestamp);
     container->add(long_val);
     std::cout << "Added long value: timestamp = " << long_val->to_long() << std::endl;
 
     // Float value
-    auto float_val = std::make_shared<float_value>("score", 98.5f);
+    std::string score_key = "score";
+    auto float_val = std::make_shared<float_value>(score_key, 98.5f);
     container->add(float_val);
     std::cout << "Added float value: score = " << float_val->to_float() << std::endl;
 
     // Double value
-    auto double_val = std::make_shared<double_value>("account_balance", 1500.75);
+    std::string balance_key = "account_balance";
+    auto double_val = std::make_shared<double_value>(balance_key, 1500.75);
     container->add(double_val);
     std::cout << "Added double value: account_balance = " << double_val->to_double() << std::endl;
 
     // Boolean value
-    auto bool_val = std::make_shared<bool_value>("is_active", true);
+    std::string active_key = "is_active";
+    auto bool_val = std::make_shared<bool_value>(active_key, true);
     container->add(bool_val);
     std::cout << "Added bool value: is_active = " << (bool_val->to_boolean() ? "true" : "false") << std::endl;
 
@@ -85,10 +92,15 @@ void demonstrate_serialization() {
     container->set_target("deserialize_test", "test_handler");
     container->set_message_type("serialization_test");
 
-    container->add(std::make_shared<string_value>("message", "Hello, Serialization!"));
-    container->add(std::make_shared<int_value>("count", 42));
-    container->add(std::make_shared<double_value>("pi", 3.14159));
-    container->add(std::make_shared<bool_value>("success", true));
+    std::string msg_key = "message";
+    std::string msg_val = "Hello, Serialization!";
+    container->add(std::make_shared<string_value>(msg_key, msg_val));
+    std::string count_key = "count";
+    container->add(std::make_shared<int_value>(count_key, 42));
+    std::string pi_key = "pi";
+    container->add(std::make_shared<double_value>(pi_key, 3.14159));
+    std::string success_key = "success";
+    container->add(std::make_shared<bool_value>(success_key, true));
 
     // Serialize
     std::cout << "Serializing container..." << std::endl;
@@ -125,10 +137,15 @@ void demonstrate_value_access() {
     container->set_message_type("value_access_test");
 
     // Add sample data
-    container->add(std::make_shared<string_value>("product_name", "Super Widget"));
-    container->add(std::make_shared<double_value>("price", 29.99));
-    container->add(std::make_shared<int_value>("quantity", 100));
-    container->add(std::make_shared<bool_value>("in_stock", true));
+    std::string product_key = "product_name";
+    std::string product_val = "Super Widget";
+    container->add(std::make_shared<string_value>(product_key, product_val));
+    std::string price_key = "price";
+    container->add(std::make_shared<double_value>(price_key, 29.99));
+    std::string qty_key = "quantity";
+    container->add(std::make_shared<int_value>(qty_key, 100));
+    std::string stock_key = "in_stock";
+    container->add(std::make_shared<bool_value>(stock_key, true));
 
     std::cout << "Container contains 4 values" << std::endl;
 
@@ -163,9 +180,13 @@ void demonstrate_multiple_values() {
     container->set_message_type("multi_value_test");
 
     // Add multiple values with same name
-    container->add(std::make_shared<string_value>("item", "first"));
-    container->add(std::make_shared<string_value>("item", "second"));
-    container->add(std::make_shared<string_value>("item", "third"));
+    std::string item_key = "item";
+    std::string first_val = "first";
+    std::string second_val = "second";
+    std::string third_val = "third";
+    container->add(std::make_shared<string_value>(item_key, first_val));
+    container->add(std::make_shared<string_value>(item_key, second_val));
+    container->add(std::make_shared<string_value>(item_key, third_val));
 
     std::cout << "Added 3 values with name 'item'" << std::endl;
 
@@ -204,8 +225,11 @@ void demonstrate_performance_basics() {
         container->set_target("perf_server", "handler");
         container->set_message_type("performance_test");
 
-        container->add(std::make_shared<int_value>("index", i));
-        container->add(std::make_shared<string_value>("data", "test_data_" + std::to_string(i)));
+        std::string index_key = "index";
+        container->add(std::make_shared<int_value>(index_key, i));
+        std::string data_key = "data";
+        std::string data_val = "test_data_" + std::to_string(i);
+        container->add(std::make_shared<string_value>(data_key, data_val));
 
         containers.push_back(container);
     }

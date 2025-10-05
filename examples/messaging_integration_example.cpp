@@ -64,10 +64,15 @@ void demonstrate_basic_usage() {
     container->set_message_type("user_data");
 
     // Add some values
-    container->add(std::make_shared<long_value>("user_id", 12345L));
-    container->add(std::make_shared<string_value>("username", "john_doe"));
-    container->add(std::make_shared<double_value>("balance", 1500.75));
-    container->add(std::make_shared<bool_value>("active", true));
+    std::string user_id_key = "user_id";
+    container->add(std::make_shared<long_value>(user_id_key, 12345L));
+    std::string username_key = "username";
+    std::string username_val = "john_doe";
+    container->add(std::make_shared<string_value>(username_key, username_val));
+    std::string balance_key = "balance";
+    container->add(std::make_shared<double_value>(balance_key, 1500.75));
+    std::string active_key = "active";
+    container->add(std::make_shared<bool_value>(active_key, true));
 
     std::cout << "Created container with 4 values\n";
     std::cout << "Message type: " << container->message_type() << "\n";
