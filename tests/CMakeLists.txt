@@ -51,10 +51,14 @@ endif()
 # Test source files
 set(TEST_SOURCES
     unit_tests.cpp
-    benchmark_tests.cpp
     test_messaging_integration.cpp
     performance_tests.cpp
 )
+
+# Only add benchmark tests if benchmark library is available
+if(benchmark_FOUND OR BENCHMARK_FOUND)
+    list(APPEND TEST_SOURCES benchmark_tests.cpp)
+endif()
 
 # Create test executables
 foreach(TEST_SOURCE ${TEST_SOURCES})
@@ -78,8 +82,8 @@ foreach(TEST_SOURCE ${TEST_SOURCES})
     endif()
 
     # Include directories
+    # Note: container_system already provides necessary include paths via target_link_libraries
     target_include_directories(${TEST_NAME} PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}/../
         ${GTEST_INCLUDE_DIRS}
     )
 

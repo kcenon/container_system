@@ -10,16 +10,16 @@
 #include <iostream>
 #include <iomanip>
 
-#include "core/container.h"
-#include "core/value.h"
-#include "values/string_value.h"
-#include "values/numeric_value.h"
-#include "values/bool_value.h"
-#include "values/bytes_value.h"
-#include "values/container_value.h"
+#include "container/core/container.h"
+#include "container/core/value.h"
+#include "container/values/string_value.h"
+#include "container/values/numeric_value.h"
+#include "container/values/bool_value.h"
+#include "container/values/bytes_value.h"
+#include "container/values/container_value.h"
 
 #ifdef HAS_MESSAGING_FEATURES
-#include "integration/messaging_integration.h"
+#include "container/integration/messaging_integration.h"
 #endif
 
 using namespace container_module;
