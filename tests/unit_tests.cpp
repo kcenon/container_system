@@ -56,8 +56,10 @@ protected:
 // ============================================================================
 
 TEST_F(ValueTest, NullValueCreation) {
-    auto null_val = std::make_shared<value>("test_null", value_types::null_value, "");
-    
+    std::string key = "test_null";
+    std::string empty_val = "";
+    auto null_val = std::make_shared<value>(key, value_types::null_value, empty_val);
+
     EXPECT_EQ(null_val->name(), "test_null");
     EXPECT_EQ(null_val->type(), value_types::null_value);
     EXPECT_TRUE(null_val->is_null());
@@ -183,19 +185,23 @@ TEST_F(ContainerTest, BasicContainerCreation) {
 
 TEST_F(ContainerTest, ContainerValueManagement) {
     // Add various values
-    container->add(std::make_shared<string_value>("key1", "value1"));
-    container->add(std::make_shared<int_value>("key2", 100));
-    container->add(std::make_shared<bool_value>("key3", true));
-    
+    std::string key1 = "key1";
+    std::string value1 = "value1";
+    std::string key2 = "key2";
+    std::string key3 = "key3";
+    container->add(std::make_shared<string_value>(key1, value1));
+    container->add(std::make_shared<int_value>(key2, 100));
+    container->add(std::make_shared<bool_value>(key3, true));
+
     // Retrieve values
     auto val1 = container->get_value("key1");
     auto val2 = container->get_value("key2");
     auto val3 = container->get_value("key3");
-    
+
     EXPECT_EQ(val1->to_string(), "value1");
     EXPECT_EQ(val2->to_int(), 100);
     EXPECT_TRUE(val3->to_boolean());
-    
+
     // Test non-existent key
     auto val4 = container->get_value("non_existent");
     EXPECT_TRUE(val4->is_null());
@@ -206,23 +212,26 @@ TEST_F(ContainerTest, ContainerSerialization) {
     container->set_source("src", "sub");
     container->set_target("tgt", "");
     container->set_message_type("test");
-    
+
     // Add values
-    container->add(std::make_shared<string_value>("str", "hello"));
-    container->add(std::make_shared<int_value>("num", 42));
-    
+    std::string str_key = "str";
+    std::string str_val = "hello";
+    std::string num_key = "num";
+    container->add(std::make_shared<string_value>(str_key, str_val));
+    container->add(std::make_shared<int_value>(num_key, 42));
+
     // Serialize
     std::string serialized = container->serialize();
-    
+
     // Deserialize
     auto new_container = std::make_unique<value_container>(serialized);
-    
+
     // Verify
     EXPECT_EQ(new_container->source_id(), "src");
     EXPECT_EQ(new_container->source_sub_id(), "sub");
     EXPECT_EQ(new_container->target_id(), "tgt");
     EXPECT_EQ(new_container->message_type(), "test");
-    
+
     EXPECT_EQ(new_container->get_value("str")->to_string(), "hello");
     EXPECT_EQ(new_container->get_value("num")->to_int(), 42);
 }
@@ -231,18 +240,21 @@ TEST_F(ContainerTest, NestedContainerSupport) {
     // Create nested container
     auto nested = std::make_unique<value_container>();
     nested->set_message_type("nested_msg");
-    nested->add(std::make_shared<string_value>("nested_key", "nested_value"));
-    
+    std::string nested_key = "nested_key";
+    std::string nested_value = "nested_value";
+    nested->add(std::make_shared<string_value>(nested_key, nested_value));
+
     // Serialize nested container
     std::string nested_data = nested->serialize();
-    
+
     // Add to main container as container value
-    container->add(std::make_shared<value>("child", value_types::container_value, nested_data));
-    
+    std::string child_key = "child";
+    container->add(std::make_shared<value>(child_key, value_types::container_value, nested_data));
+
     // Retrieve nested container
     auto child_val = container->get_value("child");
     EXPECT_TRUE(child_val->is_container());
-    
+
     // Parse nested container
     auto child_container = std::make_unique<value_container>(child_val->data());
     EXPECT_EQ(child_container->message_type(), "nested_msg");
@@ -424,8 +436,10 @@ TEST(ErrorHandlingTest, TypeConversionErrors) {
 }
 
 TEST(ErrorHandlingTest, NullValueConversions) {
-    auto null_val = std::make_shared<value>("null", value_types::null_value, "");
-    
+    std::string key = "null";
+    std::string empty_val = "";
+    auto null_val = std::make_shared<value>(key, value_types::null_value, empty_val);
+
     // Null conversions should throw
     EXPECT_THROW(null_val->to_boolean(), std::logic_error);
     EXPECT_THROW(null_val->to_int(), std::logic_error);
