@@ -12,11 +12,11 @@
 
 #include <gtest/gtest.h>
 #include <container.h>
-#include <values/bool_value.h>
-#include <values/string_value.h>
-#include <values/bytes_value.h>
-#include <values/numeric_value.h>
-#include <internal/thread_safe_container.h>
+#include <container/values/bool_value.h>
+#include <container/values/string_value.h>
+#include <container/values/bytes_value.h>
+#include <container/values/numeric_value.h>
+#include <container/internal/thread_safe_container.h>
 #include <thread>
 #include <vector>
 #include <random>
