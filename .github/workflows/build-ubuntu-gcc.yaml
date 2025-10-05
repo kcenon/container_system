@@ -31,6 +31,13 @@ jobs:
           fetch-depth: 1
           token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Checkout common_system dependency
+        uses: actions/checkout@v4
+        with:
+          repository: kcenon/common_system
+          path: common_system
+          token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Install dependencies
         run: |
           sudo apt update
@@ -103,7 +110,8 @@ jobs:
           cmake .. \
             -G Ninja \
             -DBUILD_TESTS=ON \
-            -DUSE_COMMON_SYSTEM=OFF \
+            -DBUILD_WITH_COMMON_SYSTEM=ON \
+            -DCOMMON_SYSTEM_ROOT="$GITHUB_WORKSPACE/common_system" \
             -DCMAKE_INSTALL_PREFIX="../target" \
             -DCMAKE_BUILD_TYPE=$BUILD_TYPE \
             -DCMAKE_TOOLCHAIN_FILE="$GITHUB_WORKSPACE/vcpkg/scripts/buildsystems/vcpkg.cmake" \
@@ -122,7 +130,8 @@ jobs:
             -DBUILD_TESTS=OFF \
             -DBUILD_CONTAINER_SAMPLES=OFF \
             -DBUILD_CONTAINER_EXAMPLES=OFF \
-            -DUSE_COMMON_SYSTEM=OFF \
+            -DBUILD_WITH_COMMON_SYSTEM=ON \
+            -DCOMMON_SYSTEM_ROOT="$GITHUB_WORKSPACE/common_system" \
             -DCMAKE_INSTALL_PREFIX="../target" \
             -DCMAKE_BUILD_TYPE=$BUILD_TYPE \
             -DUSE_STD_FORMAT=ON \
