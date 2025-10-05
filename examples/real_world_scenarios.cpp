@@ -17,7 +17,7 @@
 #include "container.h"
 
 #ifdef HAS_MESSAGING_FEATURES
-#include "integration/messaging_integration.h"
+#include "container/integration/messaging_integration.h"
 #endif
 
 using namespace container_module;

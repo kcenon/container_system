@@ -7,14 +7,14 @@
 #include <atomic>
 
 #ifdef HAS_MESSAGING_FEATURES
-#include "integration/messaging_integration.h"
+#include "container/integration/messaging_integration.h"
 #endif
 
-#include "core/container.h"
-#include "core/value.h"
-#include "values/string_value.h"
-#include "values/numeric_value.h"
-#include "values/bool_value.h"
+#include "container/core/container.h"
+#include "container/core/value.h"
+#include "container/values/string_value.h"
+#include "container/values/numeric_value.h"
+#include "container/values/bool_value.h"
 
 using namespace container_module;
 
