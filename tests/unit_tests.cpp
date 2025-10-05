@@ -12,11 +12,11 @@
 
 #include <gtest/gtest.h>
 #include <container.h>
-#include <values/bool_value.h>
-#include <values/string_value.h>
-#include <values/bytes_value.h>
-#include <values/numeric_value.h>
-#include <internal/thread_safe_container.h>
+#include <container/values/bool_value.h>
+#include <container/values/string_value.h>
+#include <container/values/bytes_value.h>
+#include <container/values/numeric_value.h>
+#include <container/internal/thread_safe_container.h>
 #include <thread>
 #include <vector>
 #include <random>
@@ -56,8 +56,10 @@ protected:
 // ============================================================================
 
 TEST_F(ValueTest, NullValueCreation) {
-    auto null_val = std::make_shared<value>("test_null", value_types::null_value, "");
-    
+    std::string key = "test_null";
+    std::string empty_val = "";
+    auto null_val = std::make_shared<value>(key, value_types::null_value, empty_val);
+
     EXPECT_EQ(null_val->name(), "test_null");
     EXPECT_EQ(null_val->type(), value_types::null_value);
     EXPECT_TRUE(null_val->is_null());
@@ -69,49 +71,61 @@ TEST_F(ValueTest, NullValueCreation) {
 
 TEST_F(ValueTest, BooleanValueCreation) {
     // Test true value
-    auto true_val = std::make_shared<bool_value>("test_bool", true);
+    std::string key1 = "test_bool";
+    auto true_val = std::make_shared<bool_value>(key1, true);
     EXPECT_EQ(true_val->name(), "test_bool");
     EXPECT_EQ(true_val->type(), value_types::bool_value);
     EXPECT_TRUE(true_val->is_boolean());
     EXPECT_TRUE(true_val->to_boolean());
-    
+
     // Test false value
-    auto false_val = std::make_shared<bool_value>("test_bool2", false);
+    std::string key2 = "test_bool2";
+    auto false_val = std::make_shared<bool_value>(key2, false);
     EXPECT_FALSE(false_val->to_boolean());
-    
+
     // Test string boolean
-    auto str_true_val = std::make_shared<bool_value>("test_bool3", "true");
+    std::string key3 = "test_bool3";
+    std::string true_str = "true";
+    auto str_true_val = std::make_shared<bool_value>(key3, true_str);
     EXPECT_TRUE(str_true_val->to_boolean());
-    
-    auto str_false_val = std::make_shared<bool_value>("test_bool4", "false");
+
+    std::string key4 = "test_bool4";
+    std::string false_str = "false";
+    auto str_false_val = std::make_shared<bool_value>(key4, false_str);
     EXPECT_FALSE(str_false_val->to_boolean());
 }
 
 TEST_F(ValueTest, NumericValueCreation) {
     // Test int
-    auto int_val = std::make_shared<int_value>("test_int", 42);
+    std::string key_int = "test_int";
+    auto int_val = std::make_shared<int_value>(key_int, 42);
     EXPECT_EQ(int_val->type(), value_types::int_value);
     EXPECT_TRUE(int_val->is_numeric());
     EXPECT_EQ(int_val->to_int(), 42);
     EXPECT_EQ(int_val->to_long(), 42L);
     EXPECT_DOUBLE_EQ(int_val->to_double(), 42.0);
-    
+
     // Test long long
-    auto llong_val = std::make_shared<llong_value>("test_llong", 9223372036854775807LL);
+    std::string key_llong = "test_llong";
+    auto llong_val = std::make_shared<llong_value>(key_llong, 9223372036854775807LL);
     EXPECT_EQ(llong_val->to_llong(), 9223372036854775807LL);
-    
+
     // Test double
-    auto double_val = std::make_shared<double_value>("test_double", 3.14159);
+    std::string key_double = "test_double";
+    auto double_val = std::make_shared<double_value>(key_double, 3.14159);
     EXPECT_DOUBLE_EQ(double_val->to_double(), 3.14159);
-    
+
     // Test negative values
-    auto neg_val = std::make_shared<int_value>("test_neg", -100);
+    std::string key_neg = "test_neg";
+    auto neg_val = std::make_shared<int_value>(key_neg, -100);
     EXPECT_EQ(neg_val->to_int(), -100);
 }
 
 TEST_F(ValueTest, StringValueCreation) {
-    auto str_val = std::make_shared<string_value>("test_string", "Hello, World!");
-    
+    std::string key = "test_string";
+    std::string value = "Hello, World!";
+    auto str_val = std::make_shared<string_value>(key, value);
+
     EXPECT_EQ(str_val->type(), value_types::string_value);
     EXPECT_TRUE(str_val->is_string());
     EXPECT_EQ(str_val->to_string(), "Hello, World!");
@@ -120,12 +134,13 @@ TEST_F(ValueTest, StringValueCreation) {
 
 TEST_F(ValueTest, BytesValueCreation) {
     std::vector<uint8_t> test_data = {0x01, 0x02, 0x03, 0x04, 0xFF};
-    
-    auto bytes_val = std::make_shared<bytes_value>("test_bytes", test_data);
-    
+
+    std::string key = "test_bytes";
+    auto bytes_val = std::make_shared<bytes_value>(key, test_data);
+
     EXPECT_EQ(bytes_val->type(), value_types::bytes_value);
     EXPECT_TRUE(bytes_val->is_bytes());
-    
+
     auto retrieved_bytes = bytes_val->to_bytes();
     EXPECT_EQ(retrieved_bytes.size(), test_data.size());
     EXPECT_EQ(retrieved_bytes, test_data);
@@ -133,10 +148,14 @@ TEST_F(ValueTest, BytesValueCreation) {
 
 TEST_F(ValueTest, ValueTypeSerialization) {
     // Test each value type serialization
-    auto bool_val = std::make_shared<bool_value>("bool", true);
-    auto int_val = std::make_shared<int_value>("int", 42);
-    auto str_val = std::make_shared<string_value>("str", "test");
-    
+    std::string key1 = "bool";
+    auto bool_val = std::make_shared<bool_value>(key1, true);
+    std::string key2 = "int";
+    auto int_val = std::make_shared<int_value>(key2, 42);
+    std::string key3 = "str";
+    std::string val3 = "test";
+    auto str_val = std::make_shared<string_value>(key3, val3);
+
     // Serialize values
     std::string bool_ser = bool_val->serialize();
     std::string int_ser = int_val->serialize();
@@ -166,19 +185,23 @@ TEST_F(ContainerTest, BasicContainerCreation) {
 
 TEST_F(ContainerTest, ContainerValueManagement) {
     // Add various values
-    container->add(std::make_shared<string_value>("key1", "value1"));
-    container->add(std::make_shared<int_value>("key2", 100));
-    container->add(std::make_shared<bool_value>("key3", true));
-    
+    std::string key1 = "key1";
+    std::string value1 = "value1";
+    std::string key2 = "key2";
+    std::string key3 = "key3";
+    container->add(std::make_shared<string_value>(key1, value1));
+    container->add(std::make_shared<int_value>(key2, 100));
+    container->add(std::make_shared<bool_value>(key3, true));
+
     // Retrieve values
     auto val1 = container->get_value("key1");
     auto val2 = container->get_value("key2");
     auto val3 = container->get_value("key3");
-    
+
     EXPECT_EQ(val1->to_string(), "value1");
     EXPECT_EQ(val2->to_int(), 100);
     EXPECT_TRUE(val3->to_boolean());
-    
+
     // Test non-existent key
     auto val4 = container->get_value("non_existent");
     EXPECT_TRUE(val4->is_null());
@@ -189,23 +212,26 @@ TEST_F(ContainerTest, ContainerSerialization) {
     container->set_source("src", "sub");
     container->set_target("tgt", "");
     container->set_message_type("test");
-    
+
     // Add values
-    container->add(std::make_shared<string_value>("str", "hello"));
-    container->add(std::make_shared<int_value>("num", 42));
-    
+    std::string str_key = "str";
+    std::string str_val = "hello";
+    std::string num_key = "num";
+    container->add(std::make_shared<string_value>(str_key, str_val));
+    container->add(std::make_shared<int_value>(num_key, 42));
+
     // Serialize
     std::string serialized = container->serialize();
-    
+
     // Deserialize
     auto new_container = std::make_unique<value_container>(serialized);
-    
+
     // Verify
     EXPECT_EQ(new_container->source_id(), "src");
     EXPECT_EQ(new_container->source_sub_id(), "sub");
     EXPECT_EQ(new_container->target_id(), "tgt");
     EXPECT_EQ(new_container->message_type(), "test");
-    
+
     EXPECT_EQ(new_container->get_value("str")->to_string(), "hello");
     EXPECT_EQ(new_container->get_value("num")->to_int(), 42);
 }
@@ -214,18 +240,21 @@ TEST_F(ContainerTest, NestedContainerSupport) {
     // Create nested container
     auto nested = std::make_unique<value_container>();
     nested->set_message_type("nested_msg");
-    nested->add(std::make_shared<string_value>("nested_key", "nested_value"));
-    
+    std::string nested_key = "nested_key";
+    std::string nested_value = "nested_value";
+    nested->add(std::make_shared<string_value>(nested_key, nested_value));
+
     // Serialize nested container
     std::string nested_data = nested->serialize();
-    
+
     // Add to main container as container value
-    container->add(std::make_shared<value>("child", value_types::container_value, nested_data));
-    
+    std::string child_key = "child";
+    container->add(std::make_shared<value>(child_key, value_types::container_value, nested_data));
+
     // Retrieve nested container
     auto child_val = container->get_value("child");
     EXPECT_TRUE(child_val->is_container());
-    
+
     // Parse nested container
     auto child_container = std::make_unique<value_container>(child_val->data());
     EXPECT_EQ(child_container->message_type(), "nested_msg");
@@ -246,9 +275,13 @@ TEST_F(ContainerTest, ContainerHeaderSwap) {
 
 TEST_F(ContainerTest, MultipleValuesWithSameName) {
     // Add multiple values with same name
-    container->add(std::make_shared<string_value>("item", "first"));
-    container->add(std::make_shared<string_value>("item", "second"));
-    container->add(std::make_shared<string_value>("item", "third"));
+    std::string key = "item";
+    std::string val1 = "first";
+    std::string val2 = "second";
+    std::string val3 = "third";
+    container->add(std::make_shared<string_value>(key, val1));
+    container->add(std::make_shared<string_value>(key, val2));
+    container->add(std::make_shared<string_value>(key, val3));
     
     // Get all values
     auto items = container->value_array("item");
@@ -266,13 +299,15 @@ TEST_F(ContainerTest, MultipleValuesWithSameName) {
 TEST_F(ContainerTest, ContainerCopy) {
     // Setup original
     container->set_message_type("original");
-    container->add(std::make_shared<string_value>("key", "value"));
-    
+    std::string key = "key";
+    std::string value = "value";
+    container->add(std::make_shared<string_value>(key, value));
+
     // Deep copy
     auto copy = container->copy(true);
     EXPECT_EQ(copy->message_type(), "original");
     EXPECT_EQ(copy->get_value("key")->to_string(), "value");
-    
+
     // Shallow copy (header only)
     auto shallow = container->copy(false);
     EXPECT_EQ(shallow->message_type(), "original");
@@ -283,13 +318,14 @@ TEST_F(ContainerTest, ContainerCopy) {
 TEST_F(ContainerTest, LargeDataHandling) {
     // Create large string
     std::string large_data(1024 * 1024, 'X'); // 1MB of X's
-    
-    container->add(std::make_shared<string_value>("large", large_data));
-    
+    std::string key = "large";
+
+    container->add(std::make_shared<string_value>(key, large_data));
+
     // Serialize and deserialize
     std::string serialized = container->serialize();
     auto restored = std::make_unique<value_container>(serialized);
-    
+
     EXPECT_EQ(restored->get_value("large")->to_string(), large_data);
 }
 
@@ -303,7 +339,7 @@ TEST(ThreadSafetyTest, ConcurrentReads) {
     // Add test data
     for (int i = 0; i < 100; ++i) {
         container->add(std::make_shared<int_value>(
-            "key" + std::to_string(i), 
+            std::string("key") + std::to_string(i),
             i
         ));
     }
@@ -391,15 +427,19 @@ TEST(ErrorHandlingTest, InvalidSerialization) {
 }
 
 TEST(ErrorHandlingTest, TypeConversionErrors) {
-    auto str_val = std::make_shared<string_value>("test", "not_a_number");
-    
+    std::string key = "test";
+    std::string value = "not_a_number";
+    auto str_val = std::make_shared<string_value>(key, value);
+
     // String to int conversion should handle gracefully
     EXPECT_EQ(str_val->to_int(), 0); // Default value for failed conversion
 }
 
 TEST(ErrorHandlingTest, NullValueConversions) {
-    auto null_val = std::make_shared<value>("null", value_types::null_value, "");
-    
+    std::string key = "null";
+    std::string empty_val = "";
+    auto null_val = std::make_shared<value>(key, value_types::null_value, empty_val);
+
     // Null conversions should throw
     EXPECT_THROW(null_val->to_boolean(), std::logic_error);
     EXPECT_THROW(null_val->to_int(), std::logic_error);
@@ -413,26 +453,25 @@ TEST(ErrorHandlingTest, NullValueConversions) {
 
 TEST(PerformanceTest, SerializationSpeed) {
     auto container = std::make_unique<value_container>();
-    
+
     // Add 1000 values
     for (int i = 0; i < 1000; ++i) {
-        container->add(std::make_shared<string_value>(
-            "key" + std::to_string(i),
-            "value" + std::to_string(i)
-        ));
+        std::string key = std::string("key") + std::to_string(i);
+        std::string value = std::string("value") + std::to_string(i);
+        container->add(std::make_shared<string_value>(key, value));
     }
-    
+
     // Measure serialization time
     auto start = std::chrono::high_resolution_clock::now();
     std::string serialized = container->serialize();
     auto end = std::chrono::high_resolution_clock::now();
-    
+
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
-    
+
     // Log performance
     std::cout << "Serialization of 1000 values: " << duration.count() << " microseconds" << std::endl;
     std::cout << "Serialized size: " << serialized.size() << " bytes" << std::endl;
-    
+
     // Basic performance expectation (should be fast)
     EXPECT_LT(duration.count(), 10000); // Less than 10ms
 }
@@ -441,22 +480,21 @@ TEST(PerformanceTest, DeserializationSpeed) {
     // Create and serialize container
     auto container = std::make_unique<value_container>();
     for (int i = 0; i < 1000; ++i) {
-        container->add(std::make_shared<string_value>(
-            "key" + std::to_string(i),
-            "value" + std::to_string(i)
-        ));
+        std::string key = std::string("key") + std::to_string(i);
+        std::string value = std::string("value") + std::to_string(i);
+        container->add(std::make_shared<string_value>(key, value));
     }
     std::string serialized = container->serialize();
-    
+
     // Measure deserialization time
     auto start = std::chrono::high_resolution_clock::now();
     auto restored = std::make_unique<value_container>(serialized);
     auto end = std::chrono::high_resolution_clock::now();
-    
+
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
-    
+
     std::cout << "Deserialization of 1000 values: " << duration.count() << " microseconds" << std::endl;
-    
+
     EXPECT_LT(duration.count(), 10000); // Less than 10ms
 }
 
@@ -480,32 +518,37 @@ TEST(EdgeCaseTest, EmptyContainer) {
 
 TEST(EdgeCaseTest, SpecialCharacters) {
     auto container = std::make_unique<value_container>();
-    
+
     // Test special characters in values
     std::string special = "Line1\nLine2\rLine3\tTab\0Null";
-    container->add(std::make_shared<string_value>("special", special));
-    
+    std::string special_key = "special";
+    container->add(std::make_shared<string_value>(special_key, special));
+
     // Test special characters in names (use simpler keys)
-    container->add(std::make_shared<string_value>("key_with_underscores", "value1"));
-    container->add(std::make_shared<string_value>("keyWithCamelCase", "value2"));
-    
+    std::string underscore_key = "key_with_underscores";
+    std::string underscore_value = "value1";
+    std::string camel_key = "keyWithCamelCase";
+    std::string camel_value = "value2";
+    container->add(std::make_shared<string_value>(underscore_key, underscore_value));
+    container->add(std::make_shared<string_value>(camel_key, camel_value));
+
     // Serialize and restore
     std::string serialized = container->serialize();
     auto restored = std::make_unique<value_container>(serialized);
-    
+
     // Verify special characters preserved
     auto special_val = restored->get_value("special");
     EXPECT_NE(special_val->type(), value_types::null_value);
     if (special_val->type() != value_types::null_value) {
         EXPECT_EQ(special_val->to_string(), special);
     }
-    
+
     auto underscore_val = restored->get_value("key_with_underscores");
     EXPECT_NE(underscore_val->type(), value_types::null_value);
     if (underscore_val->type() != value_types::null_value) {
         EXPECT_EQ(underscore_val->to_string(), "value1");
     }
-    
+
     auto camel_val = restored->get_value("keyWithCamelCase");
     EXPECT_NE(camel_val->type(), value_types::null_value);
     if (camel_val->type() != value_types::null_value) {
@@ -515,10 +558,14 @@ TEST(EdgeCaseTest, SpecialCharacters) {
 
 TEST(EdgeCaseTest, MaximumValues) {
     // Test maximum numeric values
-    auto max_int = std::make_shared<int_value>("max_int", std::numeric_limits<int>::max());
-    auto min_int = std::make_shared<int_value>("min_int", std::numeric_limits<int>::min());
-    auto max_llong = std::make_shared<llong_value>("max_llong", std::numeric_limits<long long>::max());
-    
+    std::string max_int_key = "max_int";
+    std::string min_int_key = "min_int";
+    std::string max_llong_key = "max_llong";
+
+    auto max_int = std::make_shared<int_value>(max_int_key, std::numeric_limits<int>::max());
+    auto min_int = std::make_shared<int_value>(min_int_key, std::numeric_limits<int>::min());
+    auto max_llong = std::make_shared<llong_value>(max_llong_key, std::numeric_limits<long long>::max());
+
     EXPECT_EQ(max_int->to_int(), std::numeric_limits<int>::max());
     EXPECT_EQ(min_int->to_int(), std::numeric_limits<int>::min());
     EXPECT_EQ(max_llong->to_llong(), std::numeric_limits<long long>::max());

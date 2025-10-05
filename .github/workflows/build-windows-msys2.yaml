@@ -40,6 +40,13 @@ jobs:
           fetch-depth: 1
           token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Checkout common_system dependency
+        uses: actions/checkout@v4
+        with:
+          repository: kcenon/common_system
+          path: common_system
+          token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Setup MSYS2
         uses: msys2/setup-msys2@v2
         with:
@@ -159,7 +166,8 @@ jobs:
             -DBUILD_TESTS=ON \
             -DBUILD_CONTAINER_SAMPLES=OFF \
             -DBUILD_CONTAINER_EXAMPLES=OFF \
-            -DUSE_COMMON_SYSTEM=OFF \
+            -DBUILD_WITH_COMMON_SYSTEM=ON \
+            -DCOMMON_SYSTEM_ROOT="${{ github.workspace }}/common_system" \
             -DCMAKE_INSTALL_PREFIX="../target" \
             -DCMAKE_BUILD_TYPE=$BUILD_TYPE \
             -DCMAKE_C_COMPILER=/mingw64/bin/gcc.exe \
@@ -189,7 +197,8 @@ jobs:
             -DBUILD_TESTS=OFF \
             -DBUILD_CONTAINER_SAMPLES=OFF \
             -DBUILD_CONTAINER_EXAMPLES=OFF \
-            -DUSE_COMMON_SYSTEM=OFF \
+            -DBUILD_WITH_COMMON_SYSTEM=ON \
+            -DCOMMON_SYSTEM_ROOT="${{ github.workspace }}/common_system" \
             -DCMAKE_INSTALL_PREFIX="../target" \
             -DCMAKE_BUILD_TYPE=$BUILD_TYPE \
             -DUSE_STD_FORMAT=ON \

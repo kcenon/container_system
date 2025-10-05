@@ -37,6 +37,13 @@ jobs:
           fetch-depth: 1
           token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Checkout common_system dependency
+        uses: actions/checkout@v4
+        with:
+          repository: kcenon/common_system
+          path: common_system
+          token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Setup Visual Studio
         uses: microsoft/setup-msbuild@v1.1
         with:
@@ -125,7 +132,8 @@ jobs:
 
           cmake .. -G "Visual Studio 17 2022" -A x64 `
                   -DBUILD_TESTS=ON `
-                  -DUSE_COMMON_SYSTEM=OFF `
+                  -DBUILD_WITH_COMMON_SYSTEM=ON `
+                  -DCOMMON_SYSTEM_ROOT="${{ github.workspace }}\common_system" `
                   -DCMAKE_INSTALL_PREFIX="..\target" `
                   -DCMAKE_BUILD_TYPE=$env:BUILD_TYPE `
                   -DCMAKE_TOOLCHAIN_FILE="${{ github.workspace }}\vcpkg\scripts\buildsystems\vcpkg.cmake" `
@@ -156,7 +164,8 @@ jobs:
                   -DBUILD_TESTS=OFF `
                   -DBUILD_CONTAINER_SAMPLES=OFF `
                   -DBUILD_CONTAINER_EXAMPLES=OFF `
-                  -DUSE_COMMON_SYSTEM=OFF `
+                  -DBUILD_WITH_COMMON_SYSTEM=ON `
+                  -DCOMMON_SYSTEM_ROOT="${{ github.workspace }}\common_system" `
                   -DCMAKE_INSTALL_PREFIX="..\target" `
                   -DCMAKE_BUILD_TYPE=$env:BUILD_TYPE `
                   -DBUILD_TESTS=OFF `
