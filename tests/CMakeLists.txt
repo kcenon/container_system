@@ -82,8 +82,8 @@ foreach(TEST_SOURCE ${TEST_SOURCES})
     endif()
 
     # Include directories
+    # Note: container_system already provides necessary include paths via target_link_libraries
     target_include_directories(${TEST_NAME} PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}/../
         ${GTEST_INCLUDE_DIRS}
     )
 
