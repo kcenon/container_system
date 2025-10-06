@@ -1,9 +1,10 @@
 [![codecov](https://codecov.io/gh/kcenon/container_system/branch/main/graph/badge.svg)](https://codecov.io/gh/kcenon/container_system)
 
-[![Ubuntu-GCC](https://github.com/kcenon/container_system/actions/workflows/build-ubuntu-gcc.yaml/badge.svg)](https://github.com/kcenon/container_system/actions/workflows/build-ubuntu-gcc.yaml)
-[![Ubuntu-Clang](https://github.com/kcenon/container_system/actions/workflows/build-ubuntu-clang.yaml/badge.svg)](https://github.com/kcenon/container_system/actions/workflows/build-ubuntu-clang.yaml)
-[![Windows-MSYS2](https://github.com/kcenon/container_system/actions/workflows/build-windows-msys2.yaml/badge.svg)](https://github.com/kcenon/container_system/actions/workflows/build-windows-msys2.yaml)
-[![Windows-VisualStudio](https://github.com/kcenon/container_system/actions/workflows/build-windows-vs.yaml/badge.svg)](https://github.com/kcenon/container_system/actions/workflows/build-windows-vs.yaml)
+[![CI](https://github.com/kcenon/container_system/actions/workflows/ci.yml/badge.svg)](https://github.com/kcenon/container_system/actions/workflows/ci.yml)
+[![Code Coverage](https://github.com/kcenon/container_system/actions/workflows/coverage.yml/badge.svg)](https://github.com/kcenon/container_system/actions/workflows/coverage.yml)
+[![Static Analysis](https://github.com/kcenon/container_system/actions/workflows/static-analysis.yml/badge.svg)](https://github.com/kcenon/container_system/actions/workflows/static-analysis.yml)
+[![Security Scan](https://github.com/kcenon/container_system/actions/workflows/dependency-security-scan.yml/badge.svg)](https://github.com/kcenon/container_system/actions/workflows/dependency-security-scan.yml)
+[![Docs](https://github.com/kcenon/container_system/actions/workflows/build-Doxygen.yaml/badge.svg)](https://github.com/kcenon/container_system/actions/workflows/build-Doxygen.yaml)
 
 # Container System Project
 
@@ -1094,6 +1095,43 @@ We welcome contributions! Please see our [Contributing Guide](./docs/CONTRIBUTIN
 - **Issues**: [GitHub Issues](https://github.com/kcenon/container_system/issues)
 - **Discussions**: [GitHub Discussions](https://github.com/kcenon/container_system/discussions)
 - **Email**: kcenon@naver.com
+
+## Phase 0: Foundation Status
+
+This project is undergoing systematic architecture improvements following a phased approach.
+
+### Current Phase: Phase 0 - Foundation and Tooling Setup
+
+#### Completed Tasks
+- ✅ **CI/CD Pipeline Enhancement**
+  - Sanitizer builds (ThreadSanitizer, AddressSanitizer, UBSanitizer)
+  - Multi-platform testing (Ubuntu GCC, Ubuntu Clang, Windows MSYS2, Windows VS)
+  - Automated test execution
+
+- ✅ **Static Analysis Baseline**
+  - Clang-tidy configuration
+  - Cppcheck integration
+  - Baseline warning collection
+
+- ✅ **Documentation of Current State**
+  - [Current State Documentation](docs/CURRENT_STATE.md)
+  - [Architecture Issues Catalog](docs/ARCHITECTURE_ISSUES.md)
+
+#### Metrics Baseline
+| Metric | Current Status | Phase 5 Target |
+|--------|---------------|----------------|
+| Test Coverage | ~70% | 80%+ |
+| Static Analysis | Baseline warnings collected | <10 warnings |
+| Sanitizer Issues | Baseline established | 0 warnings |
+| Documentation | 50% | 100% |
+
+#### Next Phase: Phase 1 - SIMD & Thread Safety
+- ARM NEON testing and validation
+- Container thread safety verification
+- Test coverage improvement
+- ThreadSanitizer compliance
+
+For detailed improvement plans, see the project's NEED_TO_FIX.md.
 
 ## License
 
