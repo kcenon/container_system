@@ -10,6 +10,7 @@ jobs:
   coverage:
     name: Coverage Analysis
     runs-on: ubuntu-22.04
+    timeout-minutes: 30
 
     steps:
     - name: Checkout code
@@ -43,9 +44,11 @@ jobs:
       run: cmake --build build --config Debug
 
     - name: Run tests
+      timeout-minutes: 15
       run: |
         cd build
-        ctest -C Debug --output-on-failure --verbose || true
+        # Use per-test timeout to prevent hangs during coverage collection
+        ctest -C Debug --output-on-failure --verbose --timeout 300 || true
 
     - name: Generate coverage report
       run: |

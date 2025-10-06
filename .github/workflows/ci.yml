@@ -126,11 +126,12 @@ jobs:
 
     - name: Test (Unix)
       if: runner.os != 'Windows'
-      timeout-minutes: 5
+      timeout-minutes: 10
       run: |
         cd build
-        # Use ctest with timeout - more portable than GNU timeout command
-        ctest -C Debug --output-on-failure --verbose --timeout 60 || true
+        # Use ctest with per-test timeout to prevent hangs
+        # Performance tests may take longer in CI environment
+        ctest -C Debug --output-on-failure --verbose --timeout 300 || true
 
     - name: Test (Windows)
       if: runner.os == 'Windows'
@@ -225,12 +226,13 @@ jobs:
       run: cmake --build build --config Debug
 
     - name: Run tests with ${{ matrix.sanitizer.name }}
-      timeout-minutes: 10
+      timeout-minutes: 15
       run: |
         cd build
         export ${{ matrix.sanitizer.env }}
         # Run with per-test timeout to prevent hangs
-        ctest -C Debug --output-on-failure --verbose --timeout 120 || echo "${{ matrix.sanitizer.name }} detected issues (expected in Phase 0)"
+        # Sanitizers add significant overhead, need longer timeout
+        ctest -C Debug --output-on-failure --verbose --timeout 600 || echo "${{ matrix.sanitizer.name }} detected issues (expected in Phase 0)"
 
     - name: Upload sanitizer logs
       if: always()
