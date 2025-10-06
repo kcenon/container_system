@@ -84,7 +84,7 @@ namespace container_module
 			  std::bind(&value::set_string, this, std::placeholders::_1) });
 		data_type_map_.insert(
 			{ value_types::container_value,
-			  std::bind(&value::set_long, this, std::placeholders::_1) });
+			  std::bind(&value::set_byte_string, this, std::placeholders::_1) });
 	}
 
 	value::value(std::shared_ptr<value> object) : value()
@@ -190,6 +190,17 @@ namespace container_module
 	{
 		name_ = n;
 		type_ = t;
+
+		// Special handling for container_value: store serialized string as-is
+		if (t == value_types::container_value)
+		{
+			// Store the serialized container string directly without base64 decoding
+			// This allows data() to return the original serialization for deserialization
+			data_.assign(d.begin(), d.end());
+			size_ = data_.size();
+			return;
+		}
+
 		auto it = data_type_map_.find(t);
 		if (it == data_type_map_.end())
 		{
@@ -209,6 +220,11 @@ namespace container_module
 		if (type_ == value_types::string_value)
 		{
 			return to_string(true);
+		}
+		if (type_ == value_types::container_value)
+		{
+			// Return the stored serialized container string for deserialization
+			return std::string(data_.begin(), data_.end());
 		}
 		return to_string(false);
 	}

@@ -33,6 +33,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #pragma once
 
 #include "container/core/container.h"
+#include "container/core/value.h"
 #include "container/values/bool_value.h"
 #include "container/values/numeric_value.h"
 #include "container/values/string_value.h"
@@ -165,7 +166,12 @@ private:
 // Template implementation for add_value
 template<typename T>
 messaging_container_builder& messaging_container_builder::add_value(const std::string& key, T&& value) {
-    if constexpr (std::is_same_v<std::decay_t<T>, bool>) {
+    if constexpr (std::is_same_v<std::decay_t<T>, std::shared_ptr<value_container>>) {
+        // Handle nested containers by serializing and storing as container_value
+        std::string serialized_data = value->serialize();
+        auto val = std::make_shared<container_module::value>(key, value_types::container_value, serialized_data);
+        container_->add(val);
+    } else if constexpr (std::is_same_v<std::decay_t<T>, bool>) {
         auto val = std::make_shared<bool_value>(key, value);
         container_->add(val);
     } else if constexpr (std::is_integral_v<std::decay_t<T>>) {
