@@ -31,13 +31,26 @@ jobs:
       with:
         submodules: recursive
 
-    - name: Checkout common_system (optional dependency)
+    - name: Checkout common_system (optional dependency - Unix)
+      if: runner.os != 'Windows'
       continue-on-error: true
       run: |
         cd ..
         if [ ! -d "common_system" ]; then
           git clone https://github.com/kcenon/common_system.git || echo "common_system not available, will build without it"
         fi
+
+    - name: Checkout common_system (optional dependency - Windows)
+      if: runner.os == 'Windows'
+      continue-on-error: true
+      run: |
+        cd ..
+        if (-not (Test-Path "common_system")) {
+          git clone https://github.com/kcenon/common_system.git
+          if (-not $?) {
+            Write-Host "common_system not available, will build without it"
+          }
+        }
 
     - name: Install dependencies (Ubuntu)
       if: runner.os == 'Linux'
@@ -155,7 +168,7 @@ jobs:
 
   # Phase 0: Allow failures, just collect data
   sanitizers:
-    name: Sanitizers (${{ matrix.sanitizer }})
+    name: Sanitizers (${{ matrix.sanitizer.name }})
     runs-on: ubuntu-22.04
     continue-on-error: true
     timeout-minutes: 30
