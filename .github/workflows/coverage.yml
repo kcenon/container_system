@@ -48,7 +48,10 @@ jobs:
       run: |
         cd build
         # Use per-test timeout to prevent hangs during coverage collection
-        ctest -C Debug --output-on-failure --verbose --timeout 300 || true
+        # Exclude heavy performance tests to stay within time limits
+        ctest -C Debug --output-on-failure --verbose --timeout 300 \
+          -E "(performance_tests|benchmark_tests)" \
+          || true
 
     - name: Generate coverage report
       run: |

@@ -34,6 +34,8 @@ jobs:
     - name: Checkout common_system (optional dependency - Unix)
       if: runner.os != 'Windows'
       continue-on-error: true
+      env:
+        GIT_TERMINAL_PROMPT: 0
       run: |
         cd ..
         if [ ! -d "common_system" ]; then
@@ -43,6 +45,8 @@ jobs:
     - name: Checkout common_system (optional dependency - Windows)
       if: runner.os == 'Windows'
       continue-on-error: true
+      env:
+        GIT_TERMINAL_PROMPT: 0
       run: |
         cd ..
         if (-not (Test-Path "common_system")) {
@@ -135,19 +139,14 @@ jobs:
 
     - name: Test (Windows)
       if: runner.os == 'Windows'
+      timeout-minutes: 10
       shell: pwsh
       run: |
         cd build
-        if (Test-Path "bin\Debug") {
-          Get-ChildItem -Path bin\Debug -Filter "*_test.exe" -Recurse | ForEach-Object {
-            echo "Running $($_.FullName)..."
-            & $_.FullName
-            if ($LASTEXITCODE -ne 0) {
-              echo "Test $($_.Name) failed but continuing..."
-            }
-          }
-        } else {
-          echo "Test directory bin\Debug not found, skipping tests..."
+        # Use ctest with per-test timeout to prevent hangs
+        ctest -C Debug --output-on-failure --verbose --timeout 300
+        if (-not $?) {
+          Write-Host "Some tests failed but continuing..."
         }
 
     - name: Upload build artifacts
@@ -188,6 +187,8 @@ jobs:
 
     - name: Checkout common_system (optional dependency)
       continue-on-error: true
+      env:
+        GIT_TERMINAL_PROMPT: 0
       run: |
         cd ..
         if [ ! -d "common_system" ]; then
@@ -231,8 +232,11 @@ jobs:
         cd build
         export ${{ matrix.sanitizer.env }}
         # Run with per-test timeout to prevent hangs
-        # Sanitizers add significant overhead, need longer timeout
-        ctest -C Debug --output-on-failure --verbose --timeout 600 || echo "${{ matrix.sanitizer.name }} detected issues (expected in Phase 0)"
+        # Exclude heavy performance and benchmark tests to stay within time limits
+        # Sanitizers add 10-50x overhead, making these tests impractical
+        ctest -C Debug --output-on-failure --verbose --timeout 600 \
+          -E "(performance_tests|benchmark_tests)" \
+          || echo "${{ matrix.sanitizer.name }} detected issues (expected in Phase 0)"
 
     - name: Upload sanitizer logs
       if: always()
