@@ -191,20 +191,13 @@ namespace container_module
 		name_ = n;
 		type_ = t;
 
-		// Special handling for container_value: store raw data without type conversion
+		// Special handling for container_value: store serialized string as-is
 		if (t == value_types::container_value)
 		{
-			auto [val, err] = convert_string::from_base64(d);
-			if (!err.empty())
-			{
-				data_.clear();
-				size_ = 0;
-			}
-			else
-			{
-				data_ = val;
-				size_ = data_.size();
-			}
+			// Store the serialized container string directly without base64 decoding
+			// This allows data() to return the original serialization for deserialization
+			data_.assign(d.begin(), d.end());
+			size_ = data_.size();
 			return;
 		}
 
@@ -227,6 +220,11 @@ namespace container_module
 		if (type_ == value_types::string_value)
 		{
 			return to_string(true);
+		}
+		if (type_ == value_types::container_value)
+		{
+			// Return the stored serialized container string for deserialization
+			return std::string(data_.begin(), data_.end());
 		}
 		return to_string(false);
 	}
