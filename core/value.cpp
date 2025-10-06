@@ -84,7 +84,7 @@ namespace container_module
 			  std::bind(&value::set_string, this, std::placeholders::_1) });
 		data_type_map_.insert(
 			{ value_types::container_value,
-			  std::bind(&value::set_long, this, std::placeholders::_1) });
+			  std::bind(&value::set_byte_string, this, std::placeholders::_1) });
 	}
 
 	value::value(std::shared_ptr<value> object) : value()
@@ -190,6 +190,24 @@ namespace container_module
 	{
 		name_ = n;
 		type_ = t;
+
+		// Special handling for container_value: store raw data without type conversion
+		if (t == value_types::container_value)
+		{
+			auto [val, err] = convert_string::from_base64(d);
+			if (!err.empty())
+			{
+				data_.clear();
+				size_ = 0;
+			}
+			else
+			{
+				data_ = val;
+				size_ = data_.size();
+			}
+			return;
+		}
+
 		auto it = data_type_map_.find(t);
 		if (it == data_type_map_.end())
 		{
