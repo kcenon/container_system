@@ -129,16 +129,8 @@ jobs:
       timeout-minutes: 5
       run: |
         cd build
-        if [ -f "bin/container_test" ] || [ -f "tests/container_test" ]; then
-          echo "Running unit tests..."
-          find bin tests -name "*_test" -executable 2>/dev/null | while read test; do
-            echo "Running $test..."
-            timeout 60 ./$test || echo "Test $test failed but continuing..."
-          done
-        else
-          echo "Running ctest..."
-          timeout 300 ctest -C Debug --output-on-failure --verbose || true
-        fi
+        # Use ctest with timeout - more portable than GNU timeout command
+        ctest -C Debug --output-on-failure --verbose --timeout 60 || true
 
     - name: Test (Windows)
       if: runner.os == 'Windows'
@@ -233,10 +225,12 @@ jobs:
       run: cmake --build build --config Debug
 
     - name: Run tests with ${{ matrix.sanitizer.name }}
+      timeout-minutes: 10
       run: |
         cd build
         export ${{ matrix.sanitizer.env }}
-        ctest -C Debug --output-on-failure --verbose || echo "${{ matrix.sanitizer.name }} detected issues (expected in Phase 0)"
+        # Run with per-test timeout to prevent hangs
+        ctest -C Debug --output-on-failure --verbose --timeout 120 || echo "${{ matrix.sanitizer.name }} detected issues (expected in Phase 0)"
 
     - name: Upload sanitizer logs
       if: always()
