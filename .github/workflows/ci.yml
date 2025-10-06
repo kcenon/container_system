@@ -130,21 +130,23 @@ jobs:
 
     - name: Test (Unix)
       if: runner.os != 'Windows'
-      timeout-minutes: 10
+      timeout-minutes: 15
       run: |
         cd build
         # Use ctest with per-test timeout to prevent hangs
         # Performance tests may take longer in CI environment
-        ctest -C Debug --output-on-failure --verbose --timeout 300 || true
+        # Shell timeout as safety guard (12 minutes max)
+        timeout 720 ctest -C Debug --output-on-failure --verbose --timeout 180 || true
 
     - name: Test (Windows)
       if: runner.os == 'Windows'
-      timeout-minutes: 10
+      timeout-minutes: 15
       shell: pwsh
       run: |
         cd build
         # Use ctest with per-test timeout to prevent hangs
-        ctest -C Debug --output-on-failure --verbose --timeout 300
+        # 180s per test, step timeout at 15min
+        ctest -C Debug --output-on-failure --verbose --timeout 180
         if (-not $?) {
           Write-Host "Some tests failed but continuing..."
         }
@@ -232,10 +234,11 @@ jobs:
         cd build
         export ${{ matrix.sanitizer.env }}
         # Run with per-test timeout to prevent hangs
-        # Exclude heavy performance and benchmark tests to stay within time limits
-        # Sanitizers add 10-50x overhead, making these tests impractical
-        ctest -C Debug --output-on-failure --verbose --timeout 600 \
-          -E "(performance_tests|benchmark_tests)" \
+        # Exclude heavy performance/benchmark tests and duplicate test binaries
+        # Sanitizers add 10-50x overhead; 180s per test, max 12min total
+        # Keep only: unit_tests and test_messaging_integration (core functionality)
+        timeout 720 ctest -C Debug --output-on-failure --verbose --timeout 180 \
+          -E "(performance_tests|benchmark_tests|all_tests|container_base_unit|container_messaging_unit)" \
           || echo "${{ matrix.sanitizer.name }} detected issues (expected in Phase 0)"
 
     - name: Upload sanitizer logs
