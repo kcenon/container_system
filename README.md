@@ -1,9 +1,10 @@
 [![codecov](https://codecov.io/gh/kcenon/container_system/branch/main/graph/badge.svg)](https://codecov.io/gh/kcenon/container_system)
 
-[![Ubuntu-GCC](https://github.com/kcenon/container_system/actions/workflows/build-ubuntu-gcc.yaml/badge.svg)](https://github.com/kcenon/container_system/actions/workflows/build-ubuntu-gcc.yaml)
-[![Ubuntu-Clang](https://github.com/kcenon/container_system/actions/workflows/build-ubuntu-clang.yaml/badge.svg)](https://github.com/kcenon/container_system/actions/workflows/build-ubuntu-clang.yaml)
-[![Windows-MSYS2](https://github.com/kcenon/container_system/actions/workflows/build-windows-msys2.yaml/badge.svg)](https://github.com/kcenon/container_system/actions/workflows/build-windows-msys2.yaml)
-[![Windows-VisualStudio](https://github.com/kcenon/container_system/actions/workflows/build-windows-vs.yaml/badge.svg)](https://github.com/kcenon/container_system/actions/workflows/build-windows-vs.yaml)
+[![CI](https://github.com/kcenon/container_system/actions/workflows/ci.yml/badge.svg)](https://github.com/kcenon/container_system/actions/workflows/ci.yml)
+[![Code Coverage](https://github.com/kcenon/container_system/actions/workflows/coverage.yml/badge.svg)](https://github.com/kcenon/container_system/actions/workflows/coverage.yml)
+[![Static Analysis](https://github.com/kcenon/container_system/actions/workflows/static-analysis.yml/badge.svg)](https://github.com/kcenon/container_system/actions/workflows/static-analysis.yml)
+[![Security Scan](https://github.com/kcenon/container_system/actions/workflows/dependency-security-scan.yml/badge.svg)](https://github.com/kcenon/container_system/actions/workflows/dependency-security-scan.yml)
+[![Docs](https://github.com/kcenon/container_system/actions/workflows/build-Doxygen.yaml/badge.svg)](https://github.com/kcenon/container_system/actions/workflows/build-Doxygen.yaml)
 
 # Container System Project
 
