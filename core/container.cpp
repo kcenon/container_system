@@ -524,7 +524,7 @@ namespace container_module
 		std::string_view target_name, unsigned int index)
 	{
 		std::shared_lock<std::shared_mutex> lock(mutex_);
-		
+
 		if (!parsed_data_)
 		{
 			deserialize_values(data_string_, false);
@@ -532,7 +532,10 @@ namespace container_module
 		auto arr = value_array(target_name);
 		if (arr.empty() || index >= arr.size())
 		{
-			return std::make_shared<value>(std::string(target_name));
+			// Return a proper null value for non-existent keys
+			auto null_val = std::make_shared<value>();
+			null_val->set_data(std::string(target_name), value_types::null_value, "");
+			return null_val;
 		}
 		return arr[index];
 	}
