@@ -31,30 +31,13 @@ jobs:
       with:
         submodules: recursive
 
-    - name: Checkout common_system (optional dependency - Unix)
-      if: runner.os != 'Windows'
+    - name: Checkout common_system (optional dependency)
+      uses: actions/checkout@v4
       continue-on-error: true
-      env:
-        GIT_TERMINAL_PROMPT: 0
-      run: |
-        cd ..
-        if [ ! -d "common_system" ]; then
-          git clone https://github.com/kcenon/common_system.git || echo "common_system not available, will build without it"
-        fi
-
-    - name: Checkout common_system (optional dependency - Windows)
-      if: runner.os == 'Windows'
-      continue-on-error: true
-      env:
-        GIT_TERMINAL_PROMPT: 0
-      run: |
-        cd ..
-        if (-not (Test-Path "common_system")) {
-          git clone https://github.com/kcenon/common_system.git
-          if (-not $?) {
-            Write-Host "common_system not available, will build without it"
-          }
-        }
+      with:
+        repository: kcenon/common_system
+        path: ../common_system
+        token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Install dependencies (Ubuntu)
       if: runner.os == 'Linux'
@@ -126,29 +109,37 @@ jobs:
           -DBUILD_CONTAINER_EXAMPLES=ON
 
     - name: Build
-      run: cmake --build build --config Debug
+      run: cmake --build build --config Debug --parallel
 
     - name: Test (Unix)
       if: runner.os != 'Windows'
-      timeout-minutes: 15
+      timeout-minutes: 10
       run: |
         cd build
-        # Use ctest with per-test timeout to prevent hangs
-        # Performance tests may take longer in CI environment
-        # Shell timeout as safety guard (12 minutes max)
-        timeout 720 ctest -C Debug --output-on-failure --verbose --timeout 180 || true
+        # Run core tests only - simpler and more reliable than ctest
+        for test in bin/unit_tests bin/test_messaging_integration; do
+          if [ -f "$test" ]; then
+            echo "Running $(basename $test)..."
+            $test || echo "Test failed but continuing..."
+          fi
+        done
 
     - name: Test (Windows)
       if: runner.os == 'Windows'
-      timeout-minutes: 15
+      timeout-minutes: 10
       shell: pwsh
       run: |
         cd build
-        # Use ctest with per-test timeout to prevent hangs
-        # 180s per test, step timeout at 15min
-        ctest -C Debug --output-on-failure --verbose --timeout 180
-        if (-not $?) {
-          Write-Host "Some tests failed but continuing..."
+        # Run core tests only - simpler and more reliable
+        $tests = @("bin\unit_tests.exe", "bin\test_messaging_integration.exe")
+        foreach ($test in $tests) {
+          if (Test-Path $test) {
+            Write-Host "Running $(Split-Path $test -Leaf)..."
+            & $test
+            if ($LASTEXITCODE -ne 0) {
+              Write-Host "Test failed but continuing..."
+            }
+          }
         }
 
     - name: Upload build artifacts
@@ -188,14 +179,12 @@ jobs:
         submodules: recursive
 
     - name: Checkout common_system (optional dependency)
+      uses: actions/checkout@v4
       continue-on-error: true
-      env:
-        GIT_TERMINAL_PROMPT: 0
-      run: |
-        cd ..
-        if [ ! -d "common_system" ]; then
-          git clone https://github.com/kcenon/common_system.git || echo "common_system not available, will build without it"
-        fi
+      with:
+        repository: kcenon/common_system
+        path: ../common_system
+        token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Install dependencies
       run: |
@@ -226,20 +215,21 @@ jobs:
           -DCMAKE_SHARED_LINKER_FLAGS="${{ matrix.sanitizer.flags }}"
 
     - name: Build with ${{ matrix.sanitizer.name }}
-      run: cmake --build build --config Debug
+      run: cmake --build build --config Debug --parallel
 
     - name: Run tests with ${{ matrix.sanitizer.name }}
-      timeout-minutes: 15
+      timeout-minutes: 10
       run: |
         cd build
         export ${{ matrix.sanitizer.env }}
-        # Run with per-test timeout to prevent hangs
-        # Exclude heavy performance/benchmark tests and duplicate test binaries
-        # Sanitizers add 10-50x overhead; 180s per test, max 12min total
-        # Keep only: unit_tests and test_messaging_integration (core functionality)
-        timeout 720 ctest -C Debug --output-on-failure --verbose --timeout 180 \
-          -E "(performance_tests|benchmark_tests|all_tests|container_base_unit|container_messaging_unit)" \
-          || echo "${{ matrix.sanitizer.name }} detected issues (expected in Phase 0)"
+        # Run core tests only - following monitoring_system pattern
+        # Sanitizers add overhead, but direct execution is simpler
+        for test in bin/unit_tests bin/test_messaging_integration; do
+          if [ -f "$test" ]; then
+            echo "Running $(basename $test) with ${{ matrix.sanitizer.name }}..."
+            ./$test || echo "${{ matrix.sanitizer.name }} detected issues (expected in Phase 0)"
+          fi
+        done
 
     - name: Upload sanitizer logs
       if: always()

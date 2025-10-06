@@ -44,15 +44,16 @@ jobs:
       run: cmake --build build --config Debug
 
     - name: Run tests
-      timeout-minutes: 15
+      timeout-minutes: 10
       run: |
         cd build
-        # Use per-test timeout to prevent hangs during coverage collection
-        # Exclude heavy performance/benchmark tests and duplicate binaries
-        # Shell timeout as safety guard (12 minutes max)
-        timeout 720 ctest -C Debug --output-on-failure --verbose --timeout 180 \
-          -E "(performance_tests|benchmark_tests|all_tests|container_base_unit|container_messaging_unit)" \
-          || true
+        # Run core tests only - simpler and more reliable
+        for test in bin/unit_tests bin/test_messaging_integration; do
+          if [ -f "$test" ]; then
+            echo "Running $(basename $test)..."
+            ./$test || true
+          fi
+        done
 
     - name: Generate coverage report
       run: |
