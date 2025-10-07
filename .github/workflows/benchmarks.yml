@@ -72,7 +72,7 @@ jobs:
 
     - name: Run benchmarks
       run: |
-        cd build/benchmarks
+        cd build/bin
         ./container_benchmarks \
           --benchmark_format=json \
           --benchmark_out=benchmark_results_${{ matrix.os }}.json \
@@ -81,23 +81,23 @@ jobs:
 
     - name: Run benchmarks (console output)
       run: |
-        cd build/benchmarks
+        cd build/bin
         ./container_benchmarks \
-          --benchmark_filter="Container_Create|Container_SetValue|Serialize_Small|Value_Create" \
+          --benchmark_filter="Container_Create|Container_AddValue|Serialize_Small|Value_Create" \
           --benchmark_repetitions=3
 
     - name: Upload benchmark results
       uses: actions/upload-artifact@v4
       with:
         name: benchmark-results-${{ matrix.os }}
-        path: build/benchmarks/benchmark_results_${{ matrix.os }}.json
+        path: build/bin/benchmark_results_${{ matrix.os }}.json
         retention-days: 30
 
     - name: Save baseline (if requested)
       if: github.event.inputs.save_baseline == 'true' && github.ref == 'refs/heads/main'
       run: |
         mkdir -p benchmarks/baselines
-        cp build/benchmarks/benchmark_results_${{ matrix.os }}.json \
+        cp build/bin/benchmark_results_${{ matrix.os }}.json \
            benchmarks/baselines/baseline_${{ matrix.os }}_$(date +%Y%m%d).json
 
     - name: Compare with baseline (if exists)
@@ -112,7 +112,7 @@ jobs:
 
         if [ -f "$BASELINE" ]; then
           echo "Baseline: $BASELINE"
-          echo "Current: build/benchmarks/benchmark_results_${{ matrix.os }}.json"
+          echo "Current: build/bin/benchmark_results_${{ matrix.os }}.json"
 
           # Download compare.py
           curl -O https://raw.githubusercontent.com/google/benchmark/main/tools/compare.py
@@ -121,7 +121,7 @@ jobs:
           # Run comparison
           python3 compare.py \
             "$BASELINE" \
-            build/benchmarks/benchmark_results_${{ matrix.os }}.json
+            build/bin/benchmark_results_${{ matrix.os }}.json
         fi
 
     - name: Check for performance regression
