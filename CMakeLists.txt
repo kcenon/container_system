@@ -30,6 +30,7 @@ option(BUILD_CONTAINER_SAMPLES "Build container system samples" ON)
 option(USE_THREAD_SAFE_OPERATIONS "Enable thread-safe operations" ON)
 option(USE_LOCKFREE_BY_DEFAULT "Use lock-free implementations by default" OFF)
 option(BUILD_WITH_COMMON_SYSTEM "Enable common_system integration" OFF)
+option(CONTAINER_BUILD_BENCHMARKS "Build container system benchmarks" OFF)
 set(COMMON_SYSTEM_ROOT "" CACHE PATH "Path to the common_system repository root")
 
 # When common_system integration is enabled, samples and tests are now supported
@@ -454,6 +455,15 @@ if(BUILD_WITH_COMMON_SYSTEM)
         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/container/adapters
         COMPONENT Development
     )
+endif()
+
+##################################################
+# Benchmarks
+##################################################
+
+if(CONTAINER_BUILD_BENCHMARKS AND NOT BUILD_CONTAINERSYSTEM_AS_SUBMODULE)
+    add_subdirectory(benchmarks)
+    message(STATUS "Container benchmarks will be built")
 endif()
 
 ##################################################
