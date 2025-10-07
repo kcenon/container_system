@@ -9,6 +9,7 @@
 #include <future>
 #include <iostream>
 #include <iomanip>
+#include <cstdlib>
 
 #include "container/core/container.h"
 #include "container/core/value.h"
@@ -47,6 +48,20 @@ protected:
         func();
         auto end = std::chrono::high_resolution_clock::now();
         return std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+    }
+
+    // Helper function to adjust threshold based on sanitizer presence
+    double adjust_threshold_for_sanitizers(double base_threshold) {
+        const char* tsan_opts = std::getenv("TSAN_OPTIONS");
+        const char* asan_opts = std::getenv("ASAN_OPTIONS");
+        const char* ubsan_opts = std::getenv("UBSAN_OPTIONS");
+
+        if (tsan_opts || asan_opts || ubsan_opts) {
+            // Sanitizers can slow down execution by 2-10x
+            // Use more conservative threshold
+            return base_threshold * 0.1;  // 10% of normal threshold
+        }
+        return base_threshold;
     }
 
     // Helper function to calculate statistics
@@ -117,7 +132,7 @@ TEST_F(PerformanceTest, ContainerCreationPerformance) {
 
     // Performance requirement: Should create at least 40K containers per second
     // Windows CI is 2-3x slower than Unix, so threshold is conservative
-    EXPECT_GT(stats.mean, 40000.0) << "Container creation performance below threshold";
+    EXPECT_GT(stats.mean, adjust_threshold_for_sanitizers(40000.0)) << "Container creation performance below threshold (threshold=" << adjust_threshold_for_sanitizers(40000.0) << ")";
 }
 
 TEST_F(PerformanceTest, ValueAdditionPerformance) {
@@ -149,7 +164,7 @@ TEST_F(PerformanceTest, ValueAdditionPerformance) {
 
     // Performance requirement: Should add at least 40K values per second
     // Windows CI is significantly slower; this threshold is conservative
-    EXPECT_GT(stats.mean, 40000.0) << "Value addition performance below threshold";
+    EXPECT_GT(stats.mean, adjust_threshold_for_sanitizers(40000.0)) << "Value addition performance below threshold (threshold=" << adjust_threshold_for_sanitizers(40000.0) << ")";
 }
 
 TEST_F(PerformanceTest, SerializationPerformance) {
@@ -192,7 +207,7 @@ TEST_F(PerformanceTest, SerializationPerformance) {
 
     // Performance requirement: Should serialize at least 5K containers per second
     // Adjusted for slower Windows CI environment
-    EXPECT_GT(stats.mean, 5000.0) << "Serialization performance below threshold";
+    EXPECT_GT(stats.mean, adjust_threshold_for_sanitizers(5000.0)) << "Serialization performance below threshold (threshold=" << adjust_threshold_for_sanitizers(5000.0) << ")";
 }
 
 TEST_F(PerformanceTest, DeserializationPerformance) {
@@ -228,7 +243,19 @@ TEST_F(PerformanceTest, DeserializationPerformance) {
 
     // Performance requirement: Should deserialize at least 400 containers per second
     // Deserialization is slow; Windows CI is even slower
-    EXPECT_GT(stats.mean, 400.0) << "Deserialization performance below threshold";
+    // Sanitizers significantly reduce performance, so lower threshold when running under sanitizers
+    double threshold = 400.0;
+
+    // Check if running under sanitizers (they set specific environment variables)
+    const char* tsan_opts = std::getenv("TSAN_OPTIONS");
+    const char* asan_opts = std::getenv("ASAN_OPTIONS");
+    const char* ubsan_opts = std::getenv("UBSAN_OPTIONS");
+
+    if (tsan_opts || asan_opts || ubsan_opts) {
+        threshold = 200.0; // Much lower threshold when sanitizers are active
+    }
+
+    EXPECT_GT(stats.mean, threshold) << "Deserialization performance below threshold (threshold=" << threshold << ")";
 }
 
 TEST_F(PerformanceTest, ThreadSafetyStressTest) {
@@ -292,7 +319,7 @@ TEST_F(PerformanceTest, ThreadSafetyStressTest) {
     // Verify all operations completed successfully
     EXPECT_EQ(total_operations.load(), STRESS_ITERATIONS);
     // Windows CI has fewer cores and is slower; threshold adjusted
-    EXPECT_GT(overall_rate, 10000.0) << "Multi-threaded performance below threshold";
+    EXPECT_GT(overall_rate, adjust_threshold_for_sanitizers(10000.0)) << "Multi-threaded performance below threshold (threshold=" << adjust_threshold_for_sanitizers(10000.0) << ")";
 }
 
 TEST_F(PerformanceTest, MemoryUsageTest) {
@@ -344,8 +371,8 @@ TEST_F(PerformanceTest, MemoryUsageTest) {
     std::cout << "=========================" << std::endl;
 
     // Performance requirements
-    EXPECT_GT(creation_rate, 10000.0) << "Bulk creation performance below threshold";
-    EXPECT_GT(serialization_rate, 5000.0) << "Bulk serialization performance below threshold";
+    EXPECT_GT(creation_rate, adjust_threshold_for_sanitizers(10000.0)) << "Bulk creation performance below threshold (threshold=" << adjust_threshold_for_sanitizers(10000.0) << ")";
+    EXPECT_GT(serialization_rate, adjust_threshold_for_sanitizers(5000.0)) << "Bulk serialization performance below threshold (threshold=" << adjust_threshold_for_sanitizers(5000.0) << ")";
 
     // Cleanup
     containers.clear();
@@ -382,7 +409,7 @@ TEST_F(PerformanceTest, MessagingIntegrationPerformance) {
 
     // Performance requirement: Builder should create at least 8K containers per second
     // Messaging integration adds overhead; Windows CI is slower
-    EXPECT_GT(stats.mean, 8000.0) << "Messaging builder performance below threshold";
+    EXPECT_GT(stats.mean, adjust_threshold_for_sanitizers(8000.0)) << "Messaging builder performance below threshold (threshold=" << adjust_threshold_for_sanitizers(8000.0) << ")";
 }
 
 TEST_F(PerformanceTest, MessagingSerializationPerformance) {
@@ -416,7 +443,7 @@ TEST_F(PerformanceTest, MessagingSerializationPerformance) {
 
     // Performance requirement: Enhanced serialization should handle at least 100 cycles per second
     // Enhanced serialization is expensive; Windows CI makes it even slower
-    EXPECT_GT(stats.mean, 100.0) << "Messaging serialization performance below threshold";
+    EXPECT_GT(stats.mean, adjust_threshold_for_sanitizers(100.0)) << "Messaging serialization performance below threshold (threshold=" << adjust_threshold_for_sanitizers(100.0) << ")";
 }
 #endif
 
@@ -512,8 +539,8 @@ TEST_F(PerformanceTest, LargeScaleStressTest) {
     EXPECT_EQ(serialized_data.size(), stress_containers);
 
     // Performance requirements for stress test
-    EXPECT_GT(creation_rate, 1000.0) << "Stress test creation rate below threshold";
-    EXPECT_GT(serialization_rate, 500.0) << "Stress test serialization rate below threshold";
+    EXPECT_GT(creation_rate, adjust_threshold_for_sanitizers(1000.0)) << "Stress test creation rate below threshold (threshold=" << adjust_threshold_for_sanitizers(1000.0) << ")";
+    EXPECT_GT(serialization_rate, adjust_threshold_for_sanitizers(500.0)) << "Stress test serialization rate below threshold (threshold=" << adjust_threshold_for_sanitizers(500.0) << ")";
 
     // Memory cleanup
     stress_containers_vec.clear();
