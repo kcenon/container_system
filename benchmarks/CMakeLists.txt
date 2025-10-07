@@ -24,9 +24,15 @@ if(benchmark_FOUND OR BENCHMARK_FOUND)
 
     target_link_libraries(container_benchmarks
         PRIVATE
-            container
+            container_system
             benchmark::benchmark
             benchmark::benchmark_main
+    )
+
+    # Add include directories for proper header resolution
+    target_include_directories(container_benchmarks
+        PRIVATE
+            ${CMAKE_CURRENT_SOURCE_DIR}/..
     )
 
     target_compile_features(container_benchmarks PRIVATE cxx_std_20)

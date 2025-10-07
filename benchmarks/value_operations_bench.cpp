@@ -5,13 +5,15 @@
  */
 
 #include <benchmark/benchmark.h>
-#include "container/core/value.h"
+#include "core/value.h"
+#include "values/string_value.h"
+#include "values/numeric_value.h"
 
 using namespace container_module;
 
 static void BM_Value_CreateString(benchmark::State& state) {
     for (auto _ : state) {
-        value v("test", value_types::string_value, "test_data");
+        auto v = std::make_shared<string_value>("test", "test_data");
         benchmark::DoNotOptimize(v);
     }
 }
@@ -19,28 +21,26 @@ BENCHMARK(BM_Value_CreateString);
 
 static void BM_Value_CreateNumeric(benchmark::State& state) {
     for (auto _ : state) {
-        value v("num", value_types::int_value, "42");
+        auto v = std::make_shared<int_value>("num", 42);
         benchmark::DoNotOptimize(v);
     }
 }
 BENCHMARK(BM_Value_CreateNumeric);
 
 static void BM_Value_GetData(benchmark::State& state) {
-    value v("test", value_types::string_value, "test_data");
+    auto v = std::make_shared<string_value>("test", "test_data");
     for (auto _ : state) {
-        auto data = v.get_data();
+        auto data = v->data();
         benchmark::DoNotOptimize(data);
     }
 }
 BENCHMARK(BM_Value_GetData);
 
-static void BM_Value_SetData(benchmark::State& state) {
-    value v;
-    std::string data = "test_data";
-
+static void BM_Value_ToString(benchmark::State& state) {
+    auto v = std::make_shared<string_value>("test", "test_data");
     for (auto _ : state) {
-        v.set_data(reinterpret_cast<const unsigned char*>(data.data()),
-                   data.size(), value_types::string_value);
+        auto str = v->to_string();
+        benchmark::DoNotOptimize(str);
     }
 }
-BENCHMARK(BM_Value_SetData);
+BENCHMARK(BM_Value_ToString);

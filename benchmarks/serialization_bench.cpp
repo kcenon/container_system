@@ -5,17 +5,20 @@
  */
 
 #include <benchmark/benchmark.h>
-#include "container/core/container.h"
+#include "core/container.h"
+#include "core/value.h"
+#include "values/string_value.h"
+#include "values/numeric_value.h"
 
 using namespace container_module;
 
 static void BM_Serialize_Small(benchmark::State& state) {
-    container c;
-    c.set_value("key1", "value1");
-    c.set_value("key2", 42);
+    auto c = std::make_shared<value_container>();
+    c->add(std::make_shared<string_value>("key1", "value1"));
+    c->add(std::make_shared<int_value>("key2", 42));
 
     for (auto _ : state) {
-        auto data = c.serialize_to_binary();
+        auto data = c->serialize();
         benchmark::DoNotOptimize(data);
         state.SetBytesProcessed(data.size());
     }
@@ -23,13 +26,13 @@ static void BM_Serialize_Small(benchmark::State& state) {
 BENCHMARK(BM_Serialize_Small);
 
 static void BM_Serialize_Large(benchmark::State& state) {
-    container c;
+    auto c = std::make_shared<value_container>();
     for (int i = 0; i < state.range(0); ++i) {
-        c.set_value("key_" + std::to_string(i), std::string(100, 'x'));
+        c->add(std::make_shared<string_value>("key_" + std::to_string(i), std::string(100, 'x')));
     }
 
     for (auto _ : state) {
-        auto data = c.serialize_to_binary();
+        auto data = c->serialize();
         benchmark::DoNotOptimize(data);
         state.SetBytesProcessed(data.size());
     }
@@ -37,15 +40,14 @@ static void BM_Serialize_Large(benchmark::State& state) {
 BENCHMARK(BM_Serialize_Large)->Arg(10)->Arg(100)->Arg(1000);
 
 static void BM_Deserialize(benchmark::State& state) {
-    container c;
+    auto c = std::make_shared<value_container>();
     for (int i = 0; i < 100; ++i) {
-        c.set_value("key_" + std::to_string(i), i);
+        c->add(std::make_shared<int_value>("key_" + std::to_string(i), i));
     }
-    auto data = c.serialize_to_binary();
+    auto data = c->serialize();
 
     for (auto _ : state) {
-        container deserialized;
-        deserialized.deserialize_from_binary(data);
+        auto deserialized = std::make_shared<value_container>(data);
         benchmark::DoNotOptimize(deserialized);
         state.SetBytesProcessed(data.size());
     }
@@ -54,12 +56,11 @@ BENCHMARK(BM_Deserialize);
 
 static void BM_SerializeDeserialize_RoundTrip(benchmark::State& state) {
     for (auto _ : state) {
-        container c;
-        c.set_value("test", "data");
+        auto c = std::make_shared<value_container>();
+        c->add(std::make_shared<string_value>("test", "data"));
 
-        auto data = c.serialize_to_binary();
-        container c2;
-        c2.deserialize_from_binary(data);
+        auto data = c->serialize();
+        auto c2 = std::make_shared<value_container>(data);
 
         benchmark::DoNotOptimize(c2);
     }
