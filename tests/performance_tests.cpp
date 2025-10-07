@@ -9,6 +9,7 @@
 #include <future>
 #include <iostream>
 #include <iomanip>
+#include <cstdlib>
 
 #include "container/core/container.h"
 #include "container/core/value.h"
@@ -228,7 +229,19 @@ TEST_F(PerformanceTest, DeserializationPerformance) {
 
     // Performance requirement: Should deserialize at least 400 containers per second
     // Deserialization is slow; Windows CI is even slower
-    EXPECT_GT(stats.mean, 400.0) << "Deserialization performance below threshold";
+    // Sanitizers significantly reduce performance, so lower threshold when running under sanitizers
+    double threshold = 400.0;
+
+    // Check if running under sanitizers (they set specific environment variables)
+    const char* tsan_opts = std::getenv("TSAN_OPTIONS");
+    const char* asan_opts = std::getenv("ASAN_OPTIONS");
+    const char* ubsan_opts = std::getenv("UBSAN_OPTIONS");
+
+    if (tsan_opts || asan_opts || ubsan_opts) {
+        threshold = 200.0; // Much lower threshold when sanitizers are active
+    }
+
+    EXPECT_GT(stats.mean, threshold) << "Deserialization performance below threshold (threshold=" << threshold << ")";
 }
 
 TEST_F(PerformanceTest, ThreadSafetyStressTest) {
