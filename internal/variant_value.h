@@ -123,18 +123,10 @@ namespace container_module
 
         /**
          * @brief Get the name of this value
+         * @note Name is immutable after construction, so this is lock-free
          */
-        std::string_view name() const {
-            std::shared_lock lock(mutex_);
+        std::string_view name() const noexcept {
             return name_;
-        }
-
-        /**
-         * @brief Set the name of this value
-         */
-        void set_name(std::string_view name) {
-            std::unique_lock lock(mutex_);
-            name_ = name;
         }
 
         /**
@@ -244,7 +236,7 @@ namespace container_module
         bool operator<(const variant_value& other) const;
 
     private:
-        std::string name_;
+        const std::string name_;  // Immutable after construction for lock-free access
         ValueVariant data_;
         mutable std::shared_mutex mutex_;
         mutable std::atomic<size_t> read_count_{0};

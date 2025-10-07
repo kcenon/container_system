@@ -42,16 +42,16 @@ namespace container_module
     using namespace utility_module;
 
     variant_value::variant_value(const variant_value& other)
+        : name_(other.name_)  // name_ is const, must be initialized in initializer list
     {
         std::shared_lock other_lock(other.mutex_);
-        name_ = other.name_;
         data_ = other.data_;
     }
 
     variant_value::variant_value(variant_value&& other) noexcept
+        : name_(other.name_)  // name_ is const, copy even for move constructor
     {
         std::unique_lock other_lock(other.mutex_);
-        name_ = std::move(other.name_);
         data_ = std::move(other.data_);
         read_count_ = other.read_count_.load();
         write_count_ = other.write_count_.load();
@@ -64,7 +64,8 @@ namespace container_module
         if (this != &other) {
             std::unique_lock lock(mutex_);
             std::shared_lock other_lock(other.mutex_);
-            name_ = other.name_;
+            // Note: name_ is const and cannot be reassigned
+            // Only the data is copied; name remains unchanged
             data_ = other.data_;
             write_count_.fetch_add(1, std::memory_order_relaxed);
         }
@@ -76,7 +77,8 @@ namespace container_module
         if (this != &other) {
             std::unique_lock lock(mutex_);
             std::unique_lock other_lock(other.mutex_);
-            name_ = std::move(other.name_);
+            // Note: name_ is const and cannot be reassigned
+            // Only the data is moved; name remains unchanged
             data_ = std::move(other.data_);
             write_count_.fetch_add(1, std::memory_order_relaxed);
         }
@@ -339,8 +341,13 @@ namespace container_module
 
     bool variant_value::operator==(const variant_value& other) const
     {
-        std::shared_lock lock(mutex_);
-        std::shared_lock other_lock(other.mutex_);
+        // Early return for self-comparison
+        if (this == &other) {
+            return true;
+        }
+
+        // Acquire both locks atomically to prevent deadlock
+        std::scoped_lock lock(mutex_, other.mutex_);
         return name_ == other.name_ && data_ == other.data_;
     }
 
@@ -351,8 +358,13 @@ namespace container_module
 
     bool variant_value::operator<(const variant_value& other) const
     {
-        std::shared_lock lock(mutex_);
-        std::shared_lock other_lock(other.mutex_);
+        // Early return for self-comparison
+        if (this == &other) {
+            return false;
+        }
+
+        // Acquire both locks atomically to prevent deadlock
+        std::scoped_lock lock(mutex_, other.mutex_);
         if (name_ != other.name_) {
             return name_ < other.name_;
         }
