@@ -6,8 +6,8 @@ All rights reserved.
 *****************************************************************************/
 
 #include <gtest/gtest.h>
-#include "container/core/container.h"
-#include "container/core/value.h"
+#include <container.h>
+#include "container/values/numeric_value.h"
 #include "container/internal/thread_safe_container.h"
 #include "container/internal/simd_processor.h"
 #include "container/internal/memory_pool.h"
@@ -20,7 +20,7 @@ All rights reserved.
 #include <algorithm>
 #include <random>
 
-using namespace kcenon::container;
+using namespace container_module;
 using namespace std::chrono_literals;
 
 class ContainerThreadSafetyTest : public ::testing::Test {
@@ -36,7 +36,7 @@ protected:
 
 // Test 1: Concurrent read/write on thread_safe_container
 TEST_F(ContainerThreadSafetyTest, ConcurrentReadWrite) {
-    thread_safe_container<std::string, Value> container;
+    thread_safe_container<std::string, int> container;
 
     const int num_readers = 10;
     const int num_writers = 5;
@@ -50,7 +50,7 @@ TEST_F(ContainerThreadSafetyTest, ConcurrentReadWrite) {
 
     // Pre-populate container
     for (int i = 0; i < num_keys; ++i) {
-        container.insert("key_" + std::to_string(i), Value(i));
+        container.insert("key_" + std::to_string(i), i);
     }
 
     // Writer threads
@@ -63,7 +63,7 @@ TEST_F(ContainerThreadSafetyTest, ConcurrentReadWrite) {
                 try {
                     int key_idx = dist(rng);
                     std::string key = "key_" + std::to_string(key_idx);
-                    container.insert_or_assign(key, Value(thread_id * 1000 + j));
+                    container.insert_or_assign(key, thread_id * 1000 + j);
                 } catch (...) {
                     ++write_errors;
                 }
@@ -166,7 +166,7 @@ TEST_F(ContainerThreadSafetyTest, MemoryPoolStress) {
     const int allocations_per_thread = 1000;
     const size_t allocation_size = 64;
 
-    memory_pool pool(allocation_size, 1000);
+    internal::fixed_block_pool pool(allocation_size, 1000);
     std::vector<std::thread> threads;
     std::atomic<int> allocation_errors{0};
     std::atomic<int> deallocation_errors{0};
@@ -215,7 +215,7 @@ TEST_F(ContainerThreadSafetyTest, MemoryPoolStress) {
 
 // Test 4: Container resize during concurrent modifications
 TEST_F(ContainerThreadSafetyTest, ContainerResize) {
-    thread_safe_container<int, Value> container;
+    thread_safe_container<int, int> container;
 
     const int num_threads = 10;
     const int operations_per_thread = 500;
@@ -229,7 +229,7 @@ TEST_F(ContainerThreadSafetyTest, ContainerResize) {
             for (int j = 0; j < operations_per_thread; ++j) {
                 try {
                     int key = next_key.fetch_add(1);
-                    container.insert(key, Value(key * 2));
+                    container.insert(key, (key * 2));
 
                     // Occasional reads
                     if (key % 10 == 0 && key > 0) {
@@ -300,7 +300,7 @@ TEST_F(ContainerThreadSafetyTest, ConcurrentSerialization) {
 
 // Test 6: Mixed operations stress test
 TEST_F(ContainerThreadSafetyTest, MixedOperationsStress) {
-    thread_safe_container<std::string, Value> container;
+    thread_safe_container<std::string, int> container;
 
     const int num_threads = 15;
     const int operations_per_thread = 400;
@@ -311,7 +311,7 @@ TEST_F(ContainerThreadSafetyTest, MixedOperationsStress) {
 
     // Pre-populate
     for (int i = 0; i < 50; ++i) {
-        container.insert("init_" + std::to_string(i), Value(i));
+        container.insert("init_" + std::to_string(i), (i));
     }
 
     for (int i = 0; i < num_threads; ++i) {
@@ -327,7 +327,7 @@ TEST_F(ContainerThreadSafetyTest, MixedOperationsStress) {
 
                     switch (op) {
                         case 0: // Insert
-                            container.insert(key, Value(thread_id * 1000 + j));
+                            container.insert(key, (thread_id * 1000 + j));
                             break;
                         case 1: // Find
                             container.find(key);
@@ -336,7 +336,7 @@ TEST_F(ContainerThreadSafetyTest, MixedOperationsStress) {
                             container.erase(key);
                             break;
                         case 3: // Update
-                            container.insert_or_assign(key, Value(j));
+                            container.insert_or_assign(key, (j));
                             break;
                         case 4: // Size check
                             container.size();
@@ -365,7 +365,7 @@ TEST_F(ContainerThreadSafetyTest, MixedOperationsStress) {
 
 // Test 7: Container clear during operations
 TEST_F(ContainerThreadSafetyTest, ClearDuringOperations) {
-    thread_safe_container<int, Value> container;
+    thread_safe_container<int, int> container;
 
     const int num_worker_threads = 8;
     const int num_clear_threads = 2;
@@ -380,7 +380,7 @@ TEST_F(ContainerThreadSafetyTest, ClearDuringOperations) {
         threads.emplace_back([&, thread_id = i]() {
             for (int j = 0; j < operations_per_thread && running.load(); ++j) {
                 try {
-                    container.insert(thread_id * 1000 + j, Value(j));
+                    container.insert(thread_id * 1000 + j, (j));
                     container.find(thread_id * 500 + j / 2);
                 } catch (...) {
                     ++errors;
@@ -416,11 +416,11 @@ TEST_F(ContainerThreadSafetyTest, ClearDuringOperations) {
 
 // Test 8: Iterator safety during modifications
 TEST_F(ContainerThreadSafetyTest, IteratorSafety) {
-    thread_safe_container<int, Value> container;
+    thread_safe_container<int, int> container;
 
     // Pre-populate
     for (int i = 0; i < 100; ++i) {
-        container.insert(i, Value(i * 2));
+        container.insert(i, (i * 2));
     }
 
     const int num_iterator_threads = 5;
@@ -453,7 +453,7 @@ TEST_F(ContainerThreadSafetyTest, IteratorSafety) {
         threads.emplace_back([&, thread_id = i]() {
             for (int j = 0; j < iterations && running.load(); ++j) {
                 try {
-                    container.insert(1000 + thread_id * 100 + j, Value(j));
+                    container.insert(1000 + thread_id * 100 + j, (j));
                     container.erase(50 + (j % 50));
                 } catch (...) {
                     ++errors;
@@ -475,9 +475,9 @@ TEST_F(ContainerThreadSafetyTest, IteratorSafety) {
 
 // Test 9: High contention on single key
 TEST_F(ContainerThreadSafetyTest, SingleKeyContention) {
-    thread_safe_container<std::string, Value> container;
+    thread_safe_container<std::string, int> container;
     const std::string hot_key = "hot_key";
-    container.insert(hot_key, Value(0));
+    container.insert(hot_key, (0));
 
     const int num_threads = 20;
     const int operations_per_thread = 1000;
@@ -496,7 +496,7 @@ TEST_F(ContainerThreadSafetyTest, SingleKeyContention) {
                     auto val = container.find(hot_key);
 
                     // Update
-                    container.insert_or_assign(hot_key, Value(thread_id * 1000 + j));
+                    container.insert_or_assign(hot_key, (thread_id * 1000 + j));
                 } catch (...) {
                     ++errors;
                 }
@@ -520,7 +520,7 @@ TEST_F(ContainerThreadSafetyTest, MemorySafetyTest) {
     std::atomic<int> total_errors{0};
 
     for (int iteration = 0; iteration < num_iterations; ++iteration) {
-        thread_safe_container<int, Value> container;
+        thread_safe_container<int, int> container;
         std::vector<std::thread> threads;
 
         for (int i = 0; i < threads_per_iteration; ++i) {
@@ -528,7 +528,7 @@ TEST_F(ContainerThreadSafetyTest, MemorySafetyTest) {
                 for (int j = 0; j < operations_per_thread; ++j) {
                     try {
                         int key = thread_id * 1000 + j;
-                        container.insert(key, Value(key * 2));
+                        container.insert(key, (key * 2));
                         container.find(key);
                         if (j % 10 == 0) {
                             container.erase(key);
