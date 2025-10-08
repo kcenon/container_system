@@ -141,7 +141,7 @@ private:
     std::size_t blocks_per_chunk_;
     std::vector<std::unique_ptr<std::uint8_t[]>> chunks_;
     void* free_list_{nullptr};
-    std::mutex mutex_;
+    mutable std::mutex mutex_;  // Mutable to allow locking in const methods
     std::size_t allocated_count_{0};  // Track number of currently allocated blocks
 };
 

@@ -6,11 +6,8 @@ All rights reserved.
 *****************************************************************************/
 
 #include <gtest/gtest.h>
-#include "container_system/core/container.h"
-#include "container_system/core/value.h"
-#include "container_system/internal/thread_safe_container.h"
-#include "container_system/internal/simd_processor.h"
-#include "container_system/internal/memory_pool.h"
+#include "container/internal/thread_safe_container.h"
+#include "container/internal/memory_pool.h"
 
 #include <thread>
 #include <vector>
@@ -20,7 +17,7 @@ All rights reserved.
 #include <algorithm>
 #include <random>
 
-using namespace kcenon::container;
+using namespace container_module;
 using namespace std::chrono_literals;
 
 class ContainerThreadSafetyTest : public ::testing::Test {
@@ -36,7 +33,7 @@ protected:
 
 // Test 1: Concurrent read/write on thread_safe_container
 TEST_F(ContainerThreadSafetyTest, ConcurrentReadWrite) {
-    thread_safe_container<std::string, Value> container;
+    auto container = std::make_shared<thread_safe_container>();
 
     const int num_readers = 10;
     const int num_writers = 5;
@@ -50,7 +47,7 @@ TEST_F(ContainerThreadSafetyTest, ConcurrentReadWrite) {
 
     // Pre-populate container
     for (int i = 0; i < num_keys; ++i) {
-        container.insert("key_" + std::to_string(i), Value(i));
+        container->set("key_" + std::to_string(i), i);
     }
 
     // Writer threads
@@ -63,7 +60,7 @@ TEST_F(ContainerThreadSafetyTest, ConcurrentReadWrite) {
                 try {
                     int key_idx = dist(rng);
                     std::string key = "key_" + std::to_string(key_idx);
-                    container.insert_or_assign(key, Value(thread_id * 1000 + j));
+                    container->set(key, thread_id * 1000 + j);
                 } catch (...) {
                     ++write_errors;
                 }
@@ -85,9 +82,9 @@ TEST_F(ContainerThreadSafetyTest, ConcurrentReadWrite) {
                 try {
                     int key_idx = dist(rng);
                     std::string key = "key_" + std::to_string(key_idx);
-                    auto value = container.find(key);
+                    auto value = container->get(key);
                     // Just access the value
-                    if (!value) {
+                    if (!value.has_value()) {
                         ++read_errors;
                     }
                 } catch (...) {
@@ -109,64 +106,13 @@ TEST_F(ContainerThreadSafetyTest, ConcurrentReadWrite) {
     EXPECT_EQ(write_errors.load(), 0) << "No write errors should occur";
 }
 
-// Test 2: SIMD concurrent access
-TEST_F(ContainerThreadSafetyTest, SIMDConcurrentAccess) {
-#ifdef __AVX2__
-    const int num_threads = 8;
-    const int operations_per_thread = 500;
-    const size_t data_size = 1024; // Must be multiple of 32 for AVX2
-
-    std::vector<float> shared_data(data_size, 0.0f);
-    std::atomic<int> errors{0};
-    std::vector<std::thread> threads;
-
-    simd_processor processor;
-
-    for (int i = 0; i < num_threads; ++i) {
-        threads.emplace_back([&, thread_id = i]() {
-            std::vector<float> local_data(data_size);
-
-            for (int j = 0; j < operations_per_thread; ++j) {
-                try {
-                    // Initialize local data
-                    std::fill(local_data.begin(), local_data.end(),
-                             static_cast<float>(thread_id * 100 + j));
-
-                    // Process with SIMD
-                    processor.process_batch(local_data.data(), data_size);
-
-                    // Verify alignment
-                    if (reinterpret_cast<uintptr_t>(local_data.data()) % 32 != 0) {
-                        ++errors;
-                    }
-                } catch (...) {
-                    ++errors;
-                }
-
-                if (j % 50 == 0) {
-                    std::this_thread::sleep_for(1ms);
-                }
-            }
-        });
-    }
-
-    for (auto& t : threads) {
-        t.join();
-    }
-
-    EXPECT_EQ(errors.load(), 0) << "No SIMD processing errors should occur";
-#else
-    GTEST_SKIP() << "AVX2 not available, skipping SIMD test";
-#endif
-}
-
-// Test 3: Memory pool stress test
+// Test 2: Memory pool stress test
 TEST_F(ContainerThreadSafetyTest, MemoryPoolStress) {
     const int num_threads = 12;
     const int allocations_per_thread = 1000;
     const size_t allocation_size = 64;
 
-    memory_pool pool(allocation_size, 1000);
+    internal::fixed_block_pool pool(allocation_size, 1000);
     std::vector<std::thread> threads;
     std::atomic<int> allocation_errors{0};
     std::atomic<int> deallocation_errors{0};
@@ -213,28 +159,25 @@ TEST_F(ContainerThreadSafetyTest, MemoryPoolStress) {
     EXPECT_EQ(deallocation_errors.load(), 0) << "No deallocation errors should occur";
 }
 
-// Test 4: Container resize during concurrent modifications
-TEST_F(ContainerThreadSafetyTest, ContainerResize) {
-    thread_safe_container<int, Value> container;
+// Test 3: Container bulk operations
+TEST_F(ContainerThreadSafetyTest, BulkOperations) {
+    auto container = std::make_shared<thread_safe_container>();
 
     const int num_threads = 10;
     const int operations_per_thread = 500;
 
     std::vector<std::thread> threads;
     std::atomic<int> errors{0};
-    std::atomic<int> next_key{0};
 
     for (int i = 0; i < num_threads; ++i) {
-        threads.emplace_back([&]() {
+        threads.emplace_back([&, thread_id = i]() {
             for (int j = 0; j < operations_per_thread; ++j) {
                 try {
-                    int key = next_key.fetch_add(1);
-                    container.insert(key, Value(key * 2));
-
-                    // Occasional reads
-                    if (key % 10 == 0 && key > 0) {
-                        auto val = container.find(key - 5);
-                    }
+                    // Bulk update
+                    container->bulk_update([thread_id, j](auto& values) {
+                        std::string key = "bulk_" + std::to_string(thread_id);
+                        values[key] = variant_value(key, j);
+                    });
                 } catch (...) {
                     ++errors;
                 }
@@ -247,60 +190,12 @@ TEST_F(ContainerThreadSafetyTest, ContainerResize) {
     }
 
     EXPECT_EQ(errors.load(), 0);
-    EXPECT_EQ(container.size(), num_threads * operations_per_thread);
+    EXPECT_EQ(container->size(), num_threads);
 }
 
-// Test 5: Value serialization/deserialization concurrent access
-TEST_F(ContainerThreadSafetyTest, ConcurrentSerialization) {
-    const int num_threads = 8;
-    const int operations_per_thread = 300;
-
-    std::vector<std::thread> threads;
-    std::atomic<int> serialize_errors{0};
-    std::atomic<int> deserialize_errors{0};
-
-    for (int i = 0; i < num_threads; ++i) {
-        threads.emplace_back([&, thread_id = i]() {
-            for (int j = 0; j < operations_per_thread; ++j) {
-                try {
-                    // Create a value
-                    Value original(thread_id * 1000 + j);
-
-                    // Serialize
-                    auto serialized = original.serialize();
-
-                    // Deserialize
-                    Value deserialized;
-                    if (!deserialized.deserialize(serialized)) {
-                        ++deserialize_errors;
-                    }
-
-                    // Verify
-                    if (deserialized.as_int() != original.as_int()) {
-                        ++serialize_errors;
-                    }
-                } catch (...) {
-                    ++serialize_errors;
-                }
-
-                if (j % 50 == 0) {
-                    std::this_thread::sleep_for(1ms);
-                }
-            }
-        });
-    }
-
-    for (auto& t : threads) {
-        t.join();
-    }
-
-    EXPECT_EQ(serialize_errors.load(), 0);
-    EXPECT_EQ(deserialize_errors.load(), 0);
-}
-
-// Test 6: Mixed operations stress test
+// Test 4: Mixed operations stress test
 TEST_F(ContainerThreadSafetyTest, MixedOperationsStress) {
-    thread_safe_container<std::string, Value> container;
+    auto container = std::make_shared<thread_safe_container>();
 
     const int num_threads = 15;
     const int operations_per_thread = 400;
@@ -311,7 +206,7 @@ TEST_F(ContainerThreadSafetyTest, MixedOperationsStress) {
 
     // Pre-populate
     for (int i = 0; i < 50; ++i) {
-        container.insert("init_" + std::to_string(i), Value(i));
+        container->set("init_" + std::to_string(i), i);
     }
 
     for (int i = 0; i < num_threads; ++i) {
@@ -326,20 +221,20 @@ TEST_F(ContainerThreadSafetyTest, MixedOperationsStress) {
                     int op = op_dist(rng);
 
                     switch (op) {
-                        case 0: // Insert
-                            container.insert(key, Value(thread_id * 1000 + j));
+                        case 0: // Set
+                            container->set(key, thread_id * 1000 + j);
                             break;
-                        case 1: // Find
-                            container.find(key);
+                        case 1: // Get
+                            container->get(key);
                             break;
-                        case 2: // Erase
-                            container.erase(key);
+                        case 2: // Remove
+                            container->remove(key);
                             break;
-                        case 3: // Update
-                            container.insert_or_assign(key, Value(j));
+                        case 3: // Contains
+                            container->contains(key);
                             break;
                         case 4: // Size check
-                            container.size();
+                            container->size();
                             break;
                     }
                 } catch (...) {
@@ -363,9 +258,9 @@ TEST_F(ContainerThreadSafetyTest, MixedOperationsStress) {
     EXPECT_EQ(errors.load(), 0);
 }
 
-// Test 7: Container clear during operations
+// Test 5: Container clear during operations
 TEST_F(ContainerThreadSafetyTest, ClearDuringOperations) {
-    thread_safe_container<int, Value> container;
+    auto container = std::make_shared<thread_safe_container>();
 
     const int num_worker_threads = 8;
     const int num_clear_threads = 2;
@@ -380,8 +275,9 @@ TEST_F(ContainerThreadSafetyTest, ClearDuringOperations) {
         threads.emplace_back([&, thread_id = i]() {
             for (int j = 0; j < operations_per_thread && running.load(); ++j) {
                 try {
-                    container.insert(thread_id * 1000 + j, Value(j));
-                    container.find(thread_id * 500 + j / 2);
+                    std::string key = "worker_" + std::to_string(thread_id) + "_" + std::to_string(j);
+                    container->set(key, j);
+                    container->get(key);
                 } catch (...) {
                     ++errors;
                 }
@@ -395,7 +291,7 @@ TEST_F(ContainerThreadSafetyTest, ClearDuringOperations) {
             std::this_thread::sleep_for(50ms);
             while (running.load()) {
                 try {
-                    container.clear();
+                    container->clear();
                     std::this_thread::sleep_for(100ms);
                 } catch (...) {
                     ++errors;
@@ -414,13 +310,13 @@ TEST_F(ContainerThreadSafetyTest, ClearDuringOperations) {
     EXPECT_EQ(errors.load(), 0);
 }
 
-// Test 8: Iterator safety during modifications
-TEST_F(ContainerThreadSafetyTest, IteratorSafety) {
-    thread_safe_container<int, Value> container;
+// Test 6: Iterator safety with for_each
+TEST_F(ContainerThreadSafetyTest, ForEachSafety) {
+    auto container = std::make_shared<thread_safe_container>();
 
     // Pre-populate
     for (int i = 0; i < 100; ++i) {
-        container.insert(i, Value(i * 2));
+        container->set("item_" + std::to_string(i), i * 2);
     }
 
     const int num_iterator_threads = 5;
@@ -437,8 +333,10 @@ TEST_F(ContainerThreadSafetyTest, IteratorSafety) {
             for (int j = 0; j < iterations && running.load(); ++j) {
                 try {
                     size_t count = 0;
-                    container.for_each([&count](const auto& key, const auto& value) {
+                    container->for_each([&count](const auto& key, const auto& value) {
                         ++count;
+                        (void)key;
+                        (void)value;
                     });
                 } catch (...) {
                     ++errors;
@@ -453,8 +351,9 @@ TEST_F(ContainerThreadSafetyTest, IteratorSafety) {
         threads.emplace_back([&, thread_id = i]() {
             for (int j = 0; j < iterations && running.load(); ++j) {
                 try {
-                    container.insert(1000 + thread_id * 100 + j, Value(j));
-                    container.erase(50 + (j % 50));
+                    std::string key = "new_" + std::to_string(thread_id) + "_" + std::to_string(j);
+                    container->set(key, j);
+                    container->remove("item_" + std::to_string(50 + (j % 50)));
                 } catch (...) {
                     ++errors;
                 }
@@ -473,11 +372,11 @@ TEST_F(ContainerThreadSafetyTest, IteratorSafety) {
     EXPECT_EQ(errors.load(), 0);
 }
 
-// Test 9: High contention on single key
+// Test 7: High contention on single key
 TEST_F(ContainerThreadSafetyTest, SingleKeyContention) {
-    thread_safe_container<std::string, Value> container;
+    auto container = std::make_shared<thread_safe_container>();
     const std::string hot_key = "hot_key";
-    container.insert(hot_key, Value(0));
+    container->set(hot_key, 0);
 
     const int num_threads = 20;
     const int operations_per_thread = 1000;
@@ -493,16 +392,128 @@ TEST_F(ContainerThreadSafetyTest, SingleKeyContention) {
             for (int j = 0; j < operations_per_thread; ++j) {
                 try {
                     // Read
-                    auto val = container.find(hot_key);
+                    auto val = container->get(hot_key);
 
                     // Update
-                    container.insert_or_assign(hot_key, Value(thread_id * 1000 + j));
+                    container->set(hot_key, thread_id * 1000 + j);
                 } catch (...) {
                     ++errors;
                 }
             }
         });
     }
+
+    for (auto& t : threads) {
+        t.join();
+    }
+
+    EXPECT_EQ(errors.load(), 0);
+}
+
+// Test 8: Typed get/set operations
+TEST_F(ContainerThreadSafetyTest, TypedOperations) {
+    auto container = std::make_shared<thread_safe_container>();
+
+    const int num_threads = 8;
+    const int operations_per_thread = 500;
+
+    std::vector<std::thread> threads;
+    std::atomic<int> errors{0};
+
+    for (int i = 0; i < num_threads; ++i) {
+        threads.emplace_back([&, thread_id = i]() {
+            for (int j = 0; j < operations_per_thread; ++j) {
+                try {
+                    std::string key = "typed_" + std::to_string(thread_id);
+
+                    // Set different types
+                    if (j % 3 == 0) {
+                        container->set_typed(key, j);
+                    } else if (j % 3 == 1) {
+                        container->set_typed(key, static_cast<double>(j) * 1.5);
+                    } else {
+                        container->set_typed(key, std::string("value_" + std::to_string(j)));
+                    }
+
+                    // Get with type check
+                    auto val = container->get(key);
+                    if (!val.has_value()) {
+                        ++errors;
+                    }
+                } catch (...) {
+                    ++errors;
+                }
+
+                if (j % 50 == 0) {
+                    std::this_thread::sleep_for(1ms);
+                }
+            }
+        });
+    }
+
+    for (auto& t : threads) {
+        t.join();
+    }
+
+    EXPECT_EQ(errors.load(), 0);
+}
+
+// Test 9: Keys() operation during modifications
+TEST_F(ContainerThreadSafetyTest, KeysOperationConcurrent) {
+    auto container = std::make_shared<thread_safe_container>();
+
+    // Pre-populate
+    for (int i = 0; i < 50; ++i) {
+        container->set("initial_" + std::to_string(i), i);
+    }
+
+    const int num_reader_threads = 5;
+    const int num_writer_threads = 5;
+    const int operations_per_thread = 200;
+
+    std::vector<std::thread> threads;
+    std::atomic<int> errors{0};
+    std::atomic<bool> running{true};
+
+    // Reader threads calling keys()
+    for (int i = 0; i < num_reader_threads; ++i) {
+        threads.emplace_back([&]() {
+            for (int j = 0; j < operations_per_thread && running.load(); ++j) {
+                try {
+                    auto all_keys = container->keys();
+                    // Process keys
+                    for (const auto& key : all_keys) {
+                        (void)key;
+                    }
+                } catch (...) {
+                    ++errors;
+                }
+                std::this_thread::sleep_for(5ms);
+            }
+        });
+    }
+
+    // Writer threads modifying container
+    for (int i = 0; i < num_writer_threads; ++i) {
+        threads.emplace_back([&, thread_id = i]() {
+            for (int j = 0; j < operations_per_thread && running.load(); ++j) {
+                try {
+                    std::string key = "dynamic_" + std::to_string(thread_id) + "_" + std::to_string(j);
+                    container->set(key, j);
+
+                    if (j % 10 == 0) {
+                        container->remove("initial_" + std::to_string(j % 50));
+                    }
+                } catch (...) {
+                    ++errors;
+                }
+                std::this_thread::sleep_for(3ms);
+            }
+        });
+    }
+
+    std::this_thread::sleep_for(1000ms);
+    running.store(false);
 
     for (auto& t : threads) {
         t.join();
@@ -520,18 +531,20 @@ TEST_F(ContainerThreadSafetyTest, MemorySafetyTest) {
     std::atomic<int> total_errors{0};
 
     for (int iteration = 0; iteration < num_iterations; ++iteration) {
-        thread_safe_container<int, Value> container;
+        auto container = std::make_shared<thread_safe_container>();
         std::vector<std::thread> threads;
 
         for (int i = 0; i < threads_per_iteration; ++i) {
             threads.emplace_back([&, thread_id = i]() {
                 for (int j = 0; j < operations_per_thread; ++j) {
                     try {
-                        int key = thread_id * 1000 + j;
-                        container.insert(key, Value(key * 2));
-                        container.find(key);
+                        std::string key = "iter_" + std::to_string(iteration) +
+                                        "_thread_" + std::to_string(thread_id) +
+                                        "_op_" + std::to_string(j);
+                        container->set(key, j * 2);
+                        container->get(key);
                         if (j % 10 == 0) {
-                            container.erase(key);
+                            container->remove(key);
                         }
                     } catch (...) {
                         ++total_errors;
