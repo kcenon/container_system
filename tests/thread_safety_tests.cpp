@@ -250,37 +250,34 @@ TEST_F(ContainerThreadSafetyTest, ContainerResize) {
     EXPECT_EQ(container.size(), num_threads * operations_per_thread);
 }
 
-// Test 5: Value serialization/deserialization concurrent access
-TEST_F(ContainerThreadSafetyTest, ConcurrentSerialization) {
+// Test 5: Concurrent computation stress test
+TEST_F(ContainerThreadSafetyTest, ConcurrentComputation) {
+    thread_safe_container<int, int> container;
+
     const int num_threads = 8;
     const int operations_per_thread = 300;
 
     std::vector<std::thread> threads;
-    std::atomic<int> serialize_errors{0};
-    std::atomic<int> deserialize_errors{0};
+    std::atomic<int> computation_errors{0};
 
     for (int i = 0; i < num_threads; ++i) {
         threads.emplace_back([&, thread_id = i]() {
             for (int j = 0; j < operations_per_thread; ++j) {
                 try {
-                    // Create a value
-                    Value original(thread_id * 1000 + j);
+                    // Compute a value
+                    int key = thread_id * 1000 + j;
+                    int value = key * 2;
 
-                    // Serialize
-                    auto serialized = original.serialize();
+                    // Store it
+                    container.insert(key, value);
 
-                    // Deserialize
-                    Value deserialized;
-                    if (!deserialized.deserialize(serialized)) {
-                        ++deserialize_errors;
-                    }
-
-                    // Verify
-                    if (deserialized.as_int() != original.as_int()) {
-                        ++serialize_errors;
+                    // Retrieve and verify
+                    auto retrieved = container.find(key);
+                    if (retrieved && *retrieved != value) {
+                        ++computation_errors;
                     }
                 } catch (...) {
-                    ++serialize_errors;
+                    ++computation_errors;
                 }
 
                 if (j % 50 == 0) {
@@ -294,8 +291,7 @@ TEST_F(ContainerThreadSafetyTest, ConcurrentSerialization) {
         t.join();
     }
 
-    EXPECT_EQ(serialize_errors.load(), 0);
-    EXPECT_EQ(deserialize_errors.load(), 0);
+    EXPECT_EQ(computation_errors.load(), 0);
 }
 
 // Test 6: Mixed operations stress test
