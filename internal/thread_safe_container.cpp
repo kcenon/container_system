@@ -75,8 +75,9 @@ namespace container_module
     thread_safe_container& thread_safe_container::operator=(const thread_safe_container& other)
     {
         if (this != &other) {
-            std::unique_lock lock(mutex_);
-            std::shared_lock other_lock(other.mutex_);
+            // Acquire both locks atomically to prevent deadlock
+            // std::scoped_lock ensures locks are acquired in a consistent order
+            std::scoped_lock lock(mutex_, other.mutex_);
             values_ = other.values_;
             write_count_.fetch_add(1, std::memory_order_relaxed);
         }
@@ -86,8 +87,9 @@ namespace container_module
     thread_safe_container& thread_safe_container::operator=(thread_safe_container&& other) noexcept
     {
         if (this != &other) {
-            std::unique_lock lock(mutex_);
-            std::unique_lock other_lock(other.mutex_);
+            // Acquire both locks atomically to prevent deadlock
+            // std::scoped_lock ensures locks are acquired in a consistent order
+            std::scoped_lock lock(mutex_, other.mutex_);
             values_ = std::move(other.values_);
             write_count_.fetch_add(1, std::memory_order_relaxed);
         }
@@ -348,13 +350,13 @@ namespace container_module
         return it->second;
     }
 
-    // lockfree_reader implementation
-    void lockfree_reader::update_snapshot()
+    // snapshot_reader implementation
+    void snapshot_reader::update_snapshot()
     {
         auto new_snapshot = std::make_shared<thread_safe_container::value_map>(
             container_->bulk_read([](const auto& map) { return map; })
         );
-        
+
         std::unique_lock lock(snapshot_mutex_);
         snapshot_ = new_snapshot;
     }

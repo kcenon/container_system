@@ -267,27 +267,32 @@ namespace container_module
     };
 
     /**
-     * @brief Lock-free reader for frequently accessed data
-     * 
-     * Uses RCU (Read-Copy-Update) pattern for lock-free reads
+     * @brief Snapshot-based reader for frequently accessed data
+     *
+     * Uses a snapshot pattern to provide read access with reduced lock contention.
+     * Note: This is not truly lock-free, as it uses a shared_mutex internally.
+     * The snapshot is updated explicitly, allowing multiple reads without acquiring
+     * the main container lock. This is useful for read-heavy workloads where
+     * slightly stale data is acceptable.
      */
-    class lockfree_reader {
+    class snapshot_reader {
     public:
         using snapshot_ptr = std::shared_ptr<const thread_safe_container::value_map>;
 
-        explicit lockfree_reader(std::shared_ptr<thread_safe_container> container)
+        explicit snapshot_reader(std::shared_ptr<thread_safe_container> container)
             : container_(container) {
             update_snapshot();
         }
 
         /**
-         * @brief Get value without locking (from snapshot)
+         * @brief Get value from snapshot (lock-protected read of snapshot)
+         * @note The snapshot may be stale; call update_snapshot() to refresh
          */
         template<typename T>
         std::optional<T> get(std::string_view key) const {
             std::shared_lock lock(snapshot_mutex_);
             if (!snapshot_) return std::nullopt;
-            
+
             auto it = snapshot_->find(std::string(key));
             if (it != snapshot_->end()) {
                 return it->second.get<T>();
@@ -297,6 +302,7 @@ namespace container_module
 
         /**
          * @brief Update snapshot from container
+         * @note This acquires the container's lock and should be called periodically
          */
         void update_snapshot();
 
@@ -305,5 +311,8 @@ namespace container_module
         snapshot_ptr snapshot_;
         mutable std::shared_mutex snapshot_mutex_;
     };
+
+    // Type alias for backward compatibility
+    using lockfree_reader = snapshot_reader;
 
 } // namespace container_module
