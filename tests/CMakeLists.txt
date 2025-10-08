@@ -53,6 +53,7 @@ set(TEST_SOURCES
     unit_tests.cpp
     test_messaging_integration.cpp
     performance_tests.cpp
+    thread_safety_tests.cpp
 )
 
 # Only add benchmark tests if benchmark library is available
