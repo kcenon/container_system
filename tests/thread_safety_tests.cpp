@@ -176,7 +176,7 @@ TEST_F(ContainerThreadSafetyTest, BulkOperations) {
                     // Bulk update
                     container->bulk_update([thread_id, j](auto& values) {
                         std::string key = "bulk_" + std::to_string(thread_id);
-                        values[key] = variant_value(j);
+                        values[key] = variant_value(key, j);
                     });
                 } catch (...) {
                     ++errors;
