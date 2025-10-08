@@ -6,11 +6,11 @@ All rights reserved.
 *****************************************************************************/
 
 #include <gtest/gtest.h>
-#include "container_system/core/container.h"
-#include "container_system/core/value.h"
-#include "container_system/internal/thread_safe_container.h"
-#include "container_system/internal/simd_processor.h"
-#include "container_system/internal/memory_pool.h"
+#include "container/core/container.h"
+#include "container/core/value.h"
+#include "container/internal/thread_safe_container.h"
+#include "container/internal/simd_processor.h"
+#include "container/internal/memory_pool.h"
 
 #include <thread>
 #include <vector>
