@@ -1,0 +1,27 @@
+<map id="scenarios::IoTDataCollectionSystem::simulate_iot_scenario" name="scenarios::IoTDataCollectionSystem::simulate_iot_scenario">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,253,228,293"/>
+<area shape="rect" id="Node000002" href="$de/deb/classscenarios_1_1IoTDataCollectionSystem.html#ab3378a367ae308589f4081b80596d143" title=" " alt="" coords="276,253,484,293"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="228,271,263,271,263,276,228,276"/>
+<area shape="rect" id="Node000003" href="$d0/dcd/classcontainer__module_1_1integration_1_1messaging__container__builder.html#a70981bba692bd185814812957472c6ec" title=" " alt="" coords="552,62,773,117"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="395,251,451,190,489,156,531,127,544,120,546,125,533,132,492,161,455,194,399,255"/>
+<area shape="rect" id="Node000009" href="$d0/dcd/classcontainer__module_1_1integration_1_1messaging__container__builder.html#ae2f2b773fb7248be85f92bd6265efab4" title=" " alt="" coords="532,141,793,181"/>
+<area shape="poly" id="edge8_Node000002_Node000009" title=" " alt="" coords="413,251,467,221,531,192,559,183,560,188,533,197,470,226,416,256"/>
+<area shape="rect" id="Node000010" href="$d0/dcd/classcontainer__module_1_1integration_1_1messaging__container__builder.html#a56f2ae6cae82bd445e889788db53e2da" title=" " alt="" coords="552,206,773,261"/>
+<area shape="poly" id="edge9_Node000002_Node000010" title=" " alt="" coords="484,256,538,248,538,254,484,261"/>
+<area shape="rect" id="Node000011" href="$d0/dcd/classcontainer__module_1_1integration_1_1messaging__container__builder.html#a271381f5ca5e3e609eaf574e5a3bf684" title=" " alt="" coords="552,285,773,339"/>
+<area shape="poly" id="edge10_Node000002_Node000011" title=" " alt="" coords="484,285,538,292,538,298,484,290"/>
+<area shape="rect" id="Node000012" href="$d0/dcd/classcontainer__module_1_1integration_1_1messaging__container__builder.html#a2c82ff350d7cb1efb87bdc6128a95a5c" title=" " alt="" coords="552,363,773,418"/>
+<area shape="poly" id="edge11_Node000002_Node000012" title=" " alt="" coords="416,291,470,320,533,350,551,356,549,361,531,354,468,325,414,296"/>
+<area shape="rect" id="Node000013" href="$d0/dcd/classcontainer__module_1_1integration_1_1messaging__container__builder.html#a71aa40744bafcb49d34270698dbc4341" title=" " alt="" coords="552,442,773,497"/>
+<area shape="poly" id="edge12_Node000002_Node000013" title=" " alt="" coords="397,292,452,359,490,396,533,428,543,434,540,438,531,433,487,400,448,363,393,295"/>
+<area shape="rect" id="Node000004" href="$d5/df9/classcontainer__module_1_1value.html#ae2d6a5ff0505af3f3c56e50b2ece015e" title=" " alt="" coords="841,69,1024,109"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="774,87,828,87,828,92,774,92"/>
+<area shape="rect" id="Node000005" href="$d1/d1a/namespacecontainer__module.html#a83ed4416891be1a3f3191bf92b50b3e9" title="Convert a string&#45;based type indicator (e.g., &quot;4&quot;) to a value_types enum." alt="" coords="1072,5,1268,45"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="1007,67,1082,46,1083,51,1008,72"/>
+<area shape="rect" id="Node000007" href="$d1/daf/classutility__module_1_1formatter.html#a1833466f2e4df9a2dbab6204dbb95800" title=" " alt="" coords="1077,69,1263,109"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="1024,87,1063,87,1063,92,1024,92"/>
+<area shape="rect" id="Node000008" href="$d5/df9/classcontainer__module_1_1value.html#aad6ea2fdcbb516d7a72f577de0b6102f" title=" " alt="" coords="1079,133,1261,173"/>
+<area shape="poly" id="edge7_Node000004_Node000008" title=" " alt="" coords="1008,107,1083,127,1082,132,1007,112"/>
+<area shape="rect" id="Node000006" href="$d1/d1a/namespacecontainer__module.html#ac03e62099dde8cbf072a3a4c635382bf" title="Compile&#45;time conversion from string to value_types." alt="" coords="1316,5,1484,45"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="1268,23,1302,23,1302,28,1268,28"/>
+</map>

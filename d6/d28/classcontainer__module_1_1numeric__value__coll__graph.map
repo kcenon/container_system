@@ -1,0 +1,23 @@
+<map id="container_module::numeric_value&lt; T, TypeTag &gt;" name="container_module::numeric_value&lt; T, TypeTag &gt;">
+<area shape="rect" id="Node000001" title="A template class for storing and converting numeric types (integral or floating)." alt="" coords="5,880,197,1480"/>
+<area shape="rect" id="Node000002" href="$d5/df9/classcontainer__module_1_1value.html" title="The base class for all values stored in the container system." alt="" coords="281,312,469,817"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="277,747,212,881,200,909,195,907,207,879,272,745"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="221,1140,400,1220"/>
+<area shape="poly" id="edge7_Node000007_Node000002" title=" " alt="" coords="313,818,309,842,303,918,302,994,308,1123,303,1123,297,994,298,917,304,841,307,817"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="424,1140,611,1220"/>
+<area shape="poly" id="edge10_Node000009_Node000002" title=" " alt="" coords="436,817,507,1123,502,1125,431,818"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="65,152,215,232"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="174,243,283,413,278,416,170,245"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="239,159,318,225"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="289,224,308,295,303,297,284,226"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="213,5,344,85"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="281,99,281,159,276,159,276,99"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="342,159,501,225"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="420,225,411,296,406,295,415,225"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="312,1140,343,856,345,834,350,834,348,856,318,1140"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="503,1543,673,1637"/>
+<area shape="poly" id="edge8_Node000002_Node000008" title=" " alt="" coords="626,1541,637,1518,637,1504,639,1408,646,1326,663,1186,666,1119,662,1049,648,971,620,881,593,821,558,765,519,713,478,667,482,663,523,709,563,762,598,819,625,879,653,970,667,1048,671,1119,668,1186,652,1326,645,1408,643,1504,643,1519,631,1544"/>
+<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="523,1220,536,1353,548,1436,565,1518,567,1526,562,1527,560,1519,543,1437,531,1354,517,1221"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="525,135,694,249"/>
+<area shape="poly" id="edge11_Node000002_Node000010" title=" " alt="" coords="576,251,480,403,475,400,571,248"/>
+</map>
