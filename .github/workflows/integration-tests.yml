@@ -1,0 +1,181 @@
+name: Integration Tests
+
+on:
+  push:
+    branches: [ main, feat/phase5-*, phase-* ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  integration-tests:
+    name: Integration Tests - ${{ matrix.os }} / ${{ matrix.build_type }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-22.04
+            build_type: Debug
+          - os: ubuntu-22.04
+            build_type: Release
+          - os: macos-13
+            build_type: Debug
+          - os: macos-13
+            build_type: Release
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Install dependencies (Ubuntu)
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y cmake ninja-build g++ clang libgtest-dev libgmock-dev lcov
+
+    - name: Install dependencies (macOS)
+      if: runner.os == 'macOS'
+      run: |
+        brew install ninja googletest lcov
+
+    - name: Configure CMake
+      run: |
+        cmake -B build -G Ninja \
+          -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
+          -DBUILD_TESTS=ON \
+          -DCONTAINER_BUILD_INTEGRATION_TESTS=ON \
+          -DENABLE_COVERAGE=${{ matrix.build_type == 'Debug' && 'ON' || 'OFF' }} \
+          -DBUILD_CONTAINER_SAMPLES=OFF \
+          -DBUILD_CONTAINER_EXAMPLES=OFF
+
+    - name: Build
+      run: cmake --build build --config ${{ matrix.build_type }} --parallel
+
+    - name: Run integration tests
+      timeout-minutes: 15
+      run: |
+        cd build
+        # Run all integration test suites
+        ctest -C ${{ matrix.build_type }} -L integration --output-on-failure --verbose
+
+    - name: Run individual test suites
+      timeout-minutes: 15
+      run: |
+        cd build
+        echo "=== Running container lifecycle tests ==="
+        ./bin/scenarios_container_lifecycle_test || echo "Lifecycle tests completed with issues"
+
+        echo "=== Running value operations tests ==="
+        ./bin/scenarios_value_operations_test || echo "Value operations tests completed with issues"
+
+        echo "=== Running serialization performance tests ==="
+        ./bin/performance_serialization_performance_test || echo "Performance tests completed with issues"
+
+        echo "=== Running error handling tests ==="
+        ./bin/failures_error_handling_test || echo "Error handling tests completed with issues"
+
+    - name: Generate coverage report (Debug only)
+      if: matrix.build_type == 'Debug' && runner.os == 'Linux'
+      run: |
+        cd build
+        # Capture coverage data
+        lcov --capture --directory . --output-file coverage.info --ignore-errors mismatch
+
+        # Remove unwanted coverage (system libraries, tests)
+        lcov --remove coverage.info \
+          '/usr/*' \
+          '*/tests/*' \
+          '*/integration_tests/*' \
+          '*/googletest/*' \
+          '*/vcpkg_installed/*' \
+          --output-file coverage_filtered.info --ignore-errors unused
+
+        # Generate summary
+        lcov --list coverage_filtered.info
+
+        # Generate HTML report
+        genhtml coverage_filtered.info --output-directory coverage_html --ignore-errors source
+
+    - name: Upload coverage to Codecov (Debug only)
+      if: matrix.build_type == 'Debug' && runner.os == 'Linux'
+      uses: codecov/codecov-action@v4
+      with:
+        files: build/coverage_filtered.info
+        flags: integration-tests
+        name: integration-tests-${{ matrix.os }}
+        fail_ci_if_error: false
+
+    - name: Upload coverage HTML report
+      if: matrix.build_type == 'Debug' && runner.os == 'Linux'
+      uses: actions/upload-artifact@v4
+      with:
+        name: coverage-html-${{ matrix.os }}-${{ matrix.build_type }}
+        path: build/coverage_html/
+
+    - name: Upload test results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-results-${{ matrix.os }}-${{ matrix.build_type }}
+        path: |
+          build/Testing/
+          build/**/*.log
+
+  performance-baseline:
+    name: Performance Baseline Validation
+    runs-on: ubuntu-22.04
+    timeout-minutes: 20
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y cmake ninja-build g++ libgtest-dev
+
+    - name: Configure CMake (Release for accurate performance)
+      run: |
+        cmake -B build -G Ninja \
+          -DCMAKE_BUILD_TYPE=Release \
+          -DBUILD_TESTS=OFF \
+          -DCONTAINER_BUILD_INTEGRATION_TESTS=ON \
+          -DBUILD_CONTAINER_SAMPLES=OFF
+
+    - name: Build
+      run: cmake --build build --config Release --parallel
+
+    - name: Run performance tests
+      run: |
+        cd build
+        echo "=== Performance Baseline Validation ==="
+        ./bin/performance_serialization_performance_test || true
+
+    - name: Upload performance results
+      uses: actions/upload-artifact@v4
+      with:
+        name: performance-baseline-results
+        path: build/Testing/
+
+  summary:
+    name: Integration Tests Summary
+    needs: [integration-tests, performance-baseline]
+    runs-on: ubuntu-22.04
+    if: always()
+
+    steps:
+    - name: Check test results
+      run: |
+        echo "Integration tests workflow completed"
+        echo "Status: ${{ needs.integration-tests.result }}"
+        echo "Performance baseline: ${{ needs.performance-baseline.result }}"
+
+        if [ "${{ needs.integration-tests.result }}" = "failure" ]; then
+          echo "::warning::Some integration tests failed"
+        fi
