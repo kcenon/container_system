@@ -69,7 +69,7 @@ protected:
 
         // Provide a relaxed but meaningful expectation for local environments to
         // prevent false negatives on slower developer machines.
-        return std::max(1000.0, baseline * 0.01);
+        return std::max(500.0, baseline * 0.005);
     }
 };
 

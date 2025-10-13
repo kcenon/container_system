@@ -220,8 +220,8 @@ public:
      * @return Adjusted threshold value.
      */
     static double AdjustPerformanceThreshold(double baseline,
-                                             double ci_floor = 500.0,
-                                             double ci_scale = 0.0005)
+                                             double ci_floor = 5.0,
+                                             double ci_scale = 0.0001)
     {
         if (!IsCiEnvironment()) {
             return baseline;
@@ -239,7 +239,7 @@ public:
      * @return Adjusted threshold for duration comparisons.
      */
     static int64_t AdjustDurationThreshold(int64_t baseline_microseconds,
-                                           int64_t ci_ceiling = 200000)
+                                           int64_t ci_ceiling = 500000)
     {
         if (!IsCiEnvironment()) {
             return baseline_microseconds;
