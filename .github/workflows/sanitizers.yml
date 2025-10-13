@@ -56,6 +56,7 @@ jobs:
           -DCMAKE_EXE_LINKER_FLAGS="-fsanitize=${{ matrix.sanitizer }}" \
           -DCMAKE_SHARED_LINKER_FLAGS="-fsanitize=${{ matrix.sanitizer }}" \
           -DBUILD_TESTS=ON \
+          -DCONTAINER_BUILD_INTEGRATION_TESTS=ON \
           -DBUILD_CONTAINER_SAMPLES=OFF
 
     - name: Build with ${{ matrix.sanitizer }} sanitizer
@@ -66,9 +67,25 @@ jobs:
     - name: Run tests with ${{ matrix.sanitizer }} sanitizer
       run: |
         cd container_system/build
+        echo "=== Running ${{ matrix.sanitizer }} sanitizer tests ==="
         ctest --output-on-failure --verbose
+        CTEST_EXIT_CODE=$?
+
+        echo ""
+        echo "=== Test Exit Code: $CTEST_EXIT_CODE ==="
+
+        if [ $CTEST_EXIT_CODE -ne 0 ]; then
+          echo "::error::Sanitizer tests failed with exit code $CTEST_EXIT_CODE"
+          if [ -f Testing/Temporary/LastTestsFailed.log ]; then
+            echo "::error::Failed tests:"
+            cat Testing/Temporary/LastTestsFailed.log
+          fi
+          exit $CTEST_EXIT_CODE
+        fi
+
+        echo "✅ All ${{ matrix.sanitizer }} sanitizer tests passed"
       env:
-        TSAN_OPTIONS: "halt_on_error=0 second_deadlock_stack=1"
+        TSAN_OPTIONS: "halt_on_error=0 second_deadlock_stack=1 history_size=7"
         ASAN_OPTIONS: "halt_on_error=0 detect_leaks=1"
         UBSAN_OPTIONS: "halt_on_error=0 print_stacktrace=1"
 
