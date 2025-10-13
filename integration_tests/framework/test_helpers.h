@@ -41,6 +41,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <vector>
 #include <random>
 #include <chrono>
+#include <regex>
+#include <iostream>
 
 namespace container_module
 {
@@ -188,12 +190,36 @@ public:
 
     /**
      * @brief Validate serialized data format
+     *
+     * Performs comprehensive validation:
+     * 1. Checks for required markers (@header and @data)
+     * 2. Validates header format matches expected pattern (single or double braces)
+     * 3. Validates data section format
+     * 4. Ensures proper termination with semicolons
      */
     static bool IsValidSerializedData(const std::string& data)
     {
-        // Basic validation - check for header markers
-        return data.find("@header") != std::string::npos &&
-               data.find("@data") != std::string::npos;
+        // Check for required markers
+        if (data.find("@header") == std::string::npos ||
+            data.find("@data") == std::string::npos) {
+            return false;
+        }
+
+        // Validate header format - must match pattern with single or double braces
+        // Pattern: @header={{...}}; or @header={...};
+        std::regex header_pattern(R"(@header=\s*\{\{?[^\}]*\}\}?;)");
+        if (!std::regex_search(data, header_pattern)) {
+            return false;
+        }
+
+        // Validate data section format
+        // Pattern: @data={{...}}; or @data={...};
+        std::regex data_pattern(R"(@data=\s*\{\{?.*\}\}?;)");
+        if (!std::regex_search(data, data_pattern)) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -231,6 +257,147 @@ public:
 
         // This is a simplified calculation
         return ((double)(serialized.size() - raw_size) / raw_size) * 100.0;
+    }
+
+    /**
+     * @brief Print detailed serialization debug information
+     *
+     * Useful for diagnosing serialization/deserialization issues.
+     * Prints header and data section boundaries, format validation results.
+     *
+     * @param serialized Serialized container data
+     */
+    static void PrintSerializationDebugInfo(const std::string& serialized)
+    {
+        std::cout << "=== Serialization Debug Info ===" << std::endl;
+        std::cout << "Total size: " << serialized.size() << " bytes" << std::endl;
+
+        // Find header position
+        size_t header_pos = serialized.find("@header");
+        size_t data_pos = serialized.find("@data");
+
+        if (header_pos != std::string::npos) {
+            std::cout << "Header found at position: " << header_pos << std::endl;
+
+            // Extract header section (up to @data or end)
+            size_t header_end = (data_pos != std::string::npos) ? data_pos : serialized.size();
+            std::string header_section = serialized.substr(header_pos,
+                std::min(size_t(200), header_end - header_pos));
+            std::cout << "Header section: " << header_section << std::endl;
+        } else {
+            std::cout << "WARNING: @header marker not found!" << std::endl;
+        }
+
+        if (data_pos != std::string::npos) {
+            std::cout << "Data found at position: " << data_pos << std::endl;
+
+            // Extract data section preview
+            std::string data_section = serialized.substr(data_pos,
+                std::min(size_t(200), serialized.size() - data_pos));
+            std::cout << "Data section: " << data_section << std::endl;
+        } else {
+            std::cout << "WARNING: @data marker not found!" << std::endl;
+        }
+
+        // Validate format
+        bool is_valid = IsValidSerializedData(serialized);
+        std::cout << "Format validation: " << (is_valid ? "PASS" : "FAIL") << std::endl;
+        std::cout << "================================" << std::endl;
+    }
+
+    /**
+     * @brief Verify roundtrip serialization with detailed diagnostics
+     *
+     * Performs serialization and deserialization while providing
+     * detailed diagnostic information if failures occur.
+     *
+     * @param container Container to test
+     * @return True if roundtrip successful, false otherwise
+     */
+    static bool VerifyRoundtripWithDiagnostics(
+        std::shared_ptr<value_container> container)
+    {
+        try {
+            // Serialize
+            std::string serialized = container->serialize();
+
+            if (serialized.empty()) {
+                std::cerr << "ERROR: Serialization produced empty string" << std::endl;
+                return false;
+            }
+
+            // Validate format
+            if (!IsValidSerializedData(serialized)) {
+                std::cerr << "ERROR: Serialized data has invalid format" << std::endl;
+                PrintSerializationDebugInfo(serialized);
+                return false;
+            }
+
+            // Deserialize
+            auto restored = std::make_shared<value_container>(serialized, false);
+
+            // Verify header preservation
+            if (restored->source_id() != container->source_id()) {
+                std::cerr << "ERROR: source_id mismatch after roundtrip" << std::endl;
+                std::cerr << "  Expected: '" << container->source_id() << "'" << std::endl;
+                std::cerr << "  Got: '" << restored->source_id() << "'" << std::endl;
+                PrintSerializationDebugInfo(serialized);
+                return false;
+            }
+
+            if (restored->target_id() != container->target_id()) {
+                std::cerr << "ERROR: target_id mismatch after roundtrip" << std::endl;
+                std::cerr << "  Expected: '" << container->target_id() << "'" << std::endl;
+                std::cerr << "  Got: '" << restored->target_id() << "'" << std::endl;
+                return false;
+            }
+
+            if (restored->message_type() != container->message_type()) {
+                std::cerr << "ERROR: message_type mismatch after roundtrip" << std::endl;
+                std::cerr << "  Expected: '" << container->message_type() << "'" << std::endl;
+                std::cerr << "  Got: '" << restored->message_type() << "'" << std::endl;
+                return false;
+            }
+
+            return true;
+
+        } catch (const std::exception& e) {
+            std::cerr << "ERROR: Exception during roundtrip: " << e.what() << std::endl;
+            return false;
+        }
+    }
+
+    /**
+     * @brief Dump container state for debugging
+     *
+     * Prints container header information and value count (if available).
+     *
+     * @param container Container to dump
+     * @param label Optional label for output
+     */
+    static void DumpContainerState(std::shared_ptr<value_container> container,
+                                   const std::string& label = "")
+    {
+        std::cout << "=== Container State";
+        if (!label.empty()) {
+            std::cout << " (" << label << ")";
+        }
+        std::cout << " ===" << std::endl;
+
+        std::cout << "Source: " << container->source_id();
+        if (!container->source_sub_id().empty()) {
+            std::cout << " (sub: " << container->source_sub_id() << ")";
+        }
+        std::cout << std::endl;
+
+        std::cout << "Target: " << container->target_id();
+        if (!container->target_sub_id().empty()) {
+            std::cout << " (sub: " << container->target_sub_id() << ")";
+        }
+        std::cout << std::endl;
+
+        std::cout << "Message type: " << container->message_type() << std::endl;
+        std::cout << "================================" << std::endl;
     }
 
     /**

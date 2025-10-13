@@ -188,7 +188,7 @@ TEST_F(ErrorHandlingTest, NumericBoundaryValues)
     AddNumericValue("min_int", std::numeric_limits<int>::min());
     AddNumericValue("max_llong", std::numeric_limits<long long>::max());
 
-    auto restored = RoundTripSerialize(true);
+    auto restored = RoundTripSerialize();
 
     EXPECT_EQ(restored->get_value("max_int")->to_int(),
               std::numeric_limits<int>::max());
@@ -225,7 +225,7 @@ TEST_F(ErrorHandlingTest, ManyDuplicateKeys)
 
     // Serialize and deserialize
     EXPECT_NO_THROW({
-        auto restored = RoundTripSerialize(true);
+        auto restored = RoundTripSerialize();
         auto restored_values = restored->value_array("duplicate");
     });
 }
@@ -241,7 +241,7 @@ TEST_F(ErrorHandlingTest, ZeroLengthBytesValue)
     auto val = container->get_value("empty_bytes");
     EXPECT_FALSE(val->is_null());
 
-    auto restored = RoundTripSerialize(true);
+    auto restored = RoundTripSerialize();
     auto restored_bytes = restored->get_value("empty_bytes");
     EXPECT_FALSE(restored_bytes->is_null());
 }

@@ -159,11 +159,44 @@ protected:
     }
 
     /**
-     * @brief Serialize and deserialize container
-     * @param parse_values Whether to fully parse values on deserialize
-     * @return Deserialized container
+     * @brief Serialize and deserialize container with full parsing
+     *
+     * This is the standard roundtrip test: serialize the container,
+     * then deserialize it with full value parsing enabled.
+     *
+     * @return Fully deserialized container
      */
-    std::shared_ptr<value_container> RoundTripSerialize(bool parse_values = true)
+    std::shared_ptr<value_container> RoundTripSerialize()
+    {
+        std::string serialized = container->serialize();
+        return std::make_shared<value_container>(serialized, false);  // false = parse all
+    }
+
+    /**
+     * @brief Serialize and deserialize container with header-only parsing
+     *
+     * Useful for testing header preservation without the overhead
+     * of parsing all values.
+     *
+     * @return Container with parsed header only
+     */
+    std::shared_ptr<value_container> RoundTripSerializeHeaderOnly()
+    {
+        std::string serialized = container->serialize();
+        return std::make_shared<value_container>(serialized, true);  // true = header only
+    }
+
+    /**
+     * @brief Deprecated: Use RoundTripSerialize() or RoundTripSerializeHeaderOnly()
+     *
+     * This function had confusing parameter semantics where parse_values
+     * was inverted before being passed to the constructor.
+     *
+     * @deprecated Use RoundTripSerialize() for full parse or
+     *             RoundTripSerializeHeaderOnly() for header-only parse
+     */
+    [[deprecated("Use RoundTripSerialize() or RoundTripSerializeHeaderOnly()")]]
+    std::shared_ptr<value_container> RoundTripSerialize(bool parse_values)
     {
         std::string serialized = container->serialize();
         return std::make_shared<value_container>(serialized, !parse_values);

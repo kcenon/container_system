@@ -159,7 +159,7 @@ TEST_F(ValueOperationsTest, DoubleValuePrecision)
 
     // Test serialization preserves precision
     container->add(double_val);
-    auto restored = RoundTripSerialize(true);
+    auto restored = RoundTripSerialize();
     EXPECT_DOUBLE_EQ(restored->get_value("pi")->to_double(), precise_value);
 }
 
@@ -186,7 +186,7 @@ TEST_F(ValueOperationsTest, LongLongValues)
     EXPECT_EQ(llong_val->to_llong(), large_value);
 
     container->add(llong_val);
-    auto restored = RoundTripSerialize(true);
+    auto restored = RoundTripSerialize();
     EXPECT_EQ(restored->get_value("large")->to_llong(), large_value);
 }
 
@@ -216,7 +216,7 @@ TEST_F(ValueOperationsTest, SpecialStringCharacters)
     auto str_val = std::make_shared<string_value>("special", special);
 
     container->add(str_val);
-    auto restored = RoundTripSerialize(true);
+    auto restored = RoundTripSerialize();
 
     auto restored_val = restored->get_value("special");
     // Note: Some special characters may be encoded/decoded differently
@@ -236,7 +236,7 @@ TEST_F(ValueOperationsTest, EmptyAndWhitespaceStrings)
     container->add(whitespace);
     container->add(mixed);
 
-    auto restored = RoundTripSerialize(true);
+    auto restored = RoundTripSerialize();
 
     EXPECT_FALSE(restored->get_value("empty")->is_null());
     EXPECT_FALSE(restored->get_value("whitespace")->is_null());
