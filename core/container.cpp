@@ -523,21 +523,31 @@ namespace container_module
 	std::shared_ptr<value> value_container::get_value(
 		std::string_view target_name, unsigned int index)
 	{
-		std::shared_lock<std::shared_mutex> lock(mutex_);
+		std::unique_lock<std::shared_mutex> lock(mutex_);
 
 		if (!parsed_data_)
 		{
 			deserialize_values(data_string_, false);
 		}
-		auto arr = value_array(target_name);
-		if (arr.empty() || index >= arr.size())
+
+		// Search directly instead of calling value_array() to avoid nested locking
+		std::vector<std::shared_ptr<value>> results;
+		for (auto& v : units_)
+		{
+			if (v->name() == target_name)
+			{
+				results.push_back(v);
+			}
+		}
+
+		if (results.empty() || index >= results.size())
 		{
 			// Return a proper null value for non-existent keys
 			auto null_val = std::make_shared<value>();
 			null_val->set_data(std::string(target_name), value_types::null_value, "");
 			return null_val;
 		}
-		return arr[index];
+		return results[index];
 	}
 
 	void value_container::initialize(void)
