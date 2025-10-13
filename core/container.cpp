@@ -615,8 +615,8 @@ namespace container_module
 		std::regex newlineRe("\\r\\n?|\\n");
 		std::string clean = std::regex_replace(data_str, newlineRe, "");
 
-		// parse header portion
-		std::regex fullRe("@header=\\s*\\{\\s*(.*?)\\s*\\};");
+		// parse header portion - matches both single and double braces
+		std::regex fullRe("@header=\\s*\\{\\{?\\s*(.*?)\\s*\\}\\}?;");
 		std::smatch match;
 		if (!std::regex_search(clean, match, fullRe))
 		{
