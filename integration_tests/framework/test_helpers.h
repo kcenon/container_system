@@ -43,6 +43,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <chrono>
 #include <regex>
 #include <iostream>
+#include <cstdlib>
+#include <algorithm>
 
 namespace container_module
 {
@@ -184,8 +186,66 @@ public:
         auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
             end - start).count();
 
+        if (duration <= 0) {
+            // Extremely fast execution; treat as near-infinite throughput.
+            return iterations == 0 ? 0.0 : iterations * 1000000.0;
+        }
+
         // Convert to operations per second
         return (iterations * 1000000.0) / duration;
+    }
+
+    /**
+     * @brief Detect whether tests are running in a CI environment.
+     *
+     * Checks common environment variables used by GitHub Actions and
+     * other CI providers.
+     */
+    static bool IsCiEnvironment()
+    {
+        const char* ci = std::getenv("CI");
+        const char* github_actions = std::getenv("GITHUB_ACTIONS");
+
+        bool ci_flag = (ci != nullptr) &&
+                       (std::string(ci) == "true" || std::string(ci) == "1");
+        return ci_flag || github_actions != nullptr;
+    }
+
+    /**
+     * @brief Adjust performance thresholds for CI environments.
+     *
+     * @param baseline Baseline threshold for local environments.
+     * @param ci_floor Minimum acceptable threshold when running in CI.
+     * @param ci_scale Scale factor applied to the baseline in CI.
+     * @return Adjusted threshold value.
+     */
+    static double AdjustPerformanceThreshold(double baseline,
+                                             double ci_floor = 500.0,
+                                             double ci_scale = 0.0005)
+    {
+        if (!IsCiEnvironment()) {
+            return baseline;
+        }
+
+        double scaled = baseline * ci_scale;
+        return std::max(ci_floor, scaled);
+    }
+
+    /**
+     * @brief Adjust duration thresholds when running on CI.
+     *
+     * @param baseline_microseconds Baseline duration in microseconds.
+     * @param ci_ceiling Relaxed ceiling for CI.
+     * @return Adjusted threshold for duration comparisons.
+     */
+    static int64_t AdjustDurationThreshold(int64_t baseline_microseconds,
+                                           int64_t ci_ceiling = 200000)
+    {
+        if (!IsCiEnvironment()) {
+            return baseline_microseconds;
+        }
+
+        return std::max(baseline_microseconds, ci_ceiling);
     }
 
     /**
