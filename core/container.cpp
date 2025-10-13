@@ -160,13 +160,27 @@ namespace container_module
 			{ value_types::bytes_value,
 			  [this](const std::string& n, const std::string& d)
 			  {
-				  // For bytes_value, we need to convert from string representation
-				  // This is a simplified version - you may need more complex parsing
+				  // For bytes_value, we need to convert from hex string representation
 				  std::vector<uint8_t> bytes;
+
+				  // Handle empty or invalid data
+				  if (d.empty()) {
+					  return std::make_shared<bytes_value>(n, bytes);
+				  }
+
+				  // Parse hex string in pairs (each byte = 2 hex chars)
 				  for (size_t i = 0; i < d.length(); i += 2) {
 					  if (i + 1 < d.length()) {
 						  std::string byte_str = d.substr(i, 2);
-						  bytes.push_back(static_cast<uint8_t>(std::stoul(byte_str, nullptr, 16)));
+						  try {
+							  // Attempt to parse hex byte
+							  unsigned long val = std::stoul(byte_str, nullptr, 16);
+							  bytes.push_back(static_cast<uint8_t>(val));
+						  } catch (const std::exception&) {
+							  // Skip invalid hex bytes - continue parsing remaining data
+							  // This allows partial recovery from corrupted data
+							  continue;
+						  }
 					  }
 				  }
 				  return std::make_shared<bytes_value>(n, bytes);
