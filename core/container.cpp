@@ -503,8 +503,8 @@ namespace container_module
 	std::vector<std::shared_ptr<value>> value_container::value_array(
 		std::string_view target_name)
 	{
-		std::shared_lock<std::shared_mutex> lock(mutex_);
-		
+		std::unique_lock<std::shared_mutex> lock(mutex_);
+
 		if (!parsed_data_)
 		{
 			deserialize_values(data_string_, false);
@@ -681,6 +681,8 @@ bool value_container::deserialize(const std::vector<uint8_t>& data_array,
 
 	const std::string value_container::to_xml(void)
 	{
+		std::unique_lock<std::shared_mutex> lock(mutex_);
+
 		if (!parsed_data_)
 		{
 			deserialize_values(data_string_, false);
@@ -719,6 +721,8 @@ bool value_container::deserialize(const std::vector<uint8_t>& data_array,
 
 	const std::string value_container::to_json(void)
 	{
+		std::unique_lock<std::shared_mutex> lock(mutex_);
+
 		if (!parsed_data_)
 		{
 			deserialize_values(data_string_, false);
