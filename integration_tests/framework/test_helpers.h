@@ -37,6 +37,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <container/values/string_value.h>
 #include <container/values/bytes_value.h>
 #include <container/values/numeric_value.h>
+#include "test_config.h"
 #include <string>
 #include <vector>
 #include <random>
@@ -200,15 +201,13 @@ public:
      *
      * Checks common environment variables used by GitHub Actions and
      * other CI providers.
+     *
+     * @deprecated Use TestConfig::instance().is_ci_environment() instead
      */
+    [[deprecated("Use TestConfig::instance().is_ci_environment()")]]
     static bool IsCiEnvironment()
     {
-        const char* ci = std::getenv("CI");
-        const char* github_actions = std::getenv("GITHUB_ACTIONS");
-
-        bool ci_flag = (ci != nullptr) &&
-                       (std::string(ci) == "true" || std::string(ci) == "1");
-        return ci_flag || github_actions != nullptr;
+        return TestConfig::instance().is_ci_environment();
     }
 
     /**
@@ -218,17 +217,15 @@ public:
      * @param ci_floor Minimum acceptable threshold when running in CI.
      * @param ci_scale Scale factor applied to the baseline in CI.
      * @return Adjusted threshold value.
+     *
+     * @deprecated Use TestConfig::instance().adjust_throughput_threshold() instead
      */
+    [[deprecated("Use TestConfig::instance().adjust_throughput_threshold()")]]
     static double AdjustPerformanceThreshold(double baseline,
                                              double ci_floor = 5.0,
                                              double ci_scale = 0.0001)
     {
-        if (!IsCiEnvironment()) {
-            return baseline;
-        }
-
-        double scaled = baseline * ci_scale;
-        return std::max(ci_floor, scaled);
+        return TestConfig::instance().adjust_throughput_threshold(baseline, ci_floor, ci_scale);
     }
 
     /**
@@ -237,15 +234,14 @@ public:
      * @param baseline_microseconds Baseline duration in microseconds.
      * @param ci_ceiling Relaxed ceiling for CI.
      * @return Adjusted threshold for duration comparisons.
+     *
+     * @deprecated Use TestConfig::instance().adjust_duration_threshold() instead
      */
+    [[deprecated("Use TestConfig::instance().adjust_duration_threshold()")]]
     static int64_t AdjustDurationThreshold(int64_t baseline_microseconds,
                                            int64_t ci_ceiling = 500000)
     {
-        if (!IsCiEnvironment()) {
-            return baseline_microseconds;
-        }
-
-        return std::max(baseline_microseconds, ci_ceiling);
+        return TestConfig::instance().adjust_duration_threshold(baseline_microseconds);
     }
 
     /**
