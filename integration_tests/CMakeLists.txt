@@ -25,6 +25,7 @@ endif()
 
 # Integration test source files
 set(INTEGRATION_TEST_SOURCES
+    framework/test_environment_validation.cpp
     scenarios/container_lifecycle_test.cpp
     scenarios/value_operations_test.cpp
     performance/serialization_performance_test.cpp
@@ -78,7 +79,9 @@ foreach(TEST_SOURCE ${INTEGRATION_TEST_SOURCES})
     )
 
     # Label tests by category
-    if(TEST_DIR STREQUAL "scenarios")
+    if(TEST_DIR STREQUAL "framework")
+        set_tests_properties(${TEST_TARGET} PROPERTIES LABELS "framework;integration;environment")
+    elseif(TEST_DIR STREQUAL "scenarios")
         set_tests_properties(${TEST_TARGET} PROPERTIES LABELS "scenarios;integration")
     elseif(TEST_DIR STREQUAL "performance")
         set_tests_properties(${TEST_TARGET} PROPERTIES
