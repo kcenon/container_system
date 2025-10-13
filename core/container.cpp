@@ -869,7 +869,8 @@ bool value_container::deserialize(const std::vector<uint8_t>& data_array,
 		}
 		changed_data_ = false;
 
-		std::regex reData("@data=\\s*\\{\\s*(.*?)\\s*\\};");
+		// Match both single and double braces for @data section
+		std::regex reData("@data=\\s*\\{\\{?\\s*(.*?)\\s*\\}\\}?;");
 		std::smatch match;
 		if (!std::regex_search(data, match, reData))
 		{
