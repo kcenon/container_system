@@ -90,53 +90,14 @@ foreach(TEST_SOURCE ${INTEGRATION_TEST_SOURCES})
     endif()
 endforeach()
 
-# Create combined integration test runner
-add_executable(all_integration_tests
-    scenarios/container_lifecycle_test.cpp
-    scenarios/value_operations_test.cpp
-    performance/serialization_performance_test.cpp
-    failures/error_handling_test.cpp
-)
-
-target_link_libraries(all_integration_tests
-    container_system
-    ${GTEST_LIBRARIES}
-    Threads::Threads
-)
-
-target_include_directories(all_integration_tests PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_CURRENT_SOURCE_DIR}/framework
-    ${GTEST_INCLUDE_DIRS}
-)
-
-# Set compile definitions for combined test runner
-if(ENABLE_MESSAGING_FEATURES)
-    target_compile_definitions(all_integration_tests PRIVATE HAS_MESSAGING_FEATURES)
-endif()
-
-if(ENABLE_PERFORMANCE_METRICS)
-    target_compile_definitions(all_integration_tests PRIVATE HAS_PERFORMANCE_METRICS)
-endif()
-
-if(ENABLE_EXTERNAL_INTEGRATION)
-    target_compile_definitions(all_integration_tests PRIVATE HAS_EXTERNAL_INTEGRATION)
-endif()
-
-# Add combined test
-add_test(NAME all_integration_tests COMMAND all_integration_tests)
-set_tests_properties(all_integration_tests PROPERTIES
-    TIMEOUT 600
-    LABELS "integration;combined"
-)
+# Note: Combined integration test runner removed due to multiple main() definitions
+# Each test file has its own main() function and should be run separately
+# Use run_all_integration target or ctest to run all tests
 
 # Test coverage configuration (if supported)
 option(ENABLE_COVERAGE "Enable coverage reporting" OFF)
 
 if(ENABLE_COVERAGE AND CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-    target_compile_options(all_integration_tests PRIVATE --coverage)
-    target_link_options(all_integration_tests PRIVATE --coverage)
-
     foreach(TEST_SOURCE ${INTEGRATION_TEST_SOURCES})
         get_filename_component(TEST_NAME ${TEST_SOURCE} NAME_WE)
         get_filename_component(TEST_DIR ${TEST_SOURCE} DIRECTORY)

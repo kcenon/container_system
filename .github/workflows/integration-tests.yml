@@ -80,11 +80,11 @@ jobs:
         ./bin/failures_error_handling_test || echo "Error handling tests completed with issues"
 
     - name: Generate coverage report (Debug only)
-      if: matrix.build_type == 'Debug' && runner.os == 'Linux'
+      if: matrix.build_type == 'Debug'
       run: |
         cd build
         # Capture coverage data
-        lcov --capture --directory . --output-file coverage.info --ignore-errors mismatch
+        lcov --capture --directory . --output-file coverage.info --ignore-errors mismatch --ignore-errors inconsistent --ignore-errors negative --ignore-errors format --ignore-errors unsupported
 
         # Remove unwanted coverage (system libraries, tests)
         lcov --remove coverage.info \
@@ -93,13 +93,15 @@ jobs:
           '*/integration_tests/*' \
           '*/googletest/*' \
           '*/vcpkg_installed/*' \
-          --output-file coverage_filtered.info --ignore-errors unused
+          '/Applications/Xcode*/**' \
+          '/usr/local/include/*' \
+          --output-file coverage_filtered.info --ignore-errors unused --ignore-errors inconsistent --ignore-errors format
 
         # Generate summary
-        lcov --list coverage_filtered.info
+        lcov --list coverage_filtered.info --ignore-errors inconsistent
 
         # Generate HTML report
-        genhtml coverage_filtered.info --output-directory coverage_html --ignore-errors source
+        genhtml coverage_filtered.info --output-directory coverage_html --ignore-errors source --ignore-errors inconsistent --ignore-errors category
 
     - name: Upload coverage to Codecov (Debug only)
       if: matrix.build_type == 'Debug' && runner.os == 'Linux'
