@@ -56,28 +56,70 @@ jobs:
     - name: Build
       run: cmake --build build --config ${{ matrix.build_type }} --parallel
 
+    - name: Validate CI environment
+      run: |
+        echo "=== CI Environment Variables ==="
+        echo "CI: ${CI:-<not set>}"
+        echo "GITHUB_ACTIONS: ${GITHUB_ACTIONS:-<not set>}"
+        echo "Build Type: ${{ matrix.build_type }}"
+        echo "Runner OS: ${{ runner.os }}"
+        echo ""
+
+        # Verify CI detection will work
+        if [ -z "$CI" ] || [ -z "$GITHUB_ACTIONS" ]; then
+          echo "::warning::CI environment variables not properly set - tests may use incorrect thresholds"
+        else
+          echo "✅ CI environment correctly configured"
+        fi
+
     - name: Run integration tests
       timeout-minutes: 15
       run: |
         cd build
-        # Run all integration test suites
-        ctest -C ${{ matrix.build_type }} -L integration --output-on-failure --verbose
+        echo "=== Running Integration Test Suite ==="
+        echo ""
 
-    - name: Run individual test suites
-      timeout-minutes: 15
+        # Run tests with explicit exit code checking
+        ctest -C ${{ matrix.build_type }} -L integration --output-on-failure --verbose
+        CTEST_EXIT_CODE=$?
+
+        echo ""
+        echo "=== CTest Exit Code: $CTEST_EXIT_CODE ==="
+
+        if [ $CTEST_EXIT_CODE -ne 0 ]; then
+          echo "::error::Integration tests failed with exit code $CTEST_EXIT_CODE"
+
+          # Show failure summary
+          if [ -f Testing/Temporary/LastTestsFailed.log ]; then
+            echo "::error::Failed tests:"
+            cat Testing/Temporary/LastTestsFailed.log
+          fi
+
+          exit $CTEST_EXIT_CODE
+        fi
+
+        echo "✅ All integration tests passed"
+
+    - name: Summarize test results
+      if: always()
       run: |
         cd build
-        echo "=== Running container lifecycle tests ==="
-        ./bin/scenarios_container_lifecycle_test || echo "Lifecycle tests completed with issues"
+        echo "=== Test Summary ==="
 
-        echo "=== Running value operations tests ==="
-        ./bin/scenarios_value_operations_test || echo "Value operations tests completed with issues"
+        # Check for CTest LastTestsFailed.log
+        if [ -f Testing/Temporary/LastTestsFailed.log ]; then
+          echo "::error::Failed tests found:"
+          cat Testing/Temporary/LastTestsFailed.log
+        else
+          echo "✅ No test failures recorded"
+        fi
 
-        echo "=== Running serialization performance tests ==="
-        ./bin/performance_serialization_performance_test || echo "Performance tests completed with issues"
-
-        echo "=== Running error handling tests ==="
-        ./bin/failures_error_handling_test || echo "Error handling tests completed with issues"
+        # Show test timing
+        if [ -f Testing/Temporary/LastTest.log ]; then
+          echo ""
+          echo "=== Test Timing (last 20 tests) ==="
+          grep "Test #" Testing/Temporary/LastTest.log | tail -20 || echo "No timing info available"
+        fi
 
     - name: Generate coverage report (Debug only)
       if: matrix.build_type == 'Debug'
@@ -157,7 +199,19 @@ jobs:
       run: |
         cd build
         echo "=== Performance Baseline Validation ==="
-        ./bin/performance_serialization_performance_test || true
+        ./bin/performance_serialization_performance_test
+        EXIT_CODE=$?
+
+        echo ""
+        if [ $EXIT_CODE -eq 0 ]; then
+          echo "✅ Performance baseline validation passed"
+        else
+          echo "::warning::Performance baseline validation had issues (exit code: $EXIT_CODE)"
+          echo "Note: Performance tests may skip validation in CI environments"
+        fi
+
+        # Don't fail the workflow - performance tests are informational
+        exit 0
 
     - name: Upload performance results
       uses: actions/upload-artifact@v4
