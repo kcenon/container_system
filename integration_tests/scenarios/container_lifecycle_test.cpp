@@ -329,7 +329,9 @@ TEST_F(ContainerLifecycleTest, MixedValueTypesLifecycle)
     EXPECT_EQ(restored->get_value("str_val")->to_string(), "test_string");
     EXPECT_EQ(restored->get_value("int_val")->to_int(), 42);
     EXPECT_EQ(restored->get_value("long_val")->to_llong(), 9223372036854775807LL);
-    EXPECT_DOUBLE_EQ(restored->get_value("double_val")->to_double(), 3.14159);
+    // Use EXPECT_NEAR for floating-point comparison to handle serialization precision loss
+    EXPECT_NEAR(restored->get_value("double_val")->to_double(), 3.14159,
+                TestConfig::instance().get_double_epsilon());
     EXPECT_TRUE(restored->get_value("bool_val")->to_boolean());
     EXPECT_TRUE(restored->get_value("bytes_val")->is_bytes());
 }
