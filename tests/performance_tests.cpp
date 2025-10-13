@@ -264,6 +264,7 @@ TEST_F(PerformanceTest, DeserializationPerformance) {
 TEST_F(PerformanceTest, ThreadSafetyStressTest) {
     const int num_threads = std::thread::hardware_concurrency();
     const int operations_per_thread = STRESS_ITERATIONS / num_threads;
+    const int remaining_operations = STRESS_ITERATIONS % num_threads;  // Handle remainder
 
     std::vector<std::future<std::chrono::microseconds>> futures;
     std::atomic<int> total_operations{0};
@@ -271,10 +272,16 @@ TEST_F(PerformanceTest, ThreadSafetyStressTest) {
     auto start_time = std::chrono::high_resolution_clock::now();
 
     for (int t = 0; t < num_threads; ++t) {
-        futures.emplace_back(std::async(std::launch::async, [&, t]() -> std::chrono::microseconds {
+        // Last thread handles remaining operations from integer division
+        int thread_operations = operations_per_thread;
+        if (t == num_threads - 1) {
+            thread_operations += remaining_operations;
+        }
+
+        futures.emplace_back(std::async(std::launch::async, [&, t, thread_operations]() -> std::chrono::microseconds {
             auto thread_start = std::chrono::high_resolution_clock::now();
 
-            for (int i = 0; i < operations_per_thread; ++i) {
+            for (int i = 0; i < thread_operations; ++i) {
                 auto container = std::make_shared<value_container>();
                 container->set_source("thread_" + std::to_string(t), "op_" + std::to_string(i));
                 container->set_target("stress_target", "handler");
@@ -290,7 +297,8 @@ TEST_F(PerformanceTest, ThreadSafetyStressTest) {
                     container->serialize();
                 }
 
-                total_operations++;
+                // Use fetch_add for atomic increment
+                total_operations.fetch_add(1, std::memory_order_relaxed);
             }
 
             auto thread_end = std::chrono::high_resolution_clock::now();
@@ -314,13 +322,16 @@ TEST_F(PerformanceTest, ThreadSafetyStressTest) {
 
     std::cout << "\n=== Thread Safety Stress Test ===" << std::endl;
     std::cout << "Threads: " << num_threads << std::endl;
+    std::cout << "Operations per thread: " << operations_per_thread << " + " << remaining_operations << " (remainder)" << std::endl;
     std::cout << "Total Operations: " << total_operations.load() << std::endl;
+    std::cout << "Expected Operations: " << STRESS_ITERATIONS << std::endl;
     std::cout << "Overall Rate: " << std::fixed << std::setprecision(2) << overall_rate << " ops/sec" << std::endl;
     std::cout << "Per-Thread Mean Rate: " << thread_stats.mean << " ops/sec" << std::endl;
     std::cout << "=================================" << std::endl;
 
     // Verify all operations completed successfully
-    EXPECT_EQ(total_operations.load(), STRESS_ITERATIONS);
+    EXPECT_EQ(total_operations.load(), STRESS_ITERATIONS)
+        << "Expected " << STRESS_ITERATIONS << " operations but got " << total_operations.load();
     // Windows CI has fewer cores and is slower; threshold adjusted
     EXPECT_GT(overall_rate, adjust_threshold_for_sanitizers(10000.0)) << "Multi-threaded performance below threshold (threshold=" << adjust_threshold_for_sanitizers(10000.0) << ")";
 }
