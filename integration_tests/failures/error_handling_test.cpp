@@ -51,6 +51,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <container/values/string_value.h>
 #include <container/values/numeric_value.h>
 #include <limits>
+#include <stdexcept>
 
 using namespace container_module;
 using namespace container_module::testing;
@@ -97,12 +98,11 @@ TEST_F(ErrorHandlingTest, NullValueConversions)
     auto retrieved = container->get_value("null");
     EXPECT_TRUE(retrieved->is_null());
 
-    // Conversions should return default values or handle gracefully
-    EXPECT_NO_THROW({
-        int i = retrieved->to_int();
-        double d = retrieved->to_double();
-        bool b = retrieved->to_boolean();
-    });
+    // Base value conversion helpers throw std::logic_error for null values.
+    // Verify that the integration surface preserves this contract.
+    EXPECT_THROW(retrieved->to_int(), std::logic_error);
+    EXPECT_THROW(retrieved->to_double(), std::logic_error);
+    EXPECT_THROW(retrieved->to_boolean(), std::logic_error);
 }
 
 /**
