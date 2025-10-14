@@ -150,27 +150,47 @@ jobs:
       run: |
         cd build
         # Capture coverage data
-        lcov --capture --directory . --output-file coverage.info --ignore-errors mismatch --ignore-errors inconsistent --ignore-errors negative --ignore-errors format --ignore-errors unsupported
+        # Ubuntu 22.04 lcov doesn't support all --ignore-errors values, use only 'source'
+        lcov --capture --directory . --output-file coverage.info --ignore-errors source --rc lcov_branch_coverage=0 2>/dev/null || \
+          lcov --capture --directory . --output-file coverage.info 2>/dev/null || true
 
         # Remove unwanted coverage (system libraries, tests)
-        lcov --remove coverage.info \
-          '/usr/*' \
-          '*/tests/*' \
-          '*/integration_tests/*' \
-          '*/googletest/*' \
-          '*/vcpkg_installed/*' \
-          '/Applications/Xcode*/**' \
-          '/usr/local/include/*' \
-          --output-file coverage_filtered.info --ignore-errors unused --ignore-errors inconsistent --ignore-errors format
+        if [ -f coverage.info ]; then
+          lcov --remove coverage.info \
+            '/usr/*' \
+            '*/tests/*' \
+            '*/integration_tests/*' \
+            '*/googletest/*' \
+            '*/vcpkg_installed/*' \
+            '/Applications/Xcode*/**' \
+            '/usr/local/include/*' \
+            --output-file coverage_filtered.info --ignore-errors source 2>/dev/null || true
 
-        # Generate summary
-        lcov --list coverage_filtered.info --ignore-errors inconsistent
+          # Generate summary
+          if [ -f coverage_filtered.info ]; then
+            lcov --list coverage_filtered.info --ignore-errors source 2>/dev/null || echo "Coverage summary generation skipped"
 
-        # Generate HTML report
-        genhtml coverage_filtered.info --output-directory coverage_html --ignore-errors source --ignore-errors inconsistent --ignore-errors category
+            # Generate HTML report
+            genhtml coverage_filtered.info --output-directory coverage_html --ignore-errors source 2>/dev/null || echo "HTML coverage report generation skipped"
+          fi
+        else
+          echo "::warning::Coverage data file not created, skipping coverage report"
+        fi
+
+    - name: Check coverage files exist
+      if: matrix.build_type == 'Debug'
+      id: coverage_check
+      run: |
+        if [ -f build/coverage_filtered.info ]; then
+          echo "coverage_exists=true" >> $GITHUB_OUTPUT
+          echo "✅ Coverage file exists"
+        else
+          echo "coverage_exists=false" >> $GITHUB_OUTPUT
+          echo "⚠️  Coverage file not generated"
+        fi
 
     - name: Upload coverage to Codecov (Debug only)
-      if: matrix.build_type == 'Debug' && runner.os == 'Linux'
+      if: matrix.build_type == 'Debug' && runner.os == 'Linux' && steps.coverage_check.outputs.coverage_exists == 'true'
       uses: codecov/codecov-action@v4
       with:
         files: build/coverage_filtered.info
@@ -179,11 +199,12 @@ jobs:
         fail_ci_if_error: false
 
     - name: Upload coverage HTML report
-      if: matrix.build_type == 'Debug' && runner.os == 'Linux'
+      if: matrix.build_type == 'Debug' && runner.os == 'Linux' && steps.coverage_check.outputs.coverage_exists == 'true'
       uses: actions/upload-artifact@v4
       with:
         name: coverage-html-${{ matrix.os }}-${{ matrix.build_type }}
         path: build/coverage_html/
+        if-no-files-found: warn
 
     - name: Upload test results
       if: always()
