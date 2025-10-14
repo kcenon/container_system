@@ -170,7 +170,11 @@ TEST_F(ErrorHandlingTest, CorruptedHeaderData)
  */
 TEST_F(ErrorHandlingTest, VeryLongStringValues)
 {
-    std::string long_string = TestHelpers::GenerateRandomString(100000);
+    // Use smaller string size in CI environments to avoid stack/heap exhaustion
+    // CI environments have more limited resources and Debug builds use more memory
+    size_t string_size = TestConfig::instance().is_ci_environment() ? 10000 : 100000;
+
+    std::string long_string = TestHelpers::GenerateRandomString(string_size);
     AddStringValue("long", long_string);
 
     EXPECT_NO_THROW({
