@@ -1,0 +1,282 @@
+name: Integration Tests
+
+on:
+  push:
+    branches: [ main, feat/phase5-*, phase-* ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  integration-tests:
+    name: Integration Tests - ${{ matrix.os }} / ${{ matrix.build_type }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-22.04
+            build_type: Debug
+          - os: ubuntu-22.04
+            build_type: Release
+          - os: macos-latest
+            build_type: Debug
+          - os: macos-latest
+            build_type: Release
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Install dependencies (Ubuntu)
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y cmake ninja-build g++ clang libgtest-dev libgmock-dev lcov libfmt-dev pkg-config
+
+    - name: Install dependencies (macOS)
+      if: runner.os == 'macOS'
+      run: |
+        brew install ninja googletest lcov fmt
+
+    - name: Verify fmt library availability
+      run: |
+        if [ "$RUNNER_OS" == "Linux" ]; then
+          echo "=== fmt library check (Ubuntu) ==="
+          dpkg -l | grep libfmt || echo "WARNING: libfmt-dev not installed"
+          pkg-config --exists fmt && echo "✅ fmt found via pkg-config" || echo "⚠️  fmt not found via pkg-config"
+          pkg-config --modversion fmt || echo "No version info"
+        else
+          echo "=== fmt library check (macOS) ==="
+          brew list fmt || echo "WARNING: fmt not installed"
+        fi
+
+    - name: Configure CMake
+      run: |
+        cmake -B build -G Ninja \
+          -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
+          -DBUILD_TESTS=ON \
+          -DCONTAINER_BUILD_INTEGRATION_TESTS=ON \
+          -DENABLE_COVERAGE=${{ matrix.build_type == 'Debug' && 'ON' || 'OFF' }} \
+          -DBUILD_CONTAINER_SAMPLES=OFF \
+          -DBUILD_CONTAINER_EXAMPLES=OFF
+
+    - name: Verify CMake fmt detection
+      run: |
+        echo "=== CMake Configuration Check ==="
+        if grep -q "Container: Linking with fmt" build/CMakeFiles/CMakeOutput.log 2>/dev/null || \
+           grep -q "Container: Linking with fmt" build/CMakeCache.txt 2>/dev/null; then
+          echo "✅ fmt library was detected by CMake"
+        else
+          echo "⚠️  WARNING: fmt library might not be properly detected"
+          echo "Checking CMake status messages..."
+          grep -i "fmt" build/CMakeFiles/CMakeOutput.log 2>/dev/null || echo "No fmt-related messages found"
+        fi
+
+    - name: Build
+      run: cmake --build build --config ${{ matrix.build_type }} --parallel
+
+    - name: Validate CI environment
+      run: |
+        echo "=== CI Environment Variables ==="
+        echo "CI: ${CI:-<not set>}"
+        echo "GITHUB_ACTIONS: ${GITHUB_ACTIONS:-<not set>}"
+        echo "Build Type: ${{ matrix.build_type }}"
+        echo "Runner OS: ${{ runner.os }}"
+        echo ""
+
+        # Verify CI detection will work
+        if [ -z "$CI" ] || [ -z "$GITHUB_ACTIONS" ]; then
+          echo "::warning::CI environment variables not properly set - tests may use incorrect thresholds"
+        else
+          echo "✅ CI environment correctly configured"
+        fi
+
+    - name: Run integration tests
+      timeout-minutes: 15
+      run: |
+        cd build
+        echo "=== Running Integration Test Suite ==="
+        echo ""
+
+        # Run tests with explicit exit code checking
+        ctest -C ${{ matrix.build_type }} -L integration --output-on-failure --verbose
+        CTEST_EXIT_CODE=$?
+
+        echo ""
+        echo "=== CTest Exit Code: $CTEST_EXIT_CODE ==="
+
+        if [ $CTEST_EXIT_CODE -ne 0 ]; then
+          echo "::error::Integration tests failed with exit code $CTEST_EXIT_CODE"
+
+          # Show failure summary
+          if [ -f Testing/Temporary/LastTestsFailed.log ]; then
+            echo "::error::Failed tests:"
+            cat Testing/Temporary/LastTestsFailed.log
+          fi
+
+          exit $CTEST_EXIT_CODE
+        fi
+
+        echo "✅ All integration tests passed"
+
+    - name: Summarize test results
+      if: always()
+      run: |
+        cd build
+        echo "=== Test Summary ==="
+
+        # Check for CTest LastTestsFailed.log
+        if [ -f Testing/Temporary/LastTestsFailed.log ]; then
+          echo "::error::Failed tests found:"
+          cat Testing/Temporary/LastTestsFailed.log
+        else
+          echo "✅ No test failures recorded"
+        fi
+
+        # Show test timing
+        if [ -f Testing/Temporary/LastTest.log ]; then
+          echo ""
+          echo "=== Test Timing (last 20 tests) ==="
+          grep "Test #" Testing/Temporary/LastTest.log | tail -20 || echo "No timing info available"
+        fi
+
+    - name: Generate coverage report (Debug only)
+      if: matrix.build_type == 'Debug'
+      run: |
+        cd build
+        # Capture coverage data
+        # Ubuntu 22.04 lcov doesn't support all --ignore-errors values, use only 'source'
+        lcov --capture --directory . --output-file coverage.info --ignore-errors source --rc lcov_branch_coverage=0 2>/dev/null || \
+          lcov --capture --directory . --output-file coverage.info 2>/dev/null || true
+
+        # Remove unwanted coverage (system libraries, tests)
+        if [ -f coverage.info ]; then
+          lcov --remove coverage.info \
+            '/usr/*' \
+            '*/tests/*' \
+            '*/integration_tests/*' \
+            '*/googletest/*' \
+            '*/vcpkg_installed/*' \
+            '/Applications/Xcode*/**' \
+            '/usr/local/include/*' \
+            --output-file coverage_filtered.info --ignore-errors source 2>/dev/null || true
+
+          # Generate summary
+          if [ -f coverage_filtered.info ]; then
+            lcov --list coverage_filtered.info --ignore-errors source 2>/dev/null || echo "Coverage summary generation skipped"
+
+            # Generate HTML report
+            genhtml coverage_filtered.info --output-directory coverage_html --ignore-errors source 2>/dev/null || echo "HTML coverage report generation skipped"
+          fi
+        else
+          echo "::warning::Coverage data file not created, skipping coverage report"
+        fi
+
+    - name: Check coverage files exist
+      if: matrix.build_type == 'Debug'
+      id: coverage_check
+      run: |
+        if [ -f build/coverage_filtered.info ]; then
+          echo "coverage_exists=true" >> $GITHUB_OUTPUT
+          echo "✅ Coverage file exists"
+        else
+          echo "coverage_exists=false" >> $GITHUB_OUTPUT
+          echo "⚠️  Coverage file not generated"
+        fi
+
+    - name: Upload coverage to Codecov (Debug only)
+      if: matrix.build_type == 'Debug' && runner.os == 'Linux' && steps.coverage_check.outputs.coverage_exists == 'true'
+      uses: codecov/codecov-action@v4
+      with:
+        files: build/coverage_filtered.info
+        flags: integration-tests
+        name: integration-tests-${{ matrix.os }}
+        fail_ci_if_error: false
+
+    - name: Upload coverage HTML report
+      if: matrix.build_type == 'Debug' && runner.os == 'Linux' && steps.coverage_check.outputs.coverage_exists == 'true'
+      uses: actions/upload-artifact@v4
+      with:
+        name: coverage-html-${{ matrix.os }}-${{ matrix.build_type }}
+        path: build/coverage_html/
+        if-no-files-found: warn
+
+    - name: Upload test results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-results-${{ matrix.os }}-${{ matrix.build_type }}
+        path: |
+          build/Testing/
+          build/**/*.log
+
+  performance-baseline:
+    name: Performance Baseline Validation
+    runs-on: ubuntu-22.04
+    timeout-minutes: 20
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y cmake ninja-build g++ libgtest-dev libfmt-dev pkg-config
+
+    - name: Configure CMake (Release for accurate performance)
+      run: |
+        cmake -B build -G Ninja \
+          -DCMAKE_BUILD_TYPE=Release \
+          -DBUILD_TESTS=OFF \
+          -DCONTAINER_BUILD_INTEGRATION_TESTS=ON \
+          -DBUILD_CONTAINER_SAMPLES=OFF
+
+    - name: Build
+      run: cmake --build build --config Release --parallel
+
+    - name: Run performance tests
+      run: |
+        cd build
+        echo "=== Performance Baseline Validation ==="
+        ./bin/performance_serialization_performance_test
+        EXIT_CODE=$?
+
+        echo ""
+        if [ $EXIT_CODE -eq 0 ]; then
+          echo "✅ Performance baseline validation passed"
+        else
+          echo "::warning::Performance baseline validation had issues (exit code: $EXIT_CODE)"
+          echo "Note: Performance tests may skip validation in CI environments"
+        fi
+
+        # Don't fail the workflow - performance tests are informational
+        exit 0
+
+    - name: Upload performance results
+      uses: actions/upload-artifact@v4
+      with:
+        name: performance-baseline-results
+        path: build/Testing/
+
+  summary:
+    name: Integration Tests Summary
+    needs: [integration-tests, performance-baseline]
+    runs-on: ubuntu-22.04
+    if: always()
+
+    steps:
+    - name: Check test results
+      run: |
+        echo "Integration tests workflow completed"
+        echo "Status: ${{ needs.integration-tests.result }}"
+        echo "Performance baseline: ${{ needs.performance-baseline.result }}"
+
+        if [ "${{ needs.integration-tests.result }}" = "failure" ]; then
+          echo "::warning::Some integration tests failed"
+        fi
