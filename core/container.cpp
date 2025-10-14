@@ -64,7 +64,7 @@ namespace container_module
 	value_container::value_container()
 		: parsed_data_(true)
 		, changed_data_(false)
-		, data_string_("@data={};")
+		, data_string_("@data={{}};")
 		, source_id_("")
 		, source_sub_id_("")
 		, target_id_("")
@@ -388,7 +388,7 @@ namespace container_module
 	{
 		parsed_data_ = true;
 		changed_data_ = false;
-		data_string_ = "@data={};";
+		data_string_ = "@data={{}};";
 		units_.clear();
 	}
 
@@ -587,8 +587,9 @@ namespace container_module
 		std::string ds = (parsed_data_ ? datas() : data_string_);
 
 		// Compose header
+		// Note: In fmt library, {{}} produces single {}, so {{{{}}}} produces {{}}
 		std::string header;
-		formatter::format_to(std::back_inserter(header), "@header={{");
+		formatter::format_to(std::back_inserter(header), "@header={{{{");
 
 		if (message_type_ != "data_container")
 		{
@@ -605,7 +606,7 @@ namespace container_module
 							 MESSAGE_TYPE, message_type_);
 		formatter::format_to(std::back_inserter(header), "[{},{}];",
 							 MESSAGE_VERSION, version_);
-		formatter::format_to(std::back_inserter(header), "}};");
+		formatter::format_to(std::back_inserter(header), "}}}};");
 
 		return header + ds;
 	}
@@ -788,13 +789,13 @@ bool value_container::deserialize(const std::vector<uint8_t>& data_array,
 		}
 		// Rebuild from top-level units
 		std::string result;
-		formatter::format_to(std::back_inserter(result), "@data={{");
+		formatter::format_to(std::back_inserter(result), "@data={{{{");
 		for (auto& u : units_)
 		{
 			formatter::format_to(std::back_inserter(result), "{}",
 								 u->serialize());
 		}
-		formatter::format_to(std::back_inserter(result), "}};");
+		formatter::format_to(std::back_inserter(result), "}}}};");
 		return result;
 	}
 
@@ -890,7 +891,7 @@ bool value_container::deserialize(const std::vector<uint8_t>& data_array,
 		std::smatch match;
 		if (!std::regex_search(data, match, reData))
 		{
-			data_string_ = "@data={};";
+			data_string_ = "@data={{}};";
 			parsed_data_ = true;
 			return false;
 		}
