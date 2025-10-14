@@ -59,16 +59,16 @@ jobs:
       run: |
         cd build
         # Capture coverage data
-        lcov --directory . --capture --output-file coverage.info || true
+        lcov --directory . --capture --output-file coverage.info --ignore-errors mismatch --ignore-errors inconsistent --ignore-errors negative --ignore-errors format --ignore-errors unsupported || true
 
         # Filter out system headers and test files
-        lcov --remove coverage.info '/usr/*' '*/test/*' '*/tests/*' '*/examples/*' --output-file coverage_filtered.info || true
-
-        # Generate HTML report
-        genhtml coverage_filtered.info --output-directory coverage_html || true
+        lcov --remove coverage.info '/usr/*' '*/test/*' '*/tests/*' '*/examples/*' '*/common_system/*' --output-file coverage_filtered.info --ignore-errors unused --ignore-errors inconsistent --ignore-errors format || true
 
         # Print summary
-        lcov --list coverage_filtered.info || true
+        lcov --list coverage_filtered.info --ignore-errors inconsistent || true
+
+        # Generate HTML report
+        genhtml coverage_filtered.info --output-directory coverage_html --ignore-errors source --ignore-errors inconsistent --ignore-errors category || true
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v4

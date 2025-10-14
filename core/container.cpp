@@ -50,19 +50,21 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 namespace container_module
 {
-	inline constexpr std::string_view TARGET_ID = "1";
-	inline constexpr std::string_view TARGET_SUB_ID = "2";
-	inline constexpr std::string_view SOURCE_ID = "3";
-	inline constexpr std::string_view SOURCE_SUB_ID = "4";
-	inline constexpr std::string_view MESSAGE_TYPE = "5";
-	inline constexpr std::string_view MESSAGE_VERSION = "6";
+	// Use integer constants instead of string_view to ensure cross-platform compatibility
+	// with fmt library formatting. Linux fmt has issues with string_view arguments.
+	inline constexpr int TARGET_ID = 1;
+	inline constexpr int TARGET_SUB_ID = 2;
+	inline constexpr int SOURCE_ID = 3;
+	inline constexpr int SOURCE_SUB_ID = 4;
+	inline constexpr int MESSAGE_TYPE = 5;
+	inline constexpr int MESSAGE_VERSION = 6;
 
 	using namespace utility_module;
 
 	value_container::value_container()
 		: parsed_data_(true)
 		, changed_data_(false)
-		, data_string_("@data={};")
+		, data_string_("@data={{}};")
 		, source_id_("")
 		, source_sub_id_("")
 		, target_id_("")
@@ -160,13 +162,27 @@ namespace container_module
 			{ value_types::bytes_value,
 			  [this](const std::string& n, const std::string& d)
 			  {
-				  // For bytes_value, we need to convert from string representation
-				  // This is a simplified version - you may need more complex parsing
+				  // For bytes_value, we need to convert from hex string representation
 				  std::vector<uint8_t> bytes;
+
+				  // Handle empty or invalid data
+				  if (d.empty()) {
+					  return std::make_shared<bytes_value>(n, bytes);
+				  }
+
+				  // Parse hex string in pairs (each byte = 2 hex chars)
 				  for (size_t i = 0; i < d.length(); i += 2) {
 					  if (i + 1 < d.length()) {
 						  std::string byte_str = d.substr(i, 2);
-						  bytes.push_back(static_cast<uint8_t>(std::stoul(byte_str, nullptr, 16)));
+						  try {
+							  // Attempt to parse hex byte
+							  unsigned long val = std::stoul(byte_str, nullptr, 16);
+							  bytes.push_back(static_cast<uint8_t>(val));
+						  } catch (const std::exception&) {
+							  // Skip invalid hex bytes - continue parsing remaining data
+							  // This allows partial recovery from corrupted data
+							  continue;
+						  }
 					  }
 				  }
 				  return std::make_shared<bytes_value>(n, bytes);
@@ -372,7 +388,7 @@ namespace container_module
 	{
 		parsed_data_ = true;
 		changed_data_ = false;
-		data_string_ = "@data={};";
+		data_string_ = "@data={{}};";
 		units_.clear();
 	}
 
@@ -503,8 +519,8 @@ namespace container_module
 	std::vector<std::shared_ptr<value>> value_container::value_array(
 		std::string_view target_name)
 	{
-		std::shared_lock<std::shared_mutex> lock(mutex_);
-		
+		std::unique_lock<std::shared_mutex> lock(mutex_);
+
 		if (!parsed_data_)
 		{
 			deserialize_values(data_string_, false);
@@ -523,21 +539,31 @@ namespace container_module
 	std::shared_ptr<value> value_container::get_value(
 		std::string_view target_name, unsigned int index)
 	{
-		std::shared_lock<std::shared_mutex> lock(mutex_);
+		std::unique_lock<std::shared_mutex> lock(mutex_);
 
 		if (!parsed_data_)
 		{
 			deserialize_values(data_string_, false);
 		}
-		auto arr = value_array(target_name);
-		if (arr.empty() || index >= arr.size())
+
+		// Search directly instead of calling value_array() to avoid nested locking
+		std::vector<std::shared_ptr<value>> results;
+		for (auto& v : units_)
+		{
+			if (v->name() == target_name)
+			{
+				results.push_back(v);
+			}
+		}
+
+		if (results.empty() || index >= results.size())
 		{
 			// Return a proper null value for non-existent keys
 			auto null_val = std::make_shared<value>();
 			null_val->set_data(std::string(target_name), value_types::null_value, "");
 			return null_val;
 		}
-		return arr[index];
+		return results[index];
 	}
 
 	void value_container::initialize(void)
@@ -561,8 +587,9 @@ namespace container_module
 		std::string ds = (parsed_data_ ? datas() : data_string_);
 
 		// Compose header
+		// Note: In fmt library, {{}} produces single {}, so {{{{}}}} produces {{}}
 		std::string header;
-		formatter::format_to(std::back_inserter(header), "@header={{");
+		formatter::format_to(std::back_inserter(header), "@header={{{{");
 
 		if (message_type_ != "data_container")
 		{
@@ -579,7 +606,7 @@ namespace container_module
 							 MESSAGE_TYPE, message_type_);
 		formatter::format_to(std::back_inserter(header), "[{},{}];",
 							 MESSAGE_VERSION, version_);
-		formatter::format_to(std::back_inserter(header), "}};");
+		formatter::format_to(std::back_inserter(header), "}}}};");
 
 		return header + ds;
 	}
@@ -605,8 +632,8 @@ namespace container_module
 		std::regex newlineRe("\\r\\n?|\\n");
 		std::string clean = std::regex_replace(data_str, newlineRe, "");
 
-		// parse header portion
-		std::regex fullRe("@header=\\s*\\{\\s*(.*?)\\s*\\};");
+		// parse header portion - matches both single and double braces
+		std::regex fullRe("@header=\\s*\\{\\{?\\s*(.*?)\\s*\\}\\}?;");
 		std::smatch match;
 		if (!std::regex_search(clean, match, fullRe))
 		{
@@ -621,12 +648,12 @@ namespace container_module
 		auto end = std::sregex_iterator();
 		for (; it != end; ++it)
 		{
-			parsing((*it)[1].str(), std::string(TARGET_ID), (*it)[2].str(), target_id_);
-			parsing((*it)[1].str(), std::string(TARGET_SUB_ID), (*it)[2].str(), target_sub_id_);
-			parsing((*it)[1].str(), std::string(SOURCE_ID), (*it)[2].str(), source_id_);
-			parsing((*it)[1].str(), std::string(SOURCE_SUB_ID), (*it)[2].str(), source_sub_id_);
-			parsing((*it)[1].str(), std::string(MESSAGE_TYPE), (*it)[2].str(), message_type_);
-			parsing((*it)[1].str(), std::string(MESSAGE_VERSION), (*it)[2].str(), version_);
+			parsing((*it)[1].str(), std::to_string(TARGET_ID), (*it)[2].str(), target_id_);
+			parsing((*it)[1].str(), std::to_string(TARGET_SUB_ID), (*it)[2].str(), target_sub_id_);
+			parsing((*it)[1].str(), std::to_string(SOURCE_ID), (*it)[2].str(), source_id_);
+			parsing((*it)[1].str(), std::to_string(SOURCE_SUB_ID), (*it)[2].str(), source_sub_id_);
+			parsing((*it)[1].str(), std::to_string(MESSAGE_TYPE), (*it)[2].str(), message_type_);
+			parsing((*it)[1].str(), std::to_string(MESSAGE_VERSION), (*it)[2].str(), version_);
 		}
 
 		return deserialize_values(clean, parse_only_header);
@@ -671,6 +698,8 @@ bool value_container::deserialize(const std::vector<uint8_t>& data_array,
 
 	const std::string value_container::to_xml(void)
 	{
+		std::unique_lock<std::shared_mutex> lock(mutex_);
+
 		if (!parsed_data_)
 		{
 			deserialize_values(data_string_, false);
@@ -709,6 +738,8 @@ bool value_container::deserialize(const std::vector<uint8_t>& data_array,
 
 	const std::string value_container::to_json(void)
 	{
+		std::unique_lock<std::shared_mutex> lock(mutex_);
+
 		if (!parsed_data_)
 		{
 			deserialize_values(data_string_, false);
@@ -758,13 +789,13 @@ bool value_container::deserialize(const std::vector<uint8_t>& data_array,
 		}
 		// Rebuild from top-level units
 		std::string result;
-		formatter::format_to(std::back_inserter(result), "@data={{");
+		formatter::format_to(std::back_inserter(result), "@data={{{{");
 		for (auto& u : units_)
 		{
 			formatter::format_to(std::back_inserter(result), "{}",
 								 u->serialize());
 		}
-		formatter::format_to(std::back_inserter(result), "}};");
+		formatter::format_to(std::back_inserter(result), "}}}};");
 		return result;
 	}
 
@@ -855,11 +886,12 @@ bool value_container::deserialize(const std::vector<uint8_t>& data_array,
 		}
 		changed_data_ = false;
 
-		std::regex reData("@data=\\s*\\{\\s*(.*?)\\s*\\};");
+		// Match both single and double braces for @data section
+		std::regex reData("@data=\\s*\\{\\{?\\s*(.*?)\\s*\\}\\}?;");
 		std::smatch match;
 		if (!std::regex_search(data, match, reData))
 		{
-			data_string_ = "@data={};";
+			data_string_ = "@data={{}};";
 			parsed_data_ = true;
 			return false;
 		}

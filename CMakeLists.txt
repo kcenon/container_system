@@ -31,6 +31,7 @@ option(USE_THREAD_SAFE_OPERATIONS "Enable thread-safe operations" ON)
 option(USE_LOCKFREE_BY_DEFAULT "Use lock-free implementations by default" OFF)
 option(BUILD_WITH_COMMON_SYSTEM "Enable common_system integration" OFF)
 option(CONTAINER_BUILD_BENCHMARKS "Build container system benchmarks" OFF)
+option(CONTAINER_BUILD_INTEGRATION_TESTS "Build container system integration tests" ON)
 set(COMMON_SYSTEM_ROOT "" CACHE PATH "Path to the common_system repository root")
 
 # When common_system integration is enabled, samples and tests are now supported
@@ -363,6 +364,13 @@ if(BUILD_TESTS AND NOT BUILD_CONTAINERSYSTEM_AS_SUBMODULE)
     enable_testing()
     add_subdirectory(tests)
     message(STATUS "Container: Unit tests enabled")
+endif()
+
+# Enable integration tests if requested
+if(CONTAINER_BUILD_INTEGRATION_TESTS AND NOT BUILD_CONTAINERSYSTEM_AS_SUBMODULE)
+    enable_testing()
+    add_subdirectory(integration_tests)
+    message(STATUS "Container: Integration tests enabled")
 endif()
 
 ##################################################
