@@ -41,6 +41,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <gtest/gtest.h>
 #include "test_config.h"
+#include <utilities/core/formatter.h>
 #include <iostream>
 #include <cstdlib>
 
@@ -66,6 +67,30 @@ protected:
         std::cout << "Debug Build: " << (TestConfig::instance().is_debug_build() ? "YES" : "NO") << std::endl;
         std::cout << "Skip Performance: " << (TestConfig::instance().should_skip_performance_checks() ? "YES" : "NO") << std::endl;
         std::cout << "Verbose Diagnostics: " << (TestConfig::instance().enable_verbose_diagnostics() ? "YES" : "NO") << std::endl;
+
+        // Print formatter mode
+        std::cout << "\nFormatter Configuration:" << std::endl;
+        #if defined(__has_include)
+            #if __has_include(<fmt/format.h>)
+                std::cout << "  fmt library: AVAILABLE" << std::endl;
+            #else
+                std::cout << "  fmt library: NOT AVAILABLE" << std::endl;
+            #endif
+            #if __has_include(<format>)
+                std::cout << "  std::format: AVAILABLE" << std::endl;
+            #else
+                std::cout << "  std::format: NOT AVAILABLE" << std::endl;
+            #endif
+        #endif
+        // Check actual HAS_STD_FORMAT value from utilities/core/formatter.h
+        #if HAS_STD_FORMAT == 1
+            std::cout << "  Active mode: std::format (HAS_STD_FORMAT=1)" << std::endl;
+        #elif HAS_STD_FORMAT == 0
+            std::cout << "  Active mode: fmt library (HAS_STD_FORMAT=0)" << std::endl;
+        #elif HAS_STD_FORMAT == -1
+            std::cout << "  Active mode: FALLBACK - NO FORMATTING (HAS_STD_FORMAT=-1)" << std::endl;
+            std::cout << "  ⚠️  WARNING: Using fallback mode will cause test failures!" << std::endl;
+        #endif
 
         // Print relevant environment variables
         std::cout << "\nEnvironment Variables:" << std::endl;
