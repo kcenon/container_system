@@ -50,12 +50,14 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 namespace container_module
 {
-	inline constexpr std::string_view TARGET_ID = "1";
-	inline constexpr std::string_view TARGET_SUB_ID = "2";
-	inline constexpr std::string_view SOURCE_ID = "3";
-	inline constexpr std::string_view SOURCE_SUB_ID = "4";
-	inline constexpr std::string_view MESSAGE_TYPE = "5";
-	inline constexpr std::string_view MESSAGE_VERSION = "6";
+	// Use integer constants instead of string_view to ensure cross-platform compatibility
+	// with fmt library formatting. Linux fmt has issues with string_view arguments.
+	inline constexpr int TARGET_ID = 1;
+	inline constexpr int TARGET_SUB_ID = 2;
+	inline constexpr int SOURCE_ID = 3;
+	inline constexpr int SOURCE_SUB_ID = 4;
+	inline constexpr int MESSAGE_TYPE = 5;
+	inline constexpr int MESSAGE_VERSION = 6;
 
 	using namespace utility_module;
 
@@ -645,12 +647,12 @@ namespace container_module
 		auto end = std::sregex_iterator();
 		for (; it != end; ++it)
 		{
-			parsing((*it)[1].str(), std::string(TARGET_ID), (*it)[2].str(), target_id_);
-			parsing((*it)[1].str(), std::string(TARGET_SUB_ID), (*it)[2].str(), target_sub_id_);
-			parsing((*it)[1].str(), std::string(SOURCE_ID), (*it)[2].str(), source_id_);
-			parsing((*it)[1].str(), std::string(SOURCE_SUB_ID), (*it)[2].str(), source_sub_id_);
-			parsing((*it)[1].str(), std::string(MESSAGE_TYPE), (*it)[2].str(), message_type_);
-			parsing((*it)[1].str(), std::string(MESSAGE_VERSION), (*it)[2].str(), version_);
+			parsing((*it)[1].str(), std::to_string(TARGET_ID), (*it)[2].str(), target_id_);
+			parsing((*it)[1].str(), std::to_string(TARGET_SUB_ID), (*it)[2].str(), target_sub_id_);
+			parsing((*it)[1].str(), std::to_string(SOURCE_ID), (*it)[2].str(), source_id_);
+			parsing((*it)[1].str(), std::to_string(SOURCE_SUB_ID), (*it)[2].str(), source_sub_id_);
+			parsing((*it)[1].str(), std::to_string(MESSAGE_TYPE), (*it)[2].str(), message_type_);
+			parsing((*it)[1].str(), std::to_string(MESSAGE_VERSION), (*it)[2].str(), version_);
 		}
 
 		return deserialize_values(clean, parse_only_header);

@@ -155,11 +155,6 @@ TEST_F(ContainerLifecycleTest, SerializationRoundtrip)
 
     std::string serialized = container->serialize();
     EXPECT_FALSE(serialized.empty());
-
-    if (!TestHelpers::IsValidSerializedData(serialized)) {
-        // Print diagnostic information when validation fails
-        TestHelpers::PrintSerializationDebugInfo(serialized);
-    }
     EXPECT_TRUE(TestHelpers::IsValidSerializedData(serialized));
 
     auto restored = std::make_shared<value_container>(serialized, false);
