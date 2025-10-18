@@ -348,26 +348,41 @@ namespace container_module
 					 std::string& target_variable);
 					 
 		// Thread-safe helper classes
+		// FIXED: Eliminated TOCTOU (Time-Of-Check-Time-Of-Use) vulnerability
+		// by always acquiring lock first, then checking thread_safe_enabled
+		// inside the critical section
 		class read_lock_guard {
 			std::shared_lock<std::shared_mutex> lock_;
+			bool is_active_;
 		public:
-			read_lock_guard(const value_container* c) {
-				if (c->thread_safe_enabled_.load()) {
-					lock_ = std::shared_lock<std::shared_mutex>(c->mutex_);
+			read_lock_guard(const value_container* c)
+				: lock_(c->mutex_)  // Always acquire lock first (eliminates race)
+				, is_active_(c->thread_safe_enabled_.load(std::memory_order_acquire)) {
+				// Now safely check if we needed the lock
+				if (is_active_) {
 					c->read_count_.fetch_add(1, std::memory_order_relaxed);
 				}
 			}
+
+			// Query whether lock is actually being used
+			bool is_locked() const noexcept { return is_active_; }
 		};
-		
+
 		class write_lock_guard {
 			std::unique_lock<std::shared_mutex> lock_;
+			bool is_active_;
 		public:
-			write_lock_guard(value_container* c) {
-				if (c->thread_safe_enabled_.load()) {
-					lock_ = std::unique_lock<std::shared_mutex>(c->mutex_);
+			write_lock_guard(value_container* c)
+				: lock_(c->mutex_)  // Always acquire lock first (eliminates race)
+				, is_active_(c->thread_safe_enabled_.load(std::memory_order_acquire)) {
+				// Now safely check if we needed the lock
+				if (is_active_) {
 					c->write_count_.fetch_add(1, std::memory_order_relaxed);
 				}
 			}
+
+			// Query whether lock is actually being used
+			bool is_locked() const noexcept { return is_active_; }
 		};
 
 	private:
