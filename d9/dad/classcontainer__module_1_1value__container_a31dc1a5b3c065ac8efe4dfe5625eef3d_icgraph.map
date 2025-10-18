@@ -1,0 +1,21 @@
+<map id="container_module::value_container::datas" name="container_module::value_container::datas">
+<area shape="rect" id="Node000001" title="Returns only the data portion&#39;s serialized string, if fully parsed." alt="" coords="496,133,679,173"/>
+<area shape="rect" id="Node000002" href="$d9/dad/classcontainer__module_1_1value__container.html#a82c223172a7cb2a674084c08a4af6514" title=" " alt="" coords="265,5,448,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="549,127,502,93,447,60,420,48,422,43,449,55,505,88,552,123"/>
+<area shape="rect" id="Node000003" href="$d9/dad/classcontainer__module_1_1value__container.html#a96a3b0be40e302af238894a09f06401f" title=" " alt="" coords="265,69,448,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="501,132,429,112,430,107,502,127"/>
+<area shape="rect" id="Node000004" href="$d9/dad/classcontainer__module_1_1value__container.html#aeb5b2e301f7ff03d546ab84c83f3e0bb" title=" " alt="" coords="265,133,448,173"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="483,156,448,156,448,151,483,151"/>
+<area shape="rect" id="Node000006" href="$d9/dad/classcontainer__module_1_1value__container.html#a9ff2f0546dce25613097b3e7d1ba7735" title="Serialize this container (header + data)." alt="" coords="265,197,448,237"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="502,180,430,200,429,195,501,174"/>
+<area shape="rect" id="Node000010" href="$d9/dad/classcontainer__module_1_1value__container.html#a53d16d6fec15eaa62a10952aedf4f43d" title="Add or merge multiple child values into this container (the top&#45;level)." alt="" coords="265,261,448,301"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="552,184,505,219,449,252,422,264,420,259,447,247,502,214,549,180"/>
+<area shape="rect" id="Node000005" href="$da/dab/classcontainer__module_1_1optimized__container.html#a76a6b8b543e5753769a2a8839adebc58" title="Remove value and update index." alt="" coords="5,101,217,141"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="252,142,217,138,218,133,252,137"/>
+<area shape="rect" id="Node000007" href="$d9/dad/classcontainer__module_1_1value__container.html#adda28e731359ee08f344277ee62c4b2a" title="Create a copy of this container. If containing_values == false, the returned container only has the h..." alt="" coords="20,165,203,205"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="251,206,203,200,203,195,252,201"/>
+<area shape="rect" id="Node000008" href="$d9/dad/classcontainer__module_1_1value__container.html#aceca2563736534676267b40406d067c2" title="Serialize to a raw byte array." alt="" coords="14,229,209,269"/>
+<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="252,234,209,239,209,234,251,228"/>
+<area shape="rect" id="Node000009" href="$d9/dad/classcontainer__module_1_1value__container.html#a611e8c57bc25142f572a7f82fd1829fa" title="Copy constructor from another value_container. If parse_only_header==true, only parse the header port..." alt="" coords="10,293,213,333"/>
+<area shape="poly" id="edge8_Node000006_Node000009" title=" " alt="" coords="281,245,267,252,243,268,219,284,189,296,187,291,216,279,240,263,264,247,279,240"/>
+</map>

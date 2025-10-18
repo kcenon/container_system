@@ -1,0 +1,22 @@
+<map id="core/optimized_container.h" name="core/optimized_container.h">
+<area shape="rect" id="Node000001" title=" " alt="" coords="569,5,768,31"/>
+<area shape="rect" id="Node000002" href="$d4/ddd/container_8h.html" title=" " alt="" coords="452,79,547,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="642,33,541,76,539,71,640,28"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="704,152,801,177"/>
+<area shape="poly" id="edge9_Node000001_Node000006" title=" " alt="" coords="673,30,681,64,698,103,713,123,730,141,726,144,709,126,693,105,676,66,668,32"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="707,79,831,104"/>
+<area shape="poly" id="edge10_Node000001_Node000010" title=" " alt="" coords="686,29,743,68,740,73,683,33"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,152,172,177"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="452,103,169,152,168,147,451,98"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="197,152,274,177"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="458,107,288,152,287,147,456,101"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="299,152,361,177"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="473,106,371,149,369,144,471,102"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="541,101,699,146,698,151,539,107"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="386,152,501,177"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="492,106,463,143,459,140,488,103"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="525,152,589,177"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="511,103,541,139,537,143,507,106"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="613,152,679,177"/>
+<area shape="poly" id="edge8_Node000002_Node000009" title=" " alt="" coords="524,102,611,144,609,148,522,106"/>
+</map>

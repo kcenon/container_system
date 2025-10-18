@@ -1,0 +1,9 @@
+<map id="container_module::value::size" name="container_module::value::size">
+<area shape="rect" id="Node000001" title=" " alt="" coords="247,69,429,109"/>
+<area shape="rect" id="Node000002" href="$df/df7/classcontainer__module_1_1bytes__value.html#a313ee54be7cf995579a518f89005cc87" title=" " alt="" coords="11,5,193,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="250,68,176,48,177,43,251,63"/>
+<area shape="rect" id="Node000003" href="$df/df7/classcontainer__module_1_1bytes__value.html#aa1557b4dda3330946f8a404ca1b8911e" title=" " alt="" coords="11,69,193,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="233,92,194,92,194,87,233,87"/>
+<area shape="rect" id="Node000004" href="$db/d1c/classcontainer__module_1_1variant__value.html#a5c5afd0733f589cfd58ffdd6c17d1574" title="Serialize to binary format." alt="" coords="5,133,199,173"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="251,116,177,136,176,131,250,110"/>
+</map>

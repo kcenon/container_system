@@ -1,0 +1,9 @@
+<map id="container_module::internal::fixed_block_pool" name="container_module::internal::fixed_block_pool">
+<area shape="rect" id="Node000001" title=" " alt="" coords="66,291,267,551"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,148,176,228"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="106,228,121,274,116,275,101,229"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="17,5,164,85"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="93,86,93,132,88,132,88,86"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="201,155,285,221"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="235,222,217,276,212,274,230,220"/>
+</map>
