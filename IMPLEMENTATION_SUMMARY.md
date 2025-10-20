@@ -1,5 +1,7 @@
 # Container System Integration Tests - Implementation Summary
 
+**Language**: **English** | [한국어](IMPLEMENTATION_SUMMARY_KO.md)
+
 ## Overview
 
 This document summarizes the implementation of comprehensive integration tests for the container_system project, following the pattern established in common_system (PR#33), thread_system (PR#47), logger_system (PR#45), and monitoring_system (PR#43).
