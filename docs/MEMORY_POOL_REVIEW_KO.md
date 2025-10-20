@@ -69,3 +69,7 @@ namespace container_module {
 - PMR hook 추가 (동작 변경 없음)
 - 실험을 위한 프로토타입 fixed-block pool header 제공
 - 벤치마크 추가 및 보고
+
+---
+
+*Last Updated: 2025-10-20*

@@ -38,3 +38,7 @@ Build
 Integration & Build Flags
 - With network_system: enable `BUILD_WITH_CONTAINER_SYSTEM` in network_system to use container adapters.
 - Adapters: `container_system_adapter` is consumed by network_system's `container_manager` for (de)serialization.
+
+---
+
+*Last Updated: 2025-10-20*

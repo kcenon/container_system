@@ -2,6 +2,51 @@
 
 > **Language:** **English** | [한국어](GRPC_MINIMAL_INTEGRATION_PLAN_KO.md)
 
+## Table of Contents
+
+- [Executive Summary](#executive-summary)
+  - [Core Principle: "Add, Don't Modify"](#core-principle-add-dont-modify)
+- [1. Architecture Overview](#1-architecture-overview)
+  - [1.1 Layered Approach](#11-layered-approach)
+  - [1.2 New Directory Structure (Additions Only)](#12-new-directory-structure-additions-only)
+- [2. Implementation Strategy](#2-implementation-strategy)
+  - [2.1 Proto Definition (Standalone)](#21-proto-definition-standalone)
+  - [2.2 Adapter Layer (Read-Only Access)](#22-adapter-layer-read-only-access)
+  - [2.3 Service Implementation (Wrapper Pattern)](#23-service-implementation-wrapper-pattern)
+- [3. Build Configuration (Isolated)](#3-build-configuration-isolated)
+  - [3.1 Separate CMake Configuration](#31-separate-cmake-configuration)
+  - [3.2 Main Build Remains Unchanged](#32-main-build-remains-unchanged)
+- [4. Minimal Implementation Timeline](#4-minimal-implementation-timeline)
+  - [Week 1: Foundation (3 days)](#week-1-foundation-3-days)
+  - [Week 2: Implementation (4 days)](#week-2-implementation-4-days)
+  - [Week 3: Testing & Documentation (3 days)](#week-3-testing-documentation-3-days)
+- [5. Usage Example (After Integration)](#5-usage-example-after-integration)
+  - [5.1 Starting gRPC Server](#51-starting-grpc-server)
+  - [5.2 Using gRPC Client](#52-using-grpc-client)
+- [6. Testing Strategy (Non-Invasive)](#6-testing-strategy-non-invasive)
+  - [6.1 Test Isolation](#61-test-isolation)
+  - [6.2 Integration Testing](#62-integration-testing)
+- [7. Risk Analysis (Minimal Approach)](#7-risk-analysis-minimal-approach)
+  - [7.1 Risk Assessment](#71-risk-assessment)
+  - [7.2 Rollback Plan](#72-rollback-plan)
+- [8. Advantages of Minimal Approach](#8-advantages-of-minimal-approach)
+  - [8.1 Zero Risk](#81-zero-risk)
+  - [8.2 Fast Implementation](#82-fast-implementation)
+  - [8.3 Easy Maintenance](#83-easy-maintenance)
+  - [8.4 Gradual Adoption](#84-gradual-adoption)
+- [9. Limitations & Future Enhancements](#9-limitations-future-enhancements)
+  - [9.1 Current Limitations](#91-current-limitations)
+  - [9.2 Future Enhancements (If Successful)](#92-future-enhancements-if-successful)
+- [10. Decision Matrix](#10-decision-matrix)
+- [11. Implementation Checklist](#11-implementation-checklist)
+  - [Pre-Implementation](#pre-implementation)
+  - [Week 1](#week-1)
+  - [Week 2](#week-2)
+  - [Week 3](#week-3)
+  - [Post-Implementation](#post-implementation)
+- [12. Conclusion](#12-conclusion)
+  - [Recommended Action](#recommended-action)
+
 **Document Version:** 1.0  
 **Date:** 2024-01-20  
 **Approach:** Zero Core Modification  
@@ -493,3 +538,6 @@ The adapter pattern ensures that the Container System remains untouched while pr
 ---
 
 **End of Minimal Integration Plan**
+---
+
+*Last Updated: 2025-10-20*

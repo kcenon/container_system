@@ -44,3 +44,7 @@ container_system ──► messaging_system ──► network_system
 
 - network_system과 함께: container adapter를 사용하려면 network_system에서 `BUILD_WITH_CONTAINER_SYSTEM` 활성화.
 - Adapters: `container_system_adapter`는 network_system의 `container_manager`에서 (역)직렬화를 위해 사용됩니다.
+
+---
+
+*Last Updated: 2025-10-20*

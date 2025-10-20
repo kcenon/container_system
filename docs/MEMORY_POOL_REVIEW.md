@@ -62,3 +62,7 @@ Next Steps
 - Provide prototype fixed‑block pool header for experimentation
 - Add benchmarks and report
 
+
+---
+
+*Last Updated: 2025-10-20*
