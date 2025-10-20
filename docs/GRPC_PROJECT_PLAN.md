@@ -1,10 +1,12 @@
 # Container System gRPC Integration - Project Plan
 
-**Project Code:** CS-GRPC-2024  
-**Start Date:** 2024-02-01  
-**End Date:** 2024-03-28  
-**Duration:** 8 weeks  
-**Project Manager:** TBD  
+> **Language:** **English** | [한국어](GRPC_PROJECT_PLAN_KO.md)
+
+**Project Code:** CS-GRPC-2024
+**Start Date:** 2024-02-01
+**End Date:** 2024-03-28
+**Duration:** 8 weeks
+**Project Manager:** TBD
 **Technical Lead:** TBD
 
 ---

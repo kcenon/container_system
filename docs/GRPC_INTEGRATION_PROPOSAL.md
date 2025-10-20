@@ -1,5 +1,7 @@
 # Container System gRPC/Protocol Buffers Integration Proposal
 
+> **Language:** **English** | [한국어](GRPC_INTEGRATION_PROPOSAL_KO.md)
+
 **Document Version:** 1.0  
 **Date:** 2024-01-20  
 **Author:** Development Team  
