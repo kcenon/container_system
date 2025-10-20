@@ -80,7 +80,7 @@ This proposal outlines the integration of gRPC and Protocol Buffers into the exi
 
 ### Investment Summary
 - **Duration**: 6-8 weeks
-- **Team Size**: 2-3 developers
+- **Developer Count**: 2-3 developers
 - **Risk Level**: Medium
 - **ROI**: 40% reduction in network overhead, 60% improvement in serialization speed
 
