@@ -1316,9 +1316,8 @@ This project is licensed under the BSD 3-Clause License - see the [LICENSE](LICE
 
 ## Acknowledgments
 
-- Thanks to all contributors who have helped improve this project
-- Special thanks to the C++ community for continuous feedback and support
 - Inspired by modern serialization frameworks and high-performance computing practices
+- Maintained by kcenon@naver.com
 
 ---
 
