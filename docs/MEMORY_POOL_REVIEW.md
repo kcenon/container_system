@@ -1,6 +1,8 @@
 Container System Memory Pool Review
 ===================================
 
+> **Language:** **English** | [한국어](MEMORY_POOL_REVIEW_KO.md)
+
 Scope
 - Assess allocation patterns and propose optional memory pool strategies for container_system.
 

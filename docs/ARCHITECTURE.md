@@ -1,6 +1,8 @@
 Architecture Overview
 =====================
 
+> **Language:** **English** | [한국어](ARCHITECTURE_KO.md)
+
 Purpose
 - container_system is a type‑safe, high‑performance value/container framework with SIMD‑accelerated operations and efficient serialization (binary/JSON/XML).
 - It serves as a shared data model for messaging/network/database subsystems.
