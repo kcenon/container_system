@@ -2,6 +2,64 @@
 
 > **Language:** **English** | [한국어](GRPC_INTEGRATION_PROPOSAL_KO.md)
 
+## Table of Contents
+
+- [Executive Summary](#executive-summary)
+  - [Key Benefits](#key-benefits)
+  - [Investment Summary](#investment-summary)
+- [1. Project Objectives](#1-project-objectives)
+  - [1.1 Primary Goals](#11-primary-goals)
+  - [1.2 Success Criteria](#12-success-criteria)
+- [2. Current State Analysis](#2-current-state-analysis)
+  - [2.1 Existing Architecture](#21-existing-architecture)
+  - [2.2 Gap Analysis](#22-gap-analysis)
+- [3. Technical Design](#3-technical-design)
+  - [3.1 Architecture Overview](#31-architecture-overview)
+  - [3.2 Protocol Buffer Schema](#32-protocol-buffer-schema)
+  - [3.3 Service Definition](#33-service-definition)
+  - [3.4 Integration Strategy](#34-integration-strategy)
+    - [Phase 1: Adapter Layer](#phase-1-adapter-layer)
+    - [Phase 2: Native Integration](#phase-2-native-integration)
+  - [3.5 Memory Optimization](#35-memory-optimization)
+- [4. Implementation Plan](#4-implementation-plan)
+  - [4.1 Development Phases](#41-development-phases)
+  - [4.2 Detailed Milestones](#42-detailed-milestones)
+    - [Milestone 1: Foundation (Week 1-2)](#milestone-1-foundation-week-1-2)
+    - [Milestone 2: Adapter Implementation (Week 3-4)](#milestone-2-adapter-implementation-week-3-4)
+    - [Milestone 3: Service Layer (Week 5)](#milestone-3-service-layer-week-5)
+    - [Milestone 4: Native Integration (Week 6-7)](#milestone-4-native-integration-week-6-7)
+    - [Milestone 5: Production Ready (Week 8)](#milestone-5-production-ready-week-8)
+- [5. Resource Requirements](#5-resource-requirements)
+  - [5.1 Team Composition](#51-team-composition)
+  - [5.2 Infrastructure](#52-infrastructure)
+  - [5.3 Budget Estimate](#53-budget-estimate)
+- [6. Risk Assessment](#6-risk-assessment)
+  - [6.1 Technical Risks](#61-technical-risks)
+  - [6.2 Project Risks](#62-project-risks)
+- [7. Success Metrics](#7-success-metrics)
+  - [7.1 Performance Metrics](#71-performance-metrics)
+  - [7.2 Quality Metrics](#72-quality-metrics)
+  - [7.3 Business Metrics](#73-business-metrics)
+- [8. Alternative Approaches](#8-alternative-approaches)
+  - [8.1 Alternative: Apache Thrift](#81-alternative-apache-thrift)
+  - [8.2 Alternative: MessagePack](#82-alternative-messagepack)
+  - [8.3 Alternative: Cap'n Proto](#83-alternative-capn-proto)
+- [9. Migration Strategy](#9-migration-strategy)
+  - [9.1 Backward Compatibility](#91-backward-compatibility)
+  - [9.2 Gradual Migration Path](#92-gradual-migration-path)
+  - [9.3 Migration Tools](#93-migration-tools)
+- [10. Documentation Plan](#10-documentation-plan)
+  - [10.1 Documentation Deliverables](#101-documentation-deliverables)
+  - [10.2 Training Materials](#102-training-materials)
+- [11. Conclusion](#11-conclusion)
+  - [Key Takeaways](#key-takeaways)
+  - [Next Steps](#next-steps)
+  - [Approval](#approval)
+- [Appendix A: Technical Details](#appendix-a-technical-details)
+  - [A.1 Type Mapping Table](#a1-type-mapping-table)
+  - [A.2 Performance Benchmarks](#a2-performance-benchmarks)
+  - [A.3 Configuration Example](#a3-configuration-example)
+
 **Document Version:** 1.0  
 **Date:** 2024-01-20  
 **Author:** Development Team  
@@ -675,3 +733,6 @@ serialization:
 ---
 
 **End of Document**
+---
+
+*Last Updated: 2025-10-20*

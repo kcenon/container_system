@@ -9,7 +9,7 @@
 
 > **Language:** [English](README.md) | **한국어**
 
-## 프로젝트 개요
+## 개요
 
 Container System Project는 메시징 시스템과 범용 애플리케이션을 위한 포괄적인 데이터 관리 기능을 제공하도록 설계된 프로덕션 준비 완료, 고성능 C++20 타입 안전 container framework입니다. SIMD 최적화와 생태계와의 원활한 통합을 특징으로 하는 모듈식 인터페이스 기반 아키텍처로 구축되어, 최소한의 오버헤드와 최대한의 타입 안전성으로 엔터프라이즈급 serialization 성능을 제공합니다.
 

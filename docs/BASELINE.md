@@ -2,6 +2,31 @@
 
 > **Language:** **English** | [한국어](BASELINE_KO.md)
 
+## Table of Contents
+
+- [Executive Summary](#executive-summary)
+- [Target Metrics](#target-metrics)
+  - [Primary Success Criteria](#primary-success-criteria)
+- [Baseline Metrics](#baseline-metrics)
+  - [1. Container Operations Performance](#1-container-operations-performance)
+  - [2. Serialization Performance](#2-serialization-performance)
+  - [3. Value Type Operations](#3-value-type-operations)
+  - [4. SIMD Performance (if applicable)](#4-simd-performance-if-applicable)
+- [Platform-Specific Baselines](#platform-specific-baselines)
+  - [macOS (Apple Silicon)](#macos-apple-silicon)
+  - [Ubuntu 22.04 (x86_64)](#ubuntu-2204-x86_64)
+- [How to Run Benchmarks](#how-to-run-benchmarks)
+  - [Generate JSON Output](#generate-json-output)
+  - [Run Specific Categories](#run-specific-categories)
+- [Performance Improvement Opportunities](#performance-improvement-opportunities)
+  - [Identified Areas for Optimization (Phase 1+)](#identified-areas-for-optimization-phase-1)
+- [Regression Testing](#regression-testing)
+  - [CI/CD Integration](#cicd-integration)
+  - [Regression Thresholds](#regression-thresholds)
+- [Notes](#notes)
+  - [Measurement Conditions](#measurement-conditions)
+  - [Known Limitations](#known-limitations)
+
 **Phase**: 0 - Foundation and Tooling
 **Task**: 0.2 - Baseline Performance Benchmarking
 **Date Created**: 2025-10-07

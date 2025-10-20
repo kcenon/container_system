@@ -2,6 +2,31 @@
 
 > **Language:** [English](BASELINE.md) | **한국어**
 
+## 목차
+
+- [요약](#요약)
+- [목표 메트릭](#목표-메트릭)
+  - [주요 성공 기준](#주요-성공-기준)
+- [기준선 메트릭](#기준선-메트릭)
+  - [1. Container Operations 성능](#1-container-operations-성능)
+  - [2. Serialization 성능](#2-serialization-성능)
+  - [3. Value Type Operations](#3-value-type-operations)
+  - [4. SIMD 성능 (해당되는 경우)](#4-simd-성능-해당되는-경우)
+- [플랫폼별 기준선](#플랫폼별-기준선)
+  - [macOS (Apple Silicon)](#macos-apple-silicon)
+  - [Ubuntu 22.04 (x86_64)](#ubuntu-2204-x86_64)
+- [벤치마크 실행 방법](#벤치마크-실행-방법)
+  - [JSON 출력 생성](#json-출력-생성)
+  - [특정 카테고리 실행](#특정-카테고리-실행)
+- [성능 개선 기회](#성능-개선-기회)
+  - [식별된 최적화 영역 (Phase 1+)](#식별된-최적화-영역-phase-1)
+- [회귀 테스트](#회귀-테스트)
+  - [CI/CD 통합](#cicd-통합)
+  - [회귀 임계값](#회귀-임계값)
+- [참고사항](#참고사항)
+  - [측정 조건](#측정-조건)
+  - [알려진 제한사항](#알려진-제한사항)
+
 **Phase**: 0 - Foundation and Tooling
 **Task**: 0.2 - Baseline Performance Benchmarking
 **작성일**: 2025-10-07
@@ -203,3 +228,7 @@ cmake --build build
 **최종 업데이트**: 2025-10-07
 **상태**: 인프라 완료
 **다음 작업**: Google Benchmark 설치 및 측정 실행
+
+---
+
+*Last Updated: 2025-10-20*
