@@ -1,5 +1,7 @@
 # 📊 Container System - Performance Benchmarks & Analysis
 
+**Language**: **English** | [한국어](PERFORMANCE_KO.md)
+
 ## 🎯 Executive Summary
 
 The Container System delivers **enterprise-grade performance** with type-safe container operations, SIMD optimizations, and high-throughput serialization capabilities. This comprehensive performance report demonstrates the system's readiness for production workloads requiring intensive data manipulation and serialization.
