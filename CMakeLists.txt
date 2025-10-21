@@ -34,6 +34,16 @@ option(CONTAINER_BUILD_BENCHMARKS "Build container system benchmarks" OFF)
 option(CONTAINER_BUILD_INTEGRATION_TESTS "Build container system integration tests" ON)
 set(COMMON_SYSTEM_ROOT "" CACHE PATH "Path to the common_system repository root")
 
+# Respect global BUILD_INTEGRATION_TESTS flag if set
+if(DEFINED BUILD_INTEGRATION_TESTS)
+    if(BUILD_INTEGRATION_TESTS)
+        set(_CONTAINER_BUILD_IT_VALUE ON)
+    else()
+        set(_CONTAINER_BUILD_IT_VALUE OFF)
+    endif()
+    set(CONTAINER_BUILD_INTEGRATION_TESTS ${_CONTAINER_BUILD_IT_VALUE} CACHE BOOL "Build container system integration tests" FORCE)
+endif()
+
 # When common_system integration is enabled, samples and tests are now supported
 if(BUILD_WITH_COMMON_SYSTEM)
     message(STATUS "Container system building with common_system integration")
