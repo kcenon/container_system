@@ -1,0 +1,25 @@
+<map id="scenarios::IoTDataCollectionSystem::send_iot_batch" name="scenarios::IoTDataCollectionSystem::send_iot_batch">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,253,213,293"/>
+<area shape="rect" id="Node000002" href="$d0/dcd/classcontainer__module_1_1integration_1_1messaging__container__builder.html#a70981bba692bd185814812957472c6ec" title=" " alt="" coords="281,62,503,117"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="125,251,180,190,218,156,260,127,273,120,276,125,263,132,221,161,184,194,128,255"/>
+<area shape="rect" id="Node000008" href="$d0/dcd/classcontainer__module_1_1integration_1_1messaging__container__builder.html#ae2f2b773fb7248be85f92bd6265efab4" title=" " alt="" coords="261,141,523,181"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="142,251,197,221,260,192,288,183,290,188,262,197,199,226,145,256"/>
+<area shape="rect" id="Node000009" href="$d0/dcd/classcontainer__module_1_1integration_1_1messaging__container__builder.html#a56f2ae6cae82bd445e889788db53e2da" title=" " alt="" coords="281,206,503,261"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="213,256,267,248,268,254,214,261"/>
+<area shape="rect" id="Node000010" href="$d0/dcd/classcontainer__module_1_1integration_1_1messaging__container__builder.html#a271381f5ca5e3e609eaf574e5a3bf684" title=" " alt="" coords="281,285,503,339"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="214,285,268,292,267,298,213,290"/>
+<area shape="rect" id="Node000011" href="$d0/dcd/classcontainer__module_1_1integration_1_1messaging__container__builder.html#a2c82ff350d7cb1efb87bdc6128a95a5c" title=" " alt="" coords="281,363,503,418"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="146,291,200,320,262,350,280,356,278,361,260,354,197,325,143,296"/>
+<area shape="rect" id="Node000012" href="$d0/dcd/classcontainer__module_1_1integration_1_1messaging__container__builder.html#a71aa40744bafcb49d34270698dbc4341" title=" " alt="" coords="281,442,503,497"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="127,292,181,359,220,396,263,428,272,434,270,438,260,433,216,400,177,363,122,295"/>
+<area shape="rect" id="Node000003" href="$d5/df9/classcontainer__module_1_1value.html#ae2d6a5ff0505af3f3c56e50b2ece015e" title=" " alt="" coords="571,69,753,109"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="503,87,557,87,557,92,503,92"/>
+<area shape="rect" id="Node000004" href="$d1/d1a/namespacecontainer__module.html#a83ed4416891be1a3f3191bf92b50b3e9" title="Convert a string&#45;based type indicator (e.g., &quot;4&quot;) to a value_types enum." alt="" coords="801,5,997,45"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="736,67,811,46,812,51,738,72"/>
+<area shape="rect" id="Node000006" href="$d1/daf/classutility__module_1_1formatter.html#a1833466f2e4df9a2dbab6204dbb95800" title=" " alt="" coords="806,69,993,109"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="753,87,792,87,792,92,753,92"/>
+<area shape="rect" id="Node000007" href="$d5/df9/classcontainer__module_1_1value.html#aad6ea2fdcbb516d7a72f577de0b6102f" title=" " alt="" coords="808,133,991,173"/>
+<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="738,107,812,127,811,132,736,112"/>
+<area shape="rect" id="Node000005" href="$d1/d1a/namespacecontainer__module.html#ac03e62099dde8cbf072a3a4c635382bf" title="Compile&#45;time conversion from string to value_types." alt="" coords="1045,5,1213,45"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="998,23,1032,23,1032,28,998,28"/>
+</map>

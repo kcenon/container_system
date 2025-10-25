@@ -1,0 +1,24 @@
+var searchData=
+[
+  ['scores_5fmutex_5f_0',['scores_mutex_',['../d5/d1c/classscenarios_1_1GamingEventSystem.html#aa26711d41531c639ac4b7f54336d9a7b',1,'scenarios::GamingEventSystem']]],
+  ['sensor_5ftype_1',['sensor_type',['../dd/d37/structscenarios_1_1IoTDataCollectionSystem_1_1SensorReading.html#a238ac2ebbf2d072082a0ee12278049ae',1,'scenarios::IoTDataCollectionSystem::SensorReading']]],
+  ['serialization_5fcallbacks_5f_2',['serialization_callbacks_',['../d2/d81/classcontainer__module_1_1integration_1_1messaging__integration.html#a730cdd307d7c9469f2ae6c6a08ab3445',1,'container_module::integration::messaging_integration']]],
+  ['serialization_5fcount_5f_3',['serialization_count_',['../d9/dad/classcontainer__module_1_1value__container.html#a3271c58edb82fece426040b85becafdb',1,'container_module::value_container']]],
+  ['serializations_5fperformed_4',['serializations_performed',['../d5/dcf/structcontainer__module_1_1integration_1_1messaging__integration_1_1metrics.html#acbf12cb8acedaefe50c9d94756d71b60',1,'container_module::integration::messaging_integration::metrics']]],
+  ['serialized_5',['serialized',['../dc/dfb/structAdvancedContainerExample_1_1Statistics.html#adbc81b48726f6be29fa05c54d72447d1',1,'AdvancedContainerExample::Statistics']]],
+  ['size_6',['size',['../d5/df7/structcontainer__module_1_1thread__safe__container_1_1Statistics.html#a4f6ac43578b26211e7977aa6778c6635',1,'container_module::thread_safe_container::Statistics']]],
+  ['size_5f_7',['size_',['../d5/df9/classcontainer__module_1_1value.html#a9dc2127f625d09b36273273ee813a277',1,'container_module::value']]],
+  ['size_5foptimized_5f_8',['size_optimized_',['../d0/dcd/classcontainer__module_1_1integration_1_1messaging__container__builder.html#af7c9716a5ebda216f29bb503c1718d67',1,'container_module::integration::messaging_container_builder']]],
+  ['snapshot_5f_9',['snapshot_',['../d7/dec/classcontainer__module_1_1snapshot__reader.html#a86f3cc68f6332ad2607982028f860ffb',1,'container_module::snapshot_reader']]],
+  ['snapshot_5fmutex_5f_10',['snapshot_mutex_',['../d7/dec/classcontainer__module_1_1snapshot__reader.html#a43ed9c0d33953f89ea8b510f31feb7c5',1,'container_module::snapshot_reader']]],
+  ['source_5fid_11',['SOURCE_ID',['../d1/d1a/namespacecontainer__module.html#ae247c040749b35262a19055817f888c0',1,'container_module']]],
+  ['source_5fid_5f_12',['source_id_',['../d9/dad/classcontainer__module_1_1value__container.html#aab04029c9885e725eac4b56d07025b0e',1,'container_module::value_container']]],
+  ['source_5fsub_5fid_13',['SOURCE_SUB_ID',['../d1/d1a/namespacecontainer__module.html#a0e97fdc87bde834e60b1bb45db0dff8a',1,'container_module']]],
+  ['source_5fsub_5fid_5f_14',['source_sub_id_',['../d9/dad/classcontainer__module_1_1value__container.html#ac2526b7a466023d1ab94cd0c5628ce7c',1,'container_module::value_container']]],
+  ['speed_5foptimized_5f_15',['speed_optimized_',['../d0/dcd/classcontainer__module_1_1integration_1_1messaging__container__builder.html#af37cc51ec0bae3987008104dcc759287',1,'container_module::integration::messaging_container_builder']]],
+  ['stack_5fallocations_5f_16',['stack_allocations_',['../d9/dad/classcontainer__module_1_1value__container.html#a65700e960d986f74e2e0fcfca75a7b35',1,'container_module::value_container']]],
+  ['start_5ftime_17',['start_time',['../dc/dfb/structAdvancedContainerExample_1_1Statistics.html#aa38cfab24df4356a886c59109c33381c',1,'AdvancedContainerExample::Statistics']]],
+  ['start_5ftime_5f_18',['start_time_',['../d0/d4f/classcontainer__module_1_1integration_1_1container__performance__monitor.html#aab625debc4ed212f81763ad4354b2c50',1,'container_module::integration::container_performance_monitor']]],
+  ['stats_5f_19',['stats_',['../d6/d71/classAdvancedContainerExample.html#a7234616fd4e951a59df331e2966c5436',1,'AdvancedContainerExample']]],
+  ['supported_20',['supported',['../d5/db5/structcontainer__module_1_1simd_1_1simd__traits.html#a0a932fb9c63aa5b18299192ba855ed57',1,'container_module::simd::simd_traits']]]
+];

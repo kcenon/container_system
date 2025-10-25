@@ -1,0 +1,20 @@
+<map id="container_module::thread_safe_container" name="container_module::thread_safe_container">
+<area shape="rect" id="Node000001" title="Thread&#45;safe container with lock optimization." alt="" coords="166,856,350,1156"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,699,180,793"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="132,803,168,860,164,863,127,806"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="157,135,292,200"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="228,200,251,793,253,839,248,840,246,793,223,201"/>
+<area shape="rect" id="Node000007" href="$db/d1c/classcontainer__module_1_1variant__value.html" title="Type&#45;safe value wrapper with thread safety." alt="" coords="405,277,591,577"/>
+<area shape="poly" id="edge8_Node000007_Node000003" title=" " alt="" coords="262,198,334,251,361,262,373,266,388,275,395,281,392,285,384,279,371,271,359,267,331,256,259,203"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="261,699,409,793"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="324,794,310,841,305,839,319,793"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="328,135,407,200"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="363,201,350,278,341,389,337,500,337,682,331,682,332,500,336,389,345,277,358,200"/>
+<area shape="poly" id="edge7_Node000007_Node000005" title=" " alt="" coords="386,199,417,261,413,264,381,201"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="302,5,433,85"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="370,99,370,134,365,134,365,99"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="424,579,369,686,364,683,419,576"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="438,135,593,200"/>
+<area shape="poly" id="edge10_Node000001_Node000008" title=" " alt="" coords="587,198,608,222,611,225,617,225,636,221,658,219,668,222,677,230,683,243,686,262,681,324,656,426,606,578,585,628,559,677,498,768,430,849,364,916,360,912,426,845,494,765,555,674,580,626,601,576,651,425,676,323,681,262,678,244,673,233,666,227,657,224,637,226,618,230,610,230,604,226,583,202"/>
+<area shape="poly" id="edge9_Node000007_Node000008" title=" " alt="" coords="516,200,512,261,506,261,511,200"/>
+</map>
