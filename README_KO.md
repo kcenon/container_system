@@ -122,37 +122,46 @@ Container System Project는 메시징 시스템과 범용 애플리케이션을 
 
 ### 📊 **성능 벤치마크**
 
-*Intel i7-12700K (16 threads) @ 3.8GHz, 32GB, Windows 11, MSVC 2022에서 벤치마크*
+*주요 벤치마크: Apple M1 (8 코어, ARM NEON), macOS 26.1, Apple Clang 17.0*
+
+> **📌 참고**: 성능 메트릭은 플랫폼에 따라 다릅니다. BASELINE.md에 Apple M1 (ARM)에 대한 상세 측정치가 포함되어 있습니다. Windows/x86 결과는 다를 수 있습니다. 크로스 플랫폼 비교는 PERFORMANCE.md를 참조하세요.
 
 > **🚀 Architecture 업데이트**: SIMD 최적화를 갖춘 최신 modular architecture는 serialization 집약적 애플리케이션에 대해 탁월한 성능을 제공합니다. 타입 안전 작업은 성능 저하 없이 안정성을 보장합니다.
 
-#### 핵심 성능 메트릭 (최신 벤치마크)
-- **Container 생성**: 최대 5M containers/second (빈 container)
+#### 핵심 성능 메트릭 (Apple M1, Release 빌드)
+- **Container 생성**: 2M containers/second (측정 기준선)
 - **Value 작업**:
-  - 문자열 value 추가: 효율적인 문자열 처리로 15M values/s
-  - 숫자 value 추가: SIMD 가속으로 25M values/s
-  - 복잡한 중첩 구조: 1.2M containers/s
-- **Serialization 성능**:
-  - Binary serialization: 2M containers/s (평균 크기 1KB)
-  - JSON serialization: 구조화된 출력으로 800K containers/s
-  - XML serialization: schema 검증으로 600K containers/s
-- **Deserialization**: binary format에서 1.5M containers/s
-- **메모리 효율성**: 최적화된 variant 저장으로 약 128 bytes baseline
+  - variant_value 생성: 3.5M values/s
+  - variant_value move: 4.2M ops/s (zero-copy)
+  - 문자열 value 추가: 2.8M values/s
+  - 숫자 value 추가: ARM NEON 가속으로 4.5M values/s
+- **Serialization 성능** (상세 내용은 BASELINE.md 참조):
+  - Binary serialization: 1.8M ops/s
+  - JSON serialization: 구조화된 출력으로 950K ops/s
+  - XML serialization: schema 검증으로 720K ops/s
+- **Deserialization**: binary format에서 2.1M ops/s
+- **메모리 기준선**: 1.5 MB (allocator 오버헤드 포함 빈 container)
 
 #### 업계 표준과의 성능 비교
-| Serialization 타입 | 처리량 | 크기 오버헤드 | 메모리 사용 | 최적 사용 사례 |
-|-------------------|------------|---------------|--------------|---------------|
-| 🏆 **Container System Binary** | **2M/s** | **~10%** | **128B+data** | 모든 시나리오 (최적화) |
-| 📦 **Protocol Buffers** | 1.2M/s | ~15% | 200B+data | 크로스 언어 호환성 |
-| 📦 **JSON (nlohmann)** | 400K/s | ~40% | 300B+data | 사람이 읽을 수 있는 교환 |
-| 📦 **MessagePack** | 1.8M/s | ~12% | 150B+data | 컴팩트한 binary format |
-| 📦 **XML (pugixml)** | 200K/s | ~60% | 400B+data | Schema 검증 필요 |
+> **⚠️ 중요**: 아래 모든 측정치는 Apple M1 플랫폼 기준입니다. 크로스 플랫폼 결과는 다를 수 있습니다. Protocol Buffers 비교 방법론은 PERFORMANCE.md 섹션 3.2를 참조하세요.
+
+| Serialization 타입 | 처리량 (ops/s) | 크기 오버헤드 | 메모리 기준선 | 최적 사용 사례 |
+|-------------------|----------------|---------------|---------------|---------------|
+| 🏆 **Container System Binary** | **1.8M** | **100% (기준선)** | **1.5 MB** | 고성능 시나리오 |
+| 📦 **MessagePack** | 1.6M | ~95% (컴팩트) | ~1.4 MB | 컴팩트한 binary format |
+| 📦 **JSON (nlohmann)** | 950K | ~180% (가독성) | ~2.0 MB | 사람이 읽을 수 있는 교환 |
+| 📦 **XML (pugixml)** | 720K | ~220% (상세) | ~2.5 MB | Schema 검증 필요 |
+
+> **Protocol Buffers 참고**: 직접 비교는 동일한 데이터 구조와 측정 방법론이 필요합니다. 통제된 비교는 benchmarks/protobuf_comparison.md (제공 시)를 참조하세요.
 
 #### 주요 성능 통찰
-- 🏃 **Binary format**: 최소한의 오버헤드로 업계 최고 수준의 성능
-- 🏋️ **SIMD 작업**: 숫자 배열에 대해 2.5배 성능 향상
+- 🏃 **Binary format**: 최소한의 오버헤드로 경쟁력 있는 성능
+- 🏋️ **ARM NEON SIMD**: 대량 작업에 대해 3.2배 성능 향상 (scalar: 1.2 GB/s → NEON: 3.8 GB/s)
 - ⏱️ **타입 안전성**: 타입 검사에 대한 runtime 오버헤드 제로
-- 📈 **확장성**: container 복잡도에 따른 선형 성능 확장
+- 📈 **확장성**: container 크기에 따른 성능 저하 (BASELINE.md Table 6 참조)
+  - 10개 value: 3.5M ops/s
+  - 100개 value: 2.0M ops/s
+  - 1000개 value: 450K ops/s
 
 ## 기능
 
