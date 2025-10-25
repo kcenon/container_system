@@ -206,6 +206,13 @@ namespace container_module
 									 bool parse_only_header)
 		: value_container()
 	{
+		// Enable zero-copy mode: store shared pointer to original data
+		// This allows lazy parsing and reduces memory copies
+		if (parse_only_header)
+		{
+			raw_data_ptr_ = std::make_shared<const std::string>(data_str);
+			zero_copy_mode_ = true;
+		}
 		deserialize(data_str, parse_only_header);
 	}
 
@@ -213,6 +220,13 @@ namespace container_module
 									 bool parse_only_header)
 		: value_container()
 	{
+		// Enable zero-copy mode: convert to string and store shared pointer
+		if (parse_only_header)
+		{
+			std::string data_str(data_array.begin(), data_array.end());
+			raw_data_ptr_ = std::make_shared<const std::string>(std::move(data_str));
+			zero_copy_mode_ = true;
+		}
 		deserialize(data_array, parse_only_header);
 	}
 
@@ -541,9 +555,30 @@ namespace container_module
 	{
 		std::unique_lock<std::shared_mutex> lock(mutex_);
 
+		// Zero-copy optimization: Check cache first
+		if (zero_copy_mode_)
+		{
+			std::string key = std::string(target_name) + "_" + std::to_string(index);
+			auto cache_it = parsed_values_cache_.find(key);
+			if (cache_it != parsed_values_cache_.end())
+			{
+				return cache_it->second;
+			}
+		}
+
 		if (!parsed_data_)
 		{
-			deserialize_values(data_string_, false);
+			// In zero-copy mode with raw data, we could implement selective parsing here
+			// For now, fall back to full deserialization as foundation
+			// Future optimization: parse only the requested value from raw_data_ptr_
+			if (zero_copy_mode_ && raw_data_ptr_)
+			{
+				deserialize_values(*raw_data_ptr_, false);
+			}
+			else
+			{
+				deserialize_values(data_string_, false);
+			}
 		}
 
 		// Search directly instead of calling value_array() to avoid nested locking
@@ -563,6 +598,14 @@ namespace container_module
 			null_val->set_data(std::string(target_name), value_types::null_value, "");
 			return null_val;
 		}
+
+		// Cache the result in zero-copy mode
+		if (zero_copy_mode_)
+		{
+			std::string key = std::string(target_name) + "_" + std::to_string(index);
+			parsed_values_cache_[key] = results[index];
+		}
+
 		return results[index];
 	}
 

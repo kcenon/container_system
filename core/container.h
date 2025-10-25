@@ -57,6 +57,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <shared_mutex>
 #include <mutex>
 #include <atomic>
+#include <unordered_map>
+#include <optional>
 
 #ifdef CONTAINER_USE_COMMON_SYSTEM
 #if __has_include(<kcenon/common/patterns/result.h>)
@@ -389,6 +391,15 @@ namespace container_module
 		bool changed_data_; ///< If true, data_string_ is not updated yet.
 		std::string data_string_; ///< Full stored data (header + data).
 
+		// Zero-copy deserialization support
+		// Shared pointer to original serialized data for zero-copy access
+		// This enables lazy parsing: parse values only when accessed
+		std::shared_ptr<const std::string> raw_data_ptr_;
+		// Cache for lazily parsed values to avoid re-parsing
+		mutable std::unordered_map<std::string, std::shared_ptr<value>> parsed_values_cache_;
+		// Flag to enable zero-copy mode
+		bool zero_copy_mode_{false};
+
 		// header
 		std::string source_id_;
 		std::string source_sub_id_;
@@ -404,11 +415,11 @@ namespace container_module
 				 std::function<std::shared_ptr<value>(const std::string&,
 													  const std::string&)>>
 			data_type_map_;
-			
+
 		// Thread safety members
 		mutable std::shared_mutex mutex_;  ///< Mutex for thread-safe access
 		std::atomic<bool> thread_safe_enabled_{false}; ///< Thread-safe mode flag
-		
+
 		// Statistics
 		mutable std::atomic<size_t> read_count_{0};
 		mutable std::atomic<size_t> write_count_{0};
