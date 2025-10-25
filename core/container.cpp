@@ -864,6 +864,59 @@ bool value_container::deserialize(const std::vector<uint8_t>& data_array,
 		throw std::runtime_error("File saving not implemented - file_handler not available");
 	}
 
+	size_t value_container::memory_footprint() const
+	{
+		std::shared_lock<std::shared_mutex> lock(mutex_);
+
+		size_t total = sizeof(value_container);
+
+		// Add header strings
+		total += source_id_.capacity();
+		total += source_sub_id_.capacity();
+		total += target_id_.capacity();
+		total += target_sub_id_.capacity();
+		total += message_type_.capacity();
+		total += version_.capacity();
+
+		// Add data string
+		total += data_string_.capacity();
+
+		// Add traditional value storage (heap-allocated)
+		total += units_.capacity() * sizeof(std::shared_ptr<value>);
+		for (const auto& v : units_)
+		{
+			if (v)
+			{
+				// Approximate: shared_ptr overhead + value object size + data
+				total += sizeof(value) + v->size();
+			}
+		}
+
+		// Add optimized value storage (stack-allocated)
+		total += optimized_units_.capacity() * sizeof(optimized_value);
+		for (const auto& ov : optimized_units_)
+		{
+			total += ov.memory_footprint();
+		}
+
+		// Add parsed values cache
+		total += parsed_values_cache_.size() * (sizeof(std::string) + sizeof(std::shared_ptr<value>));
+
+		return total;
+	}
+
+	pool_stats value_container::get_pool_stats()
+	{
+		auto& pool = value_pool<value>::instance();
+		auto [hits, misses, available] = pool.stats();
+		return pool_stats(hits, misses, available);
+	}
+
+	void value_container::clear_pool()
+	{
+		value_pool<value>::instance().clear();
+	}
+
 	std::vector<std::shared_ptr<value>> value_container::operator[](
 		std::string_view key)
 	{
