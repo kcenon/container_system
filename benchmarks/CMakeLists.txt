@@ -19,6 +19,7 @@ if(benchmark_FOUND OR BENCHMARK_FOUND)
         container_operations_bench.cpp
         serialization_bench.cpp
         value_operations_bench.cpp
+        memory_efficiency_bench.cpp
         main_bench.cpp
     )
 
