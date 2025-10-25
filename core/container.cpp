@@ -625,33 +625,39 @@ namespace container_module
 	{
 		std::shared_lock<std::shared_mutex> lock(mutex_);
 		const_cast<value_container*>(this)->serialization_count_.fetch_add(1, std::memory_order_relaxed);
-		
+
 		// If everything parsed, just rebuild data
 		std::string ds = (parsed_data_ ? datas() : data_string_);
 
-		// Compose header
+		// Compose header with pre-allocated buffer to reduce reallocations
+		// Estimate: header is typically ~150 bytes, reserve more to be safe
+		std::string result;
+		result.reserve(200 + ds.size());
+
 		// Note: In fmt library, {{}} produces single {}, so {{{{}}}} produces {{}}
-		std::string header;
-		formatter::format_to(std::back_inserter(header), "@header={{{{");
+		formatter::format_to(std::back_inserter(result), "@header={{{{");
 
 		if (message_type_ != "data_container")
 		{
-			formatter::format_to(std::back_inserter(header), "[{},{}];",
+			formatter::format_to(std::back_inserter(result), "[{},{}];",
 								 TARGET_ID, target_id_);
-			formatter::format_to(std::back_inserter(header), "[{},{}];",
+			formatter::format_to(std::back_inserter(result), "[{},{}];",
 								 TARGET_SUB_ID, target_sub_id_);
-			formatter::format_to(std::back_inserter(header), "[{},{}];",
+			formatter::format_to(std::back_inserter(result), "[{},{}];",
 								 SOURCE_ID, source_id_);
-			formatter::format_to(std::back_inserter(header), "[{},{}];",
+			formatter::format_to(std::back_inserter(result), "[{},{}];",
 								 SOURCE_SUB_ID, source_sub_id_);
 		}
-		formatter::format_to(std::back_inserter(header), "[{},{}];",
+		formatter::format_to(std::back_inserter(result), "[{},{}];",
 							 MESSAGE_TYPE, message_type_);
-		formatter::format_to(std::back_inserter(header), "[{},{}];",
+		formatter::format_to(std::back_inserter(result), "[{},{}];",
 							 MESSAGE_VERSION, version_);
-		formatter::format_to(std::back_inserter(header), "}}}};");
+		formatter::format_to(std::back_inserter(result), "}}}};");
 
-		return header + ds;
+		// Append data section directly (avoids string concatenation copy)
+		result.append(ds);
+
+		return result;
 	}
 
 	std::vector<uint8_t> value_container::serialize_array(void) const
@@ -1036,22 +1042,28 @@ bool value_container::deserialize(const std::vector<uint8_t>& data_array,
 	{
 		if (source_name == target_name)
 		{
-			target_variable = std::string(target_value);
-			// trim
-			if (!target_variable.empty())
+			// Optimized trim using string_view operations
+			// This avoids creating intermediate strings and multiple erase operations
+			if (target_value.empty())
 			{
-				// simplistic trim
-				while (!target_variable.empty()
-					   && (target_variable.front() == ' '))
-				{
-					target_variable.erase(target_variable.begin());
-				}
-				while (!target_variable.empty()
-					   && (target_variable.back() == ' '))
-				{
-					target_variable.pop_back();
-				}
+				target_variable.clear();
+				return;
 			}
+
+			// Find first non-space character
+			size_t start = target_value.find_first_not_of(' ');
+			if (start == std::string_view::npos)
+			{
+				// All spaces
+				target_variable.clear();
+				return;
+			}
+
+			// Find last non-space character
+			size_t end = target_value.find_last_not_of(' ');
+
+			// Create trimmed string in one operation (reduced memory allocations)
+			target_variable = std::string(target_value.substr(start, end - start + 1));
 		}
 	}
 } // namespace container_module
