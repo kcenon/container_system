@@ -34,6 +34,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "container/core/value.h"
 #include "container/core/optimized_value.h"
+#include "container/core/value_pool.h"
 
 // Optional common system integration
 #ifdef CONTAINER_USE_COMMON_SYSTEM
@@ -344,6 +345,17 @@ namespace container_module
 		 * @return true if SOO is enabled
 		 */
 		bool is_soo_enabled() const { return use_soo_; }
+
+		/**
+		 * @brief Get memory pool statistics
+		 * @return Pool statistics structure
+		 */
+		static pool_stats get_pool_stats();
+
+		/**
+		 * @brief Clear memory pool (for testing/benchmarking)
+		 */
+		static void clear_pool();
 
 		// Operator to get multiple child values by key
 		std::vector<std::shared_ptr<value>> operator[](std::string_view key);

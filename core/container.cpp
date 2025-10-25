@@ -905,6 +905,18 @@ bool value_container::deserialize(const std::vector<uint8_t>& data_array,
 		return total;
 	}
 
+	pool_stats value_container::get_pool_stats()
+	{
+		auto& pool = value_pool<value>::instance();
+		auto [hits, misses, available] = pool.stats();
+		return pool_stats(hits, misses, available);
+	}
+
+	void value_container::clear_pool()
+	{
+		value_pool<value>::instance().clear();
+	}
+
 	std::vector<std::shared_ptr<value>> value_container::operator[](
 		std::string_view key)
 	{
