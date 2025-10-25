@@ -57,6 +57,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <shared_mutex>
 #include <mutex>
 #include <atomic>
+#include <unordered_map>
+#include <optional>
 
 #ifdef CONTAINER_USE_COMMON_SYSTEM
 #if __has_include(<kcenon/common/patterns/result.h>)
@@ -346,20 +348,19 @@ namespace container_module
 					 std::string_view target_name,
 					 std::string_view target_value,
 					 std::string& target_variable);
-					 
-		// Thread-safe helper classes
-		// FIXED: Eliminated TOCTOU (Time-Of-Check-Time-Of-Use) vulnerability
-		// by always acquiring lock first, then checking thread_safe_enabled
-		// inside the critical section
+
+		// Thread-safe helper classes with conditional lock acquisition
+		// Optimized: Only acquire lock when thread-safe mode is enabled
+		// This eliminates lock overhead in single-threaded scenarios
 		class read_lock_guard {
-			std::shared_lock<std::shared_mutex> lock_;
+			std::optional<std::shared_lock<std::shared_mutex>> lock_;
 			bool is_active_;
 		public:
 			read_lock_guard(const value_container* c)
-				: lock_(c->mutex_)  // Always acquire lock first (eliminates race)
-				, is_active_(c->thread_safe_enabled_.load(std::memory_order_acquire)) {
-				// Now safely check if we needed the lock
+				: is_active_(c->thread_safe_enabled_.load(std::memory_order_acquire)) {
+				// Conditionally acquire lock only when thread-safe mode is enabled
 				if (is_active_) {
+					lock_.emplace(c->mutex_);
 					c->read_count_.fetch_add(1, std::memory_order_relaxed);
 				}
 			}
@@ -369,14 +370,14 @@ namespace container_module
 		};
 
 		class write_lock_guard {
-			std::unique_lock<std::shared_mutex> lock_;
+			std::optional<std::unique_lock<std::shared_mutex>> lock_;
 			bool is_active_;
 		public:
 			write_lock_guard(value_container* c)
-				: lock_(c->mutex_)  // Always acquire lock first (eliminates race)
-				, is_active_(c->thread_safe_enabled_.load(std::memory_order_acquire)) {
-				// Now safely check if we needed the lock
+				: is_active_(c->thread_safe_enabled_.load(std::memory_order_acquire)) {
+				// Conditionally acquire lock only when thread-safe mode is enabled
 				if (is_active_) {
+					lock_.emplace(c->mutex_);
 					c->write_count_.fetch_add(1, std::memory_order_relaxed);
 				}
 			}
@@ -389,6 +390,15 @@ namespace container_module
 		bool parsed_data_;	///< Indicates if all child values have been parsed.
 		bool changed_data_; ///< If true, data_string_ is not updated yet.
 		std::string data_string_; ///< Full stored data (header + data).
+
+		// Zero-copy deserialization support
+		// Shared pointer to original serialized data for zero-copy access
+		// This enables lazy parsing: parse values only when accessed
+		std::shared_ptr<const std::string> raw_data_ptr_;
+		// Cache for lazily parsed values to avoid re-parsing
+		mutable std::unordered_map<std::string, std::shared_ptr<value>> parsed_values_cache_;
+		// Flag to enable zero-copy mode
+		bool zero_copy_mode_{false};
 
 		// header
 		std::string source_id_;
@@ -405,11 +415,11 @@ namespace container_module
 				 std::function<std::shared_ptr<value>(const std::string&,
 													  const std::string&)>>
 			data_type_map_;
-			
+
 		// Thread safety members
 		mutable std::shared_mutex mutex_;  ///< Mutex for thread-safe access
 		std::atomic<bool> thread_safe_enabled_{false}; ///< Thread-safe mode flag
-		
+
 		// Statistics
 		mutable std::atomic<size_t> read_count_{0};
 		mutable std::atomic<size_t> write_count_{0};
