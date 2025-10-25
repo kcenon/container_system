@@ -122,37 +122,46 @@ This project addresses the fundamental challenge faced by developers worldwide: 
 
 ### 📊 **Performance Benchmarks**
 
-*Benchmarked on Intel i7-12700K (16 threads) @ 3.8GHz, 32GB, Windows 11, MSVC 2022*
+*Primary benchmarks on Apple M1 (8 cores, ARM NEON), macOS 26.1, Apple Clang 17.0*
+
+> **📌 Note**: Performance metrics are platform-dependent. BASELINE.md contains detailed measurements for Apple M1 (ARM). Windows/x86 results may vary. See PERFORMANCE.md for cross-platform comparisons.
 
 > **🚀 Architecture Update**: Latest modular architecture with SIMD optimizations delivers exceptional performance for serialization-intensive applications. Type-safe operations ensure reliability without performance compromise.
 
-#### Core Performance Metrics (Latest Benchmarks)
-- **Container Creation**: Up to 5M containers/second (empty containers)
+#### Core Performance Metrics (Apple M1, Release Build)
+- **Container Creation**: 2M containers/second (measured baseline)
 - **Value Operations**:
-  - String value addition: 15M values/s with efficient string handling
-  - Numeric value addition: 25M values/s with SIMD acceleration
-  - Complex nested structures: 1.2M containers/s
-- **Serialization Performance**:
-  - Binary serialization: 2M containers/s (1KB average size)
-  - JSON serialization: 800K containers/s with structured output
-  - XML serialization: 600K containers/s with schema validation
-- **Deserialization**: 1.5M containers/s from binary format
-- **Memory efficiency**: ~128 bytes baseline with optimized variant storage
+  - variant_value creation: 3.5M values/s
+  - variant_value move: 4.2M ops/s (zero-copy)
+  - String value addition: 2.8M values/s
+  - Numeric value addition: 4.5M values/s with ARM NEON acceleration
+- **Serialization Performance** (see BASELINE.md for details):
+  - Binary serialization: 1.8M ops/s
+  - JSON serialization: 950K ops/s with structured output
+  - XML serialization: 720K ops/s with schema validation
+- **Deserialization**: 2.1M ops/s from binary format
+- **Memory baseline**: 1.5 MB (empty container with allocator overhead)
 
 #### Performance Comparison with Industry Standards
-| Serialization Type | Throughput | Size Overhead | Memory Usage | Best Use Case |
-|-------------------|------------|---------------|--------------|---------------|
-| 🏆 **Container System Binary** | **2M/s** | **~10%** | **128B+data** | All scenarios (optimized) |
-| 📦 **Protocol Buffers** | 1.2M/s | ~15% | 200B+data | Cross-language compatibility |
-| 📦 **JSON (nlohmann)** | 400K/s | ~40% | 300B+data | Human-readable interchange |
-| 📦 **MessagePack** | 1.8M/s | ~12% | 150B+data | Compact binary format |
-| 📦 **XML (pugixml)** | 200K/s | ~60% | 400B+data | Schema validation needs |
+> **⚠️ Important**: All measurements below are from Apple M1 platform. Cross-platform results may differ. For Protocol Buffers comparison, see PERFORMANCE.md section 3.2 for methodology.
+
+| Serialization Type | Throughput (ops/s) | Size Overhead | Memory Baseline | Best Use Case |
+|-------------------|-------------------|---------------|-----------------|---------------|
+| 🏆 **Container System Binary** | **1.8M** | **100% (baseline)** | **1.5 MB** | High-performance scenarios |
+| 📦 **MessagePack** | 1.6M | ~95% (compact) | ~1.4 MB | Compact binary format |
+| 📦 **JSON (nlohmann)** | 950K | ~180% (readable) | ~2.0 MB | Human-readable interchange |
+| 📦 **XML (pugixml)** | 720K | ~220% (verbose) | ~2.5 MB | Schema validation needs |
+
+> **Note on Protocol Buffers**: Direct comparison requires identical data structures and measurement methodology. See benchmarks/protobuf_comparison.md (when available) for controlled comparison.
 
 #### Key Performance Insights
-- 🏃 **Binary format**: Industry-leading performance with minimal overhead
-- 🏋️ **SIMD operations**: 2.5x performance boost for numeric arrays
+- 🏃 **Binary format**: Competitive performance with minimal overhead
+- 🏋️ **ARM NEON SIMD**: 3.2x performance boost for bulk operations (scalar: 1.2 GB/s → NEON: 3.8 GB/s)
 - ⏱️ **Type safety**: Zero runtime overhead for type checking
-- 📈 **Scalability**: Linear performance scaling with container complexity
+- 📈 **Scalability**: Performance degrades with container size (see BASELINE.md Table 6)
+  - 10 values: 3.5M ops/s
+  - 100 values: 2.0M ops/s
+  - 1000 values: 450K ops/s
 
 ## Features
 
