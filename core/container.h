@@ -346,20 +346,19 @@ namespace container_module
 					 std::string_view target_name,
 					 std::string_view target_value,
 					 std::string& target_variable);
-					 
-		// Thread-safe helper classes
-		// FIXED: Eliminated TOCTOU (Time-Of-Check-Time-Of-Use) vulnerability
-		// by always acquiring lock first, then checking thread_safe_enabled
-		// inside the critical section
+
+		// Thread-safe helper classes with conditional lock acquisition
+		// Optimized: Only acquire lock when thread-safe mode is enabled
+		// This eliminates lock overhead in single-threaded scenarios
 		class read_lock_guard {
-			std::shared_lock<std::shared_mutex> lock_;
+			std::optional<std::shared_lock<std::shared_mutex>> lock_;
 			bool is_active_;
 		public:
 			read_lock_guard(const value_container* c)
-				: lock_(c->mutex_)  // Always acquire lock first (eliminates race)
-				, is_active_(c->thread_safe_enabled_.load(std::memory_order_acquire)) {
-				// Now safely check if we needed the lock
+				: is_active_(c->thread_safe_enabled_.load(std::memory_order_acquire)) {
+				// Conditionally acquire lock only when thread-safe mode is enabled
 				if (is_active_) {
+					lock_.emplace(c->mutex_);
 					c->read_count_.fetch_add(1, std::memory_order_relaxed);
 				}
 			}
@@ -369,14 +368,14 @@ namespace container_module
 		};
 
 		class write_lock_guard {
-			std::unique_lock<std::shared_mutex> lock_;
+			std::optional<std::unique_lock<std::shared_mutex>> lock_;
 			bool is_active_;
 		public:
 			write_lock_guard(value_container* c)
-				: lock_(c->mutex_)  // Always acquire lock first (eliminates race)
-				, is_active_(c->thread_safe_enabled_.load(std::memory_order_acquire)) {
-				// Now safely check if we needed the lock
+				: is_active_(c->thread_safe_enabled_.load(std::memory_order_acquire)) {
+				// Conditionally acquire lock only when thread-safe mode is enabled
 				if (is_active_) {
+					lock_.emplace(c->mutex_);
 					c->write_count_.fetch_add(1, std::memory_order_relaxed);
 				}
 			}
