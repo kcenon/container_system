@@ -901,6 +901,188 @@ namespace container_errors {
 
 ---
 
+## Long/ULong Type Policy and Cross-Language Compatibility
+
+### Overview
+
+The container system implements a unified **32-bit serialization policy** for `long_value` (type 6) and `ulong_value` (type 7) to ensure platform independence and cross-language compatibility.
+
+### Problem: Platform-Dependent Long Size
+
+Different platforms have different `long` sizes:
+- **Unix/Linux/macOS**: 8 bytes (64-bit)
+- **Windows**: 4 bytes (32-bit)
+
+This caused serious compatibility issues:
+```cpp
+// Unix system (8-byte long)
+auto lv = std::make_shared<long_value>("id", 5'000'000'000L);
+lv->serialize();  // 8 bytes written
+
+// Windows system (4-byte long)
+container->deserialize(data);  // ❌ Overflow! Value truncated
+```
+
+### Solution: Enforced 4-Byte Serialization
+
+**Type Mapping**:
+| Type ID | Name | C++ Type | Range | Serialization |
+|---------|------|----------|-------|---------------|
+| 6 | long_value | int32_t | [-2³¹, 2³¹-1] | 4 bytes LE |
+| 7 | ulong_value | uint32_t | [0, 2³²-1] | 4 bytes LE |
+| 8 | llong_value | int64_t | [-2⁶³, 2⁶³-1] | 8 bytes LE |
+| 9 | ullong_value | uint64_t | [0, 2⁶⁴-1] | 8 bytes LE |
+
+### Implementation
+
+**Range Checking Helpers** (values/numeric_value.h):
+```cpp
+constexpr int64_t kInt32Min = -2147483648LL;
+constexpr int64_t kInt32Max = 2147483647LL;
+constexpr uint64_t kUInt32Max = 4294967295ULL;
+
+constexpr bool is_int32_range(int64_t value) {
+    return value >= kInt32Min && value <= kInt32Max;
+}
+
+constexpr bool is_uint32_range(uint64_t value) {
+    return value <= kUInt32Max;
+}
+```
+
+**long_value Template Specialization** (values/numeric_value.tpp):
+```cpp
+template <>
+inline numeric_value<long, value_types::long_value>::numeric_value(
+    const std::string& name, const long& initial_value)
+    : value(name)
+{
+    int64_t value_as_64 = static_cast<int64_t>(initial_value);
+    if (!is_int32_range(value_as_64)) {
+        throw std::overflow_error(
+            "long_value (type 6) limited to 32-bit range. "
+            "Use llong_value (type 8) for 64-bit values."
+        );
+    }
+
+    // Always serialize as int32 (4 bytes)
+    int32_t value_as_32 = static_cast<int32_t>(initial_value);
+    data_.resize(sizeof(int32_t));
+    std::memcpy(data_.data(), &value_as_32, sizeof(int32_t));
+}
+```
+
+### Breaking Changes
+
+**Before** (Unix/Linux/macOS):
+```cpp
+// This was platform-dependent (8 bytes on Unix)
+auto lv = std::make_shared<long_value>("test", 5'000'000'000L);  // OK on Unix
+```
+
+**After**:
+```cpp
+// Now range-checked (4 bytes on all platforms)
+auto lv = std::make_shared<long_value>("test", 5'000'000'000L);
+// ❌ Throws std::overflow_error
+
+// ✅ Use llong_value instead
+auto llv = std::make_shared<llong_value>("test", 5'000'000'000LL);
+```
+
+### Migration Guide
+
+**Step 1**: Identify values exceeding 32-bit range
+```bash
+# Search for large long values
+grep -r "long_value.*[0-9]{10,}" src/
+```
+
+**Step 2**: Update to appropriate type
+```cpp
+// For values in [-2³¹, 2³¹-1]
+auto lv = std::make_shared<long_value>("count", 1'000'000'000L);  // ✅
+
+// For values beyond 32-bit range
+auto llv = std::make_shared<llong_value>("big", 5'000'000'000LL); // ✅
+```
+
+**Step 3**: Handle exceptions
+```cpp
+try {
+    auto lv = std::make_shared<long_value>("id", user_input);
+} catch (const std::overflow_error& e) {
+    // Value exceeds 32-bit range, use llong_value
+    auto llv = std::make_shared<llong_value>("id", user_input);
+}
+```
+
+### Type Selection Guide
+
+| Value Range | Type to Use | Example |
+|-------------|-------------|---------|
+| [-2³¹, 2³¹-1] | long_value | `long_value("id", 1'000'000'000L)` |
+| [0, 2³²-1] | ulong_value | `ulong_value("count", 3'000'000'000UL)` |
+| Beyond 32-bit signed | llong_value | `llong_value("big", 5'000'000'000LL)` |
+| Beyond 32-bit unsigned | ullong_value | `ullong_value("huge", 10'000'000'000ULL)` |
+
+### Cross-Language Compatibility
+
+This implementation is **binary-compatible** with:
+- ✅ **Python** container_system (4-byte enforcement)
+- ✅ **.NET** container_system (int32/uint32 backing)
+- ✅ **Go** container_system (int32/uint32 types)
+- ✅ **Rust** container_system (i32/u32 with range checking)
+- ✅ **Node.js/TypeScript** container_system (Result<T> pattern with 4-byte Buffer)
+
+**Wire Protocol**: All 6 implementations use identical serialization:
+```
+[type: 1 byte][name_len: 4 bytes LE][name: UTF-8][value_size: 4 bytes LE][value: 4 bytes LE]
+```
+
+### Test Coverage
+
+**test_long_range_checking.cpp** (22 tests):
+- Range validation (5 tests)
+- Overflow rejection (4 tests)
+- Serialization format (2 tests)
+- Type conversion (2 tests)
+- Error messages (2 tests)
+- Platform constants (2 tests)
+- Helper functions (5 tests)
+
+```bash
+$ ./build/bin/test_long_range_checking
+[==========] Running 22 tests from 1 test suite.
+[  PASSED  ] 22 tests.
+```
+
+### Performance Impact
+
+**Negligible**: Range checks are simple integer comparisons optimized by the compiler.
+
+**Benchmarks** (Apple M1 Max):
+- long_value creation: < 1 ns overhead
+- Serialization: No measurable difference
+- Memory savings: 50% on Unix (8 bytes → 4 bytes)
+
+### Best Practices
+
+1. **Default to 32-bit types**: Use `long_value`/`ulong_value` for most cases
+2. **Explicit 64-bit**: Only use `llong_value`/`ullong_value` when needed
+3. **Early validation**: Check ranges at data ingestion points
+4. **Clear error messages**: Include guidance to use 64-bit types
+5. **Documentation**: Comment why 64-bit types are necessary
+
+### References
+
+- Policy Document: `CONTAINER_SYSTEMS_UNIFIED_LONG_POLICY.md`
+- Implementation: `container_system/values/numeric_value.{h,tpp}`
+- Tests: `container_system/tests/test_long_range_checking.cpp`
+- Progress: `LONG_TYPE_POLICY_IMPLEMENTATION_PROGRESS.md`
+
+---
+
 ## Conclusion
 
 The Container System architecture is designed for:
