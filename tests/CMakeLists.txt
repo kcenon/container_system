@@ -54,6 +54,7 @@ set(TEST_SOURCES
     test_messaging_integration.cpp
     performance_tests.cpp
     thread_safety_tests.cpp
+    test_long_range_checking.cpp
 )
 
 # Only add benchmark tests if benchmark library is available

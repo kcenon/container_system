@@ -38,9 +38,38 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <cstring>
 #include <type_traits>
 #include <string>
+#include <stdexcept>
+#include <limits>
 
 namespace container_module
 {
+	// ========================================================================
+	// Range checking constants and helpers for long/ulong type policy
+	// ========================================================================
+
+	/// @brief Check if long is 64-bit on this platform
+	constexpr bool kLongIs64Bit = sizeof(long) == 8;
+
+	/// @brief 32-bit signed range constants
+	constexpr int64_t kInt32Min = -2147483648LL;
+	constexpr int64_t kInt32Max = 2147483647LL;
+
+	/// @brief 32-bit unsigned range constant
+	constexpr uint64_t kUInt32Max = 4294967295ULL;
+
+	/// @brief Check if a 64-bit signed value fits in 32-bit range
+	inline bool is_int32_range(int64_t value) {
+		return value >= kInt32Min && value <= kInt32Max;
+	}
+
+	/// @brief Check if a 64-bit unsigned value fits in 32-bit range
+	inline bool is_uint32_range(uint64_t value) {
+		return value <= kUInt32Max;
+	}
+
+	// ========================================================================
+	// End of range checking helpers
+	// ========================================================================
 	/**
 	 * @class numeric_value
 	 * @brief A template class for storing and converting numeric types

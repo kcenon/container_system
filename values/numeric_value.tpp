@@ -133,4 +133,84 @@ namespace container_module
 		return std::to_string(get_value());
 	}
 
+	// ========================================================================
+	// Template specialization for long_value (type 6) with range checking
+	// ========================================================================
+
+	template <>
+	inline numeric_value<long, value_types::long_value>::numeric_value(
+		const std::string& name, const long& initial_value)
+		: value(name)
+	{
+		// Convert to int64_t for range checking
+		int64_t value_as_64 = static_cast<int64_t>(initial_value);
+
+		// Enforce strict 32-bit range policy
+		if (!is_int32_range(value_as_64)) {
+			throw std::overflow_error(
+				"long_value: value " + std::to_string(value_as_64) +
+				" exceeds 32-bit range [-2147483648, 2147483647]. "
+				"Use llong_value for 64-bit values."
+			);
+		}
+
+		type_ = value_types::long_value;
+
+		// Always serialize as 4 bytes (int32_t)
+		int32_t value_as_32 = static_cast<int32_t>(initial_value);
+		data_.resize(sizeof(int32_t));
+		std::memcpy(data_.data(), &value_as_32, sizeof(int32_t));
+	}
+
+	template <>
+	inline long numeric_value<long, value_types::long_value>::get_value(void) const
+	{
+		// Deserialize as int32_t, then convert to long
+		int32_t value_as_32;
+		std::memcpy(&value_as_32, data_.data(), sizeof(int32_t));
+		return static_cast<long>(value_as_32);
+	}
+
+	// ========================================================================
+	// Template specialization for ulong_value (type 7) with range checking
+	// ========================================================================
+
+	template <>
+	inline numeric_value<unsigned long, value_types::ulong_value>::numeric_value(
+		const std::string& name, const unsigned long& initial_value)
+		: value(name)
+	{
+		// Convert to uint64_t for range checking
+		uint64_t value_as_64 = static_cast<uint64_t>(initial_value);
+
+		// Enforce strict 32-bit range policy
+		if (!is_uint32_range(value_as_64)) {
+			throw std::overflow_error(
+				"ulong_value: value " + std::to_string(value_as_64) +
+				" exceeds 32-bit range [0, 4294967295]. "
+				"Use ullong_value for 64-bit values."
+			);
+		}
+
+		type_ = value_types::ulong_value;
+
+		// Always serialize as 4 bytes (uint32_t)
+		uint32_t value_as_32 = static_cast<uint32_t>(initial_value);
+		data_.resize(sizeof(uint32_t));
+		std::memcpy(data_.data(), &value_as_32, sizeof(uint32_t));
+	}
+
+	template <>
+	inline unsigned long numeric_value<unsigned long, value_types::ulong_value>::get_value(void) const
+	{
+		// Deserialize as uint32_t, then convert to unsigned long
+		uint32_t value_as_32;
+		std::memcpy(&value_as_32, data_.data(), sizeof(uint32_t));
+		return static_cast<unsigned long>(value_as_32);
+	}
+
+	// ========================================================================
+	// End of template specializations
+	// ========================================================================
+
 } // namespace container_module
