@@ -57,11 +57,12 @@ namespace container_module
 		double_value,
 		bytes_value,
 		string_value,
-		container_value
+		container_value,
+		array_value
 	};
 
 	// Compile-time type mapping
-	constexpr std::array<std::pair<std::string_view, value_types>, 15> type_map{{
+	constexpr std::array<std::pair<std::string_view, value_types>, 16> type_map{{
 		{"0", value_types::null_value},
 		{"1", value_types::bool_value},
 		{"2", value_types::short_value},
@@ -76,7 +77,8 @@ namespace container_module
 		{"11", value_types::double_value},
 		{"12", value_types::bytes_value},
 		{"13", value_types::string_value},
-		{"14", value_types::container_value}
+		{"14", value_types::container_value},
+		{"15", value_types::array_value}
 	}};
 
 	/**
