@@ -39,6 +39,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "container/values/bool_value.h"
 #include "container/values/bytes_value.h"
 #include "container/values/container_value.h"
+#include "container/values/array_value.h"
 #include "container/values/numeric_value.h"
 #include "container/values/string_value.h"
 
@@ -199,6 +200,14 @@ namespace container_module
 			  {
 				  long count = std::atol(d.c_str());
 				  return std::make_shared<container_value>(n, count);
+			  } });
+		data_type_map_.insert(
+			{ value_types::array_value,
+			  [this](const std::string& n, const std::string& d)
+			  {
+				  // Array value: d contains the count, like container_value
+				  // The actual elements will be parsed and added during nesting logic
+				  return std::make_shared<array_value>(n);
 			  } });
 	}
 
@@ -1044,23 +1053,29 @@ bool value_container::deserialize(const std::vector<uint8_t>& data_array,
 				units_.push_back(tVal);
 				tVal->set_parent(nullptr);
 
-				if (tVal->is_container() && (tVal->to_long() > 0))
+				// Check if this is a container or array that can hold children
+				if ((tVal->is_container() || tVal->is_array()) && (tVal->to_long() > 0))
 				{
 					currentContainer = tVal;
 				}
 			}
 			else
 			{
-				// add to current container
-				// we must dynamic_cast to container_value to call add(...)
-				// directly
+				// add to current container or array
+				// we must dynamic_cast to container_value or array_value
 				if (auto c = std::dynamic_pointer_cast<container_value>(
 						currentContainer))
 				{
 					c->add(tVal, false);
 				}
+				else if (auto a = std::dynamic_pointer_cast<array_value>(
+						currentContainer))
+				{
+					a->push_back(tVal);
+				}
 
-				if (tVal->is_container() && tVal->to_long() > 0)
+				// Check if this is a container or array that can hold children
+				if ((tVal->is_container() || tVal->is_array()) && tVal->to_long() > 0)
 				{
 					currentContainer = tVal;
 				}

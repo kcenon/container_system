@@ -108,6 +108,7 @@ namespace container_module
 		bool is_numeric() const;
 		bool is_string() const;
 		bool is_container() const;
+		bool is_array() const;
 
 		const std::string to_xml();
 		const std::string to_json();
