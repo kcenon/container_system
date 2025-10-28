@@ -177,7 +177,7 @@ TEST_F(PerformanceTest, SerializationPerformance) {
     // Add various types of values
     container->add(std::make_shared<string_value>("string_data", "Lorem ipsum dolor sit amet, consectetur adipiscing elit"));
     container->add(std::make_shared<int_value>("int_data", 123456789));
-    container->add(std::make_shared<long_value>("long_data", 9223372036854775807LL));
+    container->add(std::make_shared<llong_value>("long_data", 9223372036854775807LL));
     container->add(std::make_shared<double_value>("double_data", 3.141592653589793));
     container->add(std::make_shared<bool_value>("bool_data", true));
 
@@ -500,7 +500,7 @@ TEST_F(PerformanceTest, LargeScaleStressTest) {
                     container->add(std::make_shared<bool_value>(key, (i + j) % 2 == 0));
                     break;
                 case 4:
-                    container->add(std::make_shared<long_value>(key, static_cast<long>(i) * 1000000 + j));
+                    container->add(std::make_shared<int_value>(key, (i * 1000 + j) % 2147483647));
                     break;
             }
         }
