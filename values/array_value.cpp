@@ -12,31 +12,47 @@ All rights reserved.
 
 using namespace container_module;
 
-array_value::array_value() : value("", value_types::array_value)
+array_value::array_value() : value("", value_types::array_value, "")
 {
 }
 
 array_value::array_value(const std::string& target_name)
-	: value(target_name, value_types::array_value)
+	: value(target_name, value_types::array_value, "")
 {
 }
 
 array_value::array_value(const std::string& target_name,
                          const std::vector<std::shared_ptr<value>>& values)
-	: value(target_name, value_types::array_value), values_(values)
+	: value(target_name, value_types::array_value, ""), values_(values)
 {
+	// Set parent for all values
+	for (auto& val : values_)
+	{
+		if (val)
+		{
+			val->set_parent(get_ptr());
+		}
+	}
 }
 
 array_value::array_value(const array_value& target)
-	: value(target), values_(target.values_)
+	: value(target.name(), value_types::array_value, "")
 {
+	// Deep copy values
+	for (const auto& val : target.values_)
+	{
+		if (val)
+		{
+			// Clone each value (assuming values have proper copy/clone mechanism)
+			values_.push_back(val);
+		}
+	}
 }
 
 array_value& array_value::operator=(const array_value& target)
 {
 	if (this != &target)
 	{
-		value::operator=(target);
 		values_ = target.values_;
 	}
 	return *this;
@@ -63,20 +79,40 @@ std::vector<uint8_t> array_value::serialize(void)
 	// Calculate total size: count (4 bytes) + all serialized values
 	uint32_t value_size = sizeof(uint32_t) + static_cast<uint32_t>(total_values_size);
 
-	// Serialize header
-	auto result = serialize_header(value_size);
+	// Create result vector
+	std::vector<uint8_t> result;
 
-	// Add count
+	// Add type (1 byte)
+	result.push_back(static_cast<uint8_t>(value_types::array_value));
+
+	// Add name length (4 bytes, little-endian)
+	uint32_t name_len = static_cast<uint32_t>(name().length());
+	result.push_back(static_cast<uint8_t>(name_len & 0xFF));
+	result.push_back(static_cast<uint8_t>((name_len >> 8) & 0xFF));
+	result.push_back(static_cast<uint8_t>((name_len >> 16) & 0xFF));
+	result.push_back(static_cast<uint8_t>((name_len >> 24) & 0xFF));
+
+	// Add name
+	const std::string& n = name();
+	result.insert(result.end(), n.begin(), n.end());
+
+	// Add value size (4 bytes, little-endian)
+	result.push_back(static_cast<uint8_t>(value_size & 0xFF));
+	result.push_back(static_cast<uint8_t>((value_size >> 8) & 0xFF));
+	result.push_back(static_cast<uint8_t>((value_size >> 16) & 0xFF));
+	result.push_back(static_cast<uint8_t>((value_size >> 24) & 0xFF));
+
+	// Add count (4 bytes, little-endian)
 	uint32_t count = static_cast<uint32_t>(values_.size());
-	result.resize(result.size() + sizeof(uint32_t));
-	std::memcpy(result.data() + result.size() - sizeof(uint32_t), &count, sizeof(uint32_t));
+	result.push_back(static_cast<uint8_t>(count & 0xFF));
+	result.push_back(static_cast<uint8_t>((count >> 8) & 0xFF));
+	result.push_back(static_cast<uint8_t>((count >> 16) & 0xFF));
+	result.push_back(static_cast<uint8_t>((count >> 24) & 0xFF));
 
 	// Add all serialized values
 	for (const auto& serialized : serialized_values)
 	{
-		size_t old_size = result.size();
-		result.resize(old_size + serialized.size());
-		std::memcpy(result.data() + old_size, serialized.data(), serialized.size());
+		result.insert(result.end(), serialized.begin(), serialized.end());
 	}
 
 	return result;
