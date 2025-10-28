@@ -66,13 +66,13 @@ namespace container_module
 		 * @brief Get the type discriminator
 		 * @return value_types::array_value (15)
 		 */
-		value_types type(void) const override;
+		value_types type(void) const;
 
 		/**
 		 * @brief Serialize to binary format
 		 * @return Vector of bytes representing the serialized array
 		 */
-		std::vector<uint8_t> serialize(void) override;
+		std::vector<uint8_t> serialize(void);
 
 		/**
 		 * @brief Deserialize from binary data

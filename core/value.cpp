@@ -308,6 +308,11 @@ namespace container_module
 		return (type_ == value_types::container_value);
 	}
 
+	bool value::is_array() const
+	{
+		return (type_ == value_types::array_value);
+	}
+
 	const std::string value::to_xml()
 	{
 		std::string result;
