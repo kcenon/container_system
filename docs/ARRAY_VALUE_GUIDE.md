@@ -1,8 +1,65 @@
 # ArrayValue Implementation Guide
 
+## Table of Contents
+
+- [Overview](#overview)
+- [Quick Start](#quick-start)
+- [Architecture](#architecture)
+- [Wire Protocol Format](#wire-protocol-format)
+- [Usage Examples](#usage-examples)
+- [API Reference](#api-reference)
+- [Deserialization](#deserialization)
+- [Cross-Language Interoperability](#cross-language-interoperability)
+- [Error Handling](#error-handling)
+- [Best Practices](#best-practices)
+- [Performance Considerations](#performance-considerations)
+- [Troubleshooting](#troubleshooting)
+- [Migration Guide](#migration-from-containervalue)
+- [See Also](#see-also)
+
 ## Overview
 
 `ArrayValue` (type 15) is a container type that stores ordered collections of heterogeneous or homogeneous values, providing JSON-array-like functionality with full cross-language compatibility across C++, Rust, Go, Python, .NET, and Node.js implementations.
+
+**Key Features:**
+- ✅ Heterogeneous element support (mix different value types)
+- ✅ Dynamic resizing with `push_back()`
+- ✅ Index-based access with `at()`
+- ✅ Full serialization support (binary, JSON, XML, wire protocol)
+- ✅ Cross-language data exchange compatibility
+- ✅ Automatic parent-child relationship management
+
+## Quick Start
+
+### 5-Minute Introduction
+
+```cpp
+#include "container/values/array_value.h"
+#include "container/values/numeric_value.h"
+#include "container/values/string_value.h"
+
+using namespace container_module;
+
+// 1. Create an empty array
+auto numbers = std::make_shared<array_value>("numbers");
+
+// 2. Add elements
+numbers->push_back(std::make_shared<int_value>("", 42));
+numbers->push_back(std::make_shared<int_value>("", 100));
+
+// 3. Access elements
+auto first = numbers->at(0);
+std::cout << "First: " << first->to_long() << std::endl;
+
+// 4. Check size
+std::cout << "Size: " << numbers->size() << std::endl;
+
+// 5. Serialize
+auto bytes = numbers->serialize();
+std::cout << "Serialized " << bytes.size() << " bytes" << std::endl;
+```
+
+**That's it!** You're now using ArrayValue. Read on for advanced features.
 
 ## Architecture
 
@@ -373,6 +430,171 @@ if (element->type() == value_types::int_value) {
    array->clear();
    // Array is now empty, ready for reuse
    ```
+
+## API Reference
+
+### Constructor Methods
+
+| Method | Description | Example |
+|--------|-------------|---------|
+| `array_value(name)` | Create empty array | `auto arr = std::make_shared<array_value>("data");` |
+| `array_value(name, values)` | Create with initial values | `auto arr = std::make_shared<array_value>("data", vec);` |
+| `array_value(const array_value&)` | Copy constructor (deep copy) | `auto copy = std::make_shared<array_value>(*original);` |
+
+### Element Manipulation
+
+| Method | Return Type | Description |
+|--------|-------------|-------------|
+| `push_back(value)` | `void` | Add element to end of array |
+| `at(index)` | `shared_ptr<value>` | Get element at index (throws on invalid index) |
+| `size()` | `size_t` | Get number of elements |
+| `empty()` | `bool` | Check if array is empty |
+| `clear()` | `void` | Remove all elements |
+| `values()` | `const vector<shared_ptr<value>>&` | Get reference to all elements |
+
+### Type Information
+
+| Method | Return Type | Description |
+|--------|-------------|-------------|
+| `type()` | `value_types` | Returns `value_types::array_value` (15) |
+| `name()` | `string` | Get array name |
+
+### Serialization Methods
+
+| Method | Return Type | Description |
+|--------|-------------|-------------|
+| `serialize()` | `vector<uint8_t>` | Serialize to binary format |
+| `to_string()` | `string` | Convert to text representation |
+| `deserialize(bytes)` | `shared_ptr<array_value>` | Static method to deserialize from binary |
+
+### Inherited from value
+
+| Method | Description |
+|--------|-------------|
+| `is_array()` | Returns `true` for ArrayValue |
+| `is_container()` | Returns `false` for ArrayValue |
+| `set_parent(parent)` | Set parent container |
+| `parent()` | Get parent container |
+
+## Troubleshooting
+
+### Common Issues and Solutions
+
+#### Issue: "Index out of range" exception
+
+**Problem:**
+```cpp
+auto array = std::make_shared<array_value>("data");
+auto elem = array->at(0); // Throws std::out_of_range
+```
+
+**Solution:**
+```cpp
+if (!array->empty()) {
+    auto elem = array->at(0); // Safe
+}
+// Or check size
+if (array->size() > index) {
+    auto elem = array->at(index);
+}
+```
+
+#### Issue: Type casting fails for elements
+
+**Problem:**
+```cpp
+auto elem = array->at(0);
+auto int_val = std::dynamic_pointer_cast<int_value>(elem);
+// int_val is nullptr
+```
+
+**Solution:**
+```cpp
+// Always check type first
+if (elem->type() == value_types::int_value) {
+    auto int_val = std::dynamic_pointer_cast<int_value>(elem);
+    // Now safe to use
+}
+```
+
+#### Issue: Memory leak suspicions
+
+**Problem:** Worried about circular references with parent-child relationships.
+
+**Solution:**
+ArrayValue uses `shared_ptr` with proper ownership. Parent pointers are raw pointers to avoid cycles. No manual cleanup needed.
+
+```cpp
+{
+    auto array = std::make_shared<array_value>("data");
+    array->push_back(std::make_shared<int_value>("", 42));
+    // Automatically cleaned up when array goes out of scope
+}
+```
+
+#### Issue: Cross-language deserialization fails
+
+**Problem:** Wire format from Python cannot be parsed in C++.
+
+**Solution:** Check wire format differences:
+- Python uses type IDs (e.g., "15")
+- C++ uses type names (e.g., "array_value")
+
+Use the appropriate deserializer for the source format.
+
+#### Issue: Serialized size is larger than expected
+
+**Problem:** Binary serialization produces large output.
+
+**Solution:** ArrayValue stores complete element serialization. Each element includes:
+- Type (1 byte)
+- Name length and name
+- Value size and value data
+
+For large arrays of simple types, consider custom serialization or compression.
+
+#### Issue: Compilation errors with array_value.h
+
+**Problem:**
+```
+error: 'override' only for virtual member functions
+```
+
+**Solution:** Make sure you're using the latest version. The `override` keywords were removed from non-virtual methods in commit `264f9914`.
+
+### Debugging Tips
+
+1. **Print array contents:**
+   ```cpp
+   std::cout << "Array: " << array->to_string() << std::endl;
+   ```
+
+2. **Check element types:**
+   ```cpp
+   for (size_t i = 0; i < array->size(); ++i) {
+       auto elem = array->at(i);
+       std::cout << "Element " << i << " type: "
+                 << elem->type() << std::endl;
+   }
+   ```
+
+3. **Validate serialization:**
+   ```cpp
+   auto bytes = array->serialize();
+   auto restored = array_value::deserialize(bytes);
+   assert(restored->size() == array->size());
+   ```
+
+## Language-Specific API Comparison
+
+| Operation | C++ | Rust | Go | Python |
+|-----------|-----|------|-----|--------|
+| Create empty | `make_shared<array_value>("name")` | `ArrayValue::new("name", vec![])` | `NewArrayValue("name")` | `ArrayValue("name")` |
+| Add element | `push_back(elem)` | `push(elem)` | `Push(elem)` | `push_back(elem)` |
+| Get element | `at(index)` | `at(index)` (returns `Option`) | `At(index)` (returns `error`) | `at(index)` |
+| Get size | `size()` | `count()` | `Count()` | `count()` |
+| Check empty | `empty()` | `is_empty()` | `IsEmpty()` | `is_empty()` |
+| Clear | `clear()` | `clear()` | `Clear()` | `clear()` |
 
 ## Migration from ContainerValue
 
