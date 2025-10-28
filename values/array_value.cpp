@@ -66,7 +66,7 @@ value_types array_value::type(void) const
 std::vector<uint8_t> array_value::serialize(void)
 {
 	// Serialize all values first to calculate total size
-	std::vector<std::vector<uint8_t>> serialized_values;
+	std::vector<std::string> serialized_values;
 	size_t total_values_size = 0;
 
 	for (const auto& val : values_)
@@ -112,7 +112,9 @@ std::vector<uint8_t> array_value::serialize(void)
 	// Add all serialized values
 	for (const auto& serialized : serialized_values)
 	{
-		result.insert(result.end(), serialized.begin(), serialized.end());
+		result.insert(result.end(),
+		              reinterpret_cast<const uint8_t*>(serialized.data()),
+		              reinterpret_cast<const uint8_t*>(serialized.data() + serialized.size()));
 	}
 
 	return result;
