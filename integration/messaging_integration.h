@@ -179,7 +179,7 @@ messaging_container_builder& messaging_container_builder::add_value(const std::s
             auto val = std::make_shared<int_value>(key, static_cast<int32_t>(value));
             container_->add(val);
         } else {
-            auto val = std::make_shared<long_value>(key, static_cast<int64_t>(value));
+            auto val = std::make_shared<llong_value>(key, static_cast<int64_t>(value));
             container_->add(val);
         }
     } else if constexpr (std::is_floating_point_v<std::decay_t<T>>) {
