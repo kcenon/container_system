@@ -6,7 +6,7 @@ cmake_minimum_required(VERSION 3.16)
 
 # Sample executables
 set(SAMPLE_PROGRAMS
-    container_basic_usage
+    basic_usage
     thread_safe_example
     performance_benchmark
 )
@@ -49,15 +49,15 @@ foreach(SAMPLE ${SAMPLE_PROGRAMS})
 endforeach()
 
 # Create a combined sample runner
-add_executable(container_run_all_samples container_run_all_samples.cpp)
-target_link_libraries(container_run_all_samples PRIVATE container_system)
-set_target_properties(container_run_all_samples PROPERTIES
+add_executable(run_all_samples run_all_samples.cpp)
+target_link_libraries(run_all_samples PRIVATE container_system)
+set_target_properties(run_all_samples PROPERTIES
     CXX_STANDARD 20
     CXX_STANDARD_REQUIRED ON
     CXX_EXTENSIONS OFF
 )
 
-install(TARGETS container_run_all_samples
+install(TARGETS run_all_samples
     RUNTIME DESTINATION bin/samples
 )
 
