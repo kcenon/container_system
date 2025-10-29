@@ -1,0 +1,25 @@
+<map id="AdvancedContainerExample::demonstrate_batch_processing" name="AdvancedContainerExample::demonstrate_batch_processing">
+<area shape="rect" id="Node000001" title="Demonstrates batch processing with messaging features." alt="" coords="5,253,239,293"/>
+<area shape="rect" id="Node000002" href="$d0/dcd/classcontainer__module_1_1integration_1_1messaging__container__builder.html#a70981bba692bd185814812957472c6ec" title=" " alt="" coords="307,62,528,117"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="139,251,200,190,241,156,285,127,300,120,302,124,288,132,244,161,203,194,143,255"/>
+<area shape="rect" id="Node000008" href="$d0/dcd/classcontainer__module_1_1integration_1_1messaging__container__builder.html#ae2f2b773fb7248be85f92bd6265efab4" title=" " alt="" coords="287,141,548,181"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="159,251,218,221,286,192,315,183,316,188,288,197,220,226,161,255"/>
+<area shape="rect" id="Node000009" href="$d0/dcd/classcontainer__module_1_1integration_1_1messaging__container__builder.html#a56f2ae6cae82bd445e889788db53e2da" title=" " alt="" coords="307,206,528,261"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="239,255,293,248,293,253,239,260"/>
+<area shape="rect" id="Node000010" href="$d0/dcd/classcontainer__module_1_1integration_1_1messaging__container__builder.html#a271381f5ca5e3e609eaf574e5a3bf684" title=" " alt="" coords="307,285,528,339"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="239,286,293,293,293,298,239,291"/>
+<area shape="rect" id="Node000011" href="$d0/dcd/classcontainer__module_1_1integration_1_1messaging__container__builder.html#a2c82ff350d7cb1efb87bdc6128a95a5c" title=" " alt="" coords="307,363,528,418"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="162,291,221,320,288,350,306,356,304,361,286,354,218,325,160,296"/>
+<area shape="rect" id="Node000012" href="$d0/dcd/classcontainer__module_1_1integration_1_1messaging__container__builder.html#a71aa40744bafcb49d34270698dbc4341" title=" " alt="" coords="307,442,528,497"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="141,292,201,359,242,396,288,428,298,434,296,439,285,433,239,400,197,362,137,295"/>
+<area shape="rect" id="Node000003" href="$d5/df9/classcontainer__module_1_1value.html#ae2d6a5ff0505af3f3c56e50b2ece015e" title=" " alt="" coords="596,69,779,109"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="528,87,582,87,582,92,528,92"/>
+<area shape="rect" id="Node000004" href="$d1/d1a/namespacecontainer__module.html#a83ed4416891be1a3f3191bf92b50b3e9" title="Convert a string&#45;based type indicator (e.g., &quot;4&quot;) to a value_types enum." alt="" coords="827,5,1023,45"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="762,67,836,46,838,51,763,72"/>
+<area shape="rect" id="Node000006" href="$d1/daf/classutility__module_1_1formatter.html#a1833466f2e4df9a2dbab6204dbb95800" title=" " alt="" coords="831,69,1018,109"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="779,87,818,87,818,92,779,92"/>
+<area shape="rect" id="Node000007" href="$d5/df9/classcontainer__module_1_1value.html#aad6ea2fdcbb516d7a72f577de0b6102f" title=" " alt="" coords="833,133,1016,173"/>
+<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="763,107,838,127,836,132,762,112"/>
+<area shape="rect" id="Node000005" href="$d1/d1a/namespacecontainer__module.html#ac03e62099dde8cbf072a3a4c635382bf" title="Compile&#45;time conversion from string to value_types." alt="" coords="1071,5,1239,45"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="1023,23,1057,23,1057,28,1023,28"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="scenarios::ContentManagementSystem" name="scenarios::ContentManagementSystem">
+<area shape="rect" id="Node000001" title="Content Management System." alt="" coords="5,163,227,337"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="49,5,183,71"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="119,71,119,146,113,146,113,71"/>
+</map>

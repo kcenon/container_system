@@ -1,0 +1,23 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="Node000000" title=" " alt="" coords="5,197,151,237"/>
+<area shape="rect" id="Node000001" href="$db/de5/classcontainer__module_1_1thread__safe__container.html" title="Thread&#45;safe container with lock optimization." alt="" coords="199,140,388,180"/>
+<area shape="poly" id="edge1_Node000000_Node000001" title=" " alt="" coords="163,192,217,178,218,183,165,197"/>
+<area shape="rect" id="Node000002" href="$d5/df9/classcontainer__module_1_1value.html" title="The base class for all values stored in the container system." alt="" coords="202,205,385,230"/>
+<area shape="poly" id="edge2_Node000000_Node000002" title=" " alt="" coords="164,215,202,215,202,220,164,220"/>
+<area shape="rect" id="Node000009" href="$d9/dad/classcontainer__module_1_1value__container.html" title="A high&#45;level container for messages, including source/target IDs, message type, and a list of values ..." alt="" coords="202,321,385,361"/>
+<area shape="poly" id="edge9_Node000000_Node000009" title=" " alt="" coords="127,242,259,319,256,323,124,247"/>
+<area shape="rect" id="Node000003" href="$d5/d5f/classcontainer__module_1_1array__value.html" title="A specialized value for storing arrays/lists of values." alt="" coords="451,5,633,45"/>
+<area shape="poly" id="edge3_Node000002_Node000003" title=" " alt="" coords="379,196,386,190,399,174,406,158,410,125,413,90,420,73,434,55,450,43,454,48,438,59,425,75,418,91,415,125,411,160,404,177,390,194,382,200"/>
+<area shape="rect" id="Node000004" href="$d7/d22/classcontainer__module_1_1bool__value.html" title="A specialized value for boolean data." alt="" coords="455,69,629,109"/>
+<area shape="poly" id="edge4_Node000002_Node000004" title=" " alt="" coords="375,197,386,190,402,173,410,156,418,137,434,119,455,107,458,112,438,123,422,140,415,158,406,176,390,194,378,201"/>
+<area shape="rect" id="Node000005" href="$df/df7/classcontainer__module_1_1bytes__value.html" title="A specialized value that stores an arbitrary byte array (Base64&#45;encoded in string form)." alt="" coords="451,133,633,173"/>
+<area shape="poly" id="edge5_Node000002_Node000005" title=" " alt="" coords="356,199,463,171,464,176,357,204"/>
+<area shape="rect" id="Node000006" href="$da/d1c/classcontainer__module_1_1container__value.html" title="A specialized value that can hold child values, i.e. a hierarchical container." alt="" coords="438,197,646,237"/>
+<area shape="poly" id="edge6_Node000002_Node000006" title=" " alt="" coords="398,215,438,215,438,220,398,220"/>
+<area shape="rect" id="Node000007" href="$de/dc4/classcontainer__module_1_1numeric__value.html" title="A template class for storing and converting numeric types (integral or floating)." alt="" coords="442,261,642,301"/>
+<area shape="poly" id="edge7_Node000002_Node000007" title=" " alt="" coords="357,231,464,259,463,264,356,236"/>
+<area shape="rect" id="Node000008" href="$d5/d22/classcontainer__module_1_1string__value.html" title="A specialized value for storing textual data." alt="" coords="450,325,634,365"/>
+<area shape="poly" id="edge8_Node000002_Node000008" title=" " alt="" coords="322,237,374,274,437,311,466,323,464,328,435,316,371,279,319,241"/>
+<area shape="rect" id="Node000010" href="$da/dab/classcontainer__module_1_1optimized__container.html" title="Performance&#45;optimized value_container with zero&#45;copy operations." alt="" coords="436,389,648,429"/>
+<area shape="poly" id="edge10_Node000009_Node000010" title=" " alt="" coords="381,362,469,387,468,392,379,368"/>
+</map>
