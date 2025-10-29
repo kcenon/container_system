@@ -156,13 +156,23 @@ add_library(container_system STATIC
 )
 
 # Suppress warnings inherited from parent project
-target_compile_options(container_system PRIVATE
-    -Wno-sign-conversion
-    -Wno-shorten-64-to-32
-    -Wno-float-equal
-    -Wno-implicit-float-conversion
-    -Wno-unreachable-code-loop-increment
-)
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+    target_compile_options(container_system PRIVATE
+        -Wno-sign-conversion
+        -Wno-shorten-64-to-32
+        -Wno-float-equal
+        -Wno-implicit-float-conversion
+        -Wno-unreachable-code-loop-increment
+    )
+elseif(MSVC)
+    target_compile_options(container_system PRIVATE
+        /wd4244  # conversion from 'type1' to 'type2', possible loss of data
+        /wd4267  # conversion from 'size_t' to 'type', possible loss of data
+        /wd4305  # truncation from 'type1' to 'type2'
+        /wd4365  # conversion from 'type1' to 'type2', signed/unsigned mismatch
+        /wd4668  # 'symbol' is not defined as a preprocessor macro
+    )
+endif()
 
 if(BUILD_WITH_COMMON_SYSTEM)
     message(STATUS "Container System: Enabling common_system integration")
