@@ -151,8 +151,17 @@ set(ALL_FILES
 ##################################################
 
 # Create static library
-add_library(container_system STATIC 
+add_library(container_system STATIC
     ${ALL_FILES}
+)
+
+# Suppress warnings inherited from parent project
+target_compile_options(container_system PRIVATE
+    -Wno-sign-conversion
+    -Wno-shorten-64-to-32
+    -Wno-float-equal
+    -Wno-implicit-float-conversion
+    -Wno-unreachable-code-loop-increment
 )
 
 if(BUILD_WITH_COMMON_SYSTEM)
