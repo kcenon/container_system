@@ -88,9 +88,8 @@ using ::common::map;
 using ::common::and_then;
 using ::common::or_else;
 using ::common::try_catch;
-namespace error_codes {
-using namespace ::common::error_codes;
-} // namespace error_codes
+// Import common system error codes as namespace alias (not 'using namespace')
+namespace error_codes = ::common::error_codes;
 } // namespace common
 } // namespace kcenon
 #endif // KCENON_COMMON_RESULT_FALLBACK_DEFINED
