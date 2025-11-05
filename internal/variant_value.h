@@ -49,16 +49,16 @@ namespace container_module
     class thread_safe_container;
 
     /**
-     * @brief Type-safe variant for all possible value types in the container system
-     * 
-     * This replaces the runtime polymorphism with compile-time type safety using std::variant.
-     * The order of types in the variant corresponds to the value_types enum for compatibility.
-     * 
-     * Note: On some platforms (like macOS), int64_t and long long are the same type,
-     * so we use conditional types to avoid duplication.
+     * @brief Legacy variant for variant_value (v1) class
+     *
+     * This is the original variant definition for the legacy variant_value class.
+     * It uses a different type order than variant_value_v2 for backward compatibility.
+     *
+     * Note: Renamed from ValueVariant to LegacyValueVariant to avoid conflicts
+     * with variant_value_v2's ValueVariant type.
      */
         // Use a unified variant definition that avoids type duplication
-        using ValueVariant = std::variant<
+        using LegacyValueVariant = std::variant<
             std::monostate,                       // null_value (index 0)
             bool,                                 // bool_value (index 1)
             std::vector<uint8_t>,                 // bytes_value (index 2)
@@ -237,7 +237,7 @@ namespace container_module
 
     private:
         const std::string name_;  // Immutable after construction for lock-free access
-        ValueVariant data_;
+        LegacyValueVariant data_;
         mutable std::shared_mutex mutex_;
         mutable std::atomic<size_t> read_count_{0};
         mutable std::atomic<size_t> write_count_{0};

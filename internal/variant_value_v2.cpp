@@ -69,13 +69,13 @@ namespace container_module
     variant_value_v2::variant_value_v2(std::string_view name,
                                        value_types type,
                                        const std::vector<uint8_t>& raw_data)
-        : name_(name)
+        : name_(name), data_(std::in_place_index<0>)
     {
         // Construct variant from legacy type and raw data
         size_t offset = 0;
         if (!deserialize_data(*this, type, raw_data, offset)) {
-            // Failed to deserialize, default to null
-            data_ = std::monostate{};
+            // Failed to deserialize, reset to null
+            data_.emplace<0>();
         }
     }
 
@@ -341,7 +341,7 @@ namespace container_module
                                             size_t& offset) {
         switch (type) {
             case value_types::null_value:
-                result.data_ = std::monostate{};
+                result.data_.emplace<0>();  // null is at index 0
                 return true;
 
             case value_types::bool_value:

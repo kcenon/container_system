@@ -6,6 +6,7 @@ All rights reserved.
 *****************************************************************************/
 
 #include "container/integration/value_bridge.h"
+#include "container/internal/thread_safe_container.h"
 #include "container/values/bool_value.h"
 #include "container/values/numeric_value.h"
 #include "container/values/bytes_value.h"
@@ -105,7 +106,8 @@ namespace container_module
     variant_value_v2 value_bridge::convert_container_value(const value& legacy) {
         // Container value contains nested values
         // For now, serialize and deserialize through binary format
-        auto serialized = legacy.serialize();
+        // Note: serialize() is not const, but we're only reading
+        auto serialized = const_cast<value&>(legacy).serialize();
         auto bytes = std::vector<uint8_t>(serialized.begin(), serialized.end());
 
         // Deserialize into thread_safe_container
@@ -115,7 +117,8 @@ namespace container_module
 
     variant_value_v2 value_bridge::convert_array_value(const value& legacy) {
         // Get array elements
-        auto children = legacy.children();
+        // Note: children() is not const, but we're only reading
+        auto children = const_cast<value&>(legacy).children();
 
         array_variant arr;
         arr.values.reserve(children.size());
