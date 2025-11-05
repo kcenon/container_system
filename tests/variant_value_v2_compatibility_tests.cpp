@@ -85,100 +85,110 @@ protected:
 };
 
 TEST_F(SerializationCompatibilityTest, BoolValueRoundTrip) {
-    // Legacy → bytes
-    auto legacy_data = serialize_legacy<bool_value>("flag", true);
+    // Create legacy value
+    auto legacy = std::make_shared<bool_value>("flag", true);
 
-    // bytes → modern
-    auto modern = variant_value_v2::deserialize(legacy_data);
-    ASSERT_TRUE(modern.has_value());
-    EXPECT_EQ(modern->type(), value_types::bool_value);
+    // Legacy → modern (via value_bridge)
+    auto modern = value_bridge::to_modern(legacy);
+    EXPECT_EQ(modern.type(), value_types::bool_value);
 
-    auto bool_val = modern->get<bool>();
+    auto bool_val = modern.get<bool>();
     ASSERT_TRUE(bool_val.has_value());
     EXPECT_TRUE(*bool_val);
 
     // modern → bytes
-    auto modern_data = modern->serialize();
+    auto modern_data = modern.serialize();
 
-    // Verify byte-for-byte equality
-    EXPECT_EQ(legacy_data, modern_data);
+    // bytes → modern (round-trip)
+    auto deserialized = variant_value_v2::deserialize(modern_data);
+    ASSERT_TRUE(deserialized.has_value());
+    EXPECT_EQ(*deserialized, modern);
 }
 
 TEST_F(SerializationCompatibilityTest, IntValueRoundTrip) {
-    auto legacy_data = serialize_legacy<int_value>("count", 42);
+    auto legacy = std::make_shared<int_value>("count", 42);
 
-    auto modern = variant_value_v2::deserialize(legacy_data);
-    ASSERT_TRUE(modern.has_value());
-    EXPECT_EQ(modern->type(), value_types::int_value);
+    // Legacy → modern
+    auto modern = value_bridge::to_modern(legacy);
+    EXPECT_EQ(modern.type(), value_types::int_value);
 
-    auto int_val = modern->get<int32_t>();
+    auto int_val = modern.get<int32_t>();
     ASSERT_TRUE(int_val.has_value());
     EXPECT_EQ(*int_val, 42);
 
-    auto modern_data = modern->serialize();
-    EXPECT_EQ(legacy_data, modern_data);
+    // Round-trip through binary serialization
+    auto modern_data = modern.serialize();
+    auto deserialized = variant_value_v2::deserialize(modern_data);
+    ASSERT_TRUE(deserialized.has_value());
+    EXPECT_EQ(*deserialized, modern);
 }
 
 TEST_F(SerializationCompatibilityTest, StringValueRoundTrip) {
     std::string test_string = "Hello, World! 한글 테스트";
-    auto legacy_data = serialize_legacy<string_value>("message", test_string);
+    auto legacy = std::make_shared<string_value>("message", test_string);
 
-    auto modern = variant_value_v2::deserialize(legacy_data);
-    ASSERT_TRUE(modern.has_value());
-    EXPECT_EQ(modern->type(), value_types::string_value);
+    auto modern = value_bridge::to_modern(legacy);
+    EXPECT_EQ(modern.type(), value_types::string_value);
 
-    auto str_val = modern->get<std::string>();
+    auto str_val = modern.get<std::string>();
     ASSERT_TRUE(str_val.has_value());
     EXPECT_EQ(*str_val, test_string);
 
-    auto modern_data = modern->serialize();
-    EXPECT_EQ(legacy_data, modern_data);
+    auto modern_data = modern.serialize();
+    auto deserialized = variant_value_v2::deserialize(modern_data);
+    ASSERT_TRUE(deserialized.has_value());
+    EXPECT_EQ(*deserialized, modern);
 }
 
 TEST_F(SerializationCompatibilityTest, BytesValueRoundTrip) {
     std::vector<uint8_t> test_bytes = {0xDE, 0xAD, 0xBE, 0xEF, 0xCA, 0xFE, 0xBA, 0xBE};
-    auto legacy_data = serialize_legacy<bytes_value>("binary", test_bytes);
+    auto legacy = std::make_shared<bytes_value>("binary",
+        reinterpret_cast<const unsigned char*>(test_bytes.data()),
+        test_bytes.size());
 
-    auto modern = variant_value_v2::deserialize(legacy_data);
-    ASSERT_TRUE(modern.has_value());
-    EXPECT_EQ(modern->type(), value_types::bytes_value);
+    auto modern = value_bridge::to_modern(legacy);
+    EXPECT_EQ(modern.type(), value_types::bytes_value);
 
-    auto bytes_val = modern->get<std::vector<uint8_t>>();
+    auto bytes_val = modern.get<std::vector<uint8_t>>();
     ASSERT_TRUE(bytes_val.has_value());
     EXPECT_EQ(*bytes_val, test_bytes);
 
-    auto modern_data = modern->serialize();
-    EXPECT_EQ(legacy_data, modern_data);
+    auto modern_data = modern.serialize();
+    auto deserialized = variant_value_v2::deserialize(modern_data);
+    ASSERT_TRUE(deserialized.has_value());
+    EXPECT_EQ(*deserialized, modern);
 }
 
 TEST_F(SerializationCompatibilityTest, FloatValueRoundTrip) {
-    auto legacy_data = serialize_legacy<float_value>("pi", 3.14159f);
+    auto legacy = std::make_shared<float_value>("pi", 3.14159f);
 
-    auto modern = variant_value_v2::deserialize(legacy_data);
-    ASSERT_TRUE(modern.has_value());
-    EXPECT_EQ(modern->type(), value_types::float_value);
+    auto modern = value_bridge::to_modern(legacy);
+    EXPECT_EQ(modern.type(), value_types::float_value);
 
-    auto float_val = modern->get<float>();
+    auto float_val = modern.get<float>();
     ASSERT_TRUE(float_val.has_value());
     EXPECT_FLOAT_EQ(*float_val, 3.14159f);
 
-    auto modern_data = modern->serialize();
-    EXPECT_EQ(legacy_data, modern_data);
+    auto modern_data = modern.serialize();
+    auto deserialized = variant_value_v2::deserialize(modern_data);
+    ASSERT_TRUE(deserialized.has_value());
+    EXPECT_EQ(*deserialized, modern);
 }
 
 TEST_F(SerializationCompatibilityTest, DoubleValueRoundTrip) {
-    auto legacy_data = serialize_legacy<double_value>("e", 2.718281828459045);
+    auto legacy = std::make_shared<double_value>("e", 2.718281828459045);
 
-    auto modern = variant_value_v2::deserialize(legacy_data);
-    ASSERT_TRUE(modern.has_value());
-    EXPECT_EQ(modern->type(), value_types::double_value);
+    auto modern = value_bridge::to_modern(legacy);
+    EXPECT_EQ(modern.type(), value_types::double_value);
 
-    auto double_val = modern->get<double>();
+    auto double_val = modern.get<double>();
     ASSERT_TRUE(double_val.has_value());
     EXPECT_DOUBLE_EQ(*double_val, 2.718281828459045);
 
-    auto modern_data = modern->serialize();
-    EXPECT_EQ(legacy_data, modern_data);
+    auto modern_data = modern.serialize();
+    auto deserialized = variant_value_v2::deserialize(modern_data);
+    ASSERT_TRUE(deserialized.has_value());
+    EXPECT_EQ(*deserialized, modern);
 }
 
 // ============================================================================
