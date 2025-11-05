@@ -216,8 +216,9 @@ namespace container_module
 
     /**
      * @brief Create a bytes value from string (copy bytes)
+     * Note: This treats the string as binary data, not as a null-terminated C string
      */
-    inline variant_value_v2 make_bytes_value(std::string_view name, std::string_view data) {
+    inline variant_value_v2 make_bytes_from_string(std::string_view name, std::string_view data) {
         return variant_value_v2(name, std::vector<uint8_t>(
             reinterpret_cast<const uint8_t*>(data.data()),
             reinterpret_cast<const uint8_t*>(data.data() + data.size())

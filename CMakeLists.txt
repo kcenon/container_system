@@ -121,6 +121,9 @@ file(GLOB VALUE_FILES
 set(INTERNAL_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/internal/variant_value.h
     ${CMAKE_CURRENT_SOURCE_DIR}/internal/variant_value.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/internal/variant_value_v2.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/internal/variant_value_v2.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/internal/variant_value_factory.h
     ${CMAKE_CURRENT_SOURCE_DIR}/internal/thread_safe_container.h
     ${CMAKE_CURRENT_SOURCE_DIR}/internal/thread_safe_container.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/internal/simd_processor.h
@@ -133,6 +136,8 @@ if(ENABLE_MESSAGING_FEATURES OR ENABLE_EXTERNAL_INTEGRATION OR ENABLE_PERFORMANC
     list(APPEND INTEGRATION_FILES
         ${CMAKE_CURRENT_SOURCE_DIR}/integration/messaging_integration.h
         ${CMAKE_CURRENT_SOURCE_DIR}/integration/messaging_integration.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/integration/value_bridge.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/integration/value_bridge.cpp
     )
     message(STATUS "Container: Integration modules included")
 endif()

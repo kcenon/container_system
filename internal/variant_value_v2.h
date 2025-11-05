@@ -141,13 +141,13 @@ namespace container_module
         /**
          * @brief Default constructor - creates null value
          */
-        variant_value_v2() : name_(""), data_(std::monostate{}) {}
+        variant_value_v2() : name_(""), data_(std::in_place_index<0>) {}
 
         /**
          * @brief Construct with name (null value)
          */
         explicit variant_value_v2(std::string_view name)
-            : name_(name), data_(std::monostate{}) {}
+            : name_(name), data_(std::in_place_index<0>) {}
 
         /**
          * @brief Construct with name and typed value
@@ -211,7 +211,7 @@ namespace container_module
          */
         bool is_null() const {
             std::shared_lock lock(mutex_);
-            return std::holds_alternative<std::monostate>(data_);
+            return data_.index() == 0;
         }
 
         /**

@@ -221,7 +221,7 @@ TEST(VariantValueFactoryTest, MakeBytesValueFromRawPointer) {
 
 TEST(VariantValueFactoryTest, MakeBytesValueFromString) {
     std::string_view str = "binary\x00data";
-    auto v = make_bytes_value("encoded", str);
+    auto v = make_bytes_from_string("encoded", str);
     EXPECT_EQ(v.type(), value_types::bytes_value);
 
     auto result = v.get<std::vector<uint8_t>>();
@@ -350,7 +350,7 @@ TEST(VariantValueFactoryTest, TypeName) {
     EXPECT_EQ(type_name(make_bool_value("", true)), "bool");
     EXPECT_EQ(type_name(make_int_value("", 42)), "int");
     EXPECT_EQ(type_name(make_string_value("", "test")), "string");
-    EXPECT_EQ(type_name(make_bytes_value("", {})), "bytes");
+    EXPECT_EQ(type_name(make_bytes_value("", std::vector<uint8_t>{})), "bytes");
     EXPECT_EQ(type_name(make_empty_array_value("")), "array");
 }
 

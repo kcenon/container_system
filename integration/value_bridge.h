@@ -184,9 +184,8 @@ namespace container_module
          */
         void sync() {
             if (legacy_) {
-                auto updated = value_bridge::to_legacy(modern_);
-                // Copy data to original legacy object
-                *legacy_ = *updated;
+                // Replace legacy pointer with new object (legacy value doesn't support copy assignment)
+                legacy_ = value_bridge::to_legacy(modern_);
             }
         }
 
