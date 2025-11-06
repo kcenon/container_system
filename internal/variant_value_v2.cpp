@@ -378,8 +378,7 @@ namespace container_module
                 return true;
             }
 
-            case value_types::long_value:
-            case value_types::llong_value: {  // Both map to int64_t
+            case value_types::long_value: {
                 if (offset + sizeof(int64_t) > data.size()) return false;
                 int64_t value;
                 std::memcpy(&value, data.data() + offset, sizeof(value));
@@ -388,13 +387,48 @@ namespace container_module
                 return true;
             }
 
-            case value_types::ulong_value:
-            case value_types::ullong_value: {  // Both map to uint64_t
+            case value_types::llong_value: {
+                if (offset + sizeof(int64_t) > data.size()) return false;
+#if defined(__APPLE__) || (defined(__linux__) && !defined(__ANDROID__))
+                // On macOS/Linux: llong_value uses same storage as long_value (int64_t)
+                int64_t value;
+                std::memcpy(&value, data.data() + offset, sizeof(value));
+                offset += sizeof(value);
+                result.data_ = value;  // Stored at index 6 (long_value slot)
+#else
+                // On Windows: long long is distinct from int64_t
+                long long value;
+                std::memcpy(&value, data.data() + offset, sizeof(value));
+                offset += sizeof(value);
+                result.data_ = value;  // Stored at index 8 (llong_value slot)
+#endif
+                return true;
+            }
+
+            case value_types::ulong_value: {
                 if (offset + sizeof(uint64_t) > data.size()) return false;
                 uint64_t value;
                 std::memcpy(&value, data.data() + offset, sizeof(value));
                 offset += sizeof(value);
                 result.data_ = value;
+                return true;
+            }
+
+            case value_types::ullong_value: {
+                if (offset + sizeof(uint64_t) > data.size()) return false;
+#if defined(__APPLE__) || (defined(__linux__) && !defined(__ANDROID__))
+                // On macOS/Linux: ullong_value uses same storage as ulong_value (uint64_t)
+                uint64_t value;
+                std::memcpy(&value, data.data() + offset, sizeof(value));
+                offset += sizeof(value);
+                result.data_ = value;  // Stored at index 7 (ulong_value slot)
+#else
+                // On Windows: unsigned long long is distinct from uint64_t
+                unsigned long long value;
+                std::memcpy(&value, data.data() + offset, sizeof(value));
+                offset += sizeof(value);
+                result.data_ = value;  // Stored at index 9 (ullong_value slot)
+#endif
                 return true;
             }
 
