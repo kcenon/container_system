@@ -4,10 +4,17 @@
 #include <sstream>
 
 // Check for std::format support
-#if defined(USE_STD_FORMAT) && __has_include(<format>) && defined(__cpp_lib_format)
+#if defined(USE_STD_FORMAT)
+    // When explicitly requested via CMake, trust that std::format is available
+    // This bypasses __cpp_lib_format check which may not be defined in older libstdc++
+    #include <format>
+    #define HAS_STD_FORMAT 1
+#elif __has_include(<format>) && defined(__cpp_lib_format)
+    // Auto-detect std::format with feature macro (GCC 13+, Clang 14+ with libc++)
     #include <format>
     #define HAS_STD_FORMAT 1
 #elif __has_include(<fmt/format.h>)
+    // Use fmt library if available
     #include <fmt/format.h>
     #define HAS_STD_FORMAT 0
 #else
