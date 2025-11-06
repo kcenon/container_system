@@ -50,8 +50,8 @@ jobs:
       run: |
         echo "CC=clang" >> $GITHUB_ENV
         echo "CXX=clang++" >> $GITHUB_ENV
-        # Force Clang to use GCC 12 toolchain
-        echo "CXXFLAGS=--gcc-toolchain=/usr" >> $GITHUB_ENV
+        # Force Clang to use GCC 12 headers (avoid GCC 13 chrono bugs)
+        echo "CXXFLAGS=-isystem /usr/include/c++/12 -isystem /usr/include/x86_64-linux-gnu/c++/12 --gcc-toolchain=/usr" >> $GITHUB_ENV
         echo "CFLAGS=--gcc-toolchain=/usr" >> $GITHUB_ENV
 
     - name: Configure CMake with ${{ matrix.sanitizer }} sanitizer
@@ -61,7 +61,7 @@ jobs:
         cmake -B build -S . \
           -GNinja \
           -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
-          -DCMAKE_CXX_FLAGS="--gcc-toolchain=/usr ${SANITIZER_FLAGS}" \
+          -DCMAKE_CXX_FLAGS="-isystem /usr/include/c++/12 -isystem /usr/include/x86_64-linux-gnu/c++/12 --gcc-toolchain=/usr ${SANITIZER_FLAGS}" \
           -DCMAKE_C_FLAGS="--gcc-toolchain=/usr ${SANITIZER_FLAGS}" \
           -DCMAKE_EXE_LINKER_FLAGS="-fsanitize=${{ matrix.sanitizer }}" \
           -DCMAKE_SHARED_LINKER_FLAGS="-fsanitize=${{ matrix.sanitizer }}" \
