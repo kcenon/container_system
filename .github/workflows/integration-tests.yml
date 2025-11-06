@@ -36,24 +36,16 @@ jobs:
       if: runner.os == 'Linux'
       run: |
         sudo apt-get update
-        sudo apt-get install -y cmake ninja-build g++ clang libgtest-dev libgmock-dev lcov libfmt-dev pkg-config
+        # Install GCC 13 for C++20 <format> support
+        sudo apt-get install -y software-properties-common
+        sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+        sudo apt-get update
+        sudo apt-get install -y cmake gcc-13 g++-13 ninja-build g++ clang libgtest-dev libgmock-dev lcov pkg-config
 
     - name: Install dependencies (macOS)
       if: runner.os == 'macOS'
       run: |
-        brew install ninja googletest lcov fmt
-
-    - name: Verify fmt library availability
-      run: |
-        if [ "$RUNNER_OS" == "Linux" ]; then
-          echo "=== fmt library check (Ubuntu) ==="
-          dpkg -l | grep libfmt || echo "WARNING: libfmt-dev not installed"
-          pkg-config --exists fmt && echo "✅ fmt found via pkg-config" || echo "⚠️  fmt not found via pkg-config"
-          pkg-config --modversion fmt || echo "No version info"
-        else
-          echo "=== fmt library check (macOS) ==="
-          brew list fmt || echo "WARNING: fmt not installed"
-        fi
+        brew install ninja googletest lcov
 
     - name: Configure CMake
       run: |
@@ -64,18 +56,6 @@ jobs:
           -DENABLE_COVERAGE=${{ matrix.build_type == 'Debug' && 'ON' || 'OFF' }} \
           -DBUILD_CONTAINER_SAMPLES=OFF \
           -DBUILD_CONTAINER_EXAMPLES=OFF
-
-    - name: Verify CMake fmt detection
-      run: |
-        echo "=== CMake Configuration Check ==="
-        if grep -q "Container: Linking with fmt" build/CMakeFiles/CMakeOutput.log 2>/dev/null || \
-           grep -q "Container: Linking with fmt" build/CMakeCache.txt 2>/dev/null; then
-          echo "✅ fmt library was detected by CMake"
-        else
-          echo "⚠️  WARNING: fmt library might not be properly detected"
-          echo "Checking CMake status messages..."
-          grep -i "fmt" build/CMakeFiles/CMakeOutput.log 2>/dev/null || echo "No fmt-related messages found"
-        fi
 
     - name: Build
       run: cmake --build build --config ${{ matrix.build_type }} --parallel
@@ -227,7 +207,11 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y cmake ninja-build g++ libgtest-dev libfmt-dev pkg-config
+        # Install GCC 13 for C++20 <format> support
+        sudo apt-get install -y software-properties-common
+        sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+        sudo apt-get update
+        sudo apt-get install -y cmake gcc-13 g++-13 ninja-build g++ libgtest-dev pkg-config
 
     - name: Configure CMake (Release for accurate performance)
       run: |

@@ -7,18 +7,11 @@ All rights reserved.
 
 #include "container/internal/variant_value_v2.h"
 #include "container/internal/thread_safe_container.h"
+#include <format>
 #include <sstream>
 #include <iomanip>
 #include <cstring>
 #include <stdexcept>
-
-#ifdef USE_STD_FORMAT
-    #include <format>
-    namespace formatter = std;
-#else
-    #include <fmt/format.h>
-    namespace formatter = fmt;
-#endif
 
 namespace container_module
 {
@@ -181,9 +174,9 @@ namespace container_module
             using T = std::decay_t<decltype(value)>;
 
             std::string result;
-            formatter::format_to(std::back_inserter(result),
-                               "{{\"name\":\"{}\",\"type\":{},\"value\":",
-                               var_name, static_cast<int>(var_type));
+            std::format_to(std::back_inserter(result),
+                          "{{\"name\":\"{}\",\"type\":{},\"value\":",
+                          var_name, static_cast<int>(var_type));
 
             if constexpr (std::is_same_v<T, std::monostate>) {
                 result += "null";
@@ -220,9 +213,9 @@ namespace container_module
                             if (c >= 0x20 && c <= 0x7E) {
                                 result += c;
                             } else {
-                                formatter::format_to(std::back_inserter(result),
-                                                   "\\u{:04x}",
-                                                   static_cast<unsigned>(c));
+                                std::format_to(std::back_inserter(result),
+                                              "\\u{:04x}",
+                                              static_cast<unsigned>(c));
                             }
                     }
                 }

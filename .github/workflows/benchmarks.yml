@@ -46,12 +46,16 @@ jobs:
       if: runner.os == 'Linux'
       run: |
         sudo apt-get update
-        sudo apt-get install -y cmake ninja-build clang libbenchmark-dev libgtest-dev libfmt-dev
+        # Install GCC 13 for C++20 <format> support
+        sudo apt-get install -y software-properties-common
+        sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+        sudo apt-get update
+        sudo apt-get install -y cmake gcc-13 g++-13 ninja-build clang libbenchmark-dev libgtest-dev
 
     - name: Install dependencies (macOS)
       if: runner.os == 'macOS'
       run: |
-        brew install ninja google-benchmark googletest fmt
+        brew install ninja google-benchmark googletest
 
     - name: Set up compiler
       run: |

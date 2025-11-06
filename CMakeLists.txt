@@ -72,24 +72,41 @@ endif()
 # Find required packages
 find_package(Threads REQUIRED)
 
-# vcpkg integration
-set(VCPKG_TARGET_TRIPLET "arm64-osx" CACHE STRING "VCPKG target triplet")
-find_package(fmt CONFIG)
+# This project requires C++20 <format> support
+# Check if compiler supports <format>: GCC 13+, Clang 15+, MSVC 19.29+
+set(SUPPORTS_STD_FORMAT FALSE)
 
-# If fmt is not found via vcpkg, try system installation
-if(NOT fmt_FOUND)
-    message(STATUS "fmt not found via vcpkg, trying system installation...")
-    find_package(PkgConfig QUIET)
-    if(PkgConfig_FOUND)
-        pkg_check_modules(FMT fmt)
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    if(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 13.0)
+        set(SUPPORTS_STD_FORMAT TRUE)
+        message(STATUS "Using std::format with GCC ${CMAKE_CXX_COMPILER_VERSION}")
+    else()
+        message(FATAL_ERROR "GCC 13+ is required for C++20 <format> support (current: ${CMAKE_CXX_COMPILER_VERSION}). "
+                          "Please upgrade GCC or use a newer Ubuntu version (24.04+ has GCC 13).")
     endif()
-
-    if(NOT FMT_FOUND)
-        message(STATUS "fmt not found, will use std::format if available")
-        add_compile_definitions(USE_STD_FORMAT)
-        set(fmt_FOUND FALSE)
+elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    if(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 15.0)
+        set(SUPPORTS_STD_FORMAT TRUE)
+        message(STATUS "Using std::format with Clang ${CMAKE_CXX_COMPILER_VERSION}")
+    else()
+        message(FATAL_ERROR "Clang 15+ is required for C++20 <format> support (current: ${CMAKE_CXX_COMPILER_VERSION}). "
+                          "Please upgrade Clang.")
     endif()
+elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+    if(MSVC_VERSION GREATER_EQUAL 1929)  # VS 2019 16.10+
+        set(SUPPORTS_STD_FORMAT TRUE)
+        message(STATUS "Using std::format with MSVC ${MSVC_VERSION}")
+    else()
+        message(FATAL_ERROR "Visual Studio 2019 16.10+ is required for C++20 <format> support. "
+                          "Please upgrade Visual Studio.")
+    endif()
+else()
+    message(WARNING "Unknown compiler ${CMAKE_CXX_COMPILER_ID}, assuming <format> support")
+    set(SUPPORTS_STD_FORMAT TRUE)
 endif()
+
+# Always use std::format (C++20)
+add_compile_definitions(USE_STD_FORMAT)
 
 ##################################################
 # Source Files Configuration
