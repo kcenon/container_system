@@ -297,6 +297,8 @@ elseif(FMT_FOUND)
     target_include_directories(container_system PUBLIC ${FMT_INCLUDE_DIRS})
     message(STATUS "Container: Linking with system fmt")
 else()
+    # Enable std::format when fmt is not available
+    target_compile_definitions(container_system PUBLIC USE_STD_FORMAT)
     message(STATUS "Container: Using std::format (no fmt library)")
 endif()
 
@@ -515,4 +517,13 @@ elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "arm|aarch64")
     message(STATUS "    - ARM NEON SIMD: ON")
 else()
     message(STATUS "    - SIMD: OFF (scalar fallback)")
+endif()
+
+##################################################
+# Debug test executable
+##################################################
+if(BUILD_TESTS)
+    add_executable(test_serialize_debug test_serialize_debug.cpp)
+    target_link_libraries(test_serialize_debug PRIVATE container_system)
+    target_include_directories(test_serialize_debug PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 endif()
