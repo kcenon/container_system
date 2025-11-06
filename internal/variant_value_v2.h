@@ -28,22 +28,24 @@ namespace container_module
     /**
      * @brief Platform-specific type handling for long long
      *
-     * On macOS/Linux: int64_t == long long (duplicate type)
-     * On Windows: int64_t != long long (separate types)
+     * Type equivalence across platforms:
+     * - macOS/Linux: int64_t == long long (always)
+     * - MSVC 2015+ (_MSC_VER >= 1900): int64_t == long long (typedef)
+     * - MSVC 2013- (_MSC_VER < 1900): int64_t == __int64 (distinct from long long)
      *
      * We use std::monostate as placeholder when types are identical
      * to avoid variant duplicate type compilation errors.
      */
-#if defined(__APPLE__) || (defined(__linux__) && !defined(__ANDROID__))
-    // Platforms where int64_t is typedef of long long
-    using llong_placeholder_t = std::monostate;
-    using ullong_placeholder_t = std::monostate;
-    constexpr bool has_separate_llong = false;
-#else
-    // Platforms where long long is distinct from int64_t
+#if defined(_MSC_VER) && _MSC_VER < 1900
+    // Old MSVC (2013 and earlier): int64_t is __int64, long long is separate
     using llong_placeholder_t = long long;
     using ullong_placeholder_t = unsigned long long;
     constexpr bool has_separate_llong = true;
+#else
+    // Modern platforms (macOS, Linux, MSVC 2015+): int64_t is long long
+    using llong_placeholder_t = std::monostate;
+    using ullong_placeholder_t = std::monostate;
+    constexpr bool has_separate_llong = false;
 #endif
 
     /**
