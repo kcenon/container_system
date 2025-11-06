@@ -98,14 +98,13 @@ jobs:
           BUILD_WITH_COMMON="OFF"
         fi
 
-        # Pass CXXFLAGS/CFLAGS to CMake (environment variables are not automatically used)
-        CMAKE_CXX_FLAGS=""
-        CMAKE_C_FLAGS=""
+        # Build CMake flags from environment variables
+        CMAKE_EXTRA_FLAGS=""
         if [ -n "$CXXFLAGS" ]; then
-          CMAKE_CXX_FLAGS="$CXXFLAGS"
+          CMAKE_EXTRA_FLAGS="$CMAKE_EXTRA_FLAGS -DCMAKE_CXX_FLAGS=\"$CXXFLAGS\""
         fi
         if [ -n "$CFLAGS" ]; then
-          CMAKE_C_FLAGS="$CFLAGS"
+          CMAKE_EXTRA_FLAGS="$CMAKE_EXTRA_FLAGS -DCMAKE_C_FLAGS=\"$CFLAGS\""
         fi
 
         cmake -B build -G Ninja \
@@ -114,8 +113,7 @@ jobs:
           -DBUILD_TESTS=ON \
           -DBUILD_CONTAINER_SAMPLES=ON \
           -DBUILD_CONTAINER_EXAMPLES=ON \
-          ${CMAKE_CXX_FLAGS:+-DCMAKE_CXX_FLAGS="$CMAKE_CXX_FLAGS"} \
-          ${CMAKE_C_FLAGS:+-DCMAKE_C_FLAGS="$CMAKE_C_FLAGS"}
+          $CMAKE_EXTRA_FLAGS
 
     - name: Configure CMake (Windows)
       if: runner.os == 'Windows'
