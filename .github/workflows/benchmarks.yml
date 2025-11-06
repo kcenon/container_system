@@ -66,8 +66,8 @@ jobs:
         echo "CC=clang" >> $GITHUB_ENV
         echo "CXX=clang++" >> $GITHUB_ENV
         # Force Clang to use GCC 12 toolchain
-        echo "CXXFLAGS=-gcc-toolchain=/usr" >> $GITHUB_ENV
-        echo "CFLAGS=-gcc-toolchain=/usr" >> $GITHUB_ENV
+        echo "CXXFLAGS=--gcc-toolchain=/usr" >> $GITHUB_ENV
+        echo "CFLAGS=--gcc-toolchain=/usr" >> $GITHUB_ENV
 
     - name: Set up compiler (macOS)
       if: runner.os == 'macOS'

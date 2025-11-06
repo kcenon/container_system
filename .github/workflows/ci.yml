@@ -73,8 +73,8 @@ jobs:
         echo "CC=clang" >> $GITHUB_ENV
         echo "CXX=clang++" >> $GITHUB_ENV
         # Force Clang to use GCC 12 toolchain
-        echo "CXXFLAGS=-gcc-toolchain=/usr" >> $GITHUB_ENV
-        echo "CFLAGS=-gcc-toolchain=/usr" >> $GITHUB_ENV
+        echo "CXXFLAGS=--gcc-toolchain=/usr" >> $GITHUB_ENV
+        echo "CFLAGS=--gcc-toolchain=/usr" >> $GITHUB_ENV
 
     - name: Set up compiler (Clang - macOS)
       if: matrix.compiler == 'clang' && runner.os == 'macOS'
@@ -230,8 +230,8 @@ jobs:
           -DBUILD_CONTAINER_EXAMPLES=ON \
           -DCMAKE_C_COMPILER=clang \
           -DCMAKE_CXX_COMPILER=clang++ \
-          -DCMAKE_C_FLAGS="-gcc-toolchain=/usr ${{ matrix.sanitizer.flags }}" \
-          -DCMAKE_CXX_FLAGS="-gcc-toolchain=/usr ${{ matrix.sanitizer.flags }}" \
+          -DCMAKE_C_FLAGS="--gcc-toolchain=/usr ${{ matrix.sanitizer.flags }}" \
+          -DCMAKE_CXX_FLAGS="--gcc-toolchain=/usr ${{ matrix.sanitizer.flags }}" \
           -DCMAKE_EXE_LINKER_FLAGS="${{ matrix.sanitizer.flags }}" \
           -DCMAKE_SHARED_LINKER_FLAGS="${{ matrix.sanitizer.flags }}"
 
