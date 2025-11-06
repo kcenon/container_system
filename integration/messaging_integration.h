@@ -39,9 +39,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "container/values/string_value.h"
 #include <functional>
 #include <memory>
-#include <chrono>
 
 #ifdef HAS_PERFORMANCE_METRICS
+#include <chrono>
 #include <atomic>
 #include <mutex>
 #include <unordered_map>
