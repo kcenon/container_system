@@ -77,12 +77,24 @@ jobs:
 
     - name: Configure CMake
       run: |
+        # Pass CXXFLAGS/CFLAGS to CMake (environment variables are not automatically used)
+        CMAKE_CXX_FLAGS=""
+        CMAKE_C_FLAGS=""
+        if [ -n "$CXXFLAGS" ]; then
+          CMAKE_CXX_FLAGS="$CXXFLAGS"
+        fi
+        if [ -n "$CFLAGS" ]; then
+          CMAKE_C_FLAGS="$CFLAGS"
+        fi
+
         cmake -B build -S . \
           -GNinja \
           -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
           -DCONTAINER_BUILD_BENCHMARKS=ON \
           -DBUILD_TESTS=OFF \
-          -DBUILD_CONTAINER_SAMPLES=OFF
+          -DBUILD_CONTAINER_SAMPLES=OFF \
+          ${CMAKE_CXX_FLAGS:+-DCMAKE_CXX_FLAGS="$CMAKE_CXX_FLAGS"} \
+          ${CMAKE_C_FLAGS:+-DCMAKE_C_FLAGS="$CMAKE_C_FLAGS"}
 
     - name: Build benchmarks
       run: cmake --build build --config ${{ matrix.build_type }} --target container_benchmarks -j
