@@ -37,11 +37,14 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update
-        # Install GCC 13 for libstdc++ with C++20 <format> support
+        # Install GCC 12 for Clang + libstdc++ chrono compatibility
         sudo apt-get install -y software-properties-common
         sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
         sudo apt-get update
-        sudo apt-get install -y cmake ninja-build clang gcc-13 g++-13 libgtest-dev
+        sudo apt-get install -y cmake ninja-build clang gcc-12 g++-12 libgtest-dev
+        # Set GCC 12 as default for Clang sanitizer builds
+        sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-12 100
+        sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-12 100
 
     - name: Set up compiler
       run: |

@@ -145,6 +145,7 @@ private:
     bool speed_optimized_ = false;
 };
 
+#ifdef HAS_PERFORMANCE_METRICS
 /**
  * @brief RAII container performance monitor
  */
@@ -162,6 +163,7 @@ private:
     size_t container_size_ = 0;
     size_t result_size_ = 0;
 };
+#endif // HAS_PERFORMANCE_METRICS
 
 // Template implementation for add_value
 template<typename T>

@@ -248,6 +248,7 @@ std::shared_ptr<value_container> messaging_container_builder::build() {
     return result;
 }
 
+#ifdef HAS_PERFORMANCE_METRICS
 // container_performance_monitor implementation
 
 container_performance_monitor::container_performance_monitor(const std::string& operation_name)
@@ -256,13 +257,11 @@ container_performance_monitor::container_performance_monitor(const std::string& 
 }
 
 container_performance_monitor::~container_performance_monitor() {
-#ifdef HAS_PERFORMANCE_METRICS
     auto end_time = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time_);
 
     // This could be extended to log to a performance monitoring system
     // For now, it's just a placeholder for future monitoring integration
-#endif
 }
 
 void container_performance_monitor::set_container_size(size_t size) {
@@ -272,5 +271,6 @@ void container_performance_monitor::set_container_size(size_t size) {
 void container_performance_monitor::set_result_size(size_t size) {
     result_size_ = size;
 }
+#endif // HAS_PERFORMANCE_METRICS
 
 } // namespace container_module::integration
