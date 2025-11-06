@@ -173,10 +173,8 @@ namespace container_module
         return visit([var_name, var_type](auto&& value) -> std::string {
             using T = std::decay_t<decltype(value)>;
 
-            std::string result;
-            std::format_to(std::back_inserter(result),
-                          "{{\"name\":\"{}\",\"type\":{},\"value\":",
-                          var_name, static_cast<int>(var_type));
+            std::string result = std::format("{{\"name\":\"{}\",\"type\":{},\"value\":",
+                                            var_name, static_cast<int>(var_type));
 
             if constexpr (std::is_same_v<T, std::monostate>) {
                 result += "null";
@@ -213,9 +211,7 @@ namespace container_module
                             if (c >= 0x20 && c <= 0x7E) {
                                 result += c;
                             } else {
-                                std::format_to(std::back_inserter(result),
-                                              "\\u{:04x}",
-                                              static_cast<unsigned>(c));
+                                result += std::format("\\u{:04x}", static_cast<unsigned>(c));
                             }
                     }
                 }
