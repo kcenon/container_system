@@ -27,6 +27,12 @@ namespace container_module
 
     variant_value_v2 value_bridge::to_modern(const value& legacy) {
         try {
+            // Track conversion attempt - increment at start, decrement on failure
+            {
+                std::lock_guard lock(stats_mutex_);
+                stats_.successful_conversions++;
+            }
+
             value_types type = legacy.type();
 
             switch (type) {
@@ -77,10 +83,13 @@ namespace container_module
                 default:
                     throw std::runtime_error("Unsupported legacy value type");
             }
-
-            stats_.successful_conversions++;
         } catch (const std::exception& e) {
-            stats_.failed_conversions++;
+            // Decrement success count and track failure
+            {
+                std::lock_guard lock(stats_mutex_);
+                stats_.successful_conversions--;
+                stats_.failed_conversions++;
+            }
             record_error(std::string("to_modern failed: ") + e.what());
             throw;
         }
@@ -116,14 +125,18 @@ namespace container_module
     }
 
     variant_value_v2 value_bridge::convert_array_value(const value& legacy) {
-        // Get array elements
-        // Note: children() is not const, but we're only reading
-        auto children = const_cast<value&>(legacy).children();
+        // Cast to array_value to access array-specific methods
+        const auto* arr_value = dynamic_cast<const array_value*>(&legacy);
+        if (!arr_value) {
+            throw std::runtime_error("Expected array_value type");
+        }
 
         array_variant arr;
-        arr.values.reserve(children.size());
+        arr.values.reserve(arr_value->size());
 
-        for (const auto& child : children) {
+        // Use size() and at() to access elements
+        for (size_t i = 0; i < arr_value->size(); ++i) {
+            auto child = arr_value->at(i);
             if (child) {
                 auto modern_child = to_modern(child);
                 arr.values.push_back(std::make_shared<variant_value_v2>(std::move(modern_child)));
@@ -139,6 +152,12 @@ namespace container_module
 
     std::shared_ptr<value> value_bridge::to_legacy(const variant_value_v2& modern) {
         try {
+            // Track conversion attempt - increment at start, decrement on failure
+            {
+                std::lock_guard lock(stats_mutex_);
+                stats_.successful_conversions++;
+            }
+
             value_types type = modern.type();
 
             switch (type) {
@@ -175,10 +194,13 @@ namespace container_module
                 default:
                     throw std::runtime_error("Unsupported modern value type");
             }
-
-            stats_.successful_conversions++;
         } catch (const std::exception& e) {
-            stats_.failed_conversions++;
+            // Decrement success count and track failure
+            {
+                std::lock_guard lock(stats_mutex_);
+                stats_.successful_conversions--;
+                stats_.failed_conversions++;
+            }
             record_error(std::string("to_legacy failed: ") + e.what());
             throw;
         }
@@ -213,12 +235,31 @@ namespace container_module
             case value_types::long_value:
             case value_types::llong_value: {
                 auto val = modern.get<int64_t>();
-                return std::make_shared<llong_value>(std::string(modern.name()), *val);
+                // On macOS/Linux, long_value enforces 32-bit range despite long being 64-bit
+                // Use llong_value for values outside 32-bit range
+                constexpr int64_t kInt32Min = -2147483648LL;
+                constexpr int64_t kInt32Max = 2147483647LL;
+                bool is_32bit_range = (*val >= kInt32Min && *val <= kInt32Max);
+
+                if (type == value_types::long_value && is_32bit_range) {
+                    return std::make_shared<long_value>(std::string(modern.name()), *val);
+                } else {
+                    return std::make_shared<llong_value>(std::string(modern.name()), *val);
+                }
             }
             case value_types::ulong_value:
             case value_types::ullong_value: {
                 auto val = modern.get<uint64_t>();
-                return std::make_shared<ullong_value>(std::string(modern.name()), *val);
+                // On macOS/Linux, ulong_value enforces 32-bit range despite unsigned long being 64-bit
+                // Use ullong_value for values outside 32-bit range
+                constexpr uint64_t kUInt32Max = 4294967295ULL;
+                bool is_32bit_range = (*val <= kUInt32Max);
+
+                if (type == value_types::ulong_value && is_32bit_range) {
+                    return std::make_shared<ulong_value>(std::string(modern.name()), *val);
+                } else {
+                    return std::make_shared<ullong_value>(std::string(modern.name()), *val);
+                }
             }
             case value_types::float_value: {
                 auto val = modern.get<float>();
@@ -247,14 +288,16 @@ namespace container_module
 
     std::shared_ptr<value> value_bridge::create_legacy_container(const variant_value_v2& modern) {
         auto container_ptr = modern.get<std::shared_ptr<thread_safe_container>>();
-        if (!container_ptr || !*container_ptr) {
-            return std::make_shared<container_value>(std::string(modern.name()));
-        }
 
-        // Serialize modern container and deserialize into legacy
-        auto serialized = (*container_ptr)->serialize();
+        // For now, return an empty container_value with the correct name
+        // Full container conversion would require converting internal variant_value types
+        // which is beyond the scope of this initial migration
         auto legacy = std::make_shared<container_value>(std::string(modern.name()));
-        // TODO: Implement proper container deserialization
+
+        // Note: Container content conversion is not yet implemented
+        // This is acceptable for Phase 1 as container_value is rarely used directly
+        // Container functionality is primarily provided by thread_safe_container
+
         return legacy;
     }
 
@@ -262,16 +305,18 @@ namespace container_module
         auto arr = modern.get<array_variant>();
         if (!arr) throw std::runtime_error("Type mismatch: expected array");
 
-        std::vector<std::shared_ptr<value>> legacy_values;
-        legacy_values.reserve(arr->values.size());
+        // Create empty array first to avoid shared_from_this() issues in constructor
+        auto legacy_array = std::make_shared<array_value>(std::string(modern.name()));
 
+        // Convert and add elements one by one
         for (const auto& modern_elem : arr->values) {
             if (modern_elem) {
-                legacy_values.push_back(to_legacy(*modern_elem));
+                auto legacy_elem = to_legacy(*modern_elem);
+                legacy_array->push_back(legacy_elem);
             }
         }
 
-        return std::make_shared<array_value>(std::string(modern.name()), legacy_values);
+        return legacy_array;
     }
 
     // ============================================================================
