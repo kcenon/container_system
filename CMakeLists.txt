@@ -518,12 +518,3 @@ elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "arm|aarch64")
 else()
     message(STATUS "    - SIMD: OFF (scalar fallback)")
 endif()
-
-##################################################
-# Debug test executable
-##################################################
-if(BUILD_TESTS)
-    add_executable(test_serialize_debug test_serialize_debug.cpp)
-    target_link_libraries(test_serialize_debug PRIVATE container_system)
-    target_include_directories(test_serialize_debug PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
-endif()
