@@ -98,22 +98,24 @@ jobs:
           BUILD_WITH_COMMON="OFF"
         fi
 
-        # Build CMake flags from environment variables
-        CMAKE_EXTRA_FLAGS=""
+        # Build CMake argument array
+        CMAKE_FLAGS=(
+          -DCMAKE_BUILD_TYPE=Debug
+          -DBUILD_WITH_COMMON_SYSTEM=$BUILD_WITH_COMMON
+          -DBUILD_TESTS=ON
+          -DBUILD_CONTAINER_SAMPLES=ON
+          -DBUILD_CONTAINER_EXAMPLES=ON
+        )
+
+        # Add compiler flags from environment if set
         if [ -n "$CXXFLAGS" ]; then
-          CMAKE_EXTRA_FLAGS="$CMAKE_EXTRA_FLAGS -DCMAKE_CXX_FLAGS=\"$CXXFLAGS\""
+          CMAKE_FLAGS+=(-DCMAKE_CXX_FLAGS="$CXXFLAGS")
         fi
         if [ -n "$CFLAGS" ]; then
-          CMAKE_EXTRA_FLAGS="$CMAKE_EXTRA_FLAGS -DCMAKE_C_FLAGS=\"$CFLAGS\""
+          CMAKE_FLAGS+=(-DCMAKE_C_FLAGS="$CFLAGS")
         fi
 
-        cmake -B build -G Ninja \
-          -DCMAKE_BUILD_TYPE=Debug \
-          -DBUILD_WITH_COMMON_SYSTEM=$BUILD_WITH_COMMON \
-          -DBUILD_TESTS=ON \
-          -DBUILD_CONTAINER_SAMPLES=ON \
-          -DBUILD_CONTAINER_EXAMPLES=ON \
-          $CMAKE_EXTRA_FLAGS
+        cmake -B build -G Ninja "${CMAKE_FLAGS[@]}"
 
     - name: Configure CMake (Windows)
       if: runner.os == 'Windows'

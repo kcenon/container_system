@@ -77,22 +77,23 @@ jobs:
 
     - name: Configure CMake
       run: |
-        # Build CMake flags from environment variables
-        CMAKE_EXTRA_FLAGS=""
+        # Build CMake argument array
+        CMAKE_FLAGS=(
+          -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
+          -DCONTAINER_BUILD_BENCHMARKS=ON
+          -DBUILD_TESTS=OFF
+          -DBUILD_CONTAINER_SAMPLES=OFF
+        )
+
+        # Add compiler flags from environment if set
         if [ -n "$CXXFLAGS" ]; then
-          CMAKE_EXTRA_FLAGS="$CMAKE_EXTRA_FLAGS -DCMAKE_CXX_FLAGS=\"$CXXFLAGS\""
+          CMAKE_FLAGS+=(-DCMAKE_CXX_FLAGS="$CXXFLAGS")
         fi
         if [ -n "$CFLAGS" ]; then
-          CMAKE_EXTRA_FLAGS="$CMAKE_EXTRA_FLAGS -DCMAKE_C_FLAGS=\"$CFLAGS\""
+          CMAKE_FLAGS+=(-DCMAKE_C_FLAGS="$CFLAGS")
         fi
 
-        cmake -B build -S . \
-          -GNinja \
-          -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
-          -DCONTAINER_BUILD_BENCHMARKS=ON \
-          -DBUILD_TESTS=OFF \
-          -DBUILD_CONTAINER_SAMPLES=OFF \
-          $CMAKE_EXTRA_FLAGS
+        cmake -B build -S . -GNinja "${CMAKE_FLAGS[@]}"
 
     - name: Build benchmarks
       run: cmake --build build --config ${{ matrix.build_type }} --target container_benchmarks -j
