@@ -396,6 +396,34 @@ Expected Bandwidth:
 - Pool: 2-5 GB/sec (platform dependent)
 - Limited by memory controller, not pool overhead
 
+### Automated Performance Tracking
+
+**Performance results are automatically tracked and updated** by GitHub Actions:
+
+📊 **Live Performance Data**: [MEMORY_POOL_PERFORMANCE.md](MEMORY_POOL_PERFORMANCE.md)
+
+The CI/CD pipeline automatically:
+- Runs benchmarks on Ubuntu and macOS
+- Compares pool vs standard allocator
+- Generates performance reports
+- Updates documentation with latest results
+- Stores historical data as artifacts (90-day retention)
+
+**Workflow**: `.github/workflows/memory-pool-benchmarks.yml`
+
+**Trigger Conditions**:
+- Push to `main` branch
+- Pull requests modifying memory pool code
+- Manual workflow dispatch
+
+**Automatic Documentation Updates**:
+When benchmarks complete, the workflow automatically:
+1. Parses JSON benchmark results
+2. Calculates performance metrics and speedup factors
+3. Updates `docs/MEMORY_POOL_PERFORMANCE.md`
+4. Commits and pushes changes (with `[skip ci]` to avoid loops)
+5. Adds PR comments with performance data (for pull requests)
+
 ### Running Benchmarks
 
 ```bash

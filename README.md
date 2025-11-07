@@ -1141,7 +1141,7 @@ We welcome contributions! Please see our [Contributing Guide](./docs/CONTRIBUTIN
 - **Memory Efficiency**: 1.5 MB baseline with optimized variant storage
 - **Memory Pool**: 10-50x faster than standard allocator for small blocks (<256B)
 
-See [BASELINE.md](BASELINE.md) for comprehensive performance metrics and [TESTING.md](docs/TESTING.md) for detailed benchmark information.
+See [BASELINE.md](BASELINE.md) for comprehensive performance metrics, [TESTING.md](docs/TESTING.md) for detailed benchmark information, and [MEMORY_POOL_PERFORMANCE.md](docs/MEMORY_POOL_PERFORMANCE.md) for live auto-updated performance data.
 
 **Complete Documentation Suite**
 - [ARCHITECTURE.md](docs/ARCHITECTURE.md): Ecosystem integration and dependency design
