@@ -1,11 +1,29 @@
 # Automated Performance Tracking System
 
-> **System Status**: ✅ Active
+> **System Status**: ⚙️ Ready for Installation
 > **Last Updated**: 2025-11-07
 
 ## Overview
 
 The container system includes an automated performance tracking system that continuously monitors memory pool performance across multiple platforms. Results are automatically collected, analyzed, and published to documentation.
+
+## Quick Installation
+
+The workflow template is ready to use. Install it with:
+
+```bash
+# Option 1: Use the install script
+bash .github-workflows-template/install.sh
+
+# Option 2: Manual installation
+mkdir -p .github/workflows
+cp .github-workflows-template/memory-pool-benchmarks.yml .github/workflows/
+git add .github/workflows/memory-pool-benchmarks.yml
+git commit -m "ci: Add automated memory pool performance benchmarks workflow"
+git push
+```
+
+**Note:** The workflow file is provided as a template in `.github-workflows-template/` because GitHub Apps require special `workflows` permission to create or modify workflow files directly.
 
 ## Architecture
 
