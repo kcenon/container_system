@@ -274,8 +274,8 @@ namespace container_module
         
         // Deserialize based on type index
         switch (type_idx) {
-            case 0: // std::monostate
-                result.set(std::monostate{});
+            case 0: // std::monostate (null)
+                // Already default-constructed as null, no need to set
                 break;
                 
             case 1: // bool

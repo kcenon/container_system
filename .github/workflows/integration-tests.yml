@@ -36,46 +36,52 @@ jobs:
       if: runner.os == 'Linux'
       run: |
         sudo apt-get update
-        sudo apt-get install -y cmake ninja-build g++ clang libgtest-dev libgmock-dev lcov libfmt-dev pkg-config
+        # Install GCC 12 for Clang + libstdc++ chrono compatibility
+        # Note: GCC 12 libstdc++ doesn't have <format>, so we install fmt library
+        sudo apt-get install -y software-properties-common
+        sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+        sudo apt-get update
+        sudo apt-get install -y cmake gcc-12 g++-12 ninja-build clang libgtest-dev libgmock-dev lcov pkg-config libfmt-dev
+        # Set GCC 12 as default for Clang builds
+        sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-12 100
+        sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-12 100
 
     - name: Install dependencies (macOS)
       if: runner.os == 'macOS'
       run: |
-        brew install ninja googletest lcov fmt
+        brew install ninja googletest lcov
 
-    - name: Verify fmt library availability
+    - name: Set up compiler (Linux)
+      if: runner.os == 'Linux'
       run: |
-        if [ "$RUNNER_OS" == "Linux" ]; then
-          echo "=== fmt library check (Ubuntu) ==="
-          dpkg -l | grep libfmt || echo "WARNING: libfmt-dev not installed"
-          pkg-config --exists fmt && echo "✅ fmt found via pkg-config" || echo "⚠️  fmt not found via pkg-config"
-          pkg-config --modversion fmt || echo "No version info"
-        else
-          echo "=== fmt library check (macOS) ==="
-          brew list fmt || echo "WARNING: fmt not installed"
-        fi
+        echo "CC=clang" >> $GITHUB_ENV
+        echo "CXX=clang++" >> $GITHUB_ENV
+        # Force Clang to use GCC 12 headers (avoid GCC 13 chrono bugs)
+        echo "CXXFLAGS=-isystem /usr/include/c++/12 -isystem /usr/include/x86_64-linux-gnu/c++/12 --gcc-toolchain=/usr" >> $GITHUB_ENV
+        echo "CFLAGS=--gcc-toolchain=/usr" >> $GITHUB_ENV
 
-    - name: Configure CMake
+    - name: Configure CMake (Unix)
+      if: runner.os != 'Windows'
       run: |
-        cmake -B build -G Ninja \
-          -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
-          -DBUILD_TESTS=ON \
-          -DCONTAINER_BUILD_INTEGRATION_TESTS=ON \
-          -DENABLE_COVERAGE=${{ matrix.build_type == 'Debug' && 'ON' || 'OFF' }} \
-          -DBUILD_CONTAINER_SAMPLES=OFF \
+        # Build CMake argument array
+        CMAKE_FLAGS=(
+          -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
+          -DBUILD_TESTS=ON
+          -DCONTAINER_BUILD_INTEGRATION_TESTS=ON
+          -DENABLE_COVERAGE=${{ matrix.build_type == 'Debug' && 'ON' || 'OFF' }}
+          -DBUILD_CONTAINER_SAMPLES=OFF
           -DBUILD_CONTAINER_EXAMPLES=OFF
+        )
 
-    - name: Verify CMake fmt detection
-      run: |
-        echo "=== CMake Configuration Check ==="
-        if grep -q "Container: Linking with fmt" build/CMakeFiles/CMakeOutput.log 2>/dev/null || \
-           grep -q "Container: Linking with fmt" build/CMakeCache.txt 2>/dev/null; then
-          echo "✅ fmt library was detected by CMake"
-        else
-          echo "⚠️  WARNING: fmt library might not be properly detected"
-          echo "Checking CMake status messages..."
-          grep -i "fmt" build/CMakeFiles/CMakeOutput.log 2>/dev/null || echo "No fmt-related messages found"
+        # Add compiler flags from environment if set (Linux only)
+        if [ -n "$CXXFLAGS" ]; then
+          CMAKE_FLAGS+=(-DCMAKE_CXX_FLAGS="$CXXFLAGS")
         fi
+        if [ -n "$CFLAGS" ]; then
+          CMAKE_FLAGS+=(-DCMAKE_C_FLAGS="$CFLAGS")
+        fi
+
+        cmake -B build -G Ninja "${CMAKE_FLAGS[@]}"
 
     - name: Build
       run: cmake --build build --config ${{ matrix.build_type }} --parallel
@@ -227,7 +233,11 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y cmake ninja-build g++ libgtest-dev libfmt-dev pkg-config
+        # Install GCC 13 for C++20 <format> support
+        sudo apt-get install -y software-properties-common
+        sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+        sudo apt-get update
+        sudo apt-get install -y cmake gcc-13 g++-13 ninja-build g++ libgtest-dev pkg-config
 
     - name: Configure CMake (Release for accurate performance)
       run: |

@@ -28,7 +28,15 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y cmake ninja-build g++ libgtest-dev libgmock-dev lcov
+        # Install GCC 13 for C++20 <format> support
+        sudo apt-get install -y software-properties-common
+        sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+        sudo apt-get update
+        sudo apt-get install -y cmake ninja-build gcc-13 g++-13 libgtest-dev libgmock-dev lcov
+        # Set GCC 13 as default
+        sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-13 100
+        sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-13 100
+        sudo update-alternatives --install /usr/bin/gcov gcov /usr/bin/gcov-13 100
 
     - name: Configure CMake with coverage
       run: |

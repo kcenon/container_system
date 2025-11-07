@@ -40,7 +40,7 @@ namespace container_module
     using namespace utility_module;
 
     thread_safe_container::thread_safe_container(
-        std::initializer_list<std::pair<std::string, ValueVariant>> init)
+        std::initializer_list<std::pair<std::string, LegacyValueVariant>> init)
     {
         for (const auto& [key, value] : init) {
             values_.emplace(key, variant_value(key, value));
@@ -108,7 +108,7 @@ namespace container_module
         return std::nullopt;
     }
 
-    void thread_safe_container::set(std::string_view key, ValueVariant value)
+    void thread_safe_container::set(std::string_view key, LegacyValueVariant value)
     {
         std::unique_lock lock(mutex_);
         write_count_.fetch_add(1, std::memory_order_relaxed);
@@ -176,8 +176,8 @@ namespace container_module
     }
 
     bool thread_safe_container::compare_exchange(std::string_view key,
-                                                const ValueVariant& expected,
-                                                const ValueVariant& desired)
+                                                const LegacyValueVariant& expected,
+                                                const LegacyValueVariant& desired)
     {
         std::unique_lock lock(mutex_);
         write_count_.fetch_add(1, std::memory_order_relaxed);

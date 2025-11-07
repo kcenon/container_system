@@ -20,7 +20,11 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y cmake ninja-build clang clang-tidy libgtest-dev libgmock-dev
+        # Install GCC 13 for C++20 <format> support
+        sudo apt-get install -y software-properties-common
+        sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+        sudo apt-get update
+        sudo apt-get install -y cmake gcc-13 g++-13 ninja-build clang clang-tidy libgtest-dev libgmock-dev
 
     - name: Configure CMake
       run: |
@@ -97,6 +101,10 @@ jobs:
 
     - name: Install cppcheck
       run: |
+        sudo apt-get update
+        # Install GCC 13 for C++20 <format> support
+        sudo apt-get install -y software-properties-common
+        sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
         sudo apt-get update
         sudo apt-get install -y cppcheck
 
