@@ -63,6 +63,30 @@ set(TEST_SOURCES
 # Only add benchmark tests if benchmark library is available
 if(benchmark_FOUND OR BENCHMARK_FOUND)
     list(APPEND TEST_SOURCES benchmark_tests.cpp)
+
+    # Add memory pool benchmark executable
+    add_executable(memory_pool_benchmark memory_pool_benchmark.cpp)
+
+    target_link_libraries(memory_pool_benchmark
+        container_system
+        ${BENCHMARK_LIBRARIES}
+        Threads::Threads
+    )
+
+    if(BENCHMARK_INCLUDE_DIRS)
+        target_include_directories(memory_pool_benchmark PRIVATE ${BENCHMARK_INCLUDE_DIRS})
+    endif()
+
+    # Set compile definitions
+    if(ENABLE_MESSAGING_FEATURES)
+        target_compile_definitions(memory_pool_benchmark PRIVATE HAS_MESSAGING_FEATURES)
+    endif()
+
+    if(ENABLE_PERFORMANCE_METRICS)
+        target_compile_definitions(memory_pool_benchmark PRIVATE HAS_PERFORMANCE_METRICS)
+    endif()
+
+    message(STATUS "Memory pool benchmarks will be built")
 endif()
 
 # Create test executables
