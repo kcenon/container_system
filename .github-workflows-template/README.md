@@ -45,7 +45,7 @@ cp .github-workflows-template/memory-pool-benchmarks.yml .github/workflows/
 ### What It Does
 
 1. **Triggers automatically on:**
-   - Push to `main` or `claude/*` branches (when memory pool files change)
+   - Push to `main` branch (when memory pool files change)
    - Pull requests to `main`
    - Manual workflow dispatch
 

@@ -74,7 +74,7 @@ git push
 ```yaml
 on:
   push:
-    branches: [ main, claude/* ]
+    branches: [ main ]
     paths:
       - 'internal/memory_pool.h'
       - 'tests/memory_pool_benchmark.cpp'
