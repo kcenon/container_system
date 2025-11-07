@@ -45,10 +45,11 @@ jobs:
         sudo apt-get update
         # Install GCC 12 for Clang builds (chrono compatibility)
         # Install GCC 13 for GCC builds (C++20 <format> support)
+        # Install fmt library for GCC 12 (doesn't have <format>)
         sudo apt-get install -y software-properties-common
         sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
         sudo apt-get update
-        sudo apt-get install -y cmake ninja-build gcc-12 g++-12 gcc-13 g++-13 clang libgtest-dev libgmock-dev
+        sudo apt-get install -y cmake ninja-build gcc-12 g++-12 gcc-13 g++-13 clang libgtest-dev libgmock-dev libfmt-dev
 
     - name: Install dependencies (macOS)
       if: runner.os == 'macOS'

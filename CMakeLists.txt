@@ -288,6 +288,17 @@ target_link_libraries(container_system PUBLIC
     Threads::Threads
 )
 
+# Check if std::format is actually available
+include(CheckCXXSourceCompiles)
+set(CMAKE_REQUIRED_FLAGS "${CMAKE_CXX_FLAGS} -std=c++20")
+check_cxx_source_compiles("
+    #include <format>
+    int main() {
+        auto s = std::format(\"{}\", 42);
+        return 0;
+    }
+" HAS_WORKING_STD_FORMAT)
+
 # Link fmt library if available
 if(fmt_FOUND AND TARGET fmt::fmt)
     target_link_libraries(container_system PUBLIC fmt::fmt)
@@ -296,10 +307,13 @@ elseif(FMT_FOUND)
     target_link_libraries(container_system PUBLIC ${FMT_LIBRARIES})
     target_include_directories(container_system PUBLIC ${FMT_INCLUDE_DIRS})
     message(STATUS "Container: Linking with system fmt")
-else()
-    # Enable std::format when fmt is not available
+elseif(HAS_WORKING_STD_FORMAT)
+    # Enable std::format only if it actually compiles
     target_compile_definitions(container_system PUBLIC USE_STD_FORMAT)
-    message(STATUS "Container: Using std::format (no fmt library)")
+    message(STATUS "Container: Using std::format (verified available)")
+else()
+    message(WARNING "Container: No formatting library available - using fallback")
+    message(WARNING "Serialization tests will fail. Install fmt library or use GCC 13+")
 endif()
 
 ##################################################
