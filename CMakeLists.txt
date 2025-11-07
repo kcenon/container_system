@@ -283,6 +283,9 @@ endif()
 # Dependencies
 ##################################################
 
+# Find fmt library (for formatting on systems without std::format)
+find_package(fmt QUIET)
+
 # Link libraries
 target_link_libraries(container_system PUBLIC
     Threads::Threads
