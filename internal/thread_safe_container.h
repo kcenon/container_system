@@ -62,7 +62,7 @@ namespace container_module
         /**
          * @brief Construct with initial values
          */
-        thread_safe_container(std::initializer_list<std::pair<std::string, ValueVariant>> init);
+        thread_safe_container(std::initializer_list<std::pair<std::string, LegacyValueVariant>> init);
 
         /**
          * @brief Copy constructor (thread-safe)
@@ -112,7 +112,7 @@ namespace container_module
          * @param key The key to set
          * @param value The value to store
          */
-        void set(std::string_view key, ValueVariant value);
+        void set(std::string_view key, LegacyValueVariant value);
 
         /**
          * @brief Set typed value for key
@@ -124,7 +124,7 @@ namespace container_module
         void set_typed(std::string_view key, T&& value) {
             static_assert(is_variant_type_v<std::decay_t<T>>, 
                          "Type must be a valid variant type");
-            set(key, ValueVariant(std::forward<T>(value)));
+            set(key, LegacyValueVariant(std::forward<T>(value)));
         }
 
         /**
@@ -218,8 +218,8 @@ namespace container_module
          * @return true if swap succeeded, false otherwise
          */
         bool compare_exchange(std::string_view key, 
-                            const ValueVariant& expected,
-                            const ValueVariant& desired);
+                            const LegacyValueVariant& expected,
+                            const LegacyValueVariant& desired);
 
         /**
          * @brief Get statistics

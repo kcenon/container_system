@@ -72,24 +72,9 @@ endif()
 # Find required packages
 find_package(Threads REQUIRED)
 
-# vcpkg integration
-set(VCPKG_TARGET_TRIPLET "arm64-osx" CACHE STRING "VCPKG target triplet")
-find_package(fmt CONFIG)
-
-# If fmt is not found via vcpkg, try system installation
-if(NOT fmt_FOUND)
-    message(STATUS "fmt not found via vcpkg, trying system installation...")
-    find_package(PkgConfig QUIET)
-    if(PkgConfig_FOUND)
-        pkg_check_modules(FMT fmt)
-    endif()
-
-    if(NOT FMT_FOUND)
-        message(STATUS "fmt not found, will use std::format if available")
-        add_compile_definitions(USE_STD_FORMAT)
-        set(fmt_FOUND FALSE)
-    endif()
-endif()
+# Note: This project uses manual string formatting instead of std::format
+# to ensure compatibility across all C++20 compilers (including older Clang versions)
+message(STATUS "Using manual string formatting (no std::format dependency)")
 
 ##################################################
 # Source Files Configuration
@@ -121,6 +106,9 @@ file(GLOB VALUE_FILES
 set(INTERNAL_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/internal/variant_value.h
     ${CMAKE_CURRENT_SOURCE_DIR}/internal/variant_value.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/internal/variant_value_v2.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/internal/variant_value_v2.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/internal/variant_value_factory.h
     ${CMAKE_CURRENT_SOURCE_DIR}/internal/thread_safe_container.h
     ${CMAKE_CURRENT_SOURCE_DIR}/internal/thread_safe_container.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/internal/simd_processor.h
@@ -133,6 +121,8 @@ if(ENABLE_MESSAGING_FEATURES OR ENABLE_EXTERNAL_INTEGRATION OR ENABLE_PERFORMANC
     list(APPEND INTEGRATION_FILES
         ${CMAKE_CURRENT_SOURCE_DIR}/integration/messaging_integration.h
         ${CMAKE_CURRENT_SOURCE_DIR}/integration/messaging_integration.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/integration/value_bridge.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/integration/value_bridge.cpp
     )
     message(STATUS "Container: Integration modules included")
 endif()
@@ -293,10 +283,24 @@ endif()
 # Dependencies
 ##################################################
 
+# Find fmt library (for formatting on systems without std::format)
+find_package(fmt QUIET)
+
 # Link libraries
 target_link_libraries(container_system PUBLIC
     Threads::Threads
 )
+
+# Check if std::format is actually available
+include(CheckCXXSourceCompiles)
+set(CMAKE_REQUIRED_FLAGS "${CMAKE_CXX_FLAGS} -std=c++20")
+check_cxx_source_compiles("
+    #include <format>
+    int main() {
+        auto s = std::format(\"{}\", 42);
+        return 0;
+    }
+" HAS_WORKING_STD_FORMAT)
 
 # Link fmt library if available
 if(fmt_FOUND AND TARGET fmt::fmt)
@@ -306,8 +310,13 @@ elseif(FMT_FOUND)
     target_link_libraries(container_system PUBLIC ${FMT_LIBRARIES})
     target_include_directories(container_system PUBLIC ${FMT_INCLUDE_DIRS})
     message(STATUS "Container: Linking with system fmt")
+elseif(HAS_WORKING_STD_FORMAT)
+    # Enable std::format only if it actually compiles
+    target_compile_definitions(container_system PUBLIC USE_STD_FORMAT)
+    message(STATUS "Container: Using std::format (verified available)")
 else()
-    message(STATUS "Container: Using std::format (no fmt library)")
+    message(WARNING "Container: No formatting library available - using fallback")
+    message(WARNING "Serialization tests will fail. Install fmt library or use GCC 13+")
 endif()
 
 ##################################################
