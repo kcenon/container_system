@@ -1131,6 +1131,7 @@ We welcome contributions! Please see our [Contributing Guide](./docs/CONTRIBUTIN
 - **Cross-Platform Build Scripts**: Native dependency and build scripts for all major platforms (sh/bat/ps1)
 - **Static Analysis**: Clang-tidy and Cppcheck integration with modernize checks
 - **Automated Testing**: Complete CI/CD pipeline with coverage reports
+- **Enhanced Test Coverage**: 123+ comprehensive test cases including dedicated memory pool testing (see [TESTING.md](docs/TESTING.md))
 
 **Performance Baselines**
 - **Container Creation**: 2M containers/second for empty containers
@@ -1138,8 +1139,9 @@ We welcome contributions! Please see our [Contributing Guide](./docs/CONTRIBUTIN
 - **Value Operations**: 4.2M moves/second (zero-copy semantics)
 - **SIMD Processing**: 3.8 GB/s throughput with ARM NEON optimization
 - **Memory Efficiency**: 1.5 MB baseline with optimized variant storage
+- **Memory Pool**: 10-50x faster than standard allocator for small blocks (<256B)
 
-See [BASELINE.md](BASELINE.md) for comprehensive performance metrics and SIMD optimization details.
+See [BASELINE.md](BASELINE.md) for comprehensive performance metrics, [TESTING.md](docs/TESTING.md) for detailed benchmark information, and [MEMORY_POOL_PERFORMANCE.md](docs/MEMORY_POOL_PERFORMANCE.md) for live auto-updated performance data.
 
 **Complete Documentation Suite**
 - [ARCHITECTURE.md](docs/ARCHITECTURE.md): Ecosystem integration and dependency design
