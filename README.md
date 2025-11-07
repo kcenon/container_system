@@ -1139,8 +1139,9 @@ We welcome contributions! Please see our [Contributing Guide](./docs/CONTRIBUTIN
 - **Value Operations**: 4.2M moves/second (zero-copy semantics)
 - **SIMD Processing**: 3.8 GB/s throughput with ARM NEON optimization
 - **Memory Efficiency**: 1.5 MB baseline with optimized variant storage
+- **Memory Pool**: 10-50x faster than standard allocator for small blocks (<256B)
 
-See [BASELINE.md](BASELINE.md) for comprehensive performance metrics and SIMD optimization details.
+See [BASELINE.md](BASELINE.md) for comprehensive performance metrics and [TESTING.md](docs/TESTING.md) for detailed benchmark information.
 
 **Complete Documentation Suite**
 - [ARCHITECTURE.md](docs/ARCHITECTURE.md): Ecosystem integration and dependency design
