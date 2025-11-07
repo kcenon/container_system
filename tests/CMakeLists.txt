@@ -57,6 +57,7 @@ set(TEST_SOURCES
     test_long_range_checking.cpp
     variant_value_v2_compatibility_tests.cpp
     variant_value_factory_tests.cpp
+    memory_pool_tests.cpp
 )
 
 # Only add benchmark tests if benchmark library is available
