@@ -93,6 +93,8 @@ set(CORE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/core/value.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/core/value_types.h
     ${CMAKE_CURRENT_SOURCE_DIR}/core/value_types.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/core/value_store.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/core/value_store.cpp
 )
 
 # Value files (public API)
