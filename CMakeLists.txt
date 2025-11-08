@@ -174,10 +174,8 @@ if(BUILD_WITH_COMMON_SYSTEM)
     if(DEFINED ENV{COMMON_SYSTEM_ROOT})
         list(APPEND _common_system_roots $ENV{COMMON_SYSTEM_ROOT})
     endif()
-    # Priority order: Sources/ directory (macOS), Sources/ directory (Linux), then relative paths
+    # Priority order: relative paths (sibling directory), then current directory
     list(APPEND _common_system_roots
-        /Users/dongcheolshin/Sources/common_system
-        /home/$ENV{USER}/Sources/common_system
         ${CMAKE_CURRENT_SOURCE_DIR}/../common_system
         ${CMAKE_CURRENT_SOURCE_DIR}/common_system
     )
