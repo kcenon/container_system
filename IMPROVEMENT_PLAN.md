@@ -551,10 +551,15 @@ endif()
   - **Status**: Updated CMake to correctly report which formatting library is in use
   - **Commit**: af49c0ac "Simplify formatting library dependency handling"
   - **Tests**: All 17 tests passing
-- [ ] **Task 1.5**: Write ADR (type system decision)
+- [x] **Task 1.5**: Write ADR (type system decision) ✅ **COMPLETED**
+  - **Status**: Created ADR-001-Type-System-Unification.md
+  - **Decision**: Adopt variant_value_v2 as primary type system
+  - **Timeline**: 6-month deprecation period before removing legacy systems
+  - **Commit**: 0723c3f8 "Add ADR-001: Type System Unification decision"
 
 **Resources**: 1 developer (Senior)
 **Risk Level**: Low
+**Status**: ✅ **SPRINT 1 COMPLETED**
 
 ---
 
