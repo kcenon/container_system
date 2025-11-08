@@ -259,15 +259,12 @@ endif()
 # Dependencies
 ##################################################
 
-# Find fmt library (for formatting on systems without std::format)
-find_package(fmt QUIET)
-
 # Link libraries
 target_link_libraries(container_system PUBLIC
     Threads::Threads
 )
 
-# Check if std::format is actually available
+# Formatting library configuration: prefer std::format, fall back to fmt
 include(CheckCXXSourceCompiles)
 set(CMAKE_REQUIRED_FLAGS "${CMAKE_CXX_FLAGS} -std=c++20")
 check_cxx_source_compiles("
@@ -278,21 +275,20 @@ check_cxx_source_compiles("
     }
 " HAS_WORKING_STD_FORMAT)
 
-# Link fmt library if available
-if(fmt_FOUND AND TARGET fmt::fmt)
-    target_link_libraries(container_system PUBLIC fmt::fmt)
-    message(STATUS "Container: Linking with fmt::fmt")
-elseif(FMT_FOUND)
-    target_link_libraries(container_system PUBLIC ${FMT_LIBRARIES})
-    target_include_directories(container_system PUBLIC ${FMT_INCLUDE_DIRS})
-    message(STATUS "Container: Linking with system fmt")
-elseif(HAS_WORKING_STD_FORMAT)
-    # Enable std::format only if it actually compiles
+if(HAS_WORKING_STD_FORMAT)
+    # Prefer std::format if available (C++20)
     target_compile_definitions(container_system PUBLIC USE_STD_FORMAT)
-    message(STATUS "Container: Using std::format (verified available)")
+    message(STATUS "Container: Using std::format (C++20)")
 else()
-    message(WARNING "Container: No formatting library available - using fallback")
-    message(WARNING "Serialization tests will fail. Install fmt library or use GCC 13+")
+    # Fall back to fmt library
+    find_package(fmt QUIET)
+    if(fmt_FOUND AND TARGET fmt::fmt)
+        target_link_libraries(container_system PUBLIC fmt::fmt)
+        message(STATUS "Container: Using fmt library")
+    else()
+        message(WARNING "Container: No formatting library available")
+        message(WARNING "  Install fmt library or use compiler with std::format support")
+    endif()
 endif()
 
 ##################################################
