@@ -4,10 +4,15 @@
     "description": "Thread-safe serializable container library with advanced features",
     "license": "BSD-3-Clause",
     "dependencies": [
-        "fmt",
         "benchmark"
     ],
     "features": {
+        "fmt-support": {
+            "description": "Use fmt library for formatting (fallback for compilers without std::format)",
+            "dependencies": [
+                "fmt"
+            ]
+        },
         "tests": {
             "description": "Build unit tests",
             "dependencies": [
