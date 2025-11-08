@@ -47,8 +47,12 @@ namespace container_module
 {
 	/**
 	 * @brief The base class for all values stored in the container system.
+	 *
+	 * @deprecated This polymorphic value class is deprecated and will be removed
+	 * in the next major version. Please use variant_value_v2 instead for better
+	 * performance and type safety. See docs/MIGRATION.md for migration guide.
 	 */
-	class value : public std::enable_shared_from_this<value>
+	class [[deprecated("Use variant_value_v2 instead. This polymorphic value class will be removed in the next major version.")]] value : public std::enable_shared_from_this<value>
 	{
 	public:
 		value();

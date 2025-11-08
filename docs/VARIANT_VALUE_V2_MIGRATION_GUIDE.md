@@ -2,7 +2,36 @@
 
 > **Status**: Ready for Production
 > **Version**: 2.0.0
-> **Last Updated**: 2025-11-06
+> **Last Updated**: 2025-11-08
+>
+> ⚠️ **IMPORTANT**: As of version 2.0, the polymorphic `value` class and `variant_value` v1 are officially **DEPRECATED**
+> and will be removed in the next major version. Please migrate to `variant_value_v2` as soon as possible.
+
+---
+
+## Deprecation Notice
+
+### What's Deprecated?
+
+Starting from version 2.0.0, the following classes are marked as `[[deprecated]]` and will trigger compiler warnings:
+
+1. **Polymorphic `value` class** (`core/value.h`)
+   - Legacy object-oriented value system with virtual dispatch
+   - Will be removed in v3.0.0
+
+2. **`variant_value` v1** (`internal/variant_value.h`)
+   - First variant-based implementation with incorrect type ordering
+   - Will be removed in v3.0.0
+
+### Timeline
+
+| Date | Version | Action |
+|------|---------|--------|
+| **2025-11-08** | v2.0.0 | Deprecation warnings added |
+| **2025-05-08** | v2.6.0 | Last version supporting deprecated classes |
+| **2025-11-08** | v3.0.0 | Deprecated classes removed |
+
+**Recommendation**: Complete migration within 6 months to avoid breaking changes.
 
 ---
 

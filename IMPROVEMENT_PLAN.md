@@ -566,14 +566,27 @@ endif()
 ### Sprint 2-3: Deprecation & Planning (Week 3-6)
 **Goal**: Deprecate legacy systems, prepare migration
 
-- [ ] **Task 2.1**: Mark polymorphic value deprecated
-- [ ] **Task 2.2**: Mark variant_value v1 deprecated
-- [ ] **Task 2.3**: Unify SOO dual storage
-- [ ] **Task 2.4**: Write migration guide
-- [ ] **Task 2.5**: Implement value_migrator tool
+- [x] **Task 2.1**: Mark polymorphic value deprecated ✅ (2025-11-08)
+  - Added [[deprecated]] attribute to core/value.h
+  - Compiler warnings now alert users to migrate to variant_value_v2
+- [x] **Task 2.2**: Mark variant_value v1 deprecated ✅ (2025-11-08)
+  - Added [[deprecated]] attribute to internal/variant_value.h
+  - Clear message about incorrect type ordering issue
+- [ ] **Task 2.3**: Unify SOO dual storage (Deferred to Sprint 4)
+  - Requires 81 changes across 9 files
+  - Will be addressed in dedicated sprint
+- [x] **Task 2.4**: Write migration guide ✅ (2025-11-08)
+  - Updated docs/VARIANT_VALUE_V2_MIGRATION_GUIDE.md with deprecation notice
+  - Added timeline (6-month deprecation period)
+  - Documented migration phases
+- [x] **Task 2.5**: Implement value_migrator tool ✅ (2025-11-08)
+  - Created tools/value_migrator.h as user-friendly wrapper
+  - Leverages existing value_bridge functionality
+  - Includes comprehensive documentation and examples
 
-**Resources**: 2 developers (1 Senior + 1 Mid)
-**Risk Level**: Medium
+**Resources**: 1 developer (Senior)
+**Risk Level**: Low (completed tasks only involved marking and documentation)
+**Status**: ✅ **PARTIALLY COMPLETED** (4/5 tasks, SOO unification deferred)
 
 ---
 

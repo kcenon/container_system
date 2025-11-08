@@ -76,11 +76,15 @@ namespace container_module
 
     /**
      * @brief Type-safe value wrapper with thread safety
-     * 
+     *
      * This class provides a modern, type-safe alternative to the polymorphic value class.
      * It uses std::variant for type safety and includes thread synchronization primitives.
+     *
+     * @deprecated This v1 variant_value class has incorrect type ordering and is deprecated.
+     * Please use variant_value_v2 instead which has correct type index alignment with value_types enum.
+     * This class will be removed in the next major version. See docs/MIGRATION.md for migration guide.
      */
-    class variant_value
+    class [[deprecated("Use variant_value_v2 instead. This v1 class has incorrect type ordering and will be removed in the next major version.")]] variant_value
     {
     public:
         /**
