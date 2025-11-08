@@ -230,28 +230,6 @@ target_include_directories(container_system PUBLIC
     $<INSTALL_INTERFACE:include>
 )
 
-# Create a junction/symlink for container/ include path
-# This allows #include "container/..." to work correctly
-if(NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/container)
-    if(WIN32)
-        # Use junction on Windows (doesn't require admin privileges)
-        execute_process(
-            COMMAND cmd /c mklink /J container .
-            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-            RESULT_VARIABLE JUNCTION_RESULT
-        )
-        if(NOT JUNCTION_RESULT EQUAL 0)
-            message(STATUS "Failed to create junction, files may not compile correctly")
-        endif()
-    else()
-        # Use symbolic link on Unix-like systems
-        execute_process(
-            COMMAND ${CMAKE_COMMAND} -E create_symlink . container
-            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-        )
-    endif()
-endif()
-
 ##################################################
 # Compile Definitions
 ##################################################
