@@ -16,7 +16,6 @@ All rights reserved.
  */
 
 #include <gtest/gtest.h>
-#include "container/values/numeric_value.h"
 #include <limits>
 #include <cstdint>
 

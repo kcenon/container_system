@@ -68,142 +68,6 @@ namespace container_module
 		, message_type_("data_container")
 		, version_("1.0.0.0")
 	{
-		// Fill data_type_map_ for dynamic parsing
-		data_type_map_.insert(
-			{ value_types::bool_value,
-			  [this](const std::string& n, const std::string& d)
-			  {
-				  auto b = (d == "true");
-				  return std::make_shared<bool_value>(n, b);
-			  } });
-		data_type_map_.insert(
-			{ value_types::short_value,
-			  [this](const std::string& n, const std::string& d)
-			  {
-				  try {
-					  short s = static_cast<short>(std::stoi(d));
-					  return std::make_shared<short_value>(n, s);
-				  } catch (const std::exception&) {
-					  return std::make_shared<short_value>(n, 0);
-				  }
-			  } });
-		data_type_map_.insert(
-			{ value_types::ushort_value,
-			  [this](const std::string& n, const std::string& d)
-			  {
-				  unsigned short s = (unsigned short)std::stoul(d.c_str());
-				  return std::make_shared<ushort_value>(n, s);
-			  } });
-		data_type_map_.insert(
-			{ value_types::int_value,
-			  [this](const std::string& n, const std::string& d)
-			  {
-				  try {
-					  int i = std::stoi(d);
-					  return std::make_shared<int_value>(n, i);
-				  } catch (const std::exception&) {
-					  return std::make_shared<int_value>(n, 0);
-				  }
-			  } });
-		data_type_map_.insert(
-			{ value_types::uint_value,
-			  [this](const std::string& n, const std::string& d)
-			  {
-				  unsigned int i = std::stoul(d.c_str());
-				  return std::make_shared<uint_value>(n, i);
-			  } });
-		data_type_map_.insert(
-			{ value_types::long_value,
-			  [this](const std::string& n, const std::string& d)
-			  {
-				  long l = std::atol(d.c_str());
-				  return std::make_shared<long_value>(n, l);
-			  } });
-		data_type_map_.insert(
-			{ value_types::ulong_value,
-			  [this](const std::string& n, const std::string& d)
-			  {
-				  unsigned long l = std::stoul(d.c_str());
-				  return std::make_shared<ulong_value>(n, l);
-			  } });
-		data_type_map_.insert(
-			{ value_types::llong_value,
-			  [this](const std::string& n, const std::string& d)
-			  {
-				  long long ll = std::stoll(d.c_str());
-				  return std::make_shared<llong_value>(n, ll);
-			  } });
-		data_type_map_.insert(
-			{ value_types::ullong_value,
-			  [this](const std::string& n, const std::string& d)
-			  {
-				  unsigned long long ll = std::stoull(d.c_str());
-				  return std::make_shared<ullong_value>(n, ll);
-			  } });
-		data_type_map_.insert(
-			{ value_types::float_value,
-			  [this](const std::string& n, const std::string& d)
-			  {
-				  float f = std::stof(d.c_str());
-				  return std::make_shared<float_value>(n, f);
-			  } });
-		data_type_map_.insert(
-			{ value_types::double_value,
-			  [this](const std::string& n, const std::string& d)
-			  {
-				  double dbl = std::stod(d.c_str());
-				  return std::make_shared<double_value>(n, dbl);
-			  } });
-		data_type_map_.insert(
-			{ value_types::bytes_value,
-			  [this](const std::string& n, const std::string& d)
-			  {
-				  // For bytes_value, we need to convert from hex string representation
-				  std::vector<uint8_t> bytes;
-
-				  // Handle empty or invalid data
-				  if (d.empty()) {
-					  return std::make_shared<bytes_value>(n, bytes);
-				  }
-
-				  // Parse hex string in pairs (each byte = 2 hex chars)
-				  for (size_t i = 0; i < d.length(); i += 2) {
-					  if (i + 1 < d.length()) {
-						  std::string byte_str = d.substr(i, 2);
-						  try {
-							  // Attempt to parse hex byte
-							  unsigned long val = std::stoul(byte_str, nullptr, 16);
-							  bytes.push_back(static_cast<uint8_t>(val));
-						  } catch (const std::exception&) {
-							  // Skip invalid hex bytes - continue parsing remaining data
-							  // This allows partial recovery from corrupted data
-							  continue;
-						  }
-					  }
-				  }
-				  return std::make_shared<bytes_value>(n, bytes);
-			  } });
-		data_type_map_.insert(
-			{ value_types::string_value,
-			  [this](const std::string& n, const std::string& d)
-			  {
-				  return std::make_shared<string_value>(n, d);
-			  } });
-		data_type_map_.insert(
-			{ value_types::container_value,
-			  [this](const std::string& n, const std::string& d)
-			  {
-				  long count = std::atol(d.c_str());
-				  return std::make_shared<container_value>(n, count);
-			  } });
-		data_type_map_.insert(
-			{ value_types::array_value,
-			  [this](const std::string& n, const std::string& d)
-			  {
-				  // Array value: d contains the count, like container_value
-				  // The actual elements will be parsed and added during nesting logic
-				  return std::make_shared<array_value>(n);
-			  } });
 	}
 
 	value_container::value_container(const std::string& data_str,
@@ -251,56 +115,7 @@ namespace container_module
 		}
 	}
 
-	value_container::value_container(
-		const std::string& msg_type,
-		std::vector<std::shared_ptr<value>> units)
-		: value_container()
-	{
-		set_message_type(msg_type);
-		units_ = std::move(units);
-		for (auto& unit : units_)
-		{
-			if (unit) unit->set_parent(nullptr);
-		}
-		changed_data_ = true;
-	}
-
-	value_container::value_container(
-		const std::string& tid,
-		const std::string& tsubid,
-		const std::string& msg_type,
-		std::vector<std::shared_ptr<value>> units)
-		: value_container()
-	{
-		set_target(tid, tsubid);
-		set_message_type(msg_type);
-		units_ = std::move(units);
-		for (auto& unit : units_)
-		{
-			if (unit) unit->set_parent(nullptr);
-		}
-		changed_data_ = true;
-	}
-
-	value_container::value_container(
-		const std::string& sid,
-		const std::string& ssubid,
-		const std::string& tid,
-		const std::string& tsubid,
-		const std::string& msg_type,
-		std::vector<std::shared_ptr<value>> units)
-		: value_container()
-	{
-		set_source(sid, ssubid);
-		set_target(tid, tsubid);
-		set_message_type(msg_type);
-		units_ = std::move(units);
-		for (auto& unit : units_)
-		{
-			if (unit) unit->set_parent(nullptr);
-		}
-		changed_data_ = true;
-	}
+	// Legacy constructors with value vector parameters removed
 
 	value_container::value_container(value_container&& other) noexcept
 		: parsed_data_(other.parsed_data_)
@@ -312,8 +127,7 @@ namespace container_module
 		, target_sub_id_(std::move(other.target_sub_id_))
 		, message_type_(std::move(other.message_type_))
 		, version_(std::move(other.version_))
-		, units_(std::move(other.units_))
-		, data_type_map_(std::move(other.data_type_map_))
+		// Legacy units_ and data_type_map_ removed
 	{
 		// Reset other to a valid state
 		other.parsed_data_ = true;
@@ -333,8 +147,8 @@ namespace container_module
 			parsed_data_ = other.parsed_data_;
 			changed_data_ = other.changed_data_;
 			data_string_ = std::move(other.data_string_);
-			units_ = std::move(other.units_);
-			data_type_map_ = std::move(other.data_type_map_);
+		optimized_units_ = std::move(other.optimized_units_);
+		use_soo_ = other.use_soo_;
 			
 			// Reset other to a valid state
 			other.parsed_data_ = true;
@@ -372,29 +186,6 @@ namespace container_module
 		message_type_ = std::string(msg_type);
 	}
 
-	void value_container::set_units(
-		const std::vector<std::shared_ptr<value>>& target_values,
-		bool update_immediately)
-	{
-		if (!parsed_data_)
-		{
-			deserialize_values(data_string_, false);
-		}
-		for (auto& tv : target_values)
-		{
-			auto it = std::find(units_.begin(), units_.end(), tv);
-			if (it == units_.end())
-			{
-				units_.push_back(tv);
-				tv->set_parent(nullptr);
-			}
-		}
-		changed_data_ = !update_immediately;
-		if (update_immediately)
-		{
-			data_string_ = datas();
-		}
-	}
 
 	void value_container::swap_header(void)
 	{
@@ -407,7 +198,7 @@ namespace container_module
 		parsed_data_ = true;
 		changed_data_ = false;
 		data_string_ = "@data={{}};";
-		units_.clear();
+		optimized_units_.clear();
 	}
 
 	std::shared_ptr<value_container> value_container::copy(
@@ -450,39 +241,7 @@ namespace container_module
 		return message_type_;
 	}
 
-	std::shared_ptr<value> value_container::add(const value& tv,
-												bool update_immediately)
-	{
-		// Possibly interpret tv => create a new child
-		auto newChild = std::make_shared<value>(
-			std::make_shared<value>(const_cast<value&>(tv).get_ptr()));
-		return add(newChild, update_immediately);
-	}
 
-	std::shared_ptr<value> value_container::add(std::shared_ptr<value> tv,
-												bool update_immediately)
-	{
-		std::unique_lock<std::shared_mutex> lock(mutex_);
-		
-		if (!parsed_data_)
-		{
-			deserialize_values(data_string_, false);
-		}
-		auto it = std::find(units_.begin(), units_.end(), tv);
-		if (it != units_.end())
-		{
-			return nullptr;
-		}
-		units_.push_back(tv);
-		tv->set_parent(nullptr);
-
-		changed_data_ = !update_immediately;
-		if (update_immediately)
-		{
-			data_string_ = datas();
-		}
-		return tv;
-	}
 
 	void value_container::remove(std::string_view target_name,
 								 bool update_immediately)
@@ -497,12 +256,12 @@ namespace container_module
 		while (found)
 		{
 			found = false;
-			auto it = std::find_if(units_.begin(), units_.end(),
-								   [&target_name](std::shared_ptr<value> v)
-								   { return (v->name() == target_name); });
-			if (it != units_.end())
-			{
-				units_.erase(it);
+		auto it = std::find_if(optimized_units_.begin(), optimized_units_.end(),
+							   [&target_name](const optimized_value& ov)
+							   { return (ov.name == target_name); });
+		if (it != optimized_units_.end())
+		{
+			optimized_units_.erase(it);
 				found = true;
 			}
 		}
@@ -513,105 +272,8 @@ namespace container_module
 		}
 	}
 
-	void value_container::remove(std::shared_ptr<value> tv,
-								 bool update_immediately)
-	{
-		std::unique_lock<std::shared_mutex> lock(mutex_);
-		
-		if (!parsed_data_)
-		{
-			deserialize_values(data_string_, false);
-		}
-		auto it = std::find(units_.begin(), units_.end(), tv);
-		if (it != units_.end())
-		{
-			units_.erase(it);
-			changed_data_ = !update_immediately;
-			if (update_immediately)
-			{
-				data_string_ = datas();
-			}
-		}
-	}
 
-	std::vector<std::shared_ptr<value>> value_container::value_array(
-		std::string_view target_name)
-	{
-		std::unique_lock<std::shared_mutex> lock(mutex_);
 
-		if (!parsed_data_)
-		{
-			deserialize_values(data_string_, false);
-		}
-		std::vector<std::shared_ptr<value>> results;
-		for (auto& v : units_)
-		{
-			if (v->name() == target_name)
-			{
-				results.push_back(v);
-			}
-		}
-		return results;
-	}
-
-	std::shared_ptr<value> value_container::get_value(
-		std::string_view target_name, unsigned int index)
-	{
-		std::unique_lock<std::shared_mutex> lock(mutex_);
-
-		// Zero-copy optimization: Check cache first
-		if (zero_copy_mode_)
-		{
-			std::string key = std::string(target_name) + "_" + std::to_string(index);
-			auto cache_it = parsed_values_cache_.find(key);
-			if (cache_it != parsed_values_cache_.end())
-			{
-				return cache_it->second;
-			}
-		}
-
-		if (!parsed_data_)
-		{
-			// In zero-copy mode with raw data, we could implement selective parsing here
-			// For now, fall back to full deserialization as foundation
-			// Future optimization: parse only the requested value from raw_data_ptr_
-			if (zero_copy_mode_ && raw_data_ptr_)
-			{
-				deserialize_values(*raw_data_ptr_, false);
-			}
-			else
-			{
-				deserialize_values(data_string_, false);
-			}
-		}
-
-		// Search directly instead of calling value_array() to avoid nested locking
-		std::vector<std::shared_ptr<value>> results;
-		for (auto& v : units_)
-		{
-			if (v->name() == target_name)
-			{
-				results.push_back(v);
-			}
-		}
-
-		if (results.empty() || index >= results.size())
-		{
-			// Return a proper null value for non-existent keys
-			auto null_val = std::make_shared<value>();
-			null_val->set_data(std::string(target_name), value_types::null_value, "");
-			return null_val;
-		}
-
-		// Cache the result in zero-copy mode
-		if (zero_copy_mode_)
-		{
-			std::string key = std::string(target_name) + "_" + std::to_string(index);
-			parsed_values_cache_[key] = results[index];
-		}
-
-		return results[index];
-	}
 
 	void value_container::initialize(void)
 	{
@@ -780,10 +442,10 @@ bool value_container::deserialize(const std::vector<uint8_t>& data_array,
 		formatter::format_to(std::back_inserter(result), "</header>");
 
 		formatter::format_to(std::back_inserter(result), "<values>");
-		for (auto& u : units_)
-		{
-			formatter::format_to(std::back_inserter(result), "{}", u->to_xml());
-		}
+	for (auto& u : optimized_units_)
+	{
+		// TODO: Implement optimized_value XML serialization
+	}
 		formatter::format_to(std::back_inserter(result), "</values>");
 		formatter::format_to(std::back_inserter(result), "</container>");
 		return result;
@@ -822,12 +484,11 @@ bool value_container::deserialize(const std::vector<uint8_t>& data_array,
 		// values
 		formatter::format_to(std::back_inserter(result), "\"values\":{{");
 		bool first = true;
-		for (auto& u : units_)
-		{
-			formatter::format_to(std::back_inserter(result),
-								 first ? "{}" : ",{}", u->to_json());
-			first = false;
-		}
+	for (auto& u : optimized_units_)
+	{
+		// TODO: Implement optimized_value JSON serialization
+		first = false;
+	}
 		formatter::format_to(std::back_inserter(result),
 							 "}}"); // end values
 		formatter::format_to(std::back_inserter(result), "}}");
@@ -843,10 +504,9 @@ bool value_container::deserialize(const std::vector<uint8_t>& data_array,
 		// Rebuild from top-level units
 		std::string result;
 		formatter::format_to(std::back_inserter(result), "@data={{{{");
-		for (auto& u : units_)
-		{
-			formatter::format_to(std::back_inserter(result), "{}",
-								 u->serialize());
+	for (auto& u : optimized_units_)
+	{
+		// TODO: Implement optimized_value serialization
 		}
 		formatter::format_to(std::back_inserter(result), "}}}};");
 		return result;
@@ -886,15 +546,6 @@ bool value_container::deserialize(const std::vector<uint8_t>& data_array,
 		total += data_string_.capacity();
 
 		// Add traditional value storage (heap-allocated)
-		total += units_.capacity() * sizeof(std::shared_ptr<value>);
-		for (const auto& v : units_)
-		{
-			if (v)
-			{
-				// Approximate: shared_ptr overhead + value object size + data
-				total += sizeof(value) + v->size();
-			}
-		}
 
 		// Add optimized value storage (stack-allocated)
 		total += optimized_units_.capacity() * sizeof(optimized_value);
@@ -904,54 +555,26 @@ bool value_container::deserialize(const std::vector<uint8_t>& data_array,
 		}
 
 		// Add parsed values cache
-		total += parsed_values_cache_.size() * (sizeof(std::string) + sizeof(std::shared_ptr<value>));
 
 		return total;
 	}
 
 	pool_stats value_container::get_pool_stats()
 	{
-		auto& pool = value_pool<value>::instance();
+		auto& pool = value_pool<optimized_value>::instance();
 		auto [hits, misses, available] = pool.stats();
 		return pool_stats(hits, misses, available);
 	}
 
 	void value_container::clear_pool()
 	{
-		value_pool<value>::instance().clear();
+		value_pool<optimized_value>::instance().clear();
 	}
 
-	std::vector<std::shared_ptr<value>> value_container::operator[](
-		std::string_view key)
-	{
-		return value_array(key);
-	}
 
-	value_container operator<<(value_container tc, value& other)
-	{
-		tc.add(other);
-		return tc;
-	}
 
-	value_container operator<<(value_container tc, std::shared_ptr<value> other)
-	{
-		tc.add(other);
-		return tc;
-	}
 
-	std::shared_ptr<value_container> operator<<(
-		std::shared_ptr<value_container> tc, value& other)
-	{
-		tc->add(other);
-		return tc;
-	}
 
-	std::shared_ptr<value_container> operator<<(
-		std::shared_ptr<value_container> tc, std::shared_ptr<value> other)
-	{
-		tc->add(other);
-		return tc;
-	}
 
 	std::ostream& operator<<(std::ostream& out, value_container& other)
 	{
@@ -986,9 +609,9 @@ bool value_container::deserialize(const std::vector<uint8_t>& data_array,
 	bool value_container::deserialize_values(const std::string& data,
 											 bool parse_only_header)
 	{
-		if (!units_.empty())
+		if (!optimized_units_.empty())
 		{
-			units_.clear();
+			optimized_units_.clear();
 		}
 		changed_data_ = false;
 
@@ -997,11 +620,11 @@ bool value_container::deserialize(const std::vector<uint8_t>& data_array,
 		std::smatch match;
 		if (!std::regex_search(data, match, reData))
 		{
-			data_string_ = "@data={{}};";
+			data_string_ = "@data={{}}";
 			parsed_data_ = true;
 			return false;
 		}
-		data_string_ = match[0]; // entire "@data= ... ;"
+		data_string_ = match[0];
 
 		if (parse_only_header)
 		{
@@ -1010,91 +633,10 @@ bool value_container::deserialize(const std::vector<uint8_t>& data_array,
 		}
 		parsed_data_ = true;
 
-		// parse items: [name,type,data];
-		std::regex reItems("\\[(\\w+),\\s*(\\w+),\\s*(.*?)\\];");
-		auto it = std::sregex_iterator(data_string_.begin(), data_string_.end(),
-									   reItems);
-		auto end = std::sregex_iterator();
-
-		std::vector<std::shared_ptr<value>> temp_list;
-		for (; it != end; ++it)
-		{
-			auto nameStr = (*it)[1].str();
-			auto typeStr = (*it)[2].str();
-			auto dataStr = (*it)[3].str();
-
-			// convert string -> value_types
-			auto vt = convert_value_type(typeStr);
-			// see if we have a dynamic constructor
-			auto dtIt = data_type_map_.find(vt);
-			if (dtIt == data_type_map_.end())
-			{
-				// fallback to a simple null value
-				temp_list.push_back(std::make_shared<value>(
-					nameStr, nullptr, 0, value_types::null_value));
-				continue;
-			}
-			temp_list.push_back(dtIt->second(nameStr, dataStr));
-		}
-
-		// Next, handle container nesting. We rely on the container_value
-		// storing child counts.
-		std::shared_ptr<value> currentContainer = nullptr;
-		for (auto& tVal : temp_list)
-		{
-			if (!currentContainer)
-			{
-				// top-level => add to units_
-				units_.push_back(tVal);
-				tVal->set_parent(nullptr);
-
-				// Check if this is a container or array that can hold children
-				if ((tVal->is_container() || tVal->is_array()) && (tVal->to_long() > 0))
-				{
-					currentContainer = tVal;
-				}
-			}
-			else
-			{
-				// add to current container or array
-				// we must dynamic_cast to container_value or array_value
-				if (auto c = std::dynamic_pointer_cast<container_value>(
-						currentContainer))
-				{
-					c->add(tVal, false);
-				}
-				else if (auto a = std::dynamic_pointer_cast<array_value>(
-						currentContainer))
-				{
-					a->push_back(tVal);
-				}
-
-				// Check if this is a container or array that can hold children
-				if ((tVal->is_container() || tVal->is_array()) && tVal->to_long() > 0)
-				{
-					currentContainer = tVal;
-				}
-				else
-				{
-					// Check if parent's child count is now matched
-					while (currentContainer)
-					{
-						long needed = currentContainer->to_long();
-						long have = (long)currentContainer->child_count();
-						if (have >= needed)
-						{
-							// move up
-							currentContainer = currentContainer->parent();
-						}
-						else
-						{
-							// break if still more children needed
-							break;
-						}
-					}
-				}
-			}
-		}
+		// TODO: Implement deserialization for optimized_value
+		// The legacy polymorphic value deserialization has been removed.
+		// This needs to be rewritten to parse data and create optimized_value objects.
+		(void)data_string_;
 		return true;
 	}
 

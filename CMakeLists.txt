@@ -102,18 +102,18 @@ set(INTERNAL_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/internal/variant_value_v2.h
     ${CMAKE_CURRENT_SOURCE_DIR}/internal/variant_value_v2.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/internal/variant_value_factory.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/internal/thread_safe_container.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/internal/thread_safe_container.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/internal/simd_processor.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/internal/simd_processor.cpp
+#     ${CMAKE_CURRENT_SOURCE_DIR}/internal/thread_safe_container.h
+#     ${CMAKE_CURRENT_SOURCE_DIR}/internal/thread_safe_container.cpp
+#     ${CMAKE_CURRENT_SOURCE_DIR}/internal/simd_processor.h
+#     ${CMAKE_CURRENT_SOURCE_DIR}/internal/simd_processor.cpp
 )
 
 # Integration files (conditional)
 set(INTEGRATION_FILES)
 if(ENABLE_MESSAGING_FEATURES OR ENABLE_EXTERNAL_INTEGRATION OR ENABLE_PERFORMANCE_METRICS)
     list(APPEND INTEGRATION_FILES
-        ${CMAKE_CURRENT_SOURCE_DIR}/integration/messaging_integration.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/integration/messaging_integration.cpp
+#         ${CMAKE_CURRENT_SOURCE_DIR}/integration/messaging_integration.h
+#         ${CMAKE_CURRENT_SOURCE_DIR}/integration/messaging_integration.cpp
     )
     message(STATUS "Container: Integration modules included")
 endif()
