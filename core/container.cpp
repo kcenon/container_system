@@ -36,12 +36,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "utilities/core/convert_string.h"
 
 #include "container/core/value_types.h"
-#include "container/values/bool_value.h"
-#include "container/values/bytes_value.h"
-#include "container/values/container_value.h"
-#include "container/values/array_value.h"
-#include "container/values/numeric_value.h"
-#include "container/values/string_value.h"
+// Legacy value includes removed - using variant-based storage only
 
 #include <fcntl.h>
 #include <wchar.h>

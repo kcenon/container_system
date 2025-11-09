@@ -89,25 +89,16 @@ set(MAIN_HEADER
 set(CORE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/core/container.h
     ${CMAKE_CURRENT_SOURCE_DIR}/core/container.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/core/value.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/core/value.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/core/value_types.h
     ${CMAKE_CURRENT_SOURCE_DIR}/core/value_types.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/core/value_store.h
     ${CMAKE_CURRENT_SOURCE_DIR}/core/value_store.cpp
 )
 
-# Value files (public API)
-file(GLOB VALUE_FILES 
-    ${CMAKE_CURRENT_SOURCE_DIR}/values/*.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/values/*.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/values/*.tpp
-)
+# Legacy value files removed - using variant-based storage only
 
 # Internal implementation files
 set(INTERNAL_FILES
-    ${CMAKE_CURRENT_SOURCE_DIR}/internal/variant_value.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/internal/variant_value.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/internal/variant_value_v2.h
     ${CMAKE_CURRENT_SOURCE_DIR}/internal/variant_value_v2.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/internal/variant_value_factory.h
@@ -123,8 +114,6 @@ if(ENABLE_MESSAGING_FEATURES OR ENABLE_EXTERNAL_INTEGRATION OR ENABLE_PERFORMANC
     list(APPEND INTEGRATION_FILES
         ${CMAKE_CURRENT_SOURCE_DIR}/integration/messaging_integration.h
         ${CMAKE_CURRENT_SOURCE_DIR}/integration/messaging_integration.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/integration/value_bridge.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/integration/value_bridge.cpp
     )
     message(STATUS "Container: Integration modules included")
 endif()

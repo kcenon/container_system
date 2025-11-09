@@ -32,7 +32,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #pragma once
 
-#include "container/core/value.h"
 #include "container/core/optimized_value.h"
 #include "container/core/value_pool.h"
 
@@ -144,29 +143,7 @@ namespace container_module
 		value_container(std::shared_ptr<value_container> data_container,
 						bool parse_only_header = true);
 
-		/**
-		 * @brief Construct with message type and a set of child units.
-		 */
-		value_container(const std::string& message_type,
-						std::vector<std::shared_ptr<value>> units);
-
-		/**
-		 * @brief Construct with target info and message type, plus child units.
-		 */
-		value_container(const std::string& target_id,
-						const std::string& target_sub_id,
-						const std::string& message_type,
-						std::vector<std::shared_ptr<value>> units);
-
-		/**
-		 * @brief Construct with full header info and child units.
-		 */
-		value_container(const std::string& source_id,
-						const std::string& source_sub_id,
-						const std::string& target_id,
-						const std::string& target_sub_id,
-						const std::string& message_type,
-						std::vector<std::shared_ptr<value>> units);
+		// Legacy constructors with value vectors removed - use optimized_value instead
 
 		/**
 		 * @brief Move constructor
@@ -188,12 +165,7 @@ namespace container_module
 						std::string_view target_sub_id = "");
 		void set_message_type(std::string_view message_type);
 
-		/**
-		 * @brief Add or merge multiple child values into this container (the
-		 * top-level).
-		 */
-		void set_units(const std::vector<std::shared_ptr<value>>& target_values,
-					   bool update_immediately = false);
+		// Legacy set_units method removed - use optimized_units_ directly via iterators
 
 		/**
 		 * @brief Swap source/target IDs in this header.
@@ -221,29 +193,11 @@ namespace container_module
 		std::string target_sub_id(void) const noexcept;
 		std::string message_type(void) const noexcept;
 
-		// Value management
-		std::shared_ptr<value> add(const value& target_value,
-								   bool update_immediately = false);
-		std::shared_ptr<value> add(std::shared_ptr<value> target_value,
-								   bool update_immediately = false);
+		// Legacy value management methods removed
+		// Use optimized_value accessors via iterators instead
 
 		void remove(std::string_view target_name,
 					bool update_immediately = false);
-		void remove(std::shared_ptr<value> target_value,
-					bool update_immediately = false);
-
-		/**
-		 * @brief Return all child values that match the given name.
-		 */
-		std::vector<std::shared_ptr<value>> value_array(
-			std::string_view target_name);
-
-		/**
-		 * @brief Return the first child value matching the given name, or a new
-		 * null_value if not found.
-		 */
-		std::shared_ptr<value> get_value(std::string_view target_name,
-										 unsigned int index = 0);
 
 		/**
 		 * @brief Reinitialize the entire container to defaults.
@@ -373,20 +327,7 @@ namespace container_module
 		 */
 		static void clear_pool();
 
-		// Operator to get multiple child values by key
-		std::vector<std::shared_ptr<value>> operator[](std::string_view key);
-
-		// Operators to append values
-		friend value_container operator<<(value_container target_container,
-										  value& other);
-		friend value_container operator<<(value_container target_container,
-										  std::shared_ptr<value> other);
-
-		friend std::shared_ptr<value_container> operator<<(
-			std::shared_ptr<value_container> target_container, value& other);
-		friend std::shared_ptr<value_container> operator<<(
-			std::shared_ptr<value_container> target_container,
-			std::shared_ptr<value> other);
+		// Legacy value-based operators removed - use iterators for value access
 
 		// Stream insertion operators for debug printing
 		friend std::ostream& operator<<(std::ostream& out,
@@ -502,8 +443,7 @@ namespace container_module
 		// Shared pointer to original serialized data for zero-copy access
 		// This enables lazy parsing: parse values only when accessed
 		std::shared_ptr<const std::string> raw_data_ptr_;
-		// Cache for lazily parsed values to avoid re-parsing
-		mutable std::unordered_map<std::string, std::shared_ptr<value>> parsed_values_cache_;
+		// Legacy parsed_values_cache_ removed - using optimized_units_ only
 		// Flag to enable zero-copy mode
 		bool zero_copy_mode_{false};
 
@@ -515,19 +455,10 @@ namespace container_module
 		std::string message_type_;
 		std::string version_;
 
-		std::vector<std::shared_ptr<value>> units_; ///< Top-level child values
-
-		// Small Object Optimization (SOO) storage
-		// Stores primitive values on stack using variant, reducing heap allocations
-		// This provides 30-40% memory savings for typical workloads
+		// Optimized value storage using variant (stack allocation for primitives)
+		// This provides 30-40% memory savings compared to heap-allocated polymorphic values
 		std::vector<optimized_value> optimized_units_;
 		bool use_soo_{true}; ///< Enable/disable Small Object Optimization
-
-		// Optional map for dynamic type creation if needed
-		std::map<value_types,
-				 std::function<std::shared_ptr<value>(const std::string&,
-													  const std::string&)>>
-			data_type_map_;
 
 		// Thread safety members
 		mutable std::shared_mutex mutex_;  ///< Mutex for thread-safe access
