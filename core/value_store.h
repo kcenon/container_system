@@ -75,11 +75,11 @@ public:
      */
     virtual ~value_store() = default;
 
-    // Copy and move semantics
-    value_store(const value_store&) = default;
-    value_store(value_store&&) noexcept = default;
-    value_store& operator=(const value_store&) = default;
-    value_store& operator=(value_store&&) noexcept = default;
+    // Copy and move semantics (deleted due to mutex member)
+    value_store(const value_store&) = delete;
+    value_store(value_store&&) = delete;
+    value_store& operator=(const value_store&) = delete;
+    value_store& operator=(value_store&&) = delete;
 
     // =========================================================================
     // Value Management
