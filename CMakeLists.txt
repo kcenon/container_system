@@ -129,6 +129,12 @@ if(ENABLE_MESSAGING_FEATURES OR ENABLE_EXTERNAL_INTEGRATION OR ENABLE_PERFORMANC
     message(STATUS "Container: Integration modules included")
 endif()
 
+# Messaging files (domain-specific)
+set(MESSAGING_FILES
+    ${CMAKE_CURRENT_SOURCE_DIR}/messaging/message_container.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/messaging/message_container.cpp
+)
+
 # Combine all files
 set(ALL_FILES
     ${MAIN_HEADER}
@@ -136,6 +142,7 @@ set(ALL_FILES
     ${VALUE_FILES}
     ${INTERNAL_FILES}
     ${INTEGRATION_FILES}
+    ${MESSAGING_FILES}
 )
 
 ##################################################
