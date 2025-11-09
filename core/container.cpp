@@ -427,29 +427,29 @@ namespace container_module
 		return newC;
 	}
 
-	std::string value_container::source_id(void) const { 
+	std::string value_container::source_id(void) const noexcept {
 		std::shared_lock<std::shared_mutex> lock(mutex_);
-		return source_id_; 
+		return source_id_;
 	}
 
-	std::string value_container::source_sub_id(void) const
+	std::string value_container::source_sub_id(void) const noexcept
 	{
 		std::shared_lock<std::shared_mutex> lock(mutex_);
 		return source_sub_id_;
 	}
 
-	std::string value_container::target_id(void) const { 
+	std::string value_container::target_id(void) const noexcept {
 		std::shared_lock<std::shared_mutex> lock(mutex_);
-		return target_id_; 
+		return target_id_;
 	}
 
-	std::string value_container::target_sub_id(void) const
+	std::string value_container::target_sub_id(void) const noexcept
 	{
 		std::shared_lock<std::shared_mutex> lock(mutex_);
 		return target_sub_id_;
 	}
 
-	std::string value_container::message_type(void) const
+	std::string value_container::message_type(void) const noexcept
 	{
 		std::shared_lock<std::shared_mutex> lock(mutex_);
 		return message_type_;
@@ -731,7 +731,7 @@ bool value_container::deserialize(const std::vector<uint8_t>& data_array,
 #ifdef CONTAINER_USE_COMMON_SYSTEM
 	kcenon::common::VoidResult value_container::deserialize_result(
 		const std::string& data_str,
-		bool parse_only_header)
+		bool parse_only_header) noexcept
 	{
 		if (deserialize(data_str, parse_only_header))
 		{
@@ -743,7 +743,7 @@ bool value_container::deserialize(const std::vector<uint8_t>& data_array,
 
 	kcenon::common::VoidResult value_container::deserialize_result(
 		const std::vector<uint8_t>& data_array,
-		bool parse_only_header)
+		bool parse_only_header) noexcept
 	{
 		if (deserialize(data_array, parse_only_header))
 		{

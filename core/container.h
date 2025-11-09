@@ -212,11 +212,14 @@ namespace container_module
 		std::shared_ptr<value_container> copy(bool containing_values = true);
 
 		// Accessors
-		std::string source_id(void) const;
-		std::string source_sub_id(void) const;
-		std::string target_id(void) const;
-		std::string target_sub_id(void) const;
-		std::string message_type(void) const;
+		/**
+		 * @exception_safety No-throw guarantee
+		 */
+		std::string source_id(void) const noexcept;
+		std::string source_sub_id(void) const noexcept;
+		std::string target_id(void) const noexcept;
+		std::string target_sub_id(void) const noexcept;
+		std::string message_type(void) const noexcept;
 
 		// Value management
 		std::shared_ptr<value> add(const value& target_value,
@@ -250,17 +253,25 @@ namespace container_module
 		/**
 		 * @brief Serialize this container (header + data).
 		 * @return The string form.
+		 * @exception_safety Strong guarantee - no changes on exception
+		 * @throws std::bad_alloc if memory allocation fails
+		 * @throws std::runtime_error if value cannot be serialized
 		 */
 		std::string serialize(void) const;
 
 		/**
 		 * @brief Serialize to a raw byte array.
+		 * @exception_safety Strong guarantee - no changes on exception
+		 * @throws std::bad_alloc if memory allocation fails
+		 * @throws std::runtime_error if value cannot be serialized
 		 */
 		std::vector<uint8_t> serialize_array(void) const;
 
 		/**
 		 * @brief Deserialize from string. If parse_only_header is true, child
 		 * values are not fully parsed yet.
+		 * @exception_safety Basic guarantee - container may be partially modified
+		 * @return true on success, false on parse error (no exceptions thrown)
 		 */
 		bool deserialize(const std::string& data_string,
 					 bool parse_only_header = true);
@@ -268,6 +279,8 @@ namespace container_module
 		/**
 		 * @brief Deserialize from a raw byte array. If parse_only_header is
 		 * true, child values are not fully parsed.
+		 * @exception_safety Basic guarantee - container may be partially modified
+		 * @return true on success, false on parse error (no exceptions thrown)
 		 */
 		bool deserialize(const std::vector<uint8_t>& data_array,
 					 bool parse_only_header = true);
@@ -275,15 +288,19 @@ namespace container_module
 #ifdef CONTAINER_USE_COMMON_SYSTEM
 		/**
 		 * @brief Deserialize returning common_system result to carry error context.
+		 * @exception_safety Strong guarantee - no changes on error
+		 * @return Result object containing success/error (no exceptions thrown)
 		 */
 		kcenon::common::VoidResult deserialize_result(const std::string& data_string,
-					 bool parse_only_header = true);
+					 bool parse_only_header = true) noexcept;
 
 		/**
 		 * @brief Deserialize from raw bytes returning common_system result.
+		 * @exception_safety Strong guarantee - no changes on error
+		 * @return Result object containing success/error (no exceptions thrown)
 		 */
 		kcenon::common::VoidResult deserialize_result(const std::vector<uint8_t>& data_array,
-					 bool parse_only_header = true);
+					 bool parse_only_header = true) noexcept;
 #endif
 
 		/**
