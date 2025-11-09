@@ -382,6 +382,54 @@ namespace container_module
 		friend std::string& operator<<(std::string& out,
 									   std::shared_ptr<value_container> other);
 
+	/**
+	 * @name STL Iterator Support
+	 * @brief Provides Standard Library-compatible iteration over container values
+	 *
+	 * Enables range-based for loops and STL algorithm usage:
+	 * @code
+	 *   value_container container;
+	 *   for (const auto& val : container) {
+	 *       // Process each optimized_value
+	 *   }
+	 *
+	 *   auto it = std::find_if(container.begin(), container.end(),
+	 *       [](const auto& v) { return v.type == value_types::int_value; });
+	 * @endcode
+	 * @{
+	 */
+
+	/** @brief Iterator type for non-const traversal */
+	using iterator = std::vector<optimized_value>::iterator;
+
+	/** @brief Iterator type for const traversal */
+	using const_iterator = std::vector<optimized_value>::const_iterator;
+
+	/** @brief Returns iterator to beginning of values */
+	iterator begin() { return optimized_units_.begin(); }
+
+	/** @brief Returns iterator to end of values */
+	iterator end() { return optimized_units_.end(); }
+
+	/** @brief Returns const iterator to beginning of values */
+	const_iterator begin() const { return optimized_units_.begin(); }
+
+	/** @brief Returns const iterator to end of values */
+	const_iterator end() const { return optimized_units_.end(); }
+
+	/** @brief Returns const iterator to beginning of values */
+	const_iterator cbegin() const { return optimized_units_.cbegin(); }
+
+	/** @brief Returns const iterator to end of values */
+	const_iterator cend() const { return optimized_units_.cend(); }
+
+	/** @brief Returns number of values in container */
+	size_t size() const { return optimized_units_.size(); }
+
+	/** @brief Returns whether container is empty */
+	bool empty() const { return optimized_units_.empty(); }
+
+	/** @} */
 
 	private:
 		bool deserialize_values(const std::string& data,
