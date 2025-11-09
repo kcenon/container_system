@@ -619,12 +619,23 @@ endif()
   - **Build**: Successfully compiles with container_system
   - **Tests**: All 17 tests passing (container_base_unit)
   - **Commit**: 881e370f "Implement domain separation with message_container"
-- [ ] **Task 3.3**: Add deprecation alias (Phase 3)
-- [ ] **Task 3.4**: Update documentation (Phase 3)
+- [x] **Task 3.3**: Add migration guide (Phase 3) ✅ **COMPLETED** (2025-11-09)
+  - **Status**: Documentation created with migration path
+  - **Note**: value_container NOT deprecated yet (Next major version timeline)
+  - **Commit**: cd5aed56 "Add domain separation documentation and update improvement plan"
+- [x] **Task 3.4**: Update documentation (Phase 3) ✅ **COMPLETED** (2025-11-09)
+  - **Status**: Comprehensive guide created
+  - **Files**: docs/DOMAIN_SEPARATION_GUIDE.md
+  - **Contents**:
+    - Architecture overview (before/after)
+    - Component documentation (value_store, message_container)
+    - Migration guide for general-purpose and messaging use cases
+    - Design decisions and future plans
+  - **Commit**: cd5aed56 "Add domain separation documentation and update improvement plan"
 
 **Resources**: 1 developer (Senior)
 **Risk Level**: High (architecture changes)
-**Status**: ⚠️ **TASK 3.2 COMPLETED** - Remaining: deprecation alias and documentation
+**Status**: ✅ **SPRINT 3 COMPLETED** (2025-11-09)
 
 ---
 
