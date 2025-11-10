@@ -102,10 +102,10 @@ set(INTERNAL_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/internal/variant_value_v2.h
     ${CMAKE_CURRENT_SOURCE_DIR}/internal/variant_value_v2.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/internal/variant_value_factory.h
-#     ${CMAKE_CURRENT_SOURCE_DIR}/container/internal/thread_safe_container.h
-#     ${CMAKE_CURRENT_SOURCE_DIR}/container/internal/thread_safe_container.cpp
-#     ${CMAKE_CURRENT_SOURCE_DIR}/container/internal/simd_processor.h
-#     ${CMAKE_CURRENT_SOURCE_DIR}/container/internal/simd_processor.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/container/internal/thread_safe_container.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/container/internal/thread_safe_container.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/container/internal/simd_processor.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/container/internal/simd_processor.cpp
 )
 
 # Integration files (conditional)

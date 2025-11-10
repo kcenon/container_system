@@ -347,7 +347,7 @@ namespace simd
         floats.reserve(values.size());
         
         for (const auto& val : values) {
-            if (auto f = val.get<float>()) {
+            if (auto* f = std::get_if<float>(&val)) {
                 floats.push_back(*f);
             }
         }
@@ -370,7 +370,7 @@ namespace simd
         // For now, use scalar implementation for doubles
         double sum = 0.0;
         for (const auto& val : values) {
-            if (auto d = val.get<double>()) {
+            if (auto* d = std::get_if<double>(&val)) {
                 sum += *d;
             }
         }
@@ -383,7 +383,7 @@ namespace simd
         floats.reserve(values.size());
         
         for (const auto& val : values) {
-            if (auto f = val.get<float>()) {
+            if (auto* f = std::get_if<float>(&val)) {
                 floats.push_back(*f);
             }
         }
@@ -407,7 +407,7 @@ namespace simd
         floats.reserve(values.size());
         
         for (const auto& val : values) {
-            if (auto f = val.get<float>()) {
+            if (auto* f = std::get_if<float>(&val)) {
                 floats.push_back(*f);
             }
         }
@@ -431,7 +431,7 @@ namespace simd
         std::vector<size_t> indices;
         
         for (size_t i = 0; i < values.size(); ++i) {
-            if (auto f = values[i].get<float>()) {
+            if (auto* f = std::get_if<float>(&values[i])) {
                 if (*f == target) {
                     indices.push_back(i);
                 }

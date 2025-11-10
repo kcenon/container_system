@@ -40,10 +40,10 @@ namespace container_module
     using namespace utility_module;
 
     thread_safe_container::thread_safe_container(
-        std::initializer_list<std::pair<std::string, ValueVariant>> init)
+        std::initializer_list<std::pair<std::string, variant_value_v2>> init)
     {
         for (const auto& [key, value] : init) {
-            values_.emplace(key, ValueVariant(key, value));
+            values_.emplace(key, value);
         }
     }
 
@@ -96,11 +96,11 @@ namespace container_module
         return *this;
     }
 
-    std::optional<ValueVariant> thread_safe_container::get(std::string_view key) const
+    std::optional<variant_value_v2> thread_safe_container::get(std::string_view key) const
     {
         std::shared_lock lock(mutex_);
         read_count_.fetch_add(1, std::memory_order_relaxed);
-        
+
         auto it = values_.find(std::string(key));
         if (it != values_.end()) {
             return it->second;
@@ -108,17 +108,12 @@ namespace container_module
         return std::nullopt;
     }
 
-    void thread_safe_container::set(std::string_view key, ValueVariant value)
+    void thread_safe_container::set(std::string_view key, variant_value_v2 value)
     {
         std::unique_lock lock(mutex_);
         write_count_.fetch_add(1, std::memory_order_relaxed);
-        
-        auto it = values_.find(std::string(key));
-        if (it != values_.end()) {
-            it->second.set(std::move(value));
-        } else {
-            values_.emplace(std::string(key), ValueVariant(key, std::move(value)));
-        }
+
+        values_[std::string(key)] = std::move(value);
     }
 
     bool thread_safe_container::remove(std::string_view key)
@@ -176,27 +171,18 @@ namespace container_module
     }
 
     bool thread_safe_container::compare_exchange(std::string_view key,
-                                                const ValueVariant& expected,
-                                                const ValueVariant& desired)
+                                                const variant_value_v2& expected,
+                                                const variant_value_v2& desired)
     {
         std::unique_lock lock(mutex_);
         write_count_.fetch_add(1, std::memory_order_relaxed);
-        
+
         auto it = values_.find(std::string(key));
         if (it != values_.end()) {
-            // Compare variant values directly
-            return it->second.visit([&, this](auto&& current) -> bool {
-                using T = std::decay_t<decltype(current)>;
-                
-                // Check if expected holds same type
-                if (auto* expected_val = std::get_if<T>(&expected)) {
-                    if (current == *expected_val) {
-                        it->second.set(desired);
-                        return true;
-                    }
-                }
-                return false;
-            });
+            if (it->second == expected) {
+                it->second = desired;
+                return true;
+            }
         }
         return false;
     }
@@ -327,8 +313,8 @@ namespace container_module
             std::vector<uint8_t> value_data(data.begin() + offset,
                                            data.begin() + offset + value_len);
             offset += value_len;
-            
-            auto value_opt = ValueVariant::deserialize(value_data);
+
+            auto value_opt = variant_value_v2::deserialize(value_data);
             if (value_opt) {
                 container->values_[key] = std::move(*value_opt);
             }
@@ -337,14 +323,14 @@ namespace container_module
         return container;
     }
 
-    ValueVariant& thread_safe_container::operator[](const std::string& key)
+    variant_value_v2& thread_safe_container::operator[](const std::string& key)
     {
         std::unique_lock lock(mutex_);
         write_count_.fetch_add(1, std::memory_order_relaxed);
-        
+
         auto it = values_.find(key);
         if (it == values_.end()) {
-            auto [new_it, inserted] = values_.emplace(key, ValueVariant(key));
+            auto [new_it, inserted] = values_.emplace(key, variant_value_v2(key));
             return new_it->second;
         }
         return it->second;

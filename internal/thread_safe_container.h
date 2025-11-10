@@ -50,7 +50,7 @@ namespace container_module
     class thread_safe_container : public std::enable_shared_from_this<thread_safe_container>
     {
     public:
-        using value_map = std::unordered_map<std::string, ValueVariant>;
+        using value_map = std::unordered_map<std::string, variant_value_v2>;
         using const_iterator = value_map::const_iterator;
         using iterator = value_map::iterator;
 
@@ -62,7 +62,7 @@ namespace container_module
         /**
          * @brief Construct with initial values
          */
-        thread_safe_container(std::initializer_list<std::pair<std::string, ValueVariant>> init);
+        thread_safe_container(std::initializer_list<std::pair<std::string, variant_value_v2>> init);
 
         /**
          * @brief Copy constructor (thread-safe)
@@ -87,9 +87,9 @@ namespace container_module
         /**
          * @brief Get value by key (thread-safe read)
          * @param key The key to look up
-         * @return Optional containing the ValueVariant if found
+         * @return Optional containing the variant_value_v2 if found
          */
-        std::optional<ValueVariant> get(std::string_view key) const;
+        std::optional<variant_value_v2> get(std::string_view key) const;
 
         /**
          * @brief Get typed value by key
@@ -102,9 +102,7 @@ namespace container_module
             std::shared_lock lock(mutex_);
             auto it = values_.find(std::string(key));
             if (it != values_.end()) {
-                if (auto* val = std::get_if<T>(&it->second)) {
-                    return *val;
-                }
+                return it->second.get<T>();
             }
             return std::nullopt;
         }
@@ -114,7 +112,7 @@ namespace container_module
          * @param key The key to set
          * @param value The value to store
          */
-        void set(std::string_view key, ValueVariant value);
+        void set(std::string_view key, variant_value_v2 value);
 
         /**
          * @brief Set typed value for key
@@ -124,9 +122,9 @@ namespace container_module
          */
         template<typename T>
         void set_typed(std::string_view key, T&& value) {
-            static_assert(is_variant_type_v2<std::decay_t<T>>::value, 
+            static_assert(is_variant_type_v2<std::decay_t<T>>::value,
                          "Type must be a valid variant type");
-            set(key, ValueVariant(std::forward<T>(value)));
+            set(key, variant_value_v2(key, std::forward<T>(value)));
         }
 
         /**
@@ -219,9 +217,9 @@ namespace container_module
          * @param desired The desired new value
          * @return true if swap succeeded, false otherwise
          */
-        bool compare_exchange(std::string_view key, 
-                            const ValueVariant& expected,
-                            const ValueVariant& desired);
+        bool compare_exchange(std::string_view key,
+                            const variant_value_v2& expected,
+                            const variant_value_v2& desired);
 
         /**
          * @brief Get statistics
@@ -255,7 +253,7 @@ namespace container_module
         /**
          * @brief Array-style access (creates if not exists)
          */
-        ValueVariant& operator[](const std::string& key);
+        variant_value_v2& operator[](const std::string& key);
 
     private:
         mutable std::shared_mutex mutex_;
@@ -297,9 +295,7 @@ namespace container_module
 
             auto it = snapshot_->find(std::string(key));
             if (it != snapshot_->end()) {
-                if (auto* val = std::get_if<T>(&it->second)) {
-                    return *val;
-                }
+                return it->second.get<T>();
             }
             return std::nullopt;
         }
