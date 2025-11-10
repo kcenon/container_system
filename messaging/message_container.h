@@ -33,7 +33,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #pragma once
 
 #include "container/core/value_store.h"
-#include "container/internal/variant_value_v2.h"
+#include "container/internal/value.h"
 
 #include <memory>
 #include <string>

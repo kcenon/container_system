@@ -7,7 +7,7 @@ All rights reserved.
 
 #pragma once
 
-#include "container/internal/variant_value_v2.h"
+#include "container/internal/value.h"
 #include "container/core/value_types.h"
 #include <string>
 #include <string_view>
@@ -18,7 +18,7 @@ All rights reserved.
 namespace container_module
 {
     /**
-     * @brief Factory functions for creating variant_value_v2 instances
+     * @brief Factory functions for creating value instances
      *
      * These functions provide a convenient, type-safe way to create variant values
      * without needing to specify template parameters or handle type conversions manually.
@@ -39,8 +39,8 @@ namespace container_module
     /**
      * @brief Create a null value
      */
-    inline variant_value_v2 make_null_value(std::string_view name = "") {
-        return variant_value_v2(name);
+    inline value make_null_value(std::string_view name = "") {
+        return value(name);
     }
 
     // ============================================================================
@@ -50,8 +50,8 @@ namespace container_module
     /**
      * @brief Create a boolean value
      */
-    inline variant_value_v2 make_bool_value(std::string_view name, bool value) {
-        return variant_value_v2(name, value);
+    inline value make_bool_value(std::string_view name, bool value) {
+        return value(name, value);
     }
 
     // ============================================================================
@@ -61,57 +61,57 @@ namespace container_module
     /**
      * @brief Create a short (int16_t) value
      */
-    inline variant_value_v2 make_short_value(std::string_view name, int16_t value) {
-        return variant_value_v2(name, value);
+    inline value make_short_value(std::string_view name, int16_t value) {
+        return value(name, value);
     }
 
     /**
      * @brief Create an unsigned short (uint16_t) value
      */
-    inline variant_value_v2 make_ushort_value(std::string_view name, uint16_t value) {
-        return variant_value_v2(name, value);
+    inline value make_ushort_value(std::string_view name, uint16_t value) {
+        return value(name, value);
     }
 
     /**
      * @brief Create an int (int32_t) value
      */
-    inline variant_value_v2 make_int_value(std::string_view name, int32_t value) {
-        return variant_value_v2(name, value);
+    inline value make_int_value(std::string_view name, int32_t value) {
+        return value(name, value);
     }
 
     /**
      * @brief Create an unsigned int (uint32_t) value
      */
-    inline variant_value_v2 make_uint_value(std::string_view name, uint32_t value) {
-        return variant_value_v2(name, value);
+    inline value make_uint_value(std::string_view name, uint32_t value) {
+        return value(name, value);
     }
 
     /**
      * @brief Create a long (int64_t) value
      */
-    inline variant_value_v2 make_long_value(std::string_view name, int64_t value) {
-        return variant_value_v2(name, value);
+    inline value make_long_value(std::string_view name, int64_t value) {
+        return value(name, value);
     }
 
     /**
      * @brief Create an unsigned long (uint64_t) value
      */
-    inline variant_value_v2 make_ulong_value(std::string_view name, uint64_t value) {
-        return variant_value_v2(name, value);
+    inline value make_ulong_value(std::string_view name, uint64_t value) {
+        return value(name, value);
     }
 
     /**
      * @brief Create a float value
      */
-    inline variant_value_v2 make_float_value(std::string_view name, float value) {
-        return variant_value_v2(name, value);
+    inline value make_float_value(std::string_view name, float value) {
+        return value(name, value);
     }
 
     /**
      * @brief Create a double value
      */
-    inline variant_value_v2 make_double_value(std::string_view name, double value) {
-        return variant_value_v2(name, value);
+    inline value make_double_value(std::string_view name, double value) {
+        return value(name, value);
     }
 
     /**
@@ -131,10 +131,10 @@ namespace container_module
      * @tparam T Numeric type (must be arithmetic)
      * @param name Value name
      * @param value Numeric value
-     * @return variant_value_v2 with appropriate type
+     * @return value with appropriate type
      */
     template<typename T>
-    inline variant_value_v2 make_numeric_value(std::string_view name, T value) {
+    inline value make_numeric_value(std::string_view name, T value) {
         static_assert(std::is_arithmetic_v<T>, "T must be an arithmetic type");
 
         if constexpr (std::is_same_v<T, bool>) {
@@ -176,22 +176,22 @@ namespace container_module
     /**
      * @brief Create a string value
      */
-    inline variant_value_v2 make_string_value(std::string_view name, std::string value) {
-        return variant_value_v2(name, std::move(value));
+    inline value make_string_value(std::string_view name, std::string value) {
+        return value(name, std::move(value));
     }
 
     /**
      * @brief Create a string value from string_view
      */
-    inline variant_value_v2 make_string_value(std::string_view name, std::string_view value) {
-        return variant_value_v2(name, std::string(value));
+    inline value make_string_value(std::string_view name, std::string_view value) {
+        return value(name, std::string(value));
     }
 
     /**
      * @brief Create a string value from C-string
      */
-    inline variant_value_v2 make_string_value(std::string_view name, const char* value) {
-        return variant_value_v2(name, std::string(value));
+    inline value make_string_value(std::string_view name, const char* value) {
+        return value(name, std::string(value));
     }
 
     // ============================================================================
@@ -201,25 +201,25 @@ namespace container_module
     /**
      * @brief Create a bytes value
      */
-    inline variant_value_v2 make_bytes_value(std::string_view name, std::vector<uint8_t> data) {
-        return variant_value_v2(name, std::move(data));
+    inline value make_bytes_value(std::string_view name, std::vector<uint8_t> data) {
+        return value(name, std::move(data));
     }
 
     /**
      * @brief Create a bytes value from raw data
      */
-    inline variant_value_v2 make_bytes_value(std::string_view name,
+    inline value make_bytes_value(std::string_view name,
                                              const uint8_t* data,
                                              size_t size) {
-        return variant_value_v2(name, std::vector<uint8_t>(data, data + size));
+        return value(name, std::vector<uint8_t>(data, data + size));
     }
 
     /**
      * @brief Create a bytes value from string (copy bytes)
      * Note: This treats the string as binary data, not as a null-terminated C string
      */
-    inline variant_value_v2 make_bytes_from_string(std::string_view name, std::string_view data) {
-        return variant_value_v2(name, std::vector<uint8_t>(
+    inline value make_bytes_from_string(std::string_view name, std::string_view data) {
+        return value(name, std::vector<uint8_t>(
             reinterpret_cast<const uint8_t*>(data.data()),
             reinterpret_cast<const uint8_t*>(data.data() + data.size())
         ));
@@ -232,9 +232,9 @@ namespace container_module
     /**
      * @brief Create a container value
      */
-    inline variant_value_v2 make_container_value(std::string_view name,
+    inline value make_container_value(std::string_view name,
                                                  std::shared_ptr<thread_safe_container> container) {
-        return variant_value_v2(name, std::move(container));
+        return value(name, std::move(container));
     }
 
     // ============================================================================
@@ -244,33 +244,33 @@ namespace container_module
     /**
      * @brief Create an array value
      */
-    inline variant_value_v2 make_array_value(std::string_view name,
-                                             std::vector<std::shared_ptr<variant_value_v2>> values) {
+    inline value make_array_value(std::string_view name,
+                                             std::vector<std::shared_ptr<value>> values) {
         array_variant arr;
         arr.values = std::move(values);
-        return variant_value_v2(name, std::move(arr));
+        return value(name, std::move(arr));
     }
 
     /**
      * @brief Create an array value from initializer list
      */
-    inline variant_value_v2 make_array_value(
+    inline value make_array_value(
         std::string_view name,
-        std::initializer_list<variant_value_v2> values)
+        std::initializer_list<value> values)
     {
         array_variant arr;
         arr.values.reserve(values.size());
         for (const auto& v : values) {
-            arr.values.push_back(std::make_shared<variant_value_v2>(v));
+            arr.values.push_back(std::make_shared<value>(v));
         }
-        return variant_value_v2(name, std::move(arr));
+        return value(name, std::move(arr));
     }
 
     /**
      * @brief Create an empty array value
      */
-    inline variant_value_v2 make_empty_array_value(std::string_view name) {
-        return variant_value_v2(name, array_variant{});
+    inline value make_empty_array_value(std::string_view name) {
+        return value(name, array_variant{});
     }
 
     // ============================================================================
@@ -286,13 +286,13 @@ namespace container_module
      * @param name Value name
      * @param type The value_types enum
      * @param raw_data Binary data for the value
-     * @return variant_value_v2 containing the parsed value
+     * @return value containing the parsed value
      * @throws std::runtime_error if type is unsupported or data is invalid
      */
-    inline variant_value_v2 make_value_from_raw(std::string_view name,
+    inline value make_value_from_raw(std::string_view name,
                                                 value_types type,
                                                 const std::vector<uint8_t>& raw_data) {
-        return variant_value_v2(name, type, raw_data);
+        return value(name, type, raw_data);
     }
 
     // ============================================================================
@@ -300,32 +300,32 @@ namespace container_module
     // ============================================================================
 
     /**
-     * @brief Create a copy of a variant_value_v2 with a new name
+     * @brief Create a copy of a value with a new name
      */
-    inline variant_value_v2 clone_with_name(const variant_value_v2& original,
+    inline value clone_with_name(const value& original,
                                            std::string_view new_name) {
         // Serialize and deserialize to create a deep copy, then change name
         auto serialized = original.serialize();
-        auto cloned = variant_value_v2::deserialize(serialized);
+        auto cloned = value::deserialize(serialized);
         if (!cloned) {
-            throw std::runtime_error("Failed to clone variant_value_v2");
+            throw std::runtime_error("Failed to clone value");
         }
 
         // Create new value with same data but different name
-        return variant_value_v2(new_name, cloned->type(), serialized);
+        return value(new_name, cloned->type(), serialized);
     }
 
     /**
      * @brief Check if two values have the same type
      */
-    inline bool same_type(const variant_value_v2& a, const variant_value_v2& b) {
+    inline bool same_type(const value& a, const value& b) {
         return a.type() == b.type();
     }
 
     /**
      * @brief Get human-readable type name
      */
-    inline std::string_view type_name(const variant_value_v2& value) {
+    inline std::string_view type_name(const value& value) {
         switch (value.type()) {
             case value_types::null_value: return "null";
             case value_types::bool_value: return "bool";

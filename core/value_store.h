@@ -33,7 +33,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #pragma once
 
 #include "container/core/optimized_value.h"
-#include "container/internal/variant_value_v2.h"
+#include "container/internal/value.h"
 
 #include <memory>
 #include <vector>
@@ -53,7 +53,7 @@ namespace container_module {
  * Can be used as a general-purpose serialization container.
  *
  * Features:
- * - Type-safe variant-based storage (variant_value_v2)
+ * - Type-safe variant-based storage (value)
  * - Small Object Optimization (SOO) for performance
  * - JSON/Binary serialization support
  * - Thread-safe operations (optional)
@@ -90,7 +90,7 @@ public:
      * @param val The variant value to add
      * @note Thread-safe if enable_thread_safety() was called
      */
-    virtual void add(const std::string& key, variant_value_v2 val);
+    virtual void add(const std::string& key, value val);
 
     /**
      * @brief Get a value by key
@@ -98,7 +98,7 @@ public:
      * @return Optional variant value
      * @note Thread-safe if enable_thread_safety() was called
      */
-    virtual std::optional<variant_value_v2> get(const std::string& key) const;
+    virtual std::optional<value> get(const std::string& key) const;
 
     /**
      * @brief Check if a key exists
@@ -209,8 +209,8 @@ public:
     void reset_statistics();
 
 protected:
-    // Key-value storage using variant_value_v2
-    std::unordered_map<std::string, variant_value_v2> values_;
+    // Key-value storage using value
+    std::unordered_map<std::string, value> values_;
 
     // Thread safety
     mutable std::shared_mutex mutex_;

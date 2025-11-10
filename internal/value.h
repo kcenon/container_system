@@ -23,7 +23,7 @@ namespace container_module
 {
     // Forward declarations
     class thread_safe_container;
-    class variant_value_v2;
+    class value;
 
     /**
      * @brief Platform-specific type handling for long long
@@ -52,10 +52,10 @@ namespace container_module
      * @brief Recursive array type for variant
      *
      * array_value (type 15) stores heterogeneous collections.
-     * Uses vector of variant_value_v2 for type safety.
+     * Uses vector of value for type safety.
      */
     struct array_variant {
-        std::vector<std::shared_ptr<variant_value_v2>> values;
+        std::vector<std::shared_ptr<value>> values;
 
         array_variant() = default;
         array_variant(const array_variant& other);
@@ -137,51 +137,51 @@ namespace container_module
      * 4. Zero data loss on serialization round-trips
      * 5. Backward compatible with legacy value system
      */
-    class variant_value_v2
+    class value
     {
     public:
         /**
          * @brief Default constructor - creates null value
          */
-        variant_value_v2() : name_(""), data_(std::in_place_index<0>) {}
+        value() : name_(""), data_(std::in_place_index<0>) {}
 
         /**
          * @brief Construct with name (null value)
          */
-        explicit variant_value_v2(std::string_view name)
+        explicit value(std::string_view name)
             : name_(name), data_(std::in_place_index<0>) {}
 
         /**
          * @brief Construct with name and typed value
          */
         template<typename T>
-        variant_value_v2(std::string_view name, T&& value)
+        value(std::string_view name, T&& value)
             : name_(name), data_(std::forward<T>(value)) {}
 
         /**
          * @brief Construct from value_types and raw data (legacy compatibility)
          */
-        variant_value_v2(std::string_view name, value_types type, const std::vector<uint8_t>& raw_data);
+        value(std::string_view name, value_types type, const std::vector<uint8_t>& raw_data);
 
         /**
          * @brief Copy constructor (thread-safe)
          */
-        variant_value_v2(const variant_value_v2& other);
+        value(const value& other);
 
         /**
          * @brief Move constructor
          */
-        variant_value_v2(variant_value_v2&& other) noexcept;
+        value(value&& other) noexcept;
 
         /**
          * @brief Copy assignment (thread-safe)
          */
-        variant_value_v2& operator=(const variant_value_v2& other);
+        value& operator=(const value& other);
 
         /**
          * @brief Move assignment
          */
-        variant_value_v2& operator=(variant_value_v2&& other) noexcept;
+        value& operator=(value&& other) noexcept;
 
         /**
          * @brief Get the name of this value (lock-free, immutable)
@@ -285,12 +285,12 @@ namespace container_module
          * @brief Deserialize from binary format (legacy compatible)
          *
          * Supports both:
-         * - New variant_value_v2 serialized data
+         * - New value serialized data
          * - Legacy value class serialized data
          *
          * @return std::optional containing value if deserialization succeeds
          */
-        static std::optional<variant_value_v2> deserialize(const std::vector<uint8_t>& data);
+        static std::optional<value> deserialize(const std::vector<uint8_t>& data);
 
         /**
          * @brief Get read/write statistics
@@ -301,9 +301,9 @@ namespace container_module
         /**
          * @brief Comparison operators (thread-safe)
          */
-        bool operator==(const variant_value_v2& other) const;
-        bool operator!=(const variant_value_v2& other) const { return !(*this == other); }
-        bool operator<(const variant_value_v2& other) const;
+        bool operator==(const value& other) const;
+        bool operator!=(const value& other) const { return !(*this == other); }
+        bool operator<(const value& other) const;
 
     private:
         /**
@@ -314,7 +314,7 @@ namespace container_module
         /**
          * @brief Deserialize data portion based on type
          */
-        static bool deserialize_data(variant_value_v2& result,
+        static bool deserialize_data(value& result,
                                      value_types type,
                                      const std::vector<uint8_t>& data,
                                      size_t& offset);

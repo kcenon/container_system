@@ -40,7 +40,7 @@ namespace container_module
     using namespace utility_module;
 
     thread_safe_container::thread_safe_container(
-        std::initializer_list<std::pair<std::string, variant_value_v2>> init)
+        std::initializer_list<std::pair<std::string, value>> init)
     {
         for (const auto& [key, value] : init) {
             values_.emplace(key, value);
@@ -96,7 +96,7 @@ namespace container_module
         return *this;
     }
 
-    std::optional<variant_value_v2> thread_safe_container::get(std::string_view key) const
+    std::optional<value> thread_safe_container::get(std::string_view key) const
     {
         std::shared_lock lock(mutex_);
         read_count_.fetch_add(1, std::memory_order_relaxed);
@@ -108,7 +108,7 @@ namespace container_module
         return std::nullopt;
     }
 
-    void thread_safe_container::set(std::string_view key, variant_value_v2 value)
+    void thread_safe_container::set(std::string_view key, value value)
     {
         std::unique_lock lock(mutex_);
         write_count_.fetch_add(1, std::memory_order_relaxed);
@@ -171,8 +171,8 @@ namespace container_module
     }
 
     bool thread_safe_container::compare_exchange(std::string_view key,
-                                                const variant_value_v2& expected,
-                                                const variant_value_v2& desired)
+                                                const value& expected,
+                                                const value& desired)
     {
         std::unique_lock lock(mutex_);
         write_count_.fetch_add(1, std::memory_order_relaxed);
@@ -314,7 +314,7 @@ namespace container_module
                                            data.begin() + offset + value_len);
             offset += value_len;
 
-            auto value_opt = variant_value_v2::deserialize(value_data);
+            auto value_opt = value::deserialize(value_data);
             if (value_opt) {
                 container->values_[key] = std::move(*value_opt);
             }
@@ -323,14 +323,14 @@ namespace container_module
         return container;
     }
 
-    variant_value_v2& thread_safe_container::operator[](const std::string& key)
+    value& thread_safe_container::operator[](const std::string& key)
     {
         std::unique_lock lock(mutex_);
         write_count_.fetch_add(1, std::memory_order_relaxed);
 
         auto it = values_.find(key);
         if (it == values_.end()) {
-            auto [new_it, inserted] = values_.emplace(key, variant_value_v2(key));
+            auto [new_it, inserted] = values_.emplace(key, value(key));
             return new_it->second;
         }
         return it->second;
