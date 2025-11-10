@@ -12,10 +12,6 @@
 
 #include <benchmark/benchmark.h>
 #include <container.h>
-#include <container/values/bool_value.h>
-#include <container/values/string_value.h>
-#include <container/values/bytes_value.h>
-#include <container/values/numeric_value.h>
 #include <container/internal/thread_safe_container.h>
 #include <thread>
 #include <vector>

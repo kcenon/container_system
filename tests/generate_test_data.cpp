@@ -2,10 +2,6 @@
 #include <iostream>
 #include <memory>
 #include "container/container.h"
-#include "container/values/bool_value.h"
-#include "container/values/numeric_value.h"
-#include "container/values/string_value.h"
-#include "container/values/bytes_value.h"
 
 using namespace container_module;
 

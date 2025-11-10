@@ -340,14 +340,14 @@ namespace simd
 #endif
 
     // Main interface implementations
-    float simd_processor::sum_floats(const std::vector<variant_value>& values)
+    float simd_processor::sum_floats(const std::vector<ValueVariant>& values)
     {
         // Extract float values
         std::vector<float> floats;
         floats.reserve(values.size());
         
         for (const auto& val : values) {
-            if (auto f = val.get<float>()) {
+            if (auto* f = std::get_if<float>(&val)) {
                 floats.push_back(*f);
             }
         }
@@ -365,25 +365,25 @@ namespace simd
         #endif
     }
 
-    double simd_processor::sum_doubles(const std::vector<variant_value>& values)
+    double simd_processor::sum_doubles(const std::vector<ValueVariant>& values)
     {
         // For now, use scalar implementation for doubles
         double sum = 0.0;
         for (const auto& val : values) {
-            if (auto d = val.get<double>()) {
+            if (auto* d = std::get_if<double>(&val)) {
                 sum += *d;
             }
         }
         return sum;
     }
 
-    std::optional<float> simd_processor::min_float(const std::vector<variant_value>& values)
+    std::optional<float> simd_processor::min_float(const std::vector<ValueVariant>& values)
     {
         std::vector<float> floats;
         floats.reserve(values.size());
         
         for (const auto& val : values) {
-            if (auto f = val.get<float>()) {
+            if (auto* f = std::get_if<float>(&val)) {
                 floats.push_back(*f);
             }
         }
@@ -401,13 +401,13 @@ namespace simd
         #endif
     }
 
-    std::optional<float> simd_processor::max_float(const std::vector<variant_value>& values)
+    std::optional<float> simd_processor::max_float(const std::vector<ValueVariant>& values)
     {
         std::vector<float> floats;
         floats.reserve(values.size());
         
         for (const auto& val : values) {
-            if (auto f = val.get<float>()) {
+            if (auto* f = std::get_if<float>(&val)) {
                 floats.push_back(*f);
             }
         }
@@ -426,12 +426,12 @@ namespace simd
     }
 
     std::vector<size_t> simd_processor::find_equal_floats(
-        const std::vector<variant_value>& values, float target)
+        const std::vector<ValueVariant>& values, float target)
     {
         std::vector<size_t> indices;
         
         for (size_t i = 0; i < values.size(); ++i) {
-            if (auto f = values[i].get<float>()) {
+            if (auto* f = std::get_if<float>(&values[i])) {
                 if (*f == target) {
                     indices.push_back(i);
                 }

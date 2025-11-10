@@ -96,10 +96,22 @@ jobs:
 
         cmake -B build -S . -GNinja "${CMAKE_FLAGS[@]}"
 
+    - name: Check if benchmarks are enabled
+      id: check_benchmarks
+      run: |
+        if grep -q "# Benchmarks temporarily disabled" CMakeLists.txt; then
+          echo "benchmarks_enabled=false" >> $GITHUB_OUTPUT
+          echo "::warning::Benchmarks are temporarily disabled - skipping benchmark execution"
+        else
+          echo "benchmarks_enabled=true" >> $GITHUB_OUTPUT
+        fi
+
     - name: Build benchmarks
+      if: steps.check_benchmarks.outputs.benchmarks_enabled == 'true'
       run: cmake --build build --config ${{ matrix.build_type }} --target container_benchmarks -j
 
     - name: Run benchmarks
+      if: steps.check_benchmarks.outputs.benchmarks_enabled == 'true'
       run: |
         cd build/bin
         ./container_benchmarks \
@@ -109,6 +121,7 @@ jobs:
           --benchmark_report_aggregates_only=true
 
     - name: Run benchmarks (console output)
+      if: steps.check_benchmarks.outputs.benchmarks_enabled == 'true'
       run: |
         cd build/bin
         ./container_benchmarks \
@@ -116,6 +129,7 @@ jobs:
           --benchmark_repetitions=3
 
     - name: Upload benchmark results
+      if: steps.check_benchmarks.outputs.benchmarks_enabled == 'true'
       uses: actions/upload-artifact@v4
       with:
         name: benchmark-results-${{ matrix.os }}

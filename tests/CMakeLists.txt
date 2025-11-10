@@ -55,7 +55,6 @@ set(TEST_SOURCES
     performance_tests.cpp
     thread_safety_tests.cpp
     test_long_range_checking.cpp
-    variant_value_v2_compatibility_tests.cpp
     variant_value_factory_tests.cpp
     memory_pool_tests.cpp
 )

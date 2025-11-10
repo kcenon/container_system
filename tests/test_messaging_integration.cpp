@@ -11,10 +11,6 @@
 #endif
 
 #include "container/core/container.h"
-#include "container/core/value.h"
-#include "container/values/string_value.h"
-#include "container/values/numeric_value.h"
-#include "container/values/bool_value.h"
 
 using namespace container_module;
 

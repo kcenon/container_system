@@ -10,7 +10,6 @@
 
 // Core components
 #include "container/core/container.h"
-#include "container/core/value.h"
 #include "container/core/value_types.h"
 
 // Integration features (conditional)

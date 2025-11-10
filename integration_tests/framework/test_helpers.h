@@ -33,10 +33,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #pragma once
 
 #include <container/core/container.h>
-#include <container/values/bool_value.h>
-#include <container/values/string_value.h>
-#include <container/values/bytes_value.h>
-#include <container/values/numeric_value.h>
 #include "test_config.h"
 #include <string>
 #include <vector>
