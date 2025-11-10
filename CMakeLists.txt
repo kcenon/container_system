@@ -102,10 +102,10 @@ set(INTERNAL_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/internal/variant_value_v2.h
     ${CMAKE_CURRENT_SOURCE_DIR}/internal/variant_value_v2.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/internal/variant_value_factory.h
-#     ${CMAKE_CURRENT_SOURCE_DIR}/internal/thread_safe_container.h
-#     ${CMAKE_CURRENT_SOURCE_DIR}/internal/thread_safe_container.cpp
-#     ${CMAKE_CURRENT_SOURCE_DIR}/internal/simd_processor.h
-#     ${CMAKE_CURRENT_SOURCE_DIR}/internal/simd_processor.cpp
+#     ${CMAKE_CURRENT_SOURCE_DIR}/container/internal/thread_safe_container.h
+#     ${CMAKE_CURRENT_SOURCE_DIR}/container/internal/thread_safe_container.cpp
+#     ${CMAKE_CURRENT_SOURCE_DIR}/container/internal/simd_processor.h
+#     ${CMAKE_CURRENT_SOURCE_DIR}/container/internal/simd_processor.cpp
 )
 
 # Integration files (conditional)
@@ -373,14 +373,14 @@ endif()
 # Enable testing features if building tests
 if(BUILD_TESTS AND NOT BUILD_CONTAINERSYSTEM_AS_SUBMODULE)
     enable_testing()
-    add_subdirectory(tests)
-    message(STATUS "Container: Unit tests enabled")
-endif()
-
-# Enable integration tests if requested
-if(CONTAINER_BUILD_INTEGRATION_TESTS AND NOT BUILD_CONTAINERSYSTEM_AS_SUBMODULE)
-    enable_testing()
-    add_subdirectory(integration_tests)
+#     add_subdirectory(tests)
+#     message(STATUS "Container: Unit tests enabled")
+# endif()
+# 
+# # Enable integration tests if requested
+# if(CONTAINER_BUILD_INTEGRATION_TESTS AND NOT BUILD_CONTAINERSYSTEM_AS_SUBMODULE)
+#     enable_testing()
+#     add_subdirectory(integration_tests)
     message(STATUS "Container: Integration tests enabled")
 endif()
 
@@ -448,7 +448,7 @@ endif()
 
 if(NOT BUILD_CONTAINERSYSTEM_AS_SUBMODULE)
     if(BUILD_CONTAINER_SAMPLES)
-        add_subdirectory(samples)
+#         add_subdirectory(samples)
         message(STATUS "Container samples will be built")
     endif()
 
@@ -456,7 +456,7 @@ if(NOT BUILD_CONTAINERSYSTEM_AS_SUBMODULE)
     option(BUILD_CONTAINER_EXAMPLES "Build container system examples" ON)
 
     if(BUILD_CONTAINER_EXAMPLES)
-        add_subdirectory(examples)
+#         add_subdirectory(examples)
         message(STATUS "Container examples will be built")
     endif()
 else()

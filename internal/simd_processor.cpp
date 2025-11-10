@@ -340,7 +340,7 @@ namespace simd
 #endif
 
     // Main interface implementations
-    float simd_processor::sum_floats(const std::vector<variant_value>& values)
+    float simd_processor::sum_floats(const std::vector<ValueVariant>& values)
     {
         // Extract float values
         std::vector<float> floats;
@@ -365,7 +365,7 @@ namespace simd
         #endif
     }
 
-    double simd_processor::sum_doubles(const std::vector<variant_value>& values)
+    double simd_processor::sum_doubles(const std::vector<ValueVariant>& values)
     {
         // For now, use scalar implementation for doubles
         double sum = 0.0;
@@ -377,7 +377,7 @@ namespace simd
         return sum;
     }
 
-    std::optional<float> simd_processor::min_float(const std::vector<variant_value>& values)
+    std::optional<float> simd_processor::min_float(const std::vector<ValueVariant>& values)
     {
         std::vector<float> floats;
         floats.reserve(values.size());
@@ -401,7 +401,7 @@ namespace simd
         #endif
     }
 
-    std::optional<float> simd_processor::max_float(const std::vector<variant_value>& values)
+    std::optional<float> simd_processor::max_float(const std::vector<ValueVariant>& values)
     {
         std::vector<float> floats;
         floats.reserve(values.size());
@@ -426,7 +426,7 @@ namespace simd
     }
 
     std::vector<size_t> simd_processor::find_equal_floats(
-        const std::vector<variant_value>& values, float target)
+        const std::vector<ValueVariant>& values, float target)
     {
         std::vector<size_t> indices;
         

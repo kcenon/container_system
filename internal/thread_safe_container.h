@@ -37,6 +37,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <shared_mutex>
 #include <atomic>
 #include <algorithm>
+#include "container/internal/variant_value_v2.h"
 
 namespace container_module
 {
@@ -49,7 +50,7 @@ namespace container_module
     class thread_safe_container : public std::enable_shared_from_this<thread_safe_container>
     {
     public:
-        using value_map = std::unordered_map<std::string, variant_value_v2>;
+        using value_map = std::unordered_map<std::string, ValueVariant>;
         using const_iterator = value_map::const_iterator;
         using iterator = value_map::iterator;
 
@@ -86,9 +87,9 @@ namespace container_module
         /**
          * @brief Get value by key (thread-safe read)
          * @param key The key to look up
-         * @return Optional containing the variant_value_v2 if found
+         * @return Optional containing the ValueVariant if found
          */
-        std::optional<variant_value_v2> get(std::string_view key) const;
+        std::optional<ValueVariant> get(std::string_view key) const;
 
         /**
          * @brief Get typed value by key
@@ -101,7 +102,9 @@ namespace container_module
             std::shared_lock lock(mutex_);
             auto it = values_.find(std::string(key));
             if (it != values_.end()) {
-                return it->second.get<T>();
+                if (auto* val = std::get_if<T>(&it->second)) {
+                    return *val;
+                }
             }
             return std::nullopt;
         }
@@ -252,7 +255,7 @@ namespace container_module
         /**
          * @brief Array-style access (creates if not exists)
          */
-        variant_value_v2& operator[](const std::string& key);
+        ValueVariant& operator[](const std::string& key);
 
     private:
         mutable std::shared_mutex mutex_;
@@ -294,7 +297,9 @@ namespace container_module
 
             auto it = snapshot_->find(std::string(key));
             if (it != snapshot_->end()) {
-                return it->second.get<T>();
+                if (auto* val = std::get_if<T>(&it->second)) {
+                    return *val;
+                }
             }
             return std::nullopt;
         }

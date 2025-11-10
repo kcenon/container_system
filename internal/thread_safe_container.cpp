@@ -40,10 +40,10 @@ namespace container_module
     using namespace utility_module;
 
     thread_safe_container::thread_safe_container(
-        std::initializer_list<std::pair<std::string, LegacyValueVariant>> init)
+        std::initializer_list<std::pair<std::string, ValueVariant>> init)
     {
         for (const auto& [key, value] : init) {
-            values_.emplace(key, variant_value(key, value));
+            values_.emplace(key, ValueVariant(key, value));
         }
     }
 
@@ -96,7 +96,7 @@ namespace container_module
         return *this;
     }
 
-    std::optional<variant_value> thread_safe_container::get(std::string_view key) const
+    std::optional<ValueVariant> thread_safe_container::get(std::string_view key) const
     {
         std::shared_lock lock(mutex_);
         read_count_.fetch_add(1, std::memory_order_relaxed);
@@ -108,7 +108,7 @@ namespace container_module
         return std::nullopt;
     }
 
-    void thread_safe_container::set(std::string_view key, LegacyValueVariant value)
+    void thread_safe_container::set(std::string_view key, ValueVariant value)
     {
         std::unique_lock lock(mutex_);
         write_count_.fetch_add(1, std::memory_order_relaxed);
@@ -117,7 +117,7 @@ namespace container_module
         if (it != values_.end()) {
             it->second.set(std::move(value));
         } else {
-            values_.emplace(std::string(key), variant_value(key, std::move(value)));
+            values_.emplace(std::string(key), ValueVariant(key, std::move(value)));
         }
     }
 
@@ -176,8 +176,8 @@ namespace container_module
     }
 
     bool thread_safe_container::compare_exchange(std::string_view key,
-                                                const LegacyValueVariant& expected,
-                                                const LegacyValueVariant& desired)
+                                                const ValueVariant& expected,
+                                                const ValueVariant& desired)
     {
         std::unique_lock lock(mutex_);
         write_count_.fetch_add(1, std::memory_order_relaxed);
@@ -328,7 +328,7 @@ namespace container_module
                                            data.begin() + offset + value_len);
             offset += value_len;
             
-            auto value_opt = variant_value::deserialize(value_data);
+            auto value_opt = ValueVariant::deserialize(value_data);
             if (value_opt) {
                 container->values_[key] = std::move(*value_opt);
             }
@@ -337,14 +337,14 @@ namespace container_module
         return container;
     }
 
-    variant_value& thread_safe_container::operator[](const std::string& key)
+    ValueVariant& thread_safe_container::operator[](const std::string& key)
     {
         std::unique_lock lock(mutex_);
         write_count_.fetch_add(1, std::memory_order_relaxed);
         
         auto it = values_.find(key);
         if (it == values_.end()) {
-            auto [new_it, inserted] = values_.emplace(key, variant_value(key));
+            auto [new_it, inserted] = values_.emplace(key, ValueVariant(key));
             return new_it->second;
         }
         return it->second;

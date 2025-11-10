@@ -444,7 +444,9 @@ bool value_container::deserialize(const std::vector<uint8_t>& data_array,
 		formatter::format_to(std::back_inserter(result), "<values>");
 	for (auto& u : optimized_units_)
 	{
-		// TODO: Implement optimized_value XML serialization
+		std::string value_str = variant_helpers::to_string(u.data, u.type);
+		formatter::format_to(std::back_inserter(result), "<{}>{}</{}>",
+							 u.name, value_str, u.name);
 	}
 		formatter::format_to(std::back_inserter(result), "</values>");
 		formatter::format_to(std::back_inserter(result), "</container>");
@@ -486,7 +488,23 @@ bool value_container::deserialize(const std::vector<uint8_t>& data_array,
 		bool first = true;
 	for (auto& u : optimized_units_)
 	{
-		// TODO: Implement optimized_value JSON serialization
+		if (!first)
+		{
+			formatter::format_to(std::back_inserter(result), ",");
+		}
+		std::string value_str = variant_helpers::to_string(u.data, u.type);
+
+		// String and bytes values need quotes
+		if (u.type == value_types::string_value || u.type == value_types::bytes_value)
+		{
+			formatter::format_to(std::back_inserter(result), "\"{}\":\"{}\"",
+								 u.name, value_str);
+		}
+		else
+		{
+			formatter::format_to(std::back_inserter(result), "\"{}\":{}",
+								 u.name, value_str);
+		}
 		first = false;
 	}
 		formatter::format_to(std::back_inserter(result),
@@ -506,8 +524,11 @@ bool value_container::deserialize(const std::vector<uint8_t>& data_array,
 		formatter::format_to(std::back_inserter(result), "@data={{{{");
 	for (auto& u : optimized_units_)
 	{
-		// TODO: Implement optimized_value serialization
-		}
+		std::string value_str = variant_helpers::to_string(u.data, u.type);
+		std::string type_str = convert_value_type(u.type);
+		formatter::format_to(std::back_inserter(result), "[{},{},{}];",
+							 u.name, type_str, value_str);
+	}
 		formatter::format_to(std::back_inserter(result), "}}}};");
 		return result;
 	}
@@ -633,11 +654,88 @@ bool value_container::deserialize(const std::vector<uint8_t>& data_array,
 		}
 		parsed_data_ = true;
 
-		// TODO: Implement deserialization for optimized_value
-		// The legacy polymorphic value deserialization has been removed.
-		// This needs to be rewritten to parse data and create optimized_value objects.
-		(void)data_string_;
-		return true;
+	// Parse items: [name,type,data];
+	std::regex reItems("\\[(\\w+),\\s*(\\w+),\\s*(.*?)\\];");
+	auto it = std::sregex_iterator(data_string_.begin(), data_string_.end(),
+								   reItems);
+	auto end = std::sregex_iterator();
+
+	for (; it != end; ++it)
+	{
+		auto nameStr = (*it)[1].str();
+		auto typeStr = (*it)[2].str();
+		auto dataStr = (*it)[3].str();
+
+		// Convert string -> value_types
+		auto vt = convert_value_type(typeStr);
+
+		// Create optimized_value and populate variant based on type
+		optimized_value ov;
+		ov.name = nameStr;
+		ov.type = vt;
+
+		// Parse data string into appropriate variant type
+		switch (vt)
+		{
+		case value_types::null_value:
+			ov.data = std::monostate{};
+			break;
+		case value_types::bool_value:
+			ov.data = (dataStr == "true" || dataStr == "1");
+			break;
+		case value_types::short_value:
+			ov.data = static_cast<short>(std::stoi(dataStr));
+			break;
+		case value_types::ushort_value:
+			ov.data = static_cast<unsigned short>(std::stoul(dataStr));
+			break;
+		case value_types::int_value:
+			ov.data = std::stoi(dataStr);
+			break;
+		case value_types::uint_value:
+			ov.data = static_cast<unsigned int>(std::stoul(dataStr));
+			break;
+		case value_types::long_value:
+			ov.data = std::stol(dataStr);
+			break;
+		case value_types::ulong_value:
+			ov.data = std::stoul(dataStr);
+			break;
+		case value_types::llong_value:
+			ov.data = std::stoll(dataStr);
+			break;
+		case value_types::ullong_value:
+			ov.data = std::stoull(dataStr);
+			break;
+		case value_types::float_value:
+			ov.data = std::stof(dataStr);
+			break;
+		case value_types::double_value:
+			ov.data = std::stod(dataStr);
+			break;
+		case value_types::string_value:
+			ov.data = dataStr;
+			break;
+		case value_types::bytes_value:
+		{
+			// For bytes, dataStr should be the string representation
+			std::vector<uint8_t> bytes(dataStr.begin(), dataStr.end());
+			ov.data = bytes;
+			break;
+		}
+		case value_types::container_value:
+			// TODO: Handle nested containers
+			ov.data = std::monostate{};
+			break;
+		default:
+			ov.data = std::monostate{};
+			break;
+		}
+
+		optimized_units_.push_back(std::move(ov));
+	}
+
+	return true;
 	}
 
 	void value_container::parsing(std::string_view source_name,
