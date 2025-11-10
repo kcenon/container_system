@@ -35,7 +35,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 namespace container_module {
 
-void value_store::add(const std::string& key, variant_value_v2 val) {
+void value_store::add(const std::string& key, value val) {
     if (thread_safe_enabled_.load(std::memory_order_relaxed)) {
         std::unique_lock lock(mutex_);
         values_[key] = std::move(val);
@@ -45,7 +45,7 @@ void value_store::add(const std::string& key, variant_value_v2 val) {
     write_count_.fetch_add(1, std::memory_order_relaxed);
 }
 
-std::optional<variant_value_v2> value_store::get(const std::string& key) const {
+std::optional<value> value_store::get(const std::string& key) const {
     if (thread_safe_enabled_.load(std::memory_order_relaxed)) {
         std::shared_lock lock(mutex_);
         auto it = values_.find(key);

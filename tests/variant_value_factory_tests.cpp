@@ -234,10 +234,10 @@ TEST(VariantValueFactoryTest, MakeBytesValueFromString) {
 // ============================================================================
 
 TEST(VariantValueFactoryTest, MakeArrayValueFromVector) {
-    std::vector<std::shared_ptr<variant_value_v2>> items;
-    items.push_back(std::make_shared<variant_value_v2>(make_int_value("item1", 1)));
-    items.push_back(std::make_shared<variant_value_v2>(make_int_value("item2", 2)));
-    items.push_back(std::make_shared<variant_value_v2>(make_int_value("item3", 3)));
+    std::vector<std::shared_ptr<value>> items;
+    items.push_back(std::make_shared<value>(make_int_value("item1", 1)));
+    items.push_back(std::make_shared<value>(make_int_value("item2", 2)));
+    items.push_back(std::make_shared<value>(make_int_value("item3", 3)));
 
     auto v = make_array_value("numbers", std::move(items));
     EXPECT_EQ(v.type(), value_types::array_value);
@@ -282,7 +282,7 @@ TEST(VariantValueFactoryTest, MakeEmptyArrayValue) {
 TEST(VariantValueFactoryTest, SerializationRoundTripBool) {
     auto original = make_bool_value("test", true);
     auto serialized = original.serialize();
-    auto deserialized = variant_value_v2::deserialize(serialized);
+    auto deserialized = value::deserialize(serialized);
 
     ASSERT_TRUE(deserialized.has_value());
     EXPECT_EQ(deserialized->name(), original.name());
@@ -293,7 +293,7 @@ TEST(VariantValueFactoryTest, SerializationRoundTripBool) {
 TEST(VariantValueFactoryTest, SerializationRoundTripInt) {
     auto original = make_int_value("number", 12345);
     auto serialized = original.serialize();
-    auto deserialized = variant_value_v2::deserialize(serialized);
+    auto deserialized = value::deserialize(serialized);
 
     ASSERT_TRUE(deserialized.has_value());
     EXPECT_EQ(*deserialized, original);
@@ -302,7 +302,7 @@ TEST(VariantValueFactoryTest, SerializationRoundTripInt) {
 TEST(VariantValueFactoryTest, SerializationRoundTripString) {
     auto original = make_string_value("text", "Hello, World!");
     auto serialized = original.serialize();
-    auto deserialized = variant_value_v2::deserialize(serialized);
+    auto deserialized = value::deserialize(serialized);
 
     ASSERT_TRUE(deserialized.has_value());
     EXPECT_EQ(*deserialized, original);
@@ -312,7 +312,7 @@ TEST(VariantValueFactoryTest, SerializationRoundTripBytes) {
     std::vector<uint8_t> data = {0x01, 0x02, 0x03, 0xFF};
     auto original = make_bytes_value("binary", data);
     auto serialized = original.serialize();
-    auto deserialized = variant_value_v2::deserialize(serialized);
+    auto deserialized = value::deserialize(serialized);
 
     ASSERT_TRUE(deserialized.has_value());
     EXPECT_EQ(*deserialized, original);
@@ -326,7 +326,7 @@ TEST(VariantValueFactoryTest, SerializationRoundTripArray) {
     });
 
     auto serialized = original.serialize();
-    auto deserialized = variant_value_v2::deserialize(serialized);
+    auto deserialized = value::deserialize(serialized);
 
     ASSERT_TRUE(deserialized.has_value());
     EXPECT_EQ(*deserialized, original);

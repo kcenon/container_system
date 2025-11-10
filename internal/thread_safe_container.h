@@ -37,7 +37,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <shared_mutex>
 #include <atomic>
 #include <algorithm>
-#include "container/internal/variant_value_v2.h"
+#include "container/internal/value.h"
 
 namespace container_module
 {
@@ -50,7 +50,7 @@ namespace container_module
     class thread_safe_container : public std::enable_shared_from_this<thread_safe_container>
     {
     public:
-        using value_map = std::unordered_map<std::string, variant_value_v2>;
+        using value_map = std::unordered_map<std::string, value>;
         using const_iterator = value_map::const_iterator;
         using iterator = value_map::iterator;
 
@@ -62,7 +62,7 @@ namespace container_module
         /**
          * @brief Construct with initial values
          */
-        thread_safe_container(std::initializer_list<std::pair<std::string, variant_value_v2>> init);
+        thread_safe_container(std::initializer_list<std::pair<std::string, value>> init);
 
         /**
          * @brief Copy constructor (thread-safe)
@@ -87,9 +87,9 @@ namespace container_module
         /**
          * @brief Get value by key (thread-safe read)
          * @param key The key to look up
-         * @return Optional containing the variant_value_v2 if found
+         * @return Optional containing the value if found
          */
-        std::optional<variant_value_v2> get(std::string_view key) const;
+        std::optional<value> get(std::string_view key) const;
 
         /**
          * @brief Get typed value by key
@@ -112,7 +112,7 @@ namespace container_module
          * @param key The key to set
          * @param value The value to store
          */
-        void set(std::string_view key, variant_value_v2 value);
+        void set(std::string_view key, value value);
 
         /**
          * @brief Set typed value for key
@@ -124,7 +124,7 @@ namespace container_module
         void set_typed(std::string_view key, T&& value) {
             static_assert(is_variant_type_v2<std::decay_t<T>>::value,
                          "Type must be a valid variant type");
-            set(key, variant_value_v2(key, std::forward<T>(value)));
+            set(key, value(key, std::forward<T>(value)));
         }
 
         /**
@@ -218,8 +218,8 @@ namespace container_module
          * @return true if swap succeeded, false otherwise
          */
         bool compare_exchange(std::string_view key,
-                            const variant_value_v2& expected,
-                            const variant_value_v2& desired);
+                            const value& expected,
+                            const value& desired);
 
         /**
          * @brief Get statistics
@@ -253,7 +253,7 @@ namespace container_module
         /**
          * @brief Array-style access (creates if not exists)
          */
-        variant_value_v2& operator[](const std::string& key);
+        value& operator[](const std::string& key);
 
     private:
         mutable std::shared_mutex mutex_;
