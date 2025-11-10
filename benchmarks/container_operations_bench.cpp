@@ -7,8 +7,6 @@
 #include <benchmark/benchmark.h>
 #include "core/container.h"
 #include "core/value.h"
-#include "values/string_value.h"
-#include "values/numeric_value.h"
 
 using namespace container_module;
 

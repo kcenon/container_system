@@ -12,12 +12,6 @@
 #include <cstdlib>
 
 #include "container/core/container.h"
-#include "container/core/value.h"
-#include "container/values/string_value.h"
-#include "container/values/numeric_value.h"
-#include "container/values/bool_value.h"
-#include "container/values/bytes_value.h"
-#include "container/values/container_value.h"
 
 #ifdef HAS_MESSAGING_FEATURES
 #include "container/integration/messaging_integration.h"

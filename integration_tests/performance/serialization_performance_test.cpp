@@ -46,8 +46,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "framework/system_fixture.h"
 #include "framework/test_helpers.h"
 #include <container/core/container.h>
-#include <container/values/string_value.h>
-#include <container/values/numeric_value.h>
 #include <chrono>
 #include <iostream>
 #include <algorithm>

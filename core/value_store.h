@@ -32,7 +32,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #pragma once
 
-#include "container/core/value.h"
 #include "container/core/optimized_value.h"
 #include "container/internal/variant_value_v2.h"
 

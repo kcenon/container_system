@@ -32,8 +32,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #pragma once
 
-#include "container/internal/variant_value.h"
-#include "container/internal/thread_safe_container.h"
+#include "container/internal/variant_value_v2.h"
 #include <vector>
 #include <numeric>
 #include <algorithm>
@@ -111,55 +110,55 @@ namespace simd
         /**
          * @brief Sum all float values in a container using SIMD
          */
-        static float sum_floats(const std::vector<variant_value>& values);
+        static float sum_floats(const std::vector<ValueVariant>& values);
 
         /**
          * @brief Sum all double values in a container using SIMD
          */
-        static double sum_doubles(const std::vector<variant_value>& values);
+        static double sum_doubles(const std::vector<ValueVariant>& values);
 
         /**
          * @brief Find minimum float value using SIMD
          */
-        static std::optional<float> min_float(const std::vector<variant_value>& values);
+        static std::optional<float> min_float(const std::vector<ValueVariant>& values);
 
         /**
          * @brief Find maximum float value using SIMD
          */
-        static std::optional<float> max_float(const std::vector<variant_value>& values);
+        static std::optional<float> max_float(const std::vector<ValueVariant>& values);
 
         /**
          * @brief Compute average of numeric values
          */
         template<typename T>
-        static std::optional<double> average(const std::vector<variant_value>& values);
+        static std::optional<double> average(const std::vector<ValueVariant>& values);
 
         /**
          * @brief Vectorized comparison - find all values equal to target
          */
         static std::vector<size_t> find_equal_floats(
-            const std::vector<variant_value>& values,
+            const std::vector<ValueVariant>& values,
             float target);
 
         /**
          * @brief Vectorized string search using SIMD
          */
         static std::vector<size_t> find_string_pattern(
-            const std::vector<variant_value>& values,
+            const std::vector<ValueVariant>& values,
             std::string_view pattern);
 
         /**
          * @brief Transform all numeric values by applying a function
          */
         template<typename T, typename Func>
-        static void transform_numeric(std::vector<variant_value>& values, Func&& func);
+        static void transform_numeric(std::vector<ValueVariant>& values, Func&& func);
 
         /**
          * @brief Parallel dot product of two float arrays
          */
         static std::optional<float> dot_product_floats(
-            const std::vector<variant_value>& a,
-            const std::vector<variant_value>& b);
+            const std::vector<ValueVariant>& a,
+            const std::vector<ValueVariant>& b);
 
         /**
          * @brief Fast memory copy using SIMD
@@ -175,7 +174,7 @@ namespace simd
          * @brief Serialize multiple values in parallel
          */
         static std::vector<std::vector<uint8_t>> parallel_serialize(
-            const std::vector<variant_value>& values);
+            const std::vector<ValueVariant>& values);
 
         /**
          * @brief Compute hash of data using SIMD
