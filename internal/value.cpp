@@ -5,7 +5,7 @@ Copyright (c) 2024, 🍀☀🌕🌥 🌊
 All rights reserved.
 *****************************************************************************/
 
-#include "container/internal/variant_value_v2.h"
+#include "container/internal/value.h"
 #include "container/internal/thread_safe_container.h"
 #include <sstream>
 #include <iomanip>
@@ -22,7 +22,7 @@ namespace container_module
         values.reserve(other.values.size());
         for (const auto& val : other.values) {
             if (val) {
-                values.push_back(std::make_shared<variant_value_v2>(*val));
+                values.push_back(std::make_shared<value>(*val));
             }
         }
     }
@@ -33,7 +33,7 @@ namespace container_module
             values.reserve(other.values.size());
             for (const auto& val : other.values) {
                 if (val) {
-                    values.push_back(std::make_shared<variant_value_v2>(*val));
+                    values.push_back(std::make_shared<value>(*val));
                 }
             }
         }
@@ -55,10 +55,10 @@ namespace container_module
     }
 
     // ============================================================================
-    // variant_value_v2 implementation
+    // value implementation
     // ============================================================================
 
-    variant_value_v2::variant_value_v2(std::string_view name,
+    value::value(std::string_view name,
                                        value_types type,
                                        const std::vector<uint8_t>& raw_data)
         : name_(name), data_(std::in_place_index<0>)
@@ -71,14 +71,14 @@ namespace container_module
         }
     }
 
-    variant_value_v2::variant_value_v2(const variant_value_v2& other)
+    value::value(const value& other)
         : name_(other.name_)
     {
         std::shared_lock lock(other.mutex_);
         data_ = other.data_;
     }
 
-    variant_value_v2::variant_value_v2(variant_value_v2&& other) noexcept
+    value::value(value&& other) noexcept
         : name_(other.name_)
     {
         std::unique_lock lock(other.mutex_);
@@ -89,7 +89,7 @@ namespace container_module
         other.write_count_ = 0;
     }
 
-    variant_value_v2& variant_value_v2::operator=(const variant_value_v2& other) {
+    value& value::operator=(const value& other) {
         if (this != &other) {
             std::unique_lock lock(mutex_);
             std::shared_lock other_lock(other.mutex_);
@@ -99,7 +99,7 @@ namespace container_module
         return *this;
     }
 
-    variant_value_v2& variant_value_v2::operator=(variant_value_v2&& other) noexcept {
+    value& value::operator=(value&& other) noexcept {
         if (this != &other) {
             std::unique_lock lock(mutex_);
             std::unique_lock other_lock(other.mutex_);
@@ -109,7 +109,7 @@ namespace container_module
         return *this;
     }
 
-    value_types variant_value_v2::type() const {
+    value_types value::type() const {
         std::shared_lock lock(mutex_);
         size_t idx = data_.index();
 
@@ -125,7 +125,7 @@ namespace container_module
         return static_cast<value_types>(idx);
     }
 
-    std::string variant_value_v2::to_string() const {
+    std::string value::to_string() const {
         return visit([](auto&& value) -> std::string {
             using T = std::decay_t<decltype(value)>;
 
@@ -165,7 +165,7 @@ namespace container_module
         });
     }
 
-    std::string variant_value_v2::to_json() const {
+    std::string value::to_json() const {
         auto var_name = name();
         auto var_type = type();
 
@@ -238,42 +238,42 @@ namespace container_module
         });
     }
 
-    void variant_value_v2::serialize_data(std::vector<uint8_t>& result) const {
-        visit([&result](auto&& value) {
-            using T = std::decay_t<decltype(value)>;
+    void value::serialize_data(std::vector<uint8_t>& result) const {
+        visit([&result](auto&& val) {
+            using T = std::decay_t<decltype(val)>;
 
             if constexpr (std::is_same_v<T, std::monostate>) {
-                // Null value: no data
+                // Null val: no data
             }
             else if constexpr (std::is_same_v<T, bool>) {
-                result.push_back(value ? 1 : 0);
+                result.push_back(val ? 1 : 0);
             }
             else if constexpr (std::is_same_v<T, std::vector<uint8_t>>) {
                 // Bytes: [length:4][data:length]
-                uint32_t size = static_cast<uint32_t>(value.size());
+                uint32_t size = static_cast<uint32_t>(val.size());
                 result.insert(result.end(),
                              reinterpret_cast<const uint8_t*>(&size),
                              reinterpret_cast<const uint8_t*>(&size) + sizeof(size));
-                result.insert(result.end(), value.begin(), value.end());
+                result.insert(result.end(), val.begin(), val.end());
             }
             else if constexpr (std::is_arithmetic_v<T> && !std::is_same_v<T, bool>) {
                 // Numeric: raw bytes
                 result.insert(result.end(),
-                             reinterpret_cast<const uint8_t*>(&value),
-                             reinterpret_cast<const uint8_t*>(&value) + sizeof(T));
+                             reinterpret_cast<const uint8_t*>(&val),
+                             reinterpret_cast<const uint8_t*>(&val) + sizeof(T));
             }
             else if constexpr (std::is_same_v<T, std::string>) {
                 // String: [length:4][UTF-8 data:length]
-                uint32_t size = static_cast<uint32_t>(value.size());
+                uint32_t size = static_cast<uint32_t>(val.size());
                 result.insert(result.end(),
                              reinterpret_cast<const uint8_t*>(&size),
                              reinterpret_cast<const uint8_t*>(&size) + sizeof(size));
-                result.insert(result.end(), value.begin(), value.end());
+                result.insert(result.end(), val.begin(), val.end());
             }
             else if constexpr (std::is_same_v<T, std::shared_ptr<thread_safe_container>>) {
                 // Container: [serialized_size:4][serialized_data:size]
-                if (value) {
-                    auto container_data = value->serialize();
+                if (val) {
+                    auto container_data = val->serialize();
                     uint32_t size = static_cast<uint32_t>(container_data.size());
                     result.insert(result.end(),
                                  reinterpret_cast<const uint8_t*>(&size),
@@ -288,18 +288,18 @@ namespace container_module
             }
             else if constexpr (std::is_same_v<T, array_variant>) {
                 // Array: [count:4][value1_serialized][value2_serialized]...
-                uint32_t count = static_cast<uint32_t>(value.values.size());
+                uint32_t count = static_cast<uint32_t>(val.values.size());
                 result.insert(result.end(),
                              reinterpret_cast<const uint8_t*>(&count),
                              reinterpret_cast<const uint8_t*>(&count) + sizeof(count));
 
-                for (const auto& elem : value.values) {
+                for (const auto& elem : val.values) {
                     if (elem) {
                         auto elem_data = elem->serialize();
                         result.insert(result.end(), elem_data.begin(), elem_data.end());
                     } else {
                         // Null element: serialize as null_value with empty name
-                        variant_value_v2 null_elem("");
+                        container_module::value null_elem("");
                         auto null_data = null_elem.serialize();
                         result.insert(result.end(), null_data.begin(), null_data.end());
                     }
@@ -308,7 +308,7 @@ namespace container_module
         });
     }
 
-    std::vector<uint8_t> variant_value_v2::serialize() const {
+    std::vector<uint8_t> value::serialize() const {
         std::vector<uint8_t> result;
 
         // Header: [name_length:4][name:UTF-8][type:1]
@@ -328,7 +328,7 @@ namespace container_module
         return result;
     }
 
-    bool variant_value_v2::deserialize_data(variant_value_v2& result,
+    bool value::deserialize_data(value& result,
                                             value_types type,
                                             const std::vector<uint8_t>& data,
                                             size_t& offset) {
@@ -512,7 +512,7 @@ namespace container_module
                     auto elem_size = elem->serialize().size();
                     offset += elem_size;
 
-                    arr.values.push_back(std::make_shared<variant_value_v2>(std::move(*elem)));
+                    arr.values.push_back(std::make_shared<value>(std::move(*elem)));
                 }
 
                 result.data_ = std::move(arr);
@@ -524,7 +524,7 @@ namespace container_module
         }
     }
 
-    std::optional<variant_value_v2> variant_value_v2::deserialize(const std::vector<uint8_t>& data) {
+    std::optional<value> value::deserialize(const std::vector<uint8_t>& data) {
         if (data.size() < sizeof(uint32_t) + 1) {
             return std::nullopt;  // Too small: need at least name_len + type
         }
@@ -554,7 +554,7 @@ namespace container_module
         }
 
         // Create result with name
-        variant_value_v2 result(name);
+        container_module::value result(name);
 
         // Deserialize data based on type
         if (!deserialize_data(result, type, data, offset)) {
@@ -564,13 +564,13 @@ namespace container_module
         return result;
     }
 
-    bool variant_value_v2::operator==(const variant_value_v2& other) const {
+    bool value::operator==(const value& other) const {
         if (this == &other) return true;
         std::scoped_lock lock(mutex_, other.mutex_);
         return name_ == other.name_ && data_ == other.data_;
     }
 
-    bool variant_value_v2::operator<(const variant_value_v2& other) const {
+    bool value::operator<(const value& other) const {
         if (this == &other) return false;
         std::scoped_lock lock(mutex_, other.mutex_);
         if (name_ != other.name_) return name_ < other.name_;
