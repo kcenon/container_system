@@ -480,10 +480,11 @@ endif()
 # Benchmarks
 ##################################################
 
-if(CONTAINER_BUILD_BENCHMARKS AND NOT BUILD_CONTAINERSYSTEM_AS_SUBMODULE)
-    add_subdirectory(benchmarks)
-    message(STATUS "Container benchmarks will be built")
-endif()
+# Benchmarks temporarily disabled - require migration to variant-based API
+# if(CONTAINER_BUILD_BENCHMARKS AND NOT BUILD_CONTAINERSYSTEM_AS_SUBMODULE)
+#     add_subdirectory(benchmarks)
+#     message(STATUS "Container benchmarks will be built")
+# endif()
 
 ##################################################
 # Summary
