@@ -1,163 +1,91 @@
 # Container System Documentation
 
-> **Version:** 1.0.0
-> **Last Updated:** 2025-10-27
+> **Language:** **English** | [한국어](README_KO.md)
 
-This directory contains comprehensive documentation for the Container System project.
+**Version:** 1.0
+**Last Updated:** 2025-11-11
+**Status:** Comprehensive
 
-## 📚 Documentation Index
-
-### Core Documentation
-
-| Document | Description | Language |
-|----------|-------------|----------|
-| [ARCHITECTURE.md](ARCHITECTURE.md) | Detailed system architecture and design philosophy | EN |
-| [ARCHITECTURE_KO.md](ARCHITECTURE_KO.md) | 상세한 시스템 아키텍처 및 설계 철학 | KO |
-| [STRUCTURE.md](STRUCTURE.md) | Project structure and file organization | EN |
-
-### Integration & Migration
-
-| Document | Description | Language |
-|----------|-------------|----------|
-| [INTEGRATION.md](INTEGRATION.md) | Integration guide with other systems | EN |
-| [MIGRATION.md](MIGRATION.md) | Migration guide from messaging_system | EN |
-
-### Performance & Quality
-
-| Document | Description | Language |
-|----------|-------------|----------|
-| [BASELINE.md](BASELINE.md) | Performance baseline metrics | EN |
-| [BASELINE_KO.md](BASELINE_KO.md) | 성능 기준 메트릭 | KO |
-| [PERFORMANCE.md](PERFORMANCE.md) | Detailed performance analysis | EN |
-| [PERFORMANCE_KO.md](PERFORMANCE_KO.md) | 상세 성능 분석 | KO |
-| [SANITIZER_TEST_RESULTS.md](SANITIZER_TEST_RESULTS.md) | Sanitizer test results (TSAN, ASAN, UBSAN) | EN |
-| [SANITIZER_TEST_RESULTS_KO.md](SANITIZER_TEST_RESULTS_KO.md) | 새니타이저 테스트 결과 | KO |
-
-### Development & Planning
-
-| Document | Description | Language |
-|----------|-------------|----------|
-| [IMPLEMENTATION_SUMMARY.md](IMPLEMENTATION_SUMMARY.md) | Implementation summary and test coverage | EN |
-| [IMPLEMENTATION_SUMMARY_KO.md](IMPLEMENTATION_SUMMARY_KO.md) | 구현 요약 및 테스트 커버리지 | KO |
-| [IMPROVEMENTS.md](IMPROVEMENTS.md) | Planned improvements and roadmap | EN |
-| [IMPROVEMENTS_KO.md](IMPROVEMENTS_KO.md) | 계획된 개선사항 및 로드맵 | KO |
-
-### gRPC Integration (Experimental)
-
-| Document | Description | Language |
-|----------|-------------|----------|
-| [grpc/GRPC_INTEGRATION_PROPOSAL.md](grpc/GRPC_INTEGRATION_PROPOSAL.md) | gRPC integration proposal | EN |
-| [grpc/GRPC_INTEGRATION_PROPOSAL_KO.md](grpc/GRPC_INTEGRATION_PROPOSAL_KO.md) | gRPC 통합 제안서 | KO |
-| [grpc/GRPC_MINIMAL_INTEGRATION_PLAN.md](grpc/GRPC_MINIMAL_INTEGRATION_PLAN.md) | Minimal gRPC integration plan | EN |
-| [grpc/GRPC_MINIMAL_INTEGRATION_PLAN_KO.md](grpc/GRPC_MINIMAL_INTEGRATION_PLAN_KO.md) | 최소 gRPC 통합 계획 | KO |
-| [grpc/GRPC_ADAPTER_IMPLEMENTATION.md](grpc/GRPC_ADAPTER_IMPLEMENTATION.md) | gRPC adapter implementation guide | EN |
-| [grpc/GRPC_ADAPTER_IMPLEMENTATION_KO.md](grpc/GRPC_ADAPTER_IMPLEMENTATION_KO.md) | gRPC 어댑터 구현 가이드 | KO |
-| [grpc/GRPC_PROJECT_PLAN.md](grpc/GRPC_PROJECT_PLAN.md) | gRPC project plan | EN |
-| [grpc/GRPC_PROJECT_PLAN_KO.md](grpc/GRPC_PROJECT_PLAN_KO.md) | gRPC 프로젝트 계획 | KO |
+Welcome to the container_system documentation! A type-safe, high-performance container and serialization system for C++17/20 with SIMD optimization and multiple format support.
 
 ---
 
-## 🚀 Quick Start Guide
+## 🚀 Quick Navigation
 
-### For New Users
-
-1. Start with [../README.md](../README.md) for project overview
-2. Read [ARCHITECTURE.md](ARCHITECTURE.md) to understand system design
-3. Follow [INTEGRATION.md](INTEGRATION.md) to integrate with your project
-4. Check [PERFORMANCE.md](PERFORMANCE.md) for optimization tips
-
-### For Contributors
-
-1. Review [STRUCTURE.md](STRUCTURE.md) to understand project organization
-2. Read [IMPLEMENTATION_SUMMARY.md](IMPLEMENTATION_SUMMARY.md) for implementation details
-3. Check [IMPROVEMENTS.md](IMPROVEMENTS.md) for planned features
-4. See [SANITIZER_TEST_RESULTS.md](SANITIZER_TEST_RESULTS.md) for quality metrics
-
-### For Migrating from messaging_system
-
-1. Read [MIGRATION.md](MIGRATION.md) for step-by-step migration guide
-2. Review [INTEGRATION.md](INTEGRATION.md) for integration patterns
-3. Check [../CHANGELOG.md](../CHANGELOG.md) for breaking changes
+| I want to... | Document |
+|--------------|----------|
+| ⚡ Understand containers | [Architecture](01-ARCHITECTURE.md) |
+| ❓ Find answers to common questions | [FAQ](guides/FAQ.md) (25+ Q&A) |
+| 🔧 Integrate into my project | [Integration Guide](guides/INTEGRATION.md) |
+| 🚀 Migrate from messaging_system | [Migration Guide](guides/MIGRATION.md) |
+| 📊 Review performance | [Baseline](performance/BASELINE.md) |
 
 ---
 
-## 📊 Document Categories
+## Documentation Structure
 
-### Architecture & Design
-- System architecture and design principles
-- Component organization and dependencies
-- Design patterns and best practices
+### 📘 Core Documentation
 
-### Integration & Usage
-- Integration with messaging, network, and database systems
-- Migration guides and compatibility information
-- API usage examples and patterns
+| Document | Description | Korean | Lines |
+|----------|-------------|--------|-------|
+| [01-ARCHITECTURE.md](01-ARCHITECTURE.md) | System architecture, design patterns, SIMD optimization | [🇰🇷](01-ARCHITECTURE_KO.md) | 800+ |
 
-### Performance & Quality
-- Performance benchmarks and baselines
-- Optimization strategies and SIMD usage
-- Test results and quality metrics
-- RAII compliance and memory safety
+### 📗 User Guides
 
-### Development & Planning
-- Implementation summaries and test coverage
-- Planned improvements and feature roadmap
-- Development guidelines and coding standards
+| Document | Description | Lines |
+|----------|-------------|-------|
+| [FAQ.md](guides/FAQ.md) | 25 Q&A covering containers, serialization, performance | 516 |
+| [INTEGRATION.md](guides/INTEGRATION.md) | Integration with messaging, network, database systems | 300+ |
+| [MIGRATION.md](guides/MIGRATION.md) | Migration from messaging_system containers | 200+ |
 
-### Experimental Features
-- gRPC integration proposals and plans
-- Adapter implementations for gRPC
-- Future integration possibilities
+### 📙 Advanced Topics
 
----
+| Document | Description | Lines |
+|----------|-------------|-------|
+| [ADR-001-Type-System-Unification.md](advanced/ADR-001-Type-System-Unification.md) | Architecture decision record | 200+ |
+| [VALUE_STORE_DESIGN.md](advanced/VALUE_STORE_DESIGN.md) | Value store design | 150+ |
+| [VARIANT_VALUE_V2_MIGRATION_GUIDE.md](advanced/VARIANT_VALUE_V2_MIGRATION_GUIDE.md) | V2 migration | 200+ |
+| [IMPLEMENTATION_SUMMARY.md](advanced/IMPLEMENTATION_SUMMARY.md) | Implementation status | [🇰🇷](advanced/IMPLEMENTATION_SUMMARY_KO.md) |
+| [IMPROVEMENTS.md](advanced/IMPROVEMENTS.md) | Planned improvements | [🇰🇷](advanced/IMPROVEMENTS_KO.md) |
 
-## 🌐 Language Support
+### 📊 Performance
 
-Most documents are available in both English and Korean:
-- English documents: `*.md`
-- Korean documents: `*_KO.md`
+| Document | Description | Korean | Lines |
+|----------|-------------|--------|-------|
+| [BASELINE.md](performance/BASELINE.md) | 5M containers/s, 2M serialize/s | [🇰🇷](performance/BASELINE_KO.md) | 300+ |
+| [PERFORMANCE.md](performance/PERFORMANCE.md) | Detailed performance analysis | [🇰🇷](performance/PERFORMANCE_KO.md) | 400+ |
+| [SANITIZER_TEST_RESULTS.md](performance/SANITIZER_TEST_RESULTS.md) | TSan, ASan, UBSan results | [🇰🇷](performance/SANITIZER_TEST_RESULTS_KO.md) | 200+ |
 
-If a Korean version is not available, please refer to the English version.
+### 🤝 Contributing
 
----
-
-## 📝 Contributing to Documentation
-
-When updating documentation:
-
-1. **Maintain consistency**: Follow existing document structure
-2. **Update both languages**: Provide English and Korean versions when possible
-3. **Update this index**: Add new documents to the appropriate section
-4. **Cross-reference**: Link related documents where appropriate
-5. **Version information**: Update version and date in document headers
+| Document | Description | Lines |
+|----------|-------------|-------|
+| [TESTING.md](contributing/TESTING.md) | Testing strategy | 300+ |
 
 ---
 
-## 🔍 Finding Information
+## Project Information
 
-Use the following guide to find specific information:
+### Current Status
+- **Version**: 1.0 (Type-safe variant system)
+- **C++ Standard**: C++17 (C++20 recommended)
+- **License**: BSD 3-Clause
 
-| Topic | Document |
-|-------|----------|
-| System design principles | [ARCHITECTURE.md](ARCHITECTURE.md) |
-| File organization | [STRUCTURE.md](STRUCTURE.md) |
-| Performance metrics | [BASELINE.md](BASELINE.md), [PERFORMANCE.md](PERFORMANCE.md) |
-| Integration patterns | [INTEGRATION.md](INTEGRATION.md) |
-| Migration steps | [MIGRATION.md](MIGRATION.md) |
-| Test coverage | [IMPLEMENTATION_SUMMARY.md](IMPLEMENTATION_SUMMARY.md) |
-| Quality metrics | [SANITIZER_TEST_RESULTS.md](SANITIZER_TEST_RESULTS.md) |
-| Future plans | [IMPROVEMENTS.md](IMPROVEMENTS.md) |
-| gRPC integration | [grpc/](grpc/) directory |
-
----
-
-## 📧 Contact
-
-- **Maintainer:** kcenon@naver.com
-- **Issues:** [GitHub Issues](https://github.com/kcenon/container_system/issues)
-- **License:** BSD 3-Clause
+### Key Features
+- ✅ **Type-safe containers** - `std::variant` based
+- ✅ **Multiple formats** - Binary, JSON, XML
+- ✅ **SIMD optimization** - NEON (ARM), AVX2 (x86)
+- ✅ **High performance** - 5M containers/s creation
+- ✅ **Memory pooling** - Reduced allocation overhead
+- ✅ **Thread-safe** - Verified with TSan
 
 ---
 
-**Last Updated:** 2025-10-27
-**Documentation Version:** 1.0.0
+## 📞 Getting Help
+
+- **Issues**: [GitHub Issues](https://github.com/kcenon/container_system/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/kcenon/container_system/discussions)
+
+---
+
+**Last Updated**: 2025-11-11
