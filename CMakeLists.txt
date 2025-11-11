@@ -9,12 +9,12 @@ cmake_minimum_required(VERSION 3.16)
 
 # Project definition
 project(container_system
-    DESCRIPTION "Advanced C++20 Container System with Thread-Safe Operations and Messaging Integration"
+    DESCRIPTION "Advanced C++17 Container System with Thread-Safe Operations and Messaging Integration"
     LANGUAGES CXX
 )
 
 # C++ Standard
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
