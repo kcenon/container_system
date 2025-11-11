@@ -11,7 +11,7 @@
 
 ## Overview
 
-The Container System Project is a production-ready, high-performance C++20 type-safe container framework designed to provide comprehensive data management capabilities for messaging systems and general-purpose applications. Built with a modular, interface-based architecture featuring SIMD optimizations and seamless integration with the ecosystem, it delivers enterprise-grade serialization performance with minimal overhead and maximum type safety.
+The Container System Project is a production-ready, high-performance C++17 type-safe container framework designed to provide comprehensive data management capabilities for messaging systems and general-purpose applications. Built with a modular, interface-based architecture featuring SIMD optimizations and seamless integration with the ecosystem, it delivers enterprise-grade serialization performance with minimal overhead and maximum type safety.
 
 > **🏗️ Modular Architecture**: Advanced type-safe container system with pluggable value types, efficient serialization, and thread-safe operations.
 
@@ -203,7 +203,7 @@ This project addresses the fundamental challenge faced by developers worldwide: 
 ## Technology Stack & Architecture
 
 ### 🏗️ **Modern C++ Foundation**
-- **C++20 features**: Concepts, ranges, `std::format`, and variant for enhanced performance
+- **C++17 compatibility**: Template metaprogramming, variant, and optional for type-safe operations
 - **Template metaprogramming**: Type-safe, compile-time value type checking
 - **Memory management**: Smart pointers and RAII for automatic resource cleanup
 - **SIMD optimizations**: ARM NEON and x86 AVX support for numeric operations
@@ -529,7 +529,7 @@ Our samples demonstrate real-world usage patterns and best practices:
 ### 🛠️ **Build & Integration**
 
 #### Prerequisites
-- **Compiler**: C++20 capable (GCC 9+, Clang 10+, MSVC 2019+)
+- **Compiler**: C++17 capable (GCC 7+, Clang 5+, MSVC 2017+)
 - **Build System**: CMake 3.16+
 - **Package Manager**: vcpkg (automatically installed by dependency scripts)
 
@@ -1007,7 +1007,7 @@ target_link_libraries(your_target MessagingSystem::container)
 
 ## Dependencies
 
-- **C++20 Standard Library**: Required for concepts, ranges, and format
+- **C++17 Standard Library**: Template metaprogramming, variant, and optional
 - **fmt Library**: High-performance string formatting
 - **Thread System**: For lock-free operations and threading
 - **Utilities Module**: String conversion and system utilities
