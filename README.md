@@ -541,18 +541,18 @@ git clone https://github.com/kcenon/container_system.git
 cd container_system
 
 # Install dependencies (cross-platform scripts)
-./dependency.sh  # Linux/macOS
+./scripts/dependency.sh  # Linux/macOS
 # or
-dependency.bat   # Windows Command Prompt
+scripts\dependency.bat   # Windows Command Prompt
 # or
-.\dependency.ps1 # Windows PowerShell
+.\scripts\dependency.ps1 # Windows PowerShell
 
 # Build the project (optimized for your platform)
-./build.sh       # Linux/macOS
+./scripts/build.sh       # Linux/macOS
 # or
-build.bat        # Windows Command Prompt
+scripts\build.bat        # Windows Command Prompt
 # or
-.\build.ps1      # Windows PowerShell
+.\scripts\build.ps1      # Windows PowerShell
 
 # Run examples
 ./build/examples/basic_container_example
@@ -924,9 +924,9 @@ The Container System provides full cross-platform support with native build scri
 
 | Platform | Architecture | Compiler | Build Scripts |
 |----------|-------------|-----------|---------------|
-| **Linux** | x86_64, ARM64 | GCC 9+, Clang 10+ | `dependency.sh`, `build.sh` |
-| **macOS** | x86_64, ARM64 (Apple Silicon) | Apple Clang, Clang | `dependency.sh`, `build.sh` |
-| **Windows** | x86, x64 | MSVC 2019+, Clang | `dependency.bat`, `build.bat`, `dependency.ps1`, `build.ps1` |
+| **Linux** | x86_64, ARM64 | GCC 9+, Clang 10+ | `scripts/dependency.sh`, `scripts/build.sh` |
+| **macOS** | x86_64, ARM64 (Apple Silicon) | Apple Clang, Clang | `scripts/dependency.sh`, `scripts/build.sh` |
+| **Windows** | x86, x64 | MSVC 2019+, Clang | `scripts/dependency.bat`, `scripts/build.bat`, `scripts/dependency.ps1`, `scripts/build.ps1` |
 
 ### Build Tools
 
