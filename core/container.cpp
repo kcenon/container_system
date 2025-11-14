@@ -241,7 +241,36 @@ namespace container_module
 		return message_type_;
 	}
 
+	void value_container::add_value(const std::string& name, value_types type, value_variant data)
+	{
+		write_lock_guard lock(this);
 
+		optimized_value val;
+		val.name = name;
+		val.type = type;
+		val.data = std::move(data);
+
+		optimized_units_.push_back(std::move(val));
+		changed_data_ = true;
+
+		if (use_soo_ && val.is_stack_allocated()) {
+			stack_allocations_.fetch_add(1, std::memory_order_relaxed);
+		} else {
+			heap_allocations_.fetch_add(1, std::memory_order_relaxed);
+		}
+	}
+
+	std::optional<optimized_value> value_container::get_value(const std::string& name) const noexcept
+	{
+		read_lock_guard lock(this);
+
+		for (const auto& val : optimized_units_) {
+			if (val.name == name) {
+				return val;
+			}
+		}
+		return std::nullopt;
+	}
 
 	void value_container::remove(std::string_view target_name,
 								 bool update_immediately)

@@ -193,9 +193,57 @@ namespace container_module
 		std::string target_sub_id(void) const noexcept;
 		std::string message_type(void) const noexcept;
 
-		// Legacy value management methods removed
-		// Use optimized_value accessors via iterators instead
+		// Value management methods
 
+		/**
+		 * @brief Add a value to the container
+		 * @param name Value name/key
+		 * @param type Value type enumeration
+		 * @param data Value data as variant
+		 * @exception_safety Strong guarantee - no changes on exception
+		 * @throws std::bad_alloc if memory allocation fails
+		 */
+		void add_value(const std::string& name, value_types type, value_variant data);
+
+		/**
+		 * @brief Add a value to the container (template version for type deduction)
+		 * @param name Value name/key
+		 * @param value Value of any supported type in value_variant
+		 * @exception_safety Strong guarantee - no changes on exception
+		 * @throws std::bad_alloc if memory allocation fails
+		 */
+		template<typename T>
+		void add_value(const std::string& name, T&& value) {
+			write_lock_guard lock(this);
+
+			optimized_value val;
+			val.name = name;
+			val.data = std::forward<T>(value);
+			val.type = static_cast<value_types>(val.data.index());
+
+			optimized_units_.push_back(std::move(val));
+			changed_data_ = true;
+
+			if (use_soo_ && val.is_stack_allocated()) {
+				stack_allocations_.fetch_add(1, std::memory_order_relaxed);
+			} else {
+				heap_allocations_.fetch_add(1, std::memory_order_relaxed);
+			}
+		}
+
+		/**
+		 * @brief Get a value by name
+		 * @param name Value name/key to search for
+		 * @return Optional containing the optimized_value if found, nullopt otherwise
+		 * @exception_safety No-throw guarantee
+		 */
+		std::optional<optimized_value> get_value(const std::string& name) const noexcept;
+
+		/**
+		 * @brief Remove a value by name
+		 * @param target_name Name of value to remove
+		 * @param update_immediately Whether to update serialized data immediately
+		 */
 		void remove(std::string_view target_name,
 					bool update_immediately = false);
 
