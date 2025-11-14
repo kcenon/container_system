@@ -55,8 +55,8 @@ namespace container_module
 		ullong_value,
 		float_value,
 		double_value,
-		bytes_value,
-		string_value,
+		string_value,    // 12 - must match value_variant std::string position
+		bytes_value,     // 13 - must match value_variant std::vector<uint8_t> position
 		container_value,
 		array_value
 	};
@@ -75,8 +75,8 @@ namespace container_module
 		{"9", value_types::ullong_value},
 		{"10", value_types::float_value},
 		{"11", value_types::double_value},
-		{"12", value_types::bytes_value},
-		{"13", value_types::string_value},
+		{"12", value_types::string_value},  // Swapped to match variant
+		{"13", value_types::bytes_value},   // Swapped to match variant
 		{"14", value_types::container_value},
 		{"15", value_types::array_value}
 	}};
