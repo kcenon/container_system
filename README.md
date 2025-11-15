@@ -441,6 +441,7 @@ This project is licensed under the BSD 3-Clause License - see the [LICENSE](LICE
 ## Acknowledgments
 
 - Inspired by modern serialization frameworks and high-performance computing practices
+- Built with C++20 features for maximum performance and safety
 - Maintained by kcenon@naver.com
 
 ---
