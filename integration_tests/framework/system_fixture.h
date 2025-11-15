@@ -183,22 +183,6 @@ protected:
     }
 
     /**
-     * @brief Deprecated: Use RoundTripSerialize() or RoundTripSerializeHeaderOnly()
-     *
-     * This function had confusing parameter semantics where parse_values
-     * was inverted before being passed to the constructor.
-     *
-     * @deprecated Use RoundTripSerialize() for full parse or
-     *             RoundTripSerializeHeaderOnly() for header-only parse
-     */
-    [[deprecated("Use RoundTripSerialize() or RoundTripSerializeHeaderOnly()")]]
-    std::shared_ptr<value_container> RoundTripSerialize(bool parse_values)
-    {
-        std::string serialized = container->serialize();
-        return std::make_shared<value_container>(serialized, !parse_values);
-    }
-
-    /**
      * @brief Measure serialization time
      * @return Duration in microseconds
      */
