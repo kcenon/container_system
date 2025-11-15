@@ -1,0 +1,28 @@
+var searchData=
+[
+  ['parallel_5fserialize_0',['parallel_serialize',['../db/dfe/classcontainer__module_1_1simd_1_1simd__processor.html#a4c909d4fecd6acad52a96d89f7618349',1,'container_module::simd::simd_processor']]],
+  ['parsed_5fdata_5f_1',['parsed_data_',['../d9/dad/classcontainer__module_1_1value__container.html#a105a7df7f68e24b58f9be85dfd1496d9',1,'container_module::value_container']]],
+  ['parsing_2',['parsing',['../d9/dad/classcontainer__module_1_1value__container.html#ac67f821c2e812722fd46526063911f4a',1,'container_module::value_container']]],
+  ['pattern_3',['Enhanced Builder Pattern',['../index.html#builder_pattern',1,'']]],
+  ['performance_20benchmarks_4',['📈 Performance Benchmarks',['../index.html#benchmarks',1,'']]],
+  ['performance_20benefits_5',['Performance Benefits',['../da/dab/classcontainer__module_1_1optimized__container.html#autotoc_md0',1,'']]],
+  ['performance_20characteristics_6',['Performance Characteristics',['../index.html#performance_characteristics',1,'']]],
+  ['performance_20excellence_7',['🚀 Performance Excellence',['../index.html#performance',1,'']]],
+  ['performance_5fcomparison_8',['performance_comparison',['../d5/d4e/messaging__integration__example_8cpp.html#aa77ccf0ce442d5ddeb72cf4f92601fb5',1,'messaging_integration_example.cpp']]],
+  ['platform_20support_9',['Platform Support',['../index.html#platform_support',1,'']]],
+  ['platforms_10',['Supported Platforms',['../index.html#supported_platforms',1,'']]],
+  ['player_5fid_11',['player_id',['../de/d06/structscenarios_1_1GamingEventSystem_1_1GameEvent.html#a6c8988c98b0bc83d0ed0ccf01ea9a731',1,'scenarios::GamingEventSystem::GameEvent']]],
+  ['player_5fscores_5f_12',['player_scores_',['../d5/d1c/classscenarios_1_1GamingEventSystem.html#a771893efb782d7bba03989aef12e6647',1,'scenarios::GamingEventSystem']]],
+  ['pool_5fhits_5f_13',['pool_hits_',['../d6/d67/classcontainer__module_1_1value__pool.html#a8f5bf0f5c0ca208925c5363d7352e5c6',1,'container_module::value_pool']]],
+  ['pool_5fmisses_5f_14',['pool_misses_',['../d6/d67/classcontainer__module_1_1value__pool.html#a1734e7a94cb072b2d67a7b1560f66039',1,'container_module::value_pool']]],
+  ['pool_5fstats_15',['pool_stats',['../d6/d0f/structcontainer__module_1_1pool__stats.html#a8e576a69058d3ff87a6c7ace8bdc6177',1,'container_module::pool_stats::pool_stats()'],['../d6/d0f/structcontainer__module_1_1pool__stats.html',1,'container_module::pool_stats']]],
+  ['print_5ffinal_5fstatistics_16',['print_final_statistics',['../d6/d71/classAdvancedContainerExample.html#a8a9c65f85e970a35210bfb7d8932246d',1,'AdvancedContainerExample']]],
+  ['print_5fleaderboard_17',['print_leaderboard',['../d5/d1c/classscenarios_1_1GamingEventSystem.html#a6ca25899e45597bb3011f1085c1b0166',1,'scenarios::GamingEventSystem']]],
+  ['process_5fdocument_18',['process_document',['../d9/d1c/classscenarios_1_1ContentManagementSystem.html#a6975d3a43b1e3d4046b4b4cb6bca535d',1,'scenarios::ContentManagementSystem']]],
+  ['process_5fgame_5fevent_19',['process_game_event',['../d5/d1c/classscenarios_1_1GamingEventSystem.html#a3403e62957e14344283e707976f4380b',1,'scenarios::GamingEventSystem']]],
+  ['process_5ftransaction_20',['process_transaction',['../d8/d6d/classscenarios_1_1FinancialTransactionSystem.html#a37cbcf1e27f0bcafcd915047004bd726',1,'scenarios::FinancialTransactionSystem']]],
+  ['processed_5fbytes_5f_21',['processed_bytes_',['../d6/d71/classAdvancedContainerExample.html#ad2614b1dd4c4cfb72b698f7141e4b908',1,'AdvancedContainerExample']]],
+  ['processed_5fcontainers_5f_22',['processed_containers_',['../d6/d71/classAdvancedContainerExample.html#aa1032c4a2d7346b422d08f62ab83acf6',1,'AdvancedContainerExample']]],
+  ['production_20grade_20reliability_23',['🛡️ Production-Grade Reliability',['../index.html#reliability',1,'']]],
+  ['productivity_24',['🔧 Developer Productivity',['../index.html#productivity',1,'']]]
+];

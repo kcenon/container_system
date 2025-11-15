@@ -1,0 +1,61 @@
+<map id="main" name="main">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,193,60,218"/>
+<area shape="rect" id="Node000002" href="$d6/d71/classAdvancedContainerExample.html#a168b0d067662dce9193f2fcef87dd352" title="Runs all demonstrations." alt="" coords="108,186,315,226"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="60,203,94,203,94,208,60,208"/>
+<area shape="rect" id="Node000003" href="$d6/d71/classAdvancedContainerExample.html#a958c02251422ee217d5495f7e102a7e5" title="Demonstrates basic container operations." alt="" coords="363,39,593,79"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="232,183,288,136,324,110,361,88,377,81,380,86,364,93,326,115,291,140,235,187"/>
+<area shape="rect" id="Node000004" href="$d6/d71/classAdvancedContainerExample.html#a925c904212dd05fe85d5d3a1b5f42356" title="Demonstrates error handling scenarios." alt="" coords="371,103,585,143"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="276,183,399,144,400,150,277,188"/>
+<area shape="rect" id="Node000005" href="$d6/d71/classAdvancedContainerExample.html#a1f207a927af61cbca1745044efc6b130" title="Demonstrates external integration features." alt="" coords="655,96,861,150"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="314,191,593,152,641,144,642,149,594,157,315,196"/>
+<area shape="rect" id="Node000015" href="$d6/d71/classAdvancedContainerExample.html#a809c347379d7d3b0c6870db6266a09f8" title="Demonstrates enhanced messaging features." alt="" coords="375,297,581,352"/>
+<area shape="poly" id="edge15_Node000002_Node000015" title=" " alt="" coords="259,223,405,289,402,294,256,228"/>
+<area shape="rect" id="Node000020" href="$d6/d71/classAdvancedContainerExample.html#a7c4289a3d4ae9f52e02276bca0019c0a" title="Demonstrates multi&#45;threaded producer&#45;consumer pattern." alt="" coords="652,174,864,229"/>
+<area shape="poly" id="edge31_Node000002_Node000020" title=" " alt="" coords="315,202,638,200,638,205,315,207"/>
+<area shape="rect" id="Node000021" href="$d6/d71/classAdvancedContainerExample.html#a5ca04ef76b3ca404eb6763faa6571074" title="Demonstrates performance scenarios." alt="" coords="375,376,581,430"/>
+<area shape="poly" id="edge38_Node000002_Node000021" title=" " alt="" coords="229,224,283,291,321,329,364,362,372,367,369,371,361,366,318,333,279,295,224,227"/>
+<area shape="rect" id="Node000006" href="$d0/dcd/classcontainer__module_1_1integration_1_1messaging__container__builder.html#a70981bba692bd185814812957472c6ec" title=" " alt="" coords="943,96,1164,150"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="862,120,928,120,928,126,862,126"/>
+<area shape="rect" id="Node000011" href="$d0/dcd/classcontainer__module_1_1integration_1_1messaging__container__builder.html#ae2f2b773fb7248be85f92bd6265efab4" title=" " alt="" coords="923,332,1184,372"/>
+<area shape="poly" id="edge11_Node000005_Node000011" title=" " alt="" coords="863,148,877,160,892,180,899,201,901,241,903,280,910,298,925,317,931,322,927,326,921,321,905,301,897,281,895,241,894,202,887,182,873,163,860,153"/>
+<area shape="rect" id="Node000012" href="$d0/dcd/classcontainer__module_1_1integration_1_1messaging__container__builder.html#a56f2ae6cae82bd445e889788db53e2da" title=" " alt="" coords="943,174,1164,229"/>
+<area shape="poly" id="edge12_Node000005_Node000012" title=" " alt="" coords="862,148,938,168,936,173,861,153"/>
+<area shape="rect" id="Node000013" href="$d0/dcd/classcontainer__module_1_1integration_1_1messaging__container__builder.html#a2c82ff350d7cb1efb87bdc6128a95a5c" title=" " alt="" coords="943,17,1164,72"/>
+<area shape="poly" id="edge13_Node000005_Node000013" title=" " alt="" coords="861,93,936,73,938,78,862,98"/>
+<area shape="rect" id="Node000014" href="$d0/dcd/classcontainer__module_1_1integration_1_1messaging__container__builder.html#a71aa40744bafcb49d34270698dbc4341" title=" " alt="" coords="943,253,1164,308"/>
+<area shape="poly" id="edge14_Node000005_Node000014" title=" " alt="" coords="860,148,876,160,893,180,901,200,908,219,924,238,932,244,929,248,921,242,904,222,896,202,889,182,873,163,857,153"/>
+<area shape="rect" id="Node000007" href="$d5/df9/classcontainer__module_1_1value.html#aef0c634b18712374d422801f269ff0e9" title="Serialize to binary format (legacy compatible)" alt="" coords="1232,103,1415,143"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="1164,120,1218,120,1218,126,1164,126"/>
+<area shape="rect" id="Node000008" href="$d5/df9/classcontainer__module_1_1value.html#aa105a05c2bb9ce88d5bd54610aae7103" title="Serialize data portion based on type." alt="" coords="1463,103,1645,143"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="1415,129,1449,129,1449,134,1415,134"/>
+<area shape="rect" id="Node000010" href="$d5/df9/classcontainer__module_1_1value.html#a19a827e03777e6214b597f5c9e5e8b35" title="Get the value_types enum (NOT variant::index()!)" alt="" coords="1463,167,1645,207"/>
+<area shape="poly" id="edge10_Node000007_Node000010" title=" " alt="" coords="1397,140,1469,161,1468,166,1395,145"/>
+<area shape="poly" id="edge8_Node000008_Node000007" title=" " alt="" coords="1462,117,1428,117,1428,111,1462,111"/>
+<area shape="rect" id="Node000009" href="$d5/df9/classcontainer__module_1_1value.html#a8fd9176e2a29a65418b51dee4cb6a30d" title="Apply visitor to contained value (const)" alt="" coords="1693,103,1876,143"/>
+<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="1645,120,1680,120,1680,126,1645,126"/>
+<area shape="poly" id="edge16_Node000015_Node000006" title=" " alt="" coords="496,295,591,153,603,132,610,112,621,95,640,81,672,66,701,58,728,56,754,58,808,68,875,80,936,90,935,95,874,85,807,74,753,63,728,61,702,63,674,71,643,85,625,99,615,115,608,134,596,156,500,298"/>
+<area shape="poly" id="edge17_Node000015_Node000011" title=" " alt="" coords="568,349,595,362,609,372,619,382,628,391,642,398,705,414,756,416,808,409,874,398,898,391,922,383,958,373,959,378,923,388,900,396,875,403,809,414,757,421,704,419,640,403,625,395,615,386,605,376,592,366,565,354"/>
+<area shape="poly" id="edge26_Node000015_Node000012" title=" " alt="" coords="581,300,874,238,929,226,930,231,875,243,582,305"/>
+<area shape="poly" id="edge29_Node000015_Node000013" title=" " alt="" coords="498,295,542,231,591,154,603,123,608,97,617,72,640,50,673,32,709,19,746,10,784,5,860,4,930,12,929,17,860,9,785,10,747,15,711,24,676,37,643,54,622,75,613,98,608,125,596,156,547,234,502,298"/>
+<area shape="poly" id="edge30_Node000015_Node000014" title=" " alt="" coords="571,349,639,363,716,371,796,370,836,364,874,354,888,347,897,338,907,328,921,318,937,310,940,315,924,322,910,332,901,341,891,351,876,359,837,369,797,375,716,377,638,368,570,354"/>
+<area shape="rect" id="Node000016" href="$d6/d71/classAdvancedContainerExample.html#a78efa0a41a4dd62ea14d74f5637b2b71" title="Demonstrates batch processing with messaging features." alt="" coords="641,304,875,344"/>
+<area shape="poly" id="edge18_Node000015_Node000016" title=" " alt="" coords="581,322,628,322,628,327,581,327"/>
+<area shape="rect" id="Node000017" href="$d0/dcd/classcontainer__module_1_1integration_1_1messaging__container__builder.html#a271381f5ca5e3e609eaf574e5a3bf684" title=" " alt="" coords="943,397,1164,452"/>
+<area shape="poly" id="edge27_Node000015_Node000017" title=" " alt="" coords="582,350,595,362,616,396,623,430,621,463,615,496,610,527,610,558,619,587,643,614,672,635,699,647,726,654,752,654,780,649,808,640,873,614,923,584,966,544,1001,501,1028,462,1032,465,1005,504,970,547,926,588,876,619,810,646,781,654,753,659,725,659,697,652,669,639,640,618,615,589,605,559,604,527,610,495,615,462,617,430,611,398,591,366,578,354"/>
+<area shape="rect" id="Node000018" href="$d2/d81/classcontainer__module_1_1integration_1_1messaging__integration.html#a19ce9bba06580d81ef555c61a6858419" title="Optimized deserialization for messaging." alt="" coords="649,470,867,525"/>
+<area shape="poly" id="edge25_Node000015_Node000018" title=" " alt="" coords="576,349,595,362,613,384,620,406,627,428,643,449,660,461,656,465,639,453,622,430,615,408,608,387,592,366,573,354"/>
+<area shape="rect" id="Node000019" href="$d2/d81/classcontainer__module_1_1integration_1_1messaging__integration.html#a0466cfb81c002ac19821026b30afc7f7" title="High&#45;performance serialization for messaging." alt="" coords="649,549,867,604"/>
+<area shape="poly" id="edge28_Node000015_Node000019" title=" " alt="" coords="580,350,595,362,611,385,619,407,620,451,621,494,628,515,643,536,646,538,642,542,639,539,623,517,616,495,615,451,614,408,606,387,591,366,577,354"/>
+<area shape="poly" id="edge19_Node000016_Node000006" title=" " alt="" coords="792,302,833,274,873,238,887,217,894,198,903,179,921,159,929,154,932,158,924,164,908,182,899,200,892,220,877,242,836,278,795,306"/>
+<area shape="poly" id="edge20_Node000016_Node000011" title=" " alt="" coords="875,333,909,336,909,341,875,338"/>
+<area shape="poly" id="edge21_Node000016_Node000012" title=" " alt="" coords="834,302,873,283,887,272,897,261,906,249,921,238,932,232,934,237,924,242,910,253,901,264,891,276,876,288,836,306"/>
+<area shape="poly" id="edge23_Node000016_Node000013" title=" " alt="" coords="798,302,837,275,873,239,884,217,890,197,892,158,897,120,905,101,921,81,929,74,933,78,925,85,910,103,902,121,898,159,895,198,889,219,877,242,841,279,801,306"/>
+<area shape="poly" id="edge24_Node000016_Node000014" title=" " alt="" coords="875,304,928,296,929,301,875,309"/>
+<area shape="poly" id="edge22_Node000016_Node000017" title=" " alt="" coords="813,342,924,382,949,390,948,395,922,387,811,347"/>
+<area shape="poly" id="edge32_Node000020_Node000006" title=" " alt="" coords="861,172,936,151,938,156,862,177"/>
+<area shape="poly" id="edge33_Node000020_Node000011" title=" " alt="" coords="792,227,851,273,887,296,924,316,946,325,944,330,922,321,884,301,848,277,789,231"/>
+<area shape="poly" id="edge34_Node000020_Node000012" title=" " alt="" coords="864,199,929,199,929,204,864,204"/>
+<area shape="poly" id="edge36_Node000020_Node000013" title=" " alt="" coords="854,172,873,160,889,141,896,121,904,101,921,81,929,75,932,80,924,85,908,103,901,123,893,143,876,163,857,176"/>
+<area shape="poly" id="edge37_Node000020_Node000014" title=" " alt="" coords="862,226,938,247,936,252,861,231"/>
+<area shape="poly" id="edge35_Node000020_Node000017" title=" " alt="" coords="805,227,842,256,877,291,892,316,899,340,907,361,925,382,932,388,929,392,921,386,902,364,894,341,887,318,873,294,838,260,801,231"/>
+</map>

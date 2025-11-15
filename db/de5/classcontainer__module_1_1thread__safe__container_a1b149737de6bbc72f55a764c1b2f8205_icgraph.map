@@ -1,0 +1,13 @@
+<map id="container_module::thread_safe_container::deserialize" name="container_module::thread_safe_container::deserialize">
+<area shape="rect" id="Node000001" title="Deserialize from binary." alt="" coords="697,7,901,47"/>
+<area shape="rect" id="Node000002" href="$d5/df9/classcontainer__module_1_1value.html#a2e4c2ec965ed2cb90bc1d50d77481f8f" title="Deserialize data portion based on type." alt="" coords="467,35,649,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="684,43,650,47,649,41,683,37"/>
+<area shape="rect" id="Node000003" href="$d5/df9/classcontainer__module_1_1value.html#a35f48f55cda09259dd6743889c224650" title="Deserialize from binary format (legacy compatible)" alt="" coords="236,5,419,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="453,53,416,48,417,43,454,48"/>
+<area shape="rect" id="Node000005" href="$d5/df9/classcontainer__module_1_1value.html#a9c0c056ba33752422aad6e6ab6336968" title="Construct from value_types and raw data (legacy compatibility)" alt="" coords="236,69,419,109"/>
+<area shape="poly" id="edge6_Node000002_Node000005" title=" " alt="" coords="454,73,419,78,418,73,453,68"/>
+<area shape="poly" id="edge4_Node000003_Node000001" title=" " alt="" coords="432,20,467,20,649,20,697,21,697,26,649,25,467,25,432,26"/>
+<area shape="poly" id="edge5_Node000003_Node000002" title=" " alt="" coords="433,27,470,32,469,37,432,32"/>
+<area shape="rect" id="Node000004" href="$d1/d1a/namespacecontainer__module.html#a25229d447c253f78c8dd3a8a0df6e1e9" title="Create a copy of a value with a new name." alt="" coords="5,5,188,45"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="223,28,188,28,188,23,223,23"/>
+</map>

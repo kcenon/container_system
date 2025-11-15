@@ -1,0 +1,36 @@
+<map id="container_module::value_bridge::create_legacy_array" name="container_module::value_bridge::create_legacy_array">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,229,216,269"/>
+<area shape="rect" id="Node000002" href="$dd/dd3/classcontainer__module_1_1variant__value__v2.html#a38606c558aca2e7b163af5c63e4dd0fe" title="Type&#45;safe getter with optional return." alt="" coords="755,161,948,201"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="136,227,196,183,281,128,384,74,438,52,494,34,554,19,602,12,650,16,708,35,758,79,824,149,820,153,754,83,705,39,649,21,602,17,555,25,495,39,440,57,386,79,284,132,199,187,139,231"/>
+<area shape="rect" id="Node000003" href="$dd/dd3/classcontainer__module_1_1variant__value__v2.html#ad9d4c1f70a7e0ae1076d26c717876df0" title="Get the name of this value (lock&#45;free, immutable)" alt="" coords="755,265,948,305"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="134,267,191,319,276,386,326,421,380,453,437,481,496,502,555,520,604,529,627,529,651,525,705,503,731,485,754,464,792,414,819,362,837,317,842,319,824,364,796,417,758,468,734,490,708,507,652,530,627,535,603,535,554,525,494,507,435,486,378,457,323,425,273,390,187,323,130,271"/>
+<area shape="rect" id="Node000004" href="$d0/dfe/classcontainer__module_1_1value__bridge.html#ae1f4860f05b75cad1fe39e14357aa3c2" title="Convert modern variant_value_v2 to legacy value." alt="" coords="264,229,447,269"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="216,255,250,255,250,261,216,261"/>
+<area shape="poly" id="edge4_Node000004_Node000001" title=" " alt="" coords="264,243,229,243,230,237,264,238"/>
+<area shape="poly" id="edge21_Node000004_Node000003" title=" " alt="" coords="365,268,380,312,406,368,445,423,469,446,496,465,552,490,576,496,600,497,649,489,705,465,749,435,785,396,813,354,833,316,838,319,818,356,789,399,753,439,708,470,650,494,600,503,575,501,550,495,493,470,465,451,441,426,402,370,375,314,360,270"/>
+<area shape="rect" id="Node000005" href="$d0/dfe/classcontainer__module_1_1value__bridge.html#a83bfd16b2854f62f94437c6b16a5865e" title=" " alt="" coords="499,129,703,169"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="392,226,494,178,514,171,516,176,496,183,395,231"/>
+<area shape="rect" id="Node000006" href="$d0/dfe/classcontainer__module_1_1value__bridge.html#a02d9bb1cd56a3f6540033dc297696925" title=" " alt="" coords="495,193,707,233"/>
+<area shape="poly" id="edge8_Node000004_Node000006" title=" " alt="" coords="446,233,480,228,481,233,447,238"/>
+<area shape="rect" id="Node000007" href="$d0/dfe/classcontainer__module_1_1value__bridge.html#afbbfda588a4646d83ab862dc702ebfbb" title=" " alt="" coords="509,258,692,312"/>
+<area shape="poly" id="edge11_Node000004_Node000007" title=" " alt="" coords="447,260,496,267,495,272,446,265"/>
+<area shape="rect" id="Node000008" href="$d0/dfe/classcontainer__module_1_1value__bridge.html#a8be2fb5629efa130c9c01cc514b6ffd9" title=" " alt="" coords="509,50,692,104"/>
+<area shape="poly" id="edge14_Node000004_Node000008" title=" " alt="" coords="371,227,422,172,456,142,493,115,504,108,507,113,496,119,460,146,426,176,375,231"/>
+<area shape="rect" id="Node000009" href="$dd/dd3/classcontainer__module_1_1variant__value__v2.html#af0c797c36e1223cefddd2ab3b79675cb" title="Get the value_types enum (NOT variant::index()!)" alt="" coords="755,25,948,65"/>
+<area shape="poly" id="edge23_Node000004_Node000009" title=" " alt="" coords="360,228,376,185,403,130,442,76,466,53,493,35,527,20,563,10,636,3,708,8,771,19,770,24,707,13,636,8,564,15,529,25,496,39,469,57,446,80,407,133,381,187,365,230"/>
+<area shape="rect" id="Node000010" href="$d0/dfe/classcontainer__module_1_1value__bridge.html#ab3ea5e667dd2783116693107de7ea826" title=" " alt="" coords="509,336,692,391"/>
+<area shape="poly" id="edge18_Node000004_Node000010" title=" " alt="" coords="391,267,496,323,510,329,507,333,494,327,389,271"/>
+<area shape="rect" id="Node000011" href="$d0/dfe/classcontainer__module_1_1value__bridge.html#a297cb787bdd55a15195f83b76aee2ca5" title=" " alt="" coords="509,416,692,456"/>
+<area shape="poly" id="edge22_Node000004_Node000011" title=" " alt="" coords="371,268,421,334,456,370,496,401,506,407,504,412,493,406,453,374,417,337,367,271"/>
+<area shape="poly" id="edge6_Node000005_Node000002" title=" " alt="" coords="703,159,741,164,740,169,703,165"/>
+<area shape="poly" id="edge7_Node000005_Node000003" title=" " alt="" coords="680,167,708,179,814,254,810,259,705,183,678,172"/>
+<area shape="poly" id="edge9_Node000006_Node000002" title=" " alt="" coords="706,197,741,192,742,198,707,202"/>
+<area shape="poly" id="edge10_Node000006_Node000003" title=" " alt="" coords="672,230,768,258,767,264,670,236"/>
+<area shape="poly" id="edge12_Node000007_Node000002" title=" " alt="" coords="674,255,706,242,793,204,795,209,708,247,676,260"/>
+<area shape="poly" id="edge13_Node000007_Node000003" title=" " alt="" coords="692,282,741,282,741,288,692,288"/>
+<area shape="poly" id="edge15_Node000008_Node000002" title=" " alt="" coords="676,102,708,114,795,153,793,157,706,119,674,107"/>
+<area shape="poly" id="edge16_Node000008_Node000003" title=" " alt="" coords="691,102,709,115,727,139,735,162,742,186,757,211,780,235,806,255,803,259,777,239,753,215,737,188,730,164,722,142,705,119,688,107"/>
+<area shape="poly" id="edge17_Node000008_Node000009" title=" " alt="" coords="692,63,741,56,741,62,693,68"/>
+<area shape="poly" id="edge19_Node000010_Node000002" title=" " alt="" coords="688,334,705,323,721,306,730,289,738,271,753,251,805,207,809,211,757,255,743,274,734,292,725,309,708,327,691,338"/>
+<area shape="poly" id="edge20_Node000010_Node000003" title=" " alt="" coords="688,334,773,307,774,312,689,339"/>
+</map>

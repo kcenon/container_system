@@ -1,0 +1,17 @@
+<map id="container_module::variant_value_v2::name" name="container_module::variant_value_v2::name">
+<area shape="rect" id="Node000001" title="Get the name of this value (lock&#45;free, immutable)" alt="" coords="1005,136,1199,176"/>
+<area shape="rect" id="Node000002" href="$dd/dd3/classcontainer__module_1_1variant__value__v2.html#a631232b8539656035a90e5a0422ed75f" title="Deserialize from binary format (legacy compatible)" alt="" coords="764,104,957,144"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="992,144,957,139,958,134,992,139"/>
+<area shape="rect" id="Node000007" href="$dd/dd3/classcontainer__module_1_1variant__value__v2.html#aa94a2decfb5f103ac1f2d3f27b4393fa" title="Convert to JSON representation." alt="" coords="764,168,957,208"/>
+<area shape="poly" id="edge8_Node000001_Node000007" title=" " alt="" coords="992,173,958,178,957,173,992,168"/>
+<area shape="rect" id="Node000003" href="$d1/d1a/namespacecontainer__module.html#a367a883eb38c222ee73536e395f115a1" title="Create a copy of a variant_value_v2 with a new name." alt="" coords="523,5,705,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="806,100,715,60,682,48,684,43,717,55,809,96"/>
+<area shape="rect" id="Node000004" href="$db/de5/classcontainer__module_1_1thread__safe__container.html#a1b149737de6bbc72f55a764c1b2f8205" title="Deserialize from binary." alt="" coords="512,69,716,109"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="750,111,716,106,717,101,751,106"/>
+<area shape="rect" id="Node000005" href="$dd/dd3/classcontainer__module_1_1variant__value__v2.html#ab177da145fdeb6f4470bad3aee22162a" title="Deserialize data portion based on type." alt="" coords="261,139,464,179"/>
+<area shape="poly" id="edge7_Node000002_Node000005" title=" " alt="" coords="751,142,464,162,464,156,750,137"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="528,116,436,141,435,136,527,110"/>
+<area shape="poly" id="edge5_Node000005_Node000002" title=" " alt="" coords="478,140,764,121,764,126,478,146"/>
+<area shape="rect" id="Node000006" href="$dd/dd3/classcontainer__module_1_1variant__value__v2.html#a620599b10dce348f3fb845d473eb13c4" title="Construct from value_types and raw data (legacy compatibility)" alt="" coords="5,139,213,179"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="248,161,214,161,214,156,248,156"/>
+</map>

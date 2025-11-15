@@ -1,0 +1,29 @@
+<map id="container_module::variant_value_v2::type" name="container_module::variant_value_v2::type">
+<area shape="rect" id="Node000001" title="Get the value_types enum (NOT variant::index()!)" alt="" coords="1032,316,1225,356"/>
+<area shape="rect" id="Node000002" href="$dd/dd3/classcontainer__module_1_1variant__value__v2.html#a631232b8539656035a90e5a0422ed75f" title="Deserialize from binary format (legacy compatible)" alt="" coords="777,189,971,229"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1074,312,914,232,917,227,1076,307"/>
+<area shape="rect" id="Node000005" href="$dd/dd3/classcontainer__module_1_1variant__value__v2.html#ab177da145fdeb6f4470bad3aee22162a" title="Deserialize data portion based on type." alt="" coords="261,189,464,229"/>
+<area shape="poly" id="edge8_Node000001_Node000005" title=" " alt="" coords="1018,352,910,359,782,358,713,353,645,345,577,332,511,313,473,297,438,275,383,232,387,227,441,271,476,292,513,308,578,326,646,339,714,348,782,353,910,353,1018,347"/>
+<area shape="rect" id="Node000006" href="$dd/dd3/classcontainer__module_1_1variant__value__v2.html#a620599b10dce348f3fb845d473eb13c4" title="Construct from value_types and raw data (legacy compatibility)" alt="" coords="5,159,213,199"/>
+<area shape="poly" id="edge16_Node000001_Node000006" title=" " alt="" coords="1108,305,1086,273,1058,238,1023,205,983,180,920,162,835,151,734,146,623,146,400,156,214,171,213,166,399,151,623,141,734,140,835,145,921,156,985,175,1027,201,1062,234,1091,270,1112,303"/>
+<area shape="rect" id="Node000007" href="$d1/d1a/namespacecontainer__module.html#a6aceb0a04b3f64447e5cc1b648f6b5a4" title="Check if two values have the same type." alt="" coords="765,374,983,399"/>
+<area shape="poly" id="edge9_Node000001_Node000007" title=" " alt="" coords="1019,361,939,377,938,371,1018,355"/>
+<area shape="rect" id="Node000008" href="$dd/dd3/classcontainer__module_1_1variant__value__v2.html#a9c363992dfbe99e3e1a19ae62e7fb98d" title="Serialize to binary format (legacy compatible)" alt="" coords="777,37,971,77"/>
+<area shape="poly" id="edge10_Node000001_Node000008" title=" " alt="" coords="1108,305,1057,221,1022,174,982,130,948,102,913,80,916,75,951,98,986,126,1026,170,1061,218,1113,303"/>
+<area shape="rect" id="Node000010" href="$dd/dd3/classcontainer__module_1_1variant__value__v2.html#aa94a2decfb5f103ac1f2d3f27b4393fa" title="Convert to JSON representation." alt="" coords="777,424,971,464"/>
+<area shape="poly" id="edge14_Node000001_Node000010" title=" " alt="" coords="1084,365,1037,391,985,414,952,426,950,421,983,410,1034,386,1081,360"/>
+<area shape="rect" id="Node000011" href="$d1/d1a/namespacecontainer__module.html#a3a2c0ad258d782151a5769a69c67cc5b" title="Get human&#45;readable type name." alt="" coords="764,489,984,514"/>
+<area shape="poly" id="edge15_Node000001_Node000011" title=" " alt="" coords="1106,369,1055,425,1022,454,985,478,954,491,952,486,983,474,1019,450,1051,421,1102,365"/>
+<area shape="rect" id="Node000003" href="$d1/d1a/namespacecontainer__module.html#a367a883eb38c222ee73536e395f115a1" title="Create a copy of a variant_value_v2 with a new name." alt="" coords="523,69,705,109"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="816,186,657,112,660,107,818,181"/>
+<area shape="rect" id="Node000004" href="$db/de5/classcontainer__module_1_1thread__safe__container.html#a1b149737de6bbc72f55a764c1b2f8205" title="Deserialize from binary." alt="" coords="512,259,716,299"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="786,235,690,261,689,256,784,230"/>
+<area shape="poly" id="edge7_Node000002_Node000005" title=" " alt="" coords="764,220,464,219,464,214,764,214"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="527,258,435,232,436,227,528,252"/>
+<area shape="poly" id="edge5_Node000005_Node000002" title=" " alt="" coords="478,199,777,199,777,205,478,204"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="248,198,213,194,214,189,248,193"/>
+<area shape="poly" id="edge11_Node000008_Node000003" title=" " alt="" coords="764,74,706,81,705,75,764,68"/>
+<area shape="rect" id="Node000009" href="$dd/dd3/classcontainer__module_1_1variant__value__v2.html#ac7e934be08be1d54d8ae7783d3f92547" title="Serialize data portion based on type." alt="" coords="517,5,711,45"/>
+<area shape="poly" id="edge12_Node000008_Node000009" title=" " alt="" coords="763,55,706,48,707,43,764,50"/>
+<area shape="poly" id="edge13_Node000009_Node000008" title=" " alt="" coords="725,27,782,35,781,40,724,33"/>
+</map>

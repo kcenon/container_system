@@ -1,0 +1,24 @@
+<map id="AdvancedContainerExample::demonstrate_multithreaded_operations" name="AdvancedContainerExample::demonstrate_multithreaded_operations">
+<area shape="rect" id="Node000001" title="Demonstrates multi&#45;threaded producer&#45;consumer pattern." alt="" coords="5,189,217,244"/>
+<area shape="rect" id="Node000002" href="$d0/dcd/classcontainer__module_1_1integration_1_1messaging__container__builder.html#a70981bba692bd185814812957472c6ec" title=" " alt="" coords="285,5,507,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="133,187,189,128,225,97,264,70,277,63,280,68,267,75,228,101,192,132,137,191"/>
+<area shape="rect" id="Node000007" href="$d0/dcd/classcontainer__module_1_1integration_1_1messaging__container__builder.html#ae2f2b773fb7248be85f92bd6265efab4" title=" " alt="" coords="265,85,527,125"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="158,187,208,160,264,136,292,126,294,131,266,140,211,165,160,192"/>
+<area shape="rect" id="Node000008" href="$d0/dcd/classcontainer__module_1_1integration_1_1messaging__container__builder.html#a56f2ae6cae82bd445e889788db53e2da" title=" " alt="" coords="285,149,507,204"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="217,199,271,191,272,197,218,204"/>
+<area shape="rect" id="Node000009" href="$d0/dcd/classcontainer__module_1_1integration_1_1messaging__container__builder.html#a271381f5ca5e3e609eaf574e5a3bf684" title=" " alt="" coords="285,228,507,283"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="218,228,272,236,271,241,217,234"/>
+<area shape="rect" id="Node000010" href="$d0/dcd/classcontainer__module_1_1integration_1_1messaging__container__builder.html#a2c82ff350d7cb1efb87bdc6128a95a5c" title=" " alt="" coords="285,307,507,361"/>
+<area shape="poly" id="edge10_Node000001_Node000010" title=" " alt="" coords="162,242,212,268,266,293,284,300,282,305,264,298,209,273,159,247"/>
+<area shape="rect" id="Node000011" href="$d0/dcd/classcontainer__module_1_1integration_1_1messaging__container__builder.html#a71aa40744bafcb49d34270698dbc4341" title=" " alt="" coords="285,385,507,440"/>
+<area shape="poly" id="edge11_Node000001_Node000011" title=" " alt="" coords="134,242,189,308,226,342,267,372,276,377,274,382,264,376,223,346,185,311,130,246"/>
+<area shape="rect" id="Node000003" href="$d5/df9/classcontainer__module_1_1value.html#aef0c634b18712374d422801f269ff0e9" title="Serialize to binary format (legacy compatible)" alt="" coords="575,13,757,53"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="507,30,561,30,561,35,507,35"/>
+<area shape="rect" id="Node000004" href="$d5/df9/classcontainer__module_1_1value.html#aa105a05c2bb9ce88d5bd54610aae7103" title="Serialize data portion based on type." alt="" coords="805,13,988,53"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="757,39,792,39,792,44,757,44"/>
+<area shape="rect" id="Node000006" href="$d5/df9/classcontainer__module_1_1value.html#a19a827e03777e6214b597f5c9e5e8b35" title="Get the value_types enum (NOT variant::index()!)" alt="" coords="805,77,988,117"/>
+<area shape="poly" id="edge6_Node000003_Node000006" title=" " alt="" coords="740,50,812,70,810,76,738,55"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="805,27,771,26,771,21,805,21"/>
+<area shape="rect" id="Node000005" href="$d5/df9/classcontainer__module_1_1value.html#a8fd9176e2a29a65418b51dee4cb6a30d" title="Apply visitor to contained value (const)" alt="" coords="1036,13,1219,53"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="988,30,1022,30,1022,35,988,35"/>
+</map>

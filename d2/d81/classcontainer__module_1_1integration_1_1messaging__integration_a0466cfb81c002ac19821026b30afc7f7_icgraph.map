@@ -1,0 +1,22 @@
+<map id="container_module::integration::messaging_integration::serialize_for_messaging" name="container_module::integration::messaging_integration::serialize_for_messaging">
+<area shape="rect" id="Node000001" title="High&#45;performance serialization for messaging." alt="" coords="617,126,836,181"/>
+<area shape="rect" id="Node000002" href="$d5/d4e/messaging__integration__example_8cpp.html#ac5dd2ecaf0cf22081be447c9ddcf17a7" title=" " alt="" coords="379,5,553,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="674,120,624,89,568,60,539,48,540,43,570,55,626,84,677,116"/>
+<area shape="rect" id="Node000004" href="$d5/d4e/messaging__integration__example_8cpp.html#aac1c5c6a8769e8a88a9a7b07d97752e2" title=" " alt="" coords="383,69,549,109"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="603,126,548,112,549,107,605,121"/>
+<area shape="rect" id="Node000005" href="$d6/d71/classAdvancedContainerExample.html#a809c347379d7d3b0c6870db6266a09f8" title="Demonstrates enhanced messaging features." alt="" coords="363,247,569,302"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="667,190,570,238,544,250,542,245,568,234,664,185"/>
+<area shape="rect" id="Node000008" href="$d5/d4e/messaging__integration__example_8cpp.html#a9fa03b4d998ed7c123c77fb416cc4bc7" title=" " alt="" coords="369,133,563,173"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="604,156,563,156,563,151,604,151"/>
+<area shape="rect" id="Node000009" href="$d5/d4e/messaging__integration__example_8cpp.html#aa77ccf0ce442d5ddeb72cf4f92601fb5" title=" " alt="" coords="372,198,560,223"/>
+<area shape="poly" id="edge10_Node000001_Node000009" title=" " alt="" coords="605,183,525,201,524,195,603,178"/>
+<area shape="rect" id="Node000003" href="$d5/d4e/messaging__integration__example_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="184,109,239,134"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="385,52,364,60,240,112,238,107,362,55,383,47"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="369,104,239,121,239,115,369,99"/>
+<area shape="rect" id="Node000006" href="$d6/d71/classAdvancedContainerExample.html#a168b0d067662dce9193f2fcef87dd352" title="Runs all demonstrations." alt="" coords="108,255,315,295"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="349,277,315,277,315,272,349,272"/>
+<area shape="rect" id="Node000007" href="$d8/d75/advanced__container__example_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,262,60,287"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="94,277,60,277,60,272,94,272"/>
+<area shape="poly" id="edge9_Node000008_Node000003" title=" " alt="" coords="354,142,239,127,240,122,355,137"/>
+<area shape="poly" id="edge11_Node000009_Node000003" title=" " alt="" coords="393,197,362,188,294,162,238,136,240,132,296,157,364,183,394,192"/>
+</map>

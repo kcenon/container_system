@@ -1,0 +1,7 @@
+<map id="container_module::optimized_value::is_stack_allocated" name="container_module::optimized_value::is_stack_allocated">
+<area shape="rect" id="Node000001" title="Check if value is stored on stack (primitive type)" alt="" coords="236,37,448,77"/>
+<area shape="rect" id="Node000002" href="$d9/dad/classcontainer__module_1_1value__container.html#a50b7b5d686603a95da567ce2e85c62b1" title="Add a value to the container (template version for type deduction)" alt="" coords="5,5,188,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="222,44,188,40,189,35,223,39"/>
+<area shape="rect" id="Node000003" href="$d9/dad/classcontainer__module_1_1value__container.html#af774feb54893a488633e784e66104ffc" title="Add a value to the container." alt="" coords="5,69,188,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="223,76,189,80,188,75,222,70"/>
+</map>
