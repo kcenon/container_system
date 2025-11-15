@@ -1,5 +1,8 @@
 # Baseline Performance Metrics
 
+> **📖 Documentation**: For user-friendly performance documentation and detailed analysis,
+> see [`docs/performance/BASELINE.md`](../docs/performance/BASELINE.md)
+
 **Document Version**: 1.0
 **Created**: 2025-10-07
 **System**: container_system

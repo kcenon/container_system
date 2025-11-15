@@ -2,6 +2,9 @@
 
 **Language**: **English** | [한국어](BASELINE_KO.md)
 
+> **📊 Developer Note**: For raw benchmark data and CI baseline thresholds used in automated testing,
+> see [`benchmarks/BASELINE.md`](../../benchmarks/BASELINE.md)
+
 **Version**: 1.0.0
 **Date**: 2025-10-09
 **Phase**: Phase 0 - Foundation
