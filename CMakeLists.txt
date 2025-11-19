@@ -467,6 +467,8 @@ endif()
 # Installation
 ##################################################
 
+include(GNUInstallDirs)
+
 # Install adapter headers if BUILD_WITH_COMMON_SYSTEM is enabled
 if(BUILD_WITH_COMMON_SYSTEM)
     install(FILES
