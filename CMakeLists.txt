@@ -224,6 +224,7 @@ set_target_properties(container_system PROPERTIES
 
 # Public include directories (for consumers of this library)
 target_include_directories(container_system PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
     $<INSTALL_INTERFACE:include>
 )
@@ -373,14 +374,14 @@ endif()
 # Enable testing features if building tests
 if(BUILD_TESTS AND NOT BUILD_CONTAINERSYSTEM_AS_SUBMODULE)
     enable_testing()
-#     add_subdirectory(tests)
-#     message(STATUS "Container: Unit tests enabled")
-# endif()
-# 
-# # Enable integration tests if requested
-# if(CONTAINER_BUILD_INTEGRATION_TESTS AND NOT BUILD_CONTAINERSYSTEM_AS_SUBMODULE)
-#     enable_testing()
-#     add_subdirectory(integration_tests)
+    add_subdirectory(tests)
+    message(STATUS "Container: Unit tests enabled")
+endif()
+
+# Enable integration tests if requested
+if(CONTAINER_BUILD_INTEGRATION_TESTS AND NOT BUILD_CONTAINERSYSTEM_AS_SUBMODULE)
+    enable_testing()
+    add_subdirectory(integration_tests)
     message(STATUS "Container: Integration tests enabled")
 endif()
 
@@ -448,7 +449,7 @@ endif()
 
 if(NOT BUILD_CONTAINERSYSTEM_AS_SUBMODULE)
     if(BUILD_CONTAINER_SAMPLES)
-#         add_subdirectory(samples)
+        add_subdirectory(samples)
         message(STATUS "Container samples will be built")
     endif()
 
@@ -456,7 +457,7 @@ if(NOT BUILD_CONTAINERSYSTEM_AS_SUBMODULE)
     option(BUILD_CONTAINER_EXAMPLES "Build container system examples" ON)
 
     if(BUILD_CONTAINER_EXAMPLES)
-#         add_subdirectory(examples)
+        add_subdirectory(examples)
         message(STATUS "Container examples will be built")
     endif()
 else()
@@ -482,11 +483,11 @@ endif()
 # Benchmarks
 ##################################################
 
-# Benchmarks temporarily disabled - require migration to variant-based API
-# if(CONTAINER_BUILD_BENCHMARKS AND NOT BUILD_CONTAINERSYSTEM_AS_SUBMODULE)
-#     add_subdirectory(benchmarks)
-#     message(STATUS "Container benchmarks will be built")
-# endif()
+# Benchmarks
+if(CONTAINER_BUILD_BENCHMARKS AND NOT BUILD_CONTAINERSYSTEM_AS_SUBMODULE)
+    add_subdirectory(benchmarks)
+    message(STATUS "Container benchmarks will be built")
+endif()
 
 ##################################################
 # Summary
