@@ -37,6 +37,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <mutex>
 #include <atomic>
 #include <cstddef>
+#include <tuple>
+#include <kcenon/common/utils/object_pool.h>
 
 namespace container_module
 {
@@ -74,34 +76,23 @@ namespace container_module
 		template<typename... Args>
 		std::shared_ptr<T> allocate(Args&&... args)
 		{
-			T* ptr = nullptr;
+			bool reused = false;
+			auto unique = pool_.acquire(&reused, std::forward<Args>(args)...);
 
-			// Try to get from pool (lock-free fast path)
-			if (available_count_.load(std::memory_order_acquire) > 0)
+			if (reused)
 			{
-				std::lock_guard<std::mutex> lock(mutex_);
-				if (!free_list_.empty())
-				{
-					ptr = free_list_.back();
-					free_list_.pop_back();
-					available_count_.fetch_sub(1, std::memory_order_release);
-					pool_hits_.fetch_add(1, std::memory_order_relaxed);
-
-					// Placement new with forwarded arguments
-					new (ptr) T(std::forward<Args>(args)...);
-
-					return std::shared_ptr<T>(ptr, [this](T* p) {
-						this->deallocate(p);
-					});
-				}
+				pool_hits_.fetch_add(1, std::memory_order_relaxed);
+				available_count_.fetch_sub(1, std::memory_order_release);
+			}
+			else
+			{
+				pool_misses_.fetch_add(1, std::memory_order_relaxed);
 			}
 
-			// Pool miss - allocate new memory
-			pool_misses_.fetch_add(1, std::memory_order_relaxed);
-			ptr = new T(std::forward<Args>(args)...);
-
+			T* ptr = unique.release();
 			return std::shared_ptr<T>(ptr, [this](T* p) {
-				this->deallocate(p);
+				this->pool_.release(p);
+				this->available_count_.fetch_add(1, std::memory_order_release);
 			});
 		}
 
@@ -131,18 +122,21 @@ namespace container_module
 			return total > 0 ? static_cast<double>(hits) / total : 0.0;
 		}
 
+        /**
+         * @brief Preallocate storage for @p count objects.
+         */
+        void reserve(std::size_t count)
+        {
+            pool_.reserve(count);
+            available_count_.fetch_add(count, std::memory_order_release);
+        }
+
 		/**
 		 * @brief Clear the pool and free all memory
 		 */
 		void clear()
 		{
-			std::lock_guard<std::mutex> lock(mutex_);
-
-			for (auto ptr : free_list_)
-			{
-				delete ptr;
-			}
-			free_list_.clear();
+			pool_.clear();
 			available_count_.store(0, std::memory_order_release);
 		}
 
@@ -163,29 +157,7 @@ namespace container_module
 		/**
 		 * @brief Return object to pool
 		 */
-		void deallocate(T* ptr)
-		{
-			if (!ptr) return;
-
-			// Explicitly call destructor
-			ptr->~T();
-
-			// Try to return to pool if not full
-			std::lock_guard<std::mutex> lock(mutex_);
-			if (free_list_.size() < PoolSize)
-			{
-				free_list_.push_back(ptr);
-				available_count_.fetch_add(1, std::memory_order_release);
-			}
-			else
-			{
-				// Pool full - actually delete
-				delete ptr;
-			}
-		}
-
-		std::vector<T*> free_list_;                ///< Available objects
-		std::mutex mutex_;                         ///< Protects free list
+		kcenon::common::utils::ObjectPool<T> pool_;
 		std::atomic<size_t> available_count_{0};   ///< Lock-free count
 		std::atomic<size_t> pool_hits_{0};         ///< Successful allocations from pool
 		std::atomic<size_t> pool_misses_{0};       ///< Allocations requiring new memory

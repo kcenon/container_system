@@ -42,6 +42,14 @@ jobs:
       with:
         fetch-depth: 0  # Full history for comparison
 
+    - name: Checkout common_system (optional dependency)
+      uses: actions/checkout@v4
+      continue-on-error: true
+      with:
+        repository: kcenon/common_system
+        path: common_system
+        token: ${{ secrets.GITHUB_TOKEN }}
+
     - name: Install dependencies (Ubuntu)
       if: runner.os == 'Linux'
       run: |

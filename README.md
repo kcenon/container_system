@@ -29,8 +29,8 @@ Making high-performance data serialization **accessible**, **type-safe**, and **
 ### Basic Usage Example
 
 ```cpp
-#include <container/core/container.h>
-#include <container/integration/messaging_builder.h>
+#include <kcenon/container/core/container.h>
+#include <kcenon/container/integration/messaging_builder.h>
 
 using namespace container_module;
 
@@ -364,7 +364,7 @@ for (int i = 0; i < 8; ++i) {
 **Use**: `thread_safe_container` for synchronized writes
 
 ```cpp
-#include <container/advanced/thread_safe_container.h>
+#include <kcenon/container/advanced/thread_safe_container.h>
 
 auto safe_container = std::make_shared<thread_safe_container>(container);
 
@@ -388,7 +388,7 @@ for (int i = 0; i < 4; ++i) {
 - **External API**: Result&lt;T&gt; for type safety
 
 ```cpp
-#include <container/adapters/common_result_adapter.h>
+#include <kcenon/container/adapters/common_result_adapter.h>
 using namespace container::adapters;
 
 // Serialization with Result<T>

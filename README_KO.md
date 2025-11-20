@@ -29,8 +29,8 @@ Container System은 메시징 시스템과 범용 애플리케이션을 위한 �
 ### 기본 사용 예제
 
 ```cpp
-#include <container/core/container.h>
-#include <container/integration/messaging_builder.h>
+#include <kcenon/container/core/container.h>
+#include <kcenon/container/integration/messaging_builder.h>
 
 using namespace container_module;
 
@@ -364,7 +364,7 @@ for (int i = 0; i < 8; ++i) {
 **사용**: 동기화된 쓰기를 위한 `thread_safe_container`
 
 ```cpp
-#include <container/advanced/thread_safe_container.h>
+#include <kcenon/container/advanced/thread_safe_container.h>
 
 auto safe_container = std::make_shared<thread_safe_container>(container);
 
@@ -388,7 +388,7 @@ for (int i = 0; i < 4; ++i) {
 - **외부 API**: 타입 안전성을 위한 Result&lt;T&gt;
 
 ```cpp
-#include <container/adapters/common_result_adapter.h>
+#include <kcenon/container/adapters/common_result_adapter.h>
 using namespace container::adapters;
 
 // Result<T>를 사용한 직렬화
