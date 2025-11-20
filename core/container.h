@@ -34,6 +34,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "container/core/optimized_value.h"
 #include "container/core/value_pool.h"
+#include "container/core/typed_container.h"
+#include "container/core/container_memory_pool.h"
 
 // Optional common system integration
 #ifdef CONTAINER_USE_COMMON_SYSTEM
