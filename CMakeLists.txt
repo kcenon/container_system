@@ -29,7 +29,11 @@ option(BUILD_TESTS "Build unit tests" ON)
 option(BUILD_CONTAINER_SAMPLES "Build container system samples" ON)
 option(USE_THREAD_SAFE_OPERATIONS "Enable thread-safe operations" ON)
 option(USE_LOCKFREE_BY_DEFAULT "Use lock-free implementations by default" OFF)
-option(BUILD_WITH_COMMON_SYSTEM "Enable common_system integration" OFF)
+option(BUILD_WITH_COMMON_SYSTEM "Enable common_system integration" ON)
+
+if(NOT BUILD_WITH_COMMON_SYSTEM)
+    message(FATAL_ERROR "common_system integration is now mandatory for container_system.")
+endif()
 option(CONTAINER_BUILD_BENCHMARKS "Build container system benchmarks" OFF)
 option(CONTAINER_BUILD_INTEGRATION_TESTS "Build container system integration tests" ON)
 set(COMMON_SYSTEM_ROOT "" CACHE PATH "Path to the common_system repository root")
@@ -203,7 +207,7 @@ if(BUILD_WITH_COMMON_SYSTEM)
     target_include_directories(container_system PUBLIC
         $<BUILD_INTERFACE:${COMMON_SYSTEM_INCLUDE_DIR}>
     )
-    target_compile_definitions(container_system PUBLIC BUILD_WITH_COMMON_SYSTEM)
+    target_compile_definitions(container_system PUBLIC BUILD_WITH_COMMON_SYSTEM CONTAINER_USE_COMMON_SYSTEM)
 endif()
 
 # Create aliases for consistent naming and messaging system compatibility
@@ -477,6 +481,12 @@ if(BUILD_WITH_COMMON_SYSTEM)
         COMPONENT Development
     )
 endif()
+
+install(DIRECTORY
+    ${CMAKE_CURRENT_SOURCE_DIR}/kcenon
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+    COMPONENT Development
+)
 
 ##################################################
 # Benchmarks
