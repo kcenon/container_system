@@ -438,7 +438,7 @@ using namespace container::adapters;
 // Serialization with Result<T>
 auto serialize_result = serialization_result_adapter::serialize(*container);
 if (!serialize_result) {
-    std::cerr << "Error: " << serialize_result.get_error().message << "\n";
+    std::cerr << "Error: " << serialize_result.error().message << "\n";
     return -1;
 }
 auto data = serialize_result.value();
@@ -446,13 +446,13 @@ auto data = serialize_result.value();
 // Deserialization with Result<T>
 auto deserialize_result = deserialization_result_adapter::deserialize<value_container>(data);
 if (!deserialize_result) {
-    std::cerr << "Error: " << deserialize_result.get_error().message << "\n";
+    std::cerr << "Error: " << deserialize_result.error().message << "\n";
 }
 
 // Container operations with Result<T>
 auto get_result = container_result_adapter::get_value<double>(container, "price");
 if (!get_result) {
-    std::cerr << "Error: " << get_result.get_error().message << "\n";
+    std::cerr << "Error: " << get_result.error().message << "\n";
 }
 ```
 
