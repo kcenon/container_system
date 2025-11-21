@@ -36,6 +36,7 @@ if(NOT BUILD_WITH_COMMON_SYSTEM)
 endif()
 option(CONTAINER_BUILD_BENCHMARKS "Build container system benchmarks" OFF)
 option(CONTAINER_BUILD_INTEGRATION_TESTS "Build container system integration tests" ON)
+option(BUILD_FUZZ_TESTS "Build fuzz tests" OFF)
 set(COMMON_SYSTEM_ROOT "" CACHE PATH "Path to the common_system repository root")
 
 # Respect global BUILD_INTEGRATION_TESTS flag if set
@@ -386,6 +387,25 @@ if(BUILD_TESTS AND NOT BUILD_CONTAINERSYSTEM_AS_SUBMODULE)
 #     enable_testing()
 #     add_subdirectory(integration_tests)
     message(STATUS "Container: Integration tests enabled")
+endif()
+
+if(BUILD_FUZZ_TESTS)
+    message(STATUS "Container: Fuzz tests enabled")
+    
+    # Check if we are compiling with a fuzzer-capable compiler
+    if(NOT (CMAKE_CXX_COMPILER_ID MATCHES "Clang"))
+        message(WARNING "Fuzzing typically requires Clang. Proceeding, but link might fail if -fsanitize=fuzzer is not supported.")
+    endif()
+
+    add_executable(container_fuzzer tests/fuzz/container_fuzzer.cpp)
+    
+    # Link against the container library
+    target_link_libraries(container_fuzzer PRIVATE container_system)
+    
+    # Add fuzzer flags
+    # Note: We use -g -O1 for better stack traces and moderate performance during fuzzing
+    target_compile_options(container_fuzzer PRIVATE -g -O1 -fsanitize=fuzzer,address,undefined)
+    target_link_options(container_fuzzer PRIVATE -fsanitize=fuzzer,address,undefined)
 endif()
 
 ##################################################
