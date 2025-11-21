@@ -198,6 +198,9 @@ scripts\build.bat            # Windows (CMD)
 - 📘 [API Reference](docs/API_REFERENCE.md) - Complete API documentation
 - 📗 [User Guide](docs/USER_GUIDE.md) - Usage patterns and value types
 - 🚀 [Performance](docs/PERFORMANCE.md) - SIMD optimization guide
+
+### Troubleshooting
+- 🔁 [Troubleshooting Guide](docs/guides/TROUBLESHOOTING.md) consolidates the most common `Result<T>` failures (serialization, SIMD detection, integrations) and provides a quick checklist for interpreting `err.code` / `err.message`.
 - 🔗 [Integration](docs/INTEGRATION.md) - Ecosystem integration
 
 ### Development
@@ -394,7 +397,7 @@ using namespace container::adapters;
 // Serialization with Result<T>
 auto result = serialization_result_adapter::serialize(*container);
 if (!result) {
-    std::cerr << "Error: " << result.get_error().message << "\n";
+    std::cerr << "Error: " << result.error().message << "\n";
     return -1;
 }
 auto data = result.value();
@@ -402,7 +405,7 @@ auto data = result.value();
 // Container operations with Result<T>
 auto get_result = container_result_adapter::get_value<double>(container, "price");
 if (!get_result) {
-    std::cerr << "Error: " << get_result.get_error().message << "\n";
+    std::cerr << "Error: " << get_result.error().message << "\n";
 }
 ```
 

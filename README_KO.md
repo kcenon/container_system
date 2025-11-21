@@ -200,6 +200,9 @@ scripts\build.bat            # Windows (CMD)
 - 🚀 [성능](docs/PERFORMANCE.md) - SIMD 최적화 가이드
 - 🔗 [통합](docs/INTEGRATION.md) - 생태계 통합
 
+### 문제 해결
+- 🔁 [문제 해결 가이드](docs/guides/TROUBLESHOOTING.md)는 직렬화 실패, SIMD 비활성화, 통합 오류 시 `result.error()`를 어떻게 해석할지 단계별로 안내합니다.
+
 ### 개발
 - 🤝 [기여하기](docs/CONTRIBUTING.md) - 기여 가이드라인
 - 🔄 [마이그레이션](docs/MIGRATION.md) - messaging_system에서 마이그레이션
@@ -394,7 +397,7 @@ using namespace container::adapters;
 // Result<T>를 사용한 직렬화
 auto result = serialization_result_adapter::serialize(*container);
 if (!result) {
-    std::cerr << "오류: " << result.get_error().message << "\n";
+    std::cerr << "오류: " << result.error().message << "\n";
     return -1;
 }
 auto data = result.value();
@@ -402,7 +405,7 @@ auto data = result.value();
 // Result<T>를 사용한 컨테이너 연산
 auto get_result = container_result_adapter::get_value<double>(container, "price");
 if (!get_result) {
-    std::cerr << "오류: " << get_result.get_error().message << "\n";
+    std::cerr << "오류: " << get_result.error().message << "\n";
 }
 ```
 
