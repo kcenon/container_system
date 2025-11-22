@@ -54,8 +54,8 @@ enum class value_types {
   ullong_value,
   float_value,
   double_value,
-  bytes_value,  // 12 - must match value_variant std::vector<uint8_t> position
-  string_value, // 13 - must match value_variant std::string position
+  string_value, // 12 - used in serialization format
+  bytes_value,  // 13 - used in serialization format
   container_value,
   array_value
 };
@@ -74,8 +74,8 @@ constexpr std::array<std::pair<std::string_view, value_types>, 16> type_map{
      {"9", value_types::ullong_value},
      {"10", value_types::float_value},
      {"11", value_types::double_value},
-     {"12", value_types::bytes_value},  // Swapped to match variant
-     {"13", value_types::string_value}, // Swapped to match variant
+     {"12", value_types::string_value},
+     {"13", value_types::bytes_value},
      {"14", value_types::container_value},
      {"15", value_types::array_value}}};
 

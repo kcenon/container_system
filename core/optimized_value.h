@@ -69,8 +69,8 @@ using value_variant =
                  unsigned long long,              // ullong_value (8 bytes)
                  float,                           // float_value (4 bytes)
                  double,                          // double_value (8 bytes)
-                 std::vector<uint8_t>,            // bytes_value (dynamic)
                  std::string,                     // string_value (dynamic)
+                 std::vector<uint8_t>,            // bytes_value (dynamic)
                  std::shared_ptr<value_container> // container_value (pointer
                                                   // only)
                  >;
