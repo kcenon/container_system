@@ -32,287 +32,280 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #pragma once
 
-#include <unordered_map>
+#include "container/internal/value.h"
+#include <algorithm>
+#include <atomic>
 #include <mutex>
 #include <shared_mutex>
-#include <atomic>
-#include <algorithm>
-#include "container/internal/value.h"
+#include <unordered_map>
 
-namespace container_module
-{
-    /**
-     * @brief Thread-safe container with lock optimization
-     * 
-     * This container provides thread-safe access to variant values with optimized
-     * locking strategies for different access patterns.
-     */
-    class thread_safe_container : public std::enable_shared_from_this<thread_safe_container>
-    {
-    public:
-        using value_map = std::unordered_map<std::string, value>;
-        using const_iterator = value_map::const_iterator;
-        using iterator = value_map::iterator;
+namespace container_module {
+/**
+ * @brief Thread-safe container with lock optimization
+ *
+ * This container provides thread-safe access to variant values with optimized
+ * locking strategies for different access patterns.
+ */
+class thread_safe_container
+    : public std::enable_shared_from_this<thread_safe_container> {
+public:
+  using value_map = std::unordered_map<std::string, value>;
+  using const_iterator = value_map::const_iterator;
+  using iterator = value_map::iterator;
 
-        /**
-         * @brief Default constructor
-         */
-        thread_safe_container() = default;
+  /**
+   * @brief Default constructor
+   */
+  thread_safe_container() = default;
 
-        /**
-         * @brief Construct with initial values
-         */
-        thread_safe_container(std::initializer_list<std::pair<std::string, value>> init);
+  /**
+   * @brief Construct with initial values
+   */
+  thread_safe_container(
+      std::initializer_list<std::pair<std::string, value>> init);
 
-        /**
-         * @brief Copy constructor (thread-safe)
-         */
-        thread_safe_container(const thread_safe_container& other);
+  /**
+   * @brief Copy constructor (thread-safe)
+   */
+  thread_safe_container(const thread_safe_container &other);
 
-        /**
-         * @brief Move constructor
-         */
-        thread_safe_container(thread_safe_container&& other) noexcept;
+  /**
+   * @brief Move constructor
+   */
+  thread_safe_container(thread_safe_container &&other) noexcept;
 
-        /**
-         * @brief Copy assignment (thread-safe)
-         */
-        thread_safe_container& operator=(const thread_safe_container& other);
+  /**
+   * @brief Copy assignment (thread-safe)
+   */
+  thread_safe_container &operator=(const thread_safe_container &other);
 
-        /**
-         * @brief Move assignment
-         */
-        thread_safe_container& operator=(thread_safe_container&& other) noexcept;
+  /**
+   * @brief Move assignment
+   */
+  thread_safe_container &operator=(thread_safe_container &&other) noexcept;
 
-        /**
-         * @brief Get value by key (thread-safe read)
-         * @param key The key to look up
-         * @return Optional containing the value if found
-         */
-        std::optional<value> get(std::string_view key) const;
+  /**
+   * @brief Get value by key (thread-safe read)
+   * @param key The key to look up
+   * @return Optional containing the value if found
+   */
+  std::optional<value> get(std::string_view key) const;
 
-        /**
-         * @brief Get typed value by key
-         * @tparam T The expected type
-         * @param key The key to look up
-         * @return Optional containing the value if found and type matches
-         */
-        template<typename T>
-        std::optional<T> get_typed(std::string_view key) const {
-            std::shared_lock lock(mutex_);
-            auto it = values_.find(std::string(key));
-            if (it != values_.end()) {
-                return it->second.get<T>();
-            }
-            return std::nullopt;
-        }
+  /**
+   * @brief Get typed value by key
+   * @tparam T The expected type
+   * @param key The key to look up
+   * @return Optional containing the value if found and type matches
+   */
+  template <typename T> std::optional<T> get_typed(std::string_view key) const {
+    std::shared_lock lock(mutex_);
+    auto it = values_.find(std::string(key));
+    if (it != values_.end()) {
+      return it->second.get<T>();
+    }
+    return std::nullopt;
+  }
 
-        /**
-         * @brief Set value for key (thread-safe write)
-         * @param key The key to set
-         * @param value The value to store
-         */
-        void set(std::string_view key, value value);
+  /**
+   * @brief Set value for key (thread-safe write)
+   * @param key The key to set
+   * @param value The value to store
+   */
+  void set(std::string_view key, value value);
 
-        /**
-         * @brief Set typed value for key
-         * @tparam T The value type
-         * @param key The key to set
-         * @param value The value to store
-         */
-        template<typename T>
-        void set_typed(std::string_view key, T&& value) {
-            static_assert(is_variant_type_v2<std::decay_t<T>>::value,
-                         "Type must be a valid variant type");
-            set(key, value(key, std::forward<T>(value)));
-        }
+  /**
+   * @brief Set typed value for key
+   * @tparam T The value type
+   * @param key The key to set
+   * @param value The value to store
+   */
+  template <typename T> void set_typed(std::string_view key, T &&val) {
+    static_assert(is_variant_type_v2<std::decay_t<T>>::value,
+                  "Type must be a valid variant type");
+    set(key, value(key, std::forward<T>(val)));
+  }
 
-        /**
-         * @brief Remove value by key
-         * @param key The key to remove
-         * @return true if removed, false if not found
-         */
-        bool remove(std::string_view key);
+  /**
+   * @brief Remove value by key
+   * @param key The key to remove
+   * @return true if removed, false if not found
+   */
+  bool remove(std::string_view key);
 
-        /**
-         * @brief Clear all values
-         */
-        void clear();
+  /**
+   * @brief Clear all values
+   */
+  void clear();
 
-        /**
-         * @brief Get the number of values
-         */
-        size_t size() const;
+  /**
+   * @brief Get the number of values
+   */
+  size_t size() const;
 
-        /**
-         * @brief Check if container is empty
-         */
-        bool empty() const;
+  /**
+   * @brief Check if container is empty
+   */
+  bool empty() const;
 
-        /**
-         * @brief Check if key exists
-         */
-        bool contains(std::string_view key) const;
+  /**
+   * @brief Check if key exists
+   */
+  bool contains(std::string_view key) const;
 
-        /**
-         * @brief Get all keys
-         */
-        std::vector<std::string> keys() const;
+  /**
+   * @brief Get all keys
+   */
+  std::vector<std::string> keys() const;
 
-        /**
-         * @brief Apply a function to all values (read-only)
-         * @tparam Func Function type
-         * @param func Function to apply to each key-value pair
-         */
-        template<typename Func>
-        void for_each(Func&& func) const {
-            std::shared_lock lock(mutex_);
-            for (const auto& [key, value] : values_) {
-                func(key, value);
-            }
-        }
+  /**
+   * @brief Apply a function to all values (read-only)
+   * @tparam Func Function type
+   * @param func Function to apply to each key-value pair
+   */
+  template <typename Func> void for_each(Func &&func) const {
+    std::shared_lock lock(mutex_);
+    for (const auto &[key, value] : values_) {
+      func(key, value);
+    }
+  }
 
-        /**
-         * @brief Apply a function to all values (mutable)
-         * @tparam Func Function type
-         * @param func Function to apply to each key-value pair
-         */
-        template<typename Func>
-        void for_each_mut(Func&& func) {
-            std::unique_lock lock(mutex_);
-            for (auto& [key, value] : values_) {
-                func(key, value);
-            }
-        }
+  /**
+   * @brief Apply a function to all values (mutable)
+   * @tparam Func Function type
+   * @param func Function to apply to each key-value pair
+   */
+  template <typename Func> void for_each_mut(Func &&func) {
+    std::unique_lock lock(mutex_);
+    for (auto &[key, value] : values_) {
+      func(key, value);
+    }
+  }
 
-        /**
-         * @brief Bulk update operation with minimal lock contention
-         * @tparam Func Function type that takes the entire map
-         * @param updater Function to perform bulk updates
-         */
-        template<typename Func>
-        void bulk_update(Func&& updater) {
-            std::unique_lock lock(mutex_);
-            updater(values_);
-            bulk_write_count_.fetch_add(1, std::memory_order_relaxed);
-        }
+  /**
+   * @brief Bulk update operation with minimal lock contention
+   * @tparam Func Function type that takes the entire map
+   * @param updater Function to perform bulk updates
+   */
+  template <typename Func> void bulk_update(Func &&updater) {
+    std::unique_lock lock(mutex_);
+    updater(values_);
+    bulk_write_count_.fetch_add(1, std::memory_order_relaxed);
+  }
 
-        /**
-         * @brief Bulk read operation
-         * @tparam Func Function type that takes the entire map
-         * @param reader Function to perform bulk reads
-         * @return Result of the reader function
-         */
-        template<typename Func>
-        auto bulk_read(Func&& reader) const {
-            std::shared_lock lock(mutex_);
-            bulk_read_count_.fetch_add(1, std::memory_order_relaxed);
-            return reader(values_);
-        }
+  /**
+   * @brief Bulk read operation
+   * @tparam Func Function type that takes the entire map
+   * @param reader Function to perform bulk reads
+   * @return Result of the reader function
+   */
+  template <typename Func> auto bulk_read(Func &&reader) const {
+    std::shared_lock lock(mutex_);
+    bulk_read_count_.fetch_add(1, std::memory_order_relaxed);
+    return reader(values_);
+  }
 
-        /**
-         * @brief Atomic compare and swap
-         * @param key The key to update
-         * @param expected The expected current value
-         * @param desired The desired new value
-         * @return true if swap succeeded, false otherwise
-         */
-        bool compare_exchange(std::string_view key,
-                            const value& expected,
-                            const value& desired);
+  /**
+   * @brief Atomic compare and swap
+   * @param key The key to update
+   * @param expected The expected current value
+   * @param desired The desired new value
+   * @return true if swap succeeded, false otherwise
+   */
+  bool compare_exchange(std::string_view key, const value &expected,
+                        const value &desired);
 
-        /**
-         * @brief Get statistics
-         */
-        struct Statistics {
-            size_t read_count;
-            size_t write_count;
-            size_t bulk_read_count;
-            size_t bulk_write_count;
-            size_t size;
-        };
+  /**
+   * @brief Get statistics
+   */
+  struct Statistics {
+    size_t read_count;
+    size_t write_count;
+    size_t bulk_read_count;
+    size_t bulk_write_count;
+    size_t size;
+  };
 
-        Statistics get_statistics() const;
+  Statistics get_statistics() const;
 
-        /**
-         * @brief Serialize container to JSON
-         */
-        std::string to_json() const;
+  /**
+   * @brief Serialize container to JSON
+   */
+  std::string to_json() const;
 
-        /**
-         * @brief Serialize container to binary
-         */
-        std::vector<uint8_t> serialize() const;
+  /**
+   * @brief Serialize container to binary
+   */
+  std::vector<uint8_t> serialize() const;
 
-        /**
-         * @brief Deserialize from binary
-         */
-        static std::shared_ptr<thread_safe_container> deserialize(
-            const std::vector<uint8_t>& data);
+  /**
+   * @brief Deserialize from binary
+   */
+  static std::shared_ptr<thread_safe_container>
+  deserialize(const std::vector<uint8_t> &data);
 
-        /**
-         * @brief Array-style access (creates if not exists)
-         */
-        value& operator[](const std::string& key);
+  /**
+   * @brief Array-style access (creates if not exists)
+   */
+  value &operator[](const std::string &key);
 
-    private:
-        mutable std::shared_mutex mutex_;
-        value_map values_;
-        
-        // Statistics
-        mutable std::atomic<size_t> read_count_{0};
-        mutable std::atomic<size_t> write_count_{0};
-        mutable std::atomic<size_t> bulk_read_count_{0};
-        mutable std::atomic<size_t> bulk_write_count_{0};
-    };
+private:
+  mutable std::shared_mutex mutex_;
+  value_map values_;
 
-    /**
-     * @brief Snapshot-based reader for frequently accessed data
-     *
-     * Uses a snapshot pattern to provide read access with reduced lock contention.
-     * Note: This is not truly lock-free, as it uses a shared_mutex internally.
-     * The snapshot is updated explicitly, allowing multiple reads without acquiring
-     * the main container lock. This is useful for read-heavy workloads where
-     * slightly stale data is acceptable.
-     */
-    class snapshot_reader {
-    public:
-        using snapshot_ptr = std::shared_ptr<const thread_safe_container::value_map>;
+  // Statistics
+  mutable std::atomic<size_t> read_count_{0};
+  mutable std::atomic<size_t> write_count_{0};
+  mutable std::atomic<size_t> bulk_read_count_{0};
+  mutable std::atomic<size_t> bulk_write_count_{0};
+};
 
-        explicit snapshot_reader(std::shared_ptr<thread_safe_container> container)
-            : container_(container) {
-            update_snapshot();
-        }
+/**
+ * @brief Snapshot-based reader for frequently accessed data
+ *
+ * Uses a snapshot pattern to provide read access with reduced lock contention.
+ * Note: This is not truly lock-free, as it uses a shared_mutex internally.
+ * The snapshot is updated explicitly, allowing multiple reads without acquiring
+ * the main container lock. This is useful for read-heavy workloads where
+ * slightly stale data is acceptable.
+ */
+class snapshot_reader {
+public:
+  using snapshot_ptr = std::shared_ptr<const thread_safe_container::value_map>;
 
-        /**
-         * @brief Get value from snapshot (lock-protected read of snapshot)
-         * @note The snapshot may be stale; call update_snapshot() to refresh
-         */
-        template<typename T>
-        std::optional<T> get(std::string_view key) const {
-            std::shared_lock lock(snapshot_mutex_);
-            if (!snapshot_) return std::nullopt;
+  explicit snapshot_reader(std::shared_ptr<thread_safe_container> container)
+      : container_(container) {
+    update_snapshot();
+  }
 
-            auto it = snapshot_->find(std::string(key));
-            if (it != snapshot_->end()) {
-                return it->second.get<T>();
-            }
-            return std::nullopt;
-        }
+  /**
+   * @brief Get value from snapshot (lock-protected read of snapshot)
+   * @note The snapshot may be stale; call update_snapshot() to refresh
+   */
+  template <typename T> std::optional<T> get(std::string_view key) const {
+    std::shared_lock lock(snapshot_mutex_);
+    if (!snapshot_)
+      return std::nullopt;
 
-        /**
-         * @brief Update snapshot from container
-         * @note This acquires the container's lock and should be called periodically
-         */
-        void update_snapshot();
+    auto it = snapshot_->find(std::string(key));
+    if (it != snapshot_->end()) {
+      return it->second.get<T>();
+    }
+    return std::nullopt;
+  }
 
-    private:
-        std::shared_ptr<thread_safe_container> container_;
-        snapshot_ptr snapshot_;
-        mutable std::shared_mutex snapshot_mutex_;
-    };
+  /**
+   * @brief Update snapshot from container
+   * @note This acquires the container's lock and should be called periodically
+   */
+  void update_snapshot();
 
-    // Type alias for backward compatibility
-    using lockfree_reader = snapshot_reader;
+private:
+  std::shared_ptr<thread_safe_container> container_;
+  snapshot_ptr snapshot_;
+  mutable std::shared_mutex snapshot_mutex_;
+};
+
+// Type alias for backward compatibility
+using lockfree_reader = snapshot_reader;
 
 } // namespace container_module
