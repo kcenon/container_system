@@ -44,241 +44,225 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * - Resource exhaustion scenarios
  */
 
-#include <gtest/gtest.h>
 #include "framework/system_fixture.h"
 #include "framework/test_helpers.h"
 #include <container/core/container.h>
+#include <gtest/gtest.h>
 #include <limits>
 #include <stdexcept>
 
 using namespace container_module;
 using namespace container_module::testing;
 
-class ErrorHandlingTest : public ContainerSystemFixture
-{
-};
+class ErrorHandlingTest : public ContainerSystemFixture {};
 
 /**
  * Test 1: Non-existent value retrieval
  */
-TEST_F(ErrorHandlingTest, NonExistentValueRetrieval)
-{
-    AddStringValue("exists", "value");
+TEST_F(ErrorHandlingTest, NonExistentValueRetrieval) {
+  AddStringValue("exists", "value");
 
-    auto missing = container->get_value("does_not_exist");
-    EXPECT_TRUE(missing->is_null());
-    EXPECT_EQ(missing->type(), value_types::null_value);
+  auto missing = container->get_value("does_not_exist");
+  EXPECT_TRUE(missing->type == value_types::null_value);
+  EXPECT_EQ(missing->type, value_types::null_value);
 }
 
 /**
  * Test 2: Empty key value operations
  */
-TEST_F(ErrorHandlingTest, EmptyKeyOperations)
-{
-    AddStringValue("", "empty_key_value");
+TEST_F(ErrorHandlingTest, EmptyKeyOperations) {
+  AddStringValue("", "empty_key_value");
 
-    auto val = container->get_value("");
-    // Behavior may vary - either null or returns the value
-    // Just verify it doesn't crash
-    EXPECT_NO_THROW({
-        auto result = container->get_value("");
-    });
+  auto val = container->get_value("");
+  // Behavior may vary - either null or returns the value
+  // Just verify it doesn't crash
+  EXPECT_NO_THROW({ auto result = container->get_value(""); });
 }
 
 /**
  * Test 3: Null value type conversions
  */
-TEST_F(ErrorHandlingTest, NullValueConversions)
-{
-    auto null_val = std::make_shared<value>("null", value_types::null_value, "");
-    container->add(null_val);
+TEST_F(ErrorHandlingTest, NullValueConversions) {
+  container->add_value("null", std::monostate{});
 
-    auto retrieved = container->get_value("null");
-    EXPECT_TRUE(retrieved->is_null());
+  auto retrieved = container->get_value("null");
+  EXPECT_TRUE(retrieved->type == value_types::null_value);
 
-    // Base value conversion helpers throw std::logic_error for null values.
-    // Verify that the integration surface preserves this contract.
-    EXPECT_THROW(retrieved->to_int(), std::logic_error);
-    EXPECT_THROW(retrieved->to_double(), std::logic_error);
-    EXPECT_THROW(retrieved->to_boolean(), std::logic_error);
+  // Base value conversion helpers throw std::bad_variant_access for null values
+  // (wrong type access). Verify that the integration surface preserves this
+  // contract.
+  EXPECT_THROW(std::get<int>(retrieved->data), std::bad_variant_access);
+  EXPECT_THROW(std::get<double>(retrieved->data), std::bad_variant_access);
+  EXPECT_THROW(std::get<bool>(retrieved->data), std::bad_variant_access);
 }
 
 /**
  * Test 4: String to numeric conversion failures
  */
-TEST_F(ErrorHandlingTest, StringToNumericConversionFailures)
-{
-    AddStringValue("not_a_number", "abc123xyz");
+TEST_F(ErrorHandlingTest, StringToNumericConversionFailures) {
+  AddStringValue("not_a_number", "abc123xyz");
 
-    auto val = container->get_value("not_a_number");
-    EXPECT_FALSE(val->is_null());
+  auto val = container->get_value("not_a_number");
+  EXPECT_FALSE(val->type == value_types::null_value);
 
-    // Should handle conversion gracefully (return 0 or default)
-    int result = val->to_int();
-    EXPECT_EQ(result, 0);
+  // Should throw bad_variant_access when trying to access string as int
+  EXPECT_THROW(std::get<int>(val->data), std::bad_variant_access);
 }
 
 /**
  * Test 5: Invalid serialization data
  */
-TEST_F(ErrorHandlingTest, InvalidSerializationData)
-{
-    // Test various invalid inputs
-    std::vector<std::string> invalid_inputs = {
-        "",
-        "random garbage",
-        "@header",
-        "@data",
-        "@header={};",
-        "incomplete@data"
-    };
+TEST_F(ErrorHandlingTest, InvalidSerializationData) {
+  // Test various invalid inputs
+  std::vector<std::string> invalid_inputs = {
+      "",      "random garbage", "@header",
+      "@data", "@header={};",    "incomplete@data"};
 
-    for (const auto& invalid : invalid_inputs) {
-        EXPECT_NO_THROW({
-            auto c = std::make_shared<value_container>(invalid, true);
-            // Container might be created but in invalid state
-        });
-    }
+  for (const auto &invalid : invalid_inputs) {
+    EXPECT_NO_THROW({
+      auto c = std::make_shared<value_container>(invalid, true);
+      // Container might be created but in invalid state
+    });
+  }
 }
 
 /**
  * Test 6: Corrupted header data
  */
-TEST_F(ErrorHandlingTest, CorruptedHeaderData)
-{
-    container->set_source("source", "sub");
-    container->set_target("target", "");
-    AddStringValue("key", "value");
+TEST_F(ErrorHandlingTest, CorruptedHeaderData) {
+  container->set_source("source", "sub");
+  container->set_target("target", "");
+  AddStringValue("key", "value");
 
-    std::string serialized = container->serialize();
+  std::string serialized = container->serialize();
 
-    // Corrupt the header portion
-    if (serialized.size() > 50) {
-        serialized[20] = 'X';
-        serialized[21] = 'X';
-    }
+  // Corrupt the header portion
+  if (serialized.size() > 50) {
+    serialized[20] = 'X';
+    serialized[21] = 'X';
+  }
 
-    EXPECT_NO_THROW({
-        auto c = std::make_shared<value_container>(serialized, true);
-    });
+  EXPECT_NO_THROW(
+      { auto c = std::make_shared<value_container>(serialized, true); });
 }
 
 /**
  * Test 7: Very long string values
  */
-TEST_F(ErrorHandlingTest, VeryLongStringValues)
-{
-    // Use smaller string size in CI environments to avoid stack/heap exhaustion
-    // CI environments have more limited resources and Debug builds use more memory
-    size_t string_size = TestConfig::instance().is_ci_environment() ? 10000 : 100000;
+TEST_F(ErrorHandlingTest, VeryLongStringValues) {
+  // Use smaller string size in CI environments to avoid stack/heap exhaustion
+  // CI environments have more limited resources and Debug builds use more
+  // memory
+  size_t string_size =
+      TestConfig::instance().is_ci_environment() ? 10000 : 100000;
 
-    std::string long_string = TestHelpers::GenerateRandomString(string_size);
-    AddStringValue("long", long_string);
+  std::string long_string = TestHelpers::GenerateRandomString(string_size);
+  AddStringValue("long", long_string);
 
-    EXPECT_NO_THROW({
-        std::string serialized = container->serialize();
-        auto restored = std::make_shared<value_container>(serialized, false);
-    });
+  EXPECT_NO_THROW({
+    std::string serialized = container->serialize();
+    auto restored = std::make_shared<value_container>(serialized, false);
+  });
 }
 
 /**
  * Test 8: Maximum numeric value boundaries
  */
-TEST_F(ErrorHandlingTest, NumericBoundaryValues)
-{
-    AddNumericValue("max_int", std::numeric_limits<int>::max());
-    AddNumericValue("min_int", std::numeric_limits<int>::min());
-    AddNumericValue("max_llong", std::numeric_limits<long long>::max());
+TEST_F(ErrorHandlingTest, NumericBoundaryValues) {
+  AddNumericValue("max_int", std::numeric_limits<int>::max());
+  AddNumericValue("min_int", std::numeric_limits<int>::min());
+  AddNumericValue("max_llong", std::numeric_limits<long long>::max());
 
-    auto restored = RoundTripSerialize();
+  auto restored = RoundTripSerialize();
 
-    EXPECT_EQ(restored->get_value("max_int")->to_int(),
-              std::numeric_limits<int>::max());
-    EXPECT_EQ(restored->get_value("min_int")->to_int(),
-              std::numeric_limits<int>::min());
+  EXPECT_EQ(std::get<int>(restored->get_value("max_int")->data),
+            std::numeric_limits<int>::max());
+  EXPECT_EQ(std::get<int>(restored->get_value("min_int")->data),
+            std::numeric_limits<int>::min());
 }
 
 /**
  * Test 9: Multiple rapid serializations
  */
-TEST_F(ErrorHandlingTest, RapidSerializationStress)
-{
-    AddStringValue("key1", "value1");
-    AddNumericValue("key2", 42);
+TEST_F(ErrorHandlingTest, RapidSerializationStress) {
+  AddStringValue("key1", "value1");
+  AddNumericValue("key2", 42);
 
-    EXPECT_NO_THROW({
-        for (int i = 0; i < 1000; ++i) {
-            std::string serialized = container->serialize();
-        }
-    });
+  EXPECT_NO_THROW({
+    for (int i = 0; i < 1000; ++i) {
+      std::string serialized = container->serialize();
+    }
+  });
 }
 
 /**
  * Test 10: Container with many duplicate keys
  */
-TEST_F(ErrorHandlingTest, ManyDuplicateKeys)
-{
-    for (int i = 0; i < 100; ++i) {
-        AddStringValue("duplicate", "value_" + std::to_string(i));
+TEST_F(ErrorHandlingTest, ManyDuplicateKeys) {
+  for (int i = 0; i < 100; ++i) {
+    AddStringValue("duplicate", "value_" + std::to_string(i));
+  }
+
+  std::vector<optimized_value> values;
+  for (const auto &val : *container) {
+    if (val.name == "duplicate") {
+      values.push_back(val);
     }
+  }
+  EXPECT_EQ(values.size(), 100);
 
-    auto values = container->value_array("duplicate");
-    EXPECT_EQ(values.size(), 100);
-
-    // Serialize and deserialize
-    EXPECT_NO_THROW({
-        auto restored = RoundTripSerialize();
-        auto restored_values = restored->value_array("duplicate");
-    });
+  // Serialize and deserialize
+  EXPECT_NO_THROW({
+    auto restored = RoundTripSerialize();
+    std::vector<optimized_value> restored_values;
+    for (const auto &val : *restored) {
+      if (val.name == "duplicate") {
+        restored_values.push_back(val);
+      }
+    }
+  });
 }
 
 /**
  * Test 11: Zero-length bytes value
  */
-TEST_F(ErrorHandlingTest, ZeroLengthBytesValue)
-{
-    std::vector<uint8_t> empty_bytes;
-    AddBytesValue("empty_bytes", empty_bytes);
+TEST_F(ErrorHandlingTest, ZeroLengthBytesValue) {
+  std::vector<uint8_t> empty_bytes;
+  AddBytesValue("empty_bytes", empty_bytes);
 
-    auto val = container->get_value("empty_bytes");
-    EXPECT_FALSE(val->is_null());
+  auto val = container->get_value("empty_bytes");
+  EXPECT_FALSE(val->type == value_types::null_value);
 
-    auto restored = RoundTripSerialize();
-    auto restored_bytes = restored->get_value("empty_bytes");
-    EXPECT_FALSE(restored_bytes->is_null());
+  auto restored = RoundTripSerialize();
+  auto restored_bytes = restored->get_value("empty_bytes");
+  EXPECT_FALSE(restored_bytes->type == value_types::null_value);
 }
 
 /**
  * Test 12: Special characters in keys
  */
-TEST_F(ErrorHandlingTest, SpecialCharactersInKeys)
-{
-    // Test various special characters in key names
-    std::vector<std::string> special_keys = {
-        "key_with_underscore",
-        "key-with-dash",
-        "key.with.dot",
-        "KeyWithCamelCase",
-        "key123numbers",
-        "key@special",
-        "key#hash"
-    };
+TEST_F(ErrorHandlingTest, SpecialCharactersInKeys) {
+  // Test various special characters in key names
+  std::vector<std::string> special_keys = {"key_with_underscore",
+                                           "key-with-dash",
+                                           "key.with.dot",
+                                           "KeyWithCamelCase",
+                                           "key123numbers",
+                                           "key@special",
+                                           "key#hash"};
 
-    for (const auto& key : special_keys) {
-        EXPECT_NO_THROW({
-            AddStringValue(key, "test_value");
-        });
-    }
+  for (const auto &key : special_keys) {
+    EXPECT_NO_THROW({ AddStringValue(key, "test_value"); });
+  }
 
-    // Verify serialization handles special keys
-    EXPECT_NO_THROW({
-        std::string serialized = container->serialize();
-        auto restored = std::make_shared<value_container>(serialized, false);
-    });
+  // Verify serialization handles special keys
+  EXPECT_NO_THROW({
+    std::string serialized = container->serialize();
+    auto restored = std::make_shared<value_container>(serialized, false);
+  });
 }
 
-int main(int argc, char** argv)
-{
-    ::testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
+int main(int argc, char **argv) {
+  ::testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
 }
