@@ -378,14 +378,14 @@ endif()
 # Enable testing features if building tests
 if(BUILD_TESTS AND NOT BUILD_CONTAINERSYSTEM_AS_SUBMODULE)
     enable_testing()
-#     add_subdirectory(tests)
-#     message(STATUS "Container: Unit tests enabled")
-# endif()
+    add_subdirectory(tests)
+    message(STATUS "Container: Unit tests enabled")
+endif()
 # 
-# # Enable integration tests if requested
-# if(CONTAINER_BUILD_INTEGRATION_TESTS AND NOT BUILD_CONTAINERSYSTEM_AS_SUBMODULE)
-#     enable_testing()
-#     add_subdirectory(integration_tests)
+# Enable integration tests if requested
+if(CONTAINER_BUILD_INTEGRATION_TESTS AND NOT BUILD_CONTAINERSYSTEM_AS_SUBMODULE)
+    enable_testing()
+    add_subdirectory(integration_tests)
     message(STATUS "Container: Integration tests enabled")
 endif()
 
