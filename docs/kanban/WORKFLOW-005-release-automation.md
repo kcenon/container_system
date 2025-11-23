@@ -4,7 +4,7 @@
 - **ID**: WORKFLOW-005
 - **Priority**: LOW
 - **Estimated Time**: 1 day
-- **Dependencies**: WORKFLOW-001 (After Windows support is complete)
+- **Dependencies**: None (WORKFLOW-001 completed)
 - **Status**: TODO
 - **Assignee**: TBD
 - **Related Documents**: [WORKFLOW_IMPROVEMENTS.md](../../.github/workflows/WORKFLOW_IMPROVEMENTS.md)
