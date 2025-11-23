@@ -4,7 +4,7 @@
 - **ID**: MIGRATE-002
 - **Priority**: HIGH
 - **Estimated Duration**: 2 days
-- **Dependencies**: MIGRATE-001
+- **Dependencies**: None (MIGRATE-001 completed)
 - **Status**: TODO
 - **Assignee**: TBD
 - **Related Documents**: [MIGRATION_PLAN.md](../advanced/MIGRATION_PLAN.md)
