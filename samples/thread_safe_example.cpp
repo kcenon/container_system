@@ -24,9 +24,9 @@ int main() {
     container->set_message_type("shared_data");
     std::mutex container_mutex;
 
-    // Initialize some shared data
-    container->add(std::make_shared<int_value>("counter", 0));
-    container->add(std::make_shared<int_value>("total_operations", 0));
+    // Initialize some shared data using new set_value API
+    container->set_value("counter", static_cast<int32_t>(0));
+    container->set_value("total_operations", static_cast<int32_t>(0));
 
     std::cout << "Container initialized for multi-threaded access" << std::endl;
 
@@ -56,20 +56,21 @@ int main() {
                 switch (operation_type) {
                     case 0: { // Read operation
                         std::lock_guard<std::mutex> lock(container_mutex);
-                        auto counter_val = container->get_value("counter");
-                        if (counter_val) {
-                            volatile int val = counter_val->to_int();
-                            (void)val;
+                        if (auto counter_val = container->get_value("counter")) {
+                            if (auto* val = std::get_if<int32_t>(&counter_val->data)) {
+                                volatile int read_val = *val;
+                                (void)read_val;
+                            }
                         }
                         break;
                     }
                     case 1: { // Write operation (increment counter)
                         std::lock_guard<std::mutex> lock(container_mutex);
-                        auto current = container->get_value("counter");
-                        if (current) {
-                            int val = current->to_int();
-                            container->add(std::make_shared<int_value>("counter", val + 1));
-                            global_counter.fetch_add(1, std::memory_order_relaxed);
+                        if (auto current = container->get_value("counter")) {
+                            if (auto* val = std::get_if<int32_t>(&current->data)) {
+                                container->set_value("counter", static_cast<int32_t>(*val + 1));
+                                global_counter.fetch_add(1, std::memory_order_relaxed);
+                            }
                         }
                         break;
                     }
@@ -77,15 +78,15 @@ int main() {
                         std::lock_guard<std::mutex> lock(container_mutex);
                         std::string thread_key = "thread_" + std::to_string(i);
                         std::string thread_data = "data_from_thread_" + std::to_string(i) + "_op_" + std::to_string(op);
-                        container->add(std::make_shared<string_value>(thread_key, thread_data));
+                        container->set_value(thread_key, thread_data);
                         break;
                     }
                     case 3: { // Update total operations
                         std::lock_guard<std::mutex> lock(container_mutex);
-                        auto total_ops = container->get_value("total_operations");
-                        if (total_ops) {
-                            int current_total = total_ops->to_int();
-                            container->add(std::make_shared<int_value>("total_operations", current_total + 1));
+                        if (auto total_ops = container->get_value("total_operations")) {
+                            if (auto* val = std::get_if<int32_t>(&total_ops->data)) {
+                                container->set_value("total_operations", static_cast<int32_t>(*val + 1));
+                            }
                         }
                         break;
                     }
@@ -114,14 +115,17 @@ int main() {
 
     {
         std::lock_guard<std::mutex> lock(container_mutex);
-        auto final_counter = container->get_value("counter");
-        auto total_ops = container->get_value("total_operations");
-
-        if (final_counter && total_ops) {
-            std::cout << "Final counter value: " << final_counter->to_int() << std::endl;
-            std::cout << "Total operations recorded: " << total_ops->to_int() << std::endl;
-            std::cout << "Global counter (atomic): " << global_counter.load() << std::endl;
+        if (auto final_counter = container->get_value("counter")) {
+            if (auto* val = std::get_if<int32_t>(&final_counter->data)) {
+                std::cout << "Final counter value: " << *val << std::endl;
+            }
         }
+        if (auto total_ops = container->get_value("total_operations")) {
+            if (auto* val = std::get_if<int32_t>(&total_ops->data)) {
+                std::cout << "Total operations recorded: " << *val << std::endl;
+            }
+        }
+        std::cout << "Global counter (atomic): " << global_counter.load() << std::endl;
     }
 
     // 4. Performance test
@@ -137,15 +141,15 @@ int main() {
     for (int i = 0; i < perf_iterations; ++i) {
         std::string key = "perf_key_" + std::to_string(i);
         std::string value = "perf_value_" + std::to_string(i);
-        perf_container->add(std::make_shared<string_value>(key, value));
+        perf_container->set_value(key, value);
     }
 
     auto end_time = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count();
 
     std::cout << "Sequential operations (" << perf_iterations << " ops): "
-              << duration << " μs" << std::endl;
-    std::cout << "Average time per operation: " << (double)duration / perf_iterations << " μs" << std::endl;
+              << duration << " us" << std::endl;
+    std::cout << "Average time per operation: " << (double)duration / perf_iterations << " us" << std::endl;
 
     // 5. Serialization test
     std::cout << "\n5. Serialization Test:" << std::endl;
@@ -162,9 +166,10 @@ int main() {
     auto restored_container = std::make_shared<value_container>(serialized);
     std::cout << "Container restored successfully" << std::endl;
 
-    auto restored_counter = restored_container->get_value("counter");
-    if (restored_counter) {
-        std::cout << "Restored counter value: " << restored_counter->to_int() << std::endl;
+    if (auto restored_counter = restored_container->get_value("counter")) {
+        if (auto* val = std::get_if<int32_t>(&restored_counter->data)) {
+            std::cout << "Restored counter value: " << *val << std::endl;
+        }
     }
 
     std::cout << "\n=== Thread Safety Example completed successfully ===" << std::endl;
