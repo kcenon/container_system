@@ -165,32 +165,26 @@ private:
 template<typename T>
 messaging_container_builder& messaging_container_builder::add_value(const std::string& key, T&& value) {
     if constexpr (std::is_same_v<std::decay_t<T>, std::shared_ptr<value_container>>) {
-        // Handle nested containers by serializing and storing as container_value
+        // Handle nested containers by serializing and storing as bytes
         std::string serialized_data = value->serialize();
-        auto val = std::make_shared<container_module::value>(key, value_types::container_value, serialized_data);
-        container_->add(val);
+        std::vector<uint8_t> bytes(serialized_data.begin(), serialized_data.end());
+        container_->set_value(key, bytes);
     } else if constexpr (std::is_same_v<std::decay_t<T>, bool>) {
-        auto val = std::make_shared<bool_value>(key, value);
-        container_->add(val);
+        container_->set_value(key, value);
     } else if constexpr (std::is_integral_v<std::decay_t<T>>) {
         if constexpr (sizeof(T) <= 4) {
-            auto val = std::make_shared<int_value>(key, static_cast<int32_t>(value));
-            container_->add(val);
+            container_->set_value(key, static_cast<int32_t>(value));
         } else {
-            auto val = std::make_shared<llong_value>(key, static_cast<int64_t>(value));
-            container_->add(val);
+            container_->set_value(key, static_cast<int64_t>(value));
         }
     } else if constexpr (std::is_floating_point_v<std::decay_t<T>>) {
         if constexpr (std::is_same_v<std::decay_t<T>, float>) {
-            auto val = std::make_shared<float_value>(key, value);
-            container_->add(val);
+            container_->set_value(key, value);
         } else {
-            auto val = std::make_shared<double_value>(key, value);
-            container_->add(val);
+            container_->set_value(key, value);
         }
     } else if constexpr (std::is_same_v<std::decay_t<T>, std::string>) {
-        auto val = std::make_shared<string_value>(key, value);
-        container_->add(val);
+        container_->set_value(key, std::string(value));
     }
 
     return *this;

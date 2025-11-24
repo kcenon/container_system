@@ -117,8 +117,8 @@ set(INTERNAL_FILES
 set(INTEGRATION_FILES)
 if(ENABLE_MESSAGING_FEATURES OR ENABLE_EXTERNAL_INTEGRATION OR ENABLE_PERFORMANCE_METRICS)
     list(APPEND INTEGRATION_FILES
-#         ${CMAKE_CURRENT_SOURCE_DIR}/integration/messaging_integration.h
-#         ${CMAKE_CURRENT_SOURCE_DIR}/integration/messaging_integration.cpp
+         ${CMAKE_CURRENT_SOURCE_DIR}/integration/messaging_integration.h
+         ${CMAKE_CURRENT_SOURCE_DIR}/integration/messaging_integration.cpp
     )
     message(STATUS "Container: Integration modules included")
 endif()
