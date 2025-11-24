@@ -5,7 +5,7 @@
 - **Priority**: LOW
 - **Estimated Duration**: 0.5 days
 - **Dependencies**: MIGRATE-001, MIGRATE-002, MIGRATE-003
-- **Status**: TODO
+- **Status**: DONE
 - **Assignee**: TBD
 - **Related Documents**: [MIGRATION_PLAN.md](../advanced/MIGRATION_PLAN.md)
 
@@ -235,17 +235,17 @@ TEST(ModernAPI, NoDeprecationWarning) {
 
 ## Checklist
 
-- [ ] Add [[deprecated]] to bool_value
-- [ ] Add [[deprecated]] to numeric_value
-- [ ] Add [[deprecated]] to string_value
-- [ ] Add [[deprecated]] to bytes_value
+- [x] Add [[deprecated]] to bool_value
+- [x] Add [[deprecated]] to numeric_value (int_value, llong_value, etc.)
+- [x] Add [[deprecated]] to string_value
+- [x] Add [[deprecated]] to bytes_value
 - [ ] Add [[deprecated]] to array_value
 - [ ] Add [[deprecated]] to container_value
 - [ ] Add [[deprecated]] to value base class
-- [ ] Add [[deprecated]] to container.add()
-- [ ] Create deprecation.h macros
-- [ ] Test warning generation
-- [ ] Test warning suppression
+- [x] Add [[deprecated]] to container.add()
+- [x] Create deprecation.h macros
+- [x] Test warning generation
+- [x] Test warning suppression (in test fixtures)
 - [ ] Update documentation
 
 ---

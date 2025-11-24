@@ -34,11 +34,16 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <gtest/gtest.h>
 #include <container/core/container.h>
+#include <container/core/deprecation.h>
 #include "../../tests/test_compat.h"
 #include <memory>
 #include <string>
 #include <vector>
 #include <chrono>
+
+// Suppress deprecation warnings for legacy API usage in test fixtures.
+// Test code intentionally uses legacy API for backwards compatibility testing.
+CONTAINER_SUPPRESS_DEPRECATION_START
 
 namespace container_module
 {
@@ -219,3 +224,5 @@ protected:
 
 } // namespace testing
 } // namespace container_module
+
+CONTAINER_SUPPRESS_DEPRECATION_END
