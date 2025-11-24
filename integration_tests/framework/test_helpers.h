@@ -33,6 +33,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #pragma once
 
 #include <container/core/container.h>
+#include "../../tests/test_compat.h"
 #include "test_config.h"
 #include <string>
 #include <vector>
@@ -102,7 +103,7 @@ public:
                            const std::string& key)
     {
         auto val = container->get_value(key);
-        return val && !val->is_null();
+        return !ov_is_null(val);
     }
 
     /**
@@ -153,13 +154,14 @@ public:
             auto nested = CreateNestedContainer(depth - 1);
             std::string nested_data = nested->serialize();
             std::string key = "nested_" + std::to_string(depth);
+            std::vector<uint8_t> nested_bytes(nested_data.begin(), nested_data.end());
             root->add(std::make_shared<value>(key, value_types::container_value,
-                                             nested_data));
+                                             nested_bytes));
         }
 
         std::string key = "data_" + std::to_string(depth);
-        std::string value = "level_" + std::to_string(depth);
-        root->add(std::make_shared<string_value>(key, value));
+        std::string str_value = "level_" + std::to_string(depth);
+        root->add(std::make_shared<string_value>(key, str_value));
 
         return root;
     }
