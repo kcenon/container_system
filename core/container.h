@@ -245,6 +245,66 @@ namespace container_module
 		 */
 		void add(std::shared_ptr<value> val);
 
+		// =======================================================================
+		// MIGRATE-002: variant_value_v2 Support API
+		// =======================================================================
+
+		/**
+		 * @brief Set a single optimized_value, updating if key exists
+		 * @param val The optimized_value to set
+		 * @exception_safety Strong guarantee - no changes on exception
+		 */
+		void set_unit(const optimized_value& val);
+
+		/**
+		 * @brief Set multiple optimized_values, updating existing keys
+		 * @param vals Vector of optimized_values to set
+		 * @exception_safety Strong guarantee - no changes on exception
+		 */
+		void set_units(const std::vector<optimized_value>& vals);
+
+		/**
+		 * @brief Convenience method to set a typed value by key
+		 * @param key The value key/name
+		 * @param data_val The value to store
+		 * @exception_safety Strong guarantee - no changes on exception
+		 */
+		template<typename T>
+		void set_value(const std::string& key, T&& data_val) {
+			optimized_value val;
+			val.name = key;
+			val.data = std::forward<T>(data_val);
+			val.type = static_cast<value_types>(val.data.index());
+			set_unit(val);
+		}
+
+		/**
+		 * @brief Get a value as optimized_value (alias for get_value)
+		 * @param key Value name/key to search for
+		 * @return Optional containing the optimized_value if found
+		 */
+		std::optional<optimized_value> get_variant_value(const std::string& key) const noexcept;
+
+		/**
+		 * @brief Get all values as optimized_value vector
+		 * @return Vector of all optimized_values in the container
+		 */
+		std::vector<optimized_value> get_variant_values() const;
+
+		/**
+		 * @brief Check if container is in variant mode
+		 * @return Always true - container uses variant-based storage
+		 */
+		bool is_variant_mode() const noexcept { return true; }
+
+		/**
+		 * @brief Enable variant mode (no-op, always enabled)
+		 * @param enable Ignored parameter for API compatibility
+		 */
+		void enable_variant_mode(bool enable = true) { (void)enable; }
+
+		// =======================================================================
+
 		/**
 		 * @brief Get a value by name
 		 * @param name Value name/key to search for

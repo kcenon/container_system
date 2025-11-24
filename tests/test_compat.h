@@ -76,20 +76,7 @@ inline std::shared_ptr<value> make_ullong_value(std::string_view name, uint64_t 
     return std::make_shared<value>(name, val);
 }
 
-// Legacy type aliases (allow 'long_value val' declarations)
-using int_value = value;
-using bool_value = value;
-using string_value = value;
-using llong_value = value;
-using long_value = value;
-using ulong_value = value;
-using bytes_value = value;
-using double_value = value;
-using float_value = value;
-using short_value = value;
-using ushort_value = value;
-using uint_value = value;
-using ullong_value = value;
+// Note: Legacy type aliases are defined after legacy_value class below
 
 // Type checking helper functions for legacy API compatibility
 inline bool is_boolean(const value& v) {
@@ -159,6 +146,23 @@ inline int64_t to_llong(const value& v) {
     return to_long(v);
 }
 
+inline uint64_t to_ulong(const value& v) {
+    return v.visit([](const auto& data) -> uint64_t {
+        using T = std::decay_t<decltype(data)>;
+        if constexpr (std::is_arithmetic_v<T>) {
+            return static_cast<uint64_t>(data);
+        } else if constexpr (std::is_same_v<T, std::string>) {
+            try { return std::stoull(data); } catch (...) { return 0; }
+        } else {
+            return 0;
+        }
+    });
+}
+
+inline uint64_t to_ullong(const value& v) {
+    return to_ulong(v);
+}
+
 inline double to_double(const value& v) {
     return v.visit([](const auto& data) -> double {
         using T = std::decay_t<decltype(data)>;
@@ -222,6 +226,8 @@ public:
     int32_t to_int() const { return test_compat::to_int(*this); }
     int64_t to_long() const { return test_compat::to_long(*this); }
     int64_t to_llong() const { return test_compat::to_llong(*this); }
+    uint64_t to_ulong() const { return test_compat::to_ulong(*this); }
+    uint64_t to_ullong() const { return test_compat::to_ullong(*this); }
     double to_double() const { return test_compat::to_double(*this); }
     std::vector<uint8_t> to_bytes() const { return test_compat::to_bytes(*this); }
 
@@ -232,7 +238,29 @@ public:
         auto bytes = value::serialize();
         return std::string(bytes.begin(), bytes.end());
     }
+
+    // Serialize as string (for test compatibility)
+    std::string serialize() const {
+        auto bytes = value::serialize();
+        return std::string(bytes.begin(), bytes.end());
+    }
 };
+
+// Legacy type aliases (allow 'long_value val' declarations)
+// Use legacy_value to provide member function API (to_long(), to_ulong(), etc.)
+using int_value = legacy_value;
+using bool_value = legacy_value;
+using string_value = legacy_value;
+using llong_value = legacy_value;
+using long_value = legacy_value;
+using ulong_value = legacy_value;
+using bytes_value = legacy_value;
+using double_value = legacy_value;
+using float_value = legacy_value;
+using short_value = legacy_value;
+using ushort_value = legacy_value;
+using uint_value = legacy_value;
+using ullong_value = legacy_value;
 
 // Factory functions that return shared_ptr<legacy_value> for method chaining
 inline std::shared_ptr<legacy_value> make_legacy_int_value(std::string_view name, int32_t val) {
@@ -367,6 +395,8 @@ using container_module::test_compat::to_boolean;
 using container_module::test_compat::to_int;
 using container_module::test_compat::to_long;
 using container_module::test_compat::to_llong;
+using container_module::test_compat::to_ulong;
+using container_module::test_compat::to_ullong;
 using container_module::test_compat::to_double;
 using container_module::test_compat::to_bytes;
 using container_module::test_compat::value_size;

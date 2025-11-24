@@ -303,6 +303,54 @@ namespace container_module
 		return std::nullopt;
 	}
 
+	// =======================================================================
+	// MIGRATE-002: variant_value_v2 Support API Implementation
+	// =======================================================================
+
+	void value_container::set_unit(const optimized_value& val)
+	{
+		write_lock_guard lock(this);
+
+		// Check if key already exists
+		for (auto& existing : optimized_units_) {
+			if (existing.name == val.name) {
+				existing = val;
+				changed_data_ = true;
+				return;
+			}
+		}
+
+		// Key doesn't exist, add new value
+		optimized_units_.push_back(val);
+		changed_data_ = true;
+
+		if (use_soo_ && val.is_stack_allocated()) {
+			stack_allocations_.fetch_add(1, std::memory_order_relaxed);
+		} else {
+			heap_allocations_.fetch_add(1, std::memory_order_relaxed);
+		}
+	}
+
+	void value_container::set_units(const std::vector<optimized_value>& vals)
+	{
+		for (const auto& val : vals) {
+			set_unit(val);
+		}
+	}
+
+	std::optional<optimized_value> value_container::get_variant_value(const std::string& key) const noexcept
+	{
+		return get_value(key);
+	}
+
+	std::vector<optimized_value> value_container::get_variant_values() const
+	{
+		read_lock_guard lock(this);
+		return optimized_units_;
+	}
+
+	// =======================================================================
+
 	void value_container::remove(std::string_view target_name,
 								 bool update_immediately)
 	{
