@@ -40,35 +40,35 @@ protected:
 
 TEST_F(LongRangeCheckingTest, LongValueAcceptsValidPositiveValue) {
     EXPECT_NO_THROW({
-        long_value lv("test", 1000000L);
-        EXPECT_EQ(lv.to_long(), 1000000L);
+        long_value lv("test", static_cast<int64_t>(1000000));
+        EXPECT_EQ(lv.to_long(), 1000000);
     });
 }
 
 TEST_F(LongRangeCheckingTest, LongValueAcceptsValidNegativeValue) {
     EXPECT_NO_THROW({
-        long_value lv("test", -1000000L);
-        EXPECT_EQ(lv.to_long(), -1000000L);
+        long_value lv("test", static_cast<int64_t>(-1000000));
+        EXPECT_EQ(lv.to_long(), -1000000);
     });
 }
 
 TEST_F(LongRangeCheckingTest, LongValueAcceptsZero) {
     EXPECT_NO_THROW({
-        long_value lv("test", 0L);
-        EXPECT_EQ(lv.to_long(), 0L);
+        long_value lv("test", static_cast<int64_t>(0));
+        EXPECT_EQ(lv.to_long(), 0);
     });
 }
 
 TEST_F(LongRangeCheckingTest, LongValueAcceptsInt32Max) {
     EXPECT_NO_THROW({
-        long_value lv("test", static_cast<long>(kInt32Max));
+        long_value lv("test", static_cast<int64_t>(kInt32Max));
         EXPECT_EQ(lv.to_long(), kInt32Max);
     });
 }
 
 TEST_F(LongRangeCheckingTest, LongValueAcceptsInt32Min) {
     EXPECT_NO_THROW({
-        long_value lv("test", static_cast<long>(kInt32Min));
+        long_value lv("test", static_cast<int64_t>(kInt32Min));
         EXPECT_EQ(lv.to_long(), kInt32Min);
     });
 }
@@ -109,21 +109,21 @@ TEST_F(LongRangeCheckingTest, DISABLED_LongValueRejectsLargeNegativeValue) {
 
 TEST_F(LongRangeCheckingTest, ULongValueAcceptsValidValue) {
     EXPECT_NO_THROW({
-        ulong_value ulv("test", 1000000UL);
-        EXPECT_EQ(ulv.to_ulong(), 1000000UL);
+        ulong_value ulv("test", static_cast<uint64_t>(1000000));
+        EXPECT_EQ(ulv.to_ulong(), 1000000);
     });
 }
 
 TEST_F(LongRangeCheckingTest, ULongValueAcceptsZero) {
     EXPECT_NO_THROW({
-        ulong_value ulv("test", 0UL);
-        EXPECT_EQ(ulv.to_ulong(), 0UL);
+        ulong_value ulv("test", static_cast<uint64_t>(0));
+        EXPECT_EQ(ulv.to_ulong(), 0);
     });
 }
 
 TEST_F(LongRangeCheckingTest, ULongValueAcceptsUInt32Max) {
     EXPECT_NO_THROW({
-        ulong_value ulv("test", static_cast<unsigned long>(kUInt32Max));
+        ulong_value ulv("test", static_cast<uint64_t>(kUInt32Max));
         EXPECT_EQ(ulv.to_ulong(), kUInt32Max);
     });
 }
@@ -150,14 +150,14 @@ TEST_F(LongRangeCheckingTest, DISABLED_ULongValueRejectsLargeValue) {
 // ============================================================================
 
 TEST_F(LongRangeCheckingTest, LongValueSerializesCorrectly) {
-    long_value lv("test", 12345L);
+    long_value lv("test", static_cast<int64_t>(12345));
     std::string serialized = lv.serialize();
     // Serialized format includes type info, so we just verify it doesn't throw
     EXPECT_FALSE(serialized.empty()) << "long_value must serialize to non-empty string";
 }
 
 TEST_F(LongRangeCheckingTest, ULongValueSerializesCorrectly) {
-    ulong_value ulv("test", 12345UL);
+    ulong_value ulv("test", static_cast<uint64_t>(12345));
     std::string serialized = ulv.serialize();
     // Serialized format includes type info, so we just verify it doesn't throw
     EXPECT_FALSE(serialized.empty()) << "ulong_value must serialize to non-empty string";
@@ -169,7 +169,7 @@ TEST_F(LongRangeCheckingTest, ULongValueSerializesCorrectly) {
 
 TEST_F(LongRangeCheckingTest, LongValueCompatibleWithLLongValue) {
     // A long_value should be safely convertible to llong_value
-    long_value lv("test", 12345L);
+    long_value lv("test", static_cast<int64_t>(12345));
     llong_value llv("test2", lv.to_llong());
 
     EXPECT_EQ(llv.to_llong(), 12345LL);
@@ -177,7 +177,7 @@ TEST_F(LongRangeCheckingTest, LongValueCompatibleWithLLongValue) {
 
 TEST_F(LongRangeCheckingTest, ULongValueCompatibleWithULLongValue) {
     // A ulong_value should be safely convertible to ullong_value
-    ulong_value ulv("test", 12345UL);
+    ulong_value ulv("test", static_cast<uint64_t>(12345));
     ullong_value ullv("test2", ulv.to_ullong());
 
     EXPECT_EQ(ullv.to_ullong(), 12345ULL);
