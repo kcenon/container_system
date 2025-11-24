@@ -229,59 +229,89 @@ jobs:
           build/Testing/
           build/**/*.log
 
-  # Performance baseline temporarily disabled - requires migration to variant-based API
-  # performance-baseline:
-  #   name: Performance Baseline Validation
-  #   runs-on: ubuntu-22.04
-  #   timeout-minutes: 20
+  # Performance baseline - variant-based API migration complete (REACT-006)
+  performance-baseline:
+    name: Performance Baseline Validation
+    runs-on: ubuntu-22.04
+    timeout-minutes: 20
 
-  #   steps:
-  #   - name: Checkout code
-  #     uses: actions/checkout@v4
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
 
-  #   - name: Install dependencies
-  #     run: |
-  #       sudo apt-get update
-  #       # Install GCC 13 for C++20 <format> support
-  #       sudo apt-get install -y software-properties-common
-  #       sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
-  #       sudo apt-get update
-  #       sudo apt-get install -y cmake gcc-13 g++-13 ninja-build g++ libgtest-dev pkg-config
+    - name: Checkout common_system (optional dependency)
+      uses: actions/checkout@v4
+      continue-on-error: true
+      with:
+        repository: kcenon/common_system
+        path: common_system
+        token: ${{ secrets.GITHUB_TOKEN }}
 
-  #   - name: Configure CMake (Release for accurate performance)
-  #     run: |
-  #       cmake -B build -G Ninja \
-  #         -DCMAKE_BUILD_TYPE=Release \
-  #         -DBUILD_TESTS=OFF \
-  #         -DCONTAINER_BUILD_INTEGRATION_TESTS=ON \
-  #         -DBUILD_CONTAINER_SAMPLES=OFF
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        # Install GCC 12 for Clang + libstdc++ chrono compatibility
+        sudo apt-get install -y software-properties-common
+        sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+        sudo apt-get update
+        sudo apt-get install -y cmake gcc-12 g++-12 ninja-build clang libgtest-dev libgmock-dev pkg-config libfmt-dev
+        sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-12 100
+        sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-12 100
 
-  #   - name: Build
-  #     run: cmake --build build --config Release --parallel
+    - name: Set up compiler
+      run: |
+        echo "CC=clang" >> $GITHUB_ENV
+        echo "CXX=clang++" >> $GITHUB_ENV
+        echo "CXXFLAGS=-isystem /usr/include/c++/12 -isystem /usr/include/x86_64-linux-gnu/c++/12 --gcc-toolchain=/usr" >> $GITHUB_ENV
+        echo "CFLAGS=--gcc-toolchain=/usr" >> $GITHUB_ENV
 
-  #   - name: Run performance tests
-  #     run: |
-  #       cd build
-  #       echo "=== Performance Baseline Validation ==="
-  #       ./bin/performance_serialization_performance_test
-  #       EXIT_CODE=$?
+    - name: Configure CMake (Release for accurate performance)
+      run: |
+        CMAKE_FLAGS=(
+          -DCMAKE_BUILD_TYPE=Release
+          -DBUILD_TESTS=OFF
+          -DCONTAINER_BUILD_INTEGRATION_TESTS=ON
+          -DBUILD_CONTAINER_SAMPLES=OFF
+          -DBUILD_CONTAINER_EXAMPLES=OFF
+        )
 
-  #       echo ""
-  #       if [ $EXIT_CODE -eq 0 ]; then
-  #         echo "✅ Performance baseline validation passed"
-  #       else
-  #         echo "::warning::Performance baseline validation had issues (exit code: $EXIT_CODE)"
-  #         echo "Note: Performance tests may skip validation in CI environments"
-  #       fi
+        if [ -n "$CXXFLAGS" ]; then
+          CMAKE_FLAGS+=(-DCMAKE_CXX_FLAGS="$CXXFLAGS")
+        fi
+        if [ -n "$CFLAGS" ]; then
+          CMAKE_FLAGS+=(-DCMAKE_C_FLAGS="$CFLAGS")
+        fi
 
-  #       # Don't fail the workflow - performance tests are informational
-  #       exit 0
+        cmake -B build -G Ninja "${CMAKE_FLAGS[@]}"
 
-  #   - name: Upload performance results
-  #     uses: actions/upload-artifact@v4
-  #     with:
-  #       name: performance-baseline-results
-  #       path: build/Testing/
+    - name: Build
+      run: cmake --build build --config Release --parallel
+
+    - name: Run performance tests
+      run: |
+        cd build
+        echo "=== Performance Baseline Validation ==="
+        ./bin/performance_serialization_performance_test
+        EXIT_CODE=$?
+
+        echo ""
+        if [ $EXIT_CODE -eq 0 ]; then
+          echo "✅ Performance baseline validation passed"
+        else
+          echo "::warning::Performance baseline validation had issues (exit code: $EXIT_CODE)"
+          echo "Note: Performance tests may skip validation in CI environments"
+        fi
+
+        # Don't fail the workflow - performance tests are informational
+        exit 0
+
+    - name: Upload performance results
+      uses: actions/upload-artifact@v4
+      with:
+        name: performance-baseline-results
+        path: build/Testing/
 
   summary:
     name: Integration Tests Summary
