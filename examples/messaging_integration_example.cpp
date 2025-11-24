@@ -32,11 +32,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 /**
  * @file messaging_integration_example.cpp
- * @brief Example demonstrating the new messaging integration features
+ * @brief Example demonstrating messaging integration features
  *
- * This example shows how to use the enhanced container system with
- * messaging-specific optimizations, performance monitoring, and
- * external system integration capabilities.
+ * This example shows how to use the container system with
+ * messaging-specific optimizations using the variant-based API.
  */
 
 #include <iostream>
@@ -45,34 +44,25 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <thread>
 #include <iomanip>
 
-// Include the container system with new integration features
+// Include the container system
 #include "container/container.h"
 
 using namespace container_module;
 
-#ifdef HAS_MESSAGING_FEATURES
-using namespace container_module::integration;
-#endif
-
 void demonstrate_basic_usage() {
     std::cout << "\n=== Basic Container Usage ===\n";
 
-    // Traditional way
+    // Create container using set_value API
     auto container = std::make_shared<value_container>();
     container->set_source("client_01", "session_123");
     container->set_target("server", "main_handler");
     container->set_message_type("user_data");
 
-    // Add some values
-    std::string user_id_key = "user_id";
-    container->add(std::make_shared<long_value>(user_id_key, 12345L));
-    std::string username_key = "username";
-    std::string username_val = "john_doe";
-    container->add(std::make_shared<string_value>(username_key, username_val));
-    std::string balance_key = "balance";
-    container->add(std::make_shared<double_value>(balance_key, 1500.75));
-    std::string active_key = "active";
-    container->add(std::make_shared<bool_value>(active_key, true));
+    // Add values using set_value
+    container->set_value("user_id", static_cast<int64_t>(12345L));
+    container->set_value("username", std::string("john_doe"));
+    container->set_value("balance", 1500.75);
+    container->set_value("active", true);
 
     std::cout << "Created container with 4 values\n";
     std::cout << "Message type: " << container->message_type() << "\n";
@@ -84,101 +74,85 @@ void demonstrate_basic_usage() {
     std::cout << "Serialized size: " << serialized.size() << " bytes\n";
 }
 
-#ifdef HAS_MESSAGING_FEATURES
-void demonstrate_enhanced_features() {
-    std::cout << "\n=== Enhanced Messaging Features ===\n";
+void demonstrate_value_access() {
+    std::cout << "\n=== Value Access Patterns ===\n";
 
-    // Enhanced container creation
-    auto container = messaging_integration::create_optimized_container("enhanced_message");
-    std::cout << "Created optimized container for messaging\n";
+    auto container = std::make_shared<value_container>();
+    container->set_message_type("value_access_demo");
 
-    // Builder pattern usage
-    auto built_container = messaging_container_builder()
-        .source("enhanced_client", "session_456")
-        .target("enhanced_server", "processing_unit")
-        .message_type("enhanced_data")
-        .add_value("request_id", 789)
-        .add_value("priority", 1)
-        .add_value("payload", std::string("Important data"))
-        .add_value("timestamp", 1672531200L)
-        .optimize_for_speed()
-        .build();
+    // Add various values
+    container->set_value("request_id", static_cast<int32_t>(789));
+    container->set_value("priority", static_cast<int32_t>(1));
+    container->set_value("payload", std::string("Important data"));
+    container->set_value("timestamp", static_cast<int64_t>(1672531200L));
+    container->set_value("is_urgent", true);
 
-    std::cout << "Built container using builder pattern\n";
-    std::cout << "Message type: " << built_container->message_type() << "\n";
-
-    // Enhanced serialization
-    {
-        std::string serialized = messaging_integration::serialize_for_messaging(built_container);
-
-        std::cout << "Enhanced serialization completed\n";
-        std::cout << "Serialized size: " << serialized.size() << " bytes\n";
-
-        // Enhanced deserialization
-        auto deserialized = messaging_integration::deserialize_from_messaging(serialized);
-        if (deserialized) {
-            std::cout << "Enhanced deserialization successful\n";
-            std::cout << "Restored message type: " << deserialized->message_type() << "\n";
+    // Access values using get_value and std::get_if
+    if (auto val = container->get_value("request_id")) {
+        if (auto* v = std::get_if<int32_t>(&val->data)) {
+            std::cout << "Request ID: " << *v << "\n";
         }
     }
-}
-#endif
 
-#ifdef HAS_PERFORMANCE_METRICS
-void demonstrate_performance_monitoring() {
-    std::cout << "\n=== Performance Monitoring ===\n";
-
-    // Reset metrics for clean demonstration
-    messaging_integration::reset_metrics();
-
-    // Perform some operations to generate metrics
-    for (int i = 0; i < 10; ++i) {
-        auto container = messaging_integration::create_optimized_container("perf_test");
-
-        auto built = messaging_container_builder()
-            .message_type("performance_test")
-            .add_value("iteration", i)
-            .add_value("data", std::string(100, 'x'))  // 100-character string
-            .build();
-
-        std::string serialized = messaging_integration::serialize_for_messaging(built);
-        auto deserialized = messaging_integration::deserialize_from_messaging(serialized);
+    if (auto val = container->get_value("payload")) {
+        if (auto* v = std::get_if<std::string>(&val->data)) {
+            std::cout << "Payload: " << *v << "\n";
+        }
     }
 
-    // Display metrics
-    std::cout << messaging_integration::get_metrics_summary();
+    if (auto val = container->get_value("is_urgent")) {
+        if (auto* v = std::get_if<bool>(&val->data)) {
+            std::cout << "Is Urgent: " << (*v ? "yes" : "no") << "\n";
+        }
+    }
 
-    auto& metrics = messaging_integration::get_metrics();
-    std::cout << "Total operations tracked: "
-              << (metrics.containers_created.load() +
-                  metrics.serializations_performed.load() +
-                  metrics.deserializations_performed.load()) << "\n";
+    // Iterate over all values
+    std::cout << "\nAll values in container:\n";
+    for (const auto& val : *container) {
+        std::cout << "  - " << val.name << " (type: " << static_cast<int>(val.type) << ")\n";
+    }
 }
-#endif
 
-#ifdef HAS_EXTERNAL_INTEGRATION
-void demonstrate_external_callbacks() {
-    std::cout << "\n=== External System Integration ===\n";
+void demonstrate_serialization_roundtrip() {
+    std::cout << "\n=== Serialization Round-trip ===\n";
 
-    // Register callbacks for container operations
-    messaging_integration::register_creation_callback([](const auto& container) {
-        std::cout << "Callback: Container created with type '"
-                  << container->message_type() << "'\n";
-    });
+    // Create source container
+    auto source = std::make_shared<value_container>();
+    source->set_source("sender", "app_1");
+    source->set_target("receiver", "app_2");
+    source->set_message_type("roundtrip_test");
 
-    messaging_integration::register_serialization_callback([](const auto& container) {
-        std::cout << "Callback: Container serialized\n";
-    });
+    source->set_value("int_val", static_cast<int32_t>(42));
+    source->set_value("double_val", 3.14159);
+    source->set_value("string_val", std::string("Hello, World!"));
+    source->set_value("bool_val", true);
+    source->set_value("long_val", static_cast<int64_t>(9876543210L));
 
-    // Create and serialize a container to trigger callbacks
-    auto container = messaging_integration::create_optimized_container("callback_test");
-    messaging_integration::serialize_for_messaging(container);
+    // Serialize
+    std::string serialized = source->serialize();
+    std::cout << "Serialized " << source->size() << " values to " << serialized.size() << " bytes\n";
 
-    // Clean up callbacks
-    messaging_integration::unregister_callbacks();
-    std::cout << "Callbacks unregistered\n";
+    // Deserialize
+    auto restored = std::make_shared<value_container>(serialized);
+    std::cout << "Restored container: " << restored->message_type() << "\n";
+
+    // Verify values
+    bool all_match = true;
+
+    if (auto val = restored->get_value("int_val")) {
+        if (auto* v = std::get_if<int32_t>(&val->data)) {
+            if (*v != 42) all_match = false;
+        }
+    }
+
+    if (auto val = restored->get_value("string_val")) {
+        if (auto* v = std::get_if<std::string>(&val->data)) {
+            if (*v != "Hello, World!") all_match = false;
+        }
+    }
+
+    std::cout << "Round-trip verification: " << (all_match ? "PASSED" : "FAILED") << "\n";
 }
-#endif
 
 void demonstrate_compatibility() {
     std::cout << "\n=== Messaging System Compatibility ===\n";
@@ -191,6 +165,7 @@ void demonstrate_compatibility() {
     // Demonstrate that the same container can be used in different contexts
     auto container = std::make_shared<value_container>();
     container->set_message_type("compatibility_test");
+    container->set_value("demo_value", static_cast<int32_t>(123));
 
     std::cout << "Container can be used standalone or as part of messaging system\n";
     std::cout << "Type safety and performance remain consistent across usage patterns\n";
@@ -201,82 +176,60 @@ void performance_comparison() {
 
     const int iterations = 1000;
 
-    // Standard serialization
+    // Test set_value performance
     auto start = std::chrono::high_resolution_clock::now();
     for (int i = 0; i < iterations; ++i) {
         auto container = std::make_shared<value_container>();
-        container->set_message_type("standard_test");
+        container->set_message_type("perf_test");
+        container->set_value("index", static_cast<int32_t>(i));
+        container->set_value("data", std::string("test_data"));
         std::string serialized = container->serialize();
     }
     auto standard_time = std::chrono::high_resolution_clock::now() - start;
 
-#ifdef HAS_MESSAGING_FEATURES
-    // Enhanced serialization
-    start = std::chrono::high_resolution_clock::now();
-    for (int i = 0; i < iterations; ++i) {
-        auto container = messaging_integration::create_optimized_container("enhanced_test");
-        std::string serialized = messaging_integration::serialize_for_messaging(container);
-    }
-    auto enhanced_time = std::chrono::high_resolution_clock::now() - start;
-
     auto standard_ms = std::chrono::duration_cast<std::chrono::milliseconds>(standard_time).count();
-    auto enhanced_ms = std::chrono::duration_cast<std::chrono::milliseconds>(enhanced_time).count();
+    std::cout << "set_value API: " << standard_ms << " ms for " << iterations << " operations\n";
 
-    std::cout << "Standard approach: " << standard_ms << " ms for " << iterations << " operations\n";
-    std::cout << "Enhanced approach: " << enhanced_ms << " ms for " << iterations << " operations\n";
-
-    if (enhanced_ms > 0) {
-        double improvement = static_cast<double>(standard_ms) / enhanced_ms;
-        std::cout << "Performance factor: " << std::fixed << std::setprecision(2) << improvement << "x\n";
+    if (standard_ms > 0) {
+        double rate = (iterations * 1000.0) / standard_ms;
+        std::cout << "Rate: " << std::fixed << std::setprecision(2) << rate << " containers/second\n";
     }
-#else
-    auto standard_ms = std::chrono::duration_cast<std::chrono::milliseconds>(standard_time).count();
-    std::cout << "Standard approach: " << standard_ms << " ms for " << iterations << " operations\n";
-    std::cout << "Enhanced features not enabled in this build\n";
-#endif
+}
+
+void demonstrate_memory_efficiency() {
+    std::cout << "\n=== Memory Efficiency ===\n";
+
+    auto container = std::make_shared<value_container>();
+    container->set_message_type("memory_test");
+
+    // Add various values
+    container->set_value("small_int", static_cast<int32_t>(42));
+    container->set_value("large_string", std::string(1000, 'x'));
+    container->set_value("double_val", 123.456);
+    container->set_value("bool_val", true);
+    container->set_value("long_val", static_cast<int64_t>(9999999999L));
+
+    // Get memory stats
+    auto [heap, stack] = container->memory_stats();
+    std::cout << "Container memory stats:\n";
+    std::cout << "  Heap allocations: " << heap << "\n";
+    std::cout << "  Stack allocations: " << stack << "\n";
+    std::cout << "  Total footprint: " << container->memory_footprint() << " bytes\n";
 }
 
 int main() {
     std::cout << "Container System - Messaging Integration Example\n";
     std::cout << "================================================\n";
-
-    std::cout << "Build configuration:\n";
-#ifdef HAS_MESSAGING_FEATURES
-    std::cout << "- Messaging Features: ENABLED\n";
-#else
-    std::cout << "- Messaging Features: DISABLED\n";
-#endif
-
-#ifdef HAS_PERFORMANCE_METRICS
-    std::cout << "- Performance Metrics: ENABLED\n";
-#else
-    std::cout << "- Performance Metrics: DISABLED\n";
-#endif
-
-#ifdef HAS_EXTERNAL_INTEGRATION
-    std::cout << "- External Integration: ENABLED\n";
-#else
-    std::cout << "- External Integration: DISABLED\n";
-#endif
+    std::cout << "Using variant-based API (set_value/get_value)\n";
 
     try {
         // Demonstrate various features
         demonstrate_basic_usage();
-
-#ifdef HAS_MESSAGING_FEATURES
-        demonstrate_enhanced_features();
-#endif
-
-#ifdef HAS_PERFORMANCE_METRICS
-        demonstrate_performance_monitoring();
-#endif
-
-#ifdef HAS_EXTERNAL_INTEGRATION
-        demonstrate_external_callbacks();
-#endif
-
+        demonstrate_value_access();
+        demonstrate_serialization_roundtrip();
         demonstrate_compatibility();
         performance_comparison();
+        demonstrate_memory_efficiency();
 
         std::cout << "\n=== Example Completed Successfully ===\n";
 

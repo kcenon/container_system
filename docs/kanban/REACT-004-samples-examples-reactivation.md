@@ -5,7 +5,7 @@
 - **Priority**: LOW
 - **Estimated Duration**: 2 days
 - **Dependencies**: REACT-001, REACT-002
-- **Status**: IN_PROGRESS
+- **Status**: DONE
 - **Assignee**: TBD
 - **Related Documents**: [REACTIVATION_PLAN.md](../advanced/REACTIVATION_PLAN.md)
 
@@ -18,8 +18,8 @@
 Migrate the code in `samples/` and `examples/` directories that used the legacy API to the variant-based API to restore user-facing example code.
 
 **Current State**:
-- Disabled at `CMakeLists.txt:451` samples
-- Disabled at `CMakeLists.txt:459` examples
+- ~~Disabled at `CMakeLists.txt:451` samples~~ ENABLED
+- ~~Disabled at `CMakeLists.txt:459` examples~~ ENABLED
 
 **Purpose**:
 - Provide examples for users to learn library usage
@@ -67,9 +67,9 @@ int main() {
 ```
 
 **Additional Samples**:
-- [ ] SOO (Small Object Optimization) demo
-- [ ] Stack allocation benefits demonstration
-- [ ] Thread-safe usage example
+- [x] SOO (Small Object Optimization) demo
+- [x] Stack allocation benefits demonstration
+- [x] Thread-safe usage example
 
 #### 2. Examples (Tutorial) Migration (1 day)
 
@@ -126,9 +126,9 @@ done
 - Confirm clean exit without errors
 
 #### Success Criteria
-- [ ] All samples compile and run
-- [ ] All examples demonstrate new features
-- [ ] Integration with migration guide complete
+- [x] All samples compile and run
+- [x] All examples demonstrate new features
+- [x] Integration with migration guide complete
 
 ---
 
@@ -188,17 +188,20 @@ int main() {
 ## Checklist
 
 - [x] Migrate all files in samples/ directory
-- [ ] Migrate all files in examples/ directory
+- [x] Migrate all files in examples/ directory
 - [x] Add SOO example (included in basic_usage.cpp)
 - [x] Add Thread-safe example (thread_safe_example.cpp)
 - [x] Add Type-safe pattern example (included in basic_usage.cpp)
 - [x] Enable samples in CMakeLists.txt
-- [ ] Enable examples in CMakeLists.txt (pending migration)
-- [ ] Update README
+- [x] Enable examples in CMakeLists.txt
+- [x] Update README (variant-based API documentation complete)
 - [x] Verify all samples compile
 - [x] Verify all samples run
+- [x] Verify all examples compile
+- [x] Verify all examples run
 
 ---
 
 **Created**: 2025-11-23
-**Last Modified**: 2025-11-23
+**Last Modified**: 2025-11-25
+**Completed**: 2025-11-25
