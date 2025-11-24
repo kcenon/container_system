@@ -50,8 +50,8 @@ namespace container_module
     /**
      * @brief Create a boolean value
      */
-    inline value make_bool_value(std::string_view name, bool value) {
-        return value(name, value);
+    inline value make_bool_value(std::string_view name, bool val) {
+        return value(name, val);
     }
 
     // ============================================================================
@@ -61,57 +61,57 @@ namespace container_module
     /**
      * @brief Create a short (int16_t) value
      */
-    inline value make_short_value(std::string_view name, int16_t value) {
-        return value(name, value);
+    inline value make_short_value(std::string_view name, int16_t val) {
+        return value(name, val);
     }
 
     /**
      * @brief Create an unsigned short (uint16_t) value
      */
-    inline value make_ushort_value(std::string_view name, uint16_t value) {
-        return value(name, value);
+    inline value make_ushort_value(std::string_view name, uint16_t val) {
+        return value(name, val);
     }
 
     /**
      * @brief Create an int (int32_t) value
      */
-    inline value make_int_value(std::string_view name, int32_t value) {
-        return value(name, value);
+    inline value make_int_value(std::string_view name, int32_t val) {
+        return value(name, val);
     }
 
     /**
      * @brief Create an unsigned int (uint32_t) value
      */
-    inline value make_uint_value(std::string_view name, uint32_t value) {
-        return value(name, value);
+    inline value make_uint_value(std::string_view name, uint32_t val) {
+        return value(name, val);
     }
 
     /**
      * @brief Create a long (int64_t) value
      */
-    inline value make_long_value(std::string_view name, int64_t value) {
-        return value(name, value);
+    inline value make_long_value(std::string_view name, int64_t val) {
+        return value(name, val);
     }
 
     /**
      * @brief Create an unsigned long (uint64_t) value
      */
-    inline value make_ulong_value(std::string_view name, uint64_t value) {
-        return value(name, value);
+    inline value make_ulong_value(std::string_view name, uint64_t val) {
+        return value(name, val);
     }
 
     /**
      * @brief Create a float value
      */
-    inline value make_float_value(std::string_view name, float value) {
-        return value(name, value);
+    inline value make_float_value(std::string_view name, float val) {
+        return value(name, val);
     }
 
     /**
      * @brief Create a double value
      */
-    inline value make_double_value(std::string_view name, double value) {
-        return value(name, value);
+    inline value make_double_value(std::string_view name, double val) {
+        return value(name, val);
     }
 
     /**
@@ -176,22 +176,22 @@ namespace container_module
     /**
      * @brief Create a string value
      */
-    inline value make_string_value(std::string_view name, std::string value) {
-        return value(name, std::move(value));
+    inline value make_string_value(std::string_view name, std::string str) {
+        return value(name, std::move(str));
     }
 
     /**
      * @brief Create a string value from string_view
      */
-    inline value make_string_value(std::string_view name, std::string_view value) {
-        return value(name, std::string(value));
+    inline value make_string_value(std::string_view name, std::string_view str) {
+        return value(name, std::string(str));
     }
 
     /**
      * @brief Create a string value from C-string
      */
-    inline value make_string_value(std::string_view name, const char* value) {
-        return value(name, std::string(value));
+    inline value make_string_value(std::string_view name, const char* str) {
+        return value(name, std::string(str));
     }
 
     // ============================================================================

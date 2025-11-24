@@ -37,6 +37,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "container/core/typed_container.h"
 #include "container/core/container_memory_pool.h"
 
+// Forward declaration for legacy compatibility
+namespace container_module {
+    class value;
+}
+
 // Optional common system integration
 #ifdef CONTAINER_USE_COMMON_SYSTEM
     #if __has_include(<kcenon/common/patterns/result.h>)
@@ -215,12 +220,12 @@ namespace container_module
 		 * @throws std::bad_alloc if memory allocation fails
 		 */
 		template<typename T>
-		void add_value(const std::string& name, T&& value) {
+		void add_value(const std::string& name, T&& data_val) {
 			write_lock_guard lock(this);
 
 			optimized_value val;
 			val.name = name;
-			val.data = std::forward<T>(value);
+			val.data = std::forward<T>(data_val);
 			val.type = static_cast<value_types>(val.data.index());
 
 			optimized_units_.push_back(std::move(val));
@@ -232,6 +237,13 @@ namespace container_module
 				heap_allocations_.fetch_add(1, std::memory_order_relaxed);
 			}
 		}
+
+		/**
+		 * @brief Legacy compatibility: Add a value object to the container
+		 * @param val Shared pointer to value object
+		 * @deprecated Use add_value() instead
+		 */
+		void add(std::shared_ptr<value> val);
 
 		/**
 		 * @brief Get a value by name

@@ -16,6 +16,7 @@ All rights reserved.
  */
 
 #include <gtest/gtest.h>
+#include "test_compat.h"
 #include <limits>
 #include <cstdint>
 
