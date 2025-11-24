@@ -566,3 +566,189 @@ TEST_F(ContainerThreadSafetyTest, MemorySafetyTest) {
 
     EXPECT_EQ(total_errors.load(), 0);
 }
+
+// Test 11: Nested container storage and retrieval
+TEST_F(ContainerThreadSafetyTest, NestedContainerStorage) {
+    auto inner = std::make_shared<thread_safe_container>();
+    inner->set_typed("inner_key", 42);
+    inner->set_typed("inner_string", std::string("nested value"));
+
+    thread_safe_container outer;
+    outer.set_container("nested", inner);
+
+    auto retrieved = outer.get_container("nested");
+    ASSERT_NE(retrieved, nullptr);
+
+    auto val = retrieved->get_variant("inner_key");
+    ASSERT_TRUE(val.has_value());
+    EXPECT_EQ(val->get<int32_t>().value(), 42);
+
+    auto str_val = retrieved->get_variant("inner_string");
+    ASSERT_TRUE(str_val.has_value());
+    EXPECT_EQ(str_val->get<std::string>().value(), "nested value");
+}
+
+// Test 12: Recursive serialization (3-level nested container)
+TEST_F(ContainerThreadSafetyTest, RecursiveSerialization) {
+    // Create 3-level nested container
+    auto level3 = std::make_shared<thread_safe_container>();
+    level3->set_typed("data", std::string("deepest"));
+    level3->set_typed("depth", 3);
+
+    auto level2 = std::make_shared<thread_safe_container>();
+    level2->set_container("child", level3);
+    level2->set_typed("depth", 2);
+
+    auto level1 = std::make_shared<thread_safe_container>();
+    level1->set_container("child", level2);
+    level1->set_typed("depth", 1);
+
+    // Serialize
+    auto bytes = level1->serialize();
+    EXPECT_GT(bytes.size(), 0);
+
+    // Deserialize
+    auto restored = thread_safe_container::deserialize(bytes);
+    ASSERT_NE(restored, nullptr);
+
+    // Verify depth 1
+    auto depth1_val = restored->get_variant("depth");
+    ASSERT_TRUE(depth1_val.has_value());
+    EXPECT_EQ(depth1_val->get<int32_t>().value(), 1);
+
+    // Verify depth 2
+    auto l2 = restored->get_container("child");
+    ASSERT_NE(l2, nullptr);
+    auto depth2_val = l2->get_variant("depth");
+    ASSERT_TRUE(depth2_val.has_value());
+    EXPECT_EQ(depth2_val->get<int32_t>().value(), 2);
+
+    // Verify depth 3
+    auto l3 = l2->get_container("child");
+    ASSERT_NE(l3, nullptr);
+    auto depth3_val = l3->get_variant("depth");
+    ASSERT_TRUE(depth3_val.has_value());
+    EXPECT_EQ(depth3_val->get<int32_t>().value(), 3);
+
+    auto data = l3->get_variant("data");
+    ASSERT_TRUE(data.has_value());
+    EXPECT_EQ(data->get<std::string>().value(), "deepest");
+}
+
+// Test 13: Concurrent nested container access
+TEST_F(ContainerThreadSafetyTest, ConcurrentNestedAccess) {
+    auto container = std::make_shared<thread_safe_container>();
+
+    const int num_threads = 10;
+    std::vector<std::thread> threads;
+    std::atomic<int> errors{0};
+
+    for (int i = 0; i < num_threads; ++i) {
+        threads.emplace_back([&container, &errors, i]() {
+            try {
+                auto nested = std::make_shared<thread_safe_container>();
+                nested->set_typed("id", i);
+                nested->set_typed("name", std::string("thread_" + std::to_string(i)));
+                container->set_container("nested_" + std::to_string(i), nested);
+            } catch (...) {
+                ++errors;
+            }
+        });
+    }
+
+    for (auto& t : threads) t.join();
+
+    EXPECT_EQ(errors.load(), 0);
+
+    // Verify all nested containers
+    for (int i = 0; i < num_threads; ++i) {
+        auto nested = container->get_container("nested_" + std::to_string(i));
+        ASSERT_NE(nested, nullptr) << "Nested container " << i << " not found";
+
+        auto id_val = nested->get_variant("id");
+        ASSERT_TRUE(id_val.has_value());
+        EXPECT_EQ(id_val->get<int32_t>().value(), i);
+    }
+}
+
+// Test 14: Container value round-trip serialization
+TEST_F(ContainerThreadSafetyTest, ContainerValueRoundTrip) {
+    auto container = std::make_shared<thread_safe_container>();
+    container->set_typed("key1", 123);
+    container->set_typed("key2", std::string("value"));
+    container->set_typed("key3", 3.14159);
+
+    value val("nested", container);
+
+    auto bytes = val.serialize();
+    EXPECT_GT(bytes.size(), 0);
+
+    auto restored = value::deserialize(bytes);
+    ASSERT_TRUE(restored.has_value());
+    EXPECT_EQ(restored->type(), value_types::container_value);
+
+    auto restored_container = restored->get<std::shared_ptr<thread_safe_container>>();
+    ASSERT_TRUE(restored_container.has_value());
+    ASSERT_NE(restored_container.value(), nullptr);
+
+    auto key1_val = restored_container.value()->get_variant("key1");
+    ASSERT_TRUE(key1_val.has_value());
+    EXPECT_EQ(key1_val->get<int32_t>().value(), 123);
+
+    auto key2_val = restored_container.value()->get_variant("key2");
+    ASSERT_TRUE(key2_val.has_value());
+    EXPECT_EQ(key2_val->get<std::string>().value(), "value");
+}
+
+// Test 15: Circular reference prevention
+TEST_F(ContainerThreadSafetyTest, CircularReferencePrevention) {
+    auto container1 = std::make_shared<thread_safe_container>();
+    auto container2 = std::make_shared<thread_safe_container>();
+
+    container1->set_typed("name", std::string("container1"));
+    container2->set_typed("name", std::string("container2"));
+
+    // Create circular reference: container1 -> container2 -> container1
+    container1->set_container("ref", container2);
+    container2->set_container("ref", container1);
+
+    // Serialization should not hang (circular reference is handled)
+    auto bytes = container1->serialize();
+
+    // Should complete without hanging
+    EXPECT_GT(bytes.size(), 0);
+
+    // Deserialize and verify structure is preserved (circular part becomes null)
+    auto restored = thread_safe_container::deserialize(bytes);
+    ASSERT_NE(restored, nullptr);
+
+    auto name_val = restored->get_variant("name");
+    ASSERT_TRUE(name_val.has_value());
+    EXPECT_EQ(name_val->get<std::string>().value(), "container1");
+}
+
+// Test 16: set_variant and get_variant API
+TEST_F(ContainerThreadSafetyTest, SetGetVariantAPI) {
+    thread_safe_container container;
+
+    // Create value and set using set_variant
+    value v1("test_key", 42);
+    container.set_variant(v1);
+
+    // Get using get_variant
+    auto retrieved = container.get_variant("test_key");
+    ASSERT_TRUE(retrieved.has_value());
+    EXPECT_EQ(retrieved->get<int32_t>().value(), 42);
+
+    // Test with string value
+    value v2("string_key", std::string("hello world"));
+    container.set_variant(v2);
+
+    auto str_retrieved = container.get_variant("string_key");
+    ASSERT_TRUE(str_retrieved.has_value());
+    EXPECT_EQ(str_retrieved->get<std::string>().value(), "hello world");
+
+    // Test get_variant with non-existent key
+    auto missing = container.get_variant("non_existent");
+    EXPECT_FALSE(missing.has_value());
+}

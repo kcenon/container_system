@@ -11,9 +11,35 @@ All rights reserved.
 #include <iomanip>
 #include <cstring>
 #include <stdexcept>
+#include <set>
 
 namespace container_module
 {
+    namespace detail {
+        // Thread-local set for detecting circular references during serialization
+        thread_local std::set<const void*> serializing_containers;
+
+        struct circular_ref_guard {
+            const void* ptr;
+            bool inserted;
+
+            explicit circular_ref_guard(const thread_safe_container* container)
+                : ptr(container), inserted(false) {
+                if (ptr) {
+                    auto result = serializing_containers.insert(ptr);
+                    inserted = result.second;
+                }
+            }
+
+            ~circular_ref_guard() {
+                if (inserted && ptr) {
+                    serializing_containers.erase(ptr);
+                }
+            }
+
+            bool is_circular() const { return ptr && !inserted; }
+        };
+    }
     // ============================================================================
     // array_variant implementation
     // ============================================================================
@@ -273,12 +299,22 @@ namespace container_module
             else if constexpr (std::is_same_v<T, std::shared_ptr<thread_safe_container>>) {
                 // Container: [serialized_size:4][serialized_data:size]
                 if (val) {
-                    auto container_data = val->serialize();
-                    uint32_t size = static_cast<uint32_t>(container_data.size());
-                    result.insert(result.end(),
-                                 reinterpret_cast<const uint8_t*>(&size),
-                                 reinterpret_cast<const uint8_t*>(&size) + sizeof(size));
-                    result.insert(result.end(), container_data.begin(), container_data.end());
+                    // Check for circular reference
+                    detail::circular_ref_guard guard(val.get());
+                    if (guard.is_circular()) {
+                        // Circular reference detected - serialize as null container
+                        uint32_t size = 0;
+                        result.insert(result.end(),
+                                     reinterpret_cast<const uint8_t*>(&size),
+                                     reinterpret_cast<const uint8_t*>(&size) + sizeof(size));
+                    } else {
+                        auto container_data = val->serialize();
+                        uint32_t size = static_cast<uint32_t>(container_data.size());
+                        result.insert(result.end(),
+                                     reinterpret_cast<const uint8_t*>(&size),
+                                     reinterpret_cast<const uint8_t*>(&size) + sizeof(size));
+                        result.insert(result.end(), container_data.begin(), container_data.end());
+                    }
                 } else {
                     uint32_t size = 0;
                     result.insert(result.end(),

@@ -159,15 +159,55 @@ namespace container_module
     {
         std::shared_lock lock(mutex_);
         read_count_.fetch_add(1, std::memory_order_relaxed);
-        
+
         std::vector<std::string> result;
         result.reserve(values_.size());
-        
+
         for (const auto& [key, value] : values_) {
             result.push_back(key);
         }
-        
+
         return result;
+    }
+
+    void thread_safe_container::set_variant(const value& val)
+    {
+        std::unique_lock lock(mutex_);
+        write_count_.fetch_add(1, std::memory_order_relaxed);
+        values_[std::string(val.name())] = val;
+    }
+
+    std::optional<value> thread_safe_container::get_variant(const std::string& key) const
+    {
+        std::shared_lock lock(mutex_);
+        read_count_.fetch_add(1, std::memory_order_relaxed);
+
+        auto it = values_.find(key);
+        if (it != values_.end()) {
+            return it->second;
+        }
+        return std::nullopt;
+    }
+
+    void thread_safe_container::set_container(const std::string& key,
+                                              std::shared_ptr<thread_safe_container> container)
+    {
+        std::unique_lock lock(mutex_);
+        write_count_.fetch_add(1, std::memory_order_relaxed);
+        values_[key] = value(key, std::move(container));
+    }
+
+    std::shared_ptr<thread_safe_container> thread_safe_container::get_container(
+        const std::string& key) const
+    {
+        std::shared_lock lock(mutex_);
+        read_count_.fetch_add(1, std::memory_order_relaxed);
+
+        auto it = values_.find(key);
+        if (it != values_.end()) {
+            return it->second.get<std::shared_ptr<thread_safe_container>>().value_or(nullptr);
+        }
+        return nullptr;
     }
 
     bool thread_safe_container::compare_exchange(std::string_view key,
