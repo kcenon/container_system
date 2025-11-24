@@ -5,7 +5,7 @@
 - **Priority**: LOW
 - **Estimated Duration**: 2 days
 - **Dependencies**: REACT-001, REACT-002
-- **Status**: TODO
+- **Status**: IN_PROGRESS
 - **Assignee**: TBD
 - **Related Documents**: [REACTIVATION_PLAN.md](../advanced/REACTIVATION_PLAN.md)
 
@@ -187,15 +187,16 @@ int main() {
 
 ## Checklist
 
-- [ ] Migrate all files in samples/ directory
+- [x] Migrate all files in samples/ directory
 - [ ] Migrate all files in examples/ directory
-- [ ] Add SOO example
-- [ ] Add Thread-safe example
-- [ ] Add Type-safe pattern example
-- [ ] Enable samples/examples in CMakeLists.txt
+- [x] Add SOO example (included in basic_usage.cpp)
+- [x] Add Thread-safe example (thread_safe_example.cpp)
+- [x] Add Type-safe pattern example (included in basic_usage.cpp)
+- [x] Enable samples in CMakeLists.txt
+- [ ] Enable examples in CMakeLists.txt (pending migration)
 - [ ] Update README
-- [ ] Verify all examples compile
-- [ ] Verify all examples run
+- [x] Verify all samples compile
+- [x] Verify all samples run
 
 ---
 
