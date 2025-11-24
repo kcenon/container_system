@@ -160,6 +160,34 @@ namespace container_module
         std::vector<std::string> keys() const;
 
         /**
+         * @brief Set a value directly using variant value
+         * @param val The value to store (key is extracted from value's name)
+         */
+        void set_variant(const value& val);
+
+        /**
+         * @brief Get a value as variant value
+         * @param key The key to look up
+         * @return Optional containing the value if found
+         */
+        std::optional<value> get_variant(const std::string& key) const;
+
+        /**
+         * @brief Set a nested container
+         * @param key The key for the nested container
+         * @param container The container to store
+         */
+        void set_container(const std::string& key,
+                          std::shared_ptr<thread_safe_container> container);
+
+        /**
+         * @brief Get a nested container
+         * @param key The key to look up
+         * @return Shared pointer to container, nullptr if not found or not a container
+         */
+        std::shared_ptr<thread_safe_container> get_container(const std::string& key) const;
+
+        /**
          * @brief Apply a function to all values (read-only)
          * @tparam Func Function type
          * @param func Function to apply to each key-value pair
