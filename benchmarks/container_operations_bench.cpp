@@ -34,8 +34,8 @@
  */
 
 #include <benchmark/benchmark.h>
-#include "core/container.h"
-#include "core/value.h"
+#include "container/core/container.h"
+#include "tests/test_compat.h"
 
 using namespace container_module;
 
