@@ -248,19 +248,25 @@ public:
 
 // Legacy type aliases (allow 'long_value val' declarations)
 // Use legacy_value to provide member function API (to_long(), to_ulong(), etc.)
-using int_value = legacy_value;
-using bool_value = legacy_value;
-using string_value = legacy_value;
-using llong_value = legacy_value;
-using long_value = legacy_value;
-using ulong_value = legacy_value;
-using bytes_value = legacy_value;
-using double_value = legacy_value;
-using float_value = legacy_value;
-using short_value = legacy_value;
-using ushort_value = legacy_value;
-using uint_value = legacy_value;
-using ullong_value = legacy_value;
+//
+// NOTE: These aliases are deprecated. Use variant_value_v2 and set_value() API instead.
+// See docs/advanced/VARIANT_VALUE_V2_MIGRATION_GUIDE.md for migration instructions.
+//
+// Deprecation warnings are disabled in test code to allow continued use of legacy API
+// for testing purposes. New code should use the modern API.
+using int_value [[deprecated("Use set_value() with int instead")]] = legacy_value;
+using bool_value [[deprecated("Use set_value() with bool instead")]] = legacy_value;
+using string_value [[deprecated("Use set_value() with string instead")]] = legacy_value;
+using llong_value [[deprecated("Use set_value() with int64_t instead")]] = legacy_value;
+using long_value [[deprecated("Use set_value() with long instead")]] = legacy_value;
+using ulong_value [[deprecated("Use set_value() with unsigned long instead")]] = legacy_value;
+using bytes_value [[deprecated("Use set_value() with vector<uint8_t> instead")]] = legacy_value;
+using double_value [[deprecated("Use set_value() with double instead")]] = legacy_value;
+using float_value [[deprecated("Use set_value() with float instead")]] = legacy_value;
+using short_value [[deprecated("Use set_value() with short instead")]] = legacy_value;
+using ushort_value [[deprecated("Use set_value() with unsigned short instead")]] = legacy_value;
+using uint_value [[deprecated("Use set_value() with unsigned int instead")]] = legacy_value;
+using ullong_value [[deprecated("Use set_value() with uint64_t instead")]] = legacy_value;
 
 // Factory functions that return shared_ptr<legacy_value> for method chaining
 inline std::shared_ptr<legacy_value> make_legacy_int_value(std::string_view name, int32_t val) {
