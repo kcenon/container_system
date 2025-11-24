@@ -248,25 +248,19 @@ public:
 
 // Legacy type aliases (allow 'long_value val' declarations)
 // Use legacy_value to provide member function API (to_long(), to_ulong(), etc.)
-//
-// NOTE: These aliases are deprecated. Use variant_value_v2 and set_value() API instead.
-// See docs/advanced/VARIANT_VALUE_V2_MIGRATION_GUIDE.md for migration instructions.
-//
-// Deprecation warnings are disabled in test code to allow continued use of legacy API
-// for testing purposes. New code should use the modern API.
-using int_value [[deprecated("Use set_value() with int instead")]] = legacy_value;
-using bool_value [[deprecated("Use set_value() with bool instead")]] = legacy_value;
-using string_value [[deprecated("Use set_value() with string instead")]] = legacy_value;
-using llong_value [[deprecated("Use set_value() with int64_t instead")]] = legacy_value;
-using long_value [[deprecated("Use set_value() with long instead")]] = legacy_value;
-using ulong_value [[deprecated("Use set_value() with unsigned long instead")]] = legacy_value;
-using bytes_value [[deprecated("Use set_value() with vector<uint8_t> instead")]] = legacy_value;
-using double_value [[deprecated("Use set_value() with double instead")]] = legacy_value;
-using float_value [[deprecated("Use set_value() with float instead")]] = legacy_value;
-using short_value [[deprecated("Use set_value() with short instead")]] = legacy_value;
-using ushort_value [[deprecated("Use set_value() with unsigned short instead")]] = legacy_value;
-using uint_value [[deprecated("Use set_value() with unsigned int instead")]] = legacy_value;
-using ullong_value [[deprecated("Use set_value() with uint64_t instead")]] = legacy_value;
+using int_value = legacy_value;
+using bool_value = legacy_value;
+using string_value = legacy_value;
+using llong_value = legacy_value;
+using long_value = legacy_value;
+using ulong_value = legacy_value;
+using bytes_value = legacy_value;
+using double_value = legacy_value;
+using float_value = legacy_value;
+using short_value = legacy_value;
+using ushort_value = legacy_value;
+using uint_value = legacy_value;
+using ullong_value = legacy_value;
 
 // Factory functions that return shared_ptr<legacy_value> for method chaining
 inline std::shared_ptr<legacy_value> make_legacy_int_value(std::string_view name, int32_t val) {
@@ -358,44 +352,6 @@ inline std::string ov_data(const std::optional<optimized_value>& ov) {
     return variant_helpers::to_string(ov->data, ov->type);
 }
 
-inline bool ov_is_bytes(const std::optional<optimized_value>& ov) {
-    if (!ov) return false;
-    return ov->type == value_types::bytes_value;
-}
-
-inline int64_t ov_to_llong(const std::optional<optimized_value>& ov) {
-    if (!ov) return 0;
-    return std::visit([](const auto& v) -> int64_t {
-        using T = std::decay_t<decltype(v)>;
-        if constexpr (std::is_arithmetic_v<T> && !std::is_same_v<T, std::monostate>) {
-            return static_cast<int64_t>(v);
-        } else if constexpr (std::is_same_v<T, std::string>) {
-            try { return std::stoll(v); } catch (...) { return 0; }
-        } else {
-            return 0;
-        }
-    }, ov->data);
-}
-
-inline double ov_to_double(const std::optional<optimized_value>& ov) {
-    if (!ov) return 0.0;
-    return std::visit([](const auto& v) -> double {
-        using T = std::decay_t<decltype(v)>;
-        if constexpr (std::is_arithmetic_v<T> && !std::is_same_v<T, std::monostate>) {
-            return static_cast<double>(v);
-        } else if constexpr (std::is_same_v<T, std::string>) {
-            try { return std::stod(v); } catch (...) { return 0.0; }
-        } else {
-            return 0.0;
-        }
-    }, ov->data);
-}
-
-inline std::string ov_name(const std::optional<optimized_value>& ov) {
-    if (!ov) return "";
-    return ov->name;
-}
-
 } // namespace test_compat
 } // namespace container_module
 
@@ -454,12 +410,8 @@ using container_module::test_compat::make_legacy_bytes_value;
 using container_module::test_compat::ov_to_string;
 using container_module::test_compat::ov_to_int;
 using container_module::test_compat::ov_to_boolean;
-using container_module::test_compat::ov_to_llong;
-using container_module::test_compat::ov_to_double;
 using container_module::test_compat::ov_is_null;
-using container_module::test_compat::ov_is_bytes;
 using container_module::test_compat::ov_is_container;
 using container_module::test_compat::ov_data;
-using container_module::test_compat::ov_name;
 using container_module::test_compat::is_int32_range;
 using container_module::test_compat::is_uint32_range;

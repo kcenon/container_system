@@ -241,10 +241,8 @@ namespace container_module
 		/**
 		 * @brief Legacy compatibility: Add a value object to the container
 		 * @param val Shared pointer to value object
-		 * @deprecated Use set_value() or add_value() instead
+		 * @deprecated Use add_value() instead
 		 */
-		[[deprecated("Use set_value() or add_value() instead. "
-		             "See docs/advanced/VARIANT_VALUE_V2_MIGRATION_GUIDE.md")]]
 		void add(std::shared_ptr<value> val);
 
 		// =======================================================================

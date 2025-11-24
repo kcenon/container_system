@@ -32,7 +32,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <benchmark/benchmark.h>
 #include "container/core/container.h"
-#include "tests/test_compat.h"
 
 using namespace container_module;
 
@@ -248,9 +247,9 @@ static void BM_CacheLocality(benchmark::State& state)
 		for (size_t i = 0; i < num_values; ++i)
 		{
 			auto val = container->get_value("val" + std::to_string(i));
-			if (!ov_is_null(val))
+			if (val && !val->is_null())
 			{
-				sum += ov_to_int(val);
+				sum += val->to_int();
 			}
 		}
 		benchmark::DoNotOptimize(sum);

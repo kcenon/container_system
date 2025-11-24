@@ -137,9 +137,8 @@ public:
     {
         if (!ci_environment_) {
             // Local environment: use relaxed but meaningful baseline
-            // Allow 20% of baseline to account for machine variations
-            // and variant-based storage overhead after migration
-            return std::max(min_threshold, baseline * 0.2);
+            // Allow 50% of baseline to account for machine variations
+            return std::max(min_threshold, baseline * 0.5);
         }
 
         // CI environment: very relaxed thresholds
