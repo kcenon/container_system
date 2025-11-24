@@ -53,18 +53,15 @@ static void BM_MemoryFootprint(benchmark::State& state)
 		{
 			if (i % 3 == 0)
 			{
-				container->add(std::make_shared<int_value>("int_" + std::to_string(i),
-					static_cast<int>(i)));
+				container->add_value("int_" + std::to_string(i), static_cast<int>(i));
 			}
 			else if (i % 3 == 1)
 			{
-				container->add(std::make_shared<double_value>("double_" + std::to_string(i),
-					static_cast<double>(i) * 1.5));
+				container->add_value("double_" + std::to_string(i), static_cast<double>(i) * 1.5);
 			}
 			else
 			{
-				container->add(std::make_shared<string_value>("string_" + std::to_string(i),
-					"value_" + std::to_string(i)));
+				container->add_value("string_" + std::to_string(i), "value_" + std::to_string(i));
 			}
 		}
 
@@ -95,12 +92,9 @@ static void BM_SOO_vs_Traditional(benchmark::State& state)
 		// Add primitive values that benefit from SOO
 		for (size_t i = 0; i < num_values; ++i)
 		{
-			container->add(std::make_shared<int_value>("int_" + std::to_string(i),
-				static_cast<int>(i)));
-			container->add(std::make_shared<bool_value>("bool_" + std::to_string(i),
-				i % 2 == 0));
-			container->add(std::make_shared<double_value>("double_" + std::to_string(i),
-				static_cast<double>(i)));
+			container->add_value("int_" + std::to_string(i), static_cast<int>(i));
+			container->add_value("bool_" + std::to_string(i), i % 2 == 0);
+			container->add_value("double_" + std::to_string(i), static_cast<double>(i));
 		}
 
 		auto [heap_allocs, stack_allocs] = container->memory_stats();
@@ -133,7 +127,7 @@ static void BM_MemoryPoolEfficiency(benchmark::State& state)
 		{
 			auto container = std::make_shared<value_container>();
 			container->set_message_type("pool_test");
-			container->add(std::make_shared<int_value>("value", static_cast<int>(i)));
+			container->add_value("value", static_cast<int>(i));
 			containers.push_back(container);
 		}
 
@@ -167,8 +161,7 @@ static void BM_ContainerCreationSpeed(benchmark::State& state)
 
 		for (size_t i = 0; i < num_values; ++i)
 		{
-			container->add(std::make_shared<int_value>("val" + std::to_string(i),
-				static_cast<int>(i)));
+			container->add_value("val" + std::to_string(i), static_cast<int>(i));
 		}
 
 		benchmark::DoNotOptimize(container);
@@ -199,9 +192,9 @@ static void BM_AllocationPattern(benchmark::State& state)
 		for (size_t i = 0; i < container_count; ++i)
 		{
 			auto container = std::make_shared<value_container>();
-			container->add(std::make_shared<int_value>("id", static_cast<int>(i)));
-			container->add(std::make_shared<double_value>("price", i * 10.5));
-			container->add(std::make_shared<bool_value>("active", true));
+			container->add_value("id", static_cast<int>(i));
+			container->add_value("price", i * 10.5);
+			container->add_value("active", true);
 			containers.push_back(container);
 		}
 
@@ -237,8 +230,7 @@ static void BM_CacheLocality(benchmark::State& state)
 	// Pre-populate with values
 	for (size_t i = 0; i < num_values; ++i)
 	{
-		container->add(std::make_shared<int_value>("val" + std::to_string(i),
-			static_cast<int>(i)));
+		container->add_value("val" + std::to_string(i), static_cast<int>(i));
 	}
 
 	for (auto _ : state)
