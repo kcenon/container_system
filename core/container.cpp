@@ -36,6 +36,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "utilities/core/convert_string.h"
 
 #include "container/core/value_types.h"
+#include "container/internal/value.h"
 // Legacy value includes removed - using variant-based storage only
 
 #include <fcntl.h>
@@ -258,6 +259,36 @@ namespace container_module
 		} else {
 			heap_allocations_.fetch_add(1, std::memory_order_relaxed);
 		}
+	}
+
+	void value_container::add(std::shared_ptr<value> val)
+	{
+		if (!val) {
+			return;
+		}
+
+		std::string name_str = std::string(val->name());
+
+		// Handle only types compatible with value_variant
+		val->visit([this, &name_str](const auto& data) {
+			using T = std::decay_t<decltype(data)>;
+			if constexpr (std::is_same_v<T, std::monostate>) {
+				// Skip monostate
+			} else if constexpr (std::is_same_v<T, bool> ||
+								 std::is_same_v<T, int16_t> ||
+								 std::is_same_v<T, uint16_t> ||
+								 std::is_same_v<T, int32_t> ||
+								 std::is_same_v<T, uint32_t> ||
+								 std::is_same_v<T, int64_t> ||
+								 std::is_same_v<T, uint64_t> ||
+								 std::is_same_v<T, float> ||
+								 std::is_same_v<T, double> ||
+								 std::is_same_v<T, std::string> ||
+								 std::is_same_v<T, std::vector<uint8_t>>) {
+				this->add_value(name_str, data);
+			}
+			// Skip incompatible types: thread_safe_container, array_variant
+		});
 	}
 
 	std::optional<optimized_value> value_container::get_value(const std::string& name) const noexcept

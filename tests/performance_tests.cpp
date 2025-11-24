@@ -41,6 +41,7 @@
 #include <cstdlib>
 
 #include "container/core/container.h"
+#include "test_compat.h"
 
 #ifdef HAS_MESSAGING_FEATURES
 #include "container/integration/messaging_integration.h"

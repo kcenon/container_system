@@ -40,8 +40,7 @@
  */
 
 #include <benchmark/benchmark.h>
-#include <container.h>
-#include <container/internal/thread_safe_container.h>
+#include "test_compat.h"
 #include <thread>
 #include <vector>
 #include <random>

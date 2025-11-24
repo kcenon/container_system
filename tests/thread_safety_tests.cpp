@@ -6,7 +6,7 @@ All rights reserved.
 *****************************************************************************/
 
 #include <gtest/gtest.h>
-#include "container/internal/thread_safe_container.h"
+#include "test_compat.h"
 #include "container/internal/memory_pool.h"
 
 #include <thread>
@@ -47,7 +47,8 @@ TEST_F(ContainerThreadSafetyTest, ConcurrentReadWrite) {
 
     // Pre-populate container
     for (int i = 0; i < num_keys; ++i) {
-        container->set("key_" + std::to_string(i), i);
+        std::string key = "key_" + std::to_string(i);
+        container->set(key, value(key, i));
     }
 
     // Writer threads
@@ -60,7 +61,7 @@ TEST_F(ContainerThreadSafetyTest, ConcurrentReadWrite) {
                 try {
                     int key_idx = dist(rng);
                     std::string key = "key_" + std::to_string(key_idx);
-                    container->set(key, thread_id * 1000 + j);
+                    container->set(key, value(key, thread_id * 1000 + j));
                 } catch (...) {
                     ++write_errors;
                 }
@@ -176,7 +177,7 @@ TEST_F(ContainerThreadSafetyTest, BulkOperations) {
                     // Bulk update
                     container->bulk_update([thread_id, j](auto& values) {
                         std::string key = "bulk_" + std::to_string(thread_id);
-                        values[key] = variant_value(key, j);
+                        values[key] = value(key, j);
                     });
                 } catch (...) {
                     ++errors;
@@ -206,7 +207,8 @@ TEST_F(ContainerThreadSafetyTest, MixedOperationsStress) {
 
     // Pre-populate
     for (int i = 0; i < 50; ++i) {
-        container->set("init_" + std::to_string(i), i);
+        std::string key = "init_" + std::to_string(i);
+        container->set(key, value(key, i));
     }
 
     for (int i = 0; i < num_threads; ++i) {
@@ -222,7 +224,7 @@ TEST_F(ContainerThreadSafetyTest, MixedOperationsStress) {
 
                     switch (op) {
                         case 0: // Set
-                            container->set(key, thread_id * 1000 + j);
+                            container->set(key, value(key, thread_id * 1000 + j));
                             break;
                         case 1: // Get
                             container->get(key);
@@ -276,7 +278,7 @@ TEST_F(ContainerThreadSafetyTest, ClearDuringOperations) {
             for (int j = 0; j < operations_per_thread && running.load(); ++j) {
                 try {
                     std::string key = "worker_" + std::to_string(thread_id) + "_" + std::to_string(j);
-                    container->set(key, j);
+                    container->set(key, value(key, j));
                     container->get(key);
                 } catch (...) {
                     ++errors;
@@ -316,7 +318,8 @@ TEST_F(ContainerThreadSafetyTest, ForEachSafety) {
 
     // Pre-populate
     for (int i = 0; i < 100; ++i) {
-        container->set("item_" + std::to_string(i), i * 2);
+        std::string key = "item_" + std::to_string(i);
+        container->set(key, value(key, i * 2));
     }
 
     const int num_iterator_threads = 5;
@@ -352,7 +355,7 @@ TEST_F(ContainerThreadSafetyTest, ForEachSafety) {
             for (int j = 0; j < iterations && running.load(); ++j) {
                 try {
                     std::string key = "new_" + std::to_string(thread_id) + "_" + std::to_string(j);
-                    container->set(key, j);
+                    container->set(key, value(key, j));
                     container->remove("item_" + std::to_string(50 + (j % 50)));
                 } catch (...) {
                     ++errors;
@@ -376,7 +379,7 @@ TEST_F(ContainerThreadSafetyTest, ForEachSafety) {
 TEST_F(ContainerThreadSafetyTest, SingleKeyContention) {
     auto container = std::make_shared<thread_safe_container>();
     const std::string hot_key = "hot_key";
-    container->set(hot_key, 0);
+    container->set(hot_key, value(hot_key, 0));
 
     const int num_threads = 20;
     const int operations_per_thread = 1000;
@@ -395,7 +398,7 @@ TEST_F(ContainerThreadSafetyTest, SingleKeyContention) {
                     auto val = container->get(hot_key);
 
                     // Update
-                    container->set(hot_key, thread_id * 1000 + j);
+                    container->set(hot_key, value(hot_key, thread_id * 1000 + j));
                 } catch (...) {
                     ++errors;
                 }
@@ -464,7 +467,8 @@ TEST_F(ContainerThreadSafetyTest, KeysOperationConcurrent) {
 
     // Pre-populate
     for (int i = 0; i < 50; ++i) {
-        container->set("initial_" + std::to_string(i), i);
+        std::string key = "initial_" + std::to_string(i);
+        container->set(key, value(key, i));
     }
 
     const int num_reader_threads = 5;
@@ -499,7 +503,7 @@ TEST_F(ContainerThreadSafetyTest, KeysOperationConcurrent) {
             for (int j = 0; j < operations_per_thread && running.load(); ++j) {
                 try {
                     std::string key = "dynamic_" + std::to_string(thread_id) + "_" + std::to_string(j);
-                    container->set(key, j);
+                    container->set(key, value(key, j));
 
                     if (j % 10 == 0) {
                         container->remove("initial_" + std::to_string(j % 50));
@@ -541,7 +545,7 @@ TEST_F(ContainerThreadSafetyTest, MemorySafetyTest) {
                         std::string key = "iter_" + std::to_string(iteration) +
                                         "_thread_" + std::to_string(thread_id) +
                                         "_op_" + std::to_string(j);
-                        container->set(key, j * 2);
+                        container->set(key, value(key, j * 2));
                         container->get(key);
                         if (j % 10 == 0) {
                             container->remove(key);
