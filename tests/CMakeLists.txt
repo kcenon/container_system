@@ -54,7 +54,7 @@ set(TEST_SOURCES
     test_messaging_integration.cpp
     performance_tests.cpp
     thread_safety_tests.cpp
-    # test_long_range_checking.cpp  # TODO: REACT-002 - requires legacy API migration
+    test_long_range_checking.cpp
     variant_value_factory_tests.cpp
     memory_pool_tests.cpp
 )
