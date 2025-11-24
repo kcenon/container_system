@@ -352,6 +352,44 @@ inline std::string ov_data(const std::optional<optimized_value>& ov) {
     return variant_helpers::to_string(ov->data, ov->type);
 }
 
+inline bool ov_is_bytes(const std::optional<optimized_value>& ov) {
+    if (!ov) return false;
+    return ov->type == value_types::bytes_value;
+}
+
+inline int64_t ov_to_llong(const std::optional<optimized_value>& ov) {
+    if (!ov) return 0;
+    return std::visit([](const auto& v) -> int64_t {
+        using T = std::decay_t<decltype(v)>;
+        if constexpr (std::is_arithmetic_v<T> && !std::is_same_v<T, std::monostate>) {
+            return static_cast<int64_t>(v);
+        } else if constexpr (std::is_same_v<T, std::string>) {
+            try { return std::stoll(v); } catch (...) { return 0; }
+        } else {
+            return 0;
+        }
+    }, ov->data);
+}
+
+inline double ov_to_double(const std::optional<optimized_value>& ov) {
+    if (!ov) return 0.0;
+    return std::visit([](const auto& v) -> double {
+        using T = std::decay_t<decltype(v)>;
+        if constexpr (std::is_arithmetic_v<T> && !std::is_same_v<T, std::monostate>) {
+            return static_cast<double>(v);
+        } else if constexpr (std::is_same_v<T, std::string>) {
+            try { return std::stod(v); } catch (...) { return 0.0; }
+        } else {
+            return 0.0;
+        }
+    }, ov->data);
+}
+
+inline std::string ov_name(const std::optional<optimized_value>& ov) {
+    if (!ov) return "";
+    return ov->name;
+}
+
 } // namespace test_compat
 } // namespace container_module
 
@@ -410,8 +448,12 @@ using container_module::test_compat::make_legacy_bytes_value;
 using container_module::test_compat::ov_to_string;
 using container_module::test_compat::ov_to_int;
 using container_module::test_compat::ov_to_boolean;
+using container_module::test_compat::ov_to_llong;
+using container_module::test_compat::ov_to_double;
 using container_module::test_compat::ov_is_null;
+using container_module::test_compat::ov_is_bytes;
 using container_module::test_compat::ov_is_container;
 using container_module::test_compat::ov_data;
+using container_module::test_compat::ov_name;
 using container_module::test_compat::is_int32_range;
 using container_module::test_compat::is_uint32_range;
