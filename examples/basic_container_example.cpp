@@ -42,7 +42,7 @@ using namespace container_module;
  *
  * This example demonstrates fundamental usage of the container system:
  * - Creating containers
- * - Adding different types of values
+ * - Adding different types of values using set_value() API
  * - Serialization and deserialization
  * - Basic error handling
  */
@@ -70,44 +70,31 @@ void demonstrate_value_types() {
     auto container = std::make_shared<value_container>();
     container->set_message_type("value_types_demo");
 
-    // String value
-    std::string username_key = "username";
-    std::string username_val = "john_doe";
-    auto string_val = std::make_shared<string_value>(username_key, username_val);
-    container->add(string_val);
-    std::cout << "Added string value: username = " << string_val->to_string() << std::endl;
+    // String value using new set_value API
+    container->set_value("username", std::string("john_doe"));
+    std::cout << "Added string value: username = john_doe" << std::endl;
 
     // Integer value
-    std::string user_id_key = "user_id";
-    auto int_val = std::make_shared<int_value>(user_id_key, 12345);
-    container->add(int_val);
-    std::cout << "Added int value: user_id = " << int_val->to_int() << std::endl;
+    container->set_value("user_id", static_cast<int32_t>(12345));
+    std::cout << "Added int value: user_id = 12345" << std::endl;
 
-    // Long value
+    // Long value (timestamp)
     auto timestamp = std::chrono::duration_cast<std::chrono::seconds>(
         std::chrono::system_clock::now().time_since_epoch()).count();
-    std::string timestamp_key = "timestamp";
-    auto long_val = std::make_shared<long_value>(timestamp_key, timestamp);
-    container->add(long_val);
-    std::cout << "Added long value: timestamp = " << long_val->to_long() << std::endl;
+    container->set_value("timestamp", static_cast<int64_t>(timestamp));
+    std::cout << "Added long value: timestamp = " << timestamp << std::endl;
 
     // Float value
-    std::string score_key = "score";
-    auto float_val = std::make_shared<float_value>(score_key, 98.5f);
-    container->add(float_val);
-    std::cout << "Added float value: score = " << float_val->to_float() << std::endl;
+    container->set_value("score", 98.5f);
+    std::cout << "Added float value: score = 98.5" << std::endl;
 
     // Double value
-    std::string balance_key = "account_balance";
-    auto double_val = std::make_shared<double_value>(balance_key, 1500.75);
-    container->add(double_val);
-    std::cout << "Added double value: account_balance = " << double_val->to_double() << std::endl;
+    container->set_value("account_balance", 1500.75);
+    std::cout << "Added double value: account_balance = 1500.75" << std::endl;
 
     // Boolean value
-    std::string active_key = "is_active";
-    auto bool_val = std::make_shared<bool_value>(active_key, true);
-    container->add(bool_val);
-    std::cout << "Added bool value: is_active = " << (bool_val->to_boolean() ? "true" : "false") << std::endl;
+    container->set_value("is_active", true);
+    std::cout << "Added bool value: is_active = true" << std::endl;
 
     std::cout << "Total values added: 6" << std::endl;
 }
@@ -121,15 +108,10 @@ void demonstrate_serialization() {
     container->set_target("deserialize_test", "test_handler");
     container->set_message_type("serialization_test");
 
-    std::string msg_key = "message";
-    std::string msg_val = "Hello, Serialization!";
-    container->add(std::make_shared<string_value>(msg_key, msg_val));
-    std::string count_key = "count";
-    container->add(std::make_shared<int_value>(count_key, 42));
-    std::string pi_key = "pi";
-    container->add(std::make_shared<double_value>(pi_key, 3.14159));
-    std::string success_key = "success";
-    container->add(std::make_shared<bool_value>(success_key, true));
+    container->set_value("message", std::string("Hello, Serialization!"));
+    container->set_value("count", static_cast<int32_t>(42));
+    container->set_value("pi", 3.14159);
+    container->set_value("success", true);
 
     // Serialize
     std::cout << "Serializing container..." << std::endl;
@@ -146,16 +128,17 @@ void demonstrate_serialization() {
     std::cout << "  Target: " << new_container->target_id() << "/" << new_container->target_sub_id() << std::endl;
     std::cout << "  Type: " << new_container->message_type() << std::endl;
 
-    // Verify specific values
-    auto message_value = new_container->get_value("message");
-    auto count_value = new_container->get_value("count");
-
-    if (message_value) {
-        std::cout << "  Message: " << message_value->to_string() << std::endl;
+    // Verify specific values using new get_value API
+    if (auto message_value = new_container->get_value("message")) {
+        if (auto* str = std::get_if<std::string>(&message_value->data)) {
+            std::cout << "  Message: " << *str << std::endl;
+        }
     }
 
-    if (count_value) {
-        std::cout << "  Count: " << count_value->to_int() << std::endl;
+    if (auto count_value = new_container->get_value("count")) {
+        if (auto* val = std::get_if<int32_t>(&count_value->data)) {
+            std::cout << "  Count: " << *val << std::endl;
+        }
     }
 }
 
@@ -165,76 +148,60 @@ void demonstrate_value_access() {
     auto container = std::make_shared<value_container>();
     container->set_message_type("value_access_test");
 
-    // Add sample data
-    std::string product_key = "product_name";
-    std::string product_val = "Super Widget";
-    container->add(std::make_shared<string_value>(product_key, product_val));
-    std::string price_key = "price";
-    container->add(std::make_shared<double_value>(price_key, 29.99));
-    std::string qty_key = "quantity";
-    container->add(std::make_shared<int_value>(qty_key, 100));
-    std::string stock_key = "in_stock";
-    container->add(std::make_shared<bool_value>(stock_key, true));
+    // Add sample data using set_value
+    container->set_value("product_name", std::string("Super Widget"));
+    container->set_value("price", 29.99);
+    container->set_value("quantity", static_cast<int32_t>(100));
+    container->set_value("in_stock", true);
 
     std::cout << "Container contains 4 values" << std::endl;
 
-    // Access values by key
+    // Access values by key using new API
     std::cout << "\nAccessing values by key:" << std::endl;
 
-    auto product_name = container->get_value("product_name");
-    if (product_name) {
-        std::cout << "  Product: " << product_name->to_string() << std::endl;
+    if (auto product_name = container->get_value("product_name")) {
+        if (auto* str = std::get_if<std::string>(&product_name->data)) {
+            std::cout << "  Product: " << *str << std::endl;
+        }
     }
 
-    auto price = container->get_value("price");
-    if (price) {
-        std::cout << "  Price: $" << price->to_double() << std::endl;
+    if (auto price = container->get_value("price")) {
+        if (auto* val = std::get_if<double>(&price->data)) {
+            std::cout << "  Price: $" << *val << std::endl;
+        }
     }
 
-    auto quantity = container->get_value("quantity");
-    if (quantity) {
-        std::cout << "  Quantity: " << quantity->to_int() << std::endl;
+    if (auto quantity = container->get_value("quantity")) {
+        if (auto* val = std::get_if<int32_t>(&quantity->data)) {
+            std::cout << "  Quantity: " << *val << std::endl;
+        }
     }
 
-    auto in_stock = container->get_value("in_stock");
-    if (in_stock) {
-        std::cout << "  In Stock: " << (in_stock->to_boolean() ? "yes" : "no") << std::endl;
+    if (auto in_stock = container->get_value("in_stock")) {
+        if (auto* val = std::get_if<bool>(&in_stock->data)) {
+            std::cout << "  In Stock: " << (*val ? "yes" : "no") << std::endl;
+        }
     }
 }
 
-void demonstrate_multiple_values() {
-    std::cout << "\n=== Multiple Values with Same Name ===" << std::endl;
+void demonstrate_iteration() {
+    std::cout << "\n=== Container Iteration ===" << std::endl;
 
     auto container = std::make_shared<value_container>();
-    container->set_message_type("multi_value_test");
+    container->set_message_type("iteration_test");
 
-    // Add multiple values with same name
-    std::string item_key = "item";
-    std::string first_val = "first";
-    std::string second_val = "second";
-    std::string third_val = "third";
-    container->add(std::make_shared<string_value>(item_key, first_val));
-    container->add(std::make_shared<string_value>(item_key, second_val));
-    container->add(std::make_shared<string_value>(item_key, third_val));
+    // Add multiple items
+    container->set_value("item_1", std::string("first"));
+    container->set_value("item_2", std::string("second"));
+    container->set_value("item_3", std::string("third"));
 
-    std::cout << "Added 3 values with name 'item'" << std::endl;
+    std::cout << "Added 3 values with different names" << std::endl;
 
-    // Get all values with that name
-    auto items = container->value_array("item");
-    std::cout << "Found " << items.size() << " items:" << std::endl;
-
-    for (size_t i = 0; i < items.size(); ++i) {
-        std::cout << "  [" << i << "]: " << items[i]->to_string() << std::endl;
+    // Iterate over all values
+    std::cout << "Iterating over container values:" << std::endl;
+    for (const auto& val : *container) {
+        std::cout << "  - " << val.name << " (type: " << static_cast<int>(val.type) << ")" << std::endl;
     }
-
-    // Access by index
-    auto first_item = container->get_value("item", 0);
-    auto second_item = container->get_value("item", 1);
-    auto third_item = container->get_value("item", 2);
-
-    if (first_item) std::cout << "  First item: " << first_item->to_string() << std::endl;
-    if (second_item) std::cout << "  Second item: " << second_item->to_string() << std::endl;
-    if (third_item) std::cout << "  Third item: " << third_item->to_string() << std::endl;
 }
 
 void demonstrate_performance_basics() {
@@ -254,11 +221,8 @@ void demonstrate_performance_basics() {
         container->set_target("perf_server", "handler");
         container->set_message_type("performance_test");
 
-        std::string index_key = "index";
-        container->add(std::make_shared<int_value>(index_key, i));
-        std::string data_key = "data";
-        std::string data_val = "test_data_" + std::to_string(i);
-        container->add(std::make_shared<string_value>(data_key, data_val));
+        container->set_value("index", static_cast<int32_t>(i));
+        container->set_value("data", std::string("test_data_" + std::to_string(i)));
 
         containers.push_back(container);
     }
@@ -313,17 +277,17 @@ int main() {
         demonstrate_value_types();
         demonstrate_serialization();
         demonstrate_value_access();
-        demonstrate_multiple_values();
+        demonstrate_iteration();
         demonstrate_performance_basics();
 
         std::cout << "\n=== Basic Example Completed Successfully ===" << std::endl;
         std::cout << "This example demonstrated:" << std::endl;
-        std::cout << "• Basic container creation and configuration" << std::endl;
-        std::cout << "• All supported value types" << std::endl;
-        std::cout << "• Serialization and deserialization" << std::endl;
-        std::cout << "• Value access patterns" << std::endl;
-        std::cout << "• Multiple values with same name" << std::endl;
-        std::cout << "• Basic performance characteristics" << std::endl;
+        std::cout << "  - Basic container creation and configuration" << std::endl;
+        std::cout << "  - All supported value types using set_value() API" << std::endl;
+        std::cout << "  - Serialization and deserialization" << std::endl;
+        std::cout << "  - Value access patterns using get_value() API" << std::endl;
+        std::cout << "  - Container iteration" << std::endl;
+        std::cout << "  - Basic performance characteristics" << std::endl;
 
         return 0;
 

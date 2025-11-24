@@ -40,14 +40,9 @@
 #include <map>
 #include <algorithm>
 #include <sstream>
-#include <fstream>
 #include <iomanip>
 
 #include "container.h"
-
-#ifdef HAS_MESSAGING_FEATURES
-#include "container/integration/messaging_integration.h"
-#endif
 
 using namespace container_module;
 
@@ -58,8 +53,9 @@ using namespace container_module;
  * 1. IoT Data Collection System
  * 2. Financial Transaction Processing
  * 3. Gaming Event System
- * 4. Monitoring and Alerting System
- * 5. Content Management System
+ * 4. Content Management System
+ *
+ * All examples use the variant-based API (set_value/get_value).
  */
 
 namespace scenarios {
@@ -86,14 +82,13 @@ public:
     void simulate_iot_scenario() {
         std::cout << "\n=== IoT Data Collection Scenario ===" << std::endl;
 
-        const int num_devices = 10;
-        const int readings_per_device = 50;
-        const int batch_size = 20;
+        const int num_devices = 5;
+        const int readings_per_device = 20;
+        const int batch_size = 10;
 
-        std::vector<std::string> device_types = {"temperature", "humidity", "pressure", "light", "motion"};
+        std::vector<std::string> device_types = {"temperature", "humidity", "pressure"};
         std::vector<std::thread> device_threads;
 
-        // Simulated sensor data queue
         std::queue<SensorReading> sensor_queue;
         std::mutex queue_mutex;
         std::condition_variable queue_cv;
@@ -108,8 +103,7 @@ public:
                 std::unique_lock<std::mutex> lock(queue_mutex);
                 queue_cv.wait(lock, [&]() { return !sensor_queue.empty() || !collection_active; });
 
-                // Collect batch
-                while (!sensor_queue.empty() && batch.size() < batch_size) {
+                while (!sensor_queue.empty() && batch.size() < static_cast<size_t>(batch_size)) {
                     batch.push_back(sensor_queue.front());
                     sensor_queue.pop();
                 }
@@ -131,8 +125,6 @@ public:
                 std::uniform_real_distribution<> temp_dist(18.0, 35.0);
                 std::uniform_real_distribution<> humidity_dist(30.0, 80.0);
                 std::uniform_real_distribution<> pressure_dist(990.0, 1030.0);
-                std::uniform_int_distribution<> light_dist(0, 1000);
-                std::uniform_int_distribution<> motion_dist(0, 1);
 
                 for (int reading = 0; reading < readings_per_device; ++reading) {
                     for (const auto& sensor_type : device_types) {
@@ -141,17 +133,12 @@ public:
                         sensor_reading.sensor_type = sensor_type;
                         sensor_reading.timestamp = std::chrono::system_clock::now();
 
-                        // Generate realistic sensor values
                         if (sensor_type == "temperature") {
                             sensor_reading.value = temp_dist(gen);
                         } else if (sensor_type == "humidity") {
                             sensor_reading.value = humidity_dist(gen);
-                        } else if (sensor_type == "pressure") {
+                        } else {
                             sensor_reading.value = pressure_dist(gen);
-                        } else if (sensor_type == "light") {
-                            sensor_reading.value = light_dist(gen);
-                        } else if (sensor_type == "motion") {
-                            sensor_reading.value = motion_dist(gen);
                         }
 
                         {
@@ -159,17 +146,14 @@ public:
                             sensor_queue.push(sensor_reading);
                         }
                         queue_cv.notify_one();
-
                         readings_collected_++;
 
-                        // Simulate sensor reading interval
-                        std::this_thread::sleep_for(std::chrono::milliseconds(10 + (reading % 20)));
+                        std::this_thread::sleep_for(std::chrono::milliseconds(5));
                     }
                 }
             });
         }
 
-        // Wait for all devices to finish
         for (auto& thread : device_threads) {
             thread.join();
         }
@@ -185,48 +169,29 @@ public:
 
 private:
     void send_iot_batch(const std::vector<SensorReading>& batch) {
-#ifdef HAS_MESSAGING_FEATURES
-        auto container = integration::messaging_container_builder()
-            .source("iot_aggregator", "batch_processor")
-            .target("iot_analytics_service", "data_processor")
-            .message_type("sensor_data_batch")
-            .add_value("batch_size", static_cast<int>(batch.size()))
-            .add_value("batch_timestamp", std::chrono::duration_cast<std::chrono::milliseconds>(
-                std::chrono::system_clock::now().time_since_epoch()).count())
-            .optimize_for_speed()
-            .build();
-#else
         auto container = std::make_shared<value_container>();
         container->set_source("iot_aggregator", "batch_processor");
         container->set_target("iot_analytics_service", "data_processor");
         container->set_message_type("sensor_data_batch");
-        std::string batch_size_key = "batch_size";
-        container->add(std::make_shared<int_value>(batch_size_key, static_cast<int>(batch.size())));
-        std::string batch_ts_key = "batch_timestamp";
-        container->add(std::make_shared<long_value>(batch_ts_key,
+
+        container->set_value("batch_size", static_cast<int32_t>(batch.size()));
+        container->set_value("batch_timestamp", static_cast<int64_t>(
             std::chrono::duration_cast<std::chrono::milliseconds>(
                 std::chrono::system_clock::now().time_since_epoch()).count()));
-#endif
 
-        // Add individual sensor readings as flattened values
         for (size_t i = 0; i < batch.size(); ++i) {
             const auto& reading = batch[i];
             std::string prefix = "reading_" + std::to_string(i) + "_";
 
-            std::string device_id_key = prefix + "device_id";
-            container->add(std::make_shared<string_value>(device_id_key, reading.device_id));
-            std::string sensor_type_key = prefix + "sensor_type";
-            container->add(std::make_shared<string_value>(sensor_type_key, reading.sensor_type));
-            std::string value_key = prefix + "value";
-            container->add(std::make_shared<double_value>(value_key, reading.value));
-            std::string ts_key = prefix + "timestamp";
-            container->add(std::make_shared<long_value>(ts_key,
-                std::chrono::duration_cast<std::chrono::milliseconds>(reading.timestamp.time_since_epoch()).count()));
+            container->set_value(prefix + "device_id", reading.device_id);
+            container->set_value(prefix + "sensor_type", reading.sensor_type);
+            container->set_value(prefix + "value", reading.value);
+            container->set_value(prefix + "timestamp", static_cast<int64_t>(
+                std::chrono::duration_cast<std::chrono::milliseconds>(
+                    reading.timestamp.time_since_epoch()).count()));
         }
 
-        // Simulate sending to analytics service
         std::string serialized = container->serialize();
-        // In real scenario, this would be sent over network
         std::cout << "  Sent IoT batch: " << batch.size() << " readings, "
                   << serialized.size() << " bytes" << std::endl;
     }
@@ -234,9 +199,6 @@ private:
 
 /**
  * @brief Financial Transaction Processing System
- *
- * Simulates processing financial transactions with fraud detection,
- * compliance checks, and real-time notifications.
  */
 class FinancialTransactionSystem {
 private:
@@ -259,16 +221,13 @@ public:
     void simulate_financial_scenario() {
         std::cout << "\n=== Financial Transaction Processing Scenario ===" << std::endl;
 
-        const int num_transactions = 1000;
-        std::vector<std::thread> processing_threads;
+        const int num_transactions = 100;
 
-        // Transaction queue
         std::queue<Transaction> transaction_queue;
         std::mutex transaction_mutex;
         std::condition_variable transaction_cv;
         std::atomic<bool> processing_active{true};
 
-        // Fraud detection thread
         std::thread fraud_detector([&]() {
             while (processing_active || !transaction_queue.empty()) {
                 std::unique_lock<std::mutex> lock(transaction_mutex);
@@ -285,13 +244,12 @@ public:
             }
         });
 
-        // Generate transactions
         std::random_device rd;
         std::mt19937 gen(rd());
         std::uniform_real_distribution<> amount_dist(10.0, 10000.0);
         std::uniform_int_distribution<> account_dist(1000, 9999);
-        std::vector<std::string> currencies = {"USD", "EUR", "GBP", "JPY", "CAD"};
-        std::vector<std::string> types = {"transfer", "payment", "withdrawal", "deposit"};
+        std::vector<std::string> currencies = {"USD", "EUR", "GBP"};
+        std::vector<std::string> types = {"transfer", "payment", "withdrawal"};
 
         for (int i = 0; i < num_transactions; ++i) {
             Transaction transaction;
@@ -309,8 +267,7 @@ public:
             }
             transaction_cv.notify_one();
 
-            // Simulate transaction arrival rate
-            std::this_thread::sleep_for(std::chrono::milliseconds(1 + (i % 10)));
+            std::this_thread::sleep_for(std::chrono::milliseconds(5));
         }
 
         processing_active = false;
@@ -325,13 +282,11 @@ public:
             std::lock_guard<std::mutex> lock(amount_mutex_);
             total = total_amount_;
         }
-        std::cout << "  Total amount processed: $" << std::fixed << std::setprecision(2)
-                  << total << std::endl;
+        std::cout << "  Total amount processed: $" << std::fixed << std::setprecision(2) << total << std::endl;
     }
 
 private:
     void process_transaction(const Transaction& transaction) {
-        // Fraud detection logic
         bool is_suspicious = (transaction.amount > 5000.0) ||
                            (transaction.account_from == transaction.account_to);
 
@@ -340,71 +295,38 @@ private:
             total_amount_ += transaction.amount;
         }
 
-#ifdef HAS_MESSAGING_FEATURES
-        auto container = integration::messaging_container_builder()
-            .source("transaction_processor", "fraud_detection")
-            .target("compliance_service", "transaction_monitor")
-            .message_type(is_suspicious ? "suspicious_transaction" : "normal_transaction")
-            .add_value("transaction_id", transaction.transaction_id)
-            .add_value("account_from", transaction.account_from)
-            .add_value("account_to", transaction.account_to)
-            .add_value("amount", transaction.amount)
-            .add_value("currency", transaction.currency)
-            .add_value("transaction_type", transaction.transaction_type)
-            .add_value("timestamp", std::chrono::duration_cast<std::chrono::milliseconds>(
-                transaction.timestamp.time_since_epoch()).count())
-            .add_value("risk_score", is_suspicious ? 85.0 : 15.0)
-            .optimize_for_speed()
-            .build();
-#else
         auto container = std::make_shared<value_container>();
         container->set_source("transaction_processor", "fraud_detection");
         container->set_target("compliance_service", "transaction_monitor");
         container->set_message_type(is_suspicious ? "suspicious_transaction" : "normal_transaction");
-        std::string txn_id_key = "transaction_id";
-        container->add(std::make_shared<string_value>(txn_id_key, transaction.transaction_id));
-        std::string acc_from_key = "account_from";
-        container->add(std::make_shared<string_value>(acc_from_key, transaction.account_from));
-        std::string acc_to_key = "account_to";
-        container->add(std::make_shared<string_value>(acc_to_key, transaction.account_to));
-        std::string amount_key = "amount";
-        container->add(std::make_shared<double_value>(amount_key, transaction.amount));
-        std::string currency_key = "currency";
-        container->add(std::make_shared<string_value>(currency_key, transaction.currency));
-        std::string txn_type_key = "transaction_type";
-        container->add(std::make_shared<string_value>(txn_type_key, transaction.transaction_type));
-        std::string ts_key = "timestamp";
-        container->add(std::make_shared<long_value>(ts_key,
-            std::chrono::duration_cast<std::chrono::milliseconds>(transaction.timestamp.time_since_epoch()).count()));
-        std::string risk_key = "risk_score";
-        container->add(std::make_shared<double_value>(risk_key, is_suspicious ? 85.0 : 15.0));
-#endif
+
+        container->set_value("transaction_id", transaction.transaction_id);
+        container->set_value("account_from", transaction.account_from);
+        container->set_value("account_to", transaction.account_to);
+        container->set_value("amount", transaction.amount);
+        container->set_value("currency", transaction.currency);
+        container->set_value("transaction_type", transaction.transaction_type);
+        container->set_value("timestamp", static_cast<int64_t>(
+            std::chrono::duration_cast<std::chrono::milliseconds>(
+                transaction.timestamp.time_since_epoch()).count()));
+        container->set_value("risk_score", is_suspicious ? 85.0 : 15.0);
 
         if (is_suspicious) {
             fraud_alerts_++;
-
-            // Add additional fraud-related data
-            std::string alert_key = "alert_reason";
-            std::string alert_val = transaction.amount > 5000.0 ? "high_amount" : "same_account";
-            container->add(std::make_shared<string_value>(alert_key, alert_val));
-            std::string review_key = "requires_manual_review";
-            container->add(std::make_shared<bool_value>(review_key, true));
+            container->set_value("alert_reason",
+                std::string(transaction.amount > 5000.0 ? "high_amount" : "same_account"));
+            container->set_value("requires_manual_review", true);
 
             std::cout << "  FRAUD ALERT: " << transaction.transaction_id
                       << " Amount: $" << transaction.amount << std::endl;
         }
 
-        // Simulate processing and compliance checking
-        std::string serialized = container->serialize();
-        // In real scenario, this would trigger compliance workflows
+        container->serialize();
     }
 };
 
 /**
  * @brief Gaming Event System
- *
- * Simulates a multiplayer game event system handling player actions,
- * achievements, leaderboards, and real-time updates.
  */
 class GamingEventSystem {
 private:
@@ -424,17 +346,15 @@ public:
     void simulate_gaming_scenario() {
         std::cout << "\n=== Gaming Event System Scenario ===" << std::endl;
 
-        const int num_players = 20;
-        const int events_per_player = 100;
+        const int num_players = 10;
+        const int events_per_player = 50;
         std::vector<std::thread> player_threads;
 
-        // Event processing queue
         std::queue<GameEvent> event_queue;
         std::mutex event_mutex;
         std::condition_variable event_cv;
         std::atomic<bool> game_active{true};
 
-        // Event processor thread
         std::thread event_processor([&]() {
             while (game_active || !event_queue.empty()) {
                 std::unique_lock<std::mutex> lock(event_mutex);
@@ -451,7 +371,6 @@ public:
             }
         });
 
-        // Player simulation threads
         std::random_device rd;
         for (int player_id = 0; player_id < num_players; ++player_id) {
             player_threads.emplace_back([&, player_id]() {
@@ -468,17 +387,11 @@ public:
                     event.event_type = actions[action_dist(gen)];
                     event.timestamp = std::chrono::system_clock::now();
 
-                    // Add event-specific data
                     if (event.event_type == "kill") {
                         event.event_data["target"] = "player_" + std::to_string((player_id + 1) % num_players);
-                        event.event_data["weapon"] = "rifle";
                         event.event_data["score"] = std::to_string(score_dist(gen));
                     } else if (event.event_type == "level_up") {
                         event.event_data["new_level"] = std::to_string(level_dist(gen));
-                        event.event_data["experience_gained"] = std::to_string(score_dist(gen) * 10);
-                    } else if (event.event_type == "item_collected") {
-                        event.event_data["item_type"] = "health_potion";
-                        event.event_data["rarity"] = "rare";
                     }
 
                     {
@@ -487,13 +400,11 @@ public:
                     }
                     event_cv.notify_one();
 
-                    // Simulate player action rate
-                    std::this_thread::sleep_for(std::chrono::milliseconds(50 + (event_count % 100)));
+                    std::this_thread::sleep_for(std::chrono::milliseconds(20));
                 }
             });
         }
 
-        // Wait for all players to finish
         for (auto& thread : player_threads) {
             thread.join();
         }
@@ -502,7 +413,6 @@ public:
         event_cv.notify_all();
         event_processor.join();
 
-        // Print leaderboard
         print_leaderboard();
 
         std::cout << "Gaming simulation completed:" << std::endl;
@@ -512,37 +422,21 @@ public:
 
 private:
     void process_game_event(const GameEvent& event) {
-#ifdef HAS_MESSAGING_FEATURES
-        auto container = integration::messaging_container_builder()
-            .source("game_client", event.player_id)
-            .target("game_server", "event_processor")
-            .message_type("game_event")
-            .add_value("player_id", event.player_id)
-            .add_value("event_type", event.event_type)
-            .add_value("timestamp", std::chrono::duration_cast<std::chrono::milliseconds>(
-                event.timestamp.time_since_epoch()).count())
-            .optimize_for_speed()
-            .build();
-#else
         auto container = std::make_shared<value_container>();
         container->set_source("game_client", event.player_id);
         container->set_target("game_server", "event_processor");
         container->set_message_type("game_event");
-        std::string player_id_key = "player_id";
-        container->add(std::make_shared<string_value>(player_id_key, event.player_id));
-        std::string event_type_key = "event_type";
-        container->add(std::make_shared<string_value>(event_type_key, event.event_type));
-        std::string ts_key = "timestamp";
-        container->add(std::make_shared<long_value>(ts_key,
-            std::chrono::duration_cast<std::chrono::milliseconds>(event.timestamp.time_since_epoch()).count()));
-#endif
 
-        // Add event-specific data
+        container->set_value("player_id", event.player_id);
+        container->set_value("event_type", event.event_type);
+        container->set_value("timestamp", static_cast<int64_t>(
+            std::chrono::duration_cast<std::chrono::milliseconds>(
+                event.timestamp.time_since_epoch()).count()));
+
         for (const auto& data_pair : event.event_data) {
-            container->add(std::make_shared<string_value>(data_pair.first, data_pair.second));
+            container->set_value(data_pair.first, data_pair.second);
         }
 
-        // Update player scores
         if (event.event_data.find("score") != event.event_data.end()) {
             int score = std::stoi(event.event_data.at("score"));
             {
@@ -551,7 +445,6 @@ private:
             }
         }
 
-        // Check for achievements
         if (event.event_type == "level_up" && event.event_data.find("new_level") != event.event_data.end()) {
             int level = std::stoi(event.event_data.at("new_level"));
             if (level >= 25) {
@@ -560,35 +453,20 @@ private:
             }
         }
 
-        // Simulate event processing
-        std::string serialized = container->serialize();
+        container->serialize();
     }
 
     void send_achievement_notification(const std::string& player_id, const std::string& achievement) {
-#ifdef HAS_MESSAGING_FEATURES
-        auto notification = integration::messaging_container_builder()
-            .source("achievement_system", "unlock_processor")
-            .target("notification_service", "player_notifier")
-            .message_type("achievement_unlocked")
-            .add_value("player_id", player_id)
-            .add_value("achievement_name", achievement)
-            .add_value("timestamp", std::chrono::duration_cast<std::chrono::milliseconds>(
-                std::chrono::system_clock::now().time_since_epoch()).count())
-            .build();
-#else
         auto notification = std::make_shared<value_container>();
         notification->set_source("achievement_system", "unlock_processor");
         notification->set_target("notification_service", "player_notifier");
         notification->set_message_type("achievement_unlocked");
-        std::string player_id_key = "player_id";
-        notification->add(std::make_shared<string_value>(player_id_key, player_id));
-        std::string achievement_key = "achievement_name";
-        notification->add(std::make_shared<string_value>(achievement_key, achievement));
-        std::string ts_key = "timestamp";
-        notification->add(std::make_shared<long_value>(ts_key,
+
+        notification->set_value("player_id", player_id);
+        notification->set_value("achievement_name", achievement);
+        notification->set_value("timestamp", static_cast<int64_t>(
             std::chrono::duration_cast<std::chrono::milliseconds>(
                 std::chrono::system_clock::now().time_since_epoch()).count()));
-#endif
 
         std::cout << "  ACHIEVEMENT: " << player_id << " unlocked '" << achievement << "'" << std::endl;
     }
@@ -617,9 +495,6 @@ private:
 
 /**
  * @brief Content Management System
- *
- * Simulates a content management system handling document uploads,
- * processing, indexing, and search operations.
  */
 class ContentManagementSystem {
 private:
@@ -640,16 +515,13 @@ public:
     void simulate_cms_scenario() {
         std::cout << "\n=== Content Management System Scenario ===" << std::endl;
 
-        const int num_documents = 200;
-        std::vector<std::thread> upload_threads;
+        const int num_documents = 50;
 
-        // Document processing queue
         std::queue<Document> document_queue;
         std::mutex document_mutex;
         std::condition_variable document_cv;
         std::atomic<bool> uploading_active{true};
 
-        // Document processor thread
         std::thread document_processor([&]() {
             while (uploading_active || !document_queue.empty()) {
                 std::unique_lock<std::mutex> lock(document_mutex);
@@ -666,17 +538,12 @@ public:
             }
         });
 
-        // Document upload simulation
-        std::random_device rd;
-        std::mt19937 gen(rd());
-        std::vector<std::string> categories = {"article", "report", "manual", "tutorial", "reference"};
-        std::vector<std::string> authors = {"john_smith", "jane_doe", "bob_wilson", "alice_johnson", "mike_brown"};
+        std::vector<std::string> categories = {"article", "report", "manual"};
+        std::vector<std::string> authors = {"john_smith", "jane_doe", "bob_wilson"};
         std::vector<std::vector<std::string>> tag_sets = {
             {"programming", "cpp", "tutorial"},
             {"business", "report", "analysis"},
-            {"technical", "manual", "guide"},
-            {"science", "research", "data"},
-            {"marketing", "strategy", "planning"}
+            {"technical", "manual", "guide"}
         };
 
         for (int i = 0; i < num_documents; ++i) {
@@ -695,8 +562,7 @@ public:
             }
             document_cv.notify_one();
 
-            // Simulate upload rate
-            std::this_thread::sleep_for(std::chrono::milliseconds(20 + (i % 30)));
+            std::this_thread::sleep_for(std::chrono::milliseconds(10));
         }
 
         uploading_active = false;
@@ -712,111 +578,55 @@ private:
     std::string generate_sample_content(int index) {
         std::stringstream content;
         content << "This is sample content for document " << index << ". ";
-        content << "It contains important information about various topics including ";
-        content << "technology, business processes, and technical documentation. ";
-        content << "The content is generated for demonstration purposes and shows ";
-        content << "how the container system handles different types of text data. ";
-        content << "Document creation timestamp: " << std::chrono::duration_cast<std::chrono::seconds>(
-            std::chrono::system_clock::now().time_since_epoch()).count();
+        content << "It contains important information for demonstration purposes.";
         return content.str();
     }
 
     void process_document(const Document& document) {
-        // Document processing and indexing
-#ifdef HAS_MESSAGING_FEATURES
-        auto container = integration::messaging_container_builder()
-            .source("cms_upload_service", "document_processor")
-            .target("search_indexer", "text_analyzer")
-            .message_type("document_processing")
-            .add_value("document_id", document.document_id)
-            .add_value("title", document.title)
-            .add_value("author", document.author)
-            .add_value("category", document.category)
-            .add_value("content_length", static_cast<int>(document.content.length()))
-            .add_value("upload_timestamp", std::chrono::duration_cast<std::chrono::milliseconds>(
-                document.upload_time.time_since_epoch()).count())
-            .add_value("tag_count", static_cast<int>(document.tags.size()))
-            .optimize_for_size()
-            .build();
-#else
         auto container = std::make_shared<value_container>();
         container->set_source("cms_upload_service", "document_processor");
         container->set_target("search_indexer", "text_analyzer");
         container->set_message_type("document_processing");
-        std::string doc_id_key = "document_id";
-        container->add(std::make_shared<string_value>(doc_id_key, document.document_id));
-        std::string title_key = "title";
-        container->add(std::make_shared<string_value>(title_key, document.title));
-        std::string author_key = "author";
-        container->add(std::make_shared<string_value>(author_key, document.author));
-        std::string category_key = "category";
-        container->add(std::make_shared<string_value>(category_key, document.category));
-        std::string content_len_key = "content_length";
-        container->add(std::make_shared<int_value>(content_len_key, static_cast<int>(document.content.length())));
-        std::string upload_ts_key = "upload_timestamp";
-        container->add(std::make_shared<long_value>(upload_ts_key,
-            std::chrono::duration_cast<std::chrono::milliseconds>(document.upload_time.time_since_epoch()).count()));
-        std::string tag_count_key = "tag_count";
-        container->add(std::make_shared<int_value>(tag_count_key, static_cast<int>(document.tags.size())));
-#endif
 
-        // Add content (potentially large)
-        std::string content_key = "content";
-        container->add(std::make_shared<string_value>(content_key, document.content));
+        container->set_value("document_id", document.document_id);
+        container->set_value("title", document.title);
+        container->set_value("author", document.author);
+        container->set_value("category", document.category);
+        container->set_value("content_length", static_cast<int32_t>(document.content.length()));
+        container->set_value("upload_timestamp", static_cast<int64_t>(
+            std::chrono::duration_cast<std::chrono::milliseconds>(
+                document.upload_time.time_since_epoch()).count()));
+        container->set_value("tag_count", static_cast<int32_t>(document.tags.size()));
+        container->set_value("content", document.content);
 
-        // Add tags as separate values
         for (size_t i = 0; i < document.tags.size(); ++i) {
-            std::string tag_key = "tag_" + std::to_string(i);
-            container->add(std::make_shared<string_value>(tag_key, document.tags[i]));
+            container->set_value("tag_" + std::to_string(i), document.tags[i]);
         }
 
-        // Simulate text analysis and indexing
-        std::string serialized = container->serialize();
-
-        // Create search index entry
+        container->serialize();
         create_search_index_entry(document);
-
         documents_indexed_++;
 
-        if (documents_processed_ % 50 == 0) {
+        if (documents_processed_ % 20 == 0) {
             std::cout << "  Processed " << documents_processed_.load() << " documents..." << std::endl;
         }
     }
 
     void create_search_index_entry(const Document& document) {
-#ifdef HAS_MESSAGING_FEATURES
-        auto index_container = integration::messaging_container_builder()
-            .source("text_analyzer", "indexing_service")
-            .target("search_service", "index_updater")
-            .message_type("search_index_update")
-            .add_value("document_id", document.document_id)
-            .add_value("indexed_title", document.title)
-            .add_value("indexed_category", document.category)
-            .add_value("word_count", static_cast<int>(count_words(document.content)))
-            .add_value("index_timestamp", std::chrono::duration_cast<std::chrono::milliseconds>(
-                std::chrono::system_clock::now().time_since_epoch()).count())
-            .build();
-#else
         auto index_container = std::make_shared<value_container>();
         index_container->set_source("text_analyzer", "indexing_service");
         index_container->set_target("search_service", "index_updater");
         index_container->set_message_type("search_index_update");
-        std::string doc_id_key = "document_id";
-        index_container->add(std::make_shared<string_value>(doc_id_key, document.document_id));
-        std::string idx_title_key = "indexed_title";
-        index_container->add(std::make_shared<string_value>(idx_title_key, document.title));
-        std::string idx_cat_key = "indexed_category";
-        index_container->add(std::make_shared<string_value>(idx_cat_key, document.category));
-        std::string word_count_key = "word_count";
-        index_container->add(std::make_shared<int_value>(word_count_key, static_cast<int>(count_words(document.content))));
-        std::string idx_ts_key = "index_timestamp";
-        index_container->add(std::make_shared<long_value>(idx_ts_key,
+
+        index_container->set_value("document_id", document.document_id);
+        index_container->set_value("indexed_title", document.title);
+        index_container->set_value("indexed_category", document.category);
+        index_container->set_value("word_count", static_cast<int32_t>(count_words(document.content)));
+        index_container->set_value("index_timestamp", static_cast<int64_t>(
             std::chrono::duration_cast<std::chrono::milliseconds>(
                 std::chrono::system_clock::now().time_since_epoch()).count()));
-#endif
 
-        // Simulate search index update
-        std::string index_serialized = index_container->serialize();
+        index_container->serialize();
     }
 
     size_t count_words(const std::string& text) {
@@ -835,9 +645,8 @@ private:
 int main() {
     try {
         std::cout << "=== Real-World Container System Scenarios ===" << std::endl;
-        std::cout << "Demonstrating practical applications of the container system" << std::endl;
+        std::cout << "Demonstrating practical applications using variant-based API" << std::endl;
 
-        // Run all scenarios
         scenarios::IoTDataCollectionSystem iot_system;
         iot_system.simulate_iot_scenario();
 
@@ -852,10 +661,10 @@ int main() {
 
         std::cout << "\n=== All Real-World Scenarios Completed Successfully ===" << std::endl;
         std::cout << "The container system demonstrated versatility across:" << std::endl;
-        std::cout << "• IoT data aggregation and processing" << std::endl;
-        std::cout << "• Financial transaction processing with fraud detection" << std::endl;
-        std::cout << "• Gaming event systems with real-time processing" << std::endl;
-        std::cout << "• Content management with search indexing" << std::endl;
+        std::cout << "  - IoT data aggregation and processing" << std::endl;
+        std::cout << "  - Financial transaction processing with fraud detection" << std::endl;
+        std::cout << "  - Gaming event systems with real-time processing" << std::endl;
+        std::cout << "  - Content management with search indexing" << std::endl;
 
         return 0;
 
