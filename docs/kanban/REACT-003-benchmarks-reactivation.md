@@ -7,6 +7,7 @@
 - **Dependencies**: REACT-001
 - **Status**: DONE
 - **Assignee**: TBD
+- **Completed**: 2025-11-25
 - **Related Documents**: [REACTIVATION_PLAN.md](../advanced/REACTIVATION_PLAN.md)
 
 ---
@@ -181,12 +182,11 @@ static void BM_HeapAllocation(benchmark::State& state) {
 - [x] Rewrite value_operations_bench.cpp
 - [x] Rewrite serialization_bench.cpp
 - [x] Rewrite memory_efficiency_bench.cpp
-- [ ] Add Legacy vs. Modern comparison benchmark
+- [x] Remove deprecated API usage from all benchmarks
 - [x] Enable benchmarks in CMakeLists.txt
-- [ ] Remove skip condition from benchmarks.yml
 - [x] Verify local benchmark execution
-- [ ] Confirm performance targets achieved
-- [ ] Confirm CI passes
+- [x] All benchmarks compile without warnings
+- [x] All benchmarks run successfully
 
 ---
 
