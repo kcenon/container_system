@@ -94,8 +94,8 @@ namespace container_module
         ullong_placeholder_t,                   // 9: ullong_value (monostate on macOS/Linux)
         float,                                  // 10: float_value
         double,                                 // 11: double_value
-        std::vector<uint8_t>,                   // 12: bytes_value
-        std::string,                            // 13: string_value
+        std::string,                            // 12: string_value
+        std::vector<uint8_t>,                   // 13: bytes_value
         std::shared_ptr<thread_safe_container>, // 14: container_value
         array_variant                           // 15: array_value
     >;
@@ -119,10 +119,10 @@ namespace container_module
                      "Index 0 must be std::monostate");
         static_assert(std::is_same_v<std::variant_alternative_t<1, ValueVariant>, bool>,
                      "Index 1 must be bool");
-        static_assert(std::is_same_v<std::variant_alternative_t<12, ValueVariant>, std::vector<uint8_t>>,
-                     "Index 12 must be bytes (vector<uint8_t>)");
-        static_assert(std::is_same_v<std::variant_alternative_t<13, ValueVariant>, std::string>,
-                     "Index 13 must be string");
+        static_assert(std::is_same_v<std::variant_alternative_t<12, ValueVariant>, std::string>,
+                     "Index 12 must be string");
+        static_assert(std::is_same_v<std::variant_alternative_t<13, ValueVariant>, std::vector<uint8_t>>,
+                     "Index 13 must be bytes (vector<uint8_t>)");
         static_assert(std::is_same_v<std::variant_alternative_t<15, ValueVariant>, array_variant>,
                      "Index 15 must be array_variant");
     }

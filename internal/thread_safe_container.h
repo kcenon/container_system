@@ -121,10 +121,10 @@ namespace container_module
          * @param value The value to store
          */
         template<typename T>
-        void set_typed(std::string_view key, T&& value) {
+        void set_typed(std::string_view key, T&& val) {
             static_assert(is_variant_type_v2<std::decay_t<T>>::value,
                          "Type must be a valid variant type");
-            set(key, value(key, std::forward<T>(value)));
+            set(key, value(key, std::forward<T>(val)));
         }
 
         /**
