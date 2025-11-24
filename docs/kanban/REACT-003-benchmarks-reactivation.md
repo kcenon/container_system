@@ -5,7 +5,7 @@
 - **Priority**: MEDIUM
 - **Estimated Duration**: 2 days
 - **Dependencies**: REACT-001
-- **Status**: DONE
+- **Status**: TODO
 - **Assignee**: TBD
 - **Related Documents**: [REACTIVATION_PLAN.md](../advanced/REACTIVATION_PLAN.md)
 
@@ -177,14 +177,14 @@ static void BM_HeapAllocation(benchmark::State& state) {
 
 ## Checklist
 
-- [x] Rewrite container_operations_bench.cpp
-- [x] Rewrite value_operations_bench.cpp
-- [x] Rewrite serialization_bench.cpp
-- [x] Rewrite memory_efficiency_bench.cpp
+- [ ] Rewrite container_operations_bench.cpp
+- [ ] Rewrite value_operations_bench.cpp
+- [ ] Rewrite serialization_bench.cpp
+- [ ] Rewrite memory_efficiency_bench.cpp
 - [ ] Add Legacy vs. Modern comparison benchmark
-- [x] Enable benchmarks in CMakeLists.txt
+- [ ] Enable benchmarks in CMakeLists.txt
 - [ ] Remove skip condition from benchmarks.yml
-- [x] Verify local benchmark execution
+- [ ] Verify local benchmark execution
 - [ ] Confirm performance targets achieved
 - [ ] Confirm CI passes
 

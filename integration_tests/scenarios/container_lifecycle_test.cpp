@@ -116,39 +116,30 @@ TEST_F(ContainerLifecycleTest, ValueAdditionAndRetrieval)
     auto val2 = container->get_value("key2");
     auto val3 = container->get_value("key3");
 
-    EXPECT_FALSE(ov_is_null(val1));
-    EXPECT_FALSE(ov_is_null(val2));
-    EXPECT_FALSE(ov_is_null(val3));
+    EXPECT_FALSE(val1->is_null());
+    EXPECT_FALSE(val2->is_null());
+    EXPECT_FALSE(val3->is_null());
 
-    EXPECT_EQ(ov_to_string(val1), "value1");
-    EXPECT_EQ(ov_to_int(val2), 42);
-    EXPECT_TRUE(ov_to_boolean(val3));
+    EXPECT_EQ(val1->to_string(), "value1");
+    EXPECT_EQ(val2->to_int(), 42);
+    EXPECT_TRUE(val3->to_boolean());
 }
 
 /**
  * Test 5: Multiple values with same key
- * Note: With variant-based storage, set_value updates existing keys.
- * Use add() or add_value() to add multiple values with the same key.
  */
 TEST_F(ContainerLifecycleTest, MultipleValuesWithSameKey)
 {
-    // Use add() to allow duplicate keys
-    container->add(std::make_shared<string_value>("item", "first"));
-    container->add(std::make_shared<string_value>("item", "second"));
-    container->add(std::make_shared<string_value>("item", "third"));
+    AddStringValue("item", "first");
+    AddStringValue("item", "second");
+    AddStringValue("item", "third");
 
-    // Iterate through container to find all values with key "item"
-    std::vector<std::string> items;
-    for (const auto& val : *container) {
-        if (val.name == "item") {
-            items.push_back(ov_to_string(std::make_optional(val)));
-        }
-    }
+    auto items = container->value_array("item");
     ASSERT_EQ(items.size(), 3);
 
-    EXPECT_EQ(items[0], "first");
-    EXPECT_EQ(items[1], "second");
-    EXPECT_EQ(items[2], "third");
+    EXPECT_EQ(items[0]->to_string(), "first");
+    EXPECT_EQ(items[1]->to_string(), "second");
+    EXPECT_EQ(items[2]->to_string(), "third");
 }
 
 /**
@@ -168,8 +159,8 @@ TEST_F(ContainerLifecycleTest, SerializationRoundtrip)
     EXPECT_EQ(restored->source_id(), container->source_id());
     EXPECT_EQ(restored->target_id(), container->target_id());
     EXPECT_EQ(restored->message_type(), container->message_type());
-    EXPECT_EQ(ov_to_string(restored->get_value("test_key")), "test_value");
-    EXPECT_EQ(ov_to_int(restored->get_value("number")), 123);
+    EXPECT_EQ(restored->get_value("test_key")->to_string(), "test_value");
+    EXPECT_EQ(restored->get_value("number")->to_int(), 123);
 }
 
 /**
@@ -186,8 +177,8 @@ TEST_F(ContainerLifecycleTest, BinaryArraySerialization)
     auto restored = std::make_shared<value_container>(serialized_array, false);
     auto restored_bytes = restored->get_value("binary_data");
 
-    EXPECT_FALSE(ov_is_null(restored_bytes));
-    EXPECT_TRUE(ov_is_bytes(restored_bytes));
+    EXPECT_FALSE(restored_bytes->is_null());
+    EXPECT_TRUE(restored_bytes->is_bytes());
 }
 
 /**
@@ -202,13 +193,13 @@ TEST_F(ContainerLifecycleTest, DeepCopy)
 
     ASSERT_NE(copy, nullptr);
     EXPECT_EQ(copy->message_type(), container->message_type());
-    EXPECT_EQ(ov_to_string(copy->get_value("original")), "value");
-    EXPECT_EQ(ov_to_int(copy->get_value("number")), 42);
+    EXPECT_EQ(copy->get_value("original")->to_string(), "value");
+    EXPECT_EQ(copy->get_value("number")->to_int(), 42);
 
     // Verify independence - modify original
     AddStringValue("new_key", "new_value");
     auto copy_new_val = copy->get_value("new_key");
-    EXPECT_TRUE(ov_is_null(copy_new_val));
+    EXPECT_TRUE(copy_new_val->is_null());
 }
 
 /**
@@ -228,13 +219,11 @@ TEST_F(ContainerLifecycleTest, ShallowCopy)
 
     // Shallow copy should not have values
     auto val = shallow->get_value("data");
-    EXPECT_TRUE(ov_is_null(val));
+    EXPECT_TRUE(val->is_null());
 }
 
 /**
  * Test 10: Nested container structure
- * Note: This test verifies that serialized container data can be stored and
- * deserialized correctly using the modern API.
  */
 TEST_F(ContainerLifecycleTest, NestedContainerStructure)
 {
@@ -242,20 +231,16 @@ TEST_F(ContainerLifecycleTest, NestedContainerStructure)
     nested->set_message_type("nested_msg");
     nested->add(std::make_shared<string_value>("nested_key", "nested_value"));
 
-    // Serialize nested container
     std::string nested_data = nested->serialize();
+    container->add(std::make_shared<value>("child", value_types::container_value,
+                                           nested_data));
 
-    // Store as string value (container serialized form)
-    container->set_value("child_data", nested_data);
+    auto child_val = container->get_value("child");
+    EXPECT_TRUE(child_val->is_container());
 
-    auto child_val = container->get_value("child_data");
-    EXPECT_FALSE(ov_is_null(child_val));
-
-    // Deserialize nested container from stored string
-    std::string retrieved_data = ov_to_string(child_val);
-    auto child_container = std::make_shared<value_container>(retrieved_data, false);
+    auto child_container = std::make_shared<value_container>(child_val->data(), false);
     EXPECT_EQ(child_container->message_type(), "nested_msg");
-    EXPECT_EQ(ov_to_string(child_container->get_value("nested_key")), "nested_value");
+    EXPECT_EQ(child_container->get_value("nested_key")->to_string(), "nested_value");
 }
 
 /**
@@ -270,7 +255,7 @@ TEST_F(ContainerLifecycleTest, MultiLevelNestedContainers)
     auto restored = std::make_shared<value_container>(serialized, false);
 
     EXPECT_EQ(restored->message_type(), "root_level");
-    EXPECT_FALSE(ov_is_null(restored->get_value("data_3")));
+    EXPECT_FALSE(restored->get_value("data_3")->is_null());
 }
 
 /**
@@ -282,7 +267,7 @@ TEST_F(ContainerLifecycleTest, ValueRemoval)
     AddStringValue("key2", "value2");
     AddStringValue("key3", "value3");
 
-    EXPECT_FALSE(ov_is_null(container->get_value("key2")));
+    EXPECT_FALSE(container->get_value("key2")->is_null());
 
     container->remove("key2", true);
 
@@ -290,7 +275,7 @@ TEST_F(ContainerLifecycleTest, ValueRemoval)
     // Note: Implementation may return null_value instead of actually removing
     auto removed_val = container->get_value("key2");
     // Value should either be null or not found
-    EXPECT_TRUE(ov_is_null(removed_val) || ov_name(removed_val) != "key2");
+    EXPECT_TRUE(removed_val->is_null() || removed_val->name() != "key2");
 }
 
 /**
@@ -338,14 +323,14 @@ TEST_F(ContainerLifecycleTest, MixedValueTypesLifecycle)
     auto restored = std::make_shared<value_container>(serialized, false);
 
     // Verify all value types preserved
-    EXPECT_EQ(ov_to_string(restored->get_value("str_val")), "test_string");
-    EXPECT_EQ(ov_to_int(restored->get_value("int_val")), 42);
-    EXPECT_EQ(ov_to_llong(restored->get_value("long_val")), 9223372036854775807LL);
+    EXPECT_EQ(restored->get_value("str_val")->to_string(), "test_string");
+    EXPECT_EQ(restored->get_value("int_val")->to_int(), 42);
+    EXPECT_EQ(restored->get_value("long_val")->to_llong(), 9223372036854775807LL);
     // Use EXPECT_NEAR for floating-point comparison to handle serialization precision loss
-    EXPECT_NEAR(ov_to_double(restored->get_value("double_val")), 3.14159,
+    EXPECT_NEAR(restored->get_value("double_val")->to_double(), 3.14159,
                 TestConfig::instance().get_double_epsilon());
-    EXPECT_TRUE(ov_to_boolean(restored->get_value("bool_val")));
-    EXPECT_TRUE(ov_is_bytes(restored->get_value("bytes_val")));
+    EXPECT_TRUE(restored->get_value("bool_val")->to_boolean());
+    EXPECT_TRUE(restored->get_value("bytes_val")->is_bytes());
 }
 
 int main(int argc, char** argv)

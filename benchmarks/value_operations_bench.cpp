@@ -34,8 +34,7 @@
  */
 
 #include <benchmark/benchmark.h>
-#include "container/core/container.h"
-#include "tests/test_compat.h"
+#include "core/value.h"
 
 using namespace container_module;
 
@@ -58,7 +57,7 @@ BENCHMARK(BM_Value_CreateNumeric);
 static void BM_Value_GetData(benchmark::State& state) {
     auto v = std::make_shared<string_value>("test", "test_data");
     for (auto _ : state) {
-        auto data = v->to_string();
+        auto data = v->data();
         benchmark::DoNotOptimize(data);
     }
 }

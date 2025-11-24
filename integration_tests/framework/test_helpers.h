@@ -33,7 +33,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #pragma once
 
 #include <container/core/container.h>
-#include <container/core/deprecation.h>
 #include "../../tests/test_compat.h"
 #include "test_config.h"
 #include <string>
@@ -44,10 +43,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <iostream>
 #include <cstdlib>
 #include <algorithm>
-
-// Suppress deprecation warnings for legacy API usage in test helpers.
-// Test code intentionally uses legacy API for backwards compatibility testing.
-CONTAINER_SUPPRESS_DEPRECATION_START
 
 namespace container_module
 {
@@ -487,5 +482,3 @@ public:
 
 } // namespace testing
 } // namespace container_module
-
-CONTAINER_SUPPRESS_DEPRECATION_END
