@@ -5,7 +5,7 @@
 - **Priority**: MEDIUM
 - **Estimated Duration**: 1.5 days
 - **Dependencies**: REACT-001, REACT-005
-- **Status**: TODO
+- **Status**: DONE
 - **Assignee**: TBD
 - **Related Documents**: [REACTIVATION_PLAN.md](../advanced/REACTIVATION_PLAN.md)
 
@@ -123,13 +123,13 @@ cd build && ctest -R integration --output-on-failure
 
 ## Checklist
 
-- [ ] Migrate container_lifecycle_test.cpp
-- [ ] Migrate value_operations_test.cpp
-- [ ] Migrate serialization_performance_test.cpp
-- [ ] Migrate error_handling_test.cpp
-- [ ] Enable in CMakeLists.txt
+- [x] Migrate container_lifecycle_test.cpp
+- [x] Migrate value_operations_test.cpp
+- [x] Migrate serialization_performance_test.cpp
+- [x] Migrate error_handling_test.cpp
+- [x] Enable in CMakeLists.txt
 - [ ] Enable integration-tests.yml
-- [ ] Pass local tests
+- [x] Pass local tests
 - [ ] Confirm CI passes
 
 ---

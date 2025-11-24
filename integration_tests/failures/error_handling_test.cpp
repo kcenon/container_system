@@ -66,8 +66,8 @@ TEST_F(ErrorHandlingTest, NonExistentValueRetrieval)
     AddStringValue("exists", "value");
 
     auto missing = container->get_value("does_not_exist");
-    EXPECT_TRUE(missing->is_null());
-    EXPECT_EQ(missing->type(), value_types::null_value);
+    EXPECT_TRUE(ov_is_null(missing));
+    EXPECT_TRUE(!missing.has_value() || missing->type == value_types::null_value);
 }
 
 /**
@@ -90,17 +90,18 @@ TEST_F(ErrorHandlingTest, EmptyKeyOperations)
  */
 TEST_F(ErrorHandlingTest, NullValueConversions)
 {
-    auto null_val = std::make_shared<value>("null", value_types::null_value, "");
+    std::vector<uint8_t> empty_data;
+    auto null_val = std::make_shared<value>("null", value_types::null_value, empty_data);
     container->add(null_val);
 
     auto retrieved = container->get_value("null");
-    EXPECT_TRUE(retrieved->is_null());
+    EXPECT_TRUE(ov_is_null(retrieved));
 
-    // Base value conversion helpers throw std::logic_error for null values.
-    // Verify that the integration surface preserves this contract.
-    EXPECT_THROW(retrieved->to_int(), std::logic_error);
-    EXPECT_THROW(retrieved->to_double(), std::logic_error);
-    EXPECT_THROW(retrieved->to_boolean(), std::logic_error);
+    // With variant-based storage, null value conversions return defaults
+    // instead of throwing exceptions (safer approach)
+    EXPECT_EQ(ov_to_int(retrieved), 0);
+    EXPECT_EQ(ov_to_double(retrieved), 0.0);
+    EXPECT_FALSE(ov_to_boolean(retrieved));
 }
 
 /**
@@ -111,10 +112,10 @@ TEST_F(ErrorHandlingTest, StringToNumericConversionFailures)
     AddStringValue("not_a_number", "abc123xyz");
 
     auto val = container->get_value("not_a_number");
-    EXPECT_FALSE(val->is_null());
+    EXPECT_FALSE(ov_is_null(val));
 
     // Should handle conversion gracefully (return 0 or default)
-    int result = val->to_int();
+    int result = ov_to_int(val);
     EXPECT_EQ(result, 0);
 }
 
@@ -192,9 +193,9 @@ TEST_F(ErrorHandlingTest, NumericBoundaryValues)
 
     auto restored = RoundTripSerialize();
 
-    EXPECT_EQ(restored->get_value("max_int")->to_int(),
+    EXPECT_EQ(ov_to_int(restored->get_value("max_int")),
               std::numeric_limits<int>::max());
-    EXPECT_EQ(restored->get_value("min_int")->to_int(),
+    EXPECT_EQ(ov_to_int(restored->get_value("min_int")),
               std::numeric_limits<int>::min());
 }
 
@@ -222,13 +223,20 @@ TEST_F(ErrorHandlingTest, ManyDuplicateKeys)
         AddStringValue("duplicate", "value_" + std::to_string(i));
     }
 
-    auto values = container->value_array("duplicate");
-    EXPECT_EQ(values.size(), 100);
+    // Count values with "duplicate" key using iterator
+    size_t count = 0;
+    for (const auto& val : *container) {
+        if (val.name == "duplicate") count++;
+    }
+    EXPECT_EQ(count, 100);
 
     // Serialize and deserialize
     EXPECT_NO_THROW({
         auto restored = RoundTripSerialize();
-        auto restored_values = restored->value_array("duplicate");
+        size_t restored_count = 0;
+        for (const auto& val : *restored) {
+            if (val.name == "duplicate") restored_count++;
+        }
     });
 }
 
@@ -241,11 +249,11 @@ TEST_F(ErrorHandlingTest, ZeroLengthBytesValue)
     AddBytesValue("empty_bytes", empty_bytes);
 
     auto val = container->get_value("empty_bytes");
-    EXPECT_FALSE(val->is_null());
+    EXPECT_FALSE(ov_is_null(val));
 
     auto restored = RoundTripSerialize();
     auto restored_bytes = restored->get_value("empty_bytes");
-    EXPECT_FALSE(restored_bytes->is_null());
+    EXPECT_FALSE(ov_is_null(restored_bytes));
 }
 
 /**

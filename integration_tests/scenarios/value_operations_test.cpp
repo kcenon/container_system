@@ -65,9 +65,9 @@ TEST_F(ValueOperationsTest, StringValueOperations)
     std::string test_str = "Hello, World!";
     auto str_val = std::make_shared<string_value>("test", test_str);
 
-    EXPECT_TRUE(str_val->is_string());
-    EXPECT_FALSE(str_val->is_numeric());
-    EXPECT_FALSE(str_val->is_boolean());
+    EXPECT_TRUE(is_string(*str_val));
+    EXPECT_FALSE(is_numeric(*str_val));
+    EXPECT_FALSE(is_boolean(*str_val));
     EXPECT_FALSE(str_val->is_null());
     EXPECT_EQ(str_val->to_string(), test_str);
 }
@@ -79,7 +79,7 @@ TEST_F(ValueOperationsTest, NumericValueConversions)
 {
     auto int_val = std::make_shared<int_value>("int", 42);
 
-    EXPECT_TRUE(int_val->is_numeric());
+    EXPECT_TRUE(is_numeric(*int_val));
     EXPECT_EQ(int_val->to_int(), 42);
     EXPECT_EQ(int_val->to_long(), 42L);
     EXPECT_DOUBLE_EQ(int_val->to_double(), 42.0);
@@ -93,7 +93,7 @@ TEST_F(ValueOperationsTest, BooleanValueOperations)
     auto true_val = std::make_shared<bool_value>("true_val", true);
     auto false_val = std::make_shared<bool_value>("false_val", false);
 
-    EXPECT_TRUE(true_val->is_boolean());
+    EXPECT_TRUE(is_boolean(*true_val));
     EXPECT_TRUE(true_val->to_boolean());
     EXPECT_FALSE(false_val->to_boolean());
 }
@@ -106,8 +106,8 @@ TEST_F(ValueOperationsTest, BytesValueOperations)
     std::vector<uint8_t> test_data = {0x01, 0x02, 0x03, 0xFF, 0xFE, 0xFD};
     auto bytes_val = std::make_shared<bytes_value>("bytes", test_data);
 
-    EXPECT_TRUE(bytes_val->is_bytes());
-    EXPECT_FALSE(bytes_val->is_string());
+    EXPECT_TRUE(is_bytes(*bytes_val));
+    EXPECT_FALSE(is_string(*bytes_val));
 
     auto retrieved = bytes_val->to_bytes();
     ASSERT_EQ(retrieved.size(), test_data.size());
@@ -135,12 +135,13 @@ TEST_F(ValueOperationsTest, LargeBytesValue)
  */
 TEST_F(ValueOperationsTest, NullValueBehavior)
 {
-    auto null_val = std::make_shared<value>("null", value_types::null_value, "");
+    std::vector<uint8_t> empty_data;
+    auto null_val = std::make_shared<value>("null", value_types::null_value, empty_data);
 
     EXPECT_TRUE(null_val->is_null());
-    EXPECT_FALSE(null_val->is_string());
-    EXPECT_FALSE(null_val->is_numeric());
-    EXPECT_FALSE(null_val->is_boolean());
+    EXPECT_FALSE(is_string(*null_val));
+    EXPECT_FALSE(is_numeric(*null_val));
+    EXPECT_FALSE(is_boolean(*null_val));
 }
 
 /**
@@ -161,7 +162,7 @@ TEST_F(ValueOperationsTest, DoubleValuePrecision)
 
     // Allow for precision loss during serialization/deserialization
     // Use 1e-6 tolerance (about 6-7 significant digits)
-    double restored_value = restored->get_value("pi")->to_double();
+    double restored_value = ov_to_double(restored->get_value("pi"));
     EXPECT_NEAR(restored_value, precise_value, 1e-6)
         << "Expected: " << precise_value << ", Got: " << restored_value;
 }
@@ -190,7 +191,7 @@ TEST_F(ValueOperationsTest, LongLongValues)
 
     container->add(llong_val);
     auto restored = RoundTripSerialize();
-    EXPECT_EQ(restored->get_value("large")->to_llong(), large_value);
+    EXPECT_EQ(ov_to_llong(restored->get_value("large")), large_value);
 }
 
 /**
@@ -223,7 +224,7 @@ TEST_F(ValueOperationsTest, SpecialStringCharacters)
 
     auto restored_val = restored->get_value("special");
     // Note: Some special characters may be encoded/decoded differently
-    EXPECT_FALSE(restored_val->is_null());
+    EXPECT_FALSE(ov_is_null(restored_val));
 }
 
 /**
@@ -241,9 +242,9 @@ TEST_F(ValueOperationsTest, EmptyAndWhitespaceStrings)
 
     auto restored = RoundTripSerialize();
 
-    EXPECT_FALSE(restored->get_value("empty")->is_null());
-    EXPECT_FALSE(restored->get_value("whitespace")->is_null());
-    EXPECT_FALSE(restored->get_value("mixed")->is_null());
+    EXPECT_FALSE(ov_is_null(restored->get_value("empty")));
+    EXPECT_FALSE(ov_is_null(restored->get_value("whitespace")));
+    EXPECT_FALSE(ov_is_null(restored->get_value("mixed")));
 }
 
 int main(int argc, char** argv)

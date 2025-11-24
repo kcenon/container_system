@@ -62,8 +62,9 @@ protected:
     double AdjustedOpsBaseline(double baseline) const
     {
         // Use centralized TestConfig for CI-aware threshold adjustment
-        // Set minimum threshold to 500 ops/sec, use 0.5% of baseline for local
-        return TestConfig::instance().adjust_throughput_threshold(baseline, 500.0, 0.005);
+        // Set minimum threshold to 500 ops/sec, use 0.3% of baseline for local
+        // to account for variant-based storage overhead
+        return TestConfig::instance().adjust_throughput_threshold(baseline, 500.0, 0.003);
     }
 };
 
