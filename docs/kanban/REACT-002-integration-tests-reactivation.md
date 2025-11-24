@@ -128,7 +128,7 @@ cd build && ctest -R integration --output-on-failure
 - [x] Migrate serialization_performance_test.cpp
 - [x] Migrate error_handling_test.cpp
 - [x] Enable in CMakeLists.txt
-- [ ] Enable integration-tests.yml
+- [x] Enable integration-tests.yml
 - [x] Pass local tests
 - [ ] Confirm CI passes
 
