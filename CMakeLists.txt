@@ -472,16 +472,17 @@ endif()
 
 if(NOT BUILD_CONTAINERSYSTEM_AS_SUBMODULE)
     if(BUILD_CONTAINER_SAMPLES)
-#         add_subdirectory(samples)
+        add_subdirectory(samples)
         message(STATUS "Container samples will be built")
     endif()
 
-    # Build examples (now supported with common_system integration)
+    # Build examples (requires migration to variant-based API - see REACT-004)
     option(BUILD_CONTAINER_EXAMPLES "Build container system examples" ON)
 
     if(BUILD_CONTAINER_EXAMPLES)
-#         add_subdirectory(examples)
-        message(STATUS "Container examples will be built")
+        # Examples require legacy API migration - temporarily disabled
+        # add_subdirectory(examples)
+        message(STATUS "Container examples temporarily disabled (pending API migration)")
     endif()
 else()
     message(STATUS "Container samples and examples disabled (submodule mode)")
