@@ -5,7 +5,7 @@
 - **Priority**: LOW
 - **Estimated Time**: 1 day
 - **Dependencies**: None (WORKFLOW-001 completed)
-- **Status**: TODO
+- **Status**: DONE
 - **Assignee**: TBD
 - **Related Documents**: [WORKFLOW_IMPROVEMENTS.md](../../.github/workflows/WORKFLOW_IMPROVEMENTS.md)
 
@@ -300,17 +300,18 @@ git push origin v2.0.0-beta
 
 ## Checklist
 
-- [ ] Write release.yaml workflow
-- [ ] Write Version.cmake
-- [ ] Write release notes template
-- [ ] Linux packaging test
-- [ ] macOS packaging test
-- [ ] Windows packaging test
-- [ ] Changelog generation test
-- [ ] Draft release test
-- [ ] Actual release test
+- [x] Write release.yaml workflow
+- [x] Write Version.cmake
+- [x] Write release notes template
+- [x] Linux packaging test
+- [x] macOS packaging test
+- [x] Windows packaging test
+- [x] Changelog generation test
+- [x] Draft release test
+- [x] Actual release test
 
 ---
 
 **Created**: 2025-11-23
-**Last Modified**: 2025-11-23
+**Last Modified**: 2025-11-25
+**Completed**: 2025-11-25
