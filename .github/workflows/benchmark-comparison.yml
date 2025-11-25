@@ -1,0 +1,183 @@
+name: Performance Benchmark Comparison
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'internal/**'
+      - 'core/**'
+      - 'benchmarks/**'
+      - 'CMakeLists.txt'
+
+jobs:
+  benchmark-comparison:
+    name: Compare Performance
+    runs-on: ubuntu-22.04
+    timeout-minutes: 45
+    permissions:
+      pull-requests: write
+
+    steps:
+      - name: Checkout PR code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Checkout common_system (optional dependency)
+        uses: actions/checkout@v4
+        continue-on-error: true
+        with:
+          repository: kcenon/common_system
+          path: common_system
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y software-properties-common
+          sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+          sudo apt-get update
+          sudo apt-get install -y cmake gcc-12 g++-12 ninja-build clang libbenchmark-dev libgtest-dev libfmt-dev python3
+          sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-12 100
+          sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-12 100
+
+      - name: Set up compiler
+        run: |
+          echo "CC=clang" >> $GITHUB_ENV
+          echo "CXX=clang++" >> $GITHUB_ENV
+          echo "CXXFLAGS=-isystem /usr/include/c++/12 -isystem /usr/include/x86_64-linux-gnu/c++/12 --gcc-toolchain=/usr" >> $GITHUB_ENV
+          echo "CFLAGS=--gcc-toolchain=/usr" >> $GITHUB_ENV
+
+      - name: Build PR version
+        run: |
+          CMAKE_FLAGS=(
+            -DCMAKE_BUILD_TYPE=Release
+            -DCONTAINER_BUILD_BENCHMARKS=ON
+            -DBUILD_TESTS=OFF
+            -DBUILD_CONTAINER_SAMPLES=OFF
+          )
+          if [ -n "$CXXFLAGS" ]; then
+            CMAKE_FLAGS+=(-DCMAKE_CXX_FLAGS="$CXXFLAGS")
+          fi
+          if [ -n "$CFLAGS" ]; then
+            CMAKE_FLAGS+=(-DCMAKE_C_FLAGS="$CFLAGS")
+          fi
+          cmake -B build-pr -G Ninja "${CMAKE_FLAGS[@]}"
+          cmake --build build-pr --target container_benchmarks -j
+
+      - name: Run PR benchmarks
+        run: |
+          ./build-pr/bin/container_benchmarks \
+            --benchmark_format=json \
+            --benchmark_out=pr_results.json \
+            --benchmark_repetitions=3 \
+            --benchmark_report_aggregates_only=true
+
+      - name: Checkout base branch
+        run: |
+          git checkout ${{ github.base_ref }}
+
+      - name: Build base version
+        run: |
+          CMAKE_FLAGS=(
+            -DCMAKE_BUILD_TYPE=Release
+            -DCONTAINER_BUILD_BENCHMARKS=ON
+            -DBUILD_TESTS=OFF
+            -DBUILD_CONTAINER_SAMPLES=OFF
+          )
+          if [ -n "$CXXFLAGS" ]; then
+            CMAKE_FLAGS+=(-DCMAKE_CXX_FLAGS="$CXXFLAGS")
+          fi
+          if [ -n "$CFLAGS" ]; then
+            CMAKE_FLAGS+=(-DCMAKE_C_FLAGS="$CFLAGS")
+          fi
+          cmake -B build-base -G Ninja "${CMAKE_FLAGS[@]}"
+          cmake --build build-base --target container_benchmarks -j
+
+      - name: Run base benchmarks
+        run: |
+          ./build-base/bin/container_benchmarks \
+            --benchmark_format=json \
+            --benchmark_out=base_results.json \
+            --benchmark_repetitions=3 \
+            --benchmark_report_aggregates_only=true
+
+      - name: Checkout PR again for comparison script
+        run: |
+          git checkout ${{ github.head_ref }}
+
+      - name: Compare benchmark results
+        id: compare
+        run: |
+          python3 scripts/compare_benchmarks.py \
+            --base base_results.json \
+            --pr pr_results.json \
+            --threshold 0.10 \
+            --output comparison.md
+
+      - name: Check for regression
+        id: regression
+        run: |
+          if [ -f regression_detected ]; then
+            echo "regression=true" >> $GITHUB_OUTPUT
+            echo "::error::Performance regression detected!"
+          else
+            echo "regression=false" >> $GITHUB_OUTPUT
+            echo "No significant performance regressions detected"
+          fi
+
+      - name: Comment on PR
+        if: always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            if (fs.existsSync('comparison.md')) {
+              const comparison = fs.readFileSync('comparison.md', 'utf8');
+
+              // Find existing comment
+              const { data: comments } = await github.rest.issues.listComments({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo
+              });
+
+              const botComment = comments.find(c =>
+                c.user.type === 'Bot' &&
+                c.body.includes('Performance Benchmark Report')
+              );
+
+              if (botComment) {
+                await github.rest.issues.updateComment({
+                  comment_id: botComment.id,
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  body: comparison
+                });
+              } else {
+                await github.rest.issues.createComment({
+                  issue_number: context.issue.number,
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  body: comparison
+                });
+              }
+            }
+
+      - name: Upload benchmark results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: benchmark-comparison-results
+          path: |
+            pr_results.json
+            base_results.json
+            comparison.md
+          retention-days: 30
+
+      - name: Fail on regression
+        if: steps.regression.outputs.regression == 'true'
+        run: |
+          echo "Performance regression detected - failing the check"
+          cat comparison.md
+          exit 1
