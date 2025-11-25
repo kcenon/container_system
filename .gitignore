@@ -77,3 +77,4 @@ documents/
 # Embedded system dependencies (use Sources/ directory instead)
 common_system/
 thread_system/
+.npm-cache/
