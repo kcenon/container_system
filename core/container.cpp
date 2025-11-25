@@ -690,14 +690,13 @@ bool value_container::deserialize(const std::vector<uint8_t>& data_array,
 
 	pool_stats value_container::get_pool_stats()
 	{
-		auto& pool = value_pool<optimized_value>::instance();
-		auto [hits, misses, available] = pool.stats();
-		return pool_stats(hits, misses, available);
+		// Memory pool removed - return empty stats for API compatibility
+		return pool_stats(0, 0, 0);
 	}
 
 	void value_container::clear_pool()
 	{
-		value_pool<optimized_value>::instance().clear();
+		// Memory pool removed - no-op for API compatibility
 	}
 
 

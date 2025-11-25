@@ -32,15 +32,188 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #pragma once
 
-#include "container/core/optimized_value.h"
-#include "container/core/value_pool.h"
+#include "container/core/value_types.h"
 #include "container/core/typed_container.h"
-#include "container/core/container_memory_pool.h"
+#include "container/internal/value.h"
 
-// Forward declaration for legacy compatibility
-namespace container_module {
-    class value;
-}
+#include <variant>
+#include <string>
+#include <vector>
+#include <cstdint>
+
+namespace container_module
+{
+	// Forward declaration
+	class value_container;
+
+	/**
+	 * @brief Small Object Optimization (SOO) for value storage
+	 *
+	 * This variant-based storage allows small primitive values to be stored
+	 * on the stack rather than heap-allocated, significantly reducing memory
+	 * overhead and improving cache locality.
+	 */
+	using value_variant = std::variant<
+		std::monostate,                          // null_value (0 bytes)
+		bool,                                    // bool_value (1 byte)
+		short,                                   // short_value (2 bytes)
+		unsigned short,                          // ushort_value (2 bytes)
+		int,                                     // int_value (4 bytes)
+		unsigned int,                            // uint_value (4 bytes)
+		long,                                    // long_value (4/8 bytes)
+		unsigned long,                           // ulong_value (4/8 bytes)
+		long long,                               // llong_value (8 bytes)
+		unsigned long long,                      // ullong_value (8 bytes)
+		float,                                   // float_value (4 bytes)
+		double,                                  // double_value (8 bytes)
+		std::string,                             // string_value (dynamic)
+		std::vector<uint8_t>,                    // bytes_value (dynamic)
+		std::shared_ptr<value_container>         // container_value (pointer only)
+	>;
+
+	/**
+	 * @brief Optimized value storage with Small Object Optimization
+	 */
+	struct optimized_value
+	{
+		std::string name;              ///< Value identifier
+		value_types type;              ///< Type enumeration
+		value_variant data;            ///< Variant storage (stack-allocated for primitives)
+
+		optimized_value()
+			: name("")
+			, type(value_types::null_value)
+			, data(std::monostate{})
+		{}
+
+		optimized_value(const std::string& n, value_types t)
+			: name(n)
+			, type(t)
+			, data(std::monostate{})
+		{}
+
+		size_t memory_footprint() const
+		{
+			size_t base = sizeof(optimized_value);
+			base += name.capacity();
+			if (std::holds_alternative<std::string>(data)) {
+				base += std::get<std::string>(data).capacity();
+			} else if (std::holds_alternative<std::vector<uint8_t>>(data)) {
+				base += std::get<std::vector<uint8_t>>(data).capacity();
+			}
+			return base;
+		}
+
+		bool is_stack_allocated() const
+		{
+			return type != value_types::string_value &&
+				   type != value_types::bytes_value &&
+				   type != value_types::container_value;
+		}
+	};
+
+	/**
+	 * @brief Pool statistics structure (stub for API compatibility)
+	 */
+	struct pool_stats
+	{
+		size_t hits{0};
+		size_t misses{0};
+		size_t available{0};
+		double hit_rate{0.0};
+
+		pool_stats() = default;
+		pool_stats(size_t h, size_t m, size_t a)
+			: hits(h), misses(m), available(a)
+			, hit_rate(h + m > 0 ? static_cast<double>(h) / (h + m) : 0.0)
+		{}
+	};
+
+	/**
+	 * @brief Helper functions for variant value manipulation
+	 */
+	namespace variant_helpers
+	{
+		/**
+		 * @brief Convert value_variant to string representation
+		 */
+		inline std::string to_string(const value_variant& var, value_types type)
+		{
+			switch (type)
+			{
+			case value_types::null_value:
+				return "";
+			case value_types::bool_value:
+				return std::get<bool>(var) ? "true" : "false";
+			case value_types::short_value:
+				return std::to_string(std::get<short>(var));
+			case value_types::ushort_value:
+				return std::to_string(std::get<unsigned short>(var));
+			case value_types::int_value:
+				return std::to_string(std::get<int>(var));
+			case value_types::uint_value:
+				return std::to_string(std::get<unsigned int>(var));
+			case value_types::long_value:
+				return std::to_string(std::get<long>(var));
+			case value_types::ulong_value:
+				return std::to_string(std::get<unsigned long>(var));
+			case value_types::llong_value:
+				return std::to_string(std::get<long long>(var));
+			case value_types::ullong_value:
+				return std::to_string(std::get<unsigned long long>(var));
+			case value_types::float_value:
+				return std::to_string(std::get<float>(var));
+			case value_types::double_value:
+				return std::to_string(std::get<double>(var));
+			case value_types::string_value:
+				return std::get<std::string>(var);
+			default:
+				return "";
+			}
+		}
+
+		/**
+		 * @brief Get size in bytes of variant data
+		 */
+		inline size_t data_size(const value_variant& var, value_types type)
+		{
+			switch (type)
+			{
+			case value_types::null_value:
+				return 0;
+			case value_types::bool_value:
+				return sizeof(bool);
+			case value_types::short_value:
+				return sizeof(short);
+			case value_types::ushort_value:
+				return sizeof(unsigned short);
+			case value_types::int_value:
+				return sizeof(int);
+			case value_types::uint_value:
+				return sizeof(unsigned int);
+			case value_types::long_value:
+				return sizeof(long);
+			case value_types::ulong_value:
+				return sizeof(unsigned long);
+			case value_types::llong_value:
+				return sizeof(long long);
+			case value_types::ullong_value:
+				return sizeof(unsigned long long);
+			case value_types::float_value:
+				return sizeof(float);
+			case value_types::double_value:
+				return sizeof(double);
+			case value_types::string_value:
+				return std::get<std::string>(var).size();
+			case value_types::bytes_value:
+				return std::get<std::vector<uint8_t>>(var).size();
+			default:
+				return 0;
+			}
+		}
+	}
+
+} // namespace container_module
 
 // Optional common system integration
 #ifdef CONTAINER_USE_COMMON_SYSTEM
