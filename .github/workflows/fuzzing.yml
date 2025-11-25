@@ -1,0 +1,165 @@
+name: Fuzzing Tests
+
+on:
+  schedule:
+    - cron: '0 2 * * 1'  # Every Monday at 02:00 UTC
+  pull_request:
+    branches: [main]
+    paths:
+      - 'internal/**'
+      - 'core/**'
+      - 'fuzz/**'
+  workflow_dispatch:
+    inputs:
+      fuzz_duration:
+        description: 'Fuzzing duration in seconds'
+        required: false
+        default: '300'
+
+jobs:
+  fuzz:
+    name: Fuzz Testing
+    runs-on: ubuntu-22.04
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Checkout common_system (optional dependency)
+        uses: actions/checkout@v4
+        continue-on-error: true
+        with:
+          repository: kcenon/common_system
+          path: common_system
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y software-properties-common
+          sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+          sudo apt-get update
+          sudo apt-get install -y cmake ninja-build clang-15 llvm-15 gcc-12 g++-12 libgtest-dev libfmt-dev python3
+          # Set GCC 12 as default for Clang libstdc++ compatibility
+          sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-12 100
+          sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-12 100
+
+      - name: Generate seed corpus
+        run: |
+          python3 fuzz/generate_corpus.py
+          ls -la corpus/
+
+      - name: Configure with Fuzzing
+        run: |
+          CC=clang-15 CXX=clang++-15 cmake -B build -G Ninja \
+            -DCMAKE_BUILD_TYPE=Debug \
+            -DBUILD_FUZZING=ON \
+            -DBUILD_TESTS=OFF \
+            -DBUILD_CONTAINER_SAMPLES=OFF \
+            -DCMAKE_CXX_FLAGS="-isystem /usr/include/c++/12 -isystem /usr/include/x86_64-linux-gnu/c++/12 --gcc-toolchain=/usr"
+
+      - name: Build fuzz targets
+        run: cmake --build build --target fuzz_deserialize fuzz_container_deserialize
+
+      - name: Run value deserialize fuzzing
+        id: fuzz_value
+        continue-on-error: true
+        run: |
+          DURATION=${{ github.event.inputs.fuzz_duration || '300' }}
+          echo "Running fuzz_deserialize for ${DURATION} seconds..."
+          timeout ${DURATION} ./build/fuzz/fuzz_deserialize corpus/deserialize \
+            -max_len=4096 \
+            -print_final_stats=1 \
+            2>&1 | tee fuzz_deserialize.log || true
+
+          # Check for crashes
+          if ls crash-* 1> /dev/null 2>&1; then
+            echo "crash_found=true" >> $GITHUB_OUTPUT
+            echo "::error::Crash found in fuzz_deserialize"
+          else
+            echo "crash_found=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Run container deserialize fuzzing
+        id: fuzz_container
+        continue-on-error: true
+        run: |
+          DURATION=${{ github.event.inputs.fuzz_duration || '300' }}
+          echo "Running fuzz_container_deserialize for ${DURATION} seconds..."
+          timeout ${DURATION} ./build/fuzz/fuzz_container_deserialize corpus/container \
+            -max_len=8192 \
+            -print_final_stats=1 \
+            2>&1 | tee fuzz_container.log || true
+
+          # Check for crashes
+          if ls crash-* 1> /dev/null 2>&1; then
+            echo "crash_found=true" >> $GITHUB_OUTPUT
+            echo "::error::Crash found in fuzz_container_deserialize"
+          else
+            echo "crash_found=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Check for crashes
+        run: |
+          if ls crash-* 1> /dev/null 2>&1; then
+            echo "Crashes found!"
+            ls -la crash-*
+            for crash in crash-*; do
+              echo "=== $crash ==="
+              xxd "$crash" | head -20
+            done
+            exit 1
+          fi
+          echo "No crashes found - fuzzing completed successfully"
+
+      - name: Generate summary
+        if: always()
+        run: |
+          echo "## Fuzzing Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if ls crash-* 1> /dev/null 2>&1; then
+            echo ":x: **Crashes detected**" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "| File | Size |" >> $GITHUB_STEP_SUMMARY
+            echo "|------|------|" >> $GITHUB_STEP_SUMMARY
+            for crash in crash-*; do
+              size=$(stat -c%s "$crash" 2>/dev/null || stat -f%z "$crash")
+              echo "| $crash | $size bytes |" >> $GITHUB_STEP_SUMMARY
+            done
+          else
+            echo ":white_check_mark: **No crashes found**" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Corpus Statistics" >> $GITHUB_STEP_SUMMARY
+          echo "- Deserialize corpus: $(ls corpus/deserialize 2>/dev/null | wc -l) files" >> $GITHUB_STEP_SUMMARY
+          echo "- Container corpus: $(ls corpus/container 2>/dev/null | wc -l) files" >> $GITHUB_STEP_SUMMARY
+
+      - name: Upload corpus
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: fuzz-corpus
+          path: corpus/
+          retention-days: 90
+
+      - name: Upload crashes
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: fuzz-crashes
+          path: |
+            crash-*
+            fuzz_*.log
+
+      - name: Upload logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: fuzz-logs
+          path: fuzz_*.log
+          retention-days: 30
