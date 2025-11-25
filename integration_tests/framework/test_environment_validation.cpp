@@ -186,9 +186,12 @@ TEST_F(EnvironmentValidationTest, ThresholdAdjustments)
             << "CI throughput threshold should be very relaxed (<10% of baseline)";
     } else {
         std::cout << "Local environment - using standard thresholds" << std::endl;
-        // In local, should be around 50% of baseline
-        EXPECT_GT(adjusted_throughput, baseline_throughput * 0.3)
-            << "Local throughput threshold should be reasonable (>30% of baseline)";
+        // In local, should be 20% of baseline (accounts for machine variations
+        // and variant-based storage overhead after migration)
+        EXPECT_GT(adjusted_throughput, baseline_throughput * 0.15)
+            << "Local throughput threshold should be reasonable (>15% of baseline)";
+        EXPECT_LE(adjusted_throughput, baseline_throughput * 0.25)
+            << "Local throughput threshold should not exceed 25% of baseline";
     }
 
     SUCCEED() << "Threshold adjustments validated";
