@@ -235,20 +235,25 @@ TEST(ModernAPI, NoDeprecationWarning) {
 
 ## Checklist
 
-- [x] Add [[deprecated]] to bool_value
-- [x] Add [[deprecated]] to numeric_value (int_value, llong_value, etc.)
-- [x] Add [[deprecated]] to string_value
-- [x] Add [[deprecated]] to bytes_value
-- [ ] Add [[deprecated]] to array_value
-- [ ] Add [[deprecated]] to container_value
-- [ ] Add [[deprecated]] to value base class
-- [x] Add [[deprecated]] to container.add()
-- [x] Create deprecation.h macros
+- [x] Add [[deprecated]] to bool_value (N/A - file does not exist)
+- [x] Add [[deprecated]] to numeric_value (int_value, llong_value, etc.) (N/A - file does not exist)
+- [x] Add [[deprecated]] to string_value (N/A - file does not exist)
+- [x] Add [[deprecated]] to bytes_value (N/A - file does not exist)
+- [x] Add [[deprecated]] to array_value (N/A - integrated into variant system)
+- [x] Add [[deprecated]] to container_value (N/A - integrated into variant system)
+- [x] Add [[deprecated]] to value base class (N/A - internal/value.h is new variant-based system)
+- [x] Add [[deprecated]] to container.add() (completed at core/container.h:246)
+- [x] Create deprecation.h macros (completed at core/deprecation.h)
 - [x] Test warning generation
 - [x] Test warning suppression (in test fixtures)
-- [ ] Update documentation
+- [x] Update documentation
 
 ---
 
 **Created**: 2025-11-23
-**Last Modified**: 2025-11-23
+**Last Modified**: 2025-11-25
+**Completed**: 2025-11-25
+
+**Note**: Legacy value class files (bool_value, int_value, etc.) do not exist as separate files.
+They have been integrated into the variant-based system (internal/value.h). Only the legacy
+container.add() method remains and has been marked as deprecated.
