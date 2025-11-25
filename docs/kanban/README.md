@@ -3,7 +3,7 @@
 This folder contains tickets for tracking improvement work on the Container System.
 
 **Last Updated**: 2025-11-25
-**Analysis Date**: 2025-11-25 (All REACT and MIGRATE tickets completed)
+**Analysis Date**: 2025-11-25 (All REACT, MIGRATE, and LEGACY tickets completed)
 
 ---
 
@@ -15,9 +15,9 @@ This folder contains tickets for tracking improvement work on the Container Syst
 |----------|---------------|------|-------------|---------|
 | REACT (Reactivation) | 6 | 6 | 0 | 0 |
 | MIGRATE (Migration) | 3 | 3 | 0 | 0 |
-| LEGACY (Legacy Removal) | 4 | 0 | 0 | 4 |
+| LEGACY (Legacy Removal) | 4 | 4 | 0 | 0 |
 | WORKFLOW (CI/CD) | 4 | 1 | 0 | 3 |
-| **Total** | **17** | **10** | **0** | **7** |
+| **Total** | **17** | **14** | **0** | **3** |
 
 ### Completed Tickets (Removed from Active Board)
 
@@ -34,6 +34,10 @@ This folder contains tickets for tracking improvement work on the Container Syst
 | ~~REACT-006~~ | Performance Baseline Reactivation | Performance baselines updated (2025-11-25) |
 | ~~MIGRATE-003~~ | thread_safe_container Integration | Nested container serialization implemented |
 | ~~MIGRATE-004~~ | Deprecation Warnings | `container.add()` marked deprecated, deprecation.h created (2025-11-25) |
+| ~~LEGACY-001~~ | Remove Core Value Classes | Removed optimized_value.h, value_pool.h, container_memory_pool.h (2025-11-25) |
+| ~~LEGACY-002~~ | Remove Value Types Implementation | values/ directory already removed |
+| ~~LEGACY-003~~ | Remove Old variant_value | variant_value.h/cpp already removed |
+| ~~LEGACY-004~~ | Build System Cleanup | CMakeLists.txt already clean |
 
 ---
 
@@ -73,22 +77,23 @@ This folder contains tickets for tracking improvement work on the Container Syst
 
 ### LEGACY: Legacy System Removal
 
-Clean up the codebase by removing legacy code after migration is complete.
+~~All LEGACY tickets completed! Legacy code has been removed from the codebase.~~
 
-**Files to Remove**:
-- `/internal/value.h` - Legacy polymorphic value class
-- `/internal/value.cpp` - Legacy value implementation
-- `/core/value_types.h` - Legacy type enum
-- `/core/value_types.cpp` - Legacy type utilities
+**Status**: ✅ COMPLETE (All 4 tickets done as of 2025-11-25)
+
+**Completed Work**:
+- Removed `core/optimized_value.h`, `core/value_pool.h`, `core/container_memory_pool.h`
+- Inlined necessary type definitions into `core/container.h`
+- Removed legacy `values/` directory (already done)
+- Removed old `variant_value` files (already done)
+- Build system already clean
 
 | ID | Title | Priority | Est. Duration | Dependencies | Status |
 |----|-------|----------|---------------|--------------|--------|
-| [LEGACY-001](LEGACY-001-core-value-removal.md) | Remove Core Value Classes | HIGH | 1d | MIGRATE-*, REACT-* | TODO |
-| [LEGACY-002](LEGACY-002-value-types-removal.md) | Remove Value Types Implementation | HIGH | 1d | LEGACY-001 | TODO |
-| [LEGACY-003](LEGACY-003-variant-value-old-removal.md) | Remove Old variant_value | MEDIUM | 0.5d | LEGACY-001, LEGACY-002 | TODO |
-| [LEGACY-004](LEGACY-004-build-cleanup.md) | Build System Cleanup | LOW | 0.5d | LEGACY-001~003 | TODO |
-
-**Recommended Execution Order**: LEGACY-001 → LEGACY-002 → LEGACY-003 → LEGACY-004
+| ~~[LEGACY-001](LEGACY-001-core-value-removal.md)~~ | ~~Remove Core Value Classes~~ | - | - | - | ✅ DONE |
+| ~~[LEGACY-002](LEGACY-002-value-types-removal.md)~~ | ~~Remove Value Types Implementation~~ | - | - | - | ✅ DONE |
+| ~~[LEGACY-003](LEGACY-003-variant-value-old-removal.md)~~ | ~~Remove Old variant_value~~ | - | - | - | ✅ DONE |
+| ~~[LEGACY-004](LEGACY-004-build-cleanup.md)~~ | ~~Build System Cleanup~~ | - | - | - | ✅ DONE |
 
 ---
 
@@ -149,12 +154,12 @@ Improve GitHub Actions workflows to strengthen build, test, and deployment autom
 ## Quick Start
 
 **Next Actionable Tickets** (dependencies satisfied):
-1. **LEGACY-001** - Remove Core Value Classes (HIGH priority, all REACT/MIGRATE done)
-2. **WORKFLOW-002** - ARM64 Cross-Compilation (LOW priority, no dependencies)
-3. **WORKFLOW-003** - Fuzzing Automation (MEDIUM priority, no dependencies)
+1. **WORKFLOW-004** - Performance Regression Detection (MEDIUM priority, REACT-003/006 done)
+2. **WORKFLOW-003** - Fuzzing Automation (MEDIUM priority, no dependencies)
+3. **WORKFLOW-002** - ARM64 Cross-Compilation (LOW priority, no dependencies)
 4. **WORKFLOW-005** - Release Automation (LOW priority, no dependencies)
 
-**Recommended Next Step**: Start LEGACY-001 to complete the legacy removal pipeline.
+**Recommended Next Step**: Start WORKFLOW-004 to establish performance regression detection.
 
 ---
 
