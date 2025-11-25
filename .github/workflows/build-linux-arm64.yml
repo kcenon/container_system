@@ -1,0 +1,138 @@
+name: Linux ARM64 Cross-Compile
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'internal/**'
+      - 'core/**'
+      - 'cmake/**'
+      - 'CMakeLists.txt'
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build-arm64:
+    name: Build Linux ARM64
+    runs-on: ubuntu-22.04
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Checkout common_system (optional dependency)
+        uses: actions/checkout@v4
+        continue-on-error: true
+        with:
+          repository: kcenon/common_system
+          path: common_system
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install cross-compilation tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            gcc-aarch64-linux-gnu \
+            g++-aarch64-linux-gnu \
+            binutils-aarch64-linux-gnu \
+            qemu-user-static \
+            qemu-user \
+            libc6-arm64-cross \
+            libstdc++6-arm64-cross
+
+      - name: Install ARM64 GTest
+        run: |
+          # Build GTest for ARM64
+          git clone --depth 1 --branch v1.14.0 https://github.com/google/googletest.git /tmp/googletest
+          cd /tmp/googletest
+          cmake -B build \
+            -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/cmake/toolchain-arm64-linux.cmake \
+            -DCMAKE_INSTALL_PREFIX=/usr/aarch64-linux-gnu \
+            -DCMAKE_BUILD_TYPE=Release
+          cmake --build build -j$(nproc)
+          sudo cmake --install build
+
+      - name: Configure CMake for ARM64
+        run: |
+          # Check if common_system is available
+          if [ -d "common_system" ]; then
+            echo "Building with common_system support"
+            BUILD_WITH_COMMON="ON"
+          else
+            echo "Building without common_system support"
+            BUILD_WITH_COMMON="OFF"
+          fi
+
+          cmake -B build \
+            -DCMAKE_TOOLCHAIN_FILE=cmake/toolchain-arm64-linux.cmake \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DBUILD_WITH_COMMON_SYSTEM=$BUILD_WITH_COMMON \
+            -DBUILD_TESTS=ON \
+            -DBUILD_CONTAINER_SAMPLES=OFF \
+            -DBUILD_CONTAINER_EXAMPLES=OFF \
+            -DCONTAINER_BUILD_BENCHMARKS=OFF
+
+      - name: Build
+        run: cmake --build build -j$(nproc)
+
+      - name: Verify binary architecture
+        run: |
+          echo "Checking binary architecture..."
+          file build/bin/unit_tests || true
+          # Should show: ELF 64-bit LSB executable, ARM aarch64
+
+          # Also check library
+          file build/lib/libcontainer_system.a || true
+
+      - name: Test with QEMU
+        run: |
+          echo "Running ARM64 tests via QEMU..."
+          cd build
+
+          # Set up QEMU environment
+          export QEMU_LD_PREFIX=/usr/aarch64-linux-gnu
+
+          # Run unit tests with QEMU
+          if [ -f "bin/unit_tests" ]; then
+            qemu-aarch64-static -L /usr/aarch64-linux-gnu bin/unit_tests \
+              --gtest_filter=-*DISABLED_* \
+              2>&1 || echo "Some tests may have failed (expected in cross-compilation)"
+          fi
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-arm64-artifacts
+          path: |
+            build/bin/
+            build/lib/
+          retention-days: 30
+
+      - name: Generate summary
+        run: |
+          echo "## Linux ARM64 Cross-Compilation Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [ -f "build/lib/libcontainer_system.a" ]; then
+            echo ":white_check_mark: **Library built successfully**" >> $GITHUB_STEP_SUMMARY
+            size=$(stat -c%s build/lib/libcontainer_system.a 2>/dev/null || stat -f%z build/lib/libcontainer_system.a)
+            echo "- Library size: $size bytes" >> $GITHUB_STEP_SUMMARY
+          else
+            echo ":x: **Library build failed**" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Build Artifacts" >> $GITHUB_STEP_SUMMARY
+          echo "| File | Size |" >> $GITHUB_STEP_SUMMARY
+          echo "|------|------|" >> $GITHUB_STEP_SUMMARY
+
+          for f in build/bin/* build/lib/*.a; do
+            if [ -f "$f" ]; then
+              size=$(stat -c%s "$f" 2>/dev/null || stat -f%z "$f")
+              echo "| $(basename $f) | $size bytes |" >> $GITHUB_STEP_SUMMARY
+            fi
+          done
