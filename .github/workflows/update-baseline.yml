@@ -1,0 +1,114 @@
+name: Update Performance Baseline
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'internal/**'
+      - 'core/**'
+      - 'benchmarks/**'
+  workflow_dispatch:
+    inputs:
+      force_update:
+        description: 'Force baseline update even without code changes'
+        required: false
+        default: 'false'
+
+permissions:
+  contents: write
+
+jobs:
+  update-baseline:
+    name: Update Baseline
+    runs-on: ubuntu-22.04
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Checkout common_system (optional dependency)
+        uses: actions/checkout@v4
+        continue-on-error: true
+        with:
+          repository: kcenon/common_system
+          path: common_system
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y software-properties-common
+          sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+          sudo apt-get update
+          sudo apt-get install -y cmake gcc-12 g++-12 ninja-build clang libbenchmark-dev libgtest-dev libfmt-dev python3
+          sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-12 100
+          sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-12 100
+
+      - name: Set up compiler
+        run: |
+          echo "CC=clang" >> $GITHUB_ENV
+          echo "CXX=clang++" >> $GITHUB_ENV
+          echo "CXXFLAGS=-isystem /usr/include/c++/12 -isystem /usr/include/x86_64-linux-gnu/c++/12 --gcc-toolchain=/usr" >> $GITHUB_ENV
+          echo "CFLAGS=--gcc-toolchain=/usr" >> $GITHUB_ENV
+
+      - name: Build benchmarks
+        run: |
+          CMAKE_FLAGS=(
+            -DCMAKE_BUILD_TYPE=Release
+            -DCONTAINER_BUILD_BENCHMARKS=ON
+            -DBUILD_TESTS=OFF
+            -DBUILD_CONTAINER_SAMPLES=OFF
+          )
+          if [ -n "$CXXFLAGS" ]; then
+            CMAKE_FLAGS+=(-DCMAKE_CXX_FLAGS="$CXXFLAGS")
+          fi
+          if [ -n "$CFLAGS" ]; then
+            CMAKE_FLAGS+=(-DCMAKE_C_FLAGS="$CFLAGS")
+          fi
+          cmake -B build -G Ninja "${CMAKE_FLAGS[@]}"
+          cmake --build build --target container_benchmarks -j
+
+      - name: Run benchmarks
+        run: |
+          ./build/bin/container_benchmarks \
+            --benchmark_format=json \
+            --benchmark_out=baseline.json \
+            --benchmark_repetitions=5 \
+            --benchmark_report_aggregates_only=true
+
+      - name: Generate baseline report
+        run: |
+          python3 scripts/update_baseline.py baseline.json benchmarks/BASELINE.md
+
+      - name: Archive baseline JSON
+        run: |
+          mkdir -p benchmarks/baselines
+          cp baseline.json "benchmarks/baselines/baseline_$(date +%Y%m%d_%H%M%S).json"
+          # Keep only the last 10 baselines
+          cd benchmarks/baselines
+          ls -t baseline_*.json | tail -n +11 | xargs -r rm
+
+      - name: Commit baseline update
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add benchmarks/BASELINE.md benchmarks/baselines/
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Update performance baseline [skip ci]"
+            git push
+          fi
+
+      - name: Upload baseline artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: performance-baseline
+          path: |
+            baseline.json
+            benchmarks/BASELINE.md
+          retention-days: 90

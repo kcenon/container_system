@@ -16,8 +16,8 @@ This folder contains tickets for tracking improvement work on the Container Syst
 | REACT (Reactivation) | 6 | 6 | 0 | 0 |
 | MIGRATE (Migration) | 3 | 3 | 0 | 0 |
 | LEGACY (Legacy Removal) | 4 | 4 | 0 | 0 |
-| WORKFLOW (CI/CD) | 4 | 1 | 0 | 3 |
-| **Total** | **17** | **14** | **0** | **3** |
+| WORKFLOW (CI/CD) | 4 | 2 | 0 | 2 |
+| **Total** | **17** | **15** | **0** | **2** |
 
 ### Completed Tickets (Removed from Active Board)
 
@@ -38,6 +38,7 @@ This folder contains tickets for tracking improvement work on the Container Syst
 | ~~LEGACY-002~~ | Remove Value Types Implementation | values/ directory already removed |
 | ~~LEGACY-003~~ | Remove Old variant_value | variant_value.h/cpp already removed |
 | ~~LEGACY-004~~ | Build System Cleanup | CMakeLists.txt already clean |
+| ~~WORKFLOW-004~~ | Performance Regression Detection | benchmark-comparison.yml, compare_benchmarks.py, update-baseline.yml created (2025-11-25) |
 
 ---
 
@@ -113,7 +114,7 @@ Improve GitHub Actions workflows to strengthen build, test, and deployment autom
 | ~~WORKFLOW-001~~ | ~~Windows Build Support~~ | - | - | - | DONE |
 | [WORKFLOW-002](WORKFLOW-002-arm64-linux-cross-compile.md) | ARM64 Linux Cross-Compilation | LOW | 1d | - | TODO |
 | [WORKFLOW-003](WORKFLOW-003-fuzzing-automation.md) | Fuzzing Automation | MEDIUM | 2d | - | TODO |
-| [WORKFLOW-004](WORKFLOW-004-performance-regression-detection.md) | Performance Regression Detection | MEDIUM | 1.5d | REACT-003, REACT-006 | TODO |
+| ~~[WORKFLOW-004](WORKFLOW-004-performance-regression-detection.md)~~ | ~~Performance Regression Detection~~ | - | - | - | ✅ DONE |
 | [WORKFLOW-005](WORKFLOW-005-release-automation.md) | Release Automation | LOW | 1d | - | TODO |
 
 **Recommended Execution Order**: Can proceed independently (only WORKFLOW-004 requires REACT-003, REACT-006)
@@ -154,12 +155,11 @@ Improve GitHub Actions workflows to strengthen build, test, and deployment autom
 ## Quick Start
 
 **Next Actionable Tickets** (dependencies satisfied):
-1. **WORKFLOW-004** - Performance Regression Detection (MEDIUM priority, REACT-003/006 done)
-2. **WORKFLOW-003** - Fuzzing Automation (MEDIUM priority, no dependencies)
-3. **WORKFLOW-002** - ARM64 Cross-Compilation (LOW priority, no dependencies)
-4. **WORKFLOW-005** - Release Automation (LOW priority, no dependencies)
+1. **WORKFLOW-003** - Fuzzing Automation (MEDIUM priority, no dependencies)
+2. **WORKFLOW-002** - ARM64 Cross-Compilation (LOW priority, no dependencies)
+3. **WORKFLOW-005** - Release Automation (LOW priority, no dependencies)
 
-**Recommended Next Step**: Start WORKFLOW-004 to establish performance regression detection.
+**Recommended Next Step**: Start WORKFLOW-003 to establish fuzzing automation.
 
 ---
 
