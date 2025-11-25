@@ -129,7 +129,7 @@ std::shared_ptr<value_container> messaging_integration::deserialize_from_messagi
         // Placeholder for decompression implementation
     }
 
-    auto container = std::make_shared<value_container>(processed_data);
+    auto container = std::make_shared<value_container>(processed_data, false);
 
 #ifdef HAS_PERFORMANCE_METRICS
     auto end = std::chrono::high_resolution_clock::now();

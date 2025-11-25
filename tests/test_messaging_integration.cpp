@@ -146,8 +146,7 @@ TEST_F(MessagingIntegrationTest, OptimizationSettings) {
     EXPECT_EQ(container2->message_type(), "memory_test");
 }
 
-// TODO: Fix serialization key mapping between old and new API
-TEST_F(MessagingIntegrationTest, DISABLED_SerializationIntegration) {
+TEST_F(MessagingIntegrationTest, SerializationIntegration) {
     auto container = integration::messaging_container_builder()
         .source("serialization_test")
         .target("deserialization_test")
@@ -178,7 +177,7 @@ TEST_F(MessagingIntegrationTest, DISABLED_SerializationIntegration) {
 }
 
 #ifdef HAS_PERFORMANCE_METRICS
-TEST_F(MessagingIntegrationTest, DISABLED_PerformanceMonitoring) {
+TEST_F(MessagingIntegrationTest, PerformanceMonitoring) {
     // Reset metrics for clean test
     integration::messaging_integration::reset_metrics();
 
@@ -209,33 +208,41 @@ TEST_F(MessagingIntegrationTest, DISABLED_PerformanceMonitoring) {
 #endif
 
 #ifdef HAS_EXTERNAL_INTEGRATION
-// Disabled: Windows-specific - external callbacks not being invoked
-// TODO: Fix callback mechanism in messaging_container_builder
-TEST_F(MessagingIntegrationTest, DISABLED_ExternalCallbacks) {
-    std::atomic<int> callback_count{0};
-    std::string last_callback_data;
+TEST_F(MessagingIntegrationTest, ExternalCallbacks) {
+    std::atomic<int> creation_callback_count{0};
+    std::atomic<int> serialization_callback_count{0};
 
-    // Register callback (not available in current API)
-    // integration::messaging_integration::register_callback(...)
+    // Register creation callback
+    integration::messaging_integration::register_creation_callback(
+        [&creation_callback_count](const std::shared_ptr<value_container>& container) {
+            creation_callback_count++;
+        }
+    );
 
-    auto container = integration::messaging_container_builder()
-        .source("callback_test")
-        .target("callback_target")
-        .message_type("callback_message")
-        .add_value("callback_data", std::string("test_callback_data"))
-        .build();
+    // Register serialization callback
+    integration::messaging_integration::register_serialization_callback(
+        [&serialization_callback_count](const std::shared_ptr<value_container>& container) {
+            serialization_callback_count++;
+        }
+    );
 
-    // Trigger callback
-    // Callback triggering not available in current API
+    // Test creation callback
+    auto container = integration::messaging_integration::create_optimized_container("callback_test");
+    EXPECT_EQ(creation_callback_count.load(), 1);
 
-    // Wait briefly for callback execution
-    std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    // Test serialization callback
+    std::string serialized = integration::messaging_integration::serialize_for_messaging(container);
+    EXPECT_EQ(serialization_callback_count.load(), 1);
 
-    EXPECT_EQ(callback_count.load(), 1);
-    EXPECT_EQ(last_callback_data, "callback_triggered");
+    // Test multiple operations
+    auto container2 = integration::messaging_integration::create_optimized_container("callback_test_2");
+    std::string serialized2 = integration::messaging_integration::serialize_for_messaging(container2);
+
+    EXPECT_EQ(creation_callback_count.load(), 2);
+    EXPECT_EQ(serialization_callback_count.load(), 2);
 
     // Cleanup
-    // integration::messaging_integration::unregister_callbacks(); // Available but different API
+    integration::messaging_integration::unregister_callbacks();
 }
 #endif
 
@@ -299,8 +306,7 @@ TEST_F(MessagingIntegrationTest, ErrorHandling) {
     // Container should be empty (no specific check available)
 }
 
-// TODO: Fix serialization key mapping between old and new API
-TEST_F(MessagingIntegrationTest, DISABLED_LargeDataHandling) {
+TEST_F(MessagingIntegrationTest, LargeDataHandling) {
     std::string large_string(10000, 'A');  // 10KB string
     std::vector<int> large_vector(1000, 42);  // Large vector
 

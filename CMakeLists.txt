@@ -55,9 +55,9 @@ if(BUILD_WITH_COMMON_SYSTEM)
 endif()
 
 # New messaging system integration options
-option(ENABLE_MESSAGING_FEATURES "Enable messaging-specific optimizations" OFF)
-option(ENABLE_EXTERNAL_INTEGRATION "Enable integration with external systems" OFF)
-option(ENABLE_PERFORMANCE_METRICS "Enable performance metrics collection" OFF)
+option(ENABLE_MESSAGING_FEATURES "Enable messaging-specific optimizations" ON)
+option(ENABLE_EXTERNAL_INTEGRATION "Enable integration with external systems" ON)
+option(ENABLE_PERFORMANCE_METRICS "Enable performance metrics collection" ON)
 
 # Output directories
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
