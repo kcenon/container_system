@@ -151,18 +151,18 @@ public:
     /**
      * @brief Deserialize from JSON string
      * @param json_data JSON string
-     * @return value_store instance
+     * @return unique_ptr to value_store instance (nullptr on failure)
      * @throws std::runtime_error if deserialization fails
      */
-    static value_store deserialize(std::string_view json_data);
+    static std::unique_ptr<value_store> deserialize(std::string_view json_data);
 
     /**
      * @brief Deserialize from binary format
      * @param binary_data Binary data
-     * @return value_store instance
+     * @return unique_ptr to value_store instance
      * @throws std::runtime_error if deserialization fails
      */
-    static value_store deserialize_binary(const std::vector<uint8_t>& binary_data);
+    static std::unique_ptr<value_store> deserialize_binary(const std::vector<uint8_t>& binary_data);
 
     // =========================================================================
     // Thread Safety
@@ -210,6 +210,11 @@ public:
 protected:
     // Key-value storage using value
     std::unordered_map<std::string, value> values_;
+
+private:
+    // Internal serialization helpers (lock-free, called with lock held)
+    std::string serialize_impl() const;
+    std::vector<uint8_t> serialize_binary_impl() const;
 
     // Thread safety
     mutable std::shared_mutex mutex_;

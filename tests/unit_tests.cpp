@@ -598,6 +598,185 @@ TEST(EdgeCaseTest, MaximumValues) {
     EXPECT_EQ(max_llong->to_llong(), std::numeric_limits<long long>::max());
 }
 
+// ============================================================================
+// value_store Serialization Tests
+// ============================================================================
+
+#include "container/core/value_store.h"
+
+class ValueStoreSerializationTest : public ::testing::Test {
+protected:
+    void SetUp() override {}
+    void TearDown() override {}
+};
+
+TEST_F(ValueStoreSerializationTest, EmptyStoreJSONSerialization) {
+    value_store store;
+    std::string json = store.serialize();
+    EXPECT_EQ(json, "{}");
+}
+
+TEST_F(ValueStoreSerializationTest, SingleValueJSONSerialization) {
+    value_store store;
+    store.add("test_key", value("test_key", int32_t(42)));
+
+    std::string json = store.serialize();
+    EXPECT_FALSE(json.empty());
+    EXPECT_NE(json.find("test_key"), std::string::npos);
+    EXPECT_NE(json.find("42"), std::string::npos);
+}
+
+TEST_F(ValueStoreSerializationTest, MultipleValuesJSONSerialization) {
+    value_store store;
+    store.add("int_val", value("int_val", int32_t(123)));
+    store.add("str_val", value("str_val", std::string("hello")));
+    store.add("bool_val", value("bool_val", true));
+
+    std::string json = store.serialize();
+    EXPECT_NE(json.find("int_val"), std::string::npos);
+    EXPECT_NE(json.find("str_val"), std::string::npos);
+    EXPECT_NE(json.find("bool_val"), std::string::npos);
+}
+
+TEST_F(ValueStoreSerializationTest, EmptyStoreBinarySerialization) {
+    value_store store;
+    auto binary = store.serialize_binary();
+
+    // Version byte + count (4 bytes) = 5 bytes minimum
+    EXPECT_GE(binary.size(), 5u);
+    EXPECT_EQ(binary[0], 1u); // Version 1
+}
+
+TEST_F(ValueStoreSerializationTest, BinarySerializationRoundTrip) {
+    value_store store;
+    store.add("integer", value("integer", int32_t(42)));
+    store.add("text", value("text", std::string("hello world")));
+    store.add("flag", value("flag", true));
+    store.add("decimal", value("decimal", double(3.14)));
+
+    // Serialize
+    auto binary = store.serialize_binary();
+    EXPECT_GT(binary.size(), 5u);
+
+    // Deserialize
+    auto restored = value_store::deserialize_binary(binary);
+    ASSERT_NE(restored, nullptr);
+
+    // Verify values
+    EXPECT_EQ(restored->size(), 4u);
+    EXPECT_TRUE(restored->contains("integer"));
+    EXPECT_TRUE(restored->contains("text"));
+    EXPECT_TRUE(restored->contains("flag"));
+    EXPECT_TRUE(restored->contains("decimal"));
+
+    // Verify specific values
+    auto int_val = restored->get("integer");
+    ASSERT_TRUE(int_val.has_value());
+    auto int_opt = int_val->get<int32_t>();
+    ASSERT_TRUE(int_opt.has_value());
+    EXPECT_EQ(*int_opt, 42);
+
+    auto str_val = restored->get("text");
+    ASSERT_TRUE(str_val.has_value());
+    auto str_opt = str_val->get<std::string>();
+    ASSERT_TRUE(str_opt.has_value());
+    EXPECT_EQ(*str_opt, "hello world");
+
+    auto bool_val = restored->get("flag");
+    ASSERT_TRUE(bool_val.has_value());
+    auto bool_opt = bool_val->get<bool>();
+    ASSERT_TRUE(bool_opt.has_value());
+    EXPECT_EQ(*bool_opt, true);
+}
+
+TEST_F(ValueStoreSerializationTest, BinaryDeserializeInvalidData) {
+    std::vector<uint8_t> empty_data;
+    EXPECT_THROW(value_store::deserialize_binary(empty_data), std::runtime_error);
+
+    std::vector<uint8_t> too_small = {1}; // Only version byte
+    EXPECT_THROW(value_store::deserialize_binary(too_small), std::runtime_error);
+
+    std::vector<uint8_t> bad_version = {99, 0, 0, 0, 0}; // Invalid version
+    EXPECT_THROW(value_store::deserialize_binary(bad_version), std::runtime_error);
+}
+
+TEST_F(ValueStoreSerializationTest, JSONDeserializeNotImplemented) {
+    EXPECT_THROW(value_store::deserialize("{}"), std::runtime_error);
+}
+
+TEST_F(ValueStoreSerializationTest, ThreadSafeSerialization) {
+    value_store store;
+    store.enable_thread_safety();
+
+    store.add("key1", value("key1", int32_t(100)));
+    store.add("key2", value("key2", std::string("test")));
+
+    // Should work without deadlock
+    std::string json = store.serialize();
+    auto binary = store.serialize_binary();
+
+    EXPECT_FALSE(json.empty());
+    EXPECT_GT(binary.size(), 5u);
+}
+
+TEST_F(ValueStoreSerializationTest, SpecialCharactersInKeys) {
+    value_store store;
+    store.add("key\"with\"quotes", value("key\"with\"quotes", int32_t(1)));
+    store.add("key\\with\\backslash", value("key\\with\\backslash", int32_t(2)));
+    store.add("key\nwith\nnewlines", value("key\nwith\nnewlines", int32_t(3)));
+
+    std::string json = store.serialize();
+    // Keys should be properly escaped
+    EXPECT_NE(json.find("\\\""), std::string::npos);
+    EXPECT_NE(json.find("\\\\"), std::string::npos);
+    EXPECT_NE(json.find("\\n"), std::string::npos);
+}
+
+TEST_F(ValueStoreSerializationTest, BytesValueSerialization) {
+    value_store store;
+    std::vector<uint8_t> bytes = {0x01, 0x02, 0x03, 0xFF, 0x00};
+    store.add("binary_data", value("binary_data", bytes));
+
+    auto binary = store.serialize_binary();
+    auto restored = value_store::deserialize_binary(binary);
+
+    ASSERT_NE(restored, nullptr);
+    auto restored_val = restored->get("binary_data");
+    ASSERT_TRUE(restored_val.has_value());
+    auto bytes_opt = restored_val->get<std::vector<uint8_t>>();
+    ASSERT_TRUE(bytes_opt.has_value());
+    EXPECT_EQ(*bytes_opt, bytes);
+}
+
+TEST_F(ValueStoreSerializationTest, LargeValuesSerialization) {
+    value_store store;
+
+    // Large string
+    std::string large_string(10000, 'x');
+    store.add("large_string", value("large_string", large_string));
+
+    // Large bytes
+    std::vector<uint8_t> large_bytes(10000, 0xAB);
+    store.add("large_bytes", value("large_bytes", large_bytes));
+
+    auto binary = store.serialize_binary();
+    auto restored = value_store::deserialize_binary(binary);
+
+    ASSERT_NE(restored, nullptr);
+
+    auto str_val = restored->get("large_string");
+    ASSERT_TRUE(str_val.has_value());
+    auto str_opt = str_val->get<std::string>();
+    ASSERT_TRUE(str_opt.has_value());
+    EXPECT_EQ(str_opt->size(), 10000u);
+
+    auto bytes_val = restored->get("large_bytes");
+    ASSERT_TRUE(bytes_val.has_value());
+    auto bytes_opt = bytes_val->get<std::vector<uint8_t>>();
+    ASSERT_TRUE(bytes_opt.has_value());
+    EXPECT_EQ(bytes_opt->size(), 10000u);
+}
+
 // Main function for running tests
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
