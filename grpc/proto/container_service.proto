@@ -1,0 +1,167 @@
+// BSD 3-Clause License
+//
+// Copyright (c) 2024, kcenon
+// All rights reserved.
+//
+// This proto file defines the gRPC service interface for the container_system.
+// It provides a complete mapping of the native value_types enum and value_container
+// structure to Protocol Buffers format.
+
+syntax = "proto3";
+
+package container_grpc;
+
+option cc_enable_arenas = true;
+
+// =============================================================================
+// Value Type Enum
+// =============================================================================
+
+// Matches container_module::value_types enum exactly (0-15)
+enum ValueType {
+  NULL_VALUE = 0;       // null_value
+  BOOL_VALUE = 1;       // bool_value
+  SHORT_VALUE = 2;      // short_value (int16)
+  USHORT_VALUE = 3;     // ushort_value (uint16)
+  INT_VALUE = 4;        // int_value (int32)
+  UINT_VALUE = 5;       // uint_value (uint32)
+  LONG_VALUE = 6;       // long_value (int64)
+  ULONG_VALUE = 7;      // ulong_value (uint64)
+  LLONG_VALUE = 8;      // llong_value (int64, platform-specific alias)
+  ULLONG_VALUE = 9;     // ullong_value (uint64, platform-specific alias)
+  FLOAT_VALUE = 10;     // float_value
+  DOUBLE_VALUE = 11;    // double_value
+  STRING_VALUE = 12;    // string_value
+  BYTES_VALUE = 13;     // bytes_value
+  CONTAINER_VALUE = 14; // container_value (nested container)
+  ARRAY_VALUE = 15;     // array_value (heterogeneous array)
+}
+
+// =============================================================================
+// Value Messages
+// =============================================================================
+
+// Represents a single value with name and typed data
+// Maps to container_module::optimized_value / container_module::value
+message GrpcValue {
+  // Value name/key identifier
+  string name = 1;
+
+  // Value type for explicit type checking
+  ValueType type = 2;
+
+  // Typed value storage using oneof for type safety
+  oneof value {
+    // Null value (type 0) - use empty oneof
+    bool null_flag = 3;           // Set to true for explicit null
+
+    // Primitive types
+    bool bool_val = 4;            // type 1: bool_value
+    int32 short_val = 5;          // type 2: short_value (int16 stored as int32)
+    uint32 ushort_val = 6;        // type 3: ushort_value (uint16 stored as uint32)
+    int32 int_val = 7;            // type 4: int_value
+    uint32 uint_val = 8;          // type 5: uint_value
+    int64 long_val = 9;           // type 6: long_value
+    uint64 ulong_val = 10;        // type 7: ulong_value
+    int64 llong_val = 11;         // type 8: llong_value (alias for long on most platforms)
+    uint64 ullong_val = 12;       // type 9: ullong_value (alias for ulong on most platforms)
+    float float_val = 13;         // type 10: float_value
+    double double_val = 14;       // type 11: double_value
+
+    // Complex types
+    string string_val = 15;       // type 12: string_value
+    bytes bytes_val = 16;         // type 13: bytes_value
+    GrpcContainer container_val = 17;  // type 14: container_value (nested)
+    GrpcArray array_val = 18;     // type 15: array_value
+  }
+}
+
+// Heterogeneous array type matching container_module::array_variant
+message GrpcArray {
+  repeated GrpcValue values = 1;
+}
+
+// =============================================================================
+// Container Message
+// =============================================================================
+
+// Maps to container_module::value_container
+// Represents a complete message container with header and values
+message GrpcContainer {
+  // Header fields
+  string source_id = 1;           // Source identifier
+  string source_sub_id = 2;       // Source sub-identifier
+  string target_id = 3;           // Target identifier
+  string target_sub_id = 4;       // Target sub-identifier
+  string message_type = 5;        // Message type classification
+  string version = 6;             // Container version (default: "1.0.0.0")
+
+  // Value payload
+  repeated GrpcValue values = 7;  // List of typed values
+
+  // Optional metadata
+  map<string, string> metadata = 8;  // Extension metadata for future use
+}
+
+// =============================================================================
+// Service Requests and Responses
+// =============================================================================
+
+// Request for sending a single container
+message SendContainerRequest {
+  GrpcContainer container = 1;
+}
+
+// Response for single container operations
+message SendContainerResponse {
+  bool success = 1;
+  string error_message = 2;       // Empty on success
+  GrpcContainer result = 3;       // Optional result container
+}
+
+// Request for batch container operations
+message BatchContainerRequest {
+  repeated GrpcContainer containers = 1;
+}
+
+// Response for batch operations
+message BatchContainerResponse {
+  bool success = 1;
+  string error_message = 2;
+  repeated GrpcContainer results = 3;
+  int32 processed_count = 4;
+  int32 failed_count = 5;
+}
+
+// Streaming status for bidirectional streams
+message StreamStatus {
+  bool connected = 1;
+  int64 messages_sent = 2;
+  int64 messages_received = 3;
+  string client_id = 4;
+}
+
+// =============================================================================
+// Service Definition
+// =============================================================================
+
+// ContainerService provides gRPC access to the container system
+service ContainerService {
+  // Unary RPC: Send a single container and receive response
+  rpc SendContainer(SendContainerRequest) returns (SendContainerResponse);
+
+  // Unary RPC: Process a container and receive transformed result
+  rpc ProcessContainer(GrpcContainer) returns (GrpcContainer);
+
+  // Server streaming: Subscribe to containers matching criteria
+  rpc StreamContainers(SendContainerRequest) returns (stream GrpcContainer);
+
+  // Client streaming: Send multiple containers, receive summary
+  rpc CollectContainers(stream GrpcContainer) returns (BatchContainerResponse);
+
+  // Bidirectional streaming: Full duplex container exchange
+  rpc ProcessStream(stream GrpcContainer) returns (stream GrpcContainer);
+
+  // Utility: Get stream status
+  rpc GetStreamStatus(SendContainerRequest) returns (StreamStatus);
+}
