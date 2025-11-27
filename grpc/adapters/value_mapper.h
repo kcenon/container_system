@@ -41,7 +41,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * conversions and provides utilities for type introspection.
  */
 
-#include "container/core/value_types.h"
+#include "core/value_types.h"
 
 #include <cstdint>
 #include <type_traits>

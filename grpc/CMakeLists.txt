@@ -116,21 +116,22 @@ endif()
 # Library: container_grpc_adapter
 # =============================================================================
 
-# Adapter sources (to be implemented)
+# Adapter sources
 set(ADAPTER_SOURCES
-    # adapters/container_adapter.cpp
-    # adapters/value_mapper.cpp
+    adapters/container_adapter.cpp
 )
 
-# For now, create header-only interface library
-add_library(container_grpc_adapter INTERFACE)
+add_library(container_grpc_adapter STATIC
+    ${ADAPTER_SOURCES}
+)
 
-target_include_directories(container_grpc_adapter INTERFACE
+target_include_directories(container_grpc_adapter PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_SOURCE_DIR}  # Access existing container headers (read-only)
+    ${CMAKE_CURRENT_SOURCE_DIR}/..  # Access existing container headers (read-only)
+    ${PROTO_OUTPUT_DIR}
 )
 
-target_link_libraries(container_grpc_adapter INTERFACE
+target_link_libraries(container_grpc_adapter PUBLIC
     container_grpc_proto
 )
 
@@ -138,17 +139,24 @@ target_link_libraries(container_grpc_adapter INTERFACE
 # Library: container_grpc (Full gRPC library)
 # =============================================================================
 
-# Service implementation sources (to be implemented)
+# Service implementation sources
 set(SERVICE_SOURCES
-    # server/grpc_server.cpp
-    # server/service_impl.cpp
-    # client/grpc_client.cpp
+    server/grpc_server.cpp
+    server/service_impl.cpp
+    client/grpc_client.cpp
 )
 
-# For now, create interface library that will be expanded
-add_library(container_grpc INTERFACE)
+add_library(container_grpc STATIC
+    ${SERVICE_SOURCES}
+)
 
-target_link_libraries(container_grpc INTERFACE
+target_include_directories(container_grpc PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/..
+    ${PROTO_OUTPUT_DIR}
+)
+
+target_link_libraries(container_grpc PUBLIC
     container_grpc_adapter
     container_grpc_proto
     gRPC::grpc++
