@@ -168,12 +168,13 @@ target_link_libraries(container_grpc PUBLIC
 # =============================================================================
 
 if(CONTAINER_GRPC_BUILD_EXAMPLES)
-    # Examples will be added in Week 3
-    # add_executable(grpc_server_example examples/server_example.cpp)
-    # target_link_libraries(grpc_server_example PRIVATE container_grpc)
+    # Server example
+    add_executable(grpc_server_example examples/server_example.cpp)
+    target_link_libraries(grpc_server_example PRIVATE container_grpc)
 
-    # add_executable(grpc_client_example examples/client_example.cpp)
-    # target_link_libraries(grpc_client_example PRIVATE container_grpc)
+    # Client example
+    add_executable(grpc_client_example examples/client_example.cpp)
+    target_link_libraries(grpc_client_example PRIVATE container_grpc)
 endif()
 
 # =============================================================================
