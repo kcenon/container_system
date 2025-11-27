@@ -491,10 +491,10 @@ rm -rf grpc/
 - [x] Setup isolated build
 - [x] Design adapter interfaces
 
-### Week 2  
-- [ ] Implement adapters
-- [ ] Implement service
-- [ ] Implement client
+### Week 2
+- [x] Implement adapters
+- [x] Implement service
+- [x] Implement client
 
 ### Week 3
 - [ ] Create examples

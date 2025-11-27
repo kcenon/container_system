@@ -47,8 +47,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * - Zero runtime overhead when not using gRPC
  */
 
-#include "container/core/container.h"
-#include "container/core/value_types.h"
+#include "core/container.h"
+#include "core/value_types.h"
 
 #include <memory>
 #include <string>
