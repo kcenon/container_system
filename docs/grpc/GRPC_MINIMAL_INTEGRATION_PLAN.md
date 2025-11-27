@@ -497,7 +497,7 @@ rm -rf grpc/
 - [x] Implement client
 
 ### Week 3
-- [ ] Create examples
+- [x] Create examples
 - [ ] Write tests
 - [ ] Document usage
 
