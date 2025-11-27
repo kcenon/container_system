@@ -182,15 +182,26 @@ endif()
 # =============================================================================
 
 if(CONTAINER_GRPC_BUILD_TESTS)
-    # Tests will be added in Week 3
-    # find_package(GTest REQUIRED)
-    # add_executable(grpc_adapter_test tests/adapter_test.cpp)
-    # target_link_libraries(grpc_adapter_test PRIVATE
-    #     container_grpc
-    #     GTest::gtest
-    #     GTest::gtest_main
-    # )
-    # add_test(NAME grpc_adapter_test COMMAND grpc_adapter_test)
+    find_package(GTest REQUIRED)
+    enable_testing()
+
+    # Adapter unit tests
+    add_executable(grpc_adapter_test tests/adapter_test.cpp)
+    target_link_libraries(grpc_adapter_test PRIVATE
+        container_grpc
+        GTest::gtest
+        GTest::gtest_main
+    )
+    add_test(NAME grpc_adapter_test COMMAND grpc_adapter_test)
+
+    # Service integration tests
+    add_executable(grpc_service_test tests/service_test.cpp)
+    target_link_libraries(grpc_service_test PRIVATE
+        container_grpc
+        GTest::gtest
+        GTest::gtest_main
+    )
+    add_test(NAME grpc_service_test COMMAND grpc_service_test)
 endif()
 
 # =============================================================================
