@@ -488,8 +488,8 @@ rm -rf grpc/
 
 ### Week 1
 - [x] Create proto definitions
-- [ ] Setup isolated build
-- [ ] Design adapter interfaces
+- [x] Setup isolated build
+- [x] Design adapter interfaces
 
 ### Week 2  
 - [ ] Implement adapters
