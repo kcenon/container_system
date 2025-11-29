@@ -1,0 +1,20 @@
+<map id="container_module::value_store" name="container_module::value_store">
+<area shape="rect" id="Node000001" title="Domain&#45;agnostic value storage." alt="" coords="323,837,500,1197"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="247,680,410,775"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="345,774,358,820,353,822,339,776"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="176,135,255,200"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="205,201,182,276,162,378,157,434,158,492,167,548,186,601,209,637,240,668,236,671,205,641,181,604,162,549,153,492,152,434,156,377,177,275,200,200"/>
+<area shape="rect" id="Node000005" href="$d5/df9/classcontainer__module_1_1value.html" title="Enhanced type&#45;safe value with perfect legacy compatibility." alt="" coords="241,277,416,603"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="231,199,257,261,252,263,226,201"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="150,5,281,85"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="218,99,218,134,213,134,213,99"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="331,603,331,664,326,664,326,603"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="5,135,140,200"/>
+<area shape="poly" id="edge8_Node000001_Node000006" title=" " alt="" coords="74,200,73,282,79,397,87,462,98,527,115,593,136,655,172,728,217,797,265,860,313,915,309,919,261,863,213,800,168,730,132,657,110,594,93,529,81,462,74,398,68,283,68,200"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="110,198,178,251,201,262,224,275,232,283,228,287,220,279,199,267,175,256,106,202"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="285,135,439,200"/>
+<area shape="poly" id="edge10_Node000001_Node000007" title=" " alt="" coords="419,199,438,223,440,238,438,254,434,533,425,813,424,821,419,821,419,813,429,533,433,253,435,238,433,225,414,202"/>
+<area shape="poly" id="edge7_Node000005_Node000007" title=" " alt="" coords="354,201,349,225,343,261,338,261,343,223,349,199"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="492,695,637,760"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="550,762,510,837,505,834,545,759"/>
+</map>

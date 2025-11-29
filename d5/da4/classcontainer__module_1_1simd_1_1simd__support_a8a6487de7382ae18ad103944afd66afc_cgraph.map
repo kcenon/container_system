@@ -1,0 +1,5 @@
+<map id="container_module::simd::simd_support::get_simd_info" name="container_module::simd::simd_support::get_simd_info">
+<area shape="rect" id="Node000001" title="Get a string describing available SIMD features." alt="" coords="5,5,224,45"/>
+<area shape="rect" id="Node000002" href="$d5/da4/classcontainer__module_1_1simd_1_1simd__support.html#a23f65372a41215f94056d4998d7b57ad" title="Get the optimal SIMD width for current platform." alt="" coords="272,5,519,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="224,23,258,23,258,28,224,28"/>
+</map>

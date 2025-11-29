@@ -1,0 +1,10 @@
+<map id="AdvancedContainerExample" name="AdvancedContainerExample">
+<area shape="rect" id="Node000001" title="Advanced Container System Example." alt="" coords="80,320,319,555"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,185,151,250"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="95,249,118,295,123,304,118,307,113,297,90,251"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="153,5,288,71"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="221,71,215,177,209,303,203,303,210,177,216,71"/>
+<area shape="rect" id="Node000004" href="$dc/dfb/structAdvancedContainerExample_1_1Statistics.html" title=" " alt="" coords="377,177,576,257"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="268,69,409,166,406,170,265,73"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="429,260,333,334,330,330,425,255"/>
+</map>

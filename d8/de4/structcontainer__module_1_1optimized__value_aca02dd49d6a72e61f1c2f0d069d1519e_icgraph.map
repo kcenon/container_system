@@ -1,0 +1,11 @@
+<map id="container_module::optimized_value::is_stack_allocated" name="container_module::optimized_value::is_stack_allocated">
+<area shape="rect" id="Node000001" title=" " alt="" coords="727,37,939,77"/>
+<area shape="rect" id="Node000002" href="$d9/dad/classcontainer__module_1_1value__container.html#a9fc18c7c8fe416ae1b61d3048ebc9f25" title="Add a value to the container (template version for type deduction)" alt="" coords="496,5,679,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="713,44,679,40,679,35,714,39"/>
+<area shape="rect" id="Node000003" href="$d9/dad/classcontainer__module_1_1value__container.html#af774feb54893a488633e784e66104ffc" title="Add a value to the container." alt="" coords="496,69,679,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="714,76,679,80,679,75,713,70"/>
+<area shape="rect" id="Node000004" href="$d9/dad/classcontainer__module_1_1value__container.html#a57bc01093c4c5eb67a64931b9d31db00" title="Legacy compatibility: Add a value object to the container." alt="" coords="265,69,448,109"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="483,92,448,92,448,87,483,87"/>
+<area shape="rect" id="Node000005" href="$da/dab/classcontainer__module_1_1optimized__container.html#ae72c3bca2a81094af97585ab230cfadb" title="Add value and update index." alt="" coords="5,69,217,109"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="252,92,218,92,218,87,252,87"/>
+</map>

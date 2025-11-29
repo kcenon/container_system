@@ -1,0 +1,21 @@
+<map id="integration/value_bridge.cpp" name="integration/value_bridge.cpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="774,5,982,31"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,79,164,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="774,27,508,45,345,61,178,81,178,76,344,55,507,40,774,22"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="188,79,371,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="774,33,596,53,385,81,384,76,596,48,773,27"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="395,79,558,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="819,33,572,81,571,76,818,28"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="582,79,769,119"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="849,33,738,76,736,71,848,28"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="793,79,963,119"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="881,31,881,65,875,65,875,31"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="987,79,1158,119"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="907,28,1014,71,1012,76,905,33"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="1182,79,1377,119"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="937,28,1170,73,1169,79,936,33"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="1401,79,1569,119"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="983,26,1167,46,1387,76,1387,81,1167,52,982,32"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="1593,86,1680,111"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="982,18,1105,22,1255,32,1419,49,1581,76,1594,79,1593,85,1580,81,1418,54,1254,37,1104,27,982,23"/>
+</map>

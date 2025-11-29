@@ -1,0 +1,21 @@
+<map id="container_module::make_numeric_value" name="container_module::make_numeric_value">
+<area shape="rect" id="Node000001" title="Generic numeric value factory with automatic type deduction." alt="" coords="5,261,188,301"/>
+<area shape="rect" id="Node000002" href="$d1/d1a/namespacecontainer__module.html#a17e035d2565b90057db30c31c817d1a7" title="Create a boolean value." alt="" coords="236,5,419,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="103,260,120,217,148,163,186,105,209,79,234,55,241,50,244,55,238,59,213,82,190,109,153,165,125,220,108,262"/>
+<area shape="rect" id="Node000003" href="$d1/d1a/namespacecontainer__module.html#ac3c9cfd50af1dbae88acd7e20e738349" title="Create a double value." alt="" coords="236,69,419,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="108,260,158,191,194,153,234,119,244,113,246,118,238,123,197,157,162,195,112,263"/>
+<area shape="rect" id="Node000004" href="$d1/d1a/namespacecontainer__module.html#a2479a2e7aa34470f717ba4b944e76542" title="Create a float value." alt="" coords="236,133,419,173"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="121,259,172,221,235,183,249,176,251,181,237,188,175,226,124,263"/>
+<area shape="rect" id="Node000005" href="$d1/d1a/namespacecontainer__module.html#a76582db293a8114ea719a1bb00a0475d" title="Create an int (int32_t) value." alt="" coords="236,197,419,237"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="169,259,241,238,242,244,170,264"/>
+<area shape="rect" id="Node000006" href="$d1/d1a/namespacecontainer__module.html#aca27c422055e5b6ca60f190ab0e3ba82" title="Create a long (int64_t) value." alt="" coords="236,261,419,301"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="188,279,222,279,222,284,188,284"/>
+<area shape="rect" id="Node000007" href="$d1/d1a/namespacecontainer__module.html#a1ff370eee1ea8f636a83f522c658161a" title="Create a short (int16_t) value." alt="" coords="236,325,419,365"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="170,299,242,319,241,324,169,304"/>
+<area shape="rect" id="Node000008" href="$d1/d1a/namespacecontainer__module.html#ab9b241085783e10e1ce5ee7003a15322" title="Create an unsigned int (uint32_t) value." alt="" coords="236,389,419,429"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="124,299,175,337,237,375,251,382,249,387,235,380,172,341,121,304"/>
+<area shape="rect" id="Node000009" href="$d1/d1a/namespacecontainer__module.html#ac119390c0de08bc3de48a9ef2a941c7e" title="Create an unsigned long (uint64_t) value." alt="" coords="236,453,419,493"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="112,300,162,368,197,406,238,439,246,445,244,449,234,443,194,410,158,371,108,303"/>
+<area shape="rect" id="Node000010" href="$d1/d1a/namespacecontainer__module.html#a7162a61d2a2812282268c1d66f99eeda" title="Create an unsigned short (uint16_t) value." alt="" coords="236,517,419,557"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="108,301,125,343,153,397,190,454,213,480,238,503,244,508,241,512,234,507,209,484,186,457,148,400,120,345,103,303"/>
+</map>
