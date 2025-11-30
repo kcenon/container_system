@@ -75,6 +75,12 @@ Thumbs.db
 documents/
 
 # Embedded system dependencies (use Sources/ directory instead)
+# These are CMake build artifacts, not source copies
 common_system/
 thread_system/
+database_system/
+logger_system/
+monitoring_system/
+network_system/
+container_system/
 .npm-cache/
