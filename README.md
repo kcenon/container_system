@@ -62,8 +62,8 @@ int main() {
 
 ### Prerequisites
 
-- **Compiler**: C++17 capable (GCC 7+, Clang 5+, MSVC 2017+)
-- **Build System**: CMake 3.16+
+- **Compiler**: C++20 capable (GCC 11+, Clang 14+, MSVC 2022+, Apple Clang 14+)
+- **Build System**: CMake 3.20+
 - **Package Manager**: vcpkg (auto-installed by scripts)
 
 ### Installation
@@ -444,7 +444,7 @@ This project is licensed under the BSD 3-Clause License - see the [LICENSE](LICE
 ## Acknowledgments
 
 - Inspired by modern serialization frameworks and high-performance computing practices
-- Built with C++20 features for maximum performance and safety
+- Built with C++20 features (GCC 11+, Clang 14+, MSVC 2022+) for maximum performance and safety
 - Maintained by kcenon@naver.com
 
 ---
