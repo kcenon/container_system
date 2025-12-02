@@ -91,7 +91,7 @@ macro(unified_find_dependency _dep_name)
     endif()
 
     # Define header files to search for based on dependency
-    if(_dep_name STREQUAL "common_system")
+    if("${_dep_name}" STREQUAL "common_system")
         set(_header_patterns
             "include/kcenon/common/patterns/result.h"
             "kcenon/common/patterns/result.h"
@@ -136,7 +136,8 @@ macro(unified_find_dependency _dep_name)
         message(STATUS "  ${_dep_name} not found locally, attempting FetchContent...")
 
         # Get FetchContent URL and tag
-        if(_dep_name STREQUAL "common_system")
+        # Note: In CMake macros, variable comparisons must use quoted form "${var}"
+        if("${_dep_name}" STREQUAL "common_system")
             set(_git_url "${UNIFIED_COMMON_SYSTEM_GIT_URL}")
             set(_git_tag "${UNIFIED_COMMON_SYSTEM_GIT_TAG}")
         else()

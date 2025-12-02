@@ -169,46 +169,18 @@ elseif(MSVC)
     )
 endif()
 
+# Include unified dependency resolution module
+include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/UnifiedDependencies.cmake)
+
 if(BUILD_WITH_COMMON_SYSTEM)
     message(STATUS "Container System: Enabling common_system integration")
 
-    set(_common_system_roots)
-    if(COMMON_SYSTEM_ROOT)
-        list(APPEND _common_system_roots ${COMMON_SYSTEM_ROOT})
-    endif()
-    if(DEFINED ENV{COMMON_SYSTEM_ROOT})
-        list(APPEND _common_system_roots $ENV{COMMON_SYSTEM_ROOT})
-    endif()
-    # Priority order: relative paths (sibling directory), then current directory
-    list(APPEND _common_system_roots
-        ${CMAKE_CURRENT_SOURCE_DIR}/../common_system
-        ${CMAKE_CURRENT_SOURCE_DIR}/common_system
-    )
+    # Use unified dependency resolution (replaces ~40 lines of hardcoded path logic)
+    unified_find_dependency(common_system REQUIRED)
 
-    set(COMMON_SYSTEM_INCLUDE_DIR "")
-    foreach(_root IN LISTS _common_system_roots)
-        if(NOT _root)
-            continue()
-        endif()
-
-        if(EXISTS ${_root}/include/kcenon/common/patterns/result.h)
-            set(COMMON_SYSTEM_INCLUDE_DIR ${_root}/include)
-            break()
-        elseif(EXISTS ${_root}/kcenon/common/patterns/result.h)
-            set(COMMON_SYSTEM_INCLUDE_DIR ${_root})
-            break()
-        endif()
-    endforeach()
-
-    if(NOT COMMON_SYSTEM_INCLUDE_DIR)
-        message(FATAL_ERROR
-            "common_system integration requested but header 'kcenon/common/patterns/result.h' "
-            "was not found. Set COMMON_SYSTEM_ROOT or ensure the dependency is present.")
-    endif()
-
-    message(STATUS "Container System: common_system include directory = ${COMMON_SYSTEM_INCLUDE_DIR}")
+    # Apply include directories
     target_include_directories(container_system PUBLIC
-        $<BUILD_INTERFACE:${COMMON_SYSTEM_INCLUDE_DIR}>
+        $<BUILD_INTERFACE:${common_system_INCLUDE_DIR}>
     )
     target_compile_definitions(container_system PUBLIC BUILD_WITH_COMMON_SYSTEM CONTAINER_USE_COMMON_SYSTEM)
 endif()
