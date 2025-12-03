@@ -1,0 +1,7 @@
+<map id="container_module::value_container::clear_pool" name="container_module::value_container::clear_pool">
+<area shape="rect" id="Node000001" title="Clear memory pool (for testing/benchmarking)" alt="" coords="5,37,188,77"/>
+<area shape="rect" id="Node000002" href="$d6/d67/classcontainer__module_1_1value__pool.html#acc396fe01b8940696d2142eaf44eccfc" title="Clear the pool and free all memory." alt="" coords="236,5,419,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="188,42,222,37,223,43,188,47"/>
+<area shape="rect" id="Node000003" href="$d6/d67/classcontainer__module_1_1value__pool.html#a72510e6e5bf51b91571d928dbbb62990" title="Get singleton instance of the pool." alt="" coords="236,69,419,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="188,67,223,72,222,77,188,73"/>
+</map>

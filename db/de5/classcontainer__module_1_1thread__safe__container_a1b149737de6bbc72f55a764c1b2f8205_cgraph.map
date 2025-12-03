@@ -1,0 +1,16 @@
+<map id="container_module::thread_safe_container::deserialize" name="container_module::thread_safe_container::deserialize">
+<area shape="rect" id="Node000001" title="Deserialize from binary." alt="" coords="5,41,209,81"/>
+<area shape="rect" id="Node000002" href="$d5/df9/classcontainer__module_1_1value.html#a35f48f55cda09259dd6743889c224650" title="Deserialize from binary format (legacy compatible)" alt="" coords="257,69,440,109"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="210,71,244,74,243,80,209,76"/>
+<area shape="rect" id="Node000003" href="$d5/df9/classcontainer__module_1_1value.html#a2e4c2ec965ed2cb90bc1d50d77481f8f" title="Deserialize data portion based on type." alt="" coords="488,12,671,52"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="439,73,515,53,516,58,441,78"/>
+<area shape="rect" id="Node000004" href="$d5/df9/classcontainer__module_1_1value.html#a19a827e03777e6214b597f5c9e5e8b35" title="Get the value_types enum (NOT variant::index()!)" alt="" coords="719,69,901,109"/>
+<area shape="poly" id="edge8_Node000002_Node000004" title=" " alt="" coords="440,87,705,87,705,92,440,92"/>
+<area shape="rect" id="Node000006" href="$d5/df9/classcontainer__module_1_1value.html#afdcddac13e2b1a0afe97df4091c7ee38" title="Get the name of this value (lock&#45;free, immutable)" alt="" coords="488,127,671,167"/>
+<area shape="poly" id="edge7_Node000002_Node000006" title=" " alt="" coords="430,107,486,121,484,126,429,112"/>
+<area shape="poly" id="edge3_Node000003_Node000001" title=" " alt="" coords="488,40,223,57,223,52,488,35"/>
+<area shape="poly" id="edge4_Node000003_Node000002" title=" " alt="" coords="488,48,413,68,412,63,487,43"/>
+<area shape="poly" id="edge5_Node000003_Node000004" title=" " alt="" coords="661,49,716,63,715,69,660,55"/>
+<area shape="rect" id="Node000005" href="$d5/df9/classcontainer__module_1_1value.html#a2c9717a2aac485d5ef47028551874816" title="Default constructor &#45; creates null value." alt="" coords="719,5,901,45"/>
+<area shape="poly" id="edge6_Node000003_Node000005" title=" " alt="" coords="671,27,705,26,705,31,671,32"/>
+</map>

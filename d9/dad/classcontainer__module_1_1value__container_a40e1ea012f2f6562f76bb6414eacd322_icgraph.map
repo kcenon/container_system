@@ -1,0 +1,31 @@
+<map id="container_module::value_container::end" name="container_module::value_container::end">
+<area shape="rect" id="Node000001" title="Returns iterator to end of values." alt="" coords="756,223,939,263"/>
+<area shape="rect" id="Node000002" href="$d9/dad/classcontainer__module_1_1value__container.html#aae51c06e58ddd8f44996c07f5cf4142e" title="Deserialize from string. If parse_only_header is true, child values are not fully parsed yet...." alt="" coords="265,163,448,203"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="800,218,756,197,707,181,641,171,572,167,448,173,448,168,572,162,641,166,709,176,758,192,803,214"/>
+<area shape="rect" id="Node000008" href="$d9/dad/classcontainer__module_1_1value__container.html#a17826f3cac07988dcce03e62f03c798e" title=" " alt="" coords="511,319,693,374"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="793,271,709,309,678,322,676,317,707,304,791,266"/>
+<area shape="rect" id="Node000013" href="$da/dab/classcontainer__module_1_1optimized__container.html#a41cd71380ff4a90651ace335399b67bb" title="Check if value exists (O(1))" alt="" coords="496,255,708,295"/>
+<area shape="poly" id="edge13_Node000001_Node000013" title=" " alt="" coords="743,259,709,263,708,258,742,254"/>
+<area shape="rect" id="Node000014" href="$d9/dad/classcontainer__module_1_1value__container.html#ac67f821c2e812722fd46526063911f4a" title=" " alt="" coords="511,191,693,231"/>
+<area shape="poly" id="edge14_Node000001_Node000014" title=" " alt="" coords="742,232,693,225,694,220,743,226"/>
+<area shape="rect" id="Node000003" href="$d9/dad/classcontainer__module_1_1value__container.html#a7539bd21ce23370c37e025f52f67d58a" title="Deserialize from a raw byte array. If parse_only_header is true, child values are not fully parsed...." alt="" coords="20,69,203,109"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="300,159,216,124,182,112,184,107,218,119,302,154"/>
+<area shape="rect" id="Node000004" href="$d9/dad/classcontainer__module_1_1value__container.html#a161eb3fc0910f0af3d42d7d926a7fb97" title="Construct from a serialized data string. If parse_only_header==true, only parse the header part,..." alt="" coords="10,133,213,173"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="252,173,212,168,213,163,252,168"/>
+<area shape="rect" id="Node000005" href="$d9/dad/classcontainer__module_1_1value__container.html#a05ffd9fd90384cb244c1f9400bd4ecf7" title="Construct from a raw byte array. If parse_only_header==true, only parse the header part,..." alt="" coords="10,197,213,237"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="252,200,213,206,212,200,252,195"/>
+<area shape="rect" id="Node000006" href="$d9/dad/classcontainer__module_1_1value__container.html#a611e8c57bc25142f572a7f82fd1829fa" title="Copy constructor from another value_container. If parse_only_header==true, only parse the header port..." alt="" coords="10,261,213,301"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="306,212,218,252,184,264,183,259,216,247,304,207"/>
+<area shape="rect" id="Node000007" href="$d9/dad/classcontainer__module_1_1value__container.html#ae4aa9e95aadd89c1f2bb0d82a002b20a" title="Copy from an existing pointer. If parse_only_header==true, only parse header." alt="" coords="10,5,213,45"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="327,154,278,106,248,81,216,60,191,48,193,43,219,55,251,77,282,102,331,150"/>
+<area shape="poly" id="edge8_Node000008_Node000002" title=" " alt="" coords="506,316,495,309,459,284,425,256,374,205,378,201,429,252,462,280,497,304,509,311"/>
+<area shape="rect" id="Node000009" href="$d9/dad/classcontainer__module_1_1value__container.html#aeb5b2e301f7ff03d546ab84c83f3e0bb" title="Remove a value by name." alt="" coords="265,295,448,335"/>
+<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="497,336,448,329,449,324,497,330"/>
+<area shape="rect" id="Node000011" href="$d9/dad/classcontainer__module_1_1value__container.html#a91153aad587225b9727ba9a3d8dcb8d2" title="Generate a JSON representation of this container (header + values)." alt="" coords="265,359,448,399"/>
+<area shape="poly" id="edge11_Node000008_Node000011" title=" " alt="" coords="497,363,449,369,448,364,497,358"/>
+<area shape="rect" id="Node000012" href="$d9/dad/classcontainer__module_1_1value__container.html#ac6241bfe46959d0e23ee3f4e629a8958" title="Generate an XML representation of this container (header + values)." alt="" coords="265,423,448,463"/>
+<area shape="poly" id="edge12_Node000008_Node000012" title=" " alt="" coords="526,382,449,413,417,425,415,420,447,408,524,377"/>
+<area shape="rect" id="Node000010" href="$da/dab/classcontainer__module_1_1optimized__container.html#a76a6b8b543e5753769a2a8839adebc58" title="Remove value and update index." alt="" coords="5,325,217,365"/>
+<area shape="poly" id="edge10_Node000009_Node000010" title=" " alt="" coords="252,330,218,335,217,329,252,325"/>
+<area shape="poly" id="edge15_Node000014_Node000002" title=" " alt="" coords="497,201,448,196,449,190,497,196"/>
+</map>

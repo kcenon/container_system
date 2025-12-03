@@ -1,0 +1,18 @@
+<map id="container_module::value_bridge::create_legacy_numeric" name="container_module::value_bridge::create_legacy_numeric">
+<area shape="rect" id="Node000001" title=" " alt="" coords="747,94,929,149"/>
+<area shape="rect" id="Node000002" href="$d0/dfe/classcontainer__module_1_1value__bridge.html#ae1f4860f05b75cad1fe39e14357aa3c2" title="Convert modern variant_value_v2 to legacy value." alt="" coords="516,101,699,141"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="733,124,699,124,699,119,733,119"/>
+<area shape="rect" id="Node000003" href="$d0/dfe/classcontainer__module_1_1value__bridge.html#ad9bec487a6e5f996db62953ab842989c" title=" " alt="" coords="257,5,468,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="530,98,467,72,398,48,400,43,469,67,532,93"/>
+<area shape="rect" id="Node000004" href="$de/d88/classcontainer__module_1_1auto__value__bridge.html#aefc2b5eca400695e2a2ac7d192ebbc05" title="Manually sync changes back to legacy." alt="" coords="275,69,451,109"/>
+<area shape="poly" id="edge4_Node000002_Node000004" title=" " alt="" coords="502,110,451,103,451,98,503,105"/>
+<area shape="rect" id="Node000006" href="$d0/dfe/classcontainer__module_1_1value__bridge.html#a597a2d006327edf0d2d07b121c74db53" title="Convert vector of modern values to legacy." alt="" coords="268,133,457,173"/>
+<area shape="poly" id="edge6_Node000002_Node000006" title=" " alt="" coords="503,138,458,144,457,138,502,132"/>
+<area shape="rect" id="Node000007" href="$d0/dfe/classcontainer__module_1_1value__bridge.html#abd036dde0b63607ed5232a1e0054a953" title="Test round&#45;trip conversion (modern → legacy → modern)" alt="" coords="269,197,457,237"/>
+<area shape="poly" id="edge7_Node000002_Node000007" title=" " alt="" coords="555,150,469,188,435,200,433,195,467,183,553,145"/>
+<area shape="rect" id="Node000008" href="$d0/dfe/classcontainer__module_1_1value__bridge.html#a464c6d8ef3b9c8892bfd97f6521b38e3" title="Test round&#45;trip conversion (legacy → modern → legacy)" alt="" coords="269,261,457,301"/>
+<area shape="poly" id="edge8_Node000002_Node000008" title=" " alt="" coords="582,154,533,204,502,229,469,252,444,264,442,259,467,247,499,225,530,200,578,150"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="481,48,538,73,585,99,582,104,536,78,479,52"/>
+<area shape="rect" id="Node000005" href="$de/d88/classcontainer__module_1_1auto__value__bridge.html#a5720b15c0aa41d40202de13d844cdb4c" title="Destructor: optionally syncs back." alt="" coords="5,62,209,117"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="261,92,210,92,210,87,261,87"/>
+</map>
