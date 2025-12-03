@@ -11,6 +11,11 @@ Container System 프로젝트의 모든 주요 변경 사항이 이 파일에 �
 
 ## [Unreleased]
 
+### Changed
+- fmt 라이브러리 의존성 제거 및 C++20 std::format 전용 사용 (#168)
+- 조건부 컴파일 분기 제거로 formatter.h 간소화
+- C++20 std::format 지원을 필수로 하는 CMake 설정 업데이트
+
 ### Added
 - 생태계 전반의 포괄적인 문서 통일화
 - 버전 추적 개선을 위한 CHANGELOG.md 및 MIGRATION.md

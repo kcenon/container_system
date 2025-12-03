@@ -11,6 +11,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Remove fmt library dependency and use C++20 std::format exclusively (#168)
+- Simplify formatter.h by removing conditional compilation branches
+- Update CMake configuration to require C++20 std::format support
+
 ### Added
 - Comprehensive documentation unification across ecosystem
 - CHANGELOG.md and MIGRATION.md for better version tracking

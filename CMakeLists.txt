@@ -79,9 +79,8 @@ endif()
 # Find required packages
 find_package(Threads REQUIRED)
 
-# Note: This project uses manual string formatting instead of std::format
-# to ensure compatibility across all C++20 compilers (including older Clang versions)
-message(STATUS "Using manual string formatting (no std::format dependency)")
+# Note: This project requires C++20 std::format (GCC 13+, Clang 14+, MSVC 19.29+)
+message(STATUS "Using C++20 std::format for string formatting")
 
 ##################################################
 # Source Files Configuration
@@ -241,32 +240,8 @@ target_link_libraries(container_system PUBLIC
     Threads::Threads
 )
 
-# Formatting library configuration: prefer std::format, fall back to fmt
-include(CheckCXXSourceCompiles)
-set(CMAKE_REQUIRED_FLAGS "${CMAKE_CXX_FLAGS} -std=c++20")
-check_cxx_source_compiles("
-    #include <format>
-    int main() {
-        auto s = std::format(\"{}\", 42);
-        return 0;
-    }
-" HAS_WORKING_STD_FORMAT)
-
-if(HAS_WORKING_STD_FORMAT)
-    # Prefer std::format if available (C++20)
-    target_compile_definitions(container_system PUBLIC USE_STD_FORMAT)
-    message(STATUS "Container: Using std::format (C++20)")
-else()
-    # Fall back to fmt library
-    find_package(fmt QUIET)
-    if(fmt_FOUND AND TARGET fmt::fmt)
-        target_link_libraries(container_system PUBLIC fmt::fmt)
-        message(STATUS "Container: Using fmt library")
-    else()
-        message(WARNING "Container: No formatting library available")
-        message(WARNING "  Install fmt library or use compiler with std::format support")
-    endif()
-endif()
+# C++20 std::format is required (no fmt library fallback)
+message(STATUS "Container: Using std::format (C++20)")
 
 ##################################################
 # Platform-Specific Configuration
@@ -504,13 +479,7 @@ endif()
 
 message(STATUS "Container library configured:")
 message(STATUS "  Module Directory: ${CMAKE_CURRENT_SOURCE_DIR}/container")
-if(HAS_WORKING_STD_FORMAT)
-    message(STATUS "  Dependencies: utilities, std::format (C++20)")
-elseif(fmt_FOUND)
-    message(STATUS "  Dependencies: utilities, fmt")
-else()
-    message(STATUS "  Dependencies: utilities")
-endif()
+message(STATUS "  Dependencies: utilities, std::format (C++20)")
 message(STATUS "  Features:")
 message(STATUS "    - Thread-safe operations: ON")
 message(STATUS "    - Variant-based types: ON")
