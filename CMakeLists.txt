@@ -10,7 +10,7 @@ cmake_minimum_required(VERSION 3.16)
 # Project definition
 project(container_system
     VERSION 1.0.0
-    DESCRIPTION "Advanced C++17 Container System with Thread-Safe Operations and Messaging Integration"
+    DESCRIPTION "Advanced C++20 Container System with Thread-Safe Operations and Messaging Integration"
     LANGUAGES CXX
 )
 
