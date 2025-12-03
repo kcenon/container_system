@@ -43,13 +43,11 @@ jobs:
       if: runner.os == 'Linux'
       run: |
         sudo apt-get update
-        # Install GCC 12 for Clang builds (chrono compatibility)
-        # Install GCC 13 for GCC builds (C++20 <format> support)
-        # Install fmt library for GCC 12 (doesn't have <format>)
+        # Install GCC 13 for all builds (C++20 <format> support required)
         sudo apt-get install -y software-properties-common
         sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
         sudo apt-get update
-        sudo apt-get install -y cmake ninja-build gcc-12 g++-12 gcc-13 g++-13 clang libgtest-dev libgmock-dev libfmt-dev
+        sudo apt-get install -y cmake ninja-build gcc-13 g++-13 clang libgtest-dev libgmock-dev
 
     - name: Install dependencies (macOS)
       if: runner.os == 'macOS'
@@ -68,13 +66,13 @@ jobs:
     - name: Set up compiler (Clang - Linux)
       if: matrix.compiler == 'clang' && runner.os == 'Linux'
       run: |
-        # Use GCC 12 libstdc++ for Clang builds (chrono compatibility)
-        sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-12 100
-        sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-12 100
+        # Use GCC 13 libstdc++ for Clang builds (C++20 <format> support required)
+        sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-13 100
+        sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-13 100
         echo "CC=clang" >> $GITHUB_ENV
         echo "CXX=clang++" >> $GITHUB_ENV
-        # Force Clang to use GCC 12 headers (avoid GCC 13 chrono bugs)
-        echo "CXXFLAGS=-isystem /usr/include/c++/12 -isystem /usr/include/x86_64-linux-gnu/c++/12 --gcc-toolchain=/usr" >> $GITHUB_ENV
+        # Force Clang to use GCC 13 headers for std::format support
+        echo "CXXFLAGS=-isystem /usr/include/c++/13 -isystem /usr/include/x86_64-linux-gnu/c++/13 --gcc-toolchain=/usr" >> $GITHUB_ENV
         echo "CFLAGS=--gcc-toolchain=/usr" >> $GITHUB_ENV
 
     - name: Set up compiler (Clang - macOS)
@@ -217,14 +215,14 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update
-        # Install GCC 12 for Clang + libstdc++ chrono compatibility
+        # Install GCC 13 for C++20 <format> support
         sudo apt-get install -y software-properties-common
         sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
         sudo apt-get update
-        sudo apt-get install -y cmake ninja-build gcc-12 g++-12 clang libgtest-dev libgmock-dev
-        # Set GCC 12 as default for Clang sanitizer builds
-        sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-12 100
-        sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-12 100
+        sudo apt-get install -y cmake ninja-build gcc-13 g++-13 clang libgtest-dev libgmock-dev
+        # Set GCC 13 as default for Clang sanitizer builds
+        sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-13 100
+        sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-13 100
 
     - name: Configure CMake with ${{ matrix.sanitizer.name }}
       run: |
@@ -245,7 +243,7 @@ jobs:
           -DCMAKE_C_COMPILER=clang \
           -DCMAKE_CXX_COMPILER=clang++ \
           -DCMAKE_C_FLAGS="--gcc-toolchain=/usr ${{ matrix.sanitizer.flags }}" \
-          -DCMAKE_CXX_FLAGS="-isystem /usr/include/c++/12 -isystem /usr/include/x86_64-linux-gnu/c++/12 --gcc-toolchain=/usr ${{ matrix.sanitizer.flags }}" \
+          -DCMAKE_CXX_FLAGS="-isystem /usr/include/c++/13 -isystem /usr/include/x86_64-linux-gnu/c++/13 --gcc-toolchain=/usr ${{ matrix.sanitizer.flags }}" \
           -DCMAKE_EXE_LINKER_FLAGS="${{ matrix.sanitizer.flags }}" \
           -DCMAKE_SHARED_LINKER_FLAGS="${{ matrix.sanitizer.flags }}"
 

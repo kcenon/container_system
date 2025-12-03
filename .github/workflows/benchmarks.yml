@@ -54,15 +54,14 @@ jobs:
       if: runner.os == 'Linux'
       run: |
         sudo apt-get update
-        # Install GCC 12 for Clang + libstdc++ chrono compatibility
-        # Install fmt library for GCC 12 (doesn't have <format>)
+        # Install GCC 13 for C++20 <format> support
         sudo apt-get install -y software-properties-common
         sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
         sudo apt-get update
-        sudo apt-get install -y cmake gcc-12 g++-12 ninja-build clang libbenchmark-dev libgtest-dev libfmt-dev
-        # Set GCC 12 as default for Clang benchmark builds
-        sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-12 100
-        sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-12 100
+        sudo apt-get install -y cmake gcc-13 g++-13 ninja-build clang libbenchmark-dev libgtest-dev
+        # Set GCC 13 as default for Clang benchmark builds
+        sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-13 100
+        sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-13 100
 
     - name: Install dependencies (macOS)
       if: runner.os == 'macOS'
@@ -74,8 +73,8 @@ jobs:
       run: |
         echo "CC=clang" >> $GITHUB_ENV
         echo "CXX=clang++" >> $GITHUB_ENV
-        # Force Clang to use GCC 12 headers (avoid GCC 13 chrono bugs)
-        echo "CXXFLAGS=-isystem /usr/include/c++/12 -isystem /usr/include/x86_64-linux-gnu/c++/12 --gcc-toolchain=/usr" >> $GITHUB_ENV
+        # Force Clang to use GCC 13 headers for std::format support
+        echo "CXXFLAGS=-isystem /usr/include/c++/13 -isystem /usr/include/x86_64-linux-gnu/c++/13 --gcc-toolchain=/usr" >> $GITHUB_ENV
         echo "CFLAGS=--gcc-toolchain=/usr" >> $GITHUB_ENV
 
     - name: Set up compiler (macOS)
