@@ -17,9 +17,9 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: ubuntu-22.04
+          - os: ubuntu-24.04
             build_type: Debug
-          - os: ubuntu-22.04
+          - os: ubuntu-24.04
             build_type: Release
           - os: macos-latest
             build_type: Debug
@@ -44,15 +44,8 @@ jobs:
       if: runner.os == 'Linux'
       run: |
         sudo apt-get update
-        # Install GCC 12 for Clang + libstdc++ chrono compatibility
-        # Note: GCC 12 libstdc++ doesn't have <format>, so we install fmt library
-        sudo apt-get install -y software-properties-common
-        sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
-        sudo apt-get update
-        sudo apt-get install -y cmake gcc-12 g++-12 ninja-build clang libgtest-dev libgmock-dev lcov pkg-config libfmt-dev
-        # Set GCC 12 as default for Clang builds
-        sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-12 100
-        sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-12 100
+        # Ubuntu 24.04 has GCC 14 by default with C++20 <format> support
+        sudo apt-get install -y cmake ninja-build clang libgtest-dev libgmock-dev lcov pkg-config
 
     - name: Install dependencies (macOS)
       if: runner.os == 'macOS'
@@ -64,9 +57,6 @@ jobs:
       run: |
         echo "CC=clang" >> $GITHUB_ENV
         echo "CXX=clang++" >> $GITHUB_ENV
-        # Force Clang to use GCC 12 headers (avoid GCC 13 chrono bugs)
-        echo "CXXFLAGS=-isystem /usr/include/c++/12 -isystem /usr/include/x86_64-linux-gnu/c++/12 --gcc-toolchain=/usr" >> $GITHUB_ENV
-        echo "CFLAGS=--gcc-toolchain=/usr" >> $GITHUB_ENV
 
     - name: Configure CMake (Unix)
       if: runner.os != 'Windows'
@@ -232,7 +222,7 @@ jobs:
   # Performance baseline - variant-based API migration complete (REACT-006)
   performance-baseline:
     name: Performance Baseline Validation
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
 
     steps:
@@ -252,20 +242,13 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update
-        # Install GCC 12 for Clang + libstdc++ chrono compatibility
-        sudo apt-get install -y software-properties-common
-        sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
-        sudo apt-get update
-        sudo apt-get install -y cmake gcc-12 g++-12 ninja-build clang libgtest-dev libgmock-dev pkg-config libfmt-dev
-        sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-12 100
-        sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-12 100
+        # Ubuntu 24.04 has GCC 14 by default with C++20 <format> support
+        sudo apt-get install -y cmake ninja-build clang libgtest-dev libgmock-dev pkg-config
 
     - name: Set up compiler
       run: |
         echo "CC=clang" >> $GITHUB_ENV
         echo "CXX=clang++" >> $GITHUB_ENV
-        echo "CXXFLAGS=-isystem /usr/include/c++/12 -isystem /usr/include/x86_64-linux-gnu/c++/12 --gcc-toolchain=/usr" >> $GITHUB_ENV
-        echo "CFLAGS=--gcc-toolchain=/usr" >> $GITHUB_ENV
 
     - name: Configure CMake (Release for accurate performance)
       run: |
@@ -316,7 +299,7 @@ jobs:
   summary:
     name: Integration Tests Summary
     needs: [integration-tests]
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     if: always()
 
     steps:

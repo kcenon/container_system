@@ -688,7 +688,6 @@ python scripts/compare_benchmarks.py \
 
 **Scanned Dependencies**:
 - utilities_module
-- fmt
 - nlohmann_json
 - pugixml
 - googletest (test only)
@@ -702,7 +701,6 @@ python scripts/compare_benchmarks.py \
 
 **Dependency Licenses** (All Compatible):
 - utilities_module: BSD 3-Clause
-- fmt: MIT
 - nlohmann_json: MIT
 - pugixml: MIT
 - googletest: BSD 3-Clause
