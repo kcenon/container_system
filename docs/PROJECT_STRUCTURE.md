@@ -512,11 +512,12 @@ utilities_module (external dependency)
 | Dependency | Purpose | Version | Required |
 |-----------|---------|---------|----------|
 | **utilities_module** | String conversion, system utilities | Latest | Yes |
-| **fmt** | High-performance string formatting | 10+ | Yes |
 | **nlohmann_json** | JSON serialization | 3.11+ | Yes |
 | **pugixml** | XML serialization | 1.13+ | Yes |
 | **googletest** | Unit testing framework | 1.14+ | Test only |
 | **google-benchmark** | Performance benchmarking | 1.8+ | Test only |
+
+> **Note**: String formatting uses C++20 `std::format` (requires GCC 13+, Clang 14+, or MSVC 19.29+).
 
 ### Optional Integration Dependencies
 
@@ -589,8 +590,8 @@ cmake --build build --config Release
 #include <vector>
 #include <memory>
 
-// Third-party includes
-#include <fmt/format.h>
+// Standard library includes (C++20)
+#include <format>
 
 // Project includes
 #include "container/core/value.h"
