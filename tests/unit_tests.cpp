@@ -46,6 +46,7 @@
 #include <random>
 #include <sstream>
 #include <chrono>
+#include <barrier>
 
 using namespace container_module;
 
@@ -397,9 +398,14 @@ TEST(ThreadSafetyTest, ThreadSafeContainer) {
     const int ops_per_thread = 100;
     std::vector<std::thread> threads;
 
+    // Barrier to synchronize all threads starting together
+    std::barrier sync_point(num_threads * 2);
+
     // Writers - use value objects
     for (int t = 0; t < num_threads; ++t) {
-        threads.emplace_back([safe_container, t, ops_per_thread]() {
+        threads.emplace_back([safe_container, t, ops_per_thread, &sync_point]() {
+            sync_point.arrive_and_wait();  // All threads start together
+
             for (int i = 0; i < ops_per_thread; ++i) {
                 std::string key = "thread" + std::to_string(t) + "_" + std::to_string(i);
                 int val = t * 1000 + i;
@@ -410,8 +416,8 @@ TEST(ThreadSafetyTest, ThreadSafeContainer) {
 
     // Readers
     for (int t = 0; t < num_threads; ++t) {
-        threads.emplace_back([safe_container, t, ops_per_thread]() {
-            std::this_thread::sleep_for(std::chrono::milliseconds(10)); // Let writers start
+        threads.emplace_back([safe_container, t, ops_per_thread, &sync_point]() {
+            sync_point.arrive_and_wait();  // All threads start together
 
             for (int i = 0; i < ops_per_thread; ++i) {
                 std::string key = "thread" + std::to_string(t) + "_" + std::to_string(i);

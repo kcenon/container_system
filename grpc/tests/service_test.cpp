@@ -59,7 +59,7 @@ using namespace container_module;
 class GrpcServiceTest : public ::testing::Test {
 protected:
     static constexpr const char* TEST_ADDRESS = "127.0.0.1:50099";
-    static constexpr int STARTUP_WAIT_MS = 100;
+    static constexpr int STARTUP_TIMEOUT_MS = 5000;  // Timeout for server startup
     static constexpr int SHUTDOWN_WAIT_MS = 500;
 
     void SetUp() override {
@@ -77,21 +77,37 @@ protected:
             server_->stop(SHUTDOWN_WAIT_MS);
             server_.reset();
         }
-        // Allow port to be released
+        // Allow port to be released (acceptable grace period)
         std::this_thread::sleep_for(std::chrono::milliseconds(50));
+    }
+
+    /**
+     * Wait for server to be ready using polling instead of fixed sleep
+     */
+    bool WaitForServerReady(int timeout_ms = STARTUP_TIMEOUT_MS) {
+        auto start = std::chrono::steady_clock::now();
+        while (!server_->is_running()) {
+            auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(
+                std::chrono::steady_clock::now() - start).count();
+            if (elapsed > timeout_ms) {
+                return false;
+            }
+            std::this_thread::yield();
+        }
+        return true;
     }
 
     void StartServer() {
         server_ = std::make_unique<grpc_server>(TEST_ADDRESS);
         ASSERT_TRUE(server_->start());
-        std::this_thread::sleep_for(std::chrono::milliseconds(STARTUP_WAIT_MS));
+        ASSERT_TRUE(WaitForServerReady()) << "Server did not become ready within timeout";
     }
 
     void StartServerWithProcessor(container_processor processor) {
         server_ = std::make_unique<grpc_server>(TEST_ADDRESS);
         server_->set_processor(std::move(processor));
         ASSERT_TRUE(server_->start());
-        std::this_thread::sleep_for(std::chrono::milliseconds(STARTUP_WAIT_MS));
+        ASSERT_TRUE(WaitForServerReady()) << "Server did not become ready within timeout";
     }
 
     void ConnectClient() {

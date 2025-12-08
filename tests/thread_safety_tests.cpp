@@ -14,6 +14,7 @@ All rights reserved.
 #include <atomic>
 #include <chrono>
 #include <barrier>
+#include <latch>
 #include <algorithm>
 #include <random>
 
@@ -43,7 +44,7 @@ TEST_F(ContainerThreadSafetyTest, ConcurrentReadWrite) {
     std::vector<std::thread> threads;
     std::atomic<int> read_errors{0};
     std::atomic<int> write_errors{0};
-    std::atomic<bool> running{true};
+    std::latch completion_latch(num_readers + num_writers);
 
     // Pre-populate container
     for (int i = 0; i < num_keys; ++i) {
@@ -57,7 +58,7 @@ TEST_F(ContainerThreadSafetyTest, ConcurrentReadWrite) {
             std::mt19937 rng(thread_id);
             std::uniform_int_distribution<int> dist(0, num_keys - 1);
 
-            for (int j = 0; j < operations_per_thread && running.load(); ++j) {
+            for (int j = 0; j < operations_per_thread; ++j) {
                 try {
                     int key_idx = dist(rng);
                     std::string key = "key_" + std::to_string(key_idx);
@@ -67,9 +68,10 @@ TEST_F(ContainerThreadSafetyTest, ConcurrentReadWrite) {
                 }
 
                 if (j % 100 == 0) {
-                    std::this_thread::sleep_for(1ms);
+                    std::this_thread::yield();  // Yield instead of sleep for throttling
                 }
             }
+            completion_latch.count_down();
         });
     }
 
@@ -79,7 +81,7 @@ TEST_F(ContainerThreadSafetyTest, ConcurrentReadWrite) {
             std::mt19937 rng(thread_id + 1000);
             std::uniform_int_distribution<int> dist(0, num_keys - 1);
 
-            for (int j = 0; j < operations_per_thread && running.load(); ++j) {
+            for (int j = 0; j < operations_per_thread; ++j) {
                 try {
                     int key_idx = dist(rng);
                     std::string key = "key_" + std::to_string(key_idx);
@@ -92,12 +94,12 @@ TEST_F(ContainerThreadSafetyTest, ConcurrentReadWrite) {
                     ++read_errors;
                 }
             }
+            completion_latch.count_down();
         });
     }
 
-    // Let it run for a bit
-    std::this_thread::sleep_for(500ms);
-    running.store(false);
+    // Wait for all threads to complete their operations
+    completion_latch.wait();
 
     for (auto& t : threads) {
         t.join();
@@ -137,7 +139,7 @@ TEST_F(ContainerThreadSafetyTest, MemoryPoolStress) {
                 }
 
                 if (j % 100 == 0) {
-                    std::this_thread::sleep_for(1ms);
+                    std::this_thread::yield();  // Yield for throttling
                 }
             }
 
@@ -203,7 +205,7 @@ TEST_F(ContainerThreadSafetyTest, MixedOperationsStress) {
 
     std::vector<std::thread> threads;
     std::atomic<int> errors{0};
-    std::atomic<bool> running{true};
+    std::latch completion_latch(num_threads);
 
     // Pre-populate
     for (int i = 0; i < 50; ++i) {
@@ -217,7 +219,7 @@ TEST_F(ContainerThreadSafetyTest, MixedOperationsStress) {
             std::uniform_int_distribution<int> op_dist(0, 4);
             std::uniform_int_distribution<int> key_dist(0, 99);
 
-            for (int j = 0; j < operations_per_thread && running.load(); ++j) {
+            for (int j = 0; j < operations_per_thread; ++j) {
                 try {
                     std::string key = "key_" + std::to_string(key_dist(rng));
                     int op = op_dist(rng);
@@ -244,14 +246,14 @@ TEST_F(ContainerThreadSafetyTest, MixedOperationsStress) {
                 }
 
                 if (j % 50 == 0) {
-                    std::this_thread::sleep_for(1ms);
+                    std::this_thread::yield();  // Yield instead of sleep
                 }
             }
+            completion_latch.count_down();
         });
     }
 
-    std::this_thread::sleep_for(300ms);
-    running.store(false);
+    completion_latch.wait();
 
     for (auto& t : threads) {
         t.join();
@@ -270,12 +272,13 @@ TEST_F(ContainerThreadSafetyTest, ClearDuringOperations) {
 
     std::vector<std::thread> threads;
     std::atomic<int> errors{0};
-    std::atomic<bool> running{true};
+    std::atomic<bool> workers_done{false};
+    std::latch worker_latch(num_worker_threads);
 
     // Worker threads
     for (int i = 0; i < num_worker_threads; ++i) {
         threads.emplace_back([&, thread_id = i]() {
-            for (int j = 0; j < operations_per_thread && running.load(); ++j) {
+            for (int j = 0; j < operations_per_thread; ++j) {
                 try {
                     std::string key = "worker_" + std::to_string(thread_id) + "_" + std::to_string(j);
                     container->set(key, value(key, j));
@@ -284,17 +287,19 @@ TEST_F(ContainerThreadSafetyTest, ClearDuringOperations) {
                     ++errors;
                 }
             }
+            worker_latch.count_down();
         });
     }
 
-    // Clear threads
+    // Clear threads - run until workers are done
     for (int i = 0; i < num_clear_threads; ++i) {
         threads.emplace_back([&]() {
-            std::this_thread::sleep_for(50ms);
-            while (running.load()) {
+            // Wait briefly for workers to start
+            std::this_thread::yield();
+            while (!workers_done.load()) {
                 try {
                     container->clear();
-                    std::this_thread::sleep_for(100ms);
+                    std::this_thread::yield();  // Yield between clears
                 } catch (...) {
                     ++errors;
                 }
@@ -302,8 +307,9 @@ TEST_F(ContainerThreadSafetyTest, ClearDuringOperations) {
         });
     }
 
-    std::this_thread::sleep_for(400ms);
-    running.store(false);
+    // Wait for workers to complete
+    worker_latch.wait();
+    workers_done.store(true);
 
     for (auto& t : threads) {
         t.join();
@@ -328,12 +334,12 @@ TEST_F(ContainerThreadSafetyTest, ForEachSafety) {
 
     std::vector<std::thread> threads;
     std::atomic<int> errors{0};
-    std::atomic<bool> running{true};
+    std::latch completion_latch(num_iterator_threads + num_modifier_threads);
 
     // Iterator threads
     for (int i = 0; i < num_iterator_threads; ++i) {
         threads.emplace_back([&]() {
-            for (int j = 0; j < iterations && running.load(); ++j) {
+            for (int j = 0; j < iterations; ++j) {
                 try {
                     size_t count = 0;
                     container->for_each([&count](const auto& key, const auto& value) {
@@ -344,15 +350,16 @@ TEST_F(ContainerThreadSafetyTest, ForEachSafety) {
                 } catch (...) {
                     ++errors;
                 }
-                std::this_thread::sleep_for(5ms);
+                std::this_thread::yield();  // Yield for iteration pacing
             }
+            completion_latch.count_down();
         });
     }
 
     // Modifier threads
     for (int i = 0; i < num_modifier_threads; ++i) {
         threads.emplace_back([&, thread_id = i]() {
-            for (int j = 0; j < iterations && running.load(); ++j) {
+            for (int j = 0; j < iterations; ++j) {
                 try {
                     std::string key = "new_" + std::to_string(thread_id) + "_" + std::to_string(j);
                     container->set(key, value(key, j));
@@ -360,13 +367,13 @@ TEST_F(ContainerThreadSafetyTest, ForEachSafety) {
                 } catch (...) {
                     ++errors;
                 }
-                std::this_thread::sleep_for(10ms);
+                std::this_thread::yield();  // Yield for modifier pacing
             }
+            completion_latch.count_down();
         });
     }
 
-    std::this_thread::sleep_for(600ms);
-    running.store(false);
+    completion_latch.wait();
 
     for (auto& t : threads) {
         t.join();
@@ -448,7 +455,7 @@ TEST_F(ContainerThreadSafetyTest, TypedOperations) {
                 }
 
                 if (j % 50 == 0) {
-                    std::this_thread::sleep_for(1ms);
+                    std::this_thread::yield();  // Yield for throttling
                 }
             }
         });
@@ -477,12 +484,12 @@ TEST_F(ContainerThreadSafetyTest, KeysOperationConcurrent) {
 
     std::vector<std::thread> threads;
     std::atomic<int> errors{0};
-    std::atomic<bool> running{true};
+    std::latch completion_latch(num_reader_threads + num_writer_threads);
 
     // Reader threads calling keys()
     for (int i = 0; i < num_reader_threads; ++i) {
         threads.emplace_back([&]() {
-            for (int j = 0; j < operations_per_thread && running.load(); ++j) {
+            for (int j = 0; j < operations_per_thread; ++j) {
                 try {
                     auto all_keys = container->keys();
                     // Process keys
@@ -492,15 +499,16 @@ TEST_F(ContainerThreadSafetyTest, KeysOperationConcurrent) {
                 } catch (...) {
                     ++errors;
                 }
-                std::this_thread::sleep_for(5ms);
+                std::this_thread::yield();  // Yield for pacing
             }
+            completion_latch.count_down();
         });
     }
 
     // Writer threads modifying container
     for (int i = 0; i < num_writer_threads; ++i) {
         threads.emplace_back([&, thread_id = i]() {
-            for (int j = 0; j < operations_per_thread && running.load(); ++j) {
+            for (int j = 0; j < operations_per_thread; ++j) {
                 try {
                     std::string key = "dynamic_" + std::to_string(thread_id) + "_" + std::to_string(j);
                     container->set(key, value(key, j));
@@ -511,13 +519,13 @@ TEST_F(ContainerThreadSafetyTest, KeysOperationConcurrent) {
                 } catch (...) {
                     ++errors;
                 }
-                std::this_thread::sleep_for(3ms);
+                std::this_thread::yield();  // Yield for pacing
             }
+            completion_latch.count_down();
         });
     }
 
-    std::this_thread::sleep_for(1000ms);
-    running.store(false);
+    completion_latch.wait();
 
     for (auto& t : threads) {
         t.join();
