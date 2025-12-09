@@ -8,6 +8,7 @@ All rights reserved.
 #pragma once
 
 #include "container/core/value_types.h"
+#include "container/core/concepts.h"
 #include <variant>
 #include <string>
 #include <string_view>
@@ -18,6 +19,7 @@ All rights reserved.
 #include <shared_mutex>
 #include <atomic>
 #include <type_traits>
+#include <concepts>
 
 namespace container_module
 {
@@ -218,10 +220,10 @@ namespace container_module
 
         /**
          * @brief Type-safe getter with optional return
-         * @tparam T The type to retrieve (must be exact variant type)
+         * @tparam T The type to retrieve (must be valid variant type)
          * @return std::optional containing value if type matches
          */
-        template<typename T>
+        template<concepts::ValueVariantType T>
         std::optional<T> get() const {
             std::shared_lock lock(mutex_);
             if (auto* ptr = std::get_if<T>(&data_)) {
@@ -234,7 +236,7 @@ namespace container_module
          * @brief Type-safe setter
          * @tparam T The type to store (must be valid variant type)
          */
-        template<typename T>
+        template<concepts::ValueVariantType T>
         void set(T&& value) {
             std::unique_lock lock(mutex_);
             data_ = std::forward<T>(value);
@@ -243,8 +245,9 @@ namespace container_module
 
         /**
          * @brief Apply visitor to contained value (const)
+         * @tparam Visitor The visitor callable type
          */
-        template<typename Visitor>
+        template<concepts::ValueVisitor Visitor>
         auto visit(Visitor&& vis) const {
             std::shared_lock lock(mutex_);
             read_count_.fetch_add(1, std::memory_order_relaxed);
@@ -253,8 +256,9 @@ namespace container_module
 
         /**
          * @brief Apply visitor to contained value (mutable)
+         * @tparam Visitor The visitor callable type
          */
-        template<typename Visitor>
+        template<concepts::ValueVisitor Visitor>
         auto visit_mut(Visitor&& vis) {
             std::unique_lock lock(mutex_);
             write_count_.fetch_add(1, std::memory_order_relaxed);

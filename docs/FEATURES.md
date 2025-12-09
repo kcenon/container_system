@@ -164,12 +164,45 @@ auto message = messaging_container_builder()
 ## Technology Stack
 
 ### Modern C++ Foundation
-- **C++17 compatibility** - template metaprogramming, variant, optional
+- **C++20 concepts** - compile-time type constraints with clear error messages
 - **Template metaprogramming** - compile-time type checking
 - **Smart pointers** - automatic memory management
 - **RAII principles** - resource acquisition is initialization
 - **Move semantics** - zero-copy operations
 - **Variant storage** - efficient polymorphic value storage
+
+### C++20 Concepts
+
+The container system uses C++20 concepts for improved type safety and clearer error messages:
+
+```cpp
+#include <container/core/concepts.h>
+using namespace container_module::concepts;
+
+// ValueVariantType - Types valid for ValueVariant storage
+template<ValueVariantType T>
+void set_typed(std::string_view key, T&& val);
+
+// Arithmetic - Numeric types for make_numeric_value
+template<Arithmetic T>
+value make_numeric_value(std::string_view name, T value);
+
+// TriviallyCopyable - SIMD-friendly types
+template<TriviallyCopyable T>
+class typed_container { /* ... */ };
+
+// KeyValueCallback - Iteration function signatures
+template<KeyValueCallback Func>
+void for_each(Func&& func) const;
+```
+
+Available concepts:
+- `ValueVariantType` - Types valid for ValueVariant storage
+- `Arithmetic` - Numeric types (integral and floating-point)
+- `TriviallyCopyable` - Types suitable for SIMD operations
+- `KeyValueCallback` - Functions for const iteration
+- `MutableKeyValueCallback` - Functions for mutable iteration
+- `ValueMapCallback` / `ConstValueMapCallback` - Bulk operation functions
 
 ### SIMD Optimizations
 - **ARM NEON intrinsics** for Apple Silicon
