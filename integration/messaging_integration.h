@@ -33,8 +33,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #pragma once
 
 #include "container/core/container.h"
+#include "container/core/concepts.h"
 #include <functional>
 #include <memory>
+#include <concepts>
 
 #ifdef HAS_PERFORMANCE_METRICS
 #include <chrono>
@@ -162,28 +164,33 @@ private:
 #endif // HAS_PERFORMANCE_METRICS
 
 // Template implementation for add_value
+// Uses concepts to provide clearer error messages for unsupported types
 template<typename T>
 messaging_container_builder& messaging_container_builder::add_value(const std::string& key, T&& value) {
-    if constexpr (std::is_same_v<std::decay_t<T>, std::shared_ptr<value_container>>) {
+    using DecayedT = std::decay_t<T>;
+
+    if constexpr (std::is_same_v<DecayedT, std::shared_ptr<value_container>>) {
         // Handle nested containers by serializing and storing as bytes
         std::string serialized_data = value->serialize();
         std::vector<uint8_t> bytes(serialized_data.begin(), serialized_data.end());
         container_->set_value(key, bytes);
-    } else if constexpr (std::is_same_v<std::decay_t<T>, bool>) {
+    } else if constexpr (std::is_same_v<DecayedT, bool>) {
         container_->set_value(key, value);
-    } else if constexpr (std::is_integral_v<std::decay_t<T>>) {
-        if constexpr (sizeof(T) <= 4) {
+    } else if constexpr (concepts::IntegralType<DecayedT>) {
+        if constexpr (sizeof(DecayedT) <= 4) {
             container_->set_value(key, static_cast<int32_t>(value));
         } else {
             container_->set_value(key, static_cast<int64_t>(value));
         }
-    } else if constexpr (std::is_floating_point_v<std::decay_t<T>>) {
-        if constexpr (std::is_same_v<std::decay_t<T>, float>) {
+    } else if constexpr (concepts::FloatingPointType<DecayedT>) {
+        if constexpr (std::is_same_v<DecayedT, float>) {
             container_->set_value(key, value);
         } else {
             container_->set_value(key, value);
         }
-    } else if constexpr (std::is_same_v<std::decay_t<T>, std::string>) {
+    } else if constexpr (std::is_same_v<DecayedT, std::string>) {
+        container_->set_value(key, std::string(value));
+    } else if constexpr (concepts::StringLike<DecayedT>) {
         container_->set_value(key, std::string(value));
     }
 
