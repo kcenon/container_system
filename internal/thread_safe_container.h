@@ -37,7 +37,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <shared_mutex>
 #include <atomic>
 #include <algorithm>
+#include <concepts>
 #include "container/internal/value.h"
+#include "container/core/concepts.h"
 
 namespace container_module
 {
@@ -93,11 +95,11 @@ namespace container_module
 
         /**
          * @brief Get typed value by key
-         * @tparam T The expected type
+         * @tparam T The expected type (must be a valid variant type)
          * @param key The key to look up
          * @return Optional containing the value if found and type matches
          */
-        template<typename T>
+        template<concepts::ValueVariantType T>
         std::optional<T> get_typed(std::string_view key) const {
             std::shared_lock lock(mutex_);
             auto it = values_.find(std::string(key));
@@ -116,14 +118,12 @@ namespace container_module
 
         /**
          * @brief Set typed value for key
-         * @tparam T The value type
+         * @tparam T The value type (must be a valid variant type)
          * @param key The key to set
          * @param value The value to store
          */
-        template<typename T>
+        template<concepts::ValueVariantType T>
         void set_typed(std::string_view key, T&& val) {
-            static_assert(is_variant_type_v2<std::decay_t<T>>::value,
-                         "Type must be a valid variant type");
             set(key, value(key, std::forward<T>(val)));
         }
 
@@ -189,36 +189,36 @@ namespace container_module
 
         /**
          * @brief Apply a function to all values (read-only)
-         * @tparam Func Function type
+         * @tparam Func Function type satisfying KeyValueCallback concept
          * @param func Function to apply to each key-value pair
          */
-        template<typename Func>
+        template<concepts::KeyValueCallback Func>
         void for_each(Func&& func) const {
             std::shared_lock lock(mutex_);
-            for (const auto& [key, value] : values_) {
-                func(key, value);
+            for (const auto& [key, val] : values_) {
+                func(key, val);
             }
         }
 
         /**
          * @brief Apply a function to all values (mutable)
-         * @tparam Func Function type
+         * @tparam Func Function type satisfying MutableKeyValueCallback concept
          * @param func Function to apply to each key-value pair
          */
-        template<typename Func>
+        template<concepts::MutableKeyValueCallback Func>
         void for_each_mut(Func&& func) {
             std::unique_lock lock(mutex_);
-            for (auto& [key, value] : values_) {
-                func(key, value);
+            for (auto& [key, val] : values_) {
+                func(key, val);
             }
         }
 
         /**
          * @brief Bulk update operation with minimal lock contention
-         * @tparam Func Function type that takes the entire map
+         * @tparam Func Function type satisfying ValueMapCallback concept
          * @param updater Function to perform bulk updates
          */
-        template<typename Func>
+        template<concepts::ValueMapCallback<value_map> Func>
         void bulk_update(Func&& updater) {
             std::unique_lock lock(mutex_);
             updater(values_);
@@ -227,11 +227,11 @@ namespace container_module
 
         /**
          * @brief Bulk read operation
-         * @tparam Func Function type that takes the entire map
+         * @tparam Func Function type satisfying ConstValueMapCallback concept
          * @param reader Function to perform bulk reads
          * @return Result of the reader function
          */
-        template<typename Func>
+        template<concepts::ConstValueMapCallback<value_map> Func>
         auto bulk_read(Func&& reader) const {
             std::shared_lock lock(mutex_);
             bulk_read_count_.fetch_add(1, std::memory_order_relaxed);
@@ -314,9 +314,10 @@ namespace container_module
 
         /**
          * @brief Get value from snapshot (lock-protected read of snapshot)
+         * @tparam T The expected type (must be a valid variant type)
          * @note The snapshot may be stale; call update_snapshot() to refresh
          */
-        template<typename T>
+        template<concepts::ValueVariantType T>
         std::optional<T> get(std::string_view key) const {
             std::shared_lock lock(snapshot_mutex_);
             if (!snapshot_) return std::nullopt;

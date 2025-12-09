@@ -9,11 +9,13 @@ All rights reserved.
 
 #include "container/internal/value.h"
 #include "container/core/value_types.h"
+#include "container/core/concepts.h"
 #include <string>
 #include <string_view>
 #include <vector>
 #include <memory>
 #include <type_traits>
+#include <concepts>
 
 namespace container_module
 {
@@ -128,15 +130,13 @@ namespace container_module
      * - float → float_value
      * - double → double_value
      *
-     * @tparam T Numeric type (must be arithmetic)
+     * @tparam T Numeric type (must satisfy Arithmetic concept)
      * @param name Value name
      * @param value Numeric value
      * @return value with appropriate type
      */
-    template<typename T>
+    template<concepts::Arithmetic T>
     inline value make_numeric_value(std::string_view name, T value) {
-        static_assert(std::is_arithmetic_v<T>, "T must be an arithmetic type");
-
         if constexpr (std::is_same_v<T, bool>) {
             return make_bool_value(name, value);
         } else if constexpr (std::is_same_v<T, int16_t> || std::is_same_v<T, short>) {

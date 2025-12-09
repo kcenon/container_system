@@ -4,10 +4,12 @@
 
 #pragma once
 
+#include "container/core/concepts.h"
 #include <type_traits>
 #include <vector>
 #include <cstddef>
 #include <utility>
+#include <concepts>
 
 namespace container_module::core {
 
@@ -15,11 +17,11 @@ namespace container_module::core {
  * @brief Lightweight container enforcing trivially copyable payloads.
  *
  * Designed for SIMD optimized serialization paths where deterministic layout is required.
+ *
+ * @tparam TValue Type that must satisfy the TriviallyCopyable concept
  */
-template<typename TValue>
+template<container_module::concepts::TriviallyCopyable TValue>
 class typed_container {
-    static_assert(std::is_trivially_copyable_v<TValue>,
-                  "typed_container requires trivially copyable types for SIMD optimization");
 
 public:
     explicit typed_container(std::size_t reserve = 0) {

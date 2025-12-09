@@ -17,6 +17,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update CMake configuration to require C++20 std::format support
 
 ### Added
+- **C++20 Concepts Integration** (#172): Apply C++20 concepts from common_system for improved type safety and clearer error messages
+  - New `core/concepts.h` header with container-specific concepts
+  - `ValueVariantType` concept for type-safe value storage
+  - `Arithmetic`, `TriviallyCopyable` concepts for template constraints
+  - `KeyValueCallback`, `MutableKeyValueCallback` concepts for iteration functions
+  - Replaced `static_assert` with concept constraints for better compile-time errors
 - Comprehensive documentation unification across ecosystem
 - CHANGELOG.md and MIGRATION.md for better version tracking
 
