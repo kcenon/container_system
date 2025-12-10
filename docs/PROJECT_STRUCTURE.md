@@ -1,6 +1,6 @@
 # Container System Project Structure
 
-**Last Updated**: 2025-11-15
+**Last Updated**: 2025-12-10
 
 ## Overview
 
@@ -10,7 +10,28 @@ This document provides comprehensive information about the Container System proj
 
 ```
 container_system/
-├── 📁 include/container/           # Public API headers
+├── 📁 core/                        # Core container functionality
+│   ├── concepts.h                  # C++20 concepts for type validation (NEW)
+│   ├── container.h                 # Main container class
+│   ├── container.cpp               # Container implementation
+│   ├── typed_container.h           # SIMD-friendly typed container (uses TriviallyCopyable concept)
+│   ├── value_types.h               # Value type enumerations
+│   ├── value_types.cpp             # Value type implementation
+│   ├── value_store.h               # Value storage abstraction
+│   └── value_store.cpp             # Value storage implementation
+├── 📁 internal/                    # Internal implementations
+│   ├── value.h                     # Value class (uses ValueVariantType, ValueVisitor concepts)
+│   ├── value.cpp                   # Value implementation
+│   ├── thread_safe_container.h     # Thread-safe container (uses KeyValueCallback, MutableKeyValueCallback concepts)
+│   ├── thread_safe_container.cpp   # Thread-safe implementation
+│   ├── variant_value_factory.h     # Variant value factory (uses Arithmetic concept)
+│   ├── memory_pool.h               # Memory pool for allocations
+│   ├── simd_processor.h            # SIMD optimization utilities
+│   └── simd_processor.cpp          # SIMD implementation
+├── 📁 integration/                 # Integration helpers
+│   ├── messaging_integration.h     # Messaging integration (uses IntegralType, FloatingPointType, StringLike concepts)
+│   └── messaging_integration.cpp   # Messaging implementation
+├── 📁 include/container/           # Public API headers (compatibility)
 │   ├── 📁 core/                    # Core container functionality
 │   │   ├── container.h             # Main container class
 │   │   ├── value.h                 # Abstract value base class
@@ -149,7 +170,50 @@ container_system/
 
 ## Core Module Files
 
-### Container Core (`include/container/core/`)
+### Container Core (`core/`)
+
+#### `concepts.h`
+**Purpose**: C++20 concepts for container_system type validation
+
+**Key Features**:
+- Compile-time type constraints with clear error messages
+- Replaces SFINAE-based constraints
+- Integration with common_system concepts
+
+**Requirements**:
+- C++20 compiler with concepts support
+- GCC 10+, Clang 10+, MSVC 2022+
+
+**Defined Concepts**:
+
+| Category | Concepts |
+|----------|----------|
+| Type Constraints | `Arithmetic`, `IntegralType`, `FloatingPointType`, `SignedIntegral`, `UnsignedIntegral`, `TriviallyCopyable` |
+| Value Types | `ValueVariantType`, `NumericValueType`, `StringLike`, `ByteContainer` |
+| Callbacks | `ValueVisitor`, `KeyValueCallback`, `MutableKeyValueCallback`, `ValueMapCallback`, `ConstValueMapCallback` |
+| Serialization | `Serializable`, `JsonSerializable` |
+| Container | `ContainerValue` |
+
+**Usage Example**:
+```cpp
+#include <container/core/concepts.h>
+using namespace container_module::concepts;
+
+// Using TriviallyCopyable for SIMD-friendly containers
+template<TriviallyCopyable TValue>
+class typed_container { /* ... */ };
+
+// Using KeyValueCallback for iteration
+template<KeyValueCallback Func>
+void for_each(Func&& func) const;
+```
+
+**Integration Points**:
+- `typed_container.h` - Uses `TriviallyCopyable` concept
+- `thread_safe_container.h` - Uses `KeyValueCallback`, `MutableKeyValueCallback`, `ValueMapCallback`, `ConstValueMapCallback`
+- `value.h` - Uses `ValueVariantType`, `ValueVisitor`
+- `variant_value_factory.h` - Uses `Arithmetic`
+- `messaging_integration.h` - Uses `IntegralType`, `FloatingPointType`, `StringLike`
 
 #### `container.h` / `container.cpp`
 **Purpose**: Main container class providing header management and value storage
@@ -517,7 +581,9 @@ utilities_module (external dependency)
 | **googletest** | Unit testing framework | 1.14+ | Test only |
 | **google-benchmark** | Performance benchmarking | 1.8+ | Test only |
 
-> **Note**: String formatting uses C++20 `std::format` (requires GCC 13+, Clang 14+, or MSVC 19.29+).
+> **Note**: This project requires C++20 features:
+> - **C++20 Concepts**: Type validation (requires GCC 10+, Clang 10+, or MSVC 2022+)
+> - **`std::format`**: String formatting (requires GCC 13+, Clang 14+, or MSVC 19.29+)
 
 ### Optional Integration Dependencies
 
@@ -636,5 +702,5 @@ namespace container_module {
 
 ---
 
-**Last Updated**: 2025-11-15
-**Version**: 1.0
+**Last Updated**: 2025-12-10
+**Version**: 1.1

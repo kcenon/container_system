@@ -2,7 +2,7 @@
 
 **언어:** [English](PROJECT_STRUCTURE.md) | **한국어**
 
-**최종 업데이트**: 2025-11-28
+**최종 업데이트**: 2025-12-10
 
 ## 개요
 
@@ -12,7 +12,28 @@
 
 ```
 container_system/
-├── 📁 include/container/           # 공개 API 헤더
+├── 📁 core/                        # 코어 컨테이너 기능
+│   ├── concepts.h                  # 타입 검증을 위한 C++20 concepts (신규)
+│   ├── container.h                 # 메인 컨테이너 클래스
+│   ├── container.cpp               # 컨테이너 구현
+│   ├── typed_container.h           # SIMD 친화적 타입 컨테이너 (TriviallyCopyable concept 사용)
+│   ├── value_types.h               # Value 타입 열거형
+│   ├── value_types.cpp             # Value 타입 구현
+│   ├── value_store.h               # Value 저장소 추상화
+│   └── value_store.cpp             # Value 저장소 구현
+├── 📁 internal/                    # 내부 구현
+│   ├── value.h                     # Value 클래스 (ValueVariantType, ValueVisitor concepts 사용)
+│   ├── value.cpp                   # Value 구현
+│   ├── thread_safe_container.h     # 스레드 안전 컨테이너 (KeyValueCallback, MutableKeyValueCallback concepts 사용)
+│   ├── thread_safe_container.cpp   # 스레드 안전 구현
+│   ├── variant_value_factory.h     # Variant value 팩토리 (Arithmetic concept 사용)
+│   ├── memory_pool.h               # 할당을 위한 메모리 풀
+│   ├── simd_processor.h            # SIMD 최적화 유틸리티
+│   └── simd_processor.cpp          # SIMD 구현
+├── 📁 integration/                 # 통합 헬퍼
+│   ├── messaging_integration.h     # 메시징 통합 (IntegralType, FloatingPointType, StringLike concepts 사용)
+│   └── messaging_integration.cpp   # 메시징 구현
+├── 📁 include/container/           # 공개 API 헤더 (호환성)
 │   ├── 📁 core/                    # 코어 컨테이너 기능
 │   │   ├── container.h             # 메인 컨테이너 클래스
 │   │   ├── value.h                 # 추상 value 베이스 클래스
@@ -151,7 +172,50 @@ container_system/
 
 ## 코어 모듈 파일
 
-### Container Core (`include/container/core/`)
+### Container Core (`core/`)
+
+#### `concepts.h`
+**목적**: container_system 타입 검증을 위한 C++20 concepts
+
+**주요 기능**:
+- 명확한 오류 메시지와 함께 컴파일 타임 타입 제약
+- SFINAE 기반 제약 대체
+- common_system concepts와 통합
+
+**요구사항**:
+- C++20 concepts를 지원하는 컴파일러
+- GCC 10+, Clang 10+, MSVC 2022+
+
+**정의된 Concepts**:
+
+| 카테고리 | Concepts |
+|----------|----------|
+| 타입 제약 | `Arithmetic`, `IntegralType`, `FloatingPointType`, `SignedIntegral`, `UnsignedIntegral`, `TriviallyCopyable` |
+| 값 타입 | `ValueVariantType`, `NumericValueType`, `StringLike`, `ByteContainer` |
+| 콜백 | `ValueVisitor`, `KeyValueCallback`, `MutableKeyValueCallback`, `ValueMapCallback`, `ConstValueMapCallback` |
+| 직렬화 | `Serializable`, `JsonSerializable` |
+| 컨테이너 | `ContainerValue` |
+
+**사용 예시**:
+```cpp
+#include <container/core/concepts.h>
+using namespace container_module::concepts;
+
+// SIMD 친화적 컨테이너를 위한 TriviallyCopyable 사용
+template<TriviallyCopyable TValue>
+class typed_container { /* ... */ };
+
+// 반복을 위한 KeyValueCallback 사용
+template<KeyValueCallback Func>
+void for_each(Func&& func) const;
+```
+
+**통합 지점**:
+- `typed_container.h` - `TriviallyCopyable` concept 사용
+- `thread_safe_container.h` - `KeyValueCallback`, `MutableKeyValueCallback`, `ValueMapCallback`, `ConstValueMapCallback` 사용
+- `value.h` - `ValueVariantType`, `ValueVisitor` 사용
+- `variant_value_factory.h` - `Arithmetic` 사용
+- `messaging_integration.h` - `IntegralType`, `FloatingPointType`, `StringLike` 사용
 
 #### `container.h` / `container.cpp`
 **목적**: 헤더 관리 및 value 저장소를 제공하는 메인 컨테이너 클래스
@@ -457,7 +521,9 @@ utilities_module (외부 의존성)
 | **googletest** | 유닛 테스팅 프레임워크 | 1.14+ | 테스트만 |
 | **google-benchmark** | 성능 벤치마킹 | 1.8+ | 테스트만 |
 
-> **참고**: 문자열 포매팅은 C++20 `std::format`을 사용합니다 (GCC 13+, Clang 14+, 또는 MSVC 19.29+ 필요).
+> **참고**: 이 프로젝트는 C++20 기능을 필요로 합니다:
+> - **C++20 Concepts**: 타입 검증 (GCC 10+, Clang 10+, 또는 MSVC 2022+ 필요)
+> - **`std::format`**: 문자열 포매팅 (GCC 13+, Clang 14+, 또는 MSVC 19.29+ 필요)
 
 ### 선택적 통합 의존성
 
@@ -531,8 +597,8 @@ cmake --build build --config Release
 
 ---
 
-**최종 업데이트**: 2025-11-28
-**버전**: 1.0
+**최종 업데이트**: 2025-12-10
+**버전**: 1.1
 
 ---
 
