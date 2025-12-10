@@ -1,28 +1,156 @@
 # container_system API 레퍼런스
 
-> **버전**: 2.0
-> **최종 업데이트**: 2025-11-21
-> **상태**: variant_value_v2로 마이그레이션 중 (Phase 2 진행 중)
+> **버전**: 2.1
+> **최종 업데이트**: 2025-12-10
+> **상태**: C++20 Concepts 통합 완료, variant_value_v2로 마이그레이션 중 (Phase 2 진행 중)
 
 ## 목차
 
 1. [네임스페이스](#네임스페이스)
-2. [variant_value_v2 (권장)](#variant_value_v2-권장)
-3. [Container](#container)
-4. [직렬화/역직렬화](#직렬화역직렬화)
+2. [C++20 Concepts](#c20-concepts)
+3. [variant_value_v2 (권장)](#variant_value_v2-권장)
+4. [Container](#container)
+5. [직렬화/역직렬화](#직렬화역직렬화)
 
 ---
 
 ## 네임스페이스
 
-### `kcenon::container`
+### `container_module`
 
 container_system의 모든 공개 API는 이 네임스페이스에 포함됩니다.
+
+**하위 네임스페이스**:
+- `container_module::concepts` - 타입 검증을 위한 C++20 concepts
 
 **포함 항목**:
 - `variant_value_v2` - 차세대 Value 시스템 (권장)
 - `container` - 값 컨테이너
 - 직렬화 함수들
+- 컴파일 타임 타입 검증을 위한 C++20 concepts
+
+---
+
+## C++20 Concepts
+
+### 개요
+
+**헤더**: `#include <container/core/concepts.h>`
+
+**설명**: container_system 타입 검증을 위한 C++20 concepts. SFINAE 기반 제약을 대체하여 명확한 오류 메시지와 함께 컴파일 타임 검증을 제공합니다.
+
+**요구사항**:
+- C++20 concepts를 지원하는 컴파일러
+- GCC 10+, Clang 10+, MSVC 2022+
+
+### 타입 제약 Concepts
+
+#### `Arithmetic`
+
+```cpp
+template<typename T>
+concept Arithmetic = std::is_arithmetic_v<T>;
+```
+
+**설명**: 산술 타입 (정수 또는 부동소수점).
+
+**예시**:
+```cpp
+#include <container/core/concepts.h>
+using namespace container_module::concepts;
+
+template<Arithmetic T>
+value make_numeric_value(std::string_view name, T val);
+
+// 사용법
+auto v1 = make_numeric_value("count", 42);      // OK: int는 산술 타입
+auto v2 = make_numeric_value("rate", 3.14);     // OK: double은 산술 타입
+// auto v3 = make_numeric_value("name", "test"); // 오류: const char*는 산술 타입이 아님
+```
+
+#### `TriviallyCopyable`
+
+```cpp
+template<typename T>
+concept TriviallyCopyable = std::is_trivially_copyable_v<T>;
+```
+
+**설명**: memcpy로 안전하게 복사할 수 있는 타입. SIMD 최적화 연산이나 결정적 메모리 레이아웃이 필요한 타입에 사용합니다.
+
+**예시**:
+```cpp
+#include <container/core/concepts.h>
+using namespace container_module::concepts;
+
+// SIMD 친화적 배치를 위한 typed_container에서 사용
+template<TriviallyCopyable TValue>
+class typed_container {
+    std::vector<TValue> values_;
+public:
+    void push(const TValue& value) { values_.push_back(value); }
+};
+
+// 사용법
+typed_container<int> int_container;       // OK: int는 trivially copyable
+typed_container<double> double_container; // OK: double은 trivially copyable
+// typed_container<std::string> str_container; // 오류: std::string은 trivially copyable이 아님
+```
+
+### 값 타입 Concepts
+
+#### `ValueVariantType`
+
+**설명**: ValueVariant에 저장할 수 있는 유효한 타입.
+
+**유효한 타입**:
+- `std::monostate` (null)
+- `bool`
+- `int16_t`, `uint16_t`, `int32_t`, `uint32_t`, `int64_t`, `uint64_t`
+- `float`, `double`
+- `std::string`
+- `std::vector<uint8_t>` (bytes)
+- `std::shared_ptr<thread_safe_container>`
+- `array_variant`
+
+### 콜백 Concepts
+
+#### `KeyValueCallback`
+
+```cpp
+template<typename F>
+concept KeyValueCallback = std::invocable<F, const std::string&, const value&>;
+```
+
+**설명**: const 키-값 쌍 반복을 위한 호출 가능 타입.
+
+**예시**:
+```cpp
+#include <container/core/concepts.h>
+using namespace container_module::concepts;
+
+template<KeyValueCallback Func>
+void for_each(Func&& func) const;
+
+// 사용법
+container.for_each([](const std::string& key, const value& val) {
+    std::cout << key << ": " << val.to_string() << std::endl;
+});
+```
+
+### Concepts 요약 표
+
+| Concept | 설명 | 사용처 |
+|---------|------|-------|
+| `Arithmetic` | 정수 또는 부동소수점 타입 | 숫자 값 생성을 위한 템플릿 제약 |
+| `IntegralType` | 정수 타입 | 메시징 통합에서 타입 검사 |
+| `FloatingPointType` | 부동소수점 타입 | 메시징 통합에서 타입 검사 |
+| `TriviallyCopyable` | memcpy/SIMD 안전 타입 | `typed_container` 템플릿 제약 |
+| `ValueVariantType` | `ValueVariant`에 유효한 타입 | 타입 안전 값 연산 |
+| `StringLike` | 문자열 변환 가능 타입 | 문자열 값 처리 |
+| `KeyValueCallback` | const 반복 콜백 | `for_each()` 함수 |
+| `MutableKeyValueCallback` | 가변 반복 콜백 | `for_each_mut()` 함수 |
+| `Serializable` | 직렬화 메서드 보유 타입 | 직렬화 지원 |
+| `JsonSerializable` | JSON 직렬화 타입 | JSON 출력 지원 |
 
 ---
 
@@ -30,7 +158,7 @@ container_system의 모든 공개 API는 이 네임스페이스에 포함됩니�
 
 ### 개요
 
-**헤더**: `#include <kcenon/container/values/variant_value_v2.h>`
+**헤더**: `#include <container/values/variant_value_v2.h>`
 
 **설명**: 고성능 타입 안전 variant value 구현 (4.39배 성능 향상)
 
@@ -42,9 +170,9 @@ container_system의 모든 공개 API는 이 네임스페이스에 포함됩니�
 ### 생성 및 접근
 
 ```cpp
-#include <kcenon/container/values/variant_value_v2.h>
+#include <container/values/variant_value_v2.h>
 
-using namespace kcenon::container;
+using namespace container_module;
 
 // 생성
 variant_value_v2 val_int(42);
@@ -134,16 +262,16 @@ void set(const T& value);
 
 ### container 클래스
 
-**헤더**: `#include <kcenon/container/container.h>`
+**헤더**: `#include <container/container.h>`
 
 **설명**: Key-Value 저장소
 
 #### 생성 및 사용
 
 ```cpp
-#include <kcenon/container/container.h>
+#include <container/container.h>
 
-using namespace kcenon::container;
+using namespace container_module;
 
 container c;
 
@@ -211,9 +339,9 @@ bool remove(const std::string& key);
 ### JSON 직렬화
 
 ```cpp
-#include <kcenon/container/serialization.h>
+#include <container/serialization.h>
 
-using namespace kcenon::container;
+using namespace container_module;
 
 container c;
 c.add("name", variant_value_v2("Alice"));
@@ -289,6 +417,10 @@ int i = val_new.get<int>();
 - **Phase 1**: ✅ 완료 (2025-11-06)
   - variant_value_v2 구현
   - 19/19 테스트 통과
+- **C++20 Concepts**: ✅ 완료 (2025-12-09)
+  - 타입 검증을 위한 C++20 concepts 통합
+  - SFINAE 기반 제약을 명확한 오류 메시지로 대체
+  - `core/concepts.h`에 18개 concepts 추가
 - **Phase 2**: 🔄 진행 중
   - 핵심 컨테이너 마이그레이션
   - 팩토리 함수 구현
@@ -298,9 +430,11 @@ int i = val_new.get<int>();
 
 - **새 코드**: variant_value_v2 사용 (권장)
 - **기존 코드**: 점진적 마이그레이션 (MIGRATION_GUIDE 참조)
+- **타입 제약**: 컴파일 타임 검증을 위해 C++20 concepts 사용
 
 ---
 
 **작성일**: 2025-11-21
-**버전**: 2.0
+**수정일**: 2025-12-10
+**버전**: 2.1
 **관리자**: kcenon@naver.com
