@@ -1,7 +1,7 @@
 # variant_value_v2 Migration Guide
 
 > **Status**: Ready for Production
-> **Version**: 2.0.0
+> **Version**: 0.2.0.0
 > **Last Updated**: 2025-11-08
 >
 > ⚠️ **IMPORTANT**: As of version 2.0, the polymorphic `value` class and `variant_value` v1 are officially **DEPRECATED**
@@ -763,6 +763,6 @@ variant_value_v2 val("num", long long(123));
 
 ---
 
-*Document Version: 1.0.0*
+*Document Version: 0.1.0.0*
 *Last Updated: 2025-11-06*
 *Author: Container System Team*

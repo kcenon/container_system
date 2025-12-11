@@ -6,7 +6,7 @@
 
 This guide describes how to integrate container_system with other modules in the ecosystem. Container System provides type-safe serialization and data storage that seamlessly integrates with messaging, network, and database systems.
 
-**Version:** 1.0.0
+**Version:** 0.1.0.0
 **Last Updated:** 2025-10-22
 
 ---

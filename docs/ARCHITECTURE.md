@@ -1,6 +1,6 @@
 # Architecture Documentation - Container System
 
-> **Version:** 1.0.0
+> **Version:** 0.1.0.0
 > **Last Updated:** 2025-10-22
 > **Language:** **English** | [한국어](ARCHITECTURE_KO.md)
 
@@ -1098,5 +1098,5 @@ This architecture serves as the foundation for all data serialization needs acro
 
 **Maintainer:** kcenon@naver.com
 **License:** BSD 3-Clause
-**Version:** 1.0.0
+**Version:** 0.1.0.0
 **Last Updated:** 2025-10-22
