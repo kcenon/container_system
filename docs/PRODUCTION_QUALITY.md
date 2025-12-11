@@ -804,5 +804,5 @@ python scripts/compare_benchmarks.py \
 ---
 
 **Last Updated**: 2025-11-15
-**Version**: 1.0
+**Version**: 0.1.0
 **Quality Status**: Production-Ready ✅

@@ -1,6 +1,6 @@
 # Structure Documentation - Container System
 
-> **Version:** 1.0.0
+> **Version:** 0.1.0.0
 > **Last Updated:** 2025-10-22
 > **Language:** **English** | [한국어](STRUCTURE_KO.md)
 
@@ -690,5 +690,5 @@ SANITIZER_TEST_RESULTS_KO.md            # Korean sanitizer results
 
 **Maintainer:** kcenon@naver.com
 **License:** BSD 3-Clause
-**Version:** 1.0.0
+**Version:** 0.1.0.0
 **Last Updated:** 2025-10-22

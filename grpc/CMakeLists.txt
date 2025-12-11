@@ -8,7 +8,7 @@
 # No modifications to existing code are required.
 
 cmake_minimum_required(VERSION 3.16)
-project(container_grpc VERSION 1.0.0 LANGUAGES CXX)
+project(container_grpc VERSION 0.1.0.0 LANGUAGES CXX)
 
 # =============================================================================
 # Options
