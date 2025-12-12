@@ -1,6 +1,6 @@
 /** \mainpage Container System Documentation
 
-The Container System is a comprehensive, production-ready C++20 type-safe container framework designed to democratize structured data management. By providing intuitive abstractions and robust implementations, it empowers developers of all skill levels to build high-performance, thread-safe applications with efficient data serialization and messaging capabilities.
+The Container System is a comprehensive, modern C++20 type-safe container framework designed to democratize structured data management. By providing intuitive abstractions and robust implementations, it empowers developers of all skill levels to build high-performance, thread-safe applications with efficient data serialization and messaging capabilities.
 
 \section mission Mission & Vision
 
