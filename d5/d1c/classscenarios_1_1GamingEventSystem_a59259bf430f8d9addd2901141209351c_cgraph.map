@@ -1,0 +1,24 @@
+<map id="scenarios::GamingEventSystem::send_achievement_notification" name="scenarios::GamingEventSystem::send_achievement_notification">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,193,239,233"/>
+<area shape="rect" id="Node000002" href="$d0/dcd/classcontainer__module_1_1integration_1_1messaging__container__builder.html#a70981bba692bd185814812957472c6ec" title=" " alt="" coords="307,41,528,96"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="148,190,209,149,285,106,304,98,306,103,288,111,212,153,151,195"/>
+<area shape="rect" id="Node000008" href="$d0/dcd/classcontainer__module_1_1integration_1_1messaging__container__builder.html#ae2f2b773fb7248be85f92bd6265efab4" title=" " alt="" coords="287,121,548,161"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="204,190,321,161,322,167,205,195"/>
+<area shape="rect" id="Node000009" href="$d0/dcd/classcontainer__module_1_1integration_1_1messaging__container__builder.html#a56f2ae6cae82bd445e889788db53e2da" title=" " alt="" coords="307,185,528,240"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="239,210,293,210,293,215,239,215"/>
+<area shape="rect" id="Node000010" href="$d0/dcd/classcontainer__module_1_1integration_1_1messaging__container__builder.html#a2c82ff350d7cb1efb87bdc6128a95a5c" title=" " alt="" coords="307,264,528,319"/>
+<area shape="poly" id="edge10_Node000001_Node000010" title=" " alt="" coords="199,230,301,258,300,263,197,235"/>
+<area shape="rect" id="Node000011" href="$d0/dcd/classcontainer__module_1_1integration_1_1messaging__container__builder.html#a71aa40744bafcb49d34270698dbc4341" title=" " alt="" coords="307,343,528,397"/>
+<area shape="poly" id="edge11_Node000001_Node000011" title=" " alt="" coords="148,231,209,280,247,306,288,329,301,335,299,340,285,334,244,311,206,284,144,235"/>
+<area shape="rect" id="Node000003" href="$d5/df9/classcontainer__module_1_1value.html#aef0c634b18712374d422801f269ff0e9" title="Serialize to binary format (legacy compatible)" alt="" coords="596,49,779,89"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="528,66,582,66,582,71,528,71"/>
+<area shape="rect" id="Node000004" href="$d5/df9/classcontainer__module_1_1value.html#aa105a05c2bb9ce88d5bd54610aae7103" title="Serialize data portion based on type." alt="" coords="827,49,1009,89"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="779,75,813,75,813,80,779,80"/>
+<area shape="rect" id="Node000007" href="$d5/df9/classcontainer__module_1_1value.html#a19a827e03777e6214b597f5c9e5e8b35" title="Get the value_types enum (NOT variant::index()!)" alt="" coords="827,113,1009,153"/>
+<area shape="poly" id="edge7_Node000003_Node000007" title=" " alt="" coords="761,86,833,106,832,112,759,91"/>
+<area shape="poly" id="edge5_Node000004_Node000003" title=" " alt="" coords="826,63,792,62,792,57,826,57"/>
+<area shape="rect" id="Node000005" href="$d7/d23/structcontainer__module_1_1detail_1_1circular__ref__guard.html#a7109e68223164ea84e0fcc24b770c3bf" title=" " alt="" coords="1057,5,1241,60"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="1009,52,1043,46,1044,52,1010,57"/>
+<area shape="rect" id="Node000006" href="$d5/df9/classcontainer__module_1_1value.html#a8fd9176e2a29a65418b51dee4cb6a30d" title="Apply visitor to contained value (const)" alt="" coords="1058,85,1241,125"/>
+<area shape="poly" id="edge6_Node000004_Node000006" title=" " alt="" coords="1010,80,1045,86,1044,91,1009,86"/>
+</map>
