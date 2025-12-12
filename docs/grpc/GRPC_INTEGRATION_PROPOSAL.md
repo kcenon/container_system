@@ -28,7 +28,7 @@
     - [Milestone 2: Adapter Implementation (Week 3-4)](#milestone-2-adapter-implementation-week-3-4)
     - [Milestone 3: Service Layer (Week 5)](#milestone-3-service-layer-week-5)
     - [Milestone 4: Native Integration (Week 6-7)](#milestone-4-native-integration-week-6-7)
-    - [Milestone 5: Production Ready (Week 8)](#milestone-5-production-ready-week-8)
+    - [Milestone 5: Final Integration (Week 8)](#milestone-5-final-integration-week-8)
 - [5. Resource Requirements](#5-resource-requirements)
   - [5.1 Team Composition](#51-team-composition)
   - [5.2 Infrastructure](#52-infrastructure)
