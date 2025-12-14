@@ -196,9 +196,8 @@ scripts\build.bat            # Windows (CMD)
 
 ### 시작하기
 - 📖 [빠른 시작 가이드](docs/guides/QUICK_START.md)
-- 🔧 [빌드 가이드](docs/guides/BUILD_GUIDE.md)
-- ✅ [모범 사례](docs/guides/BEST_PRACTICES.md)
 - 🔍 [문제 해결](docs/guides/TROUBLESHOOTING.md)
+- 📋 [FAQ](docs/guides/FAQ.md) - 자주 묻는 질문
 
 ### 핵심 문서
 - 📚 [기능](docs/FEATURES.md) - 전체 기능 문서
@@ -209,17 +208,12 @@ scripts\build.bat            # Windows (CMD)
 ### 기술 가이드
 - 🏛️ [아키텍처](docs/ARCHITECTURE.md) - 시스템 설계 및 패턴
 - 📘 [API 레퍼런스](docs/API_REFERENCE.md) - 전체 API 문서
-- 📗 [사용자 가이드](docs/USER_GUIDE.md) - 사용 패턴 및 값 타입
-- 🚀 [성능](docs/PERFORMANCE.md) - SIMD 최적화 가이드
-- 🔗 [통합](docs/INTEGRATION.md) - 생태계 통합
-
-### 문제 해결
-- 🔁 [문제 해결 가이드](docs/guides/TROUBLESHOOTING.md)는 직렬화 실패, SIMD 비활성화, 통합 오류 시 `result.error()`를 어떻게 해석할지 단계별로 안내합니다.
+- 🚀 [성능](docs/performance/PERFORMANCE.md) - SIMD 최적화 가이드
+- 🔗 [통합](docs/guides/INTEGRATION.md) - 생태계 통합
 
 ### 개발
-- 🤝 [기여하기](docs/CONTRIBUTING.md) - 기여 가이드라인
-- 🔄 [마이그레이션](docs/MIGRATION.md) - messaging_system에서 마이그레이션
-- 📋 [FAQ](docs/guides/FAQ.md) - 자주 묻는 질문
+- 🔄 [마이그레이션](docs/guides/MIGRATION.md) - messaging_system에서 마이그레이션
+- 🧪 [테스팅](docs/contributing/TESTING.md) - 테스트 가이드라인
 
 **언어 지원**: 대부분의 문서는 영어와 한국어(`*_KO.md`)로 제공됩니다.
 
