@@ -60,17 +60,30 @@ int main() {
 }
 ```
 
-### Prerequisites
+### Requirements
 
-- **Compiler**: C++20 capable (GCC 11+, Clang 14+, MSVC 2022+, Apple Clang 14+)
-- **Build System**: CMake 3.20+
-- **Package Manager**: vcpkg (auto-installed by scripts)
+| Dependency | Version | Required | Description |
+|------------|---------|----------|-------------|
+| C++20 Compiler | GCC 10+ / Clang 10+ / Apple Clang 12+ / MSVC 2022+ | Yes | C++20 Concepts support required |
+| CMake | 3.20+ | Yes | Build system |
+| common_system | latest | Yes | C++20 Concepts and common interfaces |
+| vcpkg | latest | Optional | Package management (recommended) |
 
 ### Installation
 
+#### Step 1: Clone Dependencies
+
 ```bash
-# Clone repository
+# Clone common_system (required)
+git clone https://github.com/kcenon/common_system.git
+
+# Clone container_system
 git clone https://github.com/kcenon/container_system.git
+```
+
+#### Step 2: Install Dependencies and Build
+
+```bash
 cd container_system
 
 # Install dependencies (cross-platform)

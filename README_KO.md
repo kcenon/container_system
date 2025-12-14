@@ -60,17 +60,30 @@ int main() {
 }
 ```
 
-### 사전 요구사항
+### 요구사항
 
-- **컴파일러**: C++17 지원 (GCC 7+, Clang 5+, MSVC 2017+)
-- **빌드 시스템**: CMake 3.16+
-- **패키지 매니저**: vcpkg (스크립트로 자동 설치)
+| 의존성 | 버전 | 필수 | 설명 |
+|--------|------|------|------|
+| C++20 컴파일러 | GCC 10+ / Clang 10+ / Apple Clang 12+ / MSVC 2022+ | 예 | C++20 Concepts 지원 필요 |
+| CMake | 3.20+ | 예 | 빌드 시스템 |
+| common_system | latest | 예 | C++20 Concepts 및 공통 인터페이스 |
+| vcpkg | latest | 선택 | 패키지 관리 (권장) |
 
 ### 설치
 
+#### 1단계: 의존성 복제
+
 ```bash
-# 저장소 복제
+# common_system 복제 (필수)
+git clone https://github.com/kcenon/common_system.git
+
+# container_system 복제
 git clone https://github.com/kcenon/container_system.git
+```
+
+#### 2단계: 의존성 설치 및 빌드
+
+```bash
 cd container_system
 
 # 의존성 설치 (크로스 플랫폼)

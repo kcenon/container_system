@@ -5,9 +5,12 @@ This module provides a consistent interface for finding dependencies across
 different configurations:
   1. Cache variable (e.g., COMMON_SYSTEM_ROOT)
   2. Environment variable (e.g., $ENV{COMMON_SYSTEM_ROOT})
-  3. Sibling directory (e.g., ../common_system)
-  4. Subdirectory (e.g., ./common_system)
+  3. Sibling directory (e.g., ../common_system) - for local development
+  4. Subdirectory (e.g., ./common_system) - for CI workflow (actions/checkout)
   5. FetchContent fallback (if UNIFIED_ALLOW_FETCHCONTENT is ON)
+
+Note: CI workflow uses actions/checkout to clone common_system into the
+workspace as a subdirectory. This is handled by option 4 above.
 
 Usage:
   include(cmake/UnifiedDependencies.cmake)
