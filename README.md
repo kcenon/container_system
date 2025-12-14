@@ -196,9 +196,8 @@ scripts\build.bat            # Windows (CMD)
 
 ### Getting Started
 - 📖 [Quick Start Guide](docs/guides/QUICK_START.md)
-- 🔧 [Build Guide](docs/guides/BUILD_GUIDE.md)
-- ✅ [Best Practices](docs/guides/BEST_PRACTICES.md)
 - 🔍 [Troubleshooting](docs/guides/TROUBLESHOOTING.md)
+- 📋 [FAQ](docs/guides/FAQ.md) - Frequently asked questions
 
 ### Core Documentation
 - 📚 [Features](docs/FEATURES.md) - Complete feature documentation
@@ -209,17 +208,12 @@ scripts\build.bat            # Windows (CMD)
 ### Technical Guides
 - 🏛️ [Architecture](docs/ARCHITECTURE.md) - System design and patterns
 - 📘 [API Reference](docs/API_REFERENCE.md) - Complete API documentation
-- 📗 [User Guide](docs/USER_GUIDE.md) - Usage patterns and value types
-- 🚀 [Performance](docs/PERFORMANCE.md) - SIMD optimization guide
-
-### Troubleshooting
-- 🔁 [Troubleshooting Guide](docs/guides/TROUBLESHOOTING.md) consolidates the most common `Result<T>` failures (serialization, SIMD detection, integrations) and provides a quick checklist for interpreting `err.code` / `err.message`.
-- 🔗 [Integration](docs/INTEGRATION.md) - Ecosystem integration
+- 🚀 [Performance](docs/performance/PERFORMANCE.md) - SIMD optimization guide
+- 🔗 [Integration](docs/guides/INTEGRATION.md) - Ecosystem integration
 
 ### Development
-- 🤝 [Contributing](docs/CONTRIBUTING.md) - Contribution guidelines
-- 🔄 [Migration](docs/MIGRATION.md) - Migration from messaging_system
-- 📋 [FAQ](docs/guides/FAQ.md) - Frequently asked questions
+- 🔄 [Migration](docs/guides/MIGRATION.md) - Migration from messaging_system
+- 🧪 [Testing](docs/contributing/TESTING.md) - Testing guidelines
 
 **Language Support**: Most documents available in English and Korean (`*_KO.md`)
 
