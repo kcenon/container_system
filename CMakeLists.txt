@@ -449,13 +449,8 @@ endif()
 include(GNUInstallDirs)
 
 # Install adapter headers if BUILD_WITH_COMMON_SYSTEM is enabled
-if(BUILD_WITH_COMMON_SYSTEM)
-    install(FILES
-        ${CMAKE_CURRENT_SOURCE_DIR}/include/container/adapters/common_result_adapter.h
-        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/container/adapters
-        COMPONENT Development
-    )
-endif()
+# Note: The adapters are already installed as part of the kcenon/ directory below
+# The include/container/adapters/ path was incorrect and has been removed
 
 install(DIRECTORY
     ${CMAKE_CURRENT_SOURCE_DIR}/kcenon
