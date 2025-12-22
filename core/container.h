@@ -215,8 +215,13 @@ namespace container_module
 
 } // namespace container_module
 
-// Optional common system integration
-#ifdef CONTAINER_USE_COMMON_SYSTEM
+// Include feature flags for unified macro detection
+#if __has_include(<kcenon/common/config/feature_flags.h>)
+    #include <kcenon/common/config/feature_flags.h>
+#endif
+
+// Optional common system integration (using unified KCENON_HAS_COMMON_SYSTEM flag)
+#if KCENON_HAS_COMMON_SYSTEM
     #if __has_include(<kcenon/common/patterns/result.h>)
         #include <kcenon/common/patterns/result.h>
         #define CONTAINER_HAS_COMMON_RESULT 1
@@ -241,7 +246,7 @@ namespace container_module
 #include <unordered_map>
 #include <optional>
 
-#ifdef CONTAINER_USE_COMMON_SYSTEM
+#if KCENON_HAS_COMMON_SYSTEM
 #if __has_include(<kcenon/common/patterns/result.h>)
 #include <kcenon/common/patterns/result.h>
 #elif __has_include(<common/patterns/result.h>)
@@ -536,7 +541,7 @@ namespace container_module
 		bool deserialize(const std::vector<uint8_t>& data_array,
 					 bool parse_only_header = true);
 
-#ifdef CONTAINER_USE_COMMON_SYSTEM
+#if KCENON_HAS_COMMON_SYSTEM
 		/**
 		 * @brief Deserialize returning common_system result to carry error context.
 		 * @exception_safety Strong guarantee - no changes on error
