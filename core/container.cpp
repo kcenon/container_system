@@ -493,7 +493,7 @@ bool value_container::deserialize(const std::vector<uint8_t>& data_array,
 	return deserialize(strVal, parse_only_header);
 }
 
-#ifdef CONTAINER_USE_COMMON_SYSTEM
+#if KCENON_HAS_COMMON_SYSTEM
 	kcenon::common::VoidResult value_container::deserialize_result(
 		const std::string& data_str,
 		bool parse_only_header) noexcept
