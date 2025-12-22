@@ -212,7 +212,7 @@ namespace container_module {
         // Messaging system integration
     }
 
-    // Adapters (when BUILD_WITH_COMMON_SYSTEM is enabled)
+    // Adapters (when KCENON_HAS_COMMON_SYSTEM is enabled)
     namespace adapters {
         class serialization_result_adapter;
         class deserialization_result_adapter;
@@ -459,7 +459,7 @@ MessagingSystem::container             # messaging_system compatibility
 ```cmake
 # Feature flags
 BUILD_CONTAINERSYSTEM_AS_SUBMODULE    # Build as submodule (OFF)
-BUILD_WITH_COMMON_SYSTEM              # Enable common_system integration (OFF)
+BUILD_WITH_COMMON_SYSTEM              # Enable common_system integration (ON, defines KCENON_HAS_COMMON_SYSTEM)
 ENABLE_MESSAGING_FEATURES             # Messaging optimizations (ON)
 ENABLE_EXTERNAL_INTEGRATION           # External integration (ON)
 ENABLE_PERFORMANCE_METRICS            # Performance metrics (OFF)

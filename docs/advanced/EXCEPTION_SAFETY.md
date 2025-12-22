@@ -80,7 +80,7 @@ bool deserialize(const std::vector<uint8_t>& data_array, bool parse_only_header 
 #### Result-based Alternatives (Recommended)
 
 ```cpp
-#ifdef CONTAINER_USE_COMMON_SYSTEM
+#if KCENON_HAS_COMMON_SYSTEM
 /**
  * @brief Deserialize with detailed error information
  * @exception_safety Strong guarantee - no changes on error

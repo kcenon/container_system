@@ -286,8 +286,8 @@ if (result.is_ok()) {
 ### Build Configuration
 
 ```cmake
-# Enable common_system integration (optional)
-set(BUILD_WITH_COMMON_SYSTEM ON)
+# Enable common_system integration (now mandatory)
+# KCENON_HAS_COMMON_SYSTEM is automatically defined when common_system is found
 
 find_package(container_system CONFIG REQUIRED)
 find_package(common_system CONFIG REQUIRED)
