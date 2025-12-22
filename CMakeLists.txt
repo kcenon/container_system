@@ -181,7 +181,7 @@ if(BUILD_WITH_COMMON_SYSTEM)
     target_include_directories(container_system PUBLIC
         $<BUILD_INTERFACE:${common_system_INCLUDE_DIR}>
     )
-    target_compile_definitions(container_system PUBLIC BUILD_WITH_COMMON_SYSTEM CONTAINER_USE_COMMON_SYSTEM)
+    target_compile_definitions(container_system PUBLIC KCENON_HAS_COMMON_SYSTEM=1)
 endif()
 
 # Create aliases for consistent naming and messaging system compatibility

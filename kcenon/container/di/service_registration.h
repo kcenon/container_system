@@ -17,7 +17,12 @@
 #include <memory>
 #include <functional>
 
-#ifdef BUILD_WITH_COMMON_SYSTEM
+// Include feature flags for unified macro detection
+#if __has_include(<kcenon/common/config/feature_flags.h>)
+    #include <kcenon/common/config/feature_flags.h>
+#endif
+
+#if KCENON_HAS_COMMON_SYSTEM
 
 #include <kcenon/common/di/service_container.h>
 
@@ -286,4 +291,4 @@ inline common::VoidResult register_all_container_services(
 
 } // namespace kcenon::container::di
 
-#endif // BUILD_WITH_COMMON_SYSTEM
+#endif // KCENON_HAS_COMMON_SYSTEM
