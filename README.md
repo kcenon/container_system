@@ -60,6 +60,32 @@ int main() {
 }
 ```
 
+### Dependencies
+
+container_system has a **minimal dependency architecture** - the cleanest in the ecosystem:
+
+```
+container_system
+       │
+       ▼
+common_system (ONLY required ecosystem dependency)
+```
+
+| Aspect | Status | Notes |
+|--------|--------|-------|
+| Required ecosystem dependencies | 1 | Only common_system |
+| Optional ecosystem dependencies | 0 | No conditional compilation needed |
+| Circular dependency risk | None | Only depends downward |
+| Isolated build | ✅ | Can build with only common_system |
+
+**Why this matters:**
+- Faster compilation times
+- Easier testing and debugging
+- Clear architectural boundaries
+- Reduced coupling with other modules
+
+📖 **[Minimal Dependency Architecture →](docs/ARCHITECTURE.md#minimal-dependency-architecture)**
+
 ### Requirements
 
 | Dependency | Version | Required | Description |
