@@ -9,6 +9,7 @@
 ## Table of Contents
 
 - [Design Philosophy](#design-philosophy)
+- [Minimal Dependency Architecture](#minimal-dependency-architecture)
 - [Core Principles](#core-principles)
 - [System Architecture](#system-architecture)
 - [Component Architecture](#component-architecture)
@@ -55,6 +56,173 @@ The architecture prioritizes seamless integration with other ecosystem component
 - Native serialization formats optimized for each transport layer
 - Backward compatibility with legacy messaging_system containers
 - Extensible value type system for custom integrations
+
+---
+
+## Minimal Dependency Architecture
+
+container_system represents the **ideal dependency pattern** in the ecosystem, demonstrating how modules should be designed for maximum isolation and maintainability.
+
+### Dependency Philosophy
+
+#### Why Minimal Dependencies Matter
+
+1. **Build Isolation**: Modules with fewer dependencies are easier to build and test independently
+2. **Reduced Complexity**: Fewer dependencies mean fewer potential conflicts and easier debugging
+3. **Faster Compilation**: Minimal dependencies reduce compilation time significantly
+4. **Easier Maintenance**: Less coupling means changes in one module don't cascade to others
+5. **Clearer Architecture**: Simple dependency graphs are easier to understand and maintain
+
+#### How container_system Achieves Isolation
+
+container_system has the cleanest dependency structure in the ecosystem:
+
+```
+container_system
+       │
+       ▼
+common_system (ONLY required dependency)
+```
+
+| Aspect | Status | Notes |
+|--------|--------|-------|
+| Required dependencies | 1 (common_system) | Minimal |
+| Optional dependencies | 0 | No conditional compilation required |
+| Circular dependency risk | NONE | Only depends downward |
+| Isolated build | ✅ | Can build with only common_system |
+
+### Key Design Decisions
+
+1. **Use Interfaces from common_system**: Instead of depending on concrete implementations from other modules, container_system uses abstract interfaces defined in common_system
+2. **External vs Ecosystem Dependencies**: External libraries (gRPC, Protobuf) are NOT ecosystem dependencies - they are optional external tools
+3. **Downward-Only Dependencies**: container_system only depends on lower-tier modules (common_system is Tier 0)
+
+### Integration Patterns
+
+#### How Other Modules Integrate with container_system
+
+Other modules in the ecosystem integrate **with** container_system, not the other way around:
+
+```
+┌────────────────────┐
+│  messaging_system  │ ──depends on──▶ container_system
+└────────────────────┘
+┌────────────────────┐
+│  network_system    │ ──depends on──▶ container_system
+└────────────────────┘
+┌────────────────────┐
+│  database_system   │ ──depends on──▶ container_system
+└────────────────────┘
+```
+
+This pattern ensures:
+- container_system remains lightweight and focused
+- Higher-level modules can use container serialization without adding dependencies to container_system
+- Clear layered architecture with unidirectional dependencies
+
+#### Messaging Integration Example
+
+When messaging_system needs container functionality:
+
+```cpp
+// messaging_system depends on container_system (NOT vice versa)
+#include <kcenon/container/core/container.h>
+
+namespace messaging_system {
+    // messaging_system uses container_system's types
+    void send_message(std::shared_ptr<container_module::value_container> container) {
+        auto serialized = container->serialize();
+        // ... send over network
+    }
+}
+```
+
+### External Dependencies
+
+container_system has optional external (non-ecosystem) dependencies:
+
+| Dependency | Type | Required | Purpose |
+|------------|------|----------|---------|
+| gRPC | External | Optional | RPC communication |
+| Protobuf | External | Optional | Protocol buffer serialization |
+| Google Test | External | Optional | Unit testing |
+| Google Benchmark | External | Optional | Performance benchmarking |
+
+These are **external** dependencies, not ecosystem dependencies. They:
+- Are conditionally compiled (can be disabled)
+- Don't affect the core functionality
+- Are only needed for specific features
+
+### Build Configuration
+
+#### Minimal Build (Core Only)
+
+```bash
+# Only requires common_system
+cmake -S . -B build \
+    -DENABLE_GRPC=OFF \
+    -DBUILD_TESTING=OFF \
+    -DBUILD_BENCHMARKS=OFF
+
+cmake --build build
+```
+
+#### With gRPC Support
+
+```bash
+cmake -S . -B build \
+    -DENABLE_GRPC=ON
+
+cmake --build build
+```
+
+#### With Full Testing
+
+```bash
+cmake -S . -B build \
+    -DBUILD_TESTING=ON \
+    -DBUILD_BENCHMARKS=ON
+
+cmake --build build
+```
+
+### Minimal Dependency Checklist
+
+Use this checklist when designing new modules or reviewing existing ones to achieve minimal dependency architecture:
+
+```markdown
+## Minimal Dependency Checklist
+
+- [ ] Only depend on lower-tier modules (common_system for Tier 1)
+- [ ] Use interfaces from common_system instead of direct module dependencies
+- [ ] External dependencies (gRPC, OpenSSL) are NOT ecosystem dependencies
+- [ ] All optional ecosystem integrations use conditional compilation
+- [ ] Module can build and test with only required dependencies
+- [ ] No circular dependency risk (only depends downward)
+- [ ] Clear separation between core functionality and optional features
+- [ ] Dependencies are documented in CMakeLists.txt and README
+```
+
+### Dependency Tier System
+
+The ecosystem follows a tier system for dependencies:
+
+```
+Tier 0: common_system (Foundation)
+    ↓
+Tier 1: container_system (Data Layer)
+    ↓
+Tier 2: messaging_system, network_system (Communication Layer)
+    ↓
+Tier 3: database_system (Storage Layer)
+    ↓
+Tier 4: Application modules
+```
+
+**Rules:**
+- Modules can only depend on modules in lower tiers
+- No circular dependencies allowed
+- External dependencies don't affect tier placement
 
 ---
 
