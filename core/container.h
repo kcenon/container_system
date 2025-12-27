@@ -30,7 +30,33 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
+/**
+ * @file core/container.h
+ * @brief Core container implementation
+ *
+ * @deprecated Direct inclusion of this header is deprecated.
+ *             Please use the canonical path:
+ *             #include <kcenon/container/container.h>
+ *             This direct include path will be removed in v0.5.0.0.
+ */
+
 #pragma once
+
+// =============================================================================
+// DEPRECATION WARNING
+// =============================================================================
+// Direct inclusion of core/container.h is deprecated.
+// Please migrate to the canonical include path:
+//     #include <kcenon/container/container.h>
+// This path will be removed in v0.5.0.0.
+// =============================================================================
+#ifndef CONTAINER_INTERNAL_INCLUDE
+    #if defined(__GNUC__) || defined(__clang__)
+        #pragma GCC warning "Deprecated: Use <kcenon/container/container.h> instead. Direct core/ includes will be removed in v0.5.0.0."
+    #elif defined(_MSC_VER)
+        #pragma message("warning: Deprecated: Use <kcenon/container/container.h> instead. Direct core/ includes will be removed in v0.5.0.0.")
+    #endif
+#endif
 
 #include "container/core/value_types.h"
 #include "container/core/typed_container.h"

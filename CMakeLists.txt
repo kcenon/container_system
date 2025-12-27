@@ -448,10 +448,16 @@ endif()
 
 include(GNUInstallDirs)
 
-# Install adapter headers if BUILD_WITH_COMMON_SYSTEM is enabled
-# Note: The adapters are already installed as part of the kcenon/ directory below
-# The include/container/adapters/ path was incorrect and has been removed
-
+# =============================================================================
+# Canonical Include Path Configuration
+# =============================================================================
+# The canonical include path for container_system is:
+#     #include <kcenon/container/container.h>
+#
+# Only the kcenon/ directory is installed to enforce the canonical path.
+# Other paths (container.h, core/container.h) are deprecated and will be
+# removed in v0.5.0.0.
+# =============================================================================
 install(DIRECTORY
     ${CMAKE_CURRENT_SOURCE_DIR}/kcenon
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
