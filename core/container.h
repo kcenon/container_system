@@ -218,6 +218,56 @@ namespace container_module
 		}
 
 		/**
+		 * @brief Encode a string for XML output per XML 1.0 specification
+		 * @param input Raw string
+		 * @return XML-encoded string with entity references
+		 */
+		inline std::string xml_encode(std::string_view input)
+		{
+			std::string result;
+			result.reserve(input.size() + input.size() / 8);
+
+			for (char c : input)
+			{
+				switch (c)
+				{
+				case '&':
+					result += "&amp;";
+					break;
+				case '<':
+					result += "&lt;";
+					break;
+				case '>':
+					result += "&gt;";
+					break;
+				case '"':
+					result += "&quot;";
+					break;
+				case '\'':
+					result += "&apos;";
+					break;
+				default:
+					if (static_cast<unsigned char>(c) < 0x20
+						&& c != '\t' && c != '\n' && c != '\r')
+					{
+						// Control character - use numeric character reference
+						char buf[16];
+						std::snprintf(buf, sizeof(buf), "&#x%02x;",
+									  static_cast<unsigned char>(c));
+						result += buf;
+					}
+					else
+					{
+						result += c;
+					}
+					break;
+				}
+			}
+
+			return result;
+		}
+
+		/**
 		 * @brief Convert value_variant to string representation
 		 */
 		inline std::string to_string(const value_variant& var, value_types type)
