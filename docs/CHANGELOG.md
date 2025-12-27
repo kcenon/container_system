@@ -11,6 +11,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- **JSON String Escaping** (#186): Add proper RFC 8259 compliant escaping in `to_json()`
+  - Escape special characters: `"`, `\`, newline, carriage return, tab, backspace, form feed
+  - Escape control characters (U+0000-U+001F) as `\uXXXX` format
+  - Apply escaping to both string values and field names
+  - Apply escaping to header fields (source_id, target_id, message_type, version)
+  - Prevents invalid JSON output and potential injection attacks
+
 ### Changed
 - Remove fmt library dependency and use C++20 std::format exclusively (#168)
 - Simplify formatter.h by removing conditional compilation branches

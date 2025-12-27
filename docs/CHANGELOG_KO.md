@@ -11,6 +11,14 @@ Container System 프로젝트의 모든 주요 변경 사항이 이 파일에 �
 
 ## [Unreleased]
 
+### Fixed
+- **JSON 문자열 이스케이핑** (#186): `to_json()`에 RFC 8259 준수 이스케이핑 추가
+  - 특수 문자 이스케이프: `"`, `\`, 줄바꿈, 캐리지리턴, 탭, 백스페이스, 폼피드
+  - 제어 문자 (U+0000-U+001F)를 `\uXXXX` 형식으로 이스케이프
+  - 문자열 값과 필드 이름 모두에 이스케이프 적용
+  - 헤더 필드 (source_id, target_id, message_type, version)에도 이스케이프 적용
+  - 잘못된 JSON 출력 및 잠재적 인젝션 공격 방지
+
 ### Changed
 - fmt 라이브러리 의존성 제거 및 C++20 std::format 전용 사용 (#168)
 - 조건부 컴파일 분기 제거로 formatter.h 간소화

@@ -579,18 +579,23 @@ bool value_container::deserialize(const std::vector<uint8_t>& data_array,
 		if (message_type_ != "data_container")
 		{
 			formatter::format_to(std::back_inserter(result),
-								 "\"target_id\":\"{}\",", target_id_);
+								 "\"target_id\":\"{}\",",
+								 variant_helpers::json_escape(target_id_));
 			formatter::format_to(std::back_inserter(result),
-								 "\"target_sub_id\":\"{}\",", target_sub_id_);
+								 "\"target_sub_id\":\"{}\",",
+								 variant_helpers::json_escape(target_sub_id_));
 			formatter::format_to(std::back_inserter(result),
-								 "\"source_id\":\"{}\",", source_id_);
+								 "\"source_id\":\"{}\",",
+								 variant_helpers::json_escape(source_id_));
 			formatter::format_to(std::back_inserter(result),
-								 "\"source_sub_id\":\"{}\",", source_sub_id_);
+								 "\"source_sub_id\":\"{}\",",
+								 variant_helpers::json_escape(source_sub_id_));
 		}
 		formatter::format_to(std::back_inserter(result),
-							 "\"message_type\":\"{}\"", message_type_);
+							 "\"message_type\":\"{}\"",
+							 variant_helpers::json_escape(message_type_));
 		formatter::format_to(std::back_inserter(result), ",\"version\":\"{}\"",
-							 version_);
+							 variant_helpers::json_escape(version_));
 		formatter::format_to(std::back_inserter(result),
 							 "}},"); // end header
 
@@ -604,17 +609,19 @@ bool value_container::deserialize(const std::vector<uint8_t>& data_array,
 			formatter::format_to(std::back_inserter(result), ",");
 		}
 		std::string value_str = variant_helpers::to_string(u.data, u.type);
+		std::string escaped_name = variant_helpers::json_escape(u.name);
 
 		// String and bytes values need quotes
 		if (u.type == value_types::string_value || u.type == value_types::bytes_value)
 		{
+			std::string escaped_value = variant_helpers::json_escape(value_str);
 			formatter::format_to(std::back_inserter(result), "\"{}\":\"{}\"",
-								 u.name, value_str);
+								 escaped_name, escaped_value);
 		}
 		else
 		{
 			formatter::format_to(std::back_inserter(result), "\"{}\":{}",
-								 u.name, value_str);
+								 escaped_name, value_str);
 		}
 		first = false;
 	}

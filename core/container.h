@@ -64,8 +64,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <variant>
 #include <string>
+#include <string_view>
 #include <vector>
 #include <cstdint>
+#include <cstdio>
 
 namespace container_module
 {
@@ -160,6 +162,61 @@ namespace container_module
 	 */
 	namespace variant_helpers
 	{
+		/**
+		 * @brief Escape a string for JSON output per RFC 8259
+		 * @param input Raw string
+		 * @return JSON-escaped string (without surrounding quotes)
+		 */
+		inline std::string json_escape(std::string_view input)
+		{
+			std::string result;
+			result.reserve(input.size() + input.size() / 8);
+
+			for (char c : input)
+			{
+				switch (c)
+				{
+				case '"':
+					result += "\\\"";
+					break;
+				case '\\':
+					result += "\\\\";
+					break;
+				case '\b':
+					result += "\\b";
+					break;
+				case '\f':
+					result += "\\f";
+					break;
+				case '\n':
+					result += "\\n";
+					break;
+				case '\r':
+					result += "\\r";
+					break;
+				case '\t':
+					result += "\\t";
+					break;
+				default:
+					if (static_cast<unsigned char>(c) < 0x20)
+					{
+						// Control character - use \uXXXX format
+						char buf[8];
+						std::snprintf(buf, sizeof(buf), "\\u%04x",
+									  static_cast<unsigned char>(c));
+						result += buf;
+					}
+					else
+					{
+						result += c;
+					}
+					break;
+				}
+			}
+
+			return result;
+		}
+
 		/**
 		 * @brief Convert value_variant to string representation
 		 */
