@@ -536,29 +536,34 @@ bool value_container::deserialize(const std::vector<uint8_t>& data_array,
 		if (message_type_ != "data_container")
 		{
 			formatter::format_to(std::back_inserter(result),
-								 "<target_id>{}</target_id>", target_id_);
+								 "<target_id>{}</target_id>",
+								 variant_helpers::xml_encode(target_id_));
 			formatter::format_to(std::back_inserter(result),
 								 "<target_sub_id>{}</target_sub_id>",
-								 target_sub_id_);
+								 variant_helpers::xml_encode(target_sub_id_));
 			formatter::format_to(std::back_inserter(result),
-								 "<source_id>{}</source_id>", source_id_);
+								 "<source_id>{}</source_id>",
+								 variant_helpers::xml_encode(source_id_));
 			formatter::format_to(std::back_inserter(result),
 								 "<source_sub_id>{}</source_sub_id>",
-								 source_sub_id_);
+								 variant_helpers::xml_encode(source_sub_id_));
 		}
 		formatter::format_to(std::back_inserter(result),
-							 "<message_type>{}</message_type>", message_type_);
+							 "<message_type>{}</message_type>",
+							 variant_helpers::xml_encode(message_type_));
 		formatter::format_to(std::back_inserter(result),
-							 "<version>{}</version>", version_);
+							 "<version>{}</version>",
+							 variant_helpers::xml_encode(version_));
 		formatter::format_to(std::back_inserter(result), "</header>");
 
 		formatter::format_to(std::back_inserter(result), "<values>");
-	for (auto& u : optimized_units_)
-	{
-		std::string value_str = variant_helpers::to_string(u.data, u.type);
-		formatter::format_to(std::back_inserter(result), "<{}>{}</{}>",
-							 u.name, value_str, u.name);
-	}
+		for (auto& u : optimized_units_)
+		{
+			std::string value_str = variant_helpers::to_string(u.data, u.type);
+			formatter::format_to(std::back_inserter(result), "<{}>{}</{}>",
+								 u.name, variant_helpers::xml_encode(value_str),
+								 u.name);
+		}
 		formatter::format_to(std::back_inserter(result), "</values>");
 		formatter::format_to(std::back_inserter(result), "</container>");
 		return result;

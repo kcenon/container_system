@@ -12,6 +12,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Fixed
+- **XML Entity Encoding** (#187): Add proper XML 1.0 entity encoding in `to_xml()`
+  - Encode XML special characters: `&` -> `&amp;`, `<` -> `&lt;`, `>` -> `&gt;`, `"` -> `&quot;`, `'` -> `&apos;`
+  - Encode control characters (0x00-0x1F except tab, newline, carriage return) as `&#xNN;`
+  - Apply encoding to string values and header fields
+  - Prevents invalid XML output and potential XML injection attacks
 - **JSON String Escaping** (#186): Add proper RFC 8259 compliant escaping in `to_json()`
   - Escape special characters: `"`, `\`, newline, carriage return, tab, backspace, form feed
   - Escape control characters (U+0000-U+001F) as `\uXXXX` format

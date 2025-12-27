@@ -1014,6 +1014,192 @@ TEST(JSONEscapeFunctionTest, NullCharacterEscaping) {
     EXPECT_EQ(result, "\\u0000");
 }
 
+// ============================================================================
+// XML Encoding Tests (Issue #187)
+// ============================================================================
+
+class XMLEncodingTest : public ::testing::Test {
+protected:
+    std::unique_ptr<value_container> container;
+
+    void SetUp() override {
+        container = std::make_unique<value_container>();
+        container->set_message_type("test_message");
+    }
+
+    void TearDown() override {
+        container.reset();
+    }
+};
+
+TEST_F(XMLEncodingTest, AmpersandEncoding) {
+    std::string key = "query";
+    std::string value = "a & b";
+    container->add(make_string_value(key, value));
+
+    std::string xml = container->to_xml();
+
+    EXPECT_NE(xml.find("a &amp; b"), std::string::npos)
+        << "Expected encoded ampersand in XML output: " << xml;
+}
+
+TEST_F(XMLEncodingTest, LessThanEncoding) {
+    std::string key = "query";
+    std::string value = "SELECT * FROM users WHERE id < 5";
+    container->add(make_string_value(key, value));
+
+    std::string xml = container->to_xml();
+
+    EXPECT_NE(xml.find("id &lt; 5"), std::string::npos)
+        << "Expected encoded less-than in XML output: " << xml;
+}
+
+TEST_F(XMLEncodingTest, GreaterThanEncoding) {
+    std::string key = "query";
+    std::string value = "x > 10";
+    container->add(make_string_value(key, value));
+
+    std::string xml = container->to_xml();
+
+    EXPECT_NE(xml.find("x &gt; 10"), std::string::npos)
+        << "Expected encoded greater-than in XML output: " << xml;
+}
+
+TEST_F(XMLEncodingTest, QuoteEncoding) {
+    std::string key = "message";
+    std::string value = "Hello \"World\"";
+    container->add(make_string_value(key, value));
+
+    std::string xml = container->to_xml();
+
+    EXPECT_NE(xml.find("Hello &quot;World&quot;"), std::string::npos)
+        << "Expected encoded quotes in XML output: " << xml;
+}
+
+TEST_F(XMLEncodingTest, ApostropheEncoding) {
+    std::string key = "message";
+    std::string value = "It's working";
+    container->add(make_string_value(key, value));
+
+    std::string xml = container->to_xml();
+
+    EXPECT_NE(xml.find("It&apos;s working"), std::string::npos)
+        << "Expected encoded apostrophe in XML output: " << xml;
+}
+
+TEST_F(XMLEncodingTest, AllSpecialCharactersCombined) {
+    std::string key = "complex";
+    std::string value = "a < b & c > d \"quoted\" and 'apostrophe'";
+    container->add(make_string_value(key, value));
+
+    std::string xml = container->to_xml();
+
+    EXPECT_NE(xml.find("a &lt; b &amp; c &gt; d &quot;quoted&quot; and &apos;apostrophe&apos;"), std::string::npos)
+        << "Expected all XML special characters encoded: " << xml;
+}
+
+TEST_F(XMLEncodingTest, ControlCharacterEncoding) {
+    std::string key = "control";
+    std::string value = std::string("before\x01\x02" "after");
+    container->add(make_string_value(key, value));
+
+    std::string xml = container->to_xml();
+
+    EXPECT_NE(xml.find("&#x01;"), std::string::npos)
+        << "Expected encoded control character &#x01; in XML output: " << xml;
+    EXPECT_NE(xml.find("&#x02;"), std::string::npos)
+        << "Expected encoded control character &#x02; in XML output: " << xml;
+}
+
+TEST_F(XMLEncodingTest, WhitespacePreserved) {
+    std::string key = "whitespace";
+    std::string value = "line1\nline2\tcolumn2\rend";
+    container->add(make_string_value(key, value));
+
+    std::string xml = container->to_xml();
+
+    // Tab, newline, and carriage return should be preserved (not encoded)
+    EXPECT_NE(xml.find("line1\nline2\tcolumn2\rend"), std::string::npos)
+        << "Expected whitespace to be preserved in XML output: " << xml;
+}
+
+TEST_F(XMLEncodingTest, HeaderFieldEncoding) {
+    container->set_source("source<id", "sub&id");
+    container->set_target("target>id", "sub\"id");
+
+    std::string xml = container->to_xml();
+
+    EXPECT_NE(xml.find("source&lt;id"), std::string::npos)
+        << "Expected encoded less-than in source_id: " << xml;
+    EXPECT_NE(xml.find("sub&amp;id"), std::string::npos)
+        << "Expected encoded ampersand in source_sub_id: " << xml;
+    EXPECT_NE(xml.find("target&gt;id"), std::string::npos)
+        << "Expected encoded greater-than in target_id: " << xml;
+    EXPECT_NE(xml.find("sub&quot;id"), std::string::npos)
+        << "Expected encoded quote in target_sub_id: " << xml;
+}
+
+TEST_F(XMLEncodingTest, ValidXMLStructure) {
+    std::string key = "test";
+    std::string value = "Hello <World> with & special chars";
+    container->add(make_string_value(key, value));
+
+    std::string xml = container->to_xml();
+
+    // Basic XML structure validation
+    EXPECT_EQ(xml.substr(0, 11), "<container>");
+    EXPECT_EQ(xml.substr(xml.size() - 12), "</container>");
+    EXPECT_NE(xml.find("<header>"), std::string::npos);
+    EXPECT_NE(xml.find("</header>"), std::string::npos);
+    EXPECT_NE(xml.find("<values>"), std::string::npos);
+    EXPECT_NE(xml.find("</values>"), std::string::npos);
+}
+
+TEST_F(XMLEncodingTest, NumericValuesUnchanged) {
+    container->add(make_int_value("int_val", 42));
+    container->add(make_double_value("double_val", 3.14));
+
+    std::string xml = container->to_xml();
+
+    EXPECT_NE(xml.find("<int_val>42</int_val>"), std::string::npos)
+        << "Expected integer value unchanged in XML output: " << xml;
+}
+
+TEST(XMLEncodeFunctionTest, EmptyString) {
+    std::string result = variant_helpers::xml_encode("");
+    EXPECT_EQ(result, "");
+}
+
+TEST(XMLEncodeFunctionTest, NoSpecialChars) {
+    std::string result = variant_helpers::xml_encode("Hello World 123");
+    EXPECT_EQ(result, "Hello World 123");
+}
+
+TEST(XMLEncodeFunctionTest, AllSpecialChars) {
+    std::string result = variant_helpers::xml_encode("&<>\"'");
+    EXPECT_EQ(result, "&amp;&lt;&gt;&quot;&apos;");
+}
+
+TEST(XMLEncodeFunctionTest, MixedContent) {
+    std::string result = variant_helpers::xml_encode("x < 5 & y > 3");
+    EXPECT_EQ(result, "x &lt; 5 &amp; y &gt; 3");
+}
+
+TEST(XMLEncodeFunctionTest, ControlCharactersAsNumericRef) {
+    std::string input(1, '\x01');
+    std::string result = variant_helpers::xml_encode(input);
+    EXPECT_EQ(result, "&#x01;");
+
+    input = std::string(1, '\x1f');
+    result = variant_helpers::xml_encode(input);
+    EXPECT_EQ(result, "&#x1f;");
+}
+
+TEST(XMLEncodeFunctionTest, WhitespacePreserved) {
+    std::string result = variant_helpers::xml_encode("a\tb\nc\rd");
+    EXPECT_EQ(result, "a\tb\nc\rd");
+}
+
 // Main function for running tests
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
