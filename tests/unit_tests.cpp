@@ -783,6 +783,237 @@ TEST_F(ValueStoreSerializationTest, LargeValuesSerialization) {
     EXPECT_EQ(bytes_opt->size(), 10000u);
 }
 
+// ============================================================================
+// JSON Escaping Tests (Issue #186)
+// ============================================================================
+
+class JSONEscapingTest : public ::testing::Test {
+protected:
+    std::unique_ptr<value_container> container;
+
+    void SetUp() override {
+        container = std::make_unique<value_container>();
+        container->set_message_type("test_message");
+    }
+
+    void TearDown() override {
+        container.reset();
+    }
+};
+
+TEST_F(JSONEscapingTest, QuoteEscaping) {
+    std::string key = "message";
+    std::string value = "Hello \"World\"";
+    container->add(make_string_value(key, value));
+
+    std::string json = container->to_json();
+
+    // Verify that quotes are escaped
+    EXPECT_NE(json.find("Hello \\\"World\\\""), std::string::npos)
+        << "Expected escaped quotes in JSON output: " << json;
+}
+
+TEST_F(JSONEscapingTest, BackslashEscaping) {
+    std::string key = "path";
+    std::string value = "C:\\Users\\test";
+    container->add(make_string_value(key, value));
+
+    std::string json = container->to_json();
+
+    // Verify that backslashes are escaped
+    EXPECT_NE(json.find("C:\\\\Users\\\\test"), std::string::npos)
+        << "Expected escaped backslashes in JSON output: " << json;
+}
+
+TEST_F(JSONEscapingTest, NewlineEscaping) {
+    std::string key = "multiline";
+    std::string value = "line1\nline2\r\nline3";
+    container->add(make_string_value(key, value));
+
+    std::string json = container->to_json();
+
+    // Verify that newlines are escaped
+    EXPECT_NE(json.find("line1\\nline2\\r\\nline3"), std::string::npos)
+        << "Expected escaped newlines in JSON output: " << json;
+}
+
+TEST_F(JSONEscapingTest, TabEscaping) {
+    std::string key = "tabbed";
+    std::string value = "col1\tcol2\tcol3";
+    container->add(make_string_value(key, value));
+
+    std::string json = container->to_json();
+
+    // Verify that tabs are escaped
+    EXPECT_NE(json.find("col1\\tcol2\\tcol3"), std::string::npos)
+        << "Expected escaped tabs in JSON output: " << json;
+}
+
+TEST_F(JSONEscapingTest, ControlCharacterEscaping) {
+    std::string key = "control";
+    std::string value = std::string("before\x01\x02\x03" "after");
+    container->add(make_string_value(key, value));
+
+    std::string json = container->to_json();
+
+    // Verify that control characters are escaped as \uXXXX
+    EXPECT_NE(json.find("\\u0001"), std::string::npos)
+        << "Expected escaped control character \\u0001 in JSON output: " << json;
+    EXPECT_NE(json.find("\\u0002"), std::string::npos)
+        << "Expected escaped control character \\u0002 in JSON output: " << json;
+    EXPECT_NE(json.find("\\u0003"), std::string::npos)
+        << "Expected escaped control character \\u0003 in JSON output: " << json;
+}
+
+TEST_F(JSONEscapingTest, FormFeedAndBackspaceEscaping) {
+    std::string key = "special";
+    std::string value = "form\ffeed\bbackspace";
+    container->add(make_string_value(key, value));
+
+    std::string json = container->to_json();
+
+    // Verify that form feed and backspace are escaped
+    EXPECT_NE(json.find("form\\ffeed\\bbackspace"), std::string::npos)
+        << "Expected escaped form feed and backspace in JSON output: " << json;
+}
+
+TEST_F(JSONEscapingTest, AllSpecialCharactersCombined) {
+    std::string key = "complex";
+    std::string value = "Quote: \" Backslash: \\ Newline:\n Tab:\t End";
+    container->add(make_string_value(key, value));
+
+    std::string json = container->to_json();
+
+    // Verify all special characters are escaped
+    EXPECT_NE(json.find("Quote: \\\""), std::string::npos)
+        << "Expected escaped quote in JSON output: " << json;
+    EXPECT_NE(json.find("Backslash: \\\\"), std::string::npos)
+        << "Expected escaped backslash in JSON output: " << json;
+    EXPECT_NE(json.find("Newline:\\n"), std::string::npos)
+        << "Expected escaped newline in JSON output: " << json;
+    EXPECT_NE(json.find("Tab:\\t"), std::string::npos)
+        << "Expected escaped tab in JSON output: " << json;
+}
+
+TEST_F(JSONEscapingTest, HeaderFieldEscaping) {
+    container->set_source("source\"id", "sub\\id");
+    container->set_target("target\nid", "sub\tid");
+
+    std::string json = container->to_json();
+
+    // Verify header fields are escaped
+    EXPECT_NE(json.find("source\\\"id"), std::string::npos)
+        << "Expected escaped quote in source_id: " << json;
+    EXPECT_NE(json.find("sub\\\\id"), std::string::npos)
+        << "Expected escaped backslash in source_sub_id: " << json;
+    EXPECT_NE(json.find("target\\nid"), std::string::npos)
+        << "Expected escaped newline in target_id: " << json;
+    EXPECT_NE(json.find("sub\\tid"), std::string::npos)
+        << "Expected escaped tab in target_sub_id: " << json;
+}
+
+TEST_F(JSONEscapingTest, FieldNameEscaping) {
+    // Field names with special characters should also be escaped
+    std::string key = "field\"name";
+    std::string value = "value";
+    container->add(make_string_value(key, value));
+
+    std::string json = container->to_json();
+
+    // Verify field name is escaped
+    EXPECT_NE(json.find("field\\\"name"), std::string::npos)
+        << "Expected escaped field name in JSON output: " << json;
+}
+
+TEST_F(JSONEscapingTest, ValidJSONOutput) {
+    std::string key = "test";
+    std::string value = "Hello \"World\" with \\ and \n special chars";
+    container->add(make_string_value(key, value));
+
+    std::string json = container->to_json();
+
+    // Basic JSON structure validation
+    EXPECT_EQ(json.front(), '{');
+    EXPECT_EQ(json.back(), '}');
+
+    // Should not have unescaped quotes inside string values
+    // (except the structural quotes that delimit keys/values)
+    size_t quote_count = 0;
+    for (size_t i = 0; i < json.size(); ++i) {
+        if (json[i] == '"' && (i == 0 || json[i-1] != '\\')) {
+            quote_count++;
+        }
+    }
+    // Quote count should be even (matched pairs)
+    EXPECT_EQ(quote_count % 2, 0u)
+        << "Unmatched quotes in JSON output: " << json;
+}
+
+TEST_F(JSONEscapingTest, EmptyStringValue) {
+    std::string key = "empty";
+    std::string value = "";
+    container->add(make_string_value(key, value));
+
+    std::string json = container->to_json();
+
+    // Empty string should produce valid JSON with empty value
+    EXPECT_NE(json.find("\"empty\":\"\""), std::string::npos)
+        << "Expected empty string value in JSON output: " << json;
+}
+
+TEST_F(JSONEscapingTest, NumericValuesUnchanged) {
+    std::string key1 = "int_val";
+    std::string key2 = "double_val";
+    container->add(make_int_value(key1, 42));
+    container->add(make_double_value(key2, 3.14));
+
+    std::string json = container->to_json();
+
+    // Numeric values should not be quoted or escaped
+    EXPECT_NE(json.find("\"int_val\":42"), std::string::npos)
+        << "Expected unquoted integer in JSON output: " << json;
+}
+
+// ============================================================================
+// JSON Escape Function Unit Tests
+// ============================================================================
+
+TEST(JSONEscapeFunctionTest, EmptyString) {
+    std::string result = variant_helpers::json_escape("");
+    EXPECT_EQ(result, "");
+}
+
+TEST(JSONEscapeFunctionTest, NoSpecialCharacters) {
+    std::string result = variant_helpers::json_escape("Hello World");
+    EXPECT_EQ(result, "Hello World");
+}
+
+TEST(JSONEscapeFunctionTest, OnlySpecialCharacters) {
+    std::string result = variant_helpers::json_escape("\"\\\n\r\t\b\f");
+    EXPECT_EQ(result, "\\\"\\\\\\n\\r\\t\\b\\f");
+}
+
+TEST(JSONEscapeFunctionTest, MixedContent) {
+    std::string result = variant_helpers::json_escape("Say \"Hello\"\nNew line");
+    EXPECT_EQ(result, "Say \\\"Hello\\\"\\nNew line");
+}
+
+TEST(JSONEscapeFunctionTest, ControlCharactersAsUnicode) {
+    std::string input(1, '\x01');
+    std::string result = variant_helpers::json_escape(input);
+    EXPECT_EQ(result, "\\u0001");
+
+    input = std::string(1, '\x1f');
+    result = variant_helpers::json_escape(input);
+    EXPECT_EQ(result, "\\u001f");
+}
+
+TEST(JSONEscapeFunctionTest, NullCharacterEscaping) {
+    std::string input(1, '\x00');
+    std::string result = variant_helpers::json_escape(input);
+    EXPECT_EQ(result, "\\u0000");
+}
+
 // Main function for running tests
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
