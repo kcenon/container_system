@@ -30,7 +30,10 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
+// Internal implementation file - suppress deprecation warnings
+#define CONTAINER_INTERNAL_INCLUDE
 #include "container/core/container.h"
+#undef CONTAINER_INTERNAL_INCLUDE
 
 #include "utilities/core/formatter.h"
 #include "utilities/core/convert_string.h"

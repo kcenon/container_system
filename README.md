@@ -29,8 +29,7 @@ Making high-performance data serialization **accessible**, **type-safe**, and **
 ### Basic Usage Example
 
 ```cpp
-#include <kcenon/container/core/container.h>
-#include <kcenon/container/integration/messaging_builder.h>
+#include <kcenon/container/container.h>  // Canonical include path
 
 using namespace container_module;
 
@@ -443,6 +442,54 @@ if (!get_result) {
 ```
 
 **Error Codes**: -400 to -499 (centralized in common_system)
+
+## Include Path Migration
+
+### Canonical Include Path
+
+Starting from v0.4.0.0, the canonical include path for container_system is:
+
+```cpp
+#include <kcenon/container/container.h>
+```
+
+### Deprecated Paths
+
+The following include paths are **deprecated** and will be removed in v0.5.0.0:
+
+| Deprecated Path | Status | Migration |
+|----------------|--------|-----------|
+| `#include "container.h"` | Deprecated | Use `<kcenon/container/container.h>` |
+| `#include <container.h>` | Deprecated | Use `<kcenon/container/container.h>` |
+| `#include "core/container.h"` | Deprecated | Use `<kcenon/container/container.h>` |
+| `#include <container/core/container.h>` | Deprecated | Use `<kcenon/container/container.h>` |
+
+### Migration Steps
+
+1. **Search** for deprecated includes in your codebase:
+   ```bash
+   grep -r '#include.*container\.h' src/ include/ --include="*.h" --include="*.cpp"
+   ```
+
+2. **Replace** deprecated paths with the canonical path:
+   ```cpp
+   // Before (deprecated)
+   #include "container.h"
+   #include <container/core/container.h>
+
+   // After (canonical)
+   #include <kcenon/container/container.h>
+   ```
+
+3. **Verify** your build works without deprecation warnings
+
+### Timeline
+
+| Version | Action |
+|---------|--------|
+| v0.4.0.0 | Deprecation warnings added to non-canonical paths |
+| v0.4.x | Migration period |
+| v0.5.0.0 | Non-canonical paths removed |
 
 ## Contributing
 
