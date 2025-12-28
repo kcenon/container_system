@@ -832,41 +832,34 @@ namespace container_module
 					 std::string_view target_value,
 					 std::string& target_variable);
 
-		// Thread-safe helper classes with conditional lock acquisition
-		// Optimized: Only acquire lock when thread-safe mode is enabled
-		// This eliminates lock overhead in single-threaded scenarios
+		// Thread-safe lock guard classes
+		// Always acquire lock to eliminate TOCTOU vulnerability (see #190)
+		// Modern mutex implementations have ~20ns overhead for uncontended locks
+		// which is negligible compared to actual data access costs
 		class read_lock_guard {
-			std::optional<std::shared_lock<std::shared_mutex>> lock_;
-			bool is_active_;
+			std::shared_lock<std::shared_mutex> lock_;
+			const value_container* container_;
 		public:
-			read_lock_guard(const value_container* c)
-				: is_active_(c->thread_safe_enabled_.load(std::memory_order_acquire)) {
-				// Conditionally acquire lock only when thread-safe mode is enabled
-				if (is_active_) {
-					lock_.emplace(c->mutex_);
-					c->read_count_.fetch_add(1, std::memory_order_relaxed);
-				}
+			explicit read_lock_guard(const value_container* c)
+				: lock_(c->mutex_), container_(c) {
+				container_->read_count_.fetch_add(1, std::memory_order_relaxed);
 			}
 
-			// Query whether lock is actually being used
-			bool is_locked() const noexcept { return is_active_; }
+			// Always locked - no TOCTOU race condition possible
+			bool is_locked() const noexcept { return true; }
 		};
 
 		class write_lock_guard {
-			std::optional<std::unique_lock<std::shared_mutex>> lock_;
-			bool is_active_;
+			std::unique_lock<std::shared_mutex> lock_;
+			value_container* container_;
 		public:
-			write_lock_guard(value_container* c)
-				: is_active_(c->thread_safe_enabled_.load(std::memory_order_acquire)) {
-				// Conditionally acquire lock only when thread-safe mode is enabled
-				if (is_active_) {
-					lock_.emplace(c->mutex_);
-					c->write_count_.fetch_add(1, std::memory_order_relaxed);
-				}
+			explicit write_lock_guard(value_container* c)
+				: lock_(c->mutex_), container_(c) {
+				container_->write_count_.fetch_add(1, std::memory_order_relaxed);
 			}
 
-			// Query whether lock is actually being used
-			bool is_locked() const noexcept { return is_active_; }
+			// Always locked - no TOCTOU race condition possible
+			bool is_locked() const noexcept { return true; }
 		};
 
 	private:
@@ -896,8 +889,8 @@ namespace container_module
 		bool use_soo_{true}; ///< Enable/disable Small Object Optimization
 
 		// Thread safety members
+		// Note: Lock is always acquired to prevent TOCTOU vulnerability (see #190)
 		mutable std::shared_mutex mutex_;  ///< Mutex for thread-safe access
-		std::atomic<bool> thread_safe_enabled_{false}; ///< Thread-safe mode flag
 
 		// Statistics
 		mutable std::atomic<size_t> read_count_{0};

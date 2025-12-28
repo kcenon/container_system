@@ -37,52 +37,32 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 namespace container_module {
 
 void value_store::add(const std::string& key, value val) {
-    if (thread_safe_enabled_.load(std::memory_order_relaxed)) {
-        std::unique_lock lock(mutex_);
-        values_[key] = std::move(val);
-    } else {
-        values_[key] = std::move(val);
-    }
+    // Always acquire lock to eliminate TOCTOU vulnerability (see #190)
+    std::unique_lock lock(mutex_);
+    values_[key] = std::move(val);
     write_count_.fetch_add(1, std::memory_order_relaxed);
 }
 
 std::optional<value> value_store::get(const std::string& key) const {
-    if (thread_safe_enabled_.load(std::memory_order_relaxed)) {
-        std::shared_lock lock(mutex_);
-        auto it = values_.find(key);
-        if (it != values_.end()) {
-            read_count_.fetch_add(1, std::memory_order_relaxed);
-            return it->second;
-        }
-    } else {
-        auto it = values_.find(key);
-        if (it != values_.end()) {
-            read_count_.fetch_add(1, std::memory_order_relaxed);
-            return it->second;
-        }
+    // Always acquire lock to eliminate TOCTOU vulnerability (see #190)
+    std::shared_lock lock(mutex_);
+    auto it = values_.find(key);
+    if (it != values_.end()) {
+        read_count_.fetch_add(1, std::memory_order_relaxed);
+        return it->second;
     }
     return std::nullopt;
 }
 
 bool value_store::contains(const std::string& key) const {
-    if (thread_safe_enabled_.load(std::memory_order_relaxed)) {
-        std::shared_lock lock(mutex_);
-        return values_.find(key) != values_.end();
-    }
+    // Always acquire lock to eliminate TOCTOU vulnerability (see #190)
+    std::shared_lock lock(mutex_);
     return values_.find(key) != values_.end();
 }
 
 bool value_store::remove(const std::string& key) {
-    if (thread_safe_enabled_.load(std::memory_order_relaxed)) {
-        std::unique_lock lock(mutex_);
-        auto it = values_.find(key);
-        if (it != values_.end()) {
-            values_.erase(it);
-            return true;
-        }
-        return false;
-    }
-
+    // Always acquire lock to eliminate TOCTOU vulnerability (see #190)
+    std::unique_lock lock(mutex_);
     auto it = values_.find(key);
     if (it != values_.end()) {
         values_.erase(it);
@@ -92,19 +72,14 @@ bool value_store::remove(const std::string& key) {
 }
 
 void value_store::clear() {
-    if (thread_safe_enabled_.load(std::memory_order_relaxed)) {
-        std::unique_lock lock(mutex_);
-        values_.clear();
-    } else {
-        values_.clear();
-    }
+    // Always acquire lock to eliminate TOCTOU vulnerability (see #190)
+    std::unique_lock lock(mutex_);
+    values_.clear();
 }
 
 size_t value_store::size() const {
-    if (thread_safe_enabled_.load(std::memory_order_relaxed)) {
-        std::shared_lock lock(mutex_);
-        return values_.size();
-    }
+    // Always acquire lock to eliminate TOCTOU vulnerability (see #190)
+    std::shared_lock lock(mutex_);
     return values_.size();
 }
 
@@ -113,10 +88,8 @@ bool value_store::empty() const {
 }
 
 std::string value_store::serialize() const {
-    if (thread_safe_enabled_.load(std::memory_order_relaxed)) {
-        std::shared_lock lock(mutex_);
-        return serialize_impl();
-    }
+    // Always acquire lock to eliminate TOCTOU vulnerability (see #190)
+    std::shared_lock lock(mutex_);
     return serialize_impl();
 }
 
@@ -153,10 +126,8 @@ std::string value_store::serialize_impl() const {
 }
 
 std::vector<uint8_t> value_store::serialize_binary() const {
-    if (thread_safe_enabled_.load(std::memory_order_relaxed)) {
-        std::shared_lock lock(mutex_);
-        return serialize_binary_impl();
-    }
+    // Always acquire lock to eliminate TOCTOU vulnerability (see #190)
+    std::shared_lock lock(mutex_);
     return serialize_binary_impl();
 }
 
@@ -272,15 +243,21 @@ std::unique_ptr<value_store> value_store::deserialize_binary(const std::vector<u
 }
 
 void value_store::enable_thread_safety() {
-    thread_safe_enabled_.store(true, std::memory_order_release);
+    // No-op: Thread safety is always enabled since v0.2.0
+    // This method is deprecated and will be removed in v0.3.0
+    // See issue #190 for details about TOCTOU vulnerability fix
 }
 
 void value_store::disable_thread_safety() {
-    thread_safe_enabled_.store(false, std::memory_order_release);
+    // No-op: Thread safety cannot be disabled since v0.2.0
+    // This method is deprecated and will be removed in v0.3.0
+    // See issue #190 for details about TOCTOU vulnerability fix
 }
 
 bool value_store::is_thread_safe() const {
-    return thread_safe_enabled_.load(std::memory_order_acquire);
+    // Always returns true since v0.2.0
+    // This method is deprecated and will be removed in v0.3.0
+    return true;
 }
 
 size_t value_store::get_read_count() const {

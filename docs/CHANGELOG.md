@@ -11,6 +11,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Security
+- **TOCTOU Thread Safety Fix** (#190): Eliminate Time-Of-Check-Time-Of-Use vulnerability
+  - Always acquire locks in `read_lock_guard` and `write_lock_guard`
+  - Remove conditional locking based on runtime flag
+  - Deprecate `enable_thread_safety()` and `disable_thread_safety()` methods (will be removed in v0.3.0)
+  - All operations are now thread-safe by default
+
 ### Fixed
 - **XML Entity Encoding** (#187): Add proper XML 1.0 entity encoding in `to_xml()`
   - Encode XML special characters: `&` -> `&amp;`, `<` -> `&lt;`, `>` -> `&gt;`, `"` -> `&quot;`, `'` -> `&apos;`

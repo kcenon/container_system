@@ -170,20 +170,30 @@ public:
 
     /**
      * @brief Enable thread-safe operations
-     * @note All subsequent operations will be protected by mutex
+     * @deprecated Since v0.2.0: Thread safety is always enabled to prevent TOCTOU
+     *             vulnerabilities. This method is now a no-op and will be removed
+     *             in v0.3.0. See issue #190 for details.
+     * @note All operations are now always protected by mutex.
      */
+    [[deprecated("Thread safety is always enabled since v0.2.0. Will be removed in v0.3.0")]]
     void enable_thread_safety();
 
     /**
      * @brief Disable thread-safe operations
-     * @note Use only if you guarantee single-threaded access
+     * @deprecated Since v0.2.0: Thread safety cannot be disabled to prevent TOCTOU
+     *             vulnerabilities. This method is now a no-op and will be removed
+     *             in v0.3.0. See issue #190 for details.
+     * @note All operations are now always protected by mutex.
      */
+    [[deprecated("Thread safety cannot be disabled since v0.2.0. Will be removed in v0.3.0")]]
     void disable_thread_safety();
 
     /**
      * @brief Check if thread safety is enabled
-     * @return true if enabled
+     * @deprecated Since v0.2.0: Always returns true. Will be removed in v0.3.0.
+     * @return Always true (thread safety is always enabled)
      */
+    [[deprecated("Always returns true since v0.2.0. Will be removed in v0.3.0")]]
     bool is_thread_safe() const;
 
     // =========================================================================
@@ -217,8 +227,8 @@ private:
     std::vector<uint8_t> serialize_binary_impl() const;
 
     // Thread safety
+    // Note: Lock is always acquired to prevent TOCTOU vulnerability (see #190)
     mutable std::shared_mutex mutex_;
-    std::atomic<bool> thread_safe_enabled_{false};
 
     // Statistics
     mutable std::atomic<size_t> read_count_{0};
