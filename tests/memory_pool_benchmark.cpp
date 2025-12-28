@@ -46,6 +46,7 @@
 #include <thread>
 #include <random>
 #include <algorithm>
+#include <cstring>
 
 using namespace container_module::internal;
 
