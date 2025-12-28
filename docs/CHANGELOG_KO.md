@@ -11,6 +11,14 @@ Container System 프로젝트의 모든 주요 변경 사항이 이 파일에 �
 
 ## [Unreleased]
 
+### Changed
+- **헤더 모듈화** (#191): container.h (902줄)를 집중된 서브 헤더로 분리
+  - `core/container/fwd.h`: 컨테이너 타입 전방 선언
+  - `core/container/types.h`: value_variant, optimized_value, pool_stats 정의
+  - `core/container/variant_helpers.h`: JSON/XML 인코딩 유틸리티
+  - container.h는 이제 하위 호환성을 위한 umbrella 헤더로 동작
+  - 컴파일 시간 및 코드 탐색 개선
+
 ### Security
 - **TOCTOU 스레드 안전성 수정** (#190): Time-Of-Check-Time-Of-Use 취약점 제거
   - `read_lock_guard`와 `write_lock_guard`에서 항상 락 획득

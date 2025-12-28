@@ -11,6 +11,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- **Header Modularization** (#191): Split container.h (902 lines) into focused sub-headers
+  - `core/container/fwd.h`: Forward declarations for container types
+  - `core/container/types.h`: value_variant, optimized_value, pool_stats definitions
+  - `core/container/variant_helpers.h`: JSON/XML encoding utilities
+  - container.h now acts as umbrella header for backward compatibility
+  - Improves compilation times and code navigation
+
 ### Security
 - **TOCTOU Thread Safety Fix** (#190): Eliminate Time-Of-Check-Time-Of-Use vulnerability
   - Always acquire locks in `read_lock_guard` and `write_lock_guard`
