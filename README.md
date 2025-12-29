@@ -11,7 +11,7 @@
 
 ## Overview
 
-The Container System is a high-performance C++17 type-safe container framework designed for comprehensive data management in messaging systems and general-purpose applications. Built with a modular, interface-based architecture featuring SIMD optimizations and seamless ecosystem integration.
+The Container System is a high-performance C++20 type-safe container framework designed for comprehensive data management in messaging systems and general-purpose applications. Built with a modular, interface-based architecture featuring SIMD optimizations and seamless ecosystem integration.
 
 **Key Highlights**:
 - **Type Safety**: Strongly-typed value system with compile-time checks
