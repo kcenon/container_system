@@ -47,7 +47,7 @@ auto binary = container->serialize(format::binary);
 
 ### 2. What C++ standard is required?
 
-**Required:** C++17 (C++20 recommended for concepts)
+**Required:** C++20 (C++20 Concepts required for common_system dependency)
 
 **Compiler Support:**
 - GCC 9+
