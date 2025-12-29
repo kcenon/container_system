@@ -6,7 +6,7 @@
 **Last Updated:** 2025-11-11
 **Status:** Comprehensive
 
-Welcome to the container_system documentation! A type-safe, high-performance container and serialization system for C++17/20 with SIMD optimization and multiple format support.
+Welcome to the container_system documentation! A type-safe, high-performance container and serialization system for C++20 with SIMD optimization and multiple format support.
 
 ---
 
@@ -68,7 +68,7 @@ Welcome to the container_system documentation! A type-safe, high-performance con
 
 ### Current Status
 - **Version**: 0.1.0 (Type-safe variant system)
-- **C++ Standard**: C++17 (C++20 recommended)
+- **C++ Standard**: C++20
 - **License**: BSD 3-Clause
 
 ### Key Features
