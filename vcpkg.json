@@ -1,31 +1,41 @@
 {
-    "name": "container-system",
-    "version": "2.0.0",
-    "description": "Thread-safe serializable container library with advanced features",
-    "license": "BSD-3-Clause",
-    "dependencies": [
-        "benchmark"
-    ],
-    "features": {
-        "fmt-support": {
-            "description": "Use fmt library for formatting (fallback for compilers without std::format)",
-            "dependencies": [
-                "fmt"
-            ]
+  "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg.schema.json",
+  "name": "kcenon-container-system",
+  "version": "2.0.0",
+  "port-version": 0,
+  "description": "Thread-safe serializable container library with advanced features",
+  "homepage": "https://github.com/kcenon/container_system",
+  "license": "BSD-3-Clause",
+  "supports": "!(uwp | xbox)",
+  "dependencies": [
+    "kcenon-common-system"
+  ],
+  "features": {
+    "testing": {
+      "description": "Build unit tests and benchmarks",
+      "dependencies": [
+        {
+          "name": "gtest",
+          "features": ["gmock"]
         },
-        "tests": {
-            "description": "Build unit tests",
-            "dependencies": [
-                "gtest"
-            ]
-        },
-        "samples": {
-            "description": "Build sample applications",
-            "dependencies": []
-        },
-        "docs": {
-            "description": "Build documentation",
-            "dependencies": []
+        {
+          "name": "benchmark"
         }
+      ]
+    },
+    "fmt-support": {
+      "description": "Use fmt library for formatting (fallback for compilers without std::format)",
+      "dependencies": [
+        "fmt"
+      ]
+    },
+    "samples": {
+      "description": "Build sample applications",
+      "dependencies": []
+    },
+    "docs": {
+      "description": "Build documentation",
+      "dependencies": []
     }
+  }
 }
