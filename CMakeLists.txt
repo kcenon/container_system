@@ -455,16 +455,29 @@ include(GNUInstallDirs)
 # Canonical Include Path Configuration
 # =============================================================================
 # The canonical include path for container_system is:
-#     #include <kcenon/container/container.h>
+#     #include <container/container.h>
 #
-# Only the kcenon/ directory is installed to enforce the canonical path.
-# Other paths (container.h, core/container.h) are deprecated and will be
-# removed in v0.5.0.0.
+# The following directories are installed:
+#   - container/ (symlink to project root, for include path resolution)
+#   - core/      (core container implementation)
+#   - internal/  (internal implementation details)
+#   - integration/ (integration adapters)
 # =============================================================================
-install(DIRECTORY
-    ${CMAKE_CURRENT_SOURCE_DIR}/kcenon
+install(FILES
+    ${CMAKE_CURRENT_SOURCE_DIR}/container.h
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
     COMPONENT Development
+)
+
+install(DIRECTORY
+    ${CMAKE_CURRENT_SOURCE_DIR}/core
+    ${CMAKE_CURRENT_SOURCE_DIR}/internal
+    ${CMAKE_CURRENT_SOURCE_DIR}/integration
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+    COMPONENT Development
+    FILES_MATCHING
+    PATTERN "*.h"
+    PATTERN "*.hpp"
 )
 
 ##################################################
