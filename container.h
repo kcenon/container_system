@@ -31,33 +31,19 @@
  * @file container.h
  * @brief Main include file for the container module
  *
- * @deprecated This header path is deprecated. Please use the canonical path:
- *             #include <kcenon/container/container.h>
- *             This header will be removed in v0.5.0.0.
- *
  * This file includes all the public headers from the container module.
  * Users should include this file to use the container functionality.
+ *
+ * @code
+ * // Recommended usage:
+ * #include <container/container.h>
+ * @endcode
  */
 
 #pragma once
 
-// =============================================================================
-// DEPRECATION WARNING
-// =============================================================================
-// This header path is deprecated and will be removed in v0.5.0.0.
-// Please migrate to the canonical include path:
-//     #include <kcenon/container/container.h>
-// =============================================================================
-#if defined(__GNUC__) || defined(__clang__)
-    #pragma GCC warning "Deprecated: Use <kcenon/container/container.h> instead. This header will be removed in v0.5.0.0."
-#elif defined(_MSC_VER)
-    #pragma message("warning: Deprecated: Use <kcenon/container/container.h> instead. This header will be removed in v0.5.0.0.")
-#endif
-
-// Core components (suppress nested deprecation warnings)
-#define CONTAINER_INTERNAL_INCLUDE
+// Core components
 #include "container/core/container.h"
-#undef CONTAINER_INTERNAL_INCLUDE
 #include "container/core/value_types.h"
 
 // Integration features (conditional)

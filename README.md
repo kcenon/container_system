@@ -29,7 +29,7 @@ Making high-performance data serialization **accessible**, **type-safe**, and **
 ### Basic Usage Example
 
 ```cpp
-#include <kcenon/container/container.h>  // Canonical include path
+#include <container/container.h>  // Canonical include path
 
 using namespace container_module;
 
@@ -399,7 +399,7 @@ for (int i = 0; i < 8; ++i) {
 **Use**: `thread_safe_container` for synchronized writes
 
 ```cpp
-#include <kcenon/container/advanced/thread_safe_container.h>
+#include <container/internal/thread_safe_container.h>
 
 auto safe_container = std::make_shared<thread_safe_container>(container);
 
@@ -423,7 +423,7 @@ for (int i = 0; i < 4; ++i) {
 - **External API**: Result&lt;T&gt; for type safety
 
 ```cpp
-#include <kcenon/container/adapters/common_result_adapter.h>
+#include <container/integration/common_result_adapter.h>
 using namespace container::adapters;
 
 // Serialization with Result<T>
@@ -443,53 +443,25 @@ if (!get_result) {
 
 **Error Codes**: -400 to -499 (centralized in common_system)
 
-## Include Path Migration
+## Include Paths
 
 ### Canonical Include Path
 
-Starting from v0.4.0.0, the canonical include path for container_system is:
+The canonical include path for container_system is:
 
 ```cpp
-#include <kcenon/container/container.h>
+#include <container/container.h>
 ```
 
-### Deprecated Paths
+### Available Headers
 
-The following include paths are **deprecated** and will be removed in v0.5.0.0:
-
-| Deprecated Path | Status | Migration |
-|----------------|--------|-----------|
-| `#include "container.h"` | Deprecated | Use `<kcenon/container/container.h>` |
-| `#include <container.h>` | Deprecated | Use `<kcenon/container/container.h>` |
-| `#include "core/container.h"` | Deprecated | Use `<kcenon/container/container.h>` |
-| `#include <container/core/container.h>` | Deprecated | Use `<kcenon/container/container.h>` |
-
-### Migration Steps
-
-1. **Search** for deprecated includes in your codebase:
-   ```bash
-   grep -r '#include.*container\.h' src/ include/ --include="*.h" --include="*.cpp"
-   ```
-
-2. **Replace** deprecated paths with the canonical path:
-   ```cpp
-   // Before (deprecated)
-   #include "container.h"
-   #include <container/core/container.h>
-
-   // After (canonical)
-   #include <kcenon/container/container.h>
-   ```
-
-3. **Verify** your build works without deprecation warnings
-
-### Timeline
-
-| Version | Action |
-|---------|--------|
-| v0.4.0.0 | Deprecation warnings added to non-canonical paths |
-| v0.4.x | Migration period |
-| v0.5.0.0 | Non-canonical paths removed |
+| Header | Purpose |
+|--------|---------|
+| `<container/container.h>` | Main entry point - includes all core functionality |
+| `<container/core/container.h>` | Core container implementation |
+| `<container/core/value_types.h>` | Value type definitions |
+| `<container/internal/thread_safe_container.h>` | Thread-safe container wrapper |
+| `<container/integration/common_result_adapter.h>` | Result-based error handling adapter |
 
 ## Contributing
 

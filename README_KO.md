@@ -29,7 +29,7 @@ Container System은 메시징 시스템과 범용 애플리케이션을 위한 �
 ### 기본 사용 예제
 
 ```cpp
-#include <kcenon/container/container.h>  // 표준 include 경로
+#include <container/container.h>  // 표준 include 경로
 
 using namespace container_module;
 
@@ -399,7 +399,7 @@ for (int i = 0; i < 8; ++i) {
 **사용**: 동기화된 쓰기를 위한 `thread_safe_container`
 
 ```cpp
-#include <kcenon/container/advanced/thread_safe_container.h>
+#include <container/internal/thread_safe_container.h>
 
 auto safe_container = std::make_shared<thread_safe_container>(container);
 
@@ -423,7 +423,7 @@ for (int i = 0; i < 4; ++i) {
 - **외부 API**: 타입 안전성을 위한 Result&lt;T&gt;
 
 ```cpp
-#include <kcenon/container/adapters/common_result_adapter.h>
+#include <container/integration/common_result_adapter.h>
 using namespace container::adapters;
 
 // Result<T>를 사용한 직렬화
@@ -443,53 +443,25 @@ if (!get_result) {
 
 **오류 코드**: -400 ~ -499 (common_system에 중앙화)
 
-## Include 경로 마이그레이션
+## Include 경로
 
 ### 표준 Include 경로
 
-v0.4.0.0부터 container_system의 표준 include 경로는 다음과 같습니다:
+container_system의 표준 include 경로는 다음과 같습니다:
 
 ```cpp
-#include <kcenon/container/container.h>
+#include <container/container.h>
 ```
 
-### 사용 중단된 경로
+### 사용 가능한 헤더
 
-다음 include 경로는 **사용 중단** 되었으며 v0.5.0.0에서 제거됩니다:
-
-| 사용 중단된 경로 | 상태 | 마이그레이션 |
-|----------------|--------|-----------|
-| `#include "container.h"` | 사용 중단 | `<kcenon/container/container.h>` 사용 |
-| `#include <container.h>` | 사용 중단 | `<kcenon/container/container.h>` 사용 |
-| `#include "core/container.h"` | 사용 중단 | `<kcenon/container/container.h>` 사용 |
-| `#include <container/core/container.h>` | 사용 중단 | `<kcenon/container/container.h>` 사용 |
-
-### 마이그레이션 단계
-
-1. 코드베이스에서 사용 중단된 include **검색**:
-   ```bash
-   grep -r '#include.*container\.h' src/ include/ --include="*.h" --include="*.cpp"
-   ```
-
-2. 사용 중단된 경로를 표준 경로로 **교체**:
-   ```cpp
-   // 이전 (사용 중단)
-   #include "container.h"
-   #include <container/core/container.h>
-
-   // 이후 (표준)
-   #include <kcenon/container/container.h>
-   ```
-
-3. 사용 중단 경고 없이 빌드되는지 **확인**
-
-### 일정
-
-| 버전 | 작업 |
-|---------|--------|
-| v0.4.0.0 | 비표준 경로에 사용 중단 경고 추가 |
-| v0.4.x | 마이그레이션 기간 |
-| v0.5.0.0 | 비표준 경로 제거 |
+| 헤더 | 용도 |
+|--------|---------|
+| `<container/container.h>` | 메인 진입점 - 모든 핵심 기능 포함 |
+| `<container/core/container.h>` | 핵심 컨테이너 구현 |
+| `<container/core/value_types.h>` | 값 타입 정의 |
+| `<container/internal/thread_safe_container.h>` | 스레드 안전 컨테이너 래퍼 |
+| `<container/integration/common_result_adapter.h>` | Result 기반 오류 처리 어댑터 |
 
 ## 기여하기
 
