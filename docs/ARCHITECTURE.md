@@ -126,7 +126,7 @@ When messaging_system needs container functionality:
 
 ```cpp
 // messaging_system depends on container_system (NOT vice versa)
-#include <kcenon/container/core/container.h>
+#include <container/core/container.h>
 
 namespace messaging_system {
     // messaging_system uses container_system's types

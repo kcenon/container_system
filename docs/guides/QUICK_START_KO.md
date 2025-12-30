@@ -70,8 +70,8 @@ cd container_system
 ### 컨테이너 생성 및 사용
 
 ```cpp
-#include <kcenon/container/core/container.h>
-#include <kcenon/container/integration/messaging_builder.h>
+#include <container/core/container.h>
+#include <container/integration/messaging_builder.h>
 
 using namespace container_module;
 
@@ -106,7 +106,7 @@ int main() {
 ### Value Factory 사용
 
 ```cpp
-#include <kcenon/container/core/container.h>
+#include <container/core/container.h>
 
 using namespace container_module;
 
