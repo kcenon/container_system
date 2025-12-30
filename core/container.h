@@ -87,6 +87,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <atomic>
 #include <unordered_map>
 #include <optional>
+#include <span>
 
 #if KCENON_HAS_COMMON_SYSTEM
 #if __has_include(<kcenon/common/patterns/result.h>)
@@ -229,7 +230,9 @@ namespace container_module
 		 * @param data Value data as variant
 		 * @exception_safety Strong guarantee - no changes on exception
 		 * @throws std::bad_alloc if memory allocation fails
+		 * @deprecated Use set() instead for unified API
 		 */
+		[[deprecated("Use set() instead")]]
 		void add_value(const std::string& name, value_types type, value_variant data);
 
 		/**
@@ -238,8 +241,10 @@ namespace container_module
 		 * @param value Value of any supported type in value_variant
 		 * @exception_safety Strong guarantee - no changes on exception
 		 * @throws std::bad_alloc if memory allocation fails
+		 * @deprecated Use set() instead for unified API
 		 */
 		template<typename T>
+		[[deprecated("Use set() instead")]]
 		void add_value(const std::string& name, T&& data_val) {
 			write_lock_guard lock(this);
 
@@ -275,14 +280,18 @@ namespace container_module
 		 * @brief Set a single optimized_value, updating if key exists
 		 * @param val The optimized_value to set
 		 * @exception_safety Strong guarantee - no changes on exception
+		 * @deprecated Use set(const optimized_value&) instead for unified API
 		 */
+		[[deprecated("Use set(const optimized_value&) instead")]]
 		void set_unit(const optimized_value& val);
 
 		/**
 		 * @brief Set multiple optimized_values, updating existing keys
 		 * @param vals Vector of optimized_values to set
 		 * @exception_safety Strong guarantee - no changes on exception
+		 * @deprecated Use set_all(std::span<const optimized_value>) instead for unified API
 		 */
+		[[deprecated("Use set_all(std::span<const optimized_value>) instead")]]
 		void set_units(const std::vector<optimized_value>& vals);
 
 		/**
@@ -290,15 +299,76 @@ namespace container_module
 		 * @param key The value key/name
 		 * @param data_val The value to store
 		 * @exception_safety Strong guarantee - no changes on exception
+		 * @deprecated Use set() instead for unified API
 		 */
 		template<typename T>
+		[[deprecated("Use set() instead")]]
 		void set_value(const std::string& key, T&& data_val) {
 			optimized_value val;
 			val.name = key;
 			val.data = std::forward<T>(data_val);
 			val.type = static_cast<value_types>(val.data.index());
-			set_unit(val);
+			set_unit_impl(val);
 		}
+
+		// =======================================================================
+		// Unified Value Setter API (Issue #207)
+		// =======================================================================
+
+		/**
+		 * @brief Set a typed value by key (unified API)
+		 * @param key The value key/name
+		 * @param data_val The value to store
+		 * @return Reference to this container for method chaining
+		 * @exception_safety Strong guarantee - no changes on exception
+		 */
+		template<typename T>
+		value_container& set(std::string_view key, T&& data_val) {
+			optimized_value val;
+			val.name = std::string(key);
+			val.data = std::forward<T>(data_val);
+			val.type = static_cast<value_types>(val.data.index());
+			set_unit_impl(val);
+			return *this;
+		}
+
+		/**
+		 * @brief Set a single optimized_value (unified API)
+		 * @param val The optimized_value to set
+		 * @return Reference to this container for method chaining
+		 * @exception_safety Strong guarantee - no changes on exception
+		 */
+		value_container& set(const optimized_value& val);
+
+		/**
+		 * @brief Set multiple optimized_values at once (unified API)
+		 * @param vals Span of optimized_values to set
+		 * @return Reference to this container for method chaining
+		 * @exception_safety Strong guarantee - no changes on exception
+		 */
+		value_container& set_all(std::span<const optimized_value> vals);
+
+		/**
+		 * @brief Check if a key exists in the container
+		 * @param key Value name/key to check
+		 * @return true if key exists, false otherwise
+		 * @exception_safety No-throw guarantee
+		 */
+		[[nodiscard]] bool contains(std::string_view key) const noexcept;
+
+#if CONTAINER_HAS_COMMON_RESULT
+		/**
+		 * @brief Get a typed value by key with Result return type
+		 * @tparam T The expected value type
+		 * @param key Value name/key to search for
+		 * @return Result containing the value or error info
+		 * @exception_safety No-throw guarantee
+		 */
+		template<typename T>
+		[[nodiscard]] kcenon::common::Result<T> get(std::string_view key) const noexcept;
+#endif
+
+		// =======================================================================
 
 		/**
 		 * @brief Get a value as optimized_value (alias for get_value)
@@ -541,6 +611,13 @@ namespace container_module
 					 std::string_view target_value,
 					 std::string& target_variable);
 
+		/**
+		 * @brief Internal implementation for setting a single optimized_value
+		 * @param val The optimized_value to set
+		 * @note Used by both deprecated and new API methods
+		 */
+		void set_unit_impl(const optimized_value& val);
+
 		// Thread-safe lock guard classes
 		// Always acquire lock to eliminate TOCTOU vulnerability (see #190)
 		// Modern mutex implementations have ~20ns overhead for uncontended locks
@@ -608,4 +685,28 @@ namespace container_module
 		mutable std::atomic<size_t> heap_allocations_{0}; ///< Track heap allocations
 		mutable std::atomic<size_t> stack_allocations_{0}; ///< Track stack allocations
 	};
+
+#if CONTAINER_HAS_COMMON_RESULT
+	// Template implementation for get<T>()
+	template<typename T>
+	[[nodiscard]] kcenon::common::Result<T> value_container::get(std::string_view key) const noexcept {
+		read_lock_guard lock(this);
+
+		for (const auto& val : optimized_units_) {
+			if (val.name == key) {
+				// Try to extract the value of type T from the variant
+				if (auto* ptr = std::get_if<T>(&val.data)) {
+					return kcenon::common::ok(*ptr);
+				}
+				// Type mismatch
+				return kcenon::common::Result<T>(
+					kcenon::common::error_info{-2, "Type mismatch for key: " + std::string(key), "container_system"});
+			}
+		}
+		// Key not found
+		return kcenon::common::Result<T>(
+			kcenon::common::error_info{-1, "Key not found: " + std::string(key), "container_system"});
+	}
+#endif
+
 } // namespace container_module
