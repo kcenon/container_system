@@ -103,7 +103,7 @@ protected:
         for (size_t i = 0; i < num_values; ++i) {
             std::string key = "key_" + std::to_string(i);
             std::string value = "value_" + std::to_string(i);
-            test_container->add(std::make_shared<string_value>(key, value));
+            test_container->add(make_string_value(key, value));
         }
 
         return test_container;
@@ -114,7 +114,7 @@ protected:
      */
     void AddStringValue(const std::string& key, const std::string& value)
     {
-        container->add(std::make_shared<string_value>(key, value));
+        container->add(make_string_value(key, value));
     }
 
     /**
@@ -124,11 +124,11 @@ protected:
     void AddNumericValue(const std::string& key, T value)
     {
         if constexpr (std::is_same_v<T, int>) {
-            container->add(std::make_shared<int_value>(key, value));
+            container->add(make_int_value(key, value));
         } else if constexpr (std::is_same_v<T, long long>) {
-            container->add(std::make_shared<llong_value>(key, value));
+            container->add(make_llong_value(key, value));
         } else if constexpr (std::is_same_v<T, double>) {
-            container->add(std::make_shared<double_value>(key, value));
+            container->add(make_double_value(key, value));
         }
     }
 
@@ -137,7 +137,7 @@ protected:
      */
     void AddBoolValue(const std::string& key, bool value)
     {
-        container->add(std::make_shared<bool_value>(key, value));
+        container->add(make_bool_value(key, value));
     }
 
     /**
@@ -145,7 +145,7 @@ protected:
      */
     void AddBytesValue(const std::string& key, const std::vector<uint8_t>& data)
     {
-        container->add(std::make_shared<bytes_value>(key, data));
+        container->add(make_bytes_value(key, data));
     }
 
     /**

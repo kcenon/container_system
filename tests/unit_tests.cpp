@@ -82,89 +82,89 @@ protected:
 
 TEST_F(ValueTest, NullValueCreation) {
     std::string key = "test_null";
-    auto null_val = std::make_shared<legacy_value>(key);
+    auto null_val = std::make_shared<value>(key);
 
     EXPECT_EQ(null_val->name(), "test_null");
     EXPECT_EQ(null_val->type(), value_types::null_value);
     EXPECT_TRUE(null_val->is_null());
-    EXPECT_FALSE(null_val->is_boolean());
-    EXPECT_FALSE(null_val->is_numeric());
-    EXPECT_FALSE(null_val->is_string());
-    EXPECT_FALSE(null_val->is_container());
+    EXPECT_FALSE(is_boolean(*null_val));
+    EXPECT_FALSE(is_numeric(*null_val));
+    EXPECT_FALSE(is_string(*null_val));
+    EXPECT_FALSE(is_container(*null_val));
 }
 
 TEST_F(ValueTest, BooleanValueCreation) {
     // Test true value
     std::string key1 = "test_bool";
-    auto true_val = make_legacy_bool_value(key1, true);
+    auto true_val = make_bool_value(key1, true);
     EXPECT_EQ(true_val->name(), "test_bool");
     EXPECT_EQ(true_val->type(), value_types::bool_value);
-    EXPECT_TRUE(true_val->is_boolean());
-    EXPECT_TRUE(true_val->to_boolean());
+    EXPECT_TRUE(is_boolean(*true_val));
+    EXPECT_TRUE(to_boolean(*true_val));
 
     // Test false value
     std::string key2 = "test_bool2";
-    auto false_val = make_legacy_bool_value(key2, false);
-    EXPECT_FALSE(false_val->to_boolean());
+    auto false_val = make_bool_value(key2, false);
+    EXPECT_FALSE(to_boolean(*false_val));
 
     // Test string that converts to boolean (via helper)
     std::string key3 = "test_str_true";
-    auto str_true_val = make_legacy_string_value(key3, "true");
-    EXPECT_TRUE(str_true_val->to_boolean());
+    auto str_true_val = make_string_value(key3, "true");
+    EXPECT_TRUE(to_boolean(*str_true_val));
 
     std::string key4 = "test_str_false";
-    auto str_false_val = make_legacy_string_value(key4, "false");
-    EXPECT_FALSE(str_false_val->to_boolean());
+    auto str_false_val = make_string_value(key4, "false");
+    EXPECT_FALSE(to_boolean(*str_false_val));
 }
 
 TEST_F(ValueTest, NumericValueCreation) {
     // Test int
     std::string key_int = "test_int";
-    auto int_val = make_legacy_int_value(key_int, 42);
+    auto int_val = make_int_value(key_int, 42);
     EXPECT_EQ(int_val->type(), value_types::int_value);
-    EXPECT_TRUE(int_val->is_numeric());
-    EXPECT_EQ(int_val->to_int(), 42);
-    EXPECT_EQ(int_val->to_long(), 42L);
-    EXPECT_DOUBLE_EQ(int_val->to_double(), 42.0);
+    EXPECT_TRUE(is_numeric(*int_val));
+    EXPECT_EQ(to_int(*int_val), 42);
+    EXPECT_EQ(to_long(*int_val), 42L);
+    EXPECT_DOUBLE_EQ(to_double(*int_val), 42.0);
 
     // Test long long
     std::string key_llong = "test_llong";
-    auto llong_val = make_legacy_llong_value(key_llong, 9223372036854775807LL);
-    EXPECT_EQ(llong_val->to_llong(), 9223372036854775807LL);
+    auto llong_val = make_llong_value(key_llong, 9223372036854775807LL);
+    EXPECT_EQ(to_llong(*llong_val), 9223372036854775807LL);
 
     // Test double
     std::string key_double = "test_double";
-    auto double_val = make_legacy_double_value(key_double, 3.14159);
-    EXPECT_DOUBLE_EQ(double_val->to_double(), 3.14159);
+    auto double_val = make_double_value(key_double, 3.14159);
+    EXPECT_DOUBLE_EQ(to_double(*double_val), 3.14159);
 
     // Test negative values
     std::string key_neg = "test_neg";
-    auto neg_val = make_legacy_int_value(key_neg, -100);
-    EXPECT_EQ(neg_val->to_int(), -100);
+    auto neg_val = make_int_value(key_neg, -100);
+    EXPECT_EQ(to_int(*neg_val), -100);
 }
 
 TEST_F(ValueTest, StringValueCreation) {
     std::string key = "test_string";
     std::string val = "Hello, World!";
-    auto str_val = make_legacy_string_value(key, val);
+    auto str_val = make_string_value(key, val);
 
     EXPECT_EQ(str_val->type(), value_types::string_value);
-    EXPECT_TRUE(str_val->is_string());
+    EXPECT_TRUE(is_string(*str_val));
     EXPECT_EQ(str_val->to_string(), "Hello, World!");
-    // Note: size() returns internal data size after conversion, not original string length
-    EXPECT_GT(str_val->size(), 0); // Just verify data exists
+    // Note: value_size() returns internal data size after conversion, not original string length
+    EXPECT_GT(value_size(*str_val), 0); // Just verify data exists
 }
 
 TEST_F(ValueTest, BytesValueCreation) {
     std::vector<uint8_t> test_data = {0x01, 0x02, 0x03, 0x04, 0xFF};
 
     std::string key = "test_bytes";
-    auto bytes_val = make_legacy_bytes_value(key, test_data);
+    auto bytes_val = make_bytes_value(key, test_data);
 
     EXPECT_EQ(bytes_val->type(), value_types::bytes_value);
-    EXPECT_TRUE(bytes_val->is_bytes());
+    EXPECT_TRUE(is_bytes(*bytes_val));
 
-    auto retrieved_bytes = bytes_val->to_bytes();
+    auto retrieved_bytes = to_bytes(*bytes_val);
     EXPECT_EQ(retrieved_bytes.size(), test_data.size());
     EXPECT_EQ(retrieved_bytes, test_data);
 }
@@ -172,12 +172,12 @@ TEST_F(ValueTest, BytesValueCreation) {
 TEST_F(ValueTest, ValueTypeSerialization) {
     // Test each value type serialization
     std::string key1 = "bool";
-    auto bool_val = make_legacy_bool_value(key1, true);
+    auto bool_val = make_bool_value(key1, true);
     std::string key2 = "int";
-    auto int_val = make_legacy_int_value(key2, 42);
+    auto int_val = make_int_value(key2, 42);
     std::string key3 = "str";
     std::string val3 = "test";
-    auto str_val = make_legacy_string_value(key3, val3);
+    auto str_val = make_string_value(key3, val3);
 
     // Serialize values (returns vector<uint8_t>)
     auto bool_ser = bool_val->serialize();
@@ -459,23 +459,23 @@ TEST(ErrorHandlingTest, InvalidSerializationHandling) {
 TEST(ErrorHandlingTest, TypeConversionErrors) {
     std::string key = "test";
     std::string val = "not_a_number";
-    auto str_val = make_legacy_string_value(key, val);
+    auto str_val = make_string_value(key, val);
 
     // String to int conversion should handle gracefully
-    EXPECT_EQ(str_val->to_int(), 0); // Default value for failed conversion
+    EXPECT_EQ(to_int(*str_val), 0); // Default value for failed conversion
 }
 
 // Disabled: Value class doesn't throw on null conversions - returns defaults instead
 // TODO: Consider implementing exception throwing for null value conversions
 TEST(ErrorHandlingTest, DISABLED_NullValueConversions) {
     std::string key = "null";
-    auto null_val = std::make_shared<legacy_value>(key);
+    auto null_val = std::make_shared<value>(key);
 
-    // With legacy_value, null conversions return default values rather than throwing
+    // With value class, null conversions return default values rather than throwing
     // This test is disabled as the current implementation doesn't throw
-    EXPECT_EQ(null_val->to_boolean(), false);
-    EXPECT_EQ(null_val->to_int(), 0);
-    EXPECT_EQ(null_val->to_double(), 0.0);
+    EXPECT_EQ(to_boolean(*null_val), false);
+    EXPECT_EQ(to_int(*null_val), 0);
+    EXPECT_EQ(to_double(*null_val), 0.0);
 }
 
 // ============================================================================
@@ -595,13 +595,13 @@ TEST(EdgeCaseTest, MaximumValues) {
     std::string min_int_key = "min_int";
     std::string max_llong_key = "max_llong";
 
-    auto max_int = make_legacy_int_value(max_int_key, std::numeric_limits<int>::max());
-    auto min_int = make_legacy_int_value(min_int_key, std::numeric_limits<int>::min());
-    auto max_llong = make_legacy_llong_value(max_llong_key, std::numeric_limits<long long>::max());
+    auto max_int = make_int_value(max_int_key, std::numeric_limits<int>::max());
+    auto min_int = make_int_value(min_int_key, std::numeric_limits<int>::min());
+    auto max_llong = make_llong_value(max_llong_key, std::numeric_limits<long long>::max());
 
-    EXPECT_EQ(max_int->to_int(), std::numeric_limits<int>::max());
-    EXPECT_EQ(min_int->to_int(), std::numeric_limits<int>::min());
-    EXPECT_EQ(max_llong->to_llong(), std::numeric_limits<long long>::max());
+    EXPECT_EQ(to_int(*max_int), std::numeric_limits<int>::max());
+    EXPECT_EQ(to_int(*min_int), std::numeric_limits<int>::min());
+    EXPECT_EQ(to_llong(*max_llong), std::numeric_limits<long long>::max());
 }
 
 // ============================================================================

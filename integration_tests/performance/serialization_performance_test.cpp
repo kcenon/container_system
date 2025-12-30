@@ -146,7 +146,7 @@ TEST_F(SerializationPerformanceTest, ValueAdditionThroughput)
 
     auto ops_per_sec = TestHelpers::MeasureThroughput([]() {
         auto temp = std::make_shared<value_container>();
-        temp->add(std::make_shared<string_value>("key", "value"));
+        temp->add(make_string_value("key", "value"));
     }, ITERATIONS);
 
     std::cout << "Value addition: " << ops_per_sec << " ops/sec" << std::endl;

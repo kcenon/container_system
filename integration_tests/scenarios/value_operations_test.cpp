@@ -63,7 +63,7 @@ class ValueOperationsTest : public ContainerSystemFixture
 TEST_F(ValueOperationsTest, StringValueOperations)
 {
     std::string test_str = "Hello, World!";
-    auto str_val = std::make_shared<string_value>("test", test_str);
+    auto str_val = make_string_value("test", test_str);
 
     EXPECT_TRUE(is_string(*str_val));
     EXPECT_FALSE(is_numeric(*str_val));
@@ -77,12 +77,12 @@ TEST_F(ValueOperationsTest, StringValueOperations)
  */
 TEST_F(ValueOperationsTest, NumericValueConversions)
 {
-    auto int_val = std::make_shared<int_value>("int", 42);
+    auto int_val = make_int_value("int", 42);
 
     EXPECT_TRUE(is_numeric(*int_val));
-    EXPECT_EQ(int_val->to_int(), 42);
-    EXPECT_EQ(int_val->to_long(), 42L);
-    EXPECT_DOUBLE_EQ(int_val->to_double(), 42.0);
+    EXPECT_EQ(to_int(*int_val), 42);
+    EXPECT_EQ(to_long(*int_val), 42L);
+    EXPECT_DOUBLE_EQ(to_double(*int_val), 42.0);
 }
 
 /**
@@ -90,12 +90,12 @@ TEST_F(ValueOperationsTest, NumericValueConversions)
  */
 TEST_F(ValueOperationsTest, BooleanValueOperations)
 {
-    auto true_val = std::make_shared<bool_value>("true_val", true);
-    auto false_val = std::make_shared<bool_value>("false_val", false);
+    auto true_val = make_bool_value("true_val", true);
+    auto false_val = make_bool_value("false_val", false);
 
     EXPECT_TRUE(is_boolean(*true_val));
-    EXPECT_TRUE(true_val->to_boolean());
-    EXPECT_FALSE(false_val->to_boolean());
+    EXPECT_TRUE(to_boolean(*true_val));
+    EXPECT_FALSE(to_boolean(*false_val));
 }
 
 /**
@@ -104,12 +104,12 @@ TEST_F(ValueOperationsTest, BooleanValueOperations)
 TEST_F(ValueOperationsTest, BytesValueOperations)
 {
     std::vector<uint8_t> test_data = {0x01, 0x02, 0x03, 0xFF, 0xFE, 0xFD};
-    auto bytes_val = std::make_shared<bytes_value>("bytes", test_data);
+    auto bytes_val = make_bytes_value("bytes", test_data);
 
     EXPECT_TRUE(is_bytes(*bytes_val));
     EXPECT_FALSE(is_string(*bytes_val));
 
-    auto retrieved = bytes_val->to_bytes();
+    auto retrieved = to_bytes(*bytes_val);
     ASSERT_EQ(retrieved.size(), test_data.size());
 
     for (size_t i = 0; i < test_data.size(); ++i) {
@@ -123,9 +123,9 @@ TEST_F(ValueOperationsTest, BytesValueOperations)
 TEST_F(ValueOperationsTest, LargeBytesValue)
 {
     auto large_bytes = TestHelpers::GenerateRandomBytes(10000);
-    auto bytes_val = std::make_shared<bytes_value>("large", large_bytes);
+    auto bytes_val = make_bytes_value("large", large_bytes);
 
-    auto retrieved = bytes_val->to_bytes();
+    auto retrieved = to_bytes(*bytes_val);
     EXPECT_EQ(retrieved.size(), large_bytes.size());
     EXPECT_EQ(retrieved, large_bytes);
 }
@@ -150,9 +150,9 @@ TEST_F(ValueOperationsTest, NullValueBehavior)
 TEST_F(ValueOperationsTest, DoubleValuePrecision)
 {
     double precise_value = 3.141592653589793;
-    auto double_val = std::make_shared<double_value>("pi", precise_value);
+    auto double_val = make_double_value("pi", precise_value);
 
-    EXPECT_DOUBLE_EQ(double_val->to_double(), precise_value);
+    EXPECT_DOUBLE_EQ(to_double(*double_val), precise_value);
 
     // Test serialization preserves precision
     // Note: Serialization may lose some precision due to string conversion
@@ -172,11 +172,11 @@ TEST_F(ValueOperationsTest, DoubleValuePrecision)
  */
 TEST_F(ValueOperationsTest, IntegerEdgeCases)
 {
-    auto max_int = std::make_shared<int_value>("max", std::numeric_limits<int>::max());
-    auto min_int = std::make_shared<int_value>("min", std::numeric_limits<int>::min());
+    auto max_int = make_int_value("max", std::numeric_limits<int>::max());
+    auto min_int = make_int_value("min", std::numeric_limits<int>::min());
 
-    EXPECT_EQ(max_int->to_int(), std::numeric_limits<int>::max());
-    EXPECT_EQ(min_int->to_int(), std::numeric_limits<int>::min());
+    EXPECT_EQ(to_int(*max_int), std::numeric_limits<int>::max());
+    EXPECT_EQ(to_int(*min_int), std::numeric_limits<int>::min());
 }
 
 /**
@@ -185,9 +185,9 @@ TEST_F(ValueOperationsTest, IntegerEdgeCases)
 TEST_F(ValueOperationsTest, LongLongValues)
 {
     long long large_value = 9223372036854775807LL;
-    auto llong_val = std::make_shared<llong_value>("large", large_value);
+    auto llong_val = make_llong_value("large", large_value);
 
-    EXPECT_EQ(llong_val->to_llong(), large_value);
+    EXPECT_EQ(to_llong(*llong_val), large_value);
 
     container->add(llong_val);
     auto restored = RoundTripSerialize();
@@ -199,11 +199,11 @@ TEST_F(ValueOperationsTest, LongLongValues)
  */
 TEST_F(ValueOperationsTest, ValueTypeIdentification)
 {
-    auto str = std::make_shared<string_value>("str", "test");
-    auto num = std::make_shared<int_value>("num", 42);
-    auto boolean = std::make_shared<bool_value>("bool", true);
+    auto str = make_string_value("str", "test");
+    auto num = make_int_value("num", 42);
+    auto boolean = make_bool_value("bool", true);
     std::vector<uint8_t> bytes_data = {0x01, 0x02};
-    auto bytes = std::make_shared<bytes_value>("bytes", bytes_data);
+    auto bytes = make_bytes_value("bytes", bytes_data);
 
     EXPECT_EQ(str->type(), value_types::string_value);
     EXPECT_EQ(num->type(), value_types::int_value);
@@ -217,7 +217,7 @@ TEST_F(ValueOperationsTest, ValueTypeIdentification)
 TEST_F(ValueOperationsTest, SpecialStringCharacters)
 {
     std::string special = "Line1\nLine2\tTab\rReturn";
-    auto str_val = std::make_shared<string_value>("special", special);
+    auto str_val = make_string_value("special", special);
 
     container->add(str_val);
     auto restored = RoundTripSerialize();
@@ -232,9 +232,9 @@ TEST_F(ValueOperationsTest, SpecialStringCharacters)
  */
 TEST_F(ValueOperationsTest, EmptyAndWhitespaceStrings)
 {
-    auto empty = std::make_shared<string_value>("empty", "");
-    auto whitespace = std::make_shared<string_value>("whitespace", "   ");
-    auto mixed = std::make_shared<string_value>("mixed", "  text  ");
+    auto empty = make_string_value("empty", "");
+    auto whitespace = make_string_value("whitespace", "   ");
+    auto mixed = make_string_value("mixed", "  text  ");
 
     container->add(empty);
     container->add(whitespace);

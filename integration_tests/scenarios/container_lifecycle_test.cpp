@@ -133,9 +133,9 @@ TEST_F(ContainerLifecycleTest, ValueAdditionAndRetrieval)
 TEST_F(ContainerLifecycleTest, MultipleValuesWithSameKey)
 {
     // Use add() to allow duplicate keys
-    container->add(std::make_shared<string_value>("item", "first"));
-    container->add(std::make_shared<string_value>("item", "second"));
-    container->add(std::make_shared<string_value>("item", "third"));
+    container->add(make_string_value("item", "first"));
+    container->add(make_string_value("item", "second"));
+    container->add(make_string_value("item", "third"));
 
     // Iterate through container to find all values with key "item"
     std::vector<std::string> items;
@@ -240,7 +240,7 @@ TEST_F(ContainerLifecycleTest, NestedContainerStructure)
 {
     auto nested = std::make_shared<value_container>();
     nested->set_message_type("nested_msg");
-    nested->add(std::make_shared<string_value>("nested_key", "nested_value"));
+    nested->add(make_string_value("nested_key", "nested_value"));
 
     // Serialize nested container
     std::string nested_data = nested->serialize();
