@@ -176,25 +176,25 @@ messaging_container_builder& messaging_container_builder::add_value(const std::s
         // Handle nested containers by serializing and storing as bytes
         std::string serialized_data = value->serialize();
         std::vector<uint8_t> bytes(serialized_data.begin(), serialized_data.end());
-        container_->set_value(key, bytes);
+        container_->set(key, bytes);
     } else if constexpr (std::is_same_v<DecayedT, bool>) {
-        container_->set_value(key, value);
+        container_->set(key, value);
     } else if constexpr (concepts::IntegralType<DecayedT>) {
         if constexpr (sizeof(DecayedT) <= 4) {
-            container_->set_value(key, static_cast<int32_t>(value));
+            container_->set(key, static_cast<int32_t>(value));
         } else {
-            container_->set_value(key, static_cast<int64_t>(value));
+            container_->set(key, static_cast<int64_t>(value));
         }
     } else if constexpr (concepts::FloatingPointType<DecayedT>) {
         if constexpr (std::is_same_v<DecayedT, float>) {
-            container_->set_value(key, value);
+            container_->set(key, value);
         } else {
-            container_->set_value(key, value);
+            container_->set(key, value);
         }
     } else if constexpr (std::is_same_v<DecayedT, std::string>) {
-        container_->set_value(key, std::string(value));
+        container_->set(key, std::string(value));
     } else if constexpr (concepts::StringLike<DecayedT>) {
-        container_->set_value(key, std::string(value));
+        container_->set(key, std::string(value));
     }
 
     return *this;

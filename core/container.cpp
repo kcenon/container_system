@@ -310,7 +310,11 @@ namespace container_module
 	// MIGRATE-002: variant_value_v2 Support API Implementation
 	// =======================================================================
 
-	void value_container::set_unit(const optimized_value& val)
+	// =======================================================================
+	// Internal implementation method
+	// =======================================================================
+
+	void value_container::set_unit_impl(const optimized_value& val)
 	{
 		write_lock_guard lock(this);
 
@@ -334,11 +338,50 @@ namespace container_module
 		}
 	}
 
+	// =======================================================================
+	// Deprecated methods (delegating to implementation)
+	// =======================================================================
+
+	void value_container::set_unit(const optimized_value& val)
+	{
+		set_unit_impl(val);
+	}
+
 	void value_container::set_units(const std::vector<optimized_value>& vals)
 	{
 		for (const auto& val : vals) {
-			set_unit(val);
+			set_unit_impl(val);
 		}
+	}
+
+	// =======================================================================
+	// Unified Value Setter API (Issue #207)
+	// =======================================================================
+
+	value_container& value_container::set(const optimized_value& val)
+	{
+		set_unit_impl(val);
+		return *this;
+	}
+
+	value_container& value_container::set_all(std::span<const optimized_value> vals)
+	{
+		for (const auto& val : vals) {
+			set_unit_impl(val);
+		}
+		return *this;
+	}
+
+	bool value_container::contains(std::string_view key) const noexcept
+	{
+		read_lock_guard lock(this);
+
+		for (const auto& val : optimized_units_) {
+			if (val.name == key) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	std::optional<optimized_value> value_container::get_variant_value(const std::string& key) const noexcept
