@@ -546,6 +546,77 @@ if (modern) {
 
 ---
 
+## Unified Value Setter API (v0.2.1)
+
+### Overview
+
+Starting from v0.2.1, `value_container` provides a unified API for setting values. This API consolidates the previous 5 different setter methods into a clean, consistent interface.
+
+### New API Methods
+
+| Method | Description |
+|--------|-------------|
+| `set(key, value)` | Set typed value by key (with method chaining) |
+| `set(optimized_value)` | Set from optimized_value object |
+| `set_all(span<optimized_value>)` | Set multiple values at once |
+| `contains(key)` | Check if key exists |
+| `get<T>(key)` | Get typed value with Result return type |
+
+### Deprecated Methods
+
+The following methods are deprecated and will be removed in the next major version:
+
+| Deprecated Method | Replacement |
+|-------------------|-------------|
+| `add_value(name, type, data)` | `set(key, value)` |
+| `add_value<T>(name, data)` | `set(key, value)` |
+| `set_unit(optimized_value)` | `set(optimized_value)` |
+| `set_units(vector)` | `set_all(span)` |
+| `set_value<T>(key, data)` | `set(key, value)` |
+
+### Migration Examples
+
+```cpp
+// DEPRECATED - Old API
+container->add_value("name", value_types::string_value, std::string("John"));
+container->add_value("count", 42);
+container->set_unit(ov);
+container->set_units(values_vector);
+
+// RECOMMENDED - New Unified API
+container->set("name", std::string("John"));
+container->set("count", 42);
+container->set(ov);
+container->set_all(values_vector);
+
+// Method chaining support
+container->set("a", 1)
+         .set("b", 2)
+         .set("c", 3);
+
+// Check if key exists
+if (container->contains("name")) {
+    // Key exists
+}
+
+// Type-safe value retrieval with Result type
+auto result = container->get<std::string>("name");
+if (kcenon::common::is_ok(result)) {
+    auto value = kcenon::common::get_value(result);
+    // Use value
+}
+```
+
+### Benefits
+
+- **Single entry point**: One `set()` method instead of 5 different setters
+- **Method chaining**: Fluent API for setting multiple values
+- **Type safety**: Template-based type deduction
+- **Cleaner API**: Follows "Reveals Intention" and "Fewest Elements" principles
+- **Backward compatible**: Deprecated methods still work during transition
+
+---
+
 ## Testing Strategy
 
 ### Unit Tests
