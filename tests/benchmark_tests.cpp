@@ -80,7 +80,7 @@ BENCHMARK(BM_ValueCreation_Null);
 
 static void BM_ValueCreation_Bool(benchmark::State& state) {
     for (auto _ : state) {
-        auto val = std::make_shared<bool_value>("test", true);
+        auto val = make_bool_value("test", true);
         benchmark::DoNotOptimize(val);
     }
 }
@@ -88,7 +88,7 @@ BENCHMARK(BM_ValueCreation_Bool);
 
 static void BM_ValueCreation_Int32(benchmark::State& state) {
     for (auto _ : state) {
-        auto val = std::make_shared<int_value>("test", 42);
+        auto val = make_int_value("test", 42);
         benchmark::DoNotOptimize(val);
     }
 }
@@ -96,7 +96,7 @@ BENCHMARK(BM_ValueCreation_Int32);
 
 static void BM_ValueCreation_Double(benchmark::State& state) {
     for (auto _ : state) {
-        auto val = std::make_shared<double_value>("test", 3.14159);
+        auto val = make_double_value("test", 3.14159);
         benchmark::DoNotOptimize(val);
     }
 }
@@ -105,7 +105,7 @@ BENCHMARK(BM_ValueCreation_Double);
 static void BM_ValueCreation_String(benchmark::State& state) {
     std::string data = generate_random_string(state.range(0));
     for (auto _ : state) {
-        auto val = std::make_shared<string_value>("test", data);
+        auto val = make_string_value("test", data);
         benchmark::DoNotOptimize(val);
     }
     state.SetBytesProcessed(state.iterations() * state.range(0));
@@ -116,7 +116,7 @@ static void BM_ValueCreation_Bytes(benchmark::State& state) {
     std::vector<uint8_t> data(state.range(0), 0xFF);
     
     for (auto _ : state) {
-        auto val = std::make_shared<bytes_value>("test", data);
+        auto val = make_bytes_value("test", data);
         benchmark::DoNotOptimize(val);
     }
     state.SetBytesProcessed(state.iterations() * state.range(0));
@@ -128,7 +128,7 @@ BENCHMARK(BM_ValueCreation_Bytes)->Range(8, 8<<10);
 // ============================================================================
 
 static void BM_ValueConversion_StringToInt(benchmark::State& state) {
-    auto val = std::make_shared<string_value>("test", "12345");
+    auto val = make_string_value("test", "12345");
     
     for (auto _ : state) {
         int result = val->to_int();
@@ -138,7 +138,7 @@ static void BM_ValueConversion_StringToInt(benchmark::State& state) {
 BENCHMARK(BM_ValueConversion_StringToInt);
 
 static void BM_ValueConversion_IntToString(benchmark::State& state) {
-    auto val = std::make_shared<int_value>("test", 12345);
+    auto val = make_int_value("test", 12345);
     
     for (auto _ : state) {
         std::string result = val->to_string();
@@ -148,7 +148,7 @@ static void BM_ValueConversion_IntToString(benchmark::State& state) {
 BENCHMARK(BM_ValueConversion_IntToString);
 
 static void BM_ValueConversion_DoubleToString(benchmark::State& state) {
-    auto val = std::make_shared<double_value>("test", 3.14159265358979);
+    auto val = make_double_value("test", 3.14159265358979);
     
     for (auto _ : state) {
         std::string result = val->to_string();
@@ -171,7 +171,7 @@ BENCHMARK(BM_ContainerCreation_Empty);
 
 static void BM_ContainerAddValue(benchmark::State& state) {
     auto container = std::make_unique<value_container>();
-    auto val = std::make_shared<string_value>("test", "data");
+    auto val = make_string_value("test", "data");
     
     for (auto _ : state) {
         state.PauseTiming();
@@ -192,7 +192,7 @@ static void BM_ContainerAddMultipleValues(benchmark::State& state) {
     
     // Pre-create values
     for (int i = 0; i < state.range(0); ++i) {
-        values.push_back(std::make_shared<string_value>(
+        values.push_back(make_string_value(
             "key" + std::to_string(i), 
             "value" + std::to_string(i)
         ));
@@ -217,7 +217,7 @@ static void BM_ContainerGetValue(benchmark::State& state) {
     
     // Add values
     for (int i = 0; i < state.range(0); ++i) {
-        container->add(std::make_shared<string_value>(
+        container->add(make_string_value(
             "key" + std::to_string(i), 
             "value" + std::to_string(i)
         ));
@@ -245,7 +245,7 @@ static void BM_ContainerSerialize(benchmark::State& state) {
     
     // Add values
     for (int i = 0; i < state.range(0); ++i) {
-        container->add(std::make_shared<string_value>(
+        container->add(make_string_value(
             "key" + std::to_string(i), 
             "value" + std::to_string(i)
         ));
@@ -267,7 +267,7 @@ static void BM_ContainerDeserialize(benchmark::State& state) {
     
     // Add values
     for (int i = 0; i < state.range(0); ++i) {
-        container->add(std::make_shared<string_value>(
+        container->add(make_string_value(
             "key" + std::to_string(i), 
             "value" + std::to_string(i)
         ));
@@ -293,7 +293,7 @@ static void BM_ContainerToJSON(benchmark::State& state) {
     
     // Add values
     for (int i = 0; i < state.range(0); ++i) {
-        container->add(std::make_shared<string_value>(
+        container->add(make_string_value(
             "key" + std::to_string(i), 
             "value" + std::to_string(i)
         ));
@@ -313,7 +313,7 @@ static void BM_ContainerToXML(benchmark::State& state) {
     
     // Add values
     for (int i = 0; i < state.range(0); ++i) {
-        container->add(std::make_shared<string_value>(
+        container->add(make_string_value(
             "key" + std::to_string(i), 
             "value" + std::to_string(i)
         ));
@@ -336,7 +336,7 @@ static void BM_LargeStringHandling(benchmark::State& state) {
     
     for (auto _ : state) {
         auto container = std::make_unique<value_container>();
-        container->add(std::make_shared<string_value>("large", large_data));
+        container->add(make_string_value("large", large_data));
         
         std::string serialized = container->serialize();
         auto restored = std::make_unique<value_container>(serialized);
@@ -354,7 +354,7 @@ static void BM_LargeBinaryHandling(benchmark::State& state) {
     
     for (auto _ : state) {
         auto container = std::make_unique<value_container>();
-        container->add(std::make_shared<bytes_value>("binary", binary_data));
+        container->add(make_bytes_value("binary", binary_data));
         
         std::string serialized = container->serialize();
         auto restored = std::make_unique<value_container>(serialized);
@@ -446,7 +446,7 @@ static void BM_MemoryPattern_SmallValues(benchmark::State& state) {
         values.reserve(state.range(0));
         
         for (int i = 0; i < state.range(0); ++i) {
-            values.push_back(std::make_shared<int_value>(
+            values.push_back(make_int_value(
                 "k", 1
             ));
         }
@@ -465,7 +465,7 @@ static void BM_MemoryPattern_LargeValues(benchmark::State& state) {
         values.reserve(state.range(0));
         
         for (int i = 0; i < state.range(0); ++i) {
-            values.push_back(std::make_shared<string_value>(
+            values.push_back(make_string_value(
                 "key", large_string
             ));
         }
@@ -491,7 +491,7 @@ static void BM_NestedContainer_Create(benchmark::State& state) {
         for (int i = 0; i < depth; ++i) {
             auto nested = std::make_unique<value_container>();
             nested->set_message_type("level_" + std::to_string(i));
-            nested->add(std::make_shared<string_value>("data", "value"));
+            nested->add(make_string_value("data", "value"));
             
             // Serialize nested container
             std::string nested_data = nested->serialize();
@@ -521,7 +521,7 @@ static void BM_NestedContainer_Serialize(benchmark::State& state) {
         
         auto nested = std::make_unique<value_container>();
         nested->set_message_type("level_" + std::to_string(level));
-        nested->add(std::make_shared<string_value>("data", 
+        nested->add(make_string_value("data", 
                                          "value_at_level_" + std::to_string(level)));
         
         // Serialize nested container and add as container value
@@ -547,7 +547,7 @@ static void BM_SIMD_StringSearch(benchmark::State& state) {
     
     // Add many string values
     for (int i = 0; i < 1000; ++i) {
-        container->add(std::make_shared<string_value>(
+        container->add(make_string_value(
             "key" + std::to_string(i), 
             generate_random_string(64)
         ));
@@ -574,7 +574,7 @@ static void BM_WorstCase_ManyDuplicateKeys(benchmark::State& state) {
     
     // Add many values with the same key
     for (int i = 0; i < state.range(0); ++i) {
-        container->add(std::make_shared<string_value>(
+        container->add(make_string_value(
             "duplicate_key", 
             "value_" + std::to_string(i)
         ));
@@ -597,7 +597,7 @@ static void BM_WorstCase_DeepNesting(benchmark::State& state) {
         nested->set_message_type("nested_" + std::to_string(i));
         
         for (int j = 0; j < 10; ++j) {
-            nested->add(std::make_shared<string_value>(
+            nested->add(make_string_value(
                 "data_" + std::to_string(j), 
                 "value"
             ));

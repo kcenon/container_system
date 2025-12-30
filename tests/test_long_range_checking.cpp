@@ -40,36 +40,36 @@ protected:
 
 TEST_F(LongRangeCheckingTest, LongValueAcceptsValidPositiveValue) {
     EXPECT_NO_THROW({
-        long_value lv("test", static_cast<int64_t>(1000000));
-        EXPECT_EQ(lv.to_long(), 1000000);
+        value lv("test", static_cast<int64_t>(1000000));
+        EXPECT_EQ(to_long(lv), 1000000);
     });
 }
 
 TEST_F(LongRangeCheckingTest, LongValueAcceptsValidNegativeValue) {
     EXPECT_NO_THROW({
-        long_value lv("test", static_cast<int64_t>(-1000000));
-        EXPECT_EQ(lv.to_long(), -1000000);
+        value lv("test", static_cast<int64_t>(-1000000));
+        EXPECT_EQ(to_long(lv), -1000000);
     });
 }
 
 TEST_F(LongRangeCheckingTest, LongValueAcceptsZero) {
     EXPECT_NO_THROW({
-        long_value lv("test", static_cast<int64_t>(0));
-        EXPECT_EQ(lv.to_long(), 0);
+        value lv("test", static_cast<int64_t>(0));
+        EXPECT_EQ(to_long(lv), 0);
     });
 }
 
 TEST_F(LongRangeCheckingTest, LongValueAcceptsInt32Max) {
     EXPECT_NO_THROW({
-        long_value lv("test", static_cast<int64_t>(kInt32Max));
-        EXPECT_EQ(lv.to_long(), kInt32Max);
+        value lv("test", static_cast<int64_t>(kInt32Max));
+        EXPECT_EQ(to_long(lv), kInt32Max);
     });
 }
 
 TEST_F(LongRangeCheckingTest, LongValueAcceptsInt32Min) {
     EXPECT_NO_THROW({
-        long_value lv("test", static_cast<int64_t>(kInt32Min));
-        EXPECT_EQ(lv.to_long(), kInt32Min);
+        value lv("test", static_cast<int64_t>(kInt32Min));
+        EXPECT_EQ(to_long(lv), kInt32Min);
     });
 }
 
@@ -79,25 +79,25 @@ TEST_F(LongRangeCheckingTest, LongValueAcceptsInt32Min) {
 
 TEST_F(LongRangeCheckingTest, DISABLED_LongValueRejectsInt32MaxPlusOne) {
     EXPECT_THROW({
-        long_value lv("test", static_cast<long>(kInt32Max) + 1);
+        value lv("test", static_cast<long>(kInt32Max) + 1);
     }, std::overflow_error);
 }
 
 TEST_F(LongRangeCheckingTest, DISABLED_LongValueRejectsInt32MinMinusOne) {
     EXPECT_THROW({
-        long_value lv("test", static_cast<long>(kInt32Min) - 1);
+        value lv("test", static_cast<long>(kInt32Min) - 1);
     }, std::overflow_error);
 }
 
 TEST_F(LongRangeCheckingTest, DISABLED_LongValueRejectsLargePositiveValue) {
     EXPECT_THROW({
-        long_value lv("test", 5000000000L); // 5 billion
+        value lv("test", 5000000000L); // 5 billion
     }, std::overflow_error);
 }
 
 TEST_F(LongRangeCheckingTest, DISABLED_LongValueRejectsLargeNegativeValue) {
     EXPECT_THROW({
-        long_value lv("test", -5000000000L); // -5 billion
+        value lv("test", -5000000000L); // -5 billion
     }, std::overflow_error);
 }
 
@@ -109,22 +109,22 @@ TEST_F(LongRangeCheckingTest, DISABLED_LongValueRejectsLargeNegativeValue) {
 
 TEST_F(LongRangeCheckingTest, ULongValueAcceptsValidValue) {
     EXPECT_NO_THROW({
-        ulong_value ulv("test", static_cast<uint64_t>(1000000));
-        EXPECT_EQ(ulv.to_ulong(), 1000000);
+        value ulv("test", static_cast<uint64_t>(1000000));
+        EXPECT_EQ(to_ulong(ulv), 1000000u);
     });
 }
 
 TEST_F(LongRangeCheckingTest, ULongValueAcceptsZero) {
     EXPECT_NO_THROW({
-        ulong_value ulv("test", static_cast<uint64_t>(0));
-        EXPECT_EQ(ulv.to_ulong(), 0);
+        value ulv("test", static_cast<uint64_t>(0));
+        EXPECT_EQ(to_ulong(ulv), 0u);
     });
 }
 
 TEST_F(LongRangeCheckingTest, ULongValueAcceptsUInt32Max) {
     EXPECT_NO_THROW({
-        ulong_value ulv("test", static_cast<uint64_t>(kUInt32Max));
-        EXPECT_EQ(ulv.to_ulong(), kUInt32Max);
+        value ulv("test", static_cast<uint64_t>(kUInt32Max));
+        EXPECT_EQ(to_ulong(ulv), kUInt32Max);
     });
 }
 
@@ -133,13 +133,13 @@ TEST_F(LongRangeCheckingTest, ULongValueAcceptsUInt32Max) {
 
 TEST_F(LongRangeCheckingTest, DISABLED_ULongValueRejectsUInt32MaxPlusOne) {
     EXPECT_THROW({
-        ulong_value ulv("test", static_cast<unsigned long>(kUInt32Max) + 1);
+        value ulv("test", static_cast<unsigned long>(kUInt32Max) + 1);
     }, std::overflow_error);
 }
 
 TEST_F(LongRangeCheckingTest, DISABLED_ULongValueRejectsLargeValue) {
     EXPECT_THROW({
-        ulong_value ulv("test", 10000000000UL); // 10 billion
+        value ulv("test", 10000000000UL); // 10 billion
     }, std::overflow_error);
 }
 
@@ -150,17 +150,17 @@ TEST_F(LongRangeCheckingTest, DISABLED_ULongValueRejectsLargeValue) {
 // ============================================================================
 
 TEST_F(LongRangeCheckingTest, LongValueSerializesCorrectly) {
-    long_value lv("test", static_cast<int64_t>(12345));
-    std::string serialized = lv.serialize();
+    value lv("test", static_cast<int64_t>(12345));
+    auto serialized = lv.serialize();
     // Serialized format includes type info, so we just verify it doesn't throw
-    EXPECT_FALSE(serialized.empty()) << "long_value must serialize to non-empty string";
+    EXPECT_FALSE(serialized.empty()) << "value with long must serialize to non-empty data";
 }
 
 TEST_F(LongRangeCheckingTest, ULongValueSerializesCorrectly) {
-    ulong_value ulv("test", static_cast<uint64_t>(12345));
-    std::string serialized = ulv.serialize();
+    value ulv("test", static_cast<uint64_t>(12345));
+    auto serialized = ulv.serialize();
     // Serialized format includes type info, so we just verify it doesn't throw
-    EXPECT_FALSE(serialized.empty()) << "ulong_value must serialize to non-empty string";
+    EXPECT_FALSE(serialized.empty()) << "value with ulong must serialize to non-empty data";
 }
 
 // ============================================================================
@@ -168,19 +168,19 @@ TEST_F(LongRangeCheckingTest, ULongValueSerializesCorrectly) {
 // ============================================================================
 
 TEST_F(LongRangeCheckingTest, LongValueCompatibleWithLLongValue) {
-    // A long_value should be safely convertible to llong_value
-    long_value lv("test", static_cast<int64_t>(12345));
-    llong_value llv("test2", lv.to_llong());
+    // A value with int64_t should be safely convertible
+    value lv("test", static_cast<int64_t>(12345));
+    value llv("test2", to_llong(lv));
 
-    EXPECT_EQ(llv.to_llong(), 12345LL);
+    EXPECT_EQ(to_llong(llv), 12345LL);
 }
 
 TEST_F(LongRangeCheckingTest, ULongValueCompatibleWithULLongValue) {
-    // A ulong_value should be safely convertible to ullong_value
-    ulong_value ulv("test", static_cast<uint64_t>(12345));
-    ullong_value ullv("test2", ulv.to_ullong());
+    // A value with uint64_t should be safely convertible
+    value ulv("test", static_cast<uint64_t>(12345));
+    value ullv("test2", to_ullong(ulv));
 
-    EXPECT_EQ(ullv.to_ullong(), 12345ULL);
+    EXPECT_EQ(to_ullong(ullv), 12345ULL);
 }
 
 // ============================================================================
@@ -191,7 +191,7 @@ TEST_F(LongRangeCheckingTest, ULongValueCompatibleWithULLongValue) {
 
 TEST_F(LongRangeCheckingTest, DISABLED_LongValueErrorMessageIsDescriptive) {
     try {
-        long_value lv("test", 5000000000L);
+        value lv("test", 5000000000L);
         FAIL() << "Expected std::overflow_error";
     } catch (const std::overflow_error& e) {
         std::string msg = e.what();
@@ -203,7 +203,7 @@ TEST_F(LongRangeCheckingTest, DISABLED_LongValueErrorMessageIsDescriptive) {
 
 TEST_F(LongRangeCheckingTest, DISABLED_ULongValueErrorMessageIsDescriptive) {
     try {
-        ulong_value ulv("test", 10000000000UL);
+        value ulv("test", 10000000000UL);
         FAIL() << "Expected std::overflow_error";
     } catch (const std::overflow_error& e) {
         std::string msg = e.what();

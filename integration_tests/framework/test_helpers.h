@@ -166,7 +166,7 @@ public:
 
         std::string key = "data_" + std::to_string(depth);
         std::string str_value = "level_" + std::to_string(depth);
-        root->add(std::make_shared<string_value>(key, str_value));
+        root->add(make_string_value(key, str_value));
 
         return root;
     }
@@ -292,14 +292,14 @@ public:
         container->set_message_type("mixed_types");
 
         // Add different value types
-        container->add(std::make_shared<string_value>("str_val", "test_string"));
-        container->add(std::make_shared<int_value>("int_val", 42));
-        container->add(std::make_shared<llong_value>("long_val", 9223372036854775807LL));
-        container->add(std::make_shared<double_value>("double_val", 3.14159));
-        container->add(std::make_shared<bool_value>("bool_val", true));
+        container->add(make_string_value("str_val", "test_string"));
+        container->add(make_int_value("int_val", 42));
+        container->add(make_llong_value("long_val", 9223372036854775807LL));
+        container->add(make_double_value("double_val", 3.14159));
+        container->add(make_bool_value("bool_val", true));
 
         std::vector<uint8_t> bytes = {0x01, 0x02, 0x03, 0x04};
-        container->add(std::make_shared<bytes_value>("bytes_val", bytes));
+        container->add(make_bytes_value("bytes_val", bytes));
 
         return container;
     }
@@ -475,7 +475,7 @@ public:
         while (current_size < target_bytes) {
             std::string key = "key_" + std::to_string(counter);
             std::string value = GenerateRandomString(100);
-            container->add(std::make_shared<string_value>(key, value));
+            container->add(make_string_value(key, value));
 
             current_size = container->serialize().size();
             counter++;

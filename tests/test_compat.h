@@ -3,10 +3,12 @@
 
 /**
  * @file test_compat.h
- * @brief Legacy API compatibility layer for tests
+ * @brief Value API helper functions for tests
  *
- * This header provides compatibility wrappers to allow existing test code
- * to work with the new variant-based value system.
+ * This header provides factory functions and helper utilities for working
+ * with the value class in tests. The legacy_value wrapper class has been
+ * removed - tests now use the value class directly with free functions
+ * for type checking and conversion (is_boolean(), to_int(), etc.).
  */
 
 #pragma once
@@ -76,9 +78,7 @@ inline std::shared_ptr<value> make_ullong_value(std::string_view name, uint64_t 
     return std::make_shared<value>(name, val);
 }
 
-// Note: Legacy type aliases are defined after legacy_value class below
-
-// Type checking helper functions for legacy API compatibility
+// Type checking helper functions for value API compatibility
 inline bool is_boolean(const value& v) {
     return v.type() == value_types::bool_value;
 }
@@ -208,91 +208,6 @@ inline std::vector<uint8_t> to_bytes(const value& v) {
     });
 }
 
-// Extension class that adds legacy member functions to value
-class legacy_value : public value {
-public:
-    using value::value;
-
-    legacy_value(const value& v) : value(v) {}
-    legacy_value(value&& v) : value(std::move(v)) {}
-
-    bool is_boolean() const { return test_compat::is_boolean(*this); }
-    bool is_numeric() const { return test_compat::is_numeric(*this); }
-    bool is_string() const { return test_compat::is_string(*this); }
-    bool is_container() const { return test_compat::is_container(*this); }
-    bool is_bytes() const { return test_compat::is_bytes(*this); }
-
-    bool to_boolean() const { return test_compat::to_boolean(*this); }
-    int32_t to_int() const { return test_compat::to_int(*this); }
-    int64_t to_long() const { return test_compat::to_long(*this); }
-    int64_t to_llong() const { return test_compat::to_llong(*this); }
-    uint64_t to_ulong() const { return test_compat::to_ulong(*this); }
-    uint64_t to_ullong() const { return test_compat::to_ullong(*this); }
-    double to_double() const { return test_compat::to_double(*this); }
-    std::vector<uint8_t> to_bytes() const { return test_compat::to_bytes(*this); }
-
-    size_t size() const { return test_compat::value_size(*this); }
-
-    // Serialize as string for legacy compatibility
-    std::string serialize_str() const {
-        auto bytes = value::serialize();
-        return std::string(bytes.begin(), bytes.end());
-    }
-
-    // Serialize as string (for test compatibility)
-    std::string serialize() const {
-        auto bytes = value::serialize();
-        return std::string(bytes.begin(), bytes.end());
-    }
-};
-
-// Legacy type aliases (allow 'long_value val' declarations)
-// Use legacy_value to provide member function API (to_long(), to_ulong(), etc.)
-//
-// NOTE: These aliases are deprecated. Use variant_value_v2 and set_value() API instead.
-// See docs/advanced/VARIANT_VALUE_V2_MIGRATION_GUIDE.md for migration instructions.
-//
-// Deprecation warnings are disabled in test code to allow continued use of legacy API
-// for testing purposes. New code should use the modern API.
-using int_value [[deprecated("Use set_value() with int instead")]] = legacy_value;
-using bool_value [[deprecated("Use set_value() with bool instead")]] = legacy_value;
-using string_value [[deprecated("Use set_value() with string instead")]] = legacy_value;
-using llong_value [[deprecated("Use set_value() with int64_t instead")]] = legacy_value;
-using long_value [[deprecated("Use set_value() with long instead")]] = legacy_value;
-using ulong_value [[deprecated("Use set_value() with unsigned long instead")]] = legacy_value;
-using bytes_value [[deprecated("Use set_value() with vector<uint8_t> instead")]] = legacy_value;
-using double_value [[deprecated("Use set_value() with double instead")]] = legacy_value;
-using float_value [[deprecated("Use set_value() with float instead")]] = legacy_value;
-using short_value [[deprecated("Use set_value() with short instead")]] = legacy_value;
-using ushort_value [[deprecated("Use set_value() with unsigned short instead")]] = legacy_value;
-using uint_value [[deprecated("Use set_value() with unsigned int instead")]] = legacy_value;
-using ullong_value [[deprecated("Use set_value() with uint64_t instead")]] = legacy_value;
-
-// Factory functions that return shared_ptr<legacy_value> for method chaining
-inline std::shared_ptr<legacy_value> make_legacy_int_value(std::string_view name, int32_t val) {
-    return std::make_shared<legacy_value>(name, val);
-}
-
-inline std::shared_ptr<legacy_value> make_legacy_bool_value(std::string_view name, bool val) {
-    return std::make_shared<legacy_value>(name, val);
-}
-
-inline std::shared_ptr<legacy_value> make_legacy_string_value(std::string_view name, std::string val) {
-    return std::make_shared<legacy_value>(name, std::move(val));
-}
-
-inline std::shared_ptr<legacy_value> make_legacy_double_value(std::string_view name, double val) {
-    return std::make_shared<legacy_value>(name, val);
-}
-
-inline std::shared_ptr<legacy_value> make_legacy_llong_value(std::string_view name, int64_t val) {
-    return std::make_shared<legacy_value>(name, val);
-}
-
-inline std::shared_ptr<legacy_value> make_legacy_bytes_value(std::string_view name, std::vector<uint8_t> val) {
-    return std::make_shared<legacy_value>(name, std::move(val));
-}
-
 // Helper functions for range checking
 inline bool is_int32_range(int64_t val) {
     return val >= static_cast<int64_t>(std::numeric_limits<int32_t>::min()) &&
@@ -414,21 +329,6 @@ using container_module::test_compat::make_ushort_value;
 using container_module::test_compat::make_uint_value;
 using container_module::test_compat::make_ullong_value;
 
-// Pull legacy type aliases into global scope
-using container_module::test_compat::int_value;
-using container_module::test_compat::bool_value;
-using container_module::test_compat::string_value;
-using container_module::test_compat::llong_value;
-using container_module::test_compat::long_value;
-using container_module::test_compat::ulong_value;
-using container_module::test_compat::bytes_value;
-using container_module::test_compat::double_value;
-using container_module::test_compat::float_value;
-using container_module::test_compat::short_value;
-using container_module::test_compat::ushort_value;
-using container_module::test_compat::uint_value;
-using container_module::test_compat::ullong_value;
-
 // Pull helper functions into global scope
 using container_module::test_compat::is_boolean;
 using container_module::test_compat::is_numeric;
@@ -444,13 +344,6 @@ using container_module::test_compat::to_ullong;
 using container_module::test_compat::to_double;
 using container_module::test_compat::to_bytes;
 using container_module::test_compat::value_size;
-using container_module::test_compat::legacy_value;
-using container_module::test_compat::make_legacy_int_value;
-using container_module::test_compat::make_legacy_bool_value;
-using container_module::test_compat::make_legacy_string_value;
-using container_module::test_compat::make_legacy_double_value;
-using container_module::test_compat::make_legacy_llong_value;
-using container_module::test_compat::make_legacy_bytes_value;
 using container_module::test_compat::ov_to_string;
 using container_module::test_compat::ov_to_int;
 using container_module::test_compat::ov_to_boolean;
