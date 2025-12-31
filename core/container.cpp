@@ -444,7 +444,6 @@ namespace container_module
 	std::string value_container::serialize(void) const
 	{
 		std::shared_lock<std::shared_mutex> lock(mutex_);
-		const_cast<value_container*>(this)->serialization_count_.fetch_add(1, std::memory_order_relaxed);
 
 		// If everything parsed, just rebuild data
 		std::string ds = (parsed_data_ ? datas() : data_string_);

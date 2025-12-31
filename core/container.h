@@ -624,11 +624,9 @@ namespace container_module
 		// which is negligible compared to actual data access costs
 		class read_lock_guard {
 			std::shared_lock<std::shared_mutex> lock_;
-			const value_container* container_;
 		public:
 			explicit read_lock_guard(const value_container* c)
-				: lock_(c->mutex_), container_(c) {
-				container_->read_count_.fetch_add(1, std::memory_order_relaxed);
+				: lock_(c->mutex_) {
 			}
 
 			// Always locked - no TOCTOU race condition possible
@@ -637,11 +635,9 @@ namespace container_module
 
 		class write_lock_guard {
 			std::unique_lock<std::shared_mutex> lock_;
-			value_container* container_;
 		public:
 			explicit write_lock_guard(value_container* c)
-				: lock_(c->mutex_), container_(c) {
-				container_->write_count_.fetch_add(1, std::memory_order_relaxed);
+				: lock_(c->mutex_) {
 			}
 
 			// Always locked - no TOCTOU race condition possible
@@ -678,10 +674,7 @@ namespace container_module
 		// Note: Lock is always acquired to prevent TOCTOU vulnerability (see #190)
 		mutable std::shared_mutex mutex_;  ///< Mutex for thread-safe access
 
-		// Statistics
-		mutable std::atomic<size_t> read_count_{0};
-		mutable std::atomic<size_t> write_count_{0};
-		mutable std::atomic<size_t> serialization_count_{0};
+		// Memory allocation statistics (exposed via memory_stats())
 		mutable std::atomic<size_t> heap_allocations_{0}; ///< Track heap allocations
 		mutable std::atomic<size_t> stack_allocations_{0}; ///< Track stack allocations
 	};
