@@ -12,6 +12,11 @@ Container System 프로젝트의 모든 주요 변경 사항이 이 파일에 �
 ## [Unreleased]
 
 ### Changed
+- **미사용 통계 카운터 제거** (#209): Simple Design 준수를 위한 데드 코드 제거
+  - `read_count_`, `write_count_`, `serialization_count_` atomic 카운터 제거
+  - `heap_allocations_`와 `stack_allocations_`는 유지 (`memory_stats()`로 노출됨)
+  - 컨테이너 인스턴스당 메모리 사용량 24바이트 감소
+  - lock guard와 serialize()에서 불필요한 atomic 연산 제거
 - **헤더 모듈화** (#191): container.h (902줄)를 집중된 서브 헤더로 분리
   - `core/container/fwd.h`: 컨테이너 타입 전방 선언
   - `core/container/types.h`: value_variant, optimized_value, pool_stats 정의
