@@ -1200,6 +1200,169 @@ TEST(XMLEncodeFunctionTest, WhitespacePreserved) {
     EXPECT_EQ(result, "a\tb\nc\rd");
 }
 
+// ============================================================================
+// Unified Value Setter API Tests (Issue #207)
+// ============================================================================
+
+class UnifiedSetterAPITest : public ::testing::Test {
+protected:
+    std::shared_ptr<value_container> container;
+
+    void SetUp() override {
+        container = std::make_shared<value_container>();
+    }
+};
+
+TEST_F(UnifiedSetterAPITest, SetSingleValue) {
+    container->set("key1", std::string("value1"));
+    container->set("key2", 42);
+    container->set("key3", true);
+    container->set("key4", 3.14);
+
+    EXPECT_TRUE(container->contains("key1"));
+    EXPECT_TRUE(container->contains("key2"));
+    EXPECT_TRUE(container->contains("key3"));
+    EXPECT_TRUE(container->contains("key4"));
+    EXPECT_FALSE(container->contains("nonexistent"));
+
+    auto val1 = container->get_value("key1");
+    auto val2 = container->get_value("key2");
+    auto val3 = container->get_value("key3");
+    auto val4 = container->get_value("key4");
+
+    ASSERT_TRUE(val1.has_value());
+    ASSERT_TRUE(val2.has_value());
+    ASSERT_TRUE(val3.has_value());
+    ASSERT_TRUE(val4.has_value());
+
+    EXPECT_EQ(std::get<std::string>(val1->data), "value1");
+    EXPECT_EQ(std::get<int32_t>(val2->data), 42);
+    EXPECT_EQ(std::get<bool>(val3->data), true);
+    EXPECT_DOUBLE_EQ(std::get<double>(val4->data), 3.14);
+}
+
+TEST_F(UnifiedSetterAPITest, SetMethodChaining) {
+    container->set("a", 1)
+             .set("b", 2)
+             .set("c", 3);
+
+    EXPECT_EQ(container->size(), 3u);
+    EXPECT_TRUE(container->contains("a"));
+    EXPECT_TRUE(container->contains("b"));
+    EXPECT_TRUE(container->contains("c"));
+}
+
+TEST_F(UnifiedSetterAPITest, SetOverwritesExistingValue) {
+    container->set("key", std::string("original"));
+    auto val1 = container->get_value("key");
+    ASSERT_TRUE(val1.has_value());
+    EXPECT_EQ(std::get<std::string>(val1->data), "original");
+
+    container->set("key", std::string("updated"));
+    auto val2 = container->get_value("key");
+    ASSERT_TRUE(val2.has_value());
+    EXPECT_EQ(std::get<std::string>(val2->data), "updated");
+
+    EXPECT_EQ(container->size(), 1u);
+}
+
+TEST_F(UnifiedSetterAPITest, SetOptimizedValue) {
+    optimized_value ov;
+    ov.name = "test_key";
+    ov.data = std::string("test_value");
+    ov.type = value_types::string_value;
+
+    container->set(ov);
+
+    EXPECT_TRUE(container->contains("test_key"));
+    auto val = container->get_value("test_key");
+    ASSERT_TRUE(val.has_value());
+    EXPECT_EQ(std::get<std::string>(val->data), "test_value");
+}
+
+TEST_F(UnifiedSetterAPITest, SetAllMultipleValues) {
+    std::vector<optimized_value> values;
+
+    optimized_value ov1;
+    ov1.name = "key1";
+    ov1.data = int32_t(100);
+    ov1.type = value_types::int_value;
+    values.push_back(ov1);
+
+    optimized_value ov2;
+    ov2.name = "key2";
+    ov2.data = std::string("hello");
+    ov2.type = value_types::string_value;
+    values.push_back(ov2);
+
+    optimized_value ov3;
+    ov3.name = "key3";
+    ov3.data = true;
+    ov3.type = value_types::bool_value;
+    values.push_back(ov3);
+
+    container->set_all(values);
+
+    EXPECT_EQ(container->size(), 3u);
+    EXPECT_TRUE(container->contains("key1"));
+    EXPECT_TRUE(container->contains("key2"));
+    EXPECT_TRUE(container->contains("key3"));
+}
+
+TEST_F(UnifiedSetterAPITest, ContainsWithStringView) {
+    container->set("test_key", 42);
+
+    std::string_view key_view = "test_key";
+    EXPECT_TRUE(container->contains(key_view));
+
+    std::string_view nonexistent_view = "nonexistent";
+    EXPECT_FALSE(container->contains(nonexistent_view));
+}
+
+TEST_F(UnifiedSetterAPITest, SerializationWithNewAPI) {
+    container->set_source("source_id", "source_sub");
+    container->set_target("target_id", "target_sub");
+    container->set_message_type("test_type");
+
+    container->set("string_val", std::string("test"))
+             .set("int_val", 123)
+             .set("bool_val", true)
+             .set("double_val", 2.718);
+
+    std::string serialized = container->serialize();
+    EXPECT_FALSE(serialized.empty());
+
+    auto restored = std::make_shared<value_container>(serialized, false);
+
+    EXPECT_EQ(restored->source_id(), "source_id");
+    EXPECT_EQ(restored->target_id(), "target_id");
+    EXPECT_TRUE(restored->contains("string_val"));
+    EXPECT_TRUE(restored->contains("int_val"));
+    EXPECT_TRUE(restored->contains("bool_val"));
+    EXPECT_TRUE(restored->contains("double_val"));
+}
+
+#if CONTAINER_HAS_COMMON_RESULT
+TEST_F(UnifiedSetterAPITest, GetWithResultType) {
+    container->set("int_key", int32_t(42));
+    container->set("string_key", std::string("hello"));
+
+    auto int_result = container->get<int32_t>("int_key");
+    EXPECT_TRUE(kcenon::common::is_ok(int_result));
+    EXPECT_EQ(kcenon::common::get_value(int_result), 42);
+
+    auto string_result = container->get<std::string>("string_key");
+    EXPECT_TRUE(kcenon::common::is_ok(string_result));
+    EXPECT_EQ(kcenon::common::get_value(string_result), "hello");
+
+    auto missing_result = container->get<int32_t>("nonexistent");
+    EXPECT_TRUE(kcenon::common::is_error(missing_result));
+
+    auto type_mismatch = container->get<std::string>("int_key");
+    EXPECT_TRUE(kcenon::common::is_error(type_mismatch));
+}
+#endif
+
 // Main function for running tests
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
