@@ -35,13 +35,15 @@
 
 #include <benchmark/benchmark.h>
 #include "container/core/container.h"
-#include "tests/test_compat.h"
 
 using namespace container_module;
 
 static void BM_Value_CreateString(benchmark::State& state) {
     for (auto _ : state) {
-        auto v = std::make_shared<string_value>("test", "test_data");
+        optimized_value v;
+        v.name = "test";
+        v.data = std::string("test_data");
+        v.type = value_types::string_value;
         benchmark::DoNotOptimize(v);
     }
 }
@@ -49,25 +51,34 @@ BENCHMARK(BM_Value_CreateString);
 
 static void BM_Value_CreateNumeric(benchmark::State& state) {
     for (auto _ : state) {
-        auto v = std::make_shared<int_value>("num", 42);
+        optimized_value v;
+        v.name = "num";
+        v.data = int32_t(42);
+        v.type = value_types::int_value;
         benchmark::DoNotOptimize(v);
     }
 }
 BENCHMARK(BM_Value_CreateNumeric);
 
 static void BM_Value_GetData(benchmark::State& state) {
-    auto v = std::make_shared<string_value>("test", "test_data");
+    optimized_value v;
+    v.name = "test";
+    v.data = std::string("test_data");
+    v.type = value_types::string_value;
     for (auto _ : state) {
-        auto data = v->to_string();
+        auto data = variant_helpers::to_string(v.data, v.type);
         benchmark::DoNotOptimize(data);
     }
 }
 BENCHMARK(BM_Value_GetData);
 
 static void BM_Value_ToString(benchmark::State& state) {
-    auto v = std::make_shared<string_value>("test", "test_data");
+    optimized_value v;
+    v.name = "test";
+    v.data = std::string("test_data");
+    v.type = value_types::string_value;
     for (auto _ : state) {
-        auto str = v->to_string();
+        auto str = variant_helpers::to_string(v.data, v.type);
         benchmark::DoNotOptimize(str);
     }
 }
