@@ -12,6 +12,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
+- **Remove Unused Statistics Counters** (#209): Remove dead code for Simple Design compliance
+  - Remove `read_count_`, `write_count_`, and `serialization_count_` atomic counters
+  - Keep `heap_allocations_` and `stack_allocations_` (exposed via `memory_stats()`)
+  - Reduces memory footprint by 24 bytes per container instance
+  - Eliminates unnecessary atomic operations in lock guards and serialize()
 - **Header Modularization** (#191): Split container.h (902 lines) into focused sub-headers
   - `core/container/fwd.h`: Forward declarations for container types
   - `core/container/types.h`: value_variant, optimized_value, pool_stats definitions
