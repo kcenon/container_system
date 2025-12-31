@@ -72,6 +72,8 @@ jobs:
           git checkout ${{ github.base_ref }}
 
       - name: Build base version
+        id: build_base
+        continue-on-error: true
         run: |
           CMAKE_FLAGS=(
             -DCMAKE_BUILD_TYPE=Release
@@ -89,6 +91,7 @@ jobs:
           cmake --build build-base --target container_benchmarks -j
 
       - name: Run base benchmarks
+        if: steps.build_base.outcome == 'success'
         run: |
           ./build-base/bin/container_benchmarks \
             --benchmark_format=json \
@@ -103,11 +106,20 @@ jobs:
       - name: Compare benchmark results
         id: compare
         run: |
-          python3 scripts/compare_benchmarks.py \
-            --base base_results.json \
-            --pr pr_results.json \
-            --threshold 0.10 \
-            --output comparison.md
+          if [ -f base_results.json ]; then
+            python3 scripts/compare_benchmarks.py \
+              --base base_results.json \
+              --pr pr_results.json \
+              --threshold 0.10 \
+              --output comparison.md
+          else
+            echo "# Performance Benchmark Report" > comparison.md
+            echo "" >> comparison.md
+            echo "**Note:** Base branch build failed. Performance comparison skipped." >> comparison.md
+            echo "" >> comparison.md
+            echo "This can happen when the base branch has build issues that are fixed in this PR." >> comparison.md
+            echo "Once this PR is merged, future comparisons will work correctly." >> comparison.md
+          fi
 
       - name: Check for regression
         id: regression
