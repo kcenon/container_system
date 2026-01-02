@@ -712,7 +712,7 @@ TEST_F(ValueStoreSerializationTest, JSONDeserializeNotImplemented) {
 
 TEST_F(ValueStoreSerializationTest, ThreadSafeSerialization) {
     value_store store;
-    store.enable_thread_safety();
+    // Thread safety is always enabled since v0.2.0
 
     store.add("key1", value("key1", int32_t(100)));
     store.add("key2", value("key2", std::string("test")));
