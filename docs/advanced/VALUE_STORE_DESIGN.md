@@ -77,10 +77,7 @@ class value_store {
     static value_store deserialize(std::string_view json_data);
     static value_store deserialize_binary(const std::vector<uint8_t>&);
 
-    // Thread Safety
-    void enable_thread_safety();
-    void disable_thread_safety();
-    bool is_thread_safe() const;
+    // Thread Safety: Always enabled since v0.2.0 (no configuration needed)
 
     // Statistics
     size_t get_read_count() const;
@@ -135,22 +132,24 @@ class value_store {
 
 ### 2. Thread Safety Model
 
-**Decision**: Optional thread-safety via `enable_thread_safety()` flag
+**Decision**: Mandatory thread-safety (always enabled since v0.2.0)
 
 **Rationale:**
-- Zero overhead when not needed (single-threaded use cases)
-- Explicit opt-in prevents accidental performance loss
+- Eliminates TOCTOU (Time-of-Check to Time-of-Use) vulnerabilities (see issue #190)
 - Uses `std::shared_mutex` for reader-writer optimization
+- Simplifies API by removing configuration complexity
+- Prevents accidental unsafe usage in multi-threaded environments
 
 **Pattern:**
 ```cpp
 value_store store;
-store.enable_thread_safety();  // Explicit opt-in
-
-// All subsequent operations are thread-safe
+// All operations are automatically thread-safe (no configuration needed)
 store.add("key", value);
 auto val = store.get("key");
 ```
+
+**Historical Note:** Prior to v0.2.0, thread safety was optional via `enable_thread_safety()`.
+These methods were deprecated in v0.2.0 and removed in v0.3.0.
 
 ### 3. Serialization Deferred to Phase 2
 
@@ -207,7 +206,7 @@ std::cout << "Write count: " << store.get_write_count() << std::endl;
 
 ```cpp
 value_store shared_store;
-shared_store.enable_thread_safety();
+// Thread safety is always enabled (no configuration needed since v0.2.0)
 
 // Producer thread
 std::thread producer([&] {
