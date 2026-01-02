@@ -11,6 +11,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Removed
+- **Deprecated Thread Safety Methods** (#217): Remove deprecated thread safety control methods from `value_store`
+  - Remove `enable_thread_safety()`: was a no-op since v0.2.0
+  - Remove `disable_thread_safety()`: was a no-op since v0.2.0
+  - Remove `is_thread_safe()`: always returned true since v0.2.0
+  - Thread safety is always enabled since v0.2.0 (see #190 for TOCTOU security fix)
+  - **Breaking Change**: Code calling these methods will no longer compile
+
 ### Changed
 - **Remove Unused Statistics Counters** (#209): Remove dead code for Simple Design compliance
   - Remove `read_count_`, `write_count_`, and `serialization_count_` atomic counters
