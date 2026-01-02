@@ -429,10 +429,10 @@ TEST_F(PerformanceTest, MessagingIntegrationPerformance) {
                     .source("perf_client_" + std::to_string(i % 100))
                     .target("perf_server", "handler_" + std::to_string(i % 10))
                     .message_type("messaging_performance_test")
-                    .add_value("iteration", i)
-                    .add_value("timestamp", std::chrono::duration_cast<std::chrono::milliseconds>(
+                    .set("iteration", i)
+                    .set("timestamp", std::chrono::duration_cast<std::chrono::milliseconds>(
                         std::chrono::system_clock::now().time_since_epoch()).count())
-                    .add_value("data", std::string("performance_test_data_" + std::to_string(i)))
+                    .set("data", std::string("performance_test_data_" + std::to_string(i)))
                     .optimize_for_speed()
                     .build();
             }
@@ -455,9 +455,9 @@ TEST_F(PerformanceTest, MessagingSerializationPerformance) {
         .source("serialization_perf")
         .target("serialization_target")
         .message_type("messaging_serialization_test")
-        .add_value("large_string", std::string(1000, 'X'))
-        .add_value("numeric_data", 123456789)
-        .add_value("floating_data", 3.141592653589793)
+        .set("large_string", std::string(1000, 'X'))
+        .set("numeric_data", 123456789)
+        .set("floating_data", 3.141592653589793)
         .optimize_for_speed()
         .build();
 

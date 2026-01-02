@@ -11,6 +11,18 @@ Container System 프로젝트의 모든 주요 변경 사항이 이 파일에 �
 
 ## [Unreleased]
 
+### Added
+- **messaging_container_builder에 통합 set() 메서드 추가** (#218): API 일관성을 위해 `messaging_container_builder`에 통합 `set()` 메서드 추가
+  - `value_container::set()` API와 일치하는 `set()` 템플릿 메서드 추가
+  - fluent 인터페이스를 위한 메서드 체이닝 지원
+  - `[[deprecated]]` 속성으로 `add_value()` deprecated 처리
+
+### Changed
+- **테스트 파일을 통합 set() API로 마이그레이션** (#218): 테스트 파일에서 deprecated `add_value()`를 `set()`으로 교체
+  - `test_messaging_integration.cpp`에서 23개 호출 마이그레이션
+  - `performance_tests.cpp`에서 6개 호출 마이그레이션
+  - 모든 테스트가 회귀 없이 통과
+
 ### Removed
 - **Deprecated 스레드 안전성 메서드 제거** (#217): `value_store`에서 deprecated 스레드 안전성 제어 메서드 제거
   - `enable_thread_safety()` 제거: v0.2.0 이후 no-op이었음

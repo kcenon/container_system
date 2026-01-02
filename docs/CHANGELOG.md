@@ -11,6 +11,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **Unified set() Method for messaging_container_builder** (#218): Add unified `set()` method to `messaging_container_builder` for API consistency
+  - Add `set()` template method matching `value_container::set()` API
+  - Supports method chaining for fluent interface
+  - Deprecate `add_value()` with `[[deprecated]]` attribute
+
+### Changed
+- **Migrate Test Files to Unified set() API** (#218): Replace deprecated `add_value()` with `set()` in test files
+  - Migrate 23 calls in `test_messaging_integration.cpp`
+  - Migrate 6 calls in `performance_tests.cpp`
+  - All tests pass with no regression
+
 ### Removed
 - **Deprecated Thread Safety Methods** (#217): Remove deprecated thread safety control methods from `value_store`
   - Remove `enable_thread_safety()`: was a no-op since v0.2.0
