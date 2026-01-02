@@ -87,7 +87,7 @@ public:
      * @brief Add a value with a key
      * @param key The key for the value
      * @param val The variant value to add
-     * @note Thread-safe if enable_thread_safety() was called
+     * @note All operations are thread-safe (always enabled since v0.2.0)
      */
     virtual void add(const std::string& key, value val);
 
@@ -95,7 +95,7 @@ public:
      * @brief Get a value by key
      * @param key The key to look up
      * @return Optional variant value
-     * @note Thread-safe if enable_thread_safety() was called
+     * @note All operations are thread-safe (always enabled since v0.2.0)
      */
     virtual std::optional<value> get(const std::string& key) const;
 
@@ -163,38 +163,6 @@ public:
      * @throws std::runtime_error if deserialization fails
      */
     static std::unique_ptr<value_store> deserialize_binary(const std::vector<uint8_t>& binary_data);
-
-    // =========================================================================
-    // Thread Safety
-    // =========================================================================
-
-    /**
-     * @brief Enable thread-safe operations
-     * @deprecated Since v0.2.0: Thread safety is always enabled to prevent TOCTOU
-     *             vulnerabilities. This method is now a no-op and will be removed
-     *             in v0.3.0. See issue #190 for details.
-     * @note All operations are now always protected by mutex.
-     */
-    [[deprecated("Thread safety is always enabled since v0.2.0. Will be removed in v0.3.0")]]
-    void enable_thread_safety();
-
-    /**
-     * @brief Disable thread-safe operations
-     * @deprecated Since v0.2.0: Thread safety cannot be disabled to prevent TOCTOU
-     *             vulnerabilities. This method is now a no-op and will be removed
-     *             in v0.3.0. See issue #190 for details.
-     * @note All operations are now always protected by mutex.
-     */
-    [[deprecated("Thread safety cannot be disabled since v0.2.0. Will be removed in v0.3.0")]]
-    void disable_thread_safety();
-
-    /**
-     * @brief Check if thread safety is enabled
-     * @deprecated Since v0.2.0: Always returns true. Will be removed in v0.3.0.
-     * @return Always true (thread safety is always enabled)
-     */
-    [[deprecated("Always returns true since v0.2.0. Will be removed in v0.3.0")]]
-    bool is_thread_safe() const;
 
     // =========================================================================
     // Statistics (Optional)
