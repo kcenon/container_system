@@ -61,9 +61,9 @@ TEST_F(MessagingIntegrationTest, BuilderPatternBasicConstruction) {
         .source("client_01", "session_123")
         .target("server", "handler_01")
         .message_type("test_message")
-        .add_value("test_key", std::string("test_value"))
-        .add_value("numeric_key", 42)
-        .add_value("boolean_key", true)
+        .set("test_key", std::string("test_value"))
+        .set("numeric_key", 42)
+        .set("boolean_key", true)
         .build();
 
     ASSERT_NE(container, nullptr);
@@ -87,9 +87,9 @@ TEST_F(MessagingIntegrationTest, BuilderPatternComplexTypes) {
         .source("producer", "batch_01")
         .target("consumer", "worker_01")
         .message_type("complex_data")
-        .add_value("nested_data", nested_container)
-        .add_value("pi_value", 3.14159)
-        .add_value("large_number", 9223372036854775807LL)
+        .set("nested_data", nested_container)
+        .set("pi_value", 3.14159)
+        .set("large_number", 9223372036854775807LL)
         .build();
 
     ASSERT_NE(container, nullptr);
@@ -126,7 +126,7 @@ TEST_F(MessagingIntegrationTest, OptimizationSettings) {
         .source("perf_client")
         .target("perf_server")
         .message_type("speed_test")
-        .add_value("data", std::string("speed_optimized"))
+        .set("data", std::string("speed_optimized"))
         .optimize_for_speed()
         .build();
 
@@ -134,7 +134,7 @@ TEST_F(MessagingIntegrationTest, OptimizationSettings) {
         .source("memory_client")
         .target("memory_server")
         .message_type("memory_test")
-        .add_value("data", std::string("memory_optimized"))
+        .set("data", std::string("memory_optimized"))
         // .optimize_for_memory() // Method not available
         .build();
 
@@ -151,10 +151,10 @@ TEST_F(MessagingIntegrationTest, SerializationIntegration) {
         .source("serialization_test")
         .target("deserialization_test")
         .message_type("serialization_message")
-        .add_value("string_data", std::string("Hello, World!"))
-        .add_value("int_data", 12345)
-        .add_value("double_data", 98.76)
-        .add_value("bool_data", false)
+        .set("string_data", std::string("Hello, World!"))
+        .set("int_data", 12345)
+        .set("double_data", 98.76)
+        .set("bool_data", false)
         .build();
 
     // Test enhanced serialization
@@ -192,7 +192,7 @@ TEST_F(MessagingIntegrationTest, PerformanceMonitoring) {
         .source("perf_test")
         .target("perf_target")
         .message_type("performance_test")
-        .add_value("test_data", std::string("performance_monitoring"))
+        .set("test_data", std::string("performance_monitoring"))
         .build();
 
     for (int i = 0; i < 10; ++i) {
@@ -260,8 +260,8 @@ TEST_F(MessagingIntegrationTest, ThreadSafetyStress) {
                         .source("thread_" + std::to_string(t))
                         .target("target_" + std::to_string(t))
                         .message_type("thread_test")
-                        .add_value("iteration", i)
-                        .add_value("thread_id", t)
+                        .set("iteration", i)
+                        .set("thread_id", t)
                         .build();
 
                     if (container && container->get_variant_value("iteration").has_value()) {
@@ -314,8 +314,8 @@ TEST_F(MessagingIntegrationTest, LargeDataHandling) {
         .source("large_data_test")
         .target("large_data_target")
         .message_type("large_data")
-        .add_value("large_string", large_string)
-        .add_value("item_count", static_cast<int>(large_vector.size()))
+        .set("large_string", large_string)
+        .set("item_count", static_cast<int>(large_vector.size()))
         .build();
 
     ASSERT_NE(container, nullptr);
@@ -363,8 +363,8 @@ TEST_F(MessagingIntegrationBenchmark, BuilderPerformance) {
             .source("benchmark_source")
             .target("benchmark_target")
             .message_type("benchmark_test")
-            .add_value("iteration", i)
-            .add_value("timestamp", std::chrono::duration_cast<std::chrono::milliseconds>(
+            .set("iteration", i)
+            .set("timestamp", std::chrono::duration_cast<std::chrono::milliseconds>(
                 std::chrono::system_clock::now().time_since_epoch()).count())
             .build();
     }
@@ -387,10 +387,10 @@ TEST_F(MessagingIntegrationBenchmark, SerializationPerformance) {
         .source("perf_test")
         .target("perf_target")
         .message_type("serialization_benchmark")
-        .add_value("data1", std::string("performance_test_data"))
-        .add_value("data2", 123456789)
-        .add_value("data3", 3.14159265359)
-        .add_value("data4", true)
+        .set("data1", std::string("performance_test_data"))
+        .set("data2", 123456789)
+        .set("data3", 3.14159265359)
+        .set("data4", true)
         .build();
 
     auto start = std::chrono::high_resolution_clock::now();
