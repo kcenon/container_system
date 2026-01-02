@@ -242,24 +242,6 @@ std::unique_ptr<value_store> value_store::deserialize_binary(const std::vector<u
     return store;
 }
 
-void value_store::enable_thread_safety() {
-    // No-op: Thread safety is always enabled since v0.2.0
-    // This method is deprecated and will be removed in v0.3.0
-    // See issue #190 for details about TOCTOU vulnerability fix
-}
-
-void value_store::disable_thread_safety() {
-    // No-op: Thread safety cannot be disabled since v0.2.0
-    // This method is deprecated and will be removed in v0.3.0
-    // See issue #190 for details about TOCTOU vulnerability fix
-}
-
-bool value_store::is_thread_safe() const {
-    // Always returns true since v0.2.0
-    // This method is deprecated and will be removed in v0.3.0
-    return true;
-}
-
 size_t value_store::get_read_count() const {
     return read_count_.load(std::memory_order_relaxed);
 }
