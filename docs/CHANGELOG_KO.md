@@ -12,6 +12,14 @@ Container System 프로젝트의 모든 주요 변경 사항이 이 파일에 �
 ## [Unreleased]
 
 ### Added
+- **C++20 모듈 지원** (#222): `kcenon.container` C++20 모듈 파일 추가
+  - `src/modules/container.cppm` 기본 모듈 인터페이스 생성
+  - 모든 공개 타입 export: `value_types`, `value_variant`, `optimized_value`, `pool_stats`, `value_container`
+  - `variant_helpers` 네임스페이스와 JSON/XML 인코딩 유틸리티 export
+  - `Result<T>` 패턴 지원을 위해 `kcenon.common` 모듈 import
+  - 모듈 빌드를 위한 `CONTAINER_BUILD_MODULES` CMake 옵션 추가
+  - 모듈 컴파일에 CMake 3.28+ 및 Ninja 생성기 필요
+  - 전환 기간 동안 헤더 기반 빌드 계속 지원
 - **messaging_container_builder에 통합 set() 메서드 추가** (#218): API 일관성을 위해 `messaging_container_builder`에 통합 `set()` 메서드 추가
   - `value_container::set()` API와 일치하는 `set()` 템플릿 메서드 추가
   - fluent 인터페이스를 위한 메서드 체이닝 지원
