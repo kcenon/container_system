@@ -481,6 +481,81 @@ install(DIRECTORY
 )
 
 ##################################################
+# C++20 Module Support (Phase 2)
+##################################################
+# Enable C++20 modules with CMake 3.28+ when building with module-capable compilers.
+# This provides an alternative to the header-based interface.
+#
+# Usage:
+#   cmake -DCONTAINER_BUILD_MODULES=ON ..
+#
+# Requirements:
+#   - CMake 3.28 or later
+#   - Clang 16+, GCC 14+, or MSVC 2022 17.4+
+#   - kcenon.common module (from common_system)
+##################################################
+
+option(CONTAINER_BUILD_MODULES "Build C++20 module version of container_system" OFF)
+
+if(CONTAINER_BUILD_MODULES)
+    # Check CMake version
+    if(CMAKE_VERSION VERSION_LESS "3.28")
+        message(WARNING "C++20 modules require CMake 3.28+. Disabling module build.")
+        set(CONTAINER_BUILD_MODULES OFF)
+    else()
+        message(STATUS "C++20 module build enabled for container_system")
+
+        # Create module library target
+        add_library(container_system_modules)
+        add_library(kcenon::container_modules ALIAS container_system_modules)
+
+        # Set C++20 standard for module target
+        target_compile_features(container_system_modules PUBLIC cxx_std_20)
+
+        # Enable module scanning
+        set_target_properties(container_system_modules PROPERTIES
+            CXX_SCAN_FOR_MODULES ON
+        )
+
+        # Add module source files
+        target_sources(container_system_modules
+            PUBLIC FILE_SET CXX_MODULES
+            FILES
+                # Single module (container_system is small enough for single module)
+                src/modules/container.cppm
+        )
+
+        # Include directories for module target
+        target_include_directories(container_system_modules PUBLIC
+            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+            $<INSTALL_INTERFACE:include>
+        )
+
+        # Link common_system modules if available
+        if(TARGET kcenon::common_modules)
+            target_link_libraries(container_system_modules PUBLIC kcenon::common_modules)
+            message(STATUS "Container module: Linked with kcenon::common_modules")
+        elseif(TARGET common_system_modules)
+            target_link_libraries(container_system_modules PUBLIC common_system_modules)
+            message(STATUS "Container module: Linked with common_system_modules")
+        else()
+            message(WARNING "kcenon.common module not found. Container module may not build correctly.")
+        endif()
+
+        # Compile definitions
+        target_compile_definitions(container_system_modules PUBLIC
+            KCENON_HAS_COMMON_SYSTEM=1
+            KCENON_USE_MODULES=1
+        )
+
+        # Link with threading library
+        target_link_libraries(container_system_modules PUBLIC Threads::Threads)
+
+        message(STATUS "C++20 module target: container_system_modules")
+    endif()
+endif()
+
+##################################################
 # Benchmarks
 ##################################################
 
@@ -501,6 +576,7 @@ message(STATUS "  Features:")
 message(STATUS "    - Thread-safe operations: ON")
 message(STATUS "    - Variant-based types: ON")
 message(STATUS "    - Build samples: ${BUILD_CONTAINER_SAMPLES}")
+message(STATUS "    - C++20 modules: ${CONTAINER_BUILD_MODULES}")
 if(COMPILER_SUPPORTS_AVX2)
     message(STATUS "    - AVX2 SIMD: ON")
 elseif(COMPILER_SUPPORTS_SSE42)
