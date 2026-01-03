@@ -24,6 +24,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - All tests pass with no regression
 
 ### Removed
+- **Remove deprecation.h** (#221): Remove deprecation warning suppression macros for C++20 module preparation
+  - Remove `core/deprecation.h` file with custom warning suppression macros
+  - Remove `CONTAINER_SUPPRESS_DEPRECATION_START/END` macros from test framework files
+  - Remove deprecated wrapper functions (`IsCiEnvironment`, `AdjustPerformanceThreshold`, `AdjustDurationThreshold`) that had no callers
+  - Use standard `[[deprecated]]` attribute instead of custom macros
+  - Follows Kent Beck's "Fewest Elements" principle
 - **Deprecated Thread Safety Methods** (#217): Remove deprecated thread safety control methods from `value_store`
   - Remove `enable_thread_safety()`: was a no-op since v0.2.0
   - Remove `disable_thread_safety()`: was a no-op since v0.2.0

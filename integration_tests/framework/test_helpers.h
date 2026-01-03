@@ -33,7 +33,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #pragma once
 
 #include <container/core/container.h>
-#include <container/core/deprecation.h>
 #include "../../tests/test_compat.h"
 #include "test_config.h"
 #include <string>
@@ -44,10 +43,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <iostream>
 #include <cstdlib>
 #include <algorithm>
-
-// Suppress deprecation warnings for legacy API usage in test helpers.
-// Test code intentionally uses legacy API for backwards compatibility testing.
-CONTAINER_SUPPRESS_DEPRECATION_START
 
 namespace container_module
 {
@@ -197,54 +192,6 @@ public:
 
         // Convert to operations per second
         return (iterations * 1000000.0) / duration;
-    }
-
-    /**
-     * @brief Detect whether tests are running in a CI environment.
-     *
-     * Checks common environment variables used by GitHub Actions and
-     * other CI providers.
-     *
-     * @deprecated Use TestConfig::instance().is_ci_environment() instead
-     */
-    [[deprecated("Use TestConfig::instance().is_ci_environment()")]]
-    static bool IsCiEnvironment()
-    {
-        return TestConfig::instance().is_ci_environment();
-    }
-
-    /**
-     * @brief Adjust performance thresholds for CI environments.
-     *
-     * @param baseline Baseline threshold for local environments.
-     * @param ci_floor Minimum acceptable threshold when running in CI.
-     * @param ci_scale Scale factor applied to the baseline in CI.
-     * @return Adjusted threshold value.
-     *
-     * @deprecated Use TestConfig::instance().adjust_throughput_threshold() instead
-     */
-    [[deprecated("Use TestConfig::instance().adjust_throughput_threshold()")]]
-    static double AdjustPerformanceThreshold(double baseline,
-                                             double ci_floor = 5.0,
-                                             double ci_scale = 0.0001)
-    {
-        return TestConfig::instance().adjust_throughput_threshold(baseline, ci_floor, ci_scale);
-    }
-
-    /**
-     * @brief Adjust duration thresholds when running on CI.
-     *
-     * @param baseline_microseconds Baseline duration in microseconds.
-     * @param ci_ceiling Relaxed ceiling for CI.
-     * @return Adjusted threshold for duration comparisons.
-     *
-     * @deprecated Use TestConfig::instance().adjust_duration_threshold() instead
-     */
-    [[deprecated("Use TestConfig::instance().adjust_duration_threshold()")]]
-    static int64_t AdjustDurationThreshold(int64_t baseline_microseconds,
-                                           int64_t ci_ceiling = 500000)
-    {
-        return TestConfig::instance().adjust_duration_threshold(baseline_microseconds);
     }
 
     /**
@@ -487,5 +434,3 @@ public:
 
 } // namespace testing
 } // namespace container_module
-
-CONTAINER_SUPPRESS_DEPRECATION_END
