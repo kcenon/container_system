@@ -24,6 +24,12 @@ Container System 프로젝트의 모든 주요 변경 사항이 이 파일에 �
   - 모든 테스트가 회귀 없이 통과
 
 ### Removed
+- **deprecation.h 제거** (#221): C++20 모듈 준비를 위해 deprecation 경고 억제 매크로 제거
+  - 사용자 정의 경고 억제 매크로가 있는 `core/deprecation.h` 파일 제거
+  - 테스트 프레임워크 파일에서 `CONTAINER_SUPPRESS_DEPRECATION_START/END` 매크로 제거
+  - 호출처가 없었던 deprecated 래퍼 함수 (`IsCiEnvironment`, `AdjustPerformanceThreshold`, `AdjustDurationThreshold`) 제거
+  - 사용자 정의 매크로 대신 표준 `[[deprecated]]` 속성 사용
+  - Kent Beck의 "Fewest Elements" 원칙 준수
 - **Deprecated 스레드 안전성 메서드 제거** (#217): `value_store`에서 deprecated 스레드 안전성 제어 메서드 제거
   - `enable_thread_safety()` 제거: v0.2.0 이후 no-op이었음
   - `disable_thread_safety()` 제거: v0.2.0 이후 no-op이었음
