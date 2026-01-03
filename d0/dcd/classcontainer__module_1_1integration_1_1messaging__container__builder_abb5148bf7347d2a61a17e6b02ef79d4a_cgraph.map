@@ -1,0 +1,14 @@
+<map id="container_module::integration::messaging_container_builder::set" name="container_module::integration::messaging_container_builder::set">
+<area shape="rect" id="Node000001" title="Set a value by key (unified API)" alt="" coords="5,49,255,89"/>
+<area shape="rect" id="Node000002" href="$d5/df9/classcontainer__module_1_1value.html#aef0c634b18712374d422801f269ff0e9" title="Serialize to binary format (legacy compatible)" alt="" coords="303,49,485,89"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="255,66,289,66,289,71,255,71"/>
+<area shape="rect" id="Node000003" href="$d5/df9/classcontainer__module_1_1value.html#aa105a05c2bb9ce88d5bd54610aae7103" title="Serialize data portion based on type." alt="" coords="533,49,716,89"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="485,75,520,75,520,80,485,80"/>
+<area shape="rect" id="Node000006" href="$d5/df9/classcontainer__module_1_1value.html#a19a827e03777e6214b597f5c9e5e8b35" title="Get the value_types enum (NOT variant::index()!)" alt="" coords="533,113,716,153"/>
+<area shape="poly" id="edge6_Node000002_Node000006" title=" " alt="" coords="468,86,540,106,538,112,466,91"/>
+<area shape="poly" id="edge4_Node000003_Node000002" title=" " alt="" coords="533,63,499,62,499,57,533,57"/>
+<area shape="rect" id="Node000004" href="$d7/d23/structcontainer__module_1_1detail_1_1circular__ref__guard.html#a7109e68223164ea84e0fcc24b770c3bf" title=" " alt="" coords="764,5,948,60"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="716,52,750,46,751,52,717,57"/>
+<area shape="rect" id="Node000005" href="$d5/df9/classcontainer__module_1_1value.html#a8fd9176e2a29a65418b51dee4cb6a30d" title="Apply visitor to contained value (const)" alt="" coords="765,85,947,125"/>
+<area shape="poly" id="edge5_Node000003_Node000005" title=" " alt="" coords="717,80,751,86,751,91,716,86"/>
+</map>

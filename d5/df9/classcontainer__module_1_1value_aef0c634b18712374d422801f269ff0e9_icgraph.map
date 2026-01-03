@@ -1,0 +1,14 @@
+<map id="container_module::value::serialize" name="container_module::value::serialize">
+<area shape="rect" id="Node000001" title="Serialize to binary format (legacy compatible)" alt="" coords="303,181,485,221"/>
+<area shape="rect" id="Node000002" href="$d0/dcd/classcontainer__module_1_1integration_1_1messaging__container__builder.html#a70981bba692bd185814812957472c6ec" title="Add value using deprecated API." alt="" coords="19,5,241,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="365,172,316,122,286,97,253,75,228,62,231,58,256,70,289,93,320,118,369,168"/>
+<area shape="rect" id="Node000003" href="$d1/d1a/namespacecontainer__module.html#a25229d447c253f78c8dd3a8a0df6e1e9" title="Create a copy of a value with a new name." alt="" coords="39,85,221,125"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="341,177,254,139,216,127,218,122,256,134,343,172"/>
+<area shape="rect" id="Node000004" href="$db/de5/classcontainer__module_1_1thread__safe__container.html#ac64100d40aeaac5989df88883fb7fe3b" title="Serialize container to binary." alt="" coords="35,149,225,189"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="288,191,224,183,225,177,289,185"/>
+<area shape="rect" id="Node000005" href="$d5/df9/classcontainer__module_1_1value.html#aa105a05c2bb9ce88d5bd54610aae7103" title="Serialize data portion based on type." alt="" coords="39,213,221,253"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="289,225,222,233,221,228,288,220"/>
+<area shape="rect" id="Node000006" href="$d0/dcd/classcontainer__module_1_1integration_1_1messaging__container__builder.html#abb5148bf7347d2a61a17e6b02ef79d4a" title="Set a value by key (unified API)" alt="" coords="5,277,255,317"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="343,229,256,267,218,279,216,274,254,262,341,224"/>
+<area shape="poly" id="edge5_Node000005_Node000001" title=" " alt="" coords="235,208,302,200,303,206,236,214"/>
+</map>

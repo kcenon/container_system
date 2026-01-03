@@ -1,0 +1,8 @@
+var searchData=
+[
+  ['width_0',['width',['../d5/db5/structcontainer__module_1_1simd_1_1simd__traits.html#ab66ec4af53b4f1a32165b38172c1fd3c',1,'container_module::simd::simd_traits']]],
+  ['world_20applications_1',['Real-World Applications',['../index.html#use_cases',1,'']]],
+  ['write_5fcount_2',['write_count',['../d5/df7/structcontainer__module_1_1thread__safe__container_1_1Statistics.html#ae7fe406c79fcf92bc4edf7d3ca85bc82',1,'container_module::thread_safe_container::Statistics::write_count'],['../d5/df9/classcontainer__module_1_1value.html#a31faf156c2eeb78a21bcf8551f289fa2',1,'container_module::value::write_count()']]],
+  ['write_5fcount_5f_3',['write_count_',['../d0/dee/classcontainer__module_1_1value__store.html#a5c199cb67b9d8558e2cccb13a00a7e16',1,'container_module::value_store::write_count_'],['../db/de5/classcontainer__module_1_1thread__safe__container.html#a5fd6bca66bfb476e05926e84fd834ea1',1,'container_module::thread_safe_container::write_count_'],['../d5/df9/classcontainer__module_1_1value.html#aa8a1b9e2d22112cf9deddfac5275eb82',1,'container_module::value::write_count_']]],
+  ['write_5flock_5fguard_4',['write_lock_guard',['../d2/d6a/classcontainer__module_1_1value__container_1_1write__lock__guard.html',1,'container_module::value_container::write_lock_guard'],['../d2/d6a/classcontainer__module_1_1value__container_1_1write__lock__guard.html#a51c0416d4905247e6bf715aa534bf1ee',1,'container_module::value_container::write_lock_guard::write_lock_guard()']]]
+];

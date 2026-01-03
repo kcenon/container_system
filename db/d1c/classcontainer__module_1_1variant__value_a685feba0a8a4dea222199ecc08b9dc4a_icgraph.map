@@ -1,0 +1,29 @@
+<map id="container_module::variant_value::deserialize" name="container_module::variant_value::deserialize">
+<area shape="rect" id="Node000001" title="Deserialize from binary format." alt="" coords="1059,261,1252,301"/>
+<area shape="rect" id="Node000002" href="$db/de5/classcontainer__module_1_1thread__safe__container.html#a1b149737de6bbc72f55a764c1b2f8205" title="Deserialize from binary." alt="" coords="807,261,1011,301"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1045,284,1011,284,1011,279,1045,279"/>
+<area shape="rect" id="Node000003" href="$d0/dfe/classcontainer__module_1_1value__bridge.html#ab754aa5145f9715fcb87868037e8b13b" title=" " alt="" coords="520,197,759,237"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="810,261,723,240,725,235,811,255"/>
+<area shape="rect" id="Node000010" href="$dd/dd3/classcontainer__module_1_1variant__value__v2.html#ab177da145fdeb6f4470bad3aee22162a" title="Deserialize data portion based on type." alt="" coords="538,293,741,333"/>
+<area shape="poly" id="edge10_Node000002_Node000010" title=" " alt="" coords="794,298,741,304,740,299,793,292"/>
+<area shape="rect" id="Node000004" href="$d0/dfe/classcontainer__module_1_1value__bridge.html#a113dbef30f730c6de738331b94282144" title="Convert legacy value to modern variant_value_v2." alt="" coords="277,133,459,173"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="540,197,453,176,454,171,541,191"/>
+<area shape="rect" id="Node000005" href="$d0/dfe/classcontainer__module_1_1value__bridge.html#a5126ef425b4b088774c326c816ae5468" title=" " alt="" coords="5,5,216,45"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="313,128,266,99,215,72,150,48,152,43,217,67,269,95,316,124"/>
+<area shape="rect" id="Node000006" href="$d0/dfe/classcontainer__module_1_1value__bridge.html#a3d0d3f7d7ce6524eed03254dd89239cf" title="Convert legacy value (shared_ptr) to modern." alt="" coords="19,69,202,109"/>
+<area shape="poly" id="edge6_Node000004_Node000006" title=" " alt="" coords="273,133,191,112,192,107,274,127"/>
+<area shape="rect" id="Node000007" href="$d0/dfe/classcontainer__module_1_1value__bridge.html#a1abee9f7421cca4901cade952dda1cc6" title="Convert vector of legacy values to modern." alt="" coords="13,133,209,173"/>
+<area shape="poly" id="edge7_Node000004_Node000007" title=" " alt="" coords="263,156,209,156,209,151,263,151"/>
+<area shape="rect" id="Node000008" href="$d0/dfe/classcontainer__module_1_1value__bridge.html#abd036dde0b63607ed5232a1e0054a953" title="Test round&#45;trip conversion (modern → legacy → modern)" alt="" coords="17,197,205,237"/>
+<area shape="poly" id="edge8_Node000004_Node000008" title=" " alt="" coords="274,179,192,200,191,195,273,174"/>
+<area shape="rect" id="Node000009" href="$d0/dfe/classcontainer__module_1_1value__bridge.html#a464c6d8ef3b9c8892bfd97f6521b38e3" title="Test round&#45;trip conversion (legacy → modern → legacy)" alt="" coords="17,261,205,301"/>
+<area shape="poly" id="edge9_Node000004_Node000009" title=" " alt="" coords="331,184,278,218,217,252,187,264,185,259,215,247,275,214,328,179"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="229,49,299,90,352,131,348,135,296,95,226,53"/>
+<area shape="rect" id="Node000011" href="$dd/dd3/classcontainer__module_1_1variant__value__v2.html#a631232b8539656035a90e5a0422ed75f" title="Deserialize from binary format (legacy compatible)" alt="" coords="271,293,465,333"/>
+<area shape="poly" id="edge11_Node000010_Node000011" title=" " alt="" coords="524,325,465,325,465,319,524,320"/>
+<area shape="rect" id="Node000013" href="$dd/dd3/classcontainer__module_1_1variant__value__v2.html#a620599b10dce348f3fb845d473eb13c4" title="Construct from value_types and raw data (legacy compatibility)" alt="" coords="264,357,472,397"/>
+<area shape="poly" id="edge14_Node000010_Node000013" title=" " alt="" coords="541,339,454,360,453,355,540,334"/>
+<area shape="poly" id="edge13_Node000011_Node000010" title=" " alt="" coords="478,302,538,302,538,307,478,307"/>
+<area shape="rect" id="Node000012" href="$d1/d1a/namespacecontainer__module.html#a367a883eb38c222ee73536e395f115a1" title="Create a copy of a variant_value_v2 with a new name." alt="" coords="19,325,202,365"/>
+<area shape="poly" id="edge12_Node000011_Node000012" title=" " alt="" coords="258,330,203,337,202,331,257,324"/>
+</map>

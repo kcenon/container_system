@@ -1,0 +1,21 @@
+<map id="container_module::value_container" name="container_module::value_container">
+<area shape="rect" id="Node000001" title="A high&#45;level container for messages, including source/target IDs, message type, and a list of values ..." alt="" coords="313,745,488,1385"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,588,223,668"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="149,678,315,930,311,933,145,681"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="389,135,468,200"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="402,202,366,247,325,306,287,374,258,447,246,502,242,557,243,613,250,669,275,778,310,877,305,879,270,779,245,670,238,614,236,557,241,501,253,446,282,372,321,303,362,244,398,199"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="376,465,537,545"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="434,200,455,449,449,449,429,200"/>
+<area shape="rect" id="Node000007" href="$d8/de4/structcontainer__module_1_1optimized__value.html" title="Optimized value storage with Small Object Optimization." alt="" coords="467,263,671,423"/>
+<area shape="poly" id="edge8_Node000007_Node000003" title=" " alt="" coords="456,199,496,248,492,251,452,202"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="363,5,494,85"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="431,99,431,134,426,134,426,99"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="400,548,365,573,347,590,332,626,322,665,316,705,315,746,310,746,311,705,316,664,327,625,342,586,361,569,397,544"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="459,588,660,668"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="548,669,496,810,491,808,543,667"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="569,423,564,571,558,571,563,423"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="684,595,819,661"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="728,663,501,944,496,941,724,659"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="843,595,998,661"/>
+<area shape="poly" id="edge10_Node000001_Node000009" title=" " alt="" coords="885,663,503,982,499,978,881,659"/>
+</map>

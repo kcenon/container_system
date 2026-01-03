@@ -1,0 +1,11 @@
+<map id="examples/iterator_example.cpp" name="examples/iterator_example.cpp">
+<area shape="rect" id="Node000001" title="Example demonstrating STL iterator support in value_container." alt="" coords="202,5,431,31"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,79,196,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="283,33,149,77,148,72,281,28"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="221,79,306,104"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="310,33,282,69,278,66,306,29"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="330,79,410,104"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="328,29,355,66,351,69,323,33"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="434,79,509,104"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="343,28,435,70,433,75,340,33"/>
+</map>
