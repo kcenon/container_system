@@ -12,6 +12,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **C++20 Module Support** (#222): Add C++20 module files for `kcenon.container`
+  - Create `src/modules/container.cppm` primary module interface
+  - Export all public types: `value_types`, `value_variant`, `optimized_value`, `pool_stats`, `value_container`
+  - Export `variant_helpers` namespace with JSON/XML encoding utilities
+  - Import `kcenon.common` module for `Result<T>` pattern support
+  - Add `CONTAINER_BUILD_MODULES` CMake option for module build
+  - Requires CMake 3.28+ and Ninja generator for module compilation
+  - Header-based build continues to work during transition period
 - **Unified set() Method for messaging_container_builder** (#218): Add unified `set()` method to `messaging_container_builder` for API consistency
   - Add `set()` template method matching `value_container::set()` API
   - Supports method chaining for fluent interface
