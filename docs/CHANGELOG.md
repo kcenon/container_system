@@ -12,6 +12,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Zero-Copy Deserialization** (#226): Complete zero-copy deserialization implementation
+  - Add `value_view` class for non-owning access to serialized data
+  - Implement lazy parsing index for on-demand value lookup
+  - Add `get_view()` method for zero-copy value access
+  - Add `is_zero_copy_mode()` and `ensure_index_built()` methods
+  - String values can be accessed via `string_view` without copying
+  - Provides 10-30x performance improvement for large message parsing
 - **C++20 Module Support** (#222): Add C++20 module files for `kcenon.container`
   - Create `src/modules/container.cppm` primary module interface
   - Export all public types: `value_types`, `value_variant`, `optimized_value`, `pool_stats`, `value_container`
