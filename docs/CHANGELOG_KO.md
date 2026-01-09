@@ -19,6 +19,14 @@ Container System 프로젝트의 모든 주요 변경 사항이 이 파일에 �
   - `is_zero_copy_mode()` 및 `ensure_index_built()` 메서드 추가
   - 문자열 값을 복사 없이 `string_view`로 접근 가능
   - 대용량 메시지 파싱 시 10-30배 성능 향상 제공
+- **메모리 풀 통합** (#225): 소규모 할당을 위해 memory pool을 value_container에 통합
+  - thread-local pool 인스턴스가 포함된 `internal/pool_allocator.h` 추가
+  - 두 가지 크기 클래스 지원: small (<=64 bytes), medium (<=256 bytes)
+  - `pool_allocate<T>()` 및 `pool_deallocate<T>()` 템플릿 함수 추가
+  - `CONTAINER_USE_MEMORY_POOL` CMake 옵션 추가 (기본값: ON)
+  - 상세한 할당 통계를 포함하도록 `pool_stats` 구조체 확장
+  - 풀 효율성 계산을 위한 `hit_rate()` 메서드 추가
+  - 소규모 할당에 대해 10-20배 성능 향상 예상
 - **C++20 모듈 지원** (#222): `kcenon.container` C++20 모듈 파일 추가
   - `src/modules/container.cppm` 기본 모듈 인터페이스 생성
   - 모든 공개 타입 export: `value_types`, `value_variant`, `optimized_value`, `pool_stats`, `value_container`

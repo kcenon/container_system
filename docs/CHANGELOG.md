@@ -19,6 +19,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Add `is_zero_copy_mode()` and `ensure_index_built()` methods
   - String values can be accessed via `string_view` without copying
   - Provides 10-30x performance improvement for large message parsing
+- **Memory Pool Integration** (#225): Integrate memory pool into value_container for small allocations
+  - Add `internal/pool_allocator.h` with thread-local pool instances
+  - Support two size classes: small (<=64 bytes) and medium (<=256 bytes)
+  - Add `pool_allocate<T>()` and `pool_deallocate<T>()` template functions
+  - Add `CONTAINER_USE_MEMORY_POOL` CMake option (default: ON)
+  - Extend `pool_stats` structure with detailed allocation statistics
+  - Add `hit_rate()` method to calculate pool efficiency
+  - Expected 10-20x performance improvement for small allocations
 - **C++20 Module Support** (#222): Add C++20 module files for `kcenon.container`
   - Create `src/modules/container.cppm` primary module interface
   - Export all public types: `value_types`, `value_variant`, `optimized_value`, `pool_stats`, `value_container`
