@@ -56,6 +56,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "container/core/value_types.h"
 #include "container/core/typed_container.h"
 #include "container/internal/value.h"
+#include "container/internal/value_view.h"
 
 // Include feature flags for unified macro detection
 #if __has_include(<kcenon/common/config/feature_flags.h>)
@@ -356,6 +357,31 @@ namespace container_module
 		 */
 		[[nodiscard]] bool contains(std::string_view key) const noexcept;
 
+		// =======================================================================
+		// Zero-Copy Deserialization API (Issue #226)
+		// =======================================================================
+
+		/**
+		 * @brief Get a zero-copy view of a value by key
+		 * @param key Value name/key to search for
+		 * @return Optional containing value_view if found and zero-copy mode is enabled
+		 * @note Returns nullopt if not in zero-copy mode or key not found
+		 * @exception_safety No-throw guarantee
+		 */
+		[[nodiscard]] std::optional<value_view> get_view(std::string_view key) const noexcept;
+
+		/**
+		 * @brief Check if container is in zero-copy mode
+		 * @return true if zero-copy deserialization is active
+		 */
+		[[nodiscard]] bool is_zero_copy_mode() const noexcept { return zero_copy_mode_; }
+
+		/**
+		 * @brief Force building the value index for lazy parsing
+		 * @note Called automatically on first get_view() call
+		 */
+		void ensure_index_built() const;
+
 #if CONTAINER_HAS_COMMON_RESULT
 		/**
 		 * @brief Get a typed value by key with Result return type
@@ -653,9 +679,18 @@ namespace container_module
 		// Shared pointer to original serialized data for zero-copy access
 		// This enables lazy parsing: parse values only when accessed
 		std::shared_ptr<const std::string> raw_data_ptr_;
-		// Legacy parsed_values_cache_ removed - using optimized_units_ only
+		// Lazy-loaded value index (built on first access via get_view)
+		mutable std::optional<std::vector<value_index_entry>> value_index_;
+		// Flag indicating if the index has been built
+		mutable bool index_built_{false};
 		// Flag to enable zero-copy mode
 		bool zero_copy_mode_{false};
+
+		/**
+		 * @brief Build the value index for lazy parsing
+		 * @note Scans data_string_ to find value locations without full parsing
+		 */
+		void build_index() const;
 
 		// header
 		std::string source_id_;

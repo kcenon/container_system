@@ -1363,6 +1363,181 @@ TEST_F(UnifiedSetterAPITest, GetWithResultType) {
 }
 #endif
 
+// ============================================================================
+// Zero-Copy Deserialization Tests (Issue #226)
+// ============================================================================
+
+class ZeroCopyTest : public ::testing::Test {
+protected:
+    void SetUp() override {}
+    void TearDown() override {}
+};
+
+TEST_F(ZeroCopyTest, ZeroCopyModeEnabledOnParseOnlyHeader) {
+    // Create a container with some data
+    auto original = std::make_shared<value_container>();
+    original->set_message_type("test_message");
+    original->set("name", std::string("test_value"));
+    original->set("count", 42);
+
+    // Serialize it
+    std::string serialized = original->serialize();
+
+    // Deserialize with parse_only_header = true
+    auto restored = std::make_shared<value_container>(serialized, true);
+
+    // Should be in zero-copy mode
+    EXPECT_TRUE(restored->is_zero_copy_mode());
+}
+
+TEST_F(ZeroCopyTest, ZeroCopyModeDisabledOnFullParse) {
+    // Create a container with some data
+    auto original = std::make_shared<value_container>();
+    original->set_message_type("test_message");
+    original->set("name", std::string("test_value"));
+
+    // Serialize it
+    std::string serialized = original->serialize();
+
+    // Deserialize with parse_only_header = false
+    auto restored = std::make_shared<value_container>(serialized, false);
+
+    // Should NOT be in zero-copy mode when full parsing
+    EXPECT_FALSE(restored->is_zero_copy_mode());
+}
+
+TEST_F(ZeroCopyTest, GetViewReturnsValueInZeroCopyMode) {
+    // Create a container with string data
+    auto original = std::make_shared<value_container>();
+    original->set_message_type("test_message");
+    original->set("greeting", std::string("Hello World"));
+    original->set("number", 42);
+
+    // Serialize and restore with lazy parsing
+    std::string serialized = original->serialize();
+    auto restored = std::make_shared<value_container>(serialized, true);
+
+    ASSERT_TRUE(restored->is_zero_copy_mode());
+
+    // Get view for string value
+    auto view = restored->get_view("greeting");
+    ASSERT_TRUE(view.has_value());
+    EXPECT_EQ(view->as_string_view(), "Hello World");
+    EXPECT_EQ(view->type(), value_types::string_value);
+}
+
+TEST_F(ZeroCopyTest, GetViewReturnsNulloptForMissingKey) {
+    auto original = std::make_shared<value_container>();
+    original->set_message_type("test_message");
+    original->set("existing", std::string("value"));
+
+    std::string serialized = original->serialize();
+    auto restored = std::make_shared<value_container>(serialized, true);
+
+    ASSERT_TRUE(restored->is_zero_copy_mode());
+
+    // Get view for non-existent key
+    auto view = restored->get_view("nonexistent");
+    EXPECT_FALSE(view.has_value());
+}
+
+TEST_F(ZeroCopyTest, GetViewReturnsNulloptWhenNotInZeroCopyMode) {
+    auto original = std::make_shared<value_container>();
+    original->set_message_type("test_message");
+    original->set("key", std::string("value"));
+
+    std::string serialized = original->serialize();
+    // Full parse (not zero-copy mode)
+    auto restored = std::make_shared<value_container>(serialized, false);
+
+    ASSERT_FALSE(restored->is_zero_copy_mode());
+
+    // get_view should return nullopt when not in zero-copy mode
+    auto view = restored->get_view("key");
+    EXPECT_FALSE(view.has_value());
+}
+
+TEST_F(ZeroCopyTest, ValueViewAsStringReturnsOwnedCopy) {
+    auto original = std::make_shared<value_container>();
+    original->set("text", std::string("test string data"));
+
+    std::string serialized = original->serialize();
+    auto restored = std::make_shared<value_container>(serialized, true);
+
+    auto view = restored->get_view("text");
+    ASSERT_TRUE(view.has_value());
+
+    // as_string() should return a copy
+    std::string owned = view->as_string();
+    EXPECT_EQ(owned, "test string data");
+}
+
+TEST_F(ZeroCopyTest, ValueViewNumericParsing) {
+    auto original = std::make_shared<value_container>();
+    original->set("int_val", 12345);
+    original->set("float_val", 3.14f);
+
+    std::string serialized = original->serialize();
+    auto restored = std::make_shared<value_container>(serialized, true);
+
+    // Integer value
+    auto int_view = restored->get_view("int_val");
+    ASSERT_TRUE(int_view.has_value());
+    auto int_opt = int_view->as<int>();
+    ASSERT_TRUE(int_opt.has_value());
+    EXPECT_EQ(*int_opt, 12345);
+
+    // Float value
+    auto float_view = restored->get_view("float_val");
+    ASSERT_TRUE(float_view.has_value());
+    auto float_opt = float_view->as<float>();
+    ASSERT_TRUE(float_opt.has_value());
+    EXPECT_NEAR(*float_opt, 3.14f, 0.01f);
+}
+
+TEST_F(ZeroCopyTest, EnsureIndexBuiltDoesNotCrash) {
+    auto original = std::make_shared<value_container>();
+    original->set("key1", std::string("value1"));
+    original->set("key2", 100);
+
+    std::string serialized = original->serialize();
+    auto restored = std::make_shared<value_container>(serialized, true);
+
+    // Should not crash
+    restored->ensure_index_built();
+
+    // Should still work after explicit build
+    auto view = restored->get_view("key1");
+    EXPECT_TRUE(view.has_value());
+}
+
+TEST_F(ZeroCopyTest, MultipleValuesIndexing) {
+    auto original = std::make_shared<value_container>();
+    original->set("first", std::string("one"));
+    original->set("second", std::string("two"));
+    original->set("third", std::string("three"));
+    original->set("fourth", 4);
+
+    std::string serialized = original->serialize();
+    auto restored = std::make_shared<value_container>(serialized, true);
+
+    // All values should be accessible
+    auto v1 = restored->get_view("first");
+    ASSERT_TRUE(v1.has_value());
+    EXPECT_EQ(v1->as_string_view(), "one");
+
+    auto v2 = restored->get_view("second");
+    ASSERT_TRUE(v2.has_value());
+    EXPECT_EQ(v2->as_string_view(), "two");
+
+    auto v3 = restored->get_view("third");
+    ASSERT_TRUE(v3.has_value());
+    EXPECT_EQ(v3->as_string_view(), "three");
+
+    auto v4 = restored->get_view("fourth");
+    ASSERT_TRUE(v4.has_value());
+}
+
 // Main function for running tests
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);

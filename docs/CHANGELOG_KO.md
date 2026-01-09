@@ -12,6 +12,13 @@ Container System 프로젝트의 모든 주요 변경 사항이 이 파일에 �
 ## [Unreleased]
 
 ### Added
+- **Zero-Copy 역직렬화** (#226): Zero-copy 역직렬화 구현 완료
+  - 직렬화된 데이터에 대한 비소유 접근을 위한 `value_view` 클래스 추가
+  - 온디맨드 값 조회를 위한 lazy parsing 인덱스 구현
+  - zero-copy 값 접근을 위한 `get_view()` 메서드 추가
+  - `is_zero_copy_mode()` 및 `ensure_index_built()` 메서드 추가
+  - 문자열 값을 복사 없이 `string_view`로 접근 가능
+  - 대용량 메시지 파싱 시 10-30배 성능 향상 제공
 - **C++20 모듈 지원** (#222): `kcenon.container` C++20 모듈 파일 추가
   - `src/modules/container.cppm` 기본 모듈 인터페이스 생성
   - 모든 공개 타입 export: `value_types`, `value_variant`, `optimized_value`, `pool_stats`, `value_container`

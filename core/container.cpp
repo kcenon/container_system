@@ -396,6 +396,104 @@ namespace container_module
 	}
 
 	// =======================================================================
+	// Zero-Copy Deserialization Implementation (Issue #226)
+	// =======================================================================
+
+	std::optional<value_view> value_container::get_view(std::string_view key) const noexcept
+	{
+		read_lock_guard lock(this);
+
+		// Zero-copy mode requires raw_data_ptr_ to be valid
+		if (!zero_copy_mode_ || !raw_data_ptr_) {
+			return std::nullopt;
+		}
+
+		// Build index if not already built
+		if (!index_built_) {
+			build_index();
+		}
+
+		// Search in the index
+		if (value_index_) {
+			for (const auto& entry : *value_index_) {
+				if (entry.name == key) {
+					const char* data_ptr = raw_data_ptr_->data();
+					return value_view(
+						entry.name.data(), entry.name.size(),
+						data_ptr + entry.value_offset, entry.value_length,
+						entry.type
+					);
+				}
+			}
+		}
+
+		return std::nullopt;
+	}
+
+	void value_container::ensure_index_built() const
+	{
+		read_lock_guard lock(this);
+		if (!index_built_) {
+			build_index();
+		}
+	}
+
+	void value_container::build_index() const
+	{
+		if (index_built_ || !raw_data_ptr_) {
+			return;
+		}
+
+		value_index_ = std::vector<value_index_entry>();
+		const std::string& data = *raw_data_ptr_;
+
+		// Find the @data section
+		// Match both single and double braces for @data section
+		std::regex reData("@data=\\s*\\{\\{?\\s*(.*?)\\s*\\}\\}?;");
+		std::smatch dataMatch;
+		if (!std::regex_search(data, dataMatch, reData)) {
+			index_built_ = true;
+			return;
+		}
+
+		// Get the position of the data section in the original string
+		size_t dataStart = static_cast<size_t>(dataMatch.position(1));
+		std::string dataInside = dataMatch[1].str();
+
+		// Parse items: [name,type,data];
+		std::regex reItems("\\[(\\w+),\\s*(\\w+),\\s*(.*?)\\];");
+		auto it = std::sregex_iterator(dataInside.begin(), dataInside.end(), reItems);
+		auto end = std::sregex_iterator();
+
+		for (; it != end; ++it) {
+			value_index_entry entry;
+
+			// Calculate offsets into the original raw data
+			size_t matchPos = static_cast<size_t>(it->position());
+			size_t nameStart = dataStart + matchPos + 1; // +1 for '['
+			size_t nameLen = (*it)[1].length();
+
+			// Store name as string_view into raw data
+			entry.name = std::string_view(data.data() + nameStart, nameLen);
+
+			// Parse type
+			std::string typeStr = (*it)[2].str();
+			entry.type = convert_value_type(typeStr);
+
+			// Calculate value offset and length
+			// Value starts after [name,type,
+			size_t valueStart = dataStart + matchPos + 1 + nameLen + 1 + (*it)[2].length() + 1;
+			// +1 for '[', +1 for first ',', +1 for second ','
+			entry.value_offset = valueStart;
+			entry.value_length = (*it)[3].length();
+
+			value_index_->push_back(entry);
+		}
+
+		index_built_ = true;
+	}
+
+	// =======================================================================
 
 	void value_container::remove(std::string_view target_name,
 								 bool update_immediately)
