@@ -81,6 +81,10 @@ Container System 프로젝트의 모든 주요 변경 사항이 이 파일에 �
   - 모든 작업이 기본적으로 스레드 안전함
 
 ### Fixed
+- **메모리 풀 테스트 Clang 호환성** (#225): macOS Clang 컴파일 에러 수정
+  - PoolAllocateTemplate 테스트의 SmallStruct에 명시적 생성자 추가
+  - Clang은 GCC와 달리 C++20의 aggregate 괄호 초기화를 지원하지 않음
+  - memory_efficiency_bench.cpp에서 `hit_rate()` 함수 호출 수정
 - **XML 엔티티 인코딩** (#187): `to_xml()`에 XML 1.0 엔티티 인코딩 추가
   - XML 특수 문자 인코딩: `&` -> `&amp;`, `<` -> `&lt;`, `>` -> `&gt;`, `"` -> `&quot;`, `'` -> `&apos;`
   - 제어 문자 (0x00-0x1F, 탭/줄바꿈/캐리지리턴 제외)를 `&#xNN;` 형식으로 인코딩

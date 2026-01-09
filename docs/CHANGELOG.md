@@ -81,6 +81,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - All operations are now thread-safe by default
 
 ### Fixed
+- **Clang Compatibility for Memory Pool Tests** (#225): Fix compilation error on macOS Clang
+  - Add explicit constructor to SmallStruct in PoolAllocateTemplate test
+  - Clang does not support C++20 parenthesized initialization of aggregates unlike GCC
+  - Fix `hit_rate()` function call in memory_efficiency_bench.cpp
 - **XML Entity Encoding** (#187): Add proper XML 1.0 entity encoding in `to_xml()`
   - Encode XML special characters: `&` -> `&amp;`, `<` -> `&lt;`, `>` -> `&gt;`, `"` -> `&quot;`, `'` -> `&apos;`
   - Encode control characters (0x00-0x1F except tab, newline, carriage return) as `&#xNN;`
