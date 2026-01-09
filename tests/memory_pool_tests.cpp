@@ -578,6 +578,8 @@ TEST_F(PoolAllocatorTest, PoolAllocateTemplate) {
     struct SmallStruct {
         int value;
         double data;
+
+        SmallStruct(int v, double d) : value(v), data(d) {}
     };
 
     auto* ptr = pool_allocate<SmallStruct>(42, 3.14);
