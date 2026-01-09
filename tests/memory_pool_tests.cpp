@@ -531,6 +531,160 @@ TEST_F(MemoryPoolTest, ManyBlocksPerChunk) {
 }
 
 // ============================================================================
+// Pool Allocator Integration Tests
+// ============================================================================
+
+#include <container/internal/pool_allocator.h>
+#include <container/core/container.h>
+
+using namespace container_module::internal;
+
+class PoolAllocatorTest : public ::testing::Test {
+protected:
+    void SetUp() override {
+        pool_allocator::instance().reset_stats();
+    }
+};
+
+TEST_F(PoolAllocatorTest, BasicAllocation) {
+    auto& allocator = pool_allocator::instance();
+
+    // Small allocation (<=64 bytes)
+    void* small_ptr = allocator.allocate(32);
+    ASSERT_NE(small_ptr, nullptr);
+
+    // Medium allocation (<=256 bytes)
+    void* medium_ptr = allocator.allocate(128);
+    ASSERT_NE(medium_ptr, nullptr);
+
+    // Large allocation (>256 bytes)
+    void* large_ptr = allocator.allocate(512);
+    ASSERT_NE(large_ptr, nullptr);
+
+    auto stats = allocator.get_stats();
+#if CONTAINER_USE_MEMORY_POOL
+    EXPECT_EQ(stats.small_pool_allocs, 1);
+    EXPECT_EQ(stats.medium_pool_allocs, 1);
+    EXPECT_EQ(stats.pool_hits, 2);  // small + medium
+    EXPECT_EQ(stats.pool_misses, 1);  // large
+#endif
+
+    allocator.deallocate(small_ptr, 32);
+    allocator.deallocate(medium_ptr, 128);
+    allocator.deallocate(large_ptr, 512);
+}
+
+TEST_F(PoolAllocatorTest, PoolAllocateTemplate) {
+    struct SmallStruct {
+        int value;
+        double data;
+    };
+
+    auto* ptr = pool_allocate<SmallStruct>(42, 3.14);
+    ASSERT_NE(ptr, nullptr);
+    EXPECT_EQ(ptr->value, 42);
+    EXPECT_DOUBLE_EQ(ptr->data, 3.14);
+
+    pool_deallocate(ptr);
+}
+
+TEST_F(PoolAllocatorTest, SizeClassRouting) {
+    EXPECT_EQ(get_size_class(32), 0);   // Small
+    EXPECT_EQ(get_size_class(64), 0);   // Small (boundary)
+    EXPECT_EQ(get_size_class(65), 1);   // Medium
+    EXPECT_EQ(get_size_class(128), 1);  // Medium
+    EXPECT_EQ(get_size_class(256), 1);  // Medium (boundary)
+    EXPECT_EQ(get_size_class(257), 2);  // Large
+    EXPECT_EQ(get_size_class(1024), 2); // Large
+}
+
+TEST_F(PoolAllocatorTest, IsPoolAllocatable) {
+    struct Small { char data[32]; };
+    struct Medium { char data[128]; };
+    struct Large { char data[512]; };
+
+    EXPECT_TRUE(is_pool_allocatable<Small>());
+    EXPECT_TRUE(is_pool_allocatable<Medium>());
+    EXPECT_FALSE(is_pool_allocatable<Large>());
+}
+
+TEST_F(PoolAllocatorTest, HitRateCalculation) {
+    auto& allocator = pool_allocator::instance();
+
+    // Perform some allocations
+    std::vector<void*> ptrs;
+    for (int i = 0; i < 10; ++i) {
+        ptrs.push_back(allocator.allocate(32));  // Small, should hit
+    }
+    for (int i = 0; i < 5; ++i) {
+        ptrs.push_back(allocator.allocate(512)); // Large, should miss
+    }
+
+    auto stats = allocator.get_stats();
+#if CONTAINER_USE_MEMORY_POOL
+    EXPECT_DOUBLE_EQ(stats.hit_rate(), 10.0 / 15.0);
+#endif
+
+    // Cleanup
+    for (int i = 0; i < 10; ++i) {
+        allocator.deallocate(ptrs[i], 32);
+    }
+    for (int i = 10; i < 15; ++i) {
+        allocator.deallocate(ptrs[i], 512);
+    }
+}
+
+TEST_F(PoolAllocatorTest, ContainerPoolStats) {
+    using namespace container_module;
+
+    // Clear any previous stats
+    value_container::clear_pool();
+
+    auto stats = value_container::get_pool_stats();
+#if CONTAINER_USE_MEMORY_POOL
+    EXPECT_GE(stats.hits, 0u);
+    EXPECT_GE(stats.misses, 0u);
+#else
+    EXPECT_EQ(stats.hits, 0u);
+    EXPECT_EQ(stats.misses, 0u);
+#endif
+}
+
+TEST_F(PoolAllocatorTest, ConcurrentPoolAccess) {
+    constexpr int num_threads = 4;
+    constexpr int allocations_per_thread = 100;
+
+    std::vector<std::thread> threads;
+    std::atomic<int> success_count{0};
+
+    for (int t = 0; t < num_threads; ++t) {
+        threads.emplace_back([&success_count]() {
+            auto& allocator = pool_allocator::instance();
+            std::vector<void*> local_ptrs;
+
+            for (int i = 0; i < allocations_per_thread; ++i) {
+                void* ptr = allocator.allocate(32);
+                if (ptr) {
+                    local_ptrs.push_back(ptr);
+                    success_count.fetch_add(1, std::memory_order_relaxed);
+                }
+            }
+
+            // Deallocate
+            for (void* ptr : local_ptrs) {
+                allocator.deallocate(ptr, 32);
+            }
+        });
+    }
+
+    for (auto& thread : threads) {
+        thread.join();
+    }
+
+    EXPECT_EQ(success_count.load(), num_threads * allocations_per_thread);
+}
+
+// ============================================================================
 // Main entry point
 // ============================================================================
 
