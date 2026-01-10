@@ -17,6 +17,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Worker thread now captures `shared_ptr` copy instead of raw `this` pointer
   - Fixes sanitizer test failures (ASan/UBSan) on Ubuntu with common_system integration
 
+- **Async File I/O Sanitizer Fixes** (#267): Fix sanitizer test failures in async file I/O
+  - Reduce RoundTripLargeFile test data size from 500KB to 10KB to avoid stack overflow in std::regex under AddressSanitizer
+  - Add missing `<algorithm>` header for `std::min` used in chunked file I/O operations
+  - Sort standard library includes alphabetically for consistency
+
 ### Added
 - **Async File I/O Operations** (#267): Add coroutine-based async file I/O for containers (Phase 3)
   - Add `async_container::load_async()` method for non-blocking file loading
