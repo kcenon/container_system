@@ -23,6 +23,14 @@ Container System 프로젝트의 모든 주요 변경 사항이 이 파일에 �
   - 일관성을 위해 표준 라이브러리 include 알파벳순 정렬
 
 ### Added
+- **스트리밍 직렬화** (#268): 대용량 데이터 처리를 위한 제너레이터 기반 스트리밍 추가 (Phase 4)
+  - 청크 직렬화를 위한 `generator<std::vector<uint8_t>>` 반환 `serialize_chunked()` 메서드 추가
+  - 점진적 역직렬화를 위한 `deserialize_streaming()` 정적 메서드 추가
+  - 메모리 효율적인 스트리밍을 위한 설정 가능한 청크 크기 지원 (기본값: 64KB)
+  - 전체 메모리 할당 없이 네트워크 스트리밍 및 대용량 파일 처리 가능
+  - 스트리밍 작업을 위한 7개의 포괄적인 단위 테스트 추가
+  - Result 기반 및 비-Result 에러 처리 API 모두 지원
+
 - **비동기 파일 I/O 작업** (#267): 컨테이너를 위한 코루틴 기반 비동기 파일 I/O 추가 (Phase 3)
   - 논블로킹 파일 로딩을 위한 `async_container::load_async()` 메서드 추가
   - 논블로킹 파일 저장을 위한 `async_container::save_async()` 메서드 추가

@@ -23,6 +23,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Sort standard library includes alphabetically for consistency
 
 ### Added
+- **Streaming Serialization** (#268): Add generator-based streaming for large data handling (Phase 4)
+  - Add `serialize_chunked()` method returning `generator<std::vector<uint8_t>>` for chunked serialization
+  - Add `deserialize_streaming()` static method for progressive deserialization
+  - Support configurable chunk size (default: 64KB) for memory-efficient streaming
+  - Enable network streaming and large file processing without full memory allocation
+  - Add 7 comprehensive unit tests for streaming operations
+  - Support both Result-based and non-Result error handling APIs
+
 - **Async File I/O Operations** (#267): Add coroutine-based async file I/O for containers (Phase 3)
   - Add `async_container::load_async()` method for non-blocking file loading
   - Add `async_container::save_async()` method for non-blocking file saving

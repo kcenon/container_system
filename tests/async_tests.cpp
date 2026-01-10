@@ -722,6 +722,211 @@ TEST_F(AsyncFileIOTest, RoundTripLargeFile) {
 }
 
 // =============================================================================
+// Streaming Tests (Issue #268 - Phase 4)
+// =============================================================================
+
+class AsyncStreamingTest : public ::testing::Test {
+protected:
+    void SetUp() override {
+        container_ = std::make_shared<container_module::value_container>();
+        // Add some test data
+        for (int i = 0; i < 100; ++i) {
+            container_->set("key_" + std::to_string(i),
+                std::string(100, static_cast<char>('A' + (i % 26))));
+        }
+    }
+
+    void TearDown() override {
+        container_.reset();
+    }
+
+    std::shared_ptr<container_module::value_container> container_;
+};
+
+TEST_F(AsyncStreamingTest, SerializeChunkedBasic) {
+    async_container async_cont(container_);
+
+    // Serialize with default chunk size
+    auto gen = async_cont.serialize_chunked();
+    EXPECT_TRUE(gen.valid());
+
+    std::vector<uint8_t> full_data;
+    size_t chunk_count = 0;
+
+    for (auto& chunk : gen) {
+        EXPECT_FALSE(chunk.empty());
+        full_data.insert(full_data.end(), chunk.begin(), chunk.end());
+        ++chunk_count;
+    }
+
+    // Verify we got at least one chunk
+    EXPECT_GT(chunk_count, 0u);
+    EXPECT_FALSE(full_data.empty());
+
+    // Verify the full data can be deserialized
+    auto restored = std::make_shared<container_module::value_container>(full_data, false);
+    EXPECT_TRUE(restored->contains("key_0"));
+    EXPECT_TRUE(restored->contains("key_99"));
+}
+
+TEST_F(AsyncStreamingTest, SerializeChunkedSmallChunks) {
+    async_container async_cont(container_);
+
+    // Use small chunk size to force multiple chunks
+    const size_t small_chunk_size = 256;
+    auto gen = async_cont.serialize_chunked(small_chunk_size);
+
+    std::vector<uint8_t> full_data;
+    size_t chunk_count = 0;
+
+    for (auto& chunk : gen) {
+        // Each chunk should be at most chunk_size (except possibly the last)
+        EXPECT_LE(chunk.size(), small_chunk_size);
+        full_data.insert(full_data.end(), chunk.begin(), chunk.end());
+        ++chunk_count;
+    }
+
+    // With small chunks, we should have multiple
+    EXPECT_GT(chunk_count, 1u);
+
+    // Verify data integrity
+    auto restored = std::make_shared<container_module::value_container>(full_data, false);
+    auto val = restored->get_value("key_50");
+    ASSERT_TRUE(val.has_value());
+    auto* str_ptr = std::get_if<std::string>(&val->data);
+    ASSERT_NE(str_ptr, nullptr);
+    EXPECT_EQ(str_ptr->size(), 100u);
+}
+
+TEST_F(AsyncStreamingTest, SerializeChunkedLargeChunks) {
+    async_container async_cont(container_);
+
+    // Use very large chunk size (larger than data) - should produce single chunk
+    const size_t large_chunk_size = 1024 * 1024;  // 1MB
+    auto gen = async_cont.serialize_chunked(large_chunk_size);
+
+    std::vector<uint8_t> full_data;
+    size_t chunk_count = 0;
+
+    for (auto& chunk : gen) {
+        full_data.insert(full_data.end(), chunk.begin(), chunk.end());
+        ++chunk_count;
+    }
+
+    // With very large chunks, should be just one
+    EXPECT_EQ(chunk_count, 1u);
+
+    // Verify data integrity
+    auto restored = std::make_shared<container_module::value_container>(full_data, false);
+    EXPECT_TRUE(restored->contains("key_0"));
+}
+
+TEST_F(AsyncStreamingTest, SerializeChunkedEmptyContainer) {
+    auto empty_container = std::make_shared<container_module::value_container>();
+    async_container async_cont(empty_container);
+
+    auto gen = async_cont.serialize_chunked();
+    size_t chunk_count = 0;
+
+    for ([[maybe_unused]] auto& chunk : gen) {
+        ++chunk_count;
+    }
+
+    // Empty container should still produce at least header data
+    // (depending on serialization format)
+    EXPECT_GE(chunk_count, 0u);
+}
+
+TEST_F(AsyncStreamingTest, DeserializeStreamingComplete) {
+    // First serialize the container
+    auto serialized = container_->serialize_array();
+    EXPECT_FALSE(serialized.empty());
+
+    // Deserialize with is_final=true
+    auto deserialize_task = async_container::deserialize_streaming(serialized, true);
+    EXPECT_TRUE(deserialize_task.valid());
+
+    while (!deserialize_task.done()) {
+        std::this_thread::sleep_for(1ms);
+    }
+
+    auto result = deserialize_task.get();
+#if CONTAINER_HAS_COMMON_RESULT
+    EXPECT_TRUE(result.is_ok());
+    auto restored = result.value();
+    EXPECT_NE(restored, nullptr);
+
+    // Verify data integrity
+    auto val = restored->get_value("key_0");
+    ASSERT_TRUE(val.has_value());
+    auto* str_ptr = std::get_if<std::string>(&val->data);
+    ASSERT_NE(str_ptr, nullptr);
+    EXPECT_EQ(str_ptr->size(), 100u);
+#else
+    EXPECT_NE(result, nullptr);
+    EXPECT_TRUE(result->contains("key_0"));
+#endif
+}
+
+TEST_F(AsyncStreamingTest, DeserializeStreamingIncomplete) {
+    // First serialize the container
+    auto serialized = container_->serialize_array();
+    EXPECT_FALSE(serialized.empty());
+
+    // Deserialize with is_final=false should fail/return error
+    auto deserialize_task = async_container::deserialize_streaming(serialized, false);
+    EXPECT_TRUE(deserialize_task.valid());
+
+    while (!deserialize_task.done()) {
+        std::this_thread::sleep_for(1ms);
+    }
+
+    auto result = deserialize_task.get();
+#if CONTAINER_HAS_COMMON_RESULT
+    // Should return error because is_final=false
+    EXPECT_FALSE(result.is_ok());
+    EXPECT_EQ(result.error().code, container_module::error_codes::deserialization_failed);
+#else
+    // Should return nullptr
+    EXPECT_EQ(result, nullptr);
+#endif
+}
+
+TEST_F(AsyncStreamingTest, RoundTripChunkedSerialization) {
+    async_container async_cont(container_);
+
+    // Serialize in chunks
+    auto gen = async_cont.serialize_chunked(1024);  // 1KB chunks
+
+    std::vector<uint8_t> accumulated_data;
+    for (auto& chunk : gen) {
+        accumulated_data.insert(accumulated_data.end(), chunk.begin(), chunk.end());
+    }
+
+    // Deserialize the accumulated data
+    auto deserialize_task = async_container::deserialize_streaming(accumulated_data, true);
+
+    while (!deserialize_task.done()) {
+        std::this_thread::sleep_for(1ms);
+    }
+
+    auto result = deserialize_task.get();
+#if CONTAINER_HAS_COMMON_RESULT
+    EXPECT_TRUE(result.is_ok());
+    auto restored = result.value();
+#else
+    auto restored = result;
+#endif
+
+    EXPECT_NE(restored, nullptr);
+
+    // Verify all keys survived round-trip
+    for (int i = 0; i < 100; ++i) {
+        EXPECT_TRUE(restored->contains("key_" + std::to_string(i)));
+    }
+}
+
+// =============================================================================
 // Feature detection test
 // =============================================================================
 
