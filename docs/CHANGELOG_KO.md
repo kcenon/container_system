@@ -11,6 +11,12 @@ Container System 프로젝트의 모든 주요 변경 사항이 이 파일에 �
 
 ## [Unreleased]
 
+### Fixed
+- **비동기 Awaitable 스레드 안전성** (#267): 비동기 작업에서 use-after-free 수정
+  - 스레드 안전한 비동기 상태 관리를 위해 `shared_ptr` 사용
+  - 워커 스레드가 raw `this` 포인터 대신 `shared_ptr` 복사본을 캡처
+  - common_system 통합이 활성화된 Ubuntu에서의 sanitizer 테스트 실패(ASan/UBSan) 수정
+
 ### Added
 - **비동기 파일 I/O 작업** (#267): 컨테이너를 위한 코루틴 기반 비동기 파일 I/O 추가 (Phase 3)
   - 논블로킹 파일 로딩을 위한 `async_container::load_async()` 메서드 추가

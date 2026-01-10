@@ -11,6 +11,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- **Async Awaitable Thread Safety** (#267): Fix use-after-free in async operations
+  - Use `shared_ptr` for thread-safe async state management
+  - Worker thread now captures `shared_ptr` copy instead of raw `this` pointer
+  - Fixes sanitizer test failures (ASan/UBSan) on Ubuntu with common_system integration
+
 ### Added
 - **Async File I/O Operations** (#267): Add coroutine-based async file I/O for containers (Phase 3)
   - Add `async_container::load_async()` method for non-blocking file loading
