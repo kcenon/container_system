@@ -12,6 +12,16 @@ Container System 프로젝트의 모든 주요 변경 사항이 이 파일에 �
 ## [Unreleased]
 
 ### Added
+- **스키마 검증 역직렬화** (#249): 역직렬화 작업에 스키마 검증 지원 추가 (Phase 5)
+  - 문자열 및 바이트 배열 입력을 위한 `deserialize(data, schema)` 오버로드 추가
+  - Result 기반 에러 처리를 위한 `VoidResult`를 반환하는 `deserialize_result(data, schema)` 오버로드 추가
+  - 역직렬화 후 상세한 검증 에러를 조회하기 위한 `get_validation_errors()` 메서드 추가
+  - 저장된 검증 상태를 초기화하기 위한 `clear_validation_errors()` 메서드 추가
+  - 검증 에러에는 필드명, 설명 메시지, 에러 코드가 포함됨
+  - 모든 스키마 제약 조건 지원: 타입 검사, 범위, 길이, 패턴, 열거형 값, 커스텀 검증자, 중첩 스키마
+  - 스키마 검증 역직렬화를 위한 9개의 포괄적인 단위 테스트 추가
+  - 스키마 검증 기능 (#228) 완료
+
 - **CMake 통합 및 예제** (#269): 비동기 API를 위한 CMake 설정 및 예제 코드 추가 (Phase 5)
   - common_system 스레드 풀 executor와의 통합을 위한 `thread_pool_executor.h` 추가
   - 전역 executor 설정을 위한 `async_executor_context` 싱글톤 추가
