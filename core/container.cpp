@@ -647,7 +647,10 @@ bool value_container::deserialize(const std::vector<uint8_t>& data_array,
 			return kcenon::common::ok();
 		}
 		return kcenon::common::VoidResult(
-			kcenon::common::error_info{-1, "Failed to deserialize container", "container_system"});
+			kcenon::common::error_info{
+				error_codes::deserialization_failed,
+				error_codes::make_message(error_codes::deserialization_failed, "string data"),
+				"container_system"});
 	}
 
 	kcenon::common::VoidResult value_container::deserialize_result(
@@ -659,7 +662,10 @@ bool value_container::deserialize(const std::vector<uint8_t>& data_array,
 			return kcenon::common::ok();
 		}
 		return kcenon::common::VoidResult(
-			kcenon::common::error_info{-1, "Failed to deserialize container", "container_system"});
+			kcenon::common::error_info{
+				error_codes::deserialization_failed,
+				error_codes::make_message(error_codes::deserialization_failed, "byte array data"),
+				"container_system"});
 	}
 #endif
 

@@ -52,6 +52,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "container/core/container/fwd.h"
 #include "container/core/container/types.h"
 #include "container/core/container/variant_helpers.h"
+#include "container/core/container/error_codes.h"
 
 #include "container/core/value_types.h"
 #include "container/core/typed_container.h"
@@ -728,12 +729,18 @@ namespace container_module
 				}
 				// Type mismatch
 				return kcenon::common::Result<T>(
-					kcenon::common::error_info{-2, "Type mismatch for key: " + std::string(key), "container_system"});
+					kcenon::common::error_info{
+						error_codes::type_mismatch,
+						error_codes::make_message(error_codes::type_mismatch, key),
+						"container_system"});
 			}
 		}
 		// Key not found
 		return kcenon::common::Result<T>(
-			kcenon::common::error_info{-1, "Key not found: " + std::string(key), "container_system"});
+			kcenon::common::error_info{
+				error_codes::key_not_found,
+				error_codes::make_message(error_codes::key_not_found, key),
+				"container_system"});
 	}
 #endif
 
