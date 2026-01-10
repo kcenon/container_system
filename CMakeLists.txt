@@ -40,6 +40,7 @@ option(CONTAINER_BUILD_INTEGRATION_TESTS "Build container system integration tes
 option(BUILD_FUZZ_TESTS "Build fuzz tests" OFF)
 option(BUILD_FUZZING "Build libFuzzer fuzz targets" OFF)
 option(CONTAINER_USE_MEMORY_POOL "Enable memory pool for small allocations" ON)
+option(CONTAINER_ENABLE_COROUTINES "Enable C++20 coroutine-based async API" ON)
 set(COMMON_SYSTEM_ROOT "" CACHE PATH "Path to the common_system repository root")
 
 # Respect global BUILD_INTEGRATION_TESTS flag if set
@@ -121,6 +122,16 @@ set(INTERNAL_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/container/internal/simd_processor.h
     ${CMAKE_CURRENT_SOURCE_DIR}/container/internal/simd_processor.cpp
 )
+
+# Async coroutine files (C++20)
+if(CONTAINER_ENABLE_COROUTINES)
+    list(APPEND INTERNAL_FILES
+        ${CMAKE_CURRENT_SOURCE_DIR}/internal/async/async.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/internal/async/task.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/internal/async/generator.h
+    )
+    message(STATUS "Container: C++20 coroutine support enabled")
+endif()
 
 # Integration files (conditional)
 set(INTEGRATION_FILES)
@@ -242,6 +253,18 @@ endif()
 if(CONTAINER_USE_MEMORY_POOL)
     target_compile_definitions(container_system PUBLIC CONTAINER_USE_MEMORY_POOL=1)
     message(STATUS "Container: Memory pool enabled")
+endif()
+
+if(CONTAINER_ENABLE_COROUTINES)
+    target_compile_definitions(container_system PUBLIC CONTAINER_HAS_COROUTINES=1)
+    # Check for coroutine compiler support
+    include(CheckCXXCompilerFlag)
+    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU")
+        check_cxx_compiler_flag("-fcoroutines" COMPILER_HAS_FCOROUTINES)
+        if(COMPILER_HAS_FCOROUTINES)
+            target_compile_options(container_system PUBLIC -fcoroutines)
+        endif()
+    endif()
 endif()
 
 ##################################################
