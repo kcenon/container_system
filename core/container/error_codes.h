@@ -314,7 +314,7 @@ namespace container_module
 		 * @param detail Additional context (e.g., key name, file path)
 		 * @return Formatted error message string
 		 */
-		std::string make_message(int code, std::string_view detail = "")
+		inline std::string make_message(int code, std::string_view detail = "")
 		{
 			std::string msg{get_message(code)};
 			if (!detail.empty())
