@@ -12,6 +12,28 @@ Container System 프로젝트의 모든 주요 변경 사항이 이 파일에 �
 ## [Unreleased]
 
 ### Added
+- **Result<T> 패턴을 모든 Public API로 확장** (#231): 포괄적인 Result 기반 에러 처리 추가
+  - `error_codes` 네임스페이스에 표준화된 에러 코드 추가 (core/container/error_codes.h)
+    - 값 연산 (1xx): key_not_found, type_mismatch, empty_key 등
+    - 직렬화 (2xx): serialization_failed, deserialization_failed 등
+    - 유효성 검사 (3xx): schema_validation_failed, constraint_violated 등
+    - 리소스 (4xx): memory_allocation_failed, file_not_found 등
+    - 스레드 안전성 (5xx): lock_acquisition_failed, concurrent_modification
+  - Result를 반환하는 값 API 추가:
+    - `get_result(key)`: `Result<optimized_value>` 반환
+    - `set_result(key, value)`: `VoidResult` 반환
+    - `set_all_result(vals)`: `VoidResult` 반환
+    - `remove_result(key)`: `VoidResult` 반환
+  - Result를 반환하는 직렬화 API 추가:
+    - `serialize_result()`: `Result<string>` 반환
+    - `serialize_array_result()`: `Result<vector<uint8_t>>` 반환
+    - `to_json_result()`: `Result<string>` 반환
+    - `to_xml_result()`: `Result<string>` 반환
+  - Result를 반환하는 파일 연산 API 추가:
+    - `load_packet_result(path)`: `VoidResult` 반환
+    - `save_packet_result(path)`: `VoidResult` 반환
+  - 마이그레이션 가이드 추가: docs/guides/RESULT_PATTERN_MIGRATION.md
+  - 모든 새 메서드에 `[[nodiscard]]` 속성 적용
 - **Zero-Copy 역직렬화** (#226): Zero-copy 역직렬화 구현 완료
   - 직렬화된 데이터에 대한 비소유 접근을 위한 `value_view` 클래스 추가
   - 온디맨드 값 조회를 위한 lazy parsing 인덱스 구현
