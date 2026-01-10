@@ -103,6 +103,7 @@ Container System 프로젝트의 모든 주요 변경 사항이 이 파일에 �
   - 스레드 안전한 `task::done()` 확인을 위해 `promise_base`에 `std::atomic<bool> completed_` 추가
   - continuation 재개 전 `final_awaiter::await_suspend()`에서 release 의미론으로 `completed_` 설정
   - `task::done()`에서 acquire 의미론을 사용하여 setter와 동기화, 완료 폴링 시 데이터 레이스 방지
+  - 소멸자와의 레이스를 방지하기 위해 `final_awaiter::await_suspend()`에서 `completed_` 표시 전에 `continuation_` 읽기
 
 - **스키마 range() 오버로드 모호성** (#250): range() 오버로드 모호성으로 인한 Linux/GCC 빌드 실패 수정
   - C++20 개념(std::integral 및 std::floating_point)을 사용하여 정수형과 부동소수점형 범위 제약 구분

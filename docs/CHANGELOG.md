@@ -103,6 +103,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Add `std::atomic<bool> completed_` to `promise_base` for thread-safe `task::done()` checking
   - Set `completed_` with release semantics in `final_awaiter::await_suspend()` before resuming continuation
   - Use acquire semantics in `task::done()` to synchronize with the setter, avoiding data race when polling completion
+  - Read `continuation_` before marking `completed_` in `final_awaiter::await_suspend()` to avoid race with destructor
 
 - **Schema range() overload ambiguity** (#250): Fix Linux/GCC build failure caused by ambiguous range() overloads
   - Use C++20 concepts (std::integral and std::floating_point) to disambiguate between integer and floating-point range constraints
