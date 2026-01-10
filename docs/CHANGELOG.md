@@ -12,6 +12,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Async File I/O Operations** (#267): Add coroutine-based async file I/O for containers (Phase 3)
+  - Add `async_container::load_async()` method for non-blocking file loading
+  - Add `async_container::save_async()` method for non-blocking file saving
+  - Add `read_file_async()` utility function for async byte array reading
+  - Add `write_file_async()` utility function for async byte array writing
+  - Add `progress_callback` type for monitoring I/O progress
+  - Add chunked I/O processing (64KB chunks) for large file handling
+  - Add 6 comprehensive unit tests for async file operations
+  - Support both Result-based and exception-based error handling APIs
+  - Require C++20 coroutine support
+
 - **Async Container Operations** (#266): Add coroutine-based async API for container serialization (Phase 2)
   - Add `async_container` class wrapping `value_container` for async operations
   - Add `serialize_async()` method for non-blocking byte array serialization

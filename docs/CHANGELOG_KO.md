@@ -12,6 +12,17 @@ Container System 프로젝트의 모든 주요 변경 사항이 이 파일에 �
 ## [Unreleased]
 
 ### Added
+- **비동기 파일 I/O 작업** (#267): 컨테이너를 위한 코루틴 기반 비동기 파일 I/O 추가 (Phase 3)
+  - 논블로킹 파일 로딩을 위한 `async_container::load_async()` 메서드 추가
+  - 논블로킹 파일 저장을 위한 `async_container::save_async()` 메서드 추가
+  - 비동기 바이트 배열 읽기를 위한 `read_file_async()` 유틸리티 함수 추가
+  - 비동기 바이트 배열 쓰기를 위한 `write_file_async()` 유틸리티 함수 추가
+  - I/O 진행 상황 모니터링을 위한 `progress_callback` 타입 추가
+  - 대용량 파일 처리를 위한 청크 I/O 처리 (64KB 청크) 추가
+  - 비동기 파일 작업을 위한 6개의 포괄적인 단위 테스트 추가
+  - Result 기반 및 예외 기반 에러 처리 API 모두 지원
+  - C++20 코루틴 지원 필요
+
 - **비동기 컨테이너 작업** (#266): 컨테이너 직렬화를 위한 코루틴 기반 비동기 API 추가 (Phase 2)
   - 비동기 작업을 위해 `value_container`를 래핑하는 `async_container` 클래스 추가
   - 논블로킹 바이트 배열 직렬화를 위한 `serialize_async()` 메서드 추가
