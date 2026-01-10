@@ -12,6 +12,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Async Container Operations** (#266): Add coroutine-based async API for container serialization (Phase 2)
+  - Add `async_container` class wrapping `value_container` for async operations
+  - Add `serialize_async()` method for non-blocking byte array serialization
+  - Add `serialize_string_async()` method for non-blocking string serialization
+  - Add `deserialize_async()` static method for async deserialization from bytes
+  - Add `deserialize_string_async()` static method for async deserialization from string
+  - Add thread-pool integration via `detail::async_awaitable` for CPU-bound work offloading
+  - Add convenience methods: `set()`, `get()`, `contains()` forwarding to underlying container
+  - Add 7 comprehensive unit tests for async container operations
+  - Support both Result-based and exception-based error handling APIs
+  - Require C++20 coroutine support
+
 - **MessagePack Serialization Support** (#234): Add MessagePack binary format as alternative to JSON/XML
   - Add `msgpack_encoder` class for compact binary serialization
   - Add `msgpack_decoder` class for binary deserialization
@@ -81,6 +93,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Add tests for schema copy/move semantics
 
 ### Fixed
+- **Thread Sanitizer data race in async operations** (#266): Fix data race detected by ThreadSanitizer in async operations
+  - Remove `worker_` std::thread member variable that caused race condition
+  - Remove unused `completed_` boolean flag
+  - Create anonymous thread and immediately detach to avoid assignment race
+  - Add `std::atomic<bool> ready_` with release-acquire memory ordering for proper synchronization
+  - Store with `memory_order_release` before `handle.resume()` and load with `memory_order_acquire` in `await_resume()`
+  - Ensures all writes in worker thread are visible to the resumed coroutine
+  - Add `std::atomic<bool> completed_` to `promise_base` for thread-safe `task::done()` checking
+  - Set `completed_` with release semantics in `final_awaiter::await_suspend()` before resuming continuation
+  - Use acquire semantics in `task::done()` to synchronize with the setter, avoiding data race when polling completion
+  - Read `continuation_` before marking `completed_` in `final_awaiter::await_suspend()` to avoid race with destructor
+
 - **Schema range() overload ambiguity** (#250): Fix Linux/GCC build failure caused by ambiguous range() overloads
   - Use C++20 concepts (std::integral and std::floating_point) to disambiguate between integer and floating-point range constraints
   - Replace non-template range() overloads with template versions

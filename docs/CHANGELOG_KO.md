@@ -12,6 +12,18 @@ Container System 프로젝트의 모든 주요 변경 사항이 이 파일에 �
 ## [Unreleased]
 
 ### Added
+- **비동기 컨테이너 작업** (#266): 컨테이너 직렬화를 위한 코루틴 기반 비동기 API 추가 (Phase 2)
+  - 비동기 작업을 위해 `value_container`를 래핑하는 `async_container` 클래스 추가
+  - 논블로킹 바이트 배열 직렬화를 위한 `serialize_async()` 메서드 추가
+  - 논블로킹 문자열 직렬화를 위한 `serialize_string_async()` 메서드 추가
+  - 바이트로부터 비동기 역직렬화를 위한 `deserialize_async()` 정적 메서드 추가
+  - 문자열로부터 비동기 역직렬화를 위한 `deserialize_string_async()` 정적 메서드 추가
+  - CPU 바운드 작업 오프로딩을 위한 `detail::async_awaitable`을 통한 스레드 풀 통합 추가
+  - 기본 컨테이너로 포워딩하는 편의 메서드: `set()`, `get()`, `contains()` 추가
+  - 비동기 컨테이너 작업을 위한 7개의 포괄적인 단위 테스트 추가
+  - Result 기반 및 예외 기반 에러 처리 API 모두 지원
+  - C++20 코루틴 지원 필요
+
 - **MessagePack 직렬화 지원** (#234): JSON/XML 대안으로 MessagePack 바이너리 포맷 추가
   - 컴팩트한 바이너리 직렬화를 위한 `msgpack_encoder` 클래스 추가
   - 바이너리 역직렬화를 위한 `msgpack_decoder` 클래스 추가
@@ -81,6 +93,18 @@ Container System 프로젝트의 모든 주요 변경 사항이 이 파일에 �
   - 스키마 복사/이동 시맨틱 테스트 추가
 
 ### Fixed
+- **비동기 작업의 Thread Sanitizer 데이터 레이스** (#266): 비동기 작업에서 ThreadSanitizer가 감지한 데이터 레이스 수정
+  - 레이스 컨디션을 유발한 `worker_` std::thread 멤버 변수 제거
+  - 사용되지 않는 `completed_` 불리언 플래그 제거
+  - 할당 레이스를 방지하기 위해 익명 스레드를 생성하고 즉시 분리
+  - 적절한 동기화를 위해 release-acquire 메모리 순서를 가진 `std::atomic<bool> ready_` 추가
+  - `handle.resume()` 전에 `memory_order_release`로 저장하고 `await_resume()`에서 `memory_order_acquire`로 로드
+  - 워커 스레드의 모든 쓰기가 재개된 코루틴에서 가시성 보장
+  - 스레드 안전한 `task::done()` 확인을 위해 `promise_base`에 `std::atomic<bool> completed_` 추가
+  - continuation 재개 전 `final_awaiter::await_suspend()`에서 release 의미론으로 `completed_` 설정
+  - `task::done()`에서 acquire 의미론을 사용하여 setter와 동기화, 완료 폴링 시 데이터 레이스 방지
+  - 소멸자와의 레이스를 방지하기 위해 `final_awaiter::await_suspend()`에서 `completed_` 표시 전에 `continuation_` 읽기
+
 - **스키마 range() 오버로드 모호성** (#250): range() 오버로드 모호성으로 인한 Linux/GCC 빌드 실패 수정
   - C++20 개념(std::integral 및 std::floating_point)을 사용하여 정수형과 부동소수점형 범위 제약 구분
   - 비템플릿 range() 오버로드를 템플릿 버전으로 대체
