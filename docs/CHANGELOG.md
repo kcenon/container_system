@@ -11,6 +11,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Deprecated
+- **Legacy void/bool API Methods** (#241): Mark legacy methods as deprecated in favor of Result-returning APIs
+  - Deprecate `serialize()` in favor of `serialize_result()`
+  - Deprecate `serialize_array()` in favor of `serialize_array_result()`
+  - Deprecate `deserialize()` in favor of `deserialize_result()`
+  - Deprecate `to_json()` in favor of `to_json_result()`
+  - Deprecate `to_xml()` in favor of `to_xml_result()`
+  - Deprecate `to_msgpack()` in favor of `to_msgpack_result()`
+  - Deprecate `from_msgpack()` in favor of `from_msgpack_result()`
+  - Deprecate `load_packet()` in favor of `load_packet_result()`
+  - Deprecate `save_packet()` in favor of `save_packet_result()`
+  - Deprecate `remove()` in favor of `remove_result()`
+  - Add `docs/guides/RESULT_API_MIGRATION_GUIDE.md` with migration instructions and examples
+  - Part of Issue #231 Phase 5: Backward Compatible Deprecated Wrappers
+
 ### Added
 - **Schema-Validated Deserialization** (#249): Add schema validation support for deserialize operations (Phase 5)
   - Add `deserialize(data, schema)` overloads for string and byte array inputs
