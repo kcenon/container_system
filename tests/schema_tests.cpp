@@ -706,6 +706,152 @@ TEST_F(SchemaTest, SchemaMoveConstruction) {
 }
 
 // ============================================================================
+// Schema-Validated Deserialization Tests (Issue #249)
+// ============================================================================
+
+TEST_F(SchemaTest, DeserializeWithSchema_ValidData) {
+	auto schema = container_schema()
+		.require("name", value_types::string_value)
+		.require("age", value_types::int_value)
+		.range("age", 0, 150);
+
+	// Create a valid container and serialize it
+	auto source = std::make_unique<value_container>();
+	source->set("name", std::string("Alice"));
+	source->set("age", 30);
+	auto serialized_data = source->serialize();
+
+	// Deserialize with schema validation
+	auto target = std::make_unique<value_container>();
+	bool success = target->deserialize(serialized_data, schema, false);
+
+	EXPECT_TRUE(success);
+	EXPECT_TRUE(target->get_validation_errors().empty());
+
+	auto name_opt = target->get_value("name");
+	EXPECT_TRUE(name_opt.has_value());
+}
+
+TEST_F(SchemaTest, DeserializeWithSchema_MissingRequiredField) {
+	auto schema = container_schema()
+		.require("name", value_types::string_value)
+		.require("age", value_types::int_value);
+
+	// Create a container missing required field
+	auto source = std::make_unique<value_container>();
+	source->set("name", std::string("Alice"));
+	// Missing 'age' field
+	auto serialized_data = source->serialize();
+
+	auto target = std::make_unique<value_container>();
+	bool success = target->deserialize(serialized_data, schema, false);
+
+	EXPECT_FALSE(success);
+	EXPECT_FALSE(target->get_validation_errors().empty());
+	EXPECT_EQ(target->get_validation_errors()[0].code, validation_codes::missing_required);
+}
+
+TEST_F(SchemaTest, DeserializeWithSchema_InvalidRange) {
+	auto schema = container_schema()
+		.require("age", value_types::int_value)
+		.range("age", 0, 150);
+
+	auto source = std::make_unique<value_container>();
+	source->set("age", 200);  // Out of range
+	auto serialized_data = source->serialize();
+
+	auto target = std::make_unique<value_container>();
+	bool success = target->deserialize(serialized_data, schema, false);
+
+	EXPECT_FALSE(success);
+	EXPECT_FALSE(target->get_validation_errors().empty());
+	EXPECT_EQ(target->get_validation_errors()[0].code, validation_codes::out_of_range);
+}
+
+TEST_F(SchemaTest, DeserializeWithSchema_ByteArray) {
+	auto schema = container_schema()
+		.require("name", value_types::string_value);
+
+	auto source = std::make_unique<value_container>();
+	source->set("name", std::string("Bob"));
+	auto serialized_string = source->serialize();
+	std::vector<uint8_t> serialized_bytes(serialized_string.begin(), serialized_string.end());
+
+	auto target = std::make_unique<value_container>();
+	bool success = target->deserialize(serialized_bytes, schema, false);
+
+	EXPECT_TRUE(success);
+	EXPECT_TRUE(target->get_validation_errors().empty());
+}
+
+TEST_F(SchemaTest, GetValidationErrors_Empty) {
+	// New container should have no validation errors
+	EXPECT_TRUE(container->get_validation_errors().empty());
+}
+
+TEST_F(SchemaTest, ClearValidationErrors) {
+	auto schema = container_schema()
+		.require("missing", value_types::string_value);
+
+	auto serialized_data = container->serialize();
+
+	auto target = std::make_unique<value_container>();
+	target->deserialize(serialized_data, schema, false);
+	EXPECT_FALSE(target->get_validation_errors().empty());
+
+	target->clear_validation_errors();
+	EXPECT_TRUE(target->get_validation_errors().empty());
+}
+
+TEST_F(SchemaTest, DeserializeWithSchema_CollectsAllErrors) {
+	auto schema = container_schema()
+		.require("name", value_types::string_value)
+		.require("age", value_types::int_value)
+		.require("email", value_types::string_value);
+
+	// Empty container - all required fields missing
+	auto serialized_data = container->serialize();
+
+	auto target = std::make_unique<value_container>();
+	target->deserialize(serialized_data, schema, false);
+
+	// Should have 3 validation errors (one for each missing field)
+	EXPECT_EQ(target->get_validation_errors().size(), 3);
+}
+
+TEST_F(SchemaTest, DeserializeWithSchema_PatternValidation) {
+	auto schema = container_schema()
+		.require("email", value_types::string_value)
+		.pattern("email", R"(^[\w\.-]+@[\w\.-]+\.\w+$)");
+
+	auto source = std::make_unique<value_container>();
+	source->set("email", std::string("invalid-email"));  // No @ symbol
+	auto serialized_data = source->serialize();
+
+	auto target = std::make_unique<value_container>();
+	bool success = target->deserialize(serialized_data, schema, false);
+
+	EXPECT_FALSE(success);
+	EXPECT_EQ(target->get_validation_errors()[0].code, validation_codes::pattern_mismatch);
+}
+
+TEST_F(SchemaTest, DeserializeWithSchema_OneOfValidation) {
+	auto schema = container_schema()
+		.require("status", value_types::string_value)
+		.one_of("status", {"active", "inactive", "pending"});
+
+	auto source = std::make_unique<value_container>();
+	source->set("status", std::string("unknown"));
+	auto serialized_data = source->serialize();
+
+	auto target = std::make_unique<value_container>();
+	bool success = target->deserialize(serialized_data, schema, false);
+
+	EXPECT_FALSE(success);
+	EXPECT_EQ(target->get_validation_errors()[0].code, validation_codes::not_in_allowed_values);
+}
+
+// ============================================================================
 // Main
 // ============================================================================
 

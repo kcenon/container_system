@@ -890,6 +890,56 @@ bool value_container::deserialize(const std::vector<uint8_t>& data_array,
 	return deserialize(strVal, parse_only_header);
 }
 
+// =============================================================================
+// Schema-Validated Deserialization API (Issue #249)
+// =============================================================================
+
+bool value_container::deserialize(const std::string& data_string,
+								  const container_schema& schema,
+								  bool parse_only_header)
+{
+	// Clear previous validation errors
+	validation_errors_.clear();
+
+	// First, deserialize the data
+	if (!deserialize(data_string, parse_only_header))
+	{
+		return false;
+	}
+
+	// Then validate against the schema
+	validation_errors_ = schema.validate_all(*this);
+	return validation_errors_.empty();
+}
+
+bool value_container::deserialize(const std::vector<uint8_t>& data_array,
+								  const container_schema& schema,
+								  bool parse_only_header)
+{
+	// Clear previous validation errors
+	validation_errors_.clear();
+
+	// First, deserialize the data
+	if (!deserialize(data_array, parse_only_header))
+	{
+		return false;
+	}
+
+	// Then validate against the schema
+	validation_errors_ = schema.validate_all(*this);
+	return validation_errors_.empty();
+}
+
+const std::vector<validation_error>& value_container::get_validation_errors() const noexcept
+{
+	return validation_errors_;
+}
+
+void value_container::clear_validation_errors() noexcept
+{
+	validation_errors_.clear();
+}
+
 #if KCENON_HAS_COMMON_SYSTEM
 	kcenon::common::VoidResult value_container::deserialize_result(
 		const std::string& data_str,
@@ -919,6 +969,65 @@ bool value_container::deserialize(const std::vector<uint8_t>& data_array,
 				error_codes::deserialization_failed,
 				error_codes::make_message(error_codes::deserialization_failed, "byte array data"),
 				"container_system"});
+	}
+
+	// Schema-validated deserialize_result overloads
+	kcenon::common::VoidResult value_container::deserialize_result(
+		const std::string& data_string,
+		const container_schema& schema,
+		bool parse_only_header) noexcept
+	{
+		// Clear previous validation errors
+		validation_errors_.clear();
+
+		// First, deserialize the data
+		auto deser_result = deserialize_result(data_string, parse_only_header);
+		if (!deser_result.is_ok())
+		{
+			return deser_result;
+		}
+
+		// Then validate against the schema
+		validation_errors_ = schema.validate_all(*this);
+		if (!validation_errors_.empty())
+		{
+			const auto& first_error = validation_errors_.front();
+			return kcenon::common::VoidResult(
+				kcenon::common::error_info{
+					first_error.code,
+					first_error.message,
+					"container_schema"});
+		}
+		return kcenon::common::ok();
+	}
+
+	kcenon::common::VoidResult value_container::deserialize_result(
+		const std::vector<uint8_t>& data_array,
+		const container_schema& schema,
+		bool parse_only_header) noexcept
+	{
+		// Clear previous validation errors
+		validation_errors_.clear();
+
+		// First, deserialize the data
+		auto deser_result = deserialize_result(data_array, parse_only_header);
+		if (!deser_result.is_ok())
+		{
+			return deser_result;
+		}
+
+		// Then validate against the schema
+		validation_errors_ = schema.validate_all(*this);
+		if (!validation_errors_.empty())
+		{
+			const auto& first_error = validation_errors_.front();
+			return kcenon::common::VoidResult(
+				kcenon::common::error_info{
+					first_error.code,
+					first_error.message,
+					"container_schema"});
+		}
+		return kcenon::common::ok();
 	}
 
 	kcenon::common::Result<optimized_value> value_container::get_result(
