@@ -1,0 +1,10 @@
+<map id="container_module::latency_histogram" name="container_module::latency_histogram">
+<area shape="rect" id="Node000001" title="Approximate latency histogram using reservoir sampling." alt="" coords="212,276,399,576"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,176,71"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="83,72,77,102,73,138,74,176,84,212,106,253,134,290,167,324,201,353,197,357,163,327,130,294,101,256,79,214,69,177,67,138,71,101,78,70"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="197,133,414,213"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="143,69,230,122,227,127,140,73"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="308,214,308,259,303,259,303,214"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="439,141,593,206"/>
+<area shape="poly" id="edge4_Node000001_Node000004" title=" " alt="" coords="491,208,412,303,407,299,487,205"/>
+</map>

@@ -1,0 +1,43 @@
+<map id="container_module::value_container::value_container" name="container_module::value_container::value_container">
+<area shape="rect" id="Node000001" title="Copy constructor from another value_container. If parse_only_header==true, only parse the header port..." alt="" coords="5,267,208,307"/>
+<area shape="rect" id="Node000002" href="$d9/dad/classcontainer__module_1_1value__container.html#aae51c06e58ddd8f44996c07f5cf4142e" title="Deserialize from string. If parse_only_header is true, child values are not fully parsed yet...." alt="" coords="256,396,439,436"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="146,305,298,387,296,392,144,309"/>
+<area shape="rect" id="Node000007" href="$da/d48/classcontainer__module_1_1metrics__manager.html#adc8d9e289a738526a21347608ad93c04" title="Get the singleton metrics instance." alt="" coords="487,177,683,217"/>
+<area shape="poly" id="edge15_Node000001_Node000007" title=" " alt="" coords="208,265,472,215,473,221,209,270"/>
+<area shape="rect" id="Node000010" href="$da/d48/classcontainer__module_1_1metrics__manager.html#a58c3ac237c495aef1052f618df063119" title="Check if metrics collection is enabled." alt="" coords="731,273,927,313"/>
+<area shape="poly" id="edge16_Node000001_Node000010" title=" " alt="" coords="208,286,487,291,717,291,717,296,487,296,208,292"/>
+<area shape="rect" id="Node000013" href="$d9/dad/classcontainer__module_1_1value__container.html#a9ff2f0546dce25613097b3e7d1ba7735" title="Serialize this container (header + data)." alt="" coords="256,149,439,189"/>
+<area shape="poly" id="edge17_Node000001_Node000013" title=" " alt="" coords="148,264,292,193,294,198,150,269"/>
+<area shape="rect" id="Node000003" href="$d9/dad/classcontainer__module_1_1value__container.html#a17826f3cac07988dcce03e62f03c798e" title=" " alt="" coords="493,357,676,411"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="438,401,479,396,480,401,439,406"/>
+<area shape="rect" id="Node000006" href="$d9/dad/classcontainer__module_1_1value__container.html#a40e1ea012f2f6562f76bb6414eacd322" title="Returns iterator to end of values." alt="" coords="737,480,920,520"/>
+<area shape="poly" id="edge6_Node000002_Node000006" title=" " alt="" coords="394,434,439,451,487,465,609,486,723,495,723,500,608,491,486,471,437,456,392,439"/>
+<area shape="poly" id="edge7_Node000002_Node000007" title=" " alt="" coords="356,395,375,359,404,314,441,267,485,227,494,221,497,226,488,231,445,271,408,317,380,362,361,397"/>
+<area shape="rect" id="Node000008" href="$d9/dad/classcontainer__module_1_1value__container.html#ae6e8db192169bc9209fe6727d1bd6a65" title="Reinitialize the entire container to defaults." alt="" coords="493,601,676,641"/>
+<area shape="poly" id="edge8_Node000002_Node000008" title=" " alt="" coords="362,435,410,509,446,551,488,587,497,593,494,597,485,591,442,555,406,512,357,438"/>
+<area shape="poly" id="edge10_Node000002_Node000010" title=" " alt="" coords="439,433,495,440,557,442,621,436,682,420,718,401,751,376,802,323,806,326,755,380,721,406,684,425,622,441,557,447,495,445,439,438"/>
+<area shape="rect" id="Node000011" href="$da/d48/classcontainer__module_1_1metrics__manager.html#a4a48c65dfeb635da6321106d4b0dc6c2" title="Create a scoped timer if metrics are enabled." alt="" coords="487,241,683,281"/>
+<area shape="poly" id="edge11_Node000002_Node000011" title=" " alt="" coords="378,394,540,287,543,291,381,398"/>
+<area shape="rect" id="Node000012" href="$d9/dad/classcontainer__module_1_1value__container.html#ac67f821c2e812722fd46526063911f4a" title=" " alt="" coords="493,537,676,577"/>
+<area shape="poly" id="edge13_Node000002_Node000012" title=" " alt="" coords="373,434,424,475,488,516,515,530,512,534,485,521,421,479,370,438"/>
+<area shape="rect" id="Node000004" href="$d1/d1a/namespacecontainer__module.html#a83ed4416891be1a3f3191bf92b50b3e9" title="Convert a string&#45;based type indicator (e.g., &quot;4&quot;) to a value_types enum." alt="" coords="731,184,927,224"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="614,355,666,308,729,259,777,229,780,233,732,264,670,313,617,359"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="644,409,775,472,772,477,642,414"/>
+<area shape="rect" id="Node000005" href="$d1/d1a/namespacecontainer__module.html#ac03e62099dde8cbf072a3a4c635382bf" title="Compile&#45;time conversion from string to value_types." alt="" coords="975,184,1143,224"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="927,201,961,201,961,207,927,207"/>
+<area shape="rect" id="Node000009" href="$d9/dad/classcontainer__module_1_1value__container.html#a1e63cbe2c9c9b83d0fcdc7f0394c1203" title="Clear all stored child values." alt="" coords="737,601,920,641"/>
+<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="676,619,724,619,724,624,676,624"/>
+<area shape="poly" id="edge12_Node000011_Node000010" title=" " alt="" coords="683,272,718,276,717,281,682,277"/>
+<area shape="poly" id="edge14_Node000012_Node000006" title=" " alt="" coords="670,535,729,521,730,526,671,540"/>
+<area shape="poly" id="edge23_Node000013_Node000007" title=" " alt="" coords="439,177,473,182,473,187,438,183"/>
+<area shape="poly" id="edge24_Node000013_Node000010" title=" " alt="" coords="421,147,481,137,548,133,618,140,652,149,684,163,703,179,711,197,719,215,733,234,774,264,771,269,729,238,714,218,706,199,698,182,681,168,650,154,617,145,548,138,481,142,422,152"/>
+<area shape="poly" id="edge25_Node000013_Node000011" title=" " alt="" coords="393,187,488,227,508,234,507,239,486,232,391,192"/>
+<area shape="rect" id="Node000014" href="$d9/dad/classcontainer__module_1_1value__container.html#a31dc1a5b3c065ac8efe4dfe5625eef3d" title="Returns only the data portion&#39;s serialized string, if fully parsed." alt="" coords="493,63,676,103"/>
+<area shape="poly" id="edge18_Node000013_Node000014" title=" " alt="" coords="402,147,515,105,517,110,404,152"/>
+<area shape="rect" id="Node000015" href="$d1/daf/classutility__module_1_1formatter.html#a1833466f2e4df9a2dbab6204dbb95800" title=" " alt="" coords="735,5,922,45"/>
+<area shape="poly" id="edge22_Node000013_Node000015" title=" " alt="" coords="363,147,413,95,448,69,486,48,544,29,606,19,666,14,722,14,722,19,666,19,606,24,546,35,488,53,450,73,417,99,367,151"/>
+<area shape="poly" id="edge19_Node000014_Node000004" title=" " alt="" coords="641,100,684,119,785,175,782,179,681,124,639,105"/>
+<area shape="poly" id="edge20_Node000014_Node000015" title=" " alt="" coords="670,60,729,46,730,51,671,65"/>
+<area shape="rect" id="Node000016" href="$d7/d42/namespacecontainer__module_1_1variant__helpers.html#ab4598dd877663bab369141b75a742c18" title="Convert value_variant to string representation." alt="" coords="732,69,925,109"/>
+<area shape="poly" id="edge21_Node000014_Node000016" title=" " alt="" coords="676,82,719,84,718,89,676,88"/>
+</map>

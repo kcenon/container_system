@@ -1,0 +1,16 @@
+<map id="container_module::container_value::add" name="container_module::container_value::add">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,133,213,173"/>
+<area shape="rect" id="Node000002" href="$da/d1c/classcontainer__module_1_1container__value.html#a5f579d28bc5dbf469856866abb71e97b" title="Override the base add(...) and remove(...) methods." alt="" coords="261,101,469,141"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="213,138,247,133,248,139,214,143"/>
+<area shape="rect" id="Node000007" href="$d5/df9/classcontainer__module_1_1value.html#ae8e109566cfbe310585e6412c313760c" title="Set raw data with a known type." alt="" coords="274,165,457,205"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="214,164,261,170,260,175,213,169"/>
+<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="320,102,317,92,325,82,341,77,365,75,394,78,409,85,407,90,392,83,365,80,342,82,328,87,323,93,325,100"/>
+<area shape="rect" id="Node000003" href="$d5/df9/classcontainer__module_1_1value.html#ae3ef28b545089f11539754178688f830" title=" " alt="" coords="517,5,700,45"/>
+<area shape="poly" id="edge3_Node000002_Node000003" title=" " alt="" coords="411,99,516,55,535,48,537,53,518,60,413,104"/>
+<area shape="rect" id="Node000004" href="$d5/df9/classcontainer__module_1_1value.html#a2ebd34a14f86331b9bf6664c234c206d" title="Virtual numeric/string conversion methods." alt="" coords="517,69,700,109"/>
+<area shape="poly" id="edge4_Node000002_Node000004" title=" " alt="" coords="469,105,503,100,504,106,470,110"/>
+<area shape="rect" id="Node000005" href="$d5/df9/classcontainer__module_1_1value.html#a856fe02dd4e79d1f02cfa1552cb0f5f3" title=" " alt="" coords="517,133,700,173"/>
+<area shape="poly" id="edge5_Node000002_Node000005" title=" " alt="" coords="470,132,504,137,503,142,469,138"/>
+<area shape="rect" id="Node000006" href="$d5/df9/classcontainer__module_1_1value.html#a19a827e03777e6214b597f5c9e5e8b35" title=" " alt="" coords="517,197,700,237"/>
+<area shape="poly" id="edge6_Node000002_Node000006" title=" " alt="" coords="441,139,471,151,495,167,519,183,533,190,531,195,516,188,492,171,468,156,439,144"/>
+</map>

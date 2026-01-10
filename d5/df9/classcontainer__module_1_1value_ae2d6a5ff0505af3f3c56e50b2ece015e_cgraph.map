@@ -1,0 +1,11 @@
+<map id="container_module::value::serialize" name="container_module::value::serialize">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,69,188,109"/>
+<area shape="rect" id="Node000002" href="$d1/d1a/namespacecontainer__module.html#a83ed4416891be1a3f3191bf92b50b3e9" title="Convert a string&#45;based type indicator (e.g., &quot;4&quot;) to a value_types enum." alt="" coords="236,5,432,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="171,67,246,46,247,51,172,72"/>
+<area shape="rect" id="Node000004" href="$d1/daf/classutility__module_1_1formatter.html#a1833466f2e4df9a2dbab6204dbb95800" title=" " alt="" coords="241,69,427,109"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="188,87,227,87,227,92,188,92"/>
+<area shape="rect" id="Node000005" href="$d5/df9/classcontainer__module_1_1value.html#aad6ea2fdcbb516d7a72f577de0b6102f" title=" " alt="" coords="243,133,425,173"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="172,107,247,127,246,132,171,112"/>
+<area shape="rect" id="Node000003" href="$d1/d1a/namespacecontainer__module.html#ac03e62099dde8cbf072a3a4c635382bf" title="Compile&#45;time conversion from string to value_types." alt="" coords="480,5,648,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="432,23,466,23,466,28,432,28"/>
+</map>

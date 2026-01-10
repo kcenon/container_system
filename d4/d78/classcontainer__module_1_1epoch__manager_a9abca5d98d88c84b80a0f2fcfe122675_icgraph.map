@@ -1,0 +1,8 @@
+<map id="container_module::epoch_manager::instance" name="container_module::epoch_manager::instance">
+<area shape="rect" id="Node000001" title="Get the singleton instance." alt="" coords="240,37,427,77"/>
+<area shape="poly" id="edge2_Node000001_Node000001" title=" " alt="" coords="373,26,359,19,333,16,311,18,297,23,292,29,295,36,290,38,287,28,294,18,310,13,333,11,361,14,376,21"/>
+<area shape="rect" id="Node000002" href="$d0/d37/classcontainer__module_1_1epoch__guard.html#aa0c19c7ac9cf1212b0f8818b2f5c209d" title="Enter critical section." alt="" coords="5,5,192,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="226,45,192,41,193,35,227,40"/>
+<area shape="rect" id="Node000003" href="$d0/d37/classcontainer__module_1_1epoch__guard.html#aa05c47ba785d5c1e6a0935935374cd49" title="Exit critical section." alt="" coords="5,69,192,109"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="227,75,193,79,192,74,226,69"/>
+</map>

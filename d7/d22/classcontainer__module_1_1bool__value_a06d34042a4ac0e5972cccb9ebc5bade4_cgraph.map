@@ -1,0 +1,7 @@
+<map id="container_module::bool_value::bool_value" name="container_module::bool_value::bool_value">
+<area shape="rect" id="Node000001" title="Construct a bool_value from a bool." alt="" coords="5,37,180,77"/>
+<area shape="rect" id="Node000002" href="$d5/df9/classcontainer__module_1_1value.html#ae3ef28b545089f11539754178688f830" title=" " alt="" coords="228,5,411,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="180,42,214,37,215,43,181,48"/>
+<area shape="rect" id="Node000003" href="$d5/df9/classcontainer__module_1_1value.html#ae8e109566cfbe310585e6412c313760c" title="Set raw data with a known type." alt="" coords="228,69,411,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="181,67,215,72,214,77,180,72"/>
+</map>

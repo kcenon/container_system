@@ -1,0 +1,15 @@
+<map id="container_module::value_container::set_unit_impl" name="container_module::value_container::set_unit_impl">
+<area shape="rect" id="Node000001" title="Internal implementation for setting a single optimized_value." alt="" coords="236,165,423,205"/>
+<area shape="rect" id="Node000002" href="$d9/dad/classcontainer__module_1_1value__container.html#a1454b34f521727b8ba231ab78ecd2a64" title="Set a single optimized_value (unified API)" alt="" coords="5,5,188,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="299,157,250,107,219,82,187,60,163,48,165,43,189,55,222,78,253,103,303,153"/>
+<area shape="rect" id="Node000003" href="$d9/dad/classcontainer__module_1_1value__container.html#a84a72d9fc9a8b7cce2d31f746ce06640" title="Set a typed value by key (unified API)" alt="" coords="5,69,188,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="273,162,187,124,156,112,158,107,189,119,276,157"/>
+<area shape="rect" id="Node000004" href="$d9/dad/classcontainer__module_1_1value__container.html#a651d3f3c9bb404abe916291c7d18f89d" title="Set multiple optimized_values at once (unified API)" alt="" coords="5,133,188,173"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="222,173,188,169,189,163,223,168"/>
+<area shape="rect" id="Node000005" href="$d9/dad/classcontainer__module_1_1value__container.html#abca2ee8822051930ec9ecab9b3449793" title="Set a single optimized_value, updating if key exists." alt="" coords="5,197,188,237"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="223,203,189,207,188,202,222,197"/>
+<area shape="rect" id="Node000006" href="$d9/dad/classcontainer__module_1_1value__container.html#a1834fbf579e02f1282e6c534bfeaabfc" title="Set multiple optimized_values, updating existing keys." alt="" coords="5,261,188,301"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="276,214,189,252,158,264,156,259,187,247,273,209"/>
+<area shape="rect" id="Node000007" href="$d9/dad/classcontainer__module_1_1value__container.html#a40ac2235903e393f9db5477a23541baa" title="Convenience method to set a typed value by key." alt="" coords="5,325,188,365"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="303,218,253,267,222,293,189,316,165,328,163,323,187,311,219,289,250,263,299,214"/>
+</map>

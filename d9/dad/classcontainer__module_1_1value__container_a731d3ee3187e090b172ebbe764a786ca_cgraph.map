@@ -1,0 +1,7 @@
+<map id="container_module::value_container::clear_pool" name="container_module::value_container::clear_pool">
+<area shape="rect" id="Node000001" title="Clear memory pool (for testing/benchmarking)" alt="" coords="5,37,188,77"/>
+<area shape="rect" id="Node000002" href="$dc/d4b/classcontainer__module_1_1internal_1_1pool__allocator.html#a41af9218d7b3eaafcc50f88232c536e5" title="Get the singleton instance." alt="" coords="239,5,436,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="188,43,225,38,226,43,189,48"/>
+<area shape="rect" id="Node000003" href="$dc/d4b/classcontainer__module_1_1internal_1_1pool__allocator.html#a6cdfcd4de3ff20a995300a8664f6a2dc" title="Reset statistics (for benchmarking)" alt="" coords="236,69,439,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="189,67,223,71,222,77,188,72"/>
+</map>

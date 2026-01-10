@@ -1,0 +1,16 @@
+<map id="container_module::container_schema" name="container_module::container_schema">
+<area shape="rect" id="Node000001" title="Schema definition for container validation." alt="" coords="44,5,244,525"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="119,588,331,668"/>
+<area shape="poly" id="edge6_Node000006_Node000001" title=" " alt="" coords="205,525,216,571,210,572,200,526"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,1173,203,1268"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="100,1173,96,924,97,757,104,588,107,542,113,542,109,588,103,757,101,924,105,1173"/>
+<area shape="rect" id="Node000003" href="$d7/d0a/structcontainer__module_1_1container__schema_1_1field__def.html" title="Field definition structure." alt="" coords="215,731,415,1111"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="217,1065,148,1162,144,1158,212,1062"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="355,595,434,661"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="389,662,374,715,369,714,383,660"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="329,225,460,305"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="397,319,397,595,392,595,392,319"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="240,668,254,714,249,716,235,669"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="458,595,649,661"/>
+<area shape="poly" id="edge7_Node000003_Node000007" title=" " alt="" coords="529,663,427,787,423,784,525,659"/>
+</map>

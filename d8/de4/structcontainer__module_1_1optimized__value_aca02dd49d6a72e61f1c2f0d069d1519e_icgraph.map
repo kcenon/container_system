@@ -1,0 +1,25 @@
+<map id="container_module::optimized_value::is_stack_allocated" name="container_module::optimized_value::is_stack_allocated">
+<area shape="rect" id="Node000001" title=" " alt="" coords="731,69,943,109"/>
+<area shape="rect" id="Node000002" href="$d9/dad/classcontainer__module_1_1value__container.html#a9fc18c7c8fe416ae1b61d3048ebc9f25" title="Add a value to the container (template version for type deduction)" alt="" coords="498,5,681,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="745,68,666,48,668,43,746,63"/>
+<area shape="rect" id="Node000003" href="$d9/dad/classcontainer__module_1_1value__container.html#af774feb54893a488633e784e66104ffc" title="Add a value to the container." alt="" coords="498,69,681,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="717,92,681,92,681,87,717,87"/>
+<area shape="rect" id="Node000006" href="$d9/dad/classcontainer__module_1_1value__container.html#adbc1f9b885e005f07c0cdd42ddaa08bc" title="Internal implementation for setting a single optimized_value." alt="" coords="496,197,683,237"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="786,118,630,200,628,195,784,113"/>
+<area shape="rect" id="Node000004" href="$d9/dad/classcontainer__module_1_1value__container.html#a57bc01093c4c5eb67a64931b9d31db00" title="Legacy compatibility: Add a value object to the container." alt="" coords="265,5,448,45"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="502,68,429,48,431,43,503,63"/>
+<area shape="rect" id="Node000005" href="$da/dab/classcontainer__module_1_1optimized__container.html#ae72c3bca2a81094af97585ab230cfadb" title="Add value and update index." alt="" coords="5,5,217,45"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="252,28,218,28,218,23,252,23"/>
+<area shape="rect" id="Node000007" href="$d9/dad/classcontainer__module_1_1value__container.html#a1454b34f521727b8ba231ab78ecd2a64" title="Set a single optimized_value (unified API)" alt="" coords="265,69,448,109"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="551,191,503,157,447,124,420,112,422,107,449,119,505,152,554,187"/>
+<area shape="rect" id="Node000008" href="$d9/dad/classcontainer__module_1_1value__container.html#a84a72d9fc9a8b7cce2d31f746ce06640" title="Set a typed value by key (unified API)" alt="" coords="265,133,448,173"/>
+<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="502,196,429,176,431,171,503,191"/>
+<area shape="rect" id="Node000009" href="$d9/dad/classcontainer__module_1_1value__container.html#a651d3f3c9bb404abe916291c7d18f89d" title="Set multiple optimized_values at once (unified API)" alt="" coords="265,197,448,237"/>
+<area shape="poly" id="edge8_Node000006_Node000009" title=" " alt="" coords="482,220,448,220,448,215,482,215"/>
+<area shape="rect" id="Node000010" href="$d9/dad/classcontainer__module_1_1value__container.html#abca2ee8822051930ec9ecab9b3449793" title="Set a single optimized_value, updating if key exists." alt="" coords="265,261,448,301"/>
+<area shape="poly" id="edge9_Node000006_Node000010" title=" " alt="" coords="503,244,431,264,429,259,502,238"/>
+<area shape="rect" id="Node000011" href="$d9/dad/classcontainer__module_1_1value__container.html#a1834fbf579e02f1282e6c534bfeaabfc" title="Set multiple optimized_values, updating existing keys." alt="" coords="265,325,448,365"/>
+<area shape="poly" id="edge10_Node000006_Node000011" title=" " alt="" coords="554,248,505,282,449,316,422,328,420,323,447,311,503,278,551,243"/>
+<area shape="rect" id="Node000012" href="$d9/dad/classcontainer__module_1_1value__container.html#a40ac2235903e393f9db5477a23541baa" title="Convenience method to set a typed value by key." alt="" coords="265,389,448,429"/>
+<area shape="poly" id="edge11_Node000006_Node000012" title=" " alt="" coords="570,250,520,315,487,350,449,380,428,391,425,387,447,375,483,346,516,312,566,247"/>
+</map>

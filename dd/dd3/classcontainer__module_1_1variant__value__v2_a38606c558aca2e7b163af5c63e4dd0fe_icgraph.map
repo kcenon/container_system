@@ -1,0 +1,33 @@
+<map id="container_module::variant_value_v2::get" name="container_module::variant_value_v2::get">
+<area shape="rect" id="Node000001" title="Type&#45;safe getter with optional return." alt="" coords="985,169,1179,209"/>
+<area shape="rect" id="Node000002" href="$d0/dfe/classcontainer__module_1_1value__bridge.html#ad9bec487a6e5f996db62953ab842989c" title=" " alt="" coords="726,5,937,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1053,160,1002,109,970,82,936,60,911,48,913,43,939,55,973,78,1005,105,1057,157"/>
+<area shape="rect" id="Node000009" href="$d0/dfe/classcontainer__module_1_1value__bridge.html#a83bfd16b2854f62f94437c6b16a5865e" title=" " alt="" coords="729,69,933,109"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="1029,166,936,124,903,112,904,107,938,119,1032,161"/>
+<area shape="rect" id="Node000010" href="$d0/dfe/classcontainer__module_1_1value__bridge.html#a02d9bb1cd56a3f6540033dc297696925" title=" " alt="" coords="725,133,937,173"/>
+<area shape="poly" id="edge11_Node000001_Node000010" title=" " alt="" coords="972,176,937,171,938,166,972,171"/>
+<area shape="rect" id="Node000011" href="$d0/dfe/classcontainer__module_1_1value__bridge.html#afbbfda588a4646d83ab862dc702ebfbb" title=" " alt="" coords="740,198,923,253"/>
+<area shape="poly" id="edge13_Node000001_Node000011" title=" " alt="" coords="972,208,923,215,922,210,971,203"/>
+<area shape="rect" id="Node000012" href="$d0/dfe/classcontainer__module_1_1value__bridge.html#a8be2fb5629efa130c9c01cc514b6ffd9" title=" " alt="" coords="740,277,923,331"/>
+<area shape="poly" id="edge15_Node000001_Node000012" title=" " alt="" coords="1035,218,938,268,911,279,909,274,936,263,1033,214"/>
+<area shape="rect" id="Node000013" href="$d0/dfe/classcontainer__module_1_1value__bridge.html#ab3ea5e667dd2783116693107de7ea826" title=" " alt="" coords="740,355,923,410"/>
+<area shape="poly" id="edge17_Node000001_Node000013" title=" " alt="" coords="1061,222,1009,284,976,317,939,346,919,358,916,353,936,342,972,313,1006,281,1057,219"/>
+<area shape="rect" id="Node000003" href="$d0/dfe/classcontainer__module_1_1value__bridge.html#ae1f4860f05b75cad1fe39e14357aa3c2" title="Convert modern variant_value_v2 to legacy value." alt="" coords="495,133,677,173"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="777,52,726,72,672,103,626,135,623,131,669,99,724,67,775,47"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="610,122,661,81,724,43,725,43,727,47,727,48,664,85,614,126"/>
+<area shape="rect" id="Node000004" href="$de/d88/classcontainer__module_1_1auto__value__bridge.html#aefc2b5eca400695e2a2ac7d192ebbc05" title="Manually sync changes back to legacy." alt="" coords="264,37,440,77"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="531,130,446,92,414,80,416,75,448,87,533,125"/>
+<area shape="rect" id="Node000006" href="$d0/dfe/classcontainer__module_1_1value__bridge.html#a597a2d006327edf0d2d07b121c74db53" title="Convert vector of modern values to legacy." alt="" coords="257,101,447,141"/>
+<area shape="poly" id="edge6_Node000003_Node000006" title=" " alt="" coords="481,142,447,137,447,132,482,136"/>
+<area shape="rect" id="Node000007" href="$d0/dfe/classcontainer__module_1_1value__bridge.html#abd036dde0b63607ed5232a1e0054a953" title="Test round&#45;trip conversion (modern → legacy → modern)" alt="" coords="258,165,446,205"/>
+<area shape="poly" id="edge7_Node000003_Node000007" title=" " alt="" coords="481,170,447,175,446,170,481,165"/>
+<area shape="rect" id="Node000008" href="$d0/dfe/classcontainer__module_1_1value__bridge.html#a464c6d8ef3b9c8892bfd97f6521b38e3" title="Test round&#45;trip conversion (legacy → modern → legacy)" alt="" coords="258,229,446,269"/>
+<area shape="poly" id="edge8_Node000003_Node000008" title=" " alt="" coords="533,182,448,220,416,232,414,227,446,215,531,177"/>
+<area shape="rect" id="Node000005" href="$de/d88/classcontainer__module_1_1auto__value__bridge.html#a5720b15c0aa41d40202de13d844cdb4c" title="Destructor: optionally syncs back." alt="" coords="5,30,209,85"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="251,60,210,60,210,55,251,55"/>
+<area shape="poly" id="edge10_Node000009_Node000003" title=" " alt="" coords="741,115,664,136,662,131,740,110"/>
+<area shape="poly" id="edge12_Node000010_Node000003" title=" " alt="" coords="712,156,678,156,678,151,712,151"/>
+<area shape="poly" id="edge14_Node000011_Node000003" title=" " alt="" coords="726,197,654,176,656,171,728,192"/>
+<area shape="poly" id="edge16_Node000012_Node000003" title=" " alt="" coords="734,273,724,268,657,221,606,176,609,172,661,217,727,263,737,268"/>
+<area shape="poly" id="edge18_Node000013_Node000003" title=" " alt="" coords="730,350,724,346,679,304,643,257,614,211,595,175,599,172,618,208,647,254,683,301,727,342,733,346"/>
+</map>

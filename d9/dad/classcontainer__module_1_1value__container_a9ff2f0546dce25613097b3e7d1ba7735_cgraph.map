@@ -1,0 +1,21 @@
+<map id="container_module::value_container::serialize" name="container_module::value_container::serialize">
+<area shape="rect" id="Node000001" title="Serialize this container (header + data)." alt="" coords="5,188,188,228"/>
+<area shape="rect" id="Node000002" href="$d9/dad/classcontainer__module_1_1value__container.html#a31dc1a5b3c065ac8efe4dfe5625eef3d" title="Returns only the data portion&#39;s serialized string, if fully parsed." alt="" coords="243,71,425,111"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="131,186,235,130,270,114,272,119,237,134,133,190"/>
+<area shape="rect" id="Node000005" href="$d1/daf/classutility__module_1_1formatter.html#a1833466f2e4df9a2dbab6204dbb95800" title=" " alt="" coords="485,133,671,173"/>
+<area shape="poly" id="edge6_Node000001_Node000005" title=" " alt="" coords="174,185,236,173,357,160,471,153,471,159,358,165,236,179,175,191"/>
+<area shape="rect" id="Node000007" href="$da/d48/classcontainer__module_1_1metrics__manager.html#adc8d9e289a738526a21347608ad93c04" title="Get the singleton metrics instance." alt="" coords="236,188,432,228"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="188,205,222,205,222,211,188,211"/>
+<area shape="rect" id="Node000008" href="$da/d48/classcontainer__module_1_1metrics__manager.html#a58c3ac237c495aef1052f618df063119" title="Check if metrics collection is enabled." alt="" coords="480,273,676,313"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="180,225,236,237,467,275,466,281,236,243,179,231"/>
+<area shape="rect" id="Node000009" href="$da/d48/classcontainer__module_1_1metrics__manager.html#a4a48c65dfeb635da6321106d4b0dc6c2" title="Create a scoped timer if metrics are enabled." alt="" coords="236,303,432,343"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="133,226,237,282,268,295,265,300,235,286,131,231"/>
+<area shape="rect" id="Node000003" href="$d1/d1a/namespacecontainer__module.html#a83ed4416891be1a3f3191bf92b50b3e9" title="Convert a string&#45;based type indicator (e.g., &quot;4&quot;) to a value_types enum." alt="" coords="480,5,676,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="409,68,489,46,490,52,410,73"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="413,108,487,127,486,133,412,113"/>
+<area shape="rect" id="Node000006" href="$d7/d42/namespacecontainer__module_1_1variant__helpers.html#ab4598dd877663bab369141b75a742c18" title="Convert value_variant to string representation." alt="" coords="481,69,675,109"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="426,88,468,87,468,93,426,93"/>
+<area shape="rect" id="Node000004" href="$d1/d1a/namespacecontainer__module.html#ac03e62099dde8cbf072a3a4c635382bf" title="Compile&#45;time conversion from string to value_types." alt="" coords="724,5,892,45"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="676,23,710,23,710,28,676,28"/>
+<area shape="poly" id="edge10_Node000009_Node000008" title=" " alt="" coords="432,308,466,304,467,309,432,314"/>
+</map>

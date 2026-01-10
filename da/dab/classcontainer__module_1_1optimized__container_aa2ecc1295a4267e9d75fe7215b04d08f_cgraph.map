@@ -1,0 +1,11 @@
+<map id="container_module::optimized_container::value_container" name="container_module::optimized_container::value_container">
+<area shape="rect" id="Node000001" title="Move constructor." alt="" coords="5,37,217,77"/>
+<area shape="rect" id="Node000002" href="$d9/dad/classcontainer__module_1_1value__container.html#a17826f3cac07988dcce03e62f03c798e" title=" " alt="" coords="265,30,448,85"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="217,55,251,55,251,60,217,60"/>
+<area shape="rect" id="Node000003" href="$d1/d1a/namespacecontainer__module.html#a83ed4416891be1a3f3191bf92b50b3e9" title="Convert a string&#45;based type indicator (e.g., &quot;4&quot;) to a value_types enum." alt="" coords="496,5,692,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="448,42,482,38,483,43,448,48"/>
+<area shape="rect" id="Node000005" href="$d9/dad/classcontainer__module_1_1value__container.html#a40e1ea012f2f6562f76bb6414eacd322" title="Returns iterator to end of values." alt="" coords="503,69,685,109"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="448,67,489,73,489,78,448,72"/>
+<area shape="rect" id="Node000004" href="$d1/d1a/namespacecontainer__module.html#ac03e62099dde8cbf072a3a4c635382bf" title="Compile&#45;time conversion from string to value_types." alt="" coords="740,5,908,45"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="692,23,726,23,726,28,692,28"/>
+</map>

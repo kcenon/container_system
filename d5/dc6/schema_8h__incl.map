@@ -1,0 +1,25 @@
+<map id="core/container/schema.h" name="core/container/schema.h">
+<area shape="rect" id="Node000001" title="Runtime schema validation for container data integrity." alt="" coords="737,5,920,31"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,79,185,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="738,28,498,48,200,81,199,76,498,42,737,23"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="209,79,389,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="739,33,403,81,402,76,739,28"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="414,79,569,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="780,33,583,79,582,74,779,28"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="593,86,651,111"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="795,33,664,81,660,83,658,78,662,76,793,28"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="676,86,773,111"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="815,33,752,80,749,76,812,29"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="797,86,860,111"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="831,31,831,72,826,72,826,31"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="885,86,959,111"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="844,29,899,75,896,79,841,33"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="984,86,1071,111"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="859,28,987,78,985,83,857,33"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="1095,86,1173,111"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="887,28,980,49,1084,76,1093,79,1091,84,1083,81,979,54,886,33"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="1197,86,1255,111"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="921,25,1047,44,1117,58,1185,76,1192,78,1190,83,1184,81,1116,63,1046,49,920,31"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="1279,86,1359,111"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="920,23,1083,42,1176,57,1268,76,1279,79,1277,84,1267,81,1175,62,1083,47,920,29"/>
+</map>

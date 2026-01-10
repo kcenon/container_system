@@ -1,0 +1,7 @@
+<map id="container_module::value_container" name="container_module::value_container">
+<area shape="rect" id="Node000001" title="A high&#45;level container for messages, including source/target IDs, message type, and a list of values ..." alt="" coords="22,133,206,1073"/>
+<area shape="rect" id="Node000003" href="$da/dab/classcontainer__module_1_1optimized__container.html" title="Performance&#45;optimized value_container with zero&#45;copy operations." alt="" coords="11,1121,217,1421"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="117,1087,117,1121,111,1121,111,1087"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,223,85"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="117,99,117,133,111,133,111,99"/>
+</map>

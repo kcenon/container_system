@@ -1,0 +1,23 @@
+<map id="internal/variant_value.h" name="internal/variant_value.h">
+<area shape="rect" id="Node000001" title=" " alt="" coords="389,5,567,31"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,79,73,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="390,33,252,53,87,81,86,76,251,48,389,28"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="98,79,157,104"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="411,33,302,53,171,81,170,76,301,48,410,28"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="181,79,279,104"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="439,33,284,77,283,72,437,28"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="303,79,365,104"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="456,33,371,75,369,70,454,28"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="390,79,467,104"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="472,33,447,69,442,66,468,29"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="491,79,566,104"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="489,29,515,66,510,69,484,33"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="590,79,654,104"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="502,28,587,70,585,75,500,33"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="678,79,793,104"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="520,28,681,72,680,78,519,33"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="817,79,883,104"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="549,28,803,76,802,81,548,33"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="908,79,1000,104"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="567,28,895,76,894,81,567,33"/>
+</map>

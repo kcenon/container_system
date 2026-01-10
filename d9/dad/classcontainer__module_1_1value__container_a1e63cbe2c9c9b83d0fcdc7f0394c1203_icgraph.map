@@ -1,0 +1,23 @@
+<map id="container_module::value_container::clear_value" name="container_module::value_container::clear_value">
+<area shape="rect" id="Node000001" title="Clear all stored child values." alt="" coords="729,229,912,269"/>
+<area shape="rect" id="Node000002" href="$d9/dad/classcontainer__module_1_1value__container.html#ae6e8db192169bc9209fe6727d1bd6a65" title="Reinitialize the entire container to defaults." alt="" coords="499,229,681,269"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="716,252,682,252,682,247,716,247"/>
+<area shape="rect" id="Node000003" href="$d9/dad/classcontainer__module_1_1value__container.html#aae51c06e58ddd8f44996c07f5cf4142e" title="Deserialize from string. If parse_only_header is true, child values are not fully parsed yet...." alt="" coords="262,197,445,237"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="485,238,444,232,445,227,486,233"/>
+<area shape="rect" id="Node000011" href="$d9/dad/classcontainer__module_1_1value__container.html#af92f883ca09da968d32f948ac8e89d0d" title="Deserialize from MessagePack binary format." alt="" coords="256,261,451,301"/>
+<area shape="poly" id="edge10_Node000002_Node000011" title=" " alt="" coords="486,266,451,271,451,266,485,261"/>
+<area shape="rect" id="Node000004" href="$d9/dad/classcontainer__module_1_1value__container.html#a72a6e68636da8d77371f038dea87d6c9" title="Deserialize from string data with schema validation." alt="" coords="15,5,198,45"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="329,187,278,123,244,89,207,60,184,48,186,43,209,55,248,85,282,119,333,184"/>
+<area shape="rect" id="Node000005" href="$d9/dad/classcontainer__module_1_1value__container.html#a7539bd21ce23370c37e025f52f67d58a" title="Deserialize from a raw byte array. If parse_only_header is true, child values are not fully parsed...." alt="" coords="15,69,198,109"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="314,191,264,156,207,124,178,112,180,107,209,119,267,152,317,187"/>
+<area shape="rect" id="Node000006" href="$d9/dad/classcontainer__module_1_1value__container.html#ab4e08c06c8b6e8d7b44b3ce4371f00d0" title="Deserialize from byte array with schema validation." alt="" coords="15,133,198,173"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="262,196,184,176,185,171,263,191"/>
+<area shape="rect" id="Node000007" href="$d9/dad/classcontainer__module_1_1value__container.html#a161eb3fc0910f0af3d42d7d926a7fb97" title="Construct from a serialized data string. If parse_only_header==true, only parse the header part,..." alt="" coords="5,197,208,237"/>
+<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="248,220,208,220,208,215,248,215"/>
+<area shape="rect" id="Node000008" href="$d9/dad/classcontainer__module_1_1value__container.html#a05ffd9fd90384cb244c1f9400bd4ecf7" title="Construct from a raw byte array. If parse_only_header==true, only parse the header part,..." alt="" coords="5,261,208,301"/>
+<area shape="poly" id="edge7_Node000003_Node000008" title=" " alt="" coords="263,243,185,264,184,259,262,238"/>
+<area shape="rect" id="Node000009" href="$d9/dad/classcontainer__module_1_1value__container.html#a611e8c57bc25142f572a7f82fd1829fa" title="Copy constructor from another value_container. If parse_only_header==true, only parse the header port..." alt="" coords="5,325,208,365"/>
+<area shape="poly" id="edge8_Node000003_Node000009" title=" " alt="" coords="266,246,258,251,243,267,234,283,226,299,210,315,189,327,186,323,206,311,222,296,230,280,238,264,254,247,263,242"/>
+<area shape="rect" id="Node000010" href="$d9/dad/classcontainer__module_1_1value__container.html#ae4aa9e95aadd89c1f2bb0d82a002b20a" title="Copy from an existing pointer. If parse_only_header==true, only parse header." alt="" coords="5,389,208,429"/>
+<area shape="poly" id="edge9_Node000003_Node000010" title=" " alt="" coords="262,247,258,251,245,267,239,282,235,314,230,346,223,363,210,379,194,391,191,387,206,375,219,360,225,345,229,313,234,281,241,264,254,247,259,243"/>
+</map>
