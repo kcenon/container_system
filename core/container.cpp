@@ -667,6 +667,143 @@ bool value_container::deserialize(const std::vector<uint8_t>& data_array,
 				error_codes::make_message(error_codes::deserialization_failed, "byte array data"),
 				"container_system"});
 	}
+
+	kcenon::common::Result<optimized_value> value_container::get_result(
+		std::string_view key) const noexcept
+	{
+		read_lock_guard lock(this);
+
+		for (const auto& val : optimized_units_)
+		{
+			if (val.name == key)
+			{
+				return kcenon::common::ok(val);
+			}
+		}
+
+		return kcenon::common::Result<optimized_value>(
+			kcenon::common::error_info{
+				error_codes::key_not_found,
+				error_codes::make_message(error_codes::key_not_found, key),
+				"container_system"});
+	}
+
+	kcenon::common::VoidResult value_container::set_result(
+		const optimized_value& val) noexcept
+	{
+		try
+		{
+			if (val.name.empty())
+			{
+				return kcenon::common::VoidResult(
+					kcenon::common::error_info{
+						error_codes::empty_key,
+						error_codes::make_message(error_codes::empty_key),
+						"container_system"});
+			}
+
+			set_unit_impl(val);
+			return kcenon::common::ok();
+		}
+		catch (const std::bad_alloc&)
+		{
+			return kcenon::common::VoidResult(
+				kcenon::common::error_info{
+					error_codes::memory_allocation_failed,
+					error_codes::make_message(error_codes::memory_allocation_failed, val.name),
+					"container_system"});
+		}
+		catch (const std::exception& e)
+		{
+			return kcenon::common::VoidResult(
+				kcenon::common::error_info{
+					error_codes::invalid_value,
+					std::string("Failed to set value: ") + e.what(),
+					"container_system"});
+		}
+	}
+
+	kcenon::common::VoidResult value_container::set_all_result(
+		std::span<const optimized_value> vals) noexcept
+	{
+		try
+		{
+			for (const auto& val : vals)
+			{
+				if (val.name.empty())
+				{
+					return kcenon::common::VoidResult(
+						kcenon::common::error_info{
+							error_codes::empty_key,
+							error_codes::make_message(error_codes::empty_key),
+							"container_system"});
+				}
+				set_unit_impl(val);
+			}
+			return kcenon::common::ok();
+		}
+		catch (const std::bad_alloc&)
+		{
+			return kcenon::common::VoidResult(
+				kcenon::common::error_info{
+					error_codes::memory_allocation_failed,
+					error_codes::make_message(error_codes::memory_allocation_failed),
+					"container_system"});
+		}
+		catch (const std::exception& e)
+		{
+			return kcenon::common::VoidResult(
+				kcenon::common::error_info{
+					error_codes::invalid_value,
+					std::string("Failed to set values: ") + e.what(),
+					"container_system"});
+		}
+	}
+
+	kcenon::common::VoidResult value_container::remove_result(
+		std::string_view target_name) noexcept
+	{
+		try
+		{
+			write_lock_guard lock(this);
+
+			if (!parsed_data_)
+			{
+				deserialize_values(data_string_, false);
+			}
+
+			auto it = std::find_if(optimized_units_.begin(), optimized_units_.end(),
+								   [&target_name](const optimized_value& ov)
+								   { return (ov.name == target_name); });
+
+			if (it == optimized_units_.end())
+			{
+				return kcenon::common::VoidResult(
+					kcenon::common::error_info{
+						error_codes::key_not_found,
+						error_codes::make_message(error_codes::key_not_found, target_name),
+						"container_system"});
+			}
+
+			// Remove all occurrences
+			optimized_units_.erase(
+				std::remove_if(optimized_units_.begin(), optimized_units_.end(),
+							   [&target_name](const optimized_value& ov)
+							   { return (ov.name == target_name); }),
+				optimized_units_.end());
+
+			changed_data_ = true;
+			return kcenon::common::ok();
+		}
+		catch (const std::exception& e)
+		{
+			return kcenon::common::VoidResult(
+				kcenon::common::error_info{
+					error_codes::invalid_value,
+					std::string("Failed to remove value: ") + e.what(),
+					"container_system"});
+		}
+	}
 #endif
 
 	const std::string value_container::to_xml(void)
