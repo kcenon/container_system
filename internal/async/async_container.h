@@ -58,40 +58,74 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "task.h"
 #include "container/core/container.h"
+#include "container/core/container/error_codes.h"
 
-#include <memory>
-#include <vector>
-#include <string>
-#include <span>
-#include <thread>
-#include <functional>
+#include <algorithm>
 #include <atomic>
+#include <fstream>
+#include <functional>
+#include <memory>
+#include <optional>
+#include <span>
+#include <string>
+#include <thread>
+#include <vector>
 
 namespace container_module::async
 {
+    /**
+     * @brief Progress callback type for async file operations
+     * @param bytes_processed Number of bytes processed so far
+     * @param total_bytes Total number of bytes (0 if unknown)
+     */
+    using progress_callback = std::function<void(size_t bytes_processed, size_t total_bytes)>;
+
     namespace detail
     {
         /**
-         * @brief Awaitable that runs work in a separate thread using std::async
+         * @brief Shared state for async operations
+         *
+         * This state is shared between the awaitable and the worker thread
+         * using shared_ptr, ensuring thread-safe access even when the
+         * awaitable is moved or destroyed.
          */
         template<typename T>
-        struct async_awaitable
+        struct async_state
         {
             std::function<T()> work_;
             std::optional<T> result_;
             std::exception_ptr exception_;
             std::atomic<bool> ready_{false};
 
-            explicit async_awaitable(std::function<T()> work)
+            explicit async_state(std::function<T()> work)
                 : work_(std::move(work)) {}
 
-            async_awaitable(async_awaitable&& other) noexcept
-                : work_(std::move(other.work_))
-                , result_(std::move(other.result_))
-                , exception_(std::move(other.exception_))
-                , ready_(other.ready_.load(std::memory_order_acquire))
-            {
-            }
+            // Non-copyable, non-movable
+            async_state(const async_state&) = delete;
+            async_state& operator=(const async_state&) = delete;
+            async_state(async_state&&) = delete;
+            async_state& operator=(async_state&&) = delete;
+        };
+
+        /**
+         * @brief Awaitable that runs work in a separate thread
+         *
+         * Uses shared_ptr to manage state, ensuring the worker thread
+         * can safely access state even if the awaitable is moved.
+         */
+        template<typename T>
+        struct async_awaitable
+        {
+            std::shared_ptr<async_state<T>> state_;
+
+            explicit async_awaitable(std::function<T()> work)
+                : state_(std::make_shared<async_state<T>>(std::move(work))) {}
+
+            async_awaitable(async_awaitable&&) noexcept = default;
+            async_awaitable& operator=(async_awaitable&&) noexcept = default;
+
+            async_awaitable(const async_awaitable&) = delete;
+            async_awaitable& operator=(const async_awaitable&) = delete;
 
             [[nodiscard]] bool await_ready() const noexcept
             {
@@ -100,15 +134,17 @@ namespace container_module::async
 
             void await_suspend(std::coroutine_handle<> handle)
             {
-                std::thread([this, handle]() mutable {
+                // Copy shared_ptr for thread to ensure state lifetime
+                auto state = state_;
+                std::thread([state, handle]() mutable {
                     try {
-                        result_.emplace(work_());
+                        state->result_.emplace(state->work_());
                     } catch (...) {
-                        exception_ = std::current_exception();
+                        state->exception_ = std::current_exception();
                     }
                     // Release barrier ensures all writes above are visible
                     // to the thread that reads with acquire semantics
-                    ready_.store(true, std::memory_order_release);
+                    state->ready_.store(true, std::memory_order_release);
                     handle.resume();
                 }).detach();
             }
@@ -117,14 +153,14 @@ namespace container_module::async
             {
                 // Acquire barrier synchronizes with the release store above,
                 // ensuring all writes in the worker thread are visible here
-                while (!ready_.load(std::memory_order_acquire)) {
+                while (!state_->ready_.load(std::memory_order_acquire)) {
                     // Spin until ready - in practice, handle.resume()
                     // ensures we only get here after ready_ is set
                 }
-                if (exception_) {
-                    std::rethrow_exception(exception_);
+                if (state_->exception_) {
+                    std::rethrow_exception(state_->exception_);
                 }
-                return std::move(*result_);
+                return std::move(*state_->result_);
             }
         };
 
@@ -339,9 +375,130 @@ namespace container_module::async
             return container_->contains(key);
         }
 
+        // =======================================================================
+        // Async File I/O APIs (Issue #267 - Phase 3)
+        // =======================================================================
+
+        /**
+         * @brief Load container from file asynchronously
+         *
+         * Reads the file in a worker thread and deserializes the content
+         * into the container.
+         *
+         * @param path File path to load from
+         * @param callback Optional progress callback
+         * @return task containing VoidResult indicating success or error
+         *
+         * @code
+         * async_container cont;
+         * auto result = co_await cont.load_async("data.bin");
+         * if (result.is_ok()) {
+         *     // Container now contains loaded data
+         * }
+         * @endcode
+         */
+#if CONTAINER_HAS_COMMON_RESULT
+        [[nodiscard]] task<kcenon::common::VoidResult> load_async(
+            std::string_view path,
+            progress_callback callback = nullptr);
+#else
+        [[nodiscard]] task<bool> load_async(
+            std::string_view path,
+            progress_callback callback = nullptr);
+#endif
+
+        /**
+         * @brief Save container to file asynchronously
+         *
+         * Serializes the container and writes to file in a worker thread.
+         *
+         * @param path File path to save to
+         * @param callback Optional progress callback
+         * @return task containing VoidResult indicating success or error
+         *
+         * @code
+         * async_container cont;
+         * cont.set("key", "value");
+         * auto result = co_await cont.save_async("output.bin");
+         * if (result.is_ok()) {
+         *     // Data saved successfully
+         * }
+         * @endcode
+         */
+#if CONTAINER_HAS_COMMON_RESULT
+        [[nodiscard]] task<kcenon::common::VoidResult> save_async(
+            std::string_view path,
+            progress_callback callback = nullptr);
+#else
+        [[nodiscard]] task<bool> save_async(
+            std::string_view path,
+            progress_callback callback = nullptr);
+#endif
+
     private:
         std::shared_ptr<value_container> container_;
     };
+
+    // ==========================================================================
+    // Async File I/O Utility Functions (Issue #267 - Phase 3)
+    // ==========================================================================
+
+    /**
+     * @brief Read file contents asynchronously
+     *
+     * Reads entire file content in a worker thread.
+     *
+     * @param path File path to read from
+     * @param callback Optional progress callback
+     * @return task containing Result with file bytes or error
+     *
+     * @code
+     * auto result = co_await read_file_async("data.bin");
+     * if (result.is_ok()) {
+     *     auto& bytes = result.value();
+     *     // Process bytes
+     * }
+     * @endcode
+     */
+#if CONTAINER_HAS_COMMON_RESULT
+    [[nodiscard]] task<kcenon::common::Result<std::vector<uint8_t>>> read_file_async(
+        std::string_view path,
+        progress_callback callback = nullptr);
+#else
+    [[nodiscard]] task<std::vector<uint8_t>> read_file_async(
+        std::string_view path,
+        progress_callback callback = nullptr);
+#endif
+
+    /**
+     * @brief Write data to file asynchronously
+     *
+     * Writes data to file in a worker thread.
+     *
+     * @param path File path to write to
+     * @param data Data to write
+     * @param callback Optional progress callback
+     * @return task containing VoidResult indicating success or error
+     *
+     * @code
+     * std::vector<uint8_t> data = {1, 2, 3, 4, 5};
+     * auto result = co_await write_file_async("output.bin", data);
+     * if (result.is_ok()) {
+     *     // File written successfully
+     * }
+     * @endcode
+     */
+#if CONTAINER_HAS_COMMON_RESULT
+    [[nodiscard]] task<kcenon::common::VoidResult> write_file_async(
+        std::string_view path,
+        std::span<const uint8_t> data,
+        progress_callback callback = nullptr);
+#else
+    [[nodiscard]] task<bool> write_file_async(
+        std::string_view path,
+        std::span<const uint8_t> data,
+        progress_callback callback = nullptr);
+#endif
 
     // ==========================================================================
     // Implementation of async methods (separate to avoid compiler issues)
@@ -402,6 +559,218 @@ namespace container_module::async
         co_return result;
     }
 
+    inline task<kcenon::common::VoidResult>
+        async_container::load_async(std::string_view path, progress_callback callback)
+    {
+        using namespace container_module;
+        auto container = container_;
+        std::string path_str(path);
+        auto result = co_await detail::make_async_awaitable(
+            [container, path_str, callback]() -> kcenon::common::VoidResult {
+                std::ifstream file(path_str, std::ios::binary | std::ios::ate);
+                if (!file) {
+                    return kcenon::common::VoidResult(
+                        kcenon::common::error_info{
+                            container_module::error_codes::file_not_found,
+                            container_module::error_codes::make_message(
+                                container_module::error_codes::file_not_found, path_str),
+                            "container_system"});
+                }
+
+                auto size = file.tellg();
+                if (size < 0) {
+                    return kcenon::common::VoidResult(
+                        kcenon::common::error_info{
+                            container_module::error_codes::file_read_error,
+                            container_module::error_codes::make_message(
+                                container_module::error_codes::file_read_error, path_str),
+                            "container_system"});
+                }
+                file.seekg(0, std::ios::beg);
+
+                std::vector<uint8_t> buffer(static_cast<size_t>(size));
+                const size_t chunk_size = 64 * 1024;
+                size_t bytes_read = 0;
+
+                while (bytes_read < static_cast<size_t>(size)) {
+                    size_t to_read = std::min(chunk_size,
+                        static_cast<size_t>(size) - bytes_read);
+                    file.read(reinterpret_cast<char*>(buffer.data() + bytes_read),
+                        static_cast<std::streamsize>(to_read));
+                    if (!file) {
+                        return kcenon::common::VoidResult(
+                            kcenon::common::error_info{
+                                container_module::error_codes::file_read_error,
+                                container_module::error_codes::make_message(
+                                    container_module::error_codes::file_read_error, path_str),
+                                "container_system"});
+                    }
+                    bytes_read += to_read;
+                    if (callback) {
+                        callback(bytes_read, static_cast<size_t>(size));
+                    }
+                }
+
+                auto deser_result = container->deserialize_result(buffer, false);
+                if (!deser_result.is_ok()) {
+                    return deser_result;
+                }
+                return kcenon::common::ok();
+            });
+        co_return result;
+    }
+
+    inline task<kcenon::common::VoidResult>
+        async_container::save_async(std::string_view path, progress_callback callback)
+    {
+        auto container = container_;
+        std::string path_str(path);
+        auto result = co_await detail::make_async_awaitable(
+            [container, path_str, callback]() -> kcenon::common::VoidResult {
+                auto data_result = container->serialize_array_result();
+                if (!data_result.is_ok()) {
+                    return kcenon::common::VoidResult(data_result.error());
+                }
+                const auto& data = data_result.value();
+
+                std::ofstream file(path_str, std::ios::binary);
+                if (!file) {
+                    return kcenon::common::VoidResult(
+                        kcenon::common::error_info{
+                            container_module::error_codes::file_write_error,
+                            container_module::error_codes::make_message(
+                                container_module::error_codes::file_write_error, path_str),
+                            "container_system"});
+                }
+
+                const size_t chunk_size = 64 * 1024;
+                size_t bytes_written = 0;
+                const size_t total_size = data.size();
+
+                while (bytes_written < total_size) {
+                    size_t to_write = std::min(chunk_size, total_size - bytes_written);
+                    file.write(reinterpret_cast<const char*>(data.data() + bytes_written),
+                        static_cast<std::streamsize>(to_write));
+                    if (!file) {
+                        return kcenon::common::VoidResult(
+                            kcenon::common::error_info{
+                                container_module::error_codes::file_write_error,
+                                container_module::error_codes::make_message(
+                                    container_module::error_codes::file_write_error, path_str),
+                                "container_system"});
+                    }
+                    bytes_written += to_write;
+                    if (callback) {
+                        callback(bytes_written, total_size);
+                    }
+                }
+
+                return kcenon::common::ok();
+            });
+        co_return result;
+    }
+
+    inline task<kcenon::common::Result<std::vector<uint8_t>>>
+        read_file_async(std::string_view path, progress_callback callback)
+    {
+        std::string path_str(path);
+        auto result = co_await detail::make_async_awaitable(
+            [path_str, callback]() -> kcenon::common::Result<std::vector<uint8_t>> {
+                std::ifstream file(path_str, std::ios::binary | std::ios::ate);
+                if (!file) {
+                    return kcenon::common::Result<std::vector<uint8_t>>(
+                        kcenon::common::error_info{
+                            container_module::error_codes::file_not_found,
+                            container_module::error_codes::make_message(
+                                container_module::error_codes::file_not_found, path_str),
+                            "container_system"});
+                }
+
+                auto size = file.tellg();
+                if (size < 0) {
+                    return kcenon::common::Result<std::vector<uint8_t>>(
+                        kcenon::common::error_info{
+                            container_module::error_codes::file_read_error,
+                            container_module::error_codes::make_message(
+                                container_module::error_codes::file_read_error, path_str),
+                            "container_system"});
+                }
+                file.seekg(0, std::ios::beg);
+
+                std::vector<uint8_t> buffer(static_cast<size_t>(size));
+                const size_t chunk_size = 64 * 1024;
+                size_t bytes_read = 0;
+
+                while (bytes_read < static_cast<size_t>(size)) {
+                    size_t to_read = std::min(chunk_size,
+                        static_cast<size_t>(size) - bytes_read);
+                    file.read(reinterpret_cast<char*>(buffer.data() + bytes_read),
+                        static_cast<std::streamsize>(to_read));
+                    if (!file) {
+                        return kcenon::common::Result<std::vector<uint8_t>>(
+                            kcenon::common::error_info{
+                                container_module::error_codes::file_read_error,
+                                container_module::error_codes::make_message(
+                                    container_module::error_codes::file_read_error, path_str),
+                                "container_system"});
+                    }
+                    bytes_read += to_read;
+                    if (callback) {
+                        callback(bytes_read, static_cast<size_t>(size));
+                    }
+                }
+
+                return kcenon::common::ok(std::move(buffer));
+            });
+        co_return result;
+    }
+
+    inline task<kcenon::common::VoidResult>
+        write_file_async(std::string_view path, std::span<const uint8_t> data,
+            progress_callback callback)
+    {
+        std::string path_str(path);
+        std::vector<uint8_t> data_copy(data.begin(), data.end());
+        auto result = co_await detail::make_async_awaitable(
+            [path_str, data_copy = std::move(data_copy), callback]()
+                -> kcenon::common::VoidResult {
+                std::ofstream file(path_str, std::ios::binary);
+                if (!file) {
+                    return kcenon::common::VoidResult(
+                        kcenon::common::error_info{
+                            container_module::error_codes::file_write_error,
+                            container_module::error_codes::make_message(
+                                container_module::error_codes::file_write_error, path_str),
+                            "container_system"});
+                }
+
+                const size_t chunk_size = 64 * 1024;
+                size_t bytes_written = 0;
+                const size_t total_size = data_copy.size();
+
+                while (bytes_written < total_size) {
+                    size_t to_write = std::min(chunk_size, total_size - bytes_written);
+                    file.write(reinterpret_cast<const char*>(data_copy.data() + bytes_written),
+                        static_cast<std::streamsize>(to_write));
+                    if (!file) {
+                        return kcenon::common::VoidResult(
+                            kcenon::common::error_info{
+                                container_module::error_codes::file_write_error,
+                                container_module::error_codes::make_message(
+                                    container_module::error_codes::file_write_error, path_str),
+                                "container_system"});
+                    }
+                    bytes_written += to_write;
+                    if (callback) {
+                        callback(bytes_written, total_size);
+                    }
+                }
+
+                return kcenon::common::ok();
+            });
+        co_return result;
+    }
+
 #else
 
     inline task<std::vector<uint8_t>>
@@ -444,6 +813,162 @@ namespace container_module::async
             [data_copy = std::move(data_copy)]() {
                 auto container = std::make_shared<value_container>(data_copy, false);
                 return container;
+            });
+        co_return result;
+    }
+
+    inline task<bool>
+        async_container::load_async(std::string_view path, progress_callback callback)
+    {
+        auto container = container_;
+        std::string path_str(path);
+        auto result = co_await detail::make_async_awaitable(
+            [container, path_str, callback]() {
+                std::ifstream file(path_str, std::ios::binary | std::ios::ate);
+                if (!file) {
+                    return false;
+                }
+
+                auto size = file.tellg();
+                if (size < 0) {
+                    return false;
+                }
+                file.seekg(0, std::ios::beg);
+
+                std::vector<uint8_t> buffer(static_cast<size_t>(size));
+                const size_t chunk_size = 64 * 1024;  // 64KB chunks
+                size_t bytes_read = 0;
+
+                while (bytes_read < static_cast<size_t>(size)) {
+                    size_t to_read = std::min(chunk_size,
+                        static_cast<size_t>(size) - bytes_read);
+                    file.read(reinterpret_cast<char*>(buffer.data() + bytes_read),
+                        static_cast<std::streamsize>(to_read));
+                    if (!file) {
+                        return false;
+                    }
+                    bytes_read += to_read;
+                    if (callback) {
+                        callback(bytes_read, static_cast<size_t>(size));
+                    }
+                }
+
+                container->deserialize(buffer, false);
+                return true;
+            });
+        co_return result;
+    }
+
+    inline task<bool>
+        async_container::save_async(std::string_view path, progress_callback callback)
+    {
+        auto container = container_;
+        std::string path_str(path);
+        auto result = co_await detail::make_async_awaitable(
+            [container, path_str, callback]() {
+                auto data = container->serialize_array();
+                if (data.empty()) {
+                    return false;
+                }
+
+                std::ofstream file(path_str, std::ios::binary);
+                if (!file) {
+                    return false;
+                }
+
+                const size_t chunk_size = 64 * 1024;  // 64KB chunks
+                size_t bytes_written = 0;
+                const size_t total_size = data.size();
+
+                while (bytes_written < total_size) {
+                    size_t to_write = std::min(chunk_size, total_size - bytes_written);
+                    file.write(reinterpret_cast<const char*>(data.data() + bytes_written),
+                        static_cast<std::streamsize>(to_write));
+                    if (!file) {
+                        return false;
+                    }
+                    bytes_written += to_write;
+                    if (callback) {
+                        callback(bytes_written, total_size);
+                    }
+                }
+
+                return true;
+            });
+        co_return result;
+    }
+
+    inline task<std::vector<uint8_t>>
+        read_file_async(std::string_view path, progress_callback callback)
+    {
+        std::string path_str(path);
+        auto result = co_await detail::make_async_awaitable(
+            [path_str, callback]() {
+                std::ifstream file(path_str, std::ios::binary | std::ios::ate);
+                if (!file) {
+                    return std::vector<uint8_t>{};
+                }
+
+                auto size = file.tellg();
+                if (size < 0) {
+                    return std::vector<uint8_t>{};
+                }
+                file.seekg(0, std::ios::beg);
+
+                std::vector<uint8_t> buffer(static_cast<size_t>(size));
+                const size_t chunk_size = 64 * 1024;  // 64KB chunks
+                size_t bytes_read = 0;
+
+                while (bytes_read < static_cast<size_t>(size)) {
+                    size_t to_read = std::min(chunk_size,
+                        static_cast<size_t>(size) - bytes_read);
+                    file.read(reinterpret_cast<char*>(buffer.data() + bytes_read),
+                        static_cast<std::streamsize>(to_read));
+                    if (!file) {
+                        return std::vector<uint8_t>{};
+                    }
+                    bytes_read += to_read;
+                    if (callback) {
+                        callback(bytes_read, static_cast<size_t>(size));
+                    }
+                }
+
+                return buffer;
+            });
+        co_return result;
+    }
+
+    inline task<bool>
+        write_file_async(std::string_view path, std::span<const uint8_t> data,
+            progress_callback callback)
+    {
+        std::string path_str(path);
+        std::vector<uint8_t> data_copy(data.begin(), data.end());
+        auto result = co_await detail::make_async_awaitable(
+            [path_str, data_copy = std::move(data_copy), callback]() {
+                std::ofstream file(path_str, std::ios::binary);
+                if (!file) {
+                    return false;
+                }
+
+                const size_t chunk_size = 64 * 1024;  // 64KB chunks
+                size_t bytes_written = 0;
+                const size_t total_size = data_copy.size();
+
+                while (bytes_written < total_size) {
+                    size_t to_write = std::min(chunk_size, total_size - bytes_written);
+                    file.write(reinterpret_cast<const char*>(data_copy.data() + bytes_written),
+                        static_cast<std::streamsize>(to_write));
+                    if (!file) {
+                        return false;
+                    }
+                    bytes_written += to_write;
+                    if (callback) {
+                        callback(bytes_written, total_size);
+                    }
+                }
+
+                return true;
             });
         co_return result;
     }
