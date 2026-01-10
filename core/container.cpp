@@ -804,6 +804,111 @@ bool value_container::deserialize(const std::vector<uint8_t>& data_array,
 					"container_system"});
 		}
 	}
+
+	kcenon::common::Result<std::string> value_container::serialize_result() const noexcept
+	{
+		try
+		{
+			return kcenon::common::ok(serialize());
+		}
+		catch (const std::bad_alloc&)
+		{
+			return kcenon::common::Result<std::string>(
+				kcenon::common::error_info{
+					error_codes::memory_allocation_failed,
+					error_codes::make_message(error_codes::memory_allocation_failed),
+					"container_system"});
+		}
+		catch (const std::exception& e)
+		{
+			return kcenon::common::Result<std::string>(
+				kcenon::common::error_info{
+					error_codes::serialization_failed,
+					std::string("Serialization failed: ") + e.what(),
+					"container_system"});
+		}
+	}
+
+	kcenon::common::Result<std::vector<uint8_t>> value_container::serialize_array_result() const noexcept
+	{
+		try
+		{
+			auto [arr, err] = convert_string::to_array(serialize());
+			if (!err.empty())
+			{
+				return kcenon::common::Result<std::vector<uint8_t>>(
+					kcenon::common::error_info{
+						error_codes::encoding_error,
+						std::string("Encoding error: ") + err,
+						"container_system"});
+			}
+			return kcenon::common::ok(std::move(arr));
+		}
+		catch (const std::bad_alloc&)
+		{
+			return kcenon::common::Result<std::vector<uint8_t>>(
+				kcenon::common::error_info{
+					error_codes::memory_allocation_failed,
+					error_codes::make_message(error_codes::memory_allocation_failed),
+					"container_system"});
+		}
+		catch (const std::exception& e)
+		{
+			return kcenon::common::Result<std::vector<uint8_t>>(
+				kcenon::common::error_info{
+					error_codes::serialization_failed,
+					std::string("Serialization failed: ") + e.what(),
+					"container_system"});
+		}
+	}
+
+	kcenon::common::Result<std::string> value_container::to_json_result() noexcept
+	{
+		try
+		{
+			return kcenon::common::ok(to_json());
+		}
+		catch (const std::bad_alloc&)
+		{
+			return kcenon::common::Result<std::string>(
+				kcenon::common::error_info{
+					error_codes::memory_allocation_failed,
+					error_codes::make_message(error_codes::memory_allocation_failed),
+					"container_system"});
+		}
+		catch (const std::exception& e)
+		{
+			return kcenon::common::Result<std::string>(
+				kcenon::common::error_info{
+					error_codes::serialization_failed,
+					std::string("JSON serialization failed: ") + e.what(),
+					"container_system"});
+		}
+	}
+
+	kcenon::common::Result<std::string> value_container::to_xml_result() noexcept
+	{
+		try
+		{
+			return kcenon::common::ok(to_xml());
+		}
+		catch (const std::bad_alloc&)
+		{
+			return kcenon::common::Result<std::string>(
+				kcenon::common::error_info{
+					error_codes::memory_allocation_failed,
+					error_codes::make_message(error_codes::memory_allocation_failed),
+					"container_system"});
+		}
+		catch (const std::exception& e)
+		{
+			return kcenon::common::Result<std::string>(
+				kcenon::common::error_info{
+					error_codes::serialization_failed,
+					std::string("XML serialization failed: ") + e.what(),
+					"container_system"});
+		}
+	}
 #endif
 
 	const std::string value_container::to_xml(void)

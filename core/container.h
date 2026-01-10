@@ -440,6 +440,38 @@ namespace container_module
 		 * @exception_safety Strong guarantee - no changes on exception
 		 */
 		[[nodiscard]] kcenon::common::VoidResult remove_result(std::string_view target_name) noexcept;
+
+		// =======================================================================
+		// Result-based Serialization API (Issue #231)
+		// =======================================================================
+
+		/**
+		 * @brief Serialize this container with Result return type
+		 * @return Result containing serialized string or error info
+		 * @exception_safety No-throw guarantee
+		 */
+		[[nodiscard]] kcenon::common::Result<std::string> serialize_result() const noexcept;
+
+		/**
+		 * @brief Serialize to raw byte array with Result return type
+		 * @return Result containing byte array or error info
+		 * @exception_safety No-throw guarantee
+		 */
+		[[nodiscard]] kcenon::common::Result<std::vector<uint8_t>> serialize_array_result() const noexcept;
+
+		/**
+		 * @brief Generate JSON representation with Result return type
+		 * @return Result containing JSON string or error info
+		 * @exception_safety No-throw guarantee
+		 */
+		[[nodiscard]] kcenon::common::Result<std::string> to_json_result() noexcept;
+
+		/**
+		 * @brief Generate XML representation with Result return type
+		 * @return Result containing XML string or error info
+		 * @exception_safety No-throw guarantee
+		 */
+		[[nodiscard]] kcenon::common::Result<std::string> to_xml_result() noexcept;
 #endif
 
 		// =======================================================================
