@@ -45,6 +45,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <container/core/container.h>
 #include <container/core/container/error_codes.h>
 
+#include <filesystem>
+#include <fstream>
 #include <memory>
 #include <span>
 #include <vector>
@@ -656,6 +658,270 @@ TEST_F(ResultAPITest, ErrorMessageContainsContext)
 	// Error module should be set
 	EXPECT_FALSE(error.module.empty())
 		<< "Error module should identify container_system";
+}
+
+// ============================================================================
+// File Operation Result API Tests (Issue #240)
+// ============================================================================
+
+class FileOperationResultAPITest : public ::testing::Test
+{
+protected:
+	void SetUp() override
+	{
+		container = std::make_shared<value_container>();
+		// Create a unique test directory
+		test_dir = std::filesystem::temp_directory_path() / "container_test";
+		std::filesystem::create_directories(test_dir);
+	}
+
+	void TearDown() override
+	{
+		container.reset();
+		// Clean up test directory
+		std::error_code ec;
+		std::filesystem::remove_all(test_dir, ec);
+	}
+
+	std::shared_ptr<value_container> container;
+	std::filesystem::path test_dir;
+};
+
+TEST_F(FileOperationResultAPITest, LoadPacketResultFileNotFound)
+{
+	// Try to load a non-existent file
+	std::string nonexistent_path = (test_dir / "nonexistent_file.bin").string();
+
+	auto result = container->load_packet_result(nonexistent_path);
+	EXPECT_TRUE(kcenon::common::is_error(result))
+		<< "load_packet_result should fail for non-existent file";
+
+	auto error = kcenon::common::get_error(result);
+	EXPECT_EQ(error.code, error_codes::file_not_found)
+		<< "Error code should be file_not_found";
+	EXPECT_FALSE(error.message.empty())
+		<< "Error message should not be empty";
+	EXPECT_NE(error.message.find(nonexistent_path), std::string::npos)
+		<< "Error message should contain file path";
+}
+
+TEST_F(FileOperationResultAPITest, SavePacketResultSuccess)
+{
+	// Add some data to the container
+	container->set("test_key", std::string("test_value"));
+	container->set("number", int32_t(42));
+
+	std::string file_path = (test_dir / "test_output.bin").string();
+
+	auto result = container->save_packet_result(file_path);
+	EXPECT_TRUE(kcenon::common::is_ok(result))
+		<< "save_packet_result should succeed for valid path";
+
+	// Verify file was created
+	EXPECT_TRUE(std::filesystem::exists(file_path))
+		<< "File should exist after save";
+
+	// Verify file is not empty
+	EXPECT_GT(std::filesystem::file_size(file_path), 0)
+		<< "Saved file should not be empty";
+}
+
+TEST_F(FileOperationResultAPITest, LoadPacketResultSuccess)
+{
+	// First save a container
+	container->set("load_test", std::string("hello"));
+	container->set("value", int32_t(123));
+
+	std::string file_path = (test_dir / "test_load.bin").string();
+	auto save_result = container->save_packet_result(file_path);
+	EXPECT_TRUE(kcenon::common::is_ok(save_result));
+
+	// Create a new container and load from file
+	auto new_container = std::make_shared<value_container>();
+	auto load_result = new_container->load_packet_result(file_path);
+	EXPECT_TRUE(kcenon::common::is_ok(load_result))
+		<< "load_packet_result should succeed for valid file";
+
+	// Verify loaded data
+	EXPECT_TRUE(new_container->contains("load_test"));
+	EXPECT_TRUE(new_container->contains("value"));
+
+	auto str_result = new_container->get<std::string>("load_test");
+	EXPECT_TRUE(kcenon::common::is_ok(str_result));
+	EXPECT_EQ(kcenon::common::get_value(str_result), "hello");
+
+	auto int_result = new_container->get<int32_t>("value");
+	EXPECT_TRUE(kcenon::common::is_ok(int_result));
+	EXPECT_EQ(kcenon::common::get_value(int_result), 123);
+}
+
+TEST_F(FileOperationResultAPITest, LoadPacketResultInvalidContent)
+{
+	// Create a file with invalid content
+	std::string file_path = (test_dir / "invalid_content.bin").string();
+	{
+		std::ofstream file(file_path, std::ios::binary);
+		file << "this is not valid serialized data";
+	}
+
+	auto result = container->load_packet_result(file_path);
+	EXPECT_TRUE(kcenon::common::is_error(result))
+		<< "load_packet_result should fail for invalid file content";
+
+	auto error = kcenon::common::get_error(result);
+	EXPECT_EQ(error.code, error_codes::deserialization_failed)
+		<< "Error code should be deserialization_failed";
+}
+
+TEST_F(FileOperationResultAPITest, SavePacketResultInvalidPath)
+{
+	// Try to save to an invalid path (non-existent directory)
+	std::string invalid_path = "/nonexistent_directory_12345/file.bin";
+
+	container->set("test", int32_t(1));
+	auto result = container->save_packet_result(invalid_path);
+	EXPECT_TRUE(kcenon::common::is_error(result))
+		<< "save_packet_result should fail for invalid path";
+
+	auto error = kcenon::common::get_error(result);
+	EXPECT_EQ(error.code, error_codes::file_write_error)
+		<< "Error code should be file_write_error";
+}
+
+TEST_F(FileOperationResultAPITest, FileOperationRoundTrip)
+{
+	// Comprehensive round-trip test
+	container->set("string_val", std::string("round trip test"));
+	container->set("int_val", int32_t(98765));
+	container->set("double_val", 2.71828);
+	container->set("bool_val", false);
+	container->set("int64_val", int64_t(1234567890123LL));
+
+	std::string file_path = (test_dir / "round_trip.bin").string();
+
+	// Save
+	auto save_result = container->save_packet_result(file_path);
+	EXPECT_TRUE(kcenon::common::is_ok(save_result))
+		<< "save_packet_result should succeed";
+
+	// Load into new container
+	auto loaded_container = std::make_shared<value_container>();
+	auto load_result = loaded_container->load_packet_result(file_path);
+	EXPECT_TRUE(kcenon::common::is_ok(load_result))
+		<< "load_packet_result should succeed";
+
+	// Verify all values
+	auto str_result = loaded_container->get<std::string>("string_val");
+	EXPECT_TRUE(kcenon::common::is_ok(str_result));
+	EXPECT_EQ(kcenon::common::get_value(str_result), "round trip test");
+
+	auto int_result = loaded_container->get<int32_t>("int_val");
+	EXPECT_TRUE(kcenon::common::is_ok(int_result));
+	EXPECT_EQ(kcenon::common::get_value(int_result), 98765);
+
+	auto double_result = loaded_container->get<double>("double_val");
+	EXPECT_TRUE(kcenon::common::is_ok(double_result));
+	EXPECT_DOUBLE_EQ(kcenon::common::get_value(double_result), 2.71828);
+
+	auto bool_result = loaded_container->get<bool>("bool_val");
+	EXPECT_TRUE(kcenon::common::is_ok(bool_result));
+	EXPECT_EQ(kcenon::common::get_value(bool_result), false);
+
+	auto int64_result = loaded_container->get<int64_t>("int64_val");
+	EXPECT_TRUE(kcenon::common::is_ok(int64_result));
+	EXPECT_EQ(kcenon::common::get_value(int64_result), 1234567890123LL);
+}
+
+TEST_F(FileOperationResultAPITest, LoadPacketResultEmptyFile)
+{
+	// Create an empty file
+	std::string file_path = (test_dir / "empty_file.bin").string();
+	{
+		std::ofstream file(file_path, std::ios::binary);
+		// Write nothing - create empty file
+	}
+
+	auto result = container->load_packet_result(file_path);
+	EXPECT_TRUE(kcenon::common::is_error(result))
+		<< "load_packet_result should fail for empty file";
+
+	auto error = kcenon::common::get_error(result);
+	EXPECT_EQ(error.code, error_codes::deserialization_failed)
+		<< "Error code should be deserialization_failed";
+}
+
+TEST_F(FileOperationResultAPITest, SavePacketResultEmptyContainer)
+{
+	// Save an empty container (should still succeed)
+	std::string file_path = (test_dir / "empty_container.bin").string();
+
+	auto result = container->save_packet_result(file_path);
+	EXPECT_TRUE(kcenon::common::is_ok(result))
+		<< "save_packet_result should succeed for empty container";
+
+	// Verify file was created
+	EXPECT_TRUE(std::filesystem::exists(file_path))
+		<< "File should exist after save";
+}
+
+TEST_F(FileOperationResultAPITest, SavePacketResultOverwrite)
+{
+	std::string file_path = (test_dir / "overwrite_test.bin").string();
+
+	// First save
+	container->set("version", int32_t(1));
+	auto first_result = container->save_packet_result(file_path);
+	EXPECT_TRUE(kcenon::common::is_ok(first_result));
+
+	// Overwrite with different content
+	auto new_container = std::make_shared<value_container>();
+	new_container->set("version", int32_t(2));
+	new_container->set("new_key", std::string("new_value"));
+
+	auto second_result = new_container->save_packet_result(file_path);
+	EXPECT_TRUE(kcenon::common::is_ok(second_result))
+		<< "save_packet_result should succeed when overwriting";
+
+	// Load and verify new content
+	auto loaded_container = std::make_shared<value_container>();
+	auto load_result = loaded_container->load_packet_result(file_path);
+	EXPECT_TRUE(kcenon::common::is_ok(load_result));
+
+	auto version_result = loaded_container->get<int32_t>("version");
+	EXPECT_TRUE(kcenon::common::is_ok(version_result));
+	EXPECT_EQ(kcenon::common::get_value(version_result), 2)
+		<< "Should contain overwritten value";
+
+	EXPECT_TRUE(loaded_container->contains("new_key"))
+		<< "Should contain new key from overwritten file";
+}
+
+TEST_F(FileOperationResultAPITest, FileOperationErrorMessages)
+{
+	// Verify error messages contain useful context
+
+	// File not found error
+	std::string nonexistent = (test_dir / "no_such_file.bin").string();
+	auto load_result = container->load_packet_result(nonexistent);
+	EXPECT_TRUE(kcenon::common::is_error(load_result));
+
+	auto load_error = kcenon::common::get_error(load_result);
+	EXPECT_FALSE(load_error.message.empty())
+		<< "Error message should not be empty";
+	EXPECT_EQ(load_error.module, "container_system")
+		<< "Error module should be container_system";
+
+	// File write error
+	std::string invalid_path = "/nonexistent_dir_xyz/file.bin";
+	container->set("test", int32_t(1));
+	auto save_result = container->save_packet_result(invalid_path);
+	EXPECT_TRUE(kcenon::common::is_error(save_result));
+
+	auto save_error = kcenon::common::get_error(save_result);
+	EXPECT_FALSE(save_error.message.empty())
+		<< "Error message should not be empty";
+	EXPECT_EQ(save_error.module, "container_system")
+		<< "Error module should be container_system";
 }
 
 #endif  // CONTAINER_HAS_COMMON_RESULT
