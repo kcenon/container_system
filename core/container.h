@@ -52,6 +52,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "container/core/container/fwd.h"
 #include "container/core/container/types.h"
 #include "container/core/container/variant_helpers.h"
+#include "container/core/container/error_codes.h"
 
 #include "container/core/value_types.h"
 #include "container/core/typed_container.h"
@@ -383,6 +384,10 @@ namespace container_module
 		void ensure_index_built() const;
 
 #if CONTAINER_HAS_COMMON_RESULT
+		// =======================================================================
+		// Result-based API (Issue #231)
+		// =======================================================================
+
 		/**
 		 * @brief Get a typed value by key with Result return type
 		 * @tparam T The expected value type
@@ -392,6 +397,101 @@ namespace container_module
 		 */
 		template<typename T>
 		[[nodiscard]] kcenon::common::Result<T> get(std::string_view key) const noexcept;
+
+		/**
+		 * @brief Get a value by name with Result return type
+		 * @param key Value name/key to search for
+		 * @return Result containing the optimized_value or error info
+		 * @exception_safety No-throw guarantee
+		 */
+		[[nodiscard]] kcenon::common::Result<optimized_value> get_result(std::string_view key) const noexcept;
+
+		/**
+		 * @brief Set a typed value by key with Result return type
+		 * @tparam T The value type
+		 * @param key The value key/name
+		 * @param data_val The value to store
+		 * @return VoidResult indicating success or error
+		 * @exception_safety Strong guarantee - no changes on exception
+		 */
+		template<typename T>
+		[[nodiscard]] kcenon::common::VoidResult set_result(std::string_view key, T&& data_val) noexcept;
+
+		/**
+		 * @brief Set a single optimized_value with Result return type
+		 * @param val The optimized_value to set
+		 * @return VoidResult indicating success or error
+		 * @exception_safety Strong guarantee - no changes on exception
+		 */
+		[[nodiscard]] kcenon::common::VoidResult set_result(const optimized_value& val) noexcept;
+
+		/**
+		 * @brief Set multiple optimized_values at once with Result return type
+		 * @param vals Span of optimized_values to set
+		 * @return VoidResult indicating success or error
+		 * @exception_safety Strong guarantee - no changes on exception
+		 */
+		[[nodiscard]] kcenon::common::VoidResult set_all_result(std::span<const optimized_value> vals) noexcept;
+
+		/**
+		 * @brief Remove a value by name with Result return type
+		 * @param target_name Name of value to remove
+		 * @return VoidResult indicating success or error (key_not_found if not exists)
+		 * @exception_safety Strong guarantee - no changes on exception
+		 */
+		[[nodiscard]] kcenon::common::VoidResult remove_result(std::string_view target_name) noexcept;
+
+		// =======================================================================
+		// Result-based Serialization API (Issue #231)
+		// =======================================================================
+
+		/**
+		 * @brief Serialize this container with Result return type
+		 * @return Result containing serialized string or error info
+		 * @exception_safety No-throw guarantee
+		 */
+		[[nodiscard]] kcenon::common::Result<std::string> serialize_result() const noexcept;
+
+		/**
+		 * @brief Serialize to raw byte array with Result return type
+		 * @return Result containing byte array or error info
+		 * @exception_safety No-throw guarantee
+		 */
+		[[nodiscard]] kcenon::common::Result<std::vector<uint8_t>> serialize_array_result() const noexcept;
+
+		/**
+		 * @brief Generate JSON representation with Result return type
+		 * @return Result containing JSON string or error info
+		 * @exception_safety No-throw guarantee
+		 */
+		[[nodiscard]] kcenon::common::Result<std::string> to_json_result() noexcept;
+
+		/**
+		 * @brief Generate XML representation with Result return type
+		 * @return Result containing XML string or error info
+		 * @exception_safety No-throw guarantee
+		 */
+		[[nodiscard]] kcenon::common::Result<std::string> to_xml_result() noexcept;
+
+		// =======================================================================
+		// Result-based File Operations API (Issue #231)
+		// =======================================================================
+
+		/**
+		 * @brief Load from a file path with Result return type
+		 * @param file_path Path to the file to load
+		 * @return VoidResult indicating success or error (file_not_found, file_read_error)
+		 * @exception_safety Strong guarantee - no changes on exception
+		 */
+		[[nodiscard]] kcenon::common::VoidResult load_packet_result(const std::string& file_path) noexcept;
+
+		/**
+		 * @brief Save to a file path with Result return type
+		 * @param file_path Path to the file to save
+		 * @return VoidResult indicating success or error (file_write_error)
+		 * @exception_safety Strong guarantee - no changes on exception
+		 */
+		[[nodiscard]] kcenon::common::VoidResult save_packet_result(const std::string& file_path) noexcept;
 #endif
 
 		// =======================================================================
@@ -728,12 +828,52 @@ namespace container_module
 				}
 				// Type mismatch
 				return kcenon::common::Result<T>(
-					kcenon::common::error_info{-2, "Type mismatch for key: " + std::string(key), "container_system"});
+					kcenon::common::error_info{
+						error_codes::type_mismatch,
+						error_codes::make_message(error_codes::type_mismatch, key),
+						"container_system"});
 			}
 		}
 		// Key not found
 		return kcenon::common::Result<T>(
-			kcenon::common::error_info{-1, "Key not found: " + std::string(key), "container_system"});
+			kcenon::common::error_info{
+				error_codes::key_not_found,
+				error_codes::make_message(error_codes::key_not_found, key),
+				"container_system"});
+	}
+
+	// Template implementation for set_result<T>()
+	template<typename T>
+	[[nodiscard]] kcenon::common::VoidResult value_container::set_result(
+		std::string_view key, T&& data_val) noexcept {
+		try {
+			if (key.empty()) {
+				return kcenon::common::VoidResult(
+					kcenon::common::error_info{
+						error_codes::empty_key,
+						error_codes::make_message(error_codes::empty_key),
+						"container_system"});
+			}
+
+			optimized_value val;
+			val.name = std::string(key);
+			val.data = std::forward<T>(data_val);
+			val.type = static_cast<value_types>(val.data.index());
+			set_unit_impl(val);
+			return kcenon::common::ok();
+		} catch (const std::bad_alloc&) {
+			return kcenon::common::VoidResult(
+				kcenon::common::error_info{
+					error_codes::memory_allocation_failed,
+					error_codes::make_message(error_codes::memory_allocation_failed, key),
+					"container_system"});
+		} catch (const std::exception& e) {
+			return kcenon::common::VoidResult(
+				kcenon::common::error_info{
+					error_codes::invalid_value,
+					std::string("Failed to set value: ") + e.what(),
+					"container_system"});
+		}
 	}
 #endif
 
