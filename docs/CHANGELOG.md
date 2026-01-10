@@ -27,6 +27,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Part of Issue #231 Phase 5: Backward Compatible Deprecated Wrappers
 
 ### Added
+- **Auto-Refresh Lock-Free Reader** (#262): Add auto-refreshing lock-free reader for thread-safe containers (Phase 4)
+  - Add `auto_refresh_reader` class with configurable refresh interval
+  - Add `create_auto_refresh_reader(interval)` factory method to `thread_safe_container`
+  - Background thread automatically refreshes snapshot at specified interval
+  - All read operations are lock-free (wait-free O(1))
+  - Proper lifecycle management with `stop()` method and automatic cleanup in destructor
+  - Delegates all read operations to underlying `lockfree_container_reader`
+  - Add 6 comprehensive integration tests for auto-refresh functionality
+
 - **Schema-Validated Deserialization** (#249): Add schema validation support for deserialize operations (Phase 5)
   - Add `deserialize(data, schema)` overloads for string and byte array inputs
   - Add `deserialize_result(data, schema)` overloads returning `VoidResult` for Result-based error handling
