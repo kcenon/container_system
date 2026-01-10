@@ -12,6 +12,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Error Codes Unit Tests** (#237): Add comprehensive unit tests for error codes module
+  - Add 34 test cases covering all error codes and utility functions
+  - Test error code value verification for all categories (1xx-5xx)
+  - Test get_message() returns correct messages for all error codes
+  - Test get_category() returns correct category names
+  - Test is_*_error() helper functions for category classification
+  - Test make_message() with various inputs including edge cases
+  - Test constexpr evaluation of utility functions
+  - Test boundary values between categories
+  - Add Error Codes section to API_REFERENCE.md documentation
+
 - **Schema Constraint Validators Test Coverage** (#246): Add comprehensive unit tests for schema validation constraints
   - Add 43 test cases covering all constraint validators
   - Add tests for integer range validation (boundary, negative, long long types)
