@@ -10,8 +10,9 @@
 2. [C++20 Concepts](#c20-concepts)
 3. [variant_value_v2 (Recommended)](#variant_value_v2-recommended)
 4. [Container](#container)
-5. [Error Codes](#error-codes)
-6. [Serialization/Deserialization](#serializationdeserialization)
+5. [Async API (C++20 Coroutines)](#async-api-c20-coroutines)
+6. [Error Codes](#error-codes)
+7. [Serialization/Deserialization](#serializationdeserialization)
 
 ---
 
@@ -697,6 +698,473 @@ value_container::reset_metrics();
 
 // Disable for production
 value_container::set_metrics_enabled(false);
+```
+
+---
+
+## Async API (C++20 Coroutines)
+
+### Overview
+
+**Header**: `#include <container/internal/async/async.h>`
+
+**Namespace**: `container_module::async`
+
+**Description**: C++20 coroutine-based asynchronous API for non-blocking container operations.
+
+**Requirements**:
+- C++20 compiler with coroutine support
+- GCC 10+ (full support in 11+), Clang 13+, MSVC 2019 16.8+
+- CMake option: `CONTAINER_ENABLE_COROUTINES=ON` (default)
+
+### task<T>
+
+A lazy coroutine task type representing an asynchronous computation.
+
+#### Constructor
+
+```cpp
+task();                         // Default constructor (invalid task)
+task(task&& other) noexcept;   // Move constructor
+```
+
+#### Methods
+
+##### `valid()`
+
+```cpp
+[[nodiscard]] bool valid() const noexcept;
+```
+
+**Description**: Check if task holds a valid coroutine handle.
+
+##### `done()`
+
+```cpp
+[[nodiscard]] bool done() const noexcept;
+```
+
+**Description**: Check if the coroutine has completed.
+
+##### `get()`
+
+```cpp
+T get();                    // For task<T>
+void get();                 // For task<void>
+```
+
+**Description**: Get the result of the task. Rethrows any captured exception.
+
+**Exceptions**: Rethrows any exception that occurred during coroutine execution.
+
+#### Factory Functions
+
+##### `make_ready_task()`
+
+```cpp
+template<typename T>
+task<T> make_ready_task(T value);
+
+task<void> make_ready_task();
+```
+
+**Description**: Create an immediately-ready task with a value.
+
+##### `make_exceptional_task()`
+
+```cpp
+template<typename T>
+task<T> make_exceptional_task(std::exception_ptr ex);
+```
+
+**Description**: Create a task that will rethrow the given exception.
+
+#### Example
+
+```cpp
+#include <container/internal/async/async.h>
+using namespace container_module::async;
+
+task<int> compute() {
+    co_return 42;
+}
+
+task<int> chained() {
+    int value = co_await compute();
+    co_return value * 2;
+}
+
+// Usage
+auto t = chained();
+while (!t.done()) {
+    std::this_thread::sleep_for(1ms);
+}
+int result = t.get();  // 84
+```
+
+---
+
+### generator<T>
+
+A coroutine generator for lazily producing sequences of values.
+
+#### Methods
+
+##### `valid()`
+
+```cpp
+[[nodiscard]] bool valid() const noexcept;
+```
+
+**Description**: Check if generator holds a valid coroutine handle.
+
+##### `begin()` / `end()`
+
+```cpp
+iterator begin();
+std::default_sentinel_t end();
+```
+
+**Description**: Range-based for loop support.
+
+#### Utility Functions
+
+##### `take()`
+
+```cpp
+template<typename T>
+generator<T> take(generator<T> gen, size_t count);
+```
+
+**Description**: Limit a generator to produce at most `count` values.
+
+#### Example
+
+```cpp
+generator<int> range(int start, int end) {
+    for (int i = start; i < end; ++i) {
+        co_yield i;
+    }
+}
+
+// Usage
+for (int value : range(0, 10)) {
+    std::cout << value << "\n";
+}
+
+// With take() for infinite sequences
+generator<int> infinite() {
+    int i = 0;
+    while (true) co_yield i++;
+}
+
+for (int value : take(infinite(), 5)) {
+    process(value);
+}
+```
+
+---
+
+### async_container
+
+Async wrapper for `value_container` with coroutine-based operations.
+
+#### Constructors
+
+```cpp
+async_container();                                          // Empty container
+explicit async_container(std::shared_ptr<value_container> container);  // Wrap existing
+async_container(async_container&& other) noexcept;         // Move constructor
+```
+
+#### Container Access
+
+##### `get_container()`
+
+```cpp
+[[nodiscard]] std::shared_ptr<value_container> get_container() const noexcept;
+```
+
+**Description**: Get the underlying container.
+
+##### `set_container()`
+
+```cpp
+void set_container(std::shared_ptr<value_container> container) noexcept;
+```
+
+**Description**: Replace the underlying container.
+
+#### Value Operations
+
+##### `set()`
+
+```cpp
+template<typename T>
+async_container& set(std::string_view key, T&& value);
+```
+
+**Description**: Set a value in the container. Returns `*this` for chaining.
+
+##### `get()`
+
+```cpp
+template<typename T>
+[[nodiscard]] std::optional<T> get(std::string_view key) const;
+```
+
+**Description**: Get a typed value from the container.
+
+##### `contains()`
+
+```cpp
+[[nodiscard]] bool contains(std::string_view key) const noexcept;
+```
+
+**Description**: Check if key exists.
+
+#### Async Serialization
+
+##### `serialize_async()`
+
+```cpp
+[[nodiscard]] task<Result<std::vector<uint8_t>>> serialize_async() const;
+```
+
+**Description**: Serialize container to byte array asynchronously.
+
+##### `serialize_string_async()`
+
+```cpp
+[[nodiscard]] task<Result<std::string>> serialize_string_async() const;
+```
+
+**Description**: Serialize container to string asynchronously.
+
+#### Async Deserialization
+
+##### `deserialize_async()`
+
+```cpp
+[[nodiscard]] static task<Result<std::shared_ptr<value_container>>>
+    deserialize_async(std::span<const uint8_t> data);
+```
+
+**Description**: Deserialize from byte array asynchronously.
+
+##### `deserialize_string_async()`
+
+```cpp
+[[nodiscard]] static task<Result<std::shared_ptr<value_container>>>
+    deserialize_string_async(std::string_view data);
+```
+
+**Description**: Deserialize from string asynchronously.
+
+#### Async File I/O
+
+##### `load_async()`
+
+```cpp
+[[nodiscard]] task<VoidResult> load_async(
+    std::string_view path,
+    progress_callback callback = nullptr);
+```
+
+**Description**: Load container from file asynchronously.
+
+**Parameters**:
+- `path`: File path to load from
+- `callback`: Optional progress callback `void(size_t bytes, size_t total)`
+
+##### `save_async()`
+
+```cpp
+[[nodiscard]] task<VoidResult> save_async(
+    std::string_view path,
+    progress_callback callback = nullptr);
+```
+
+**Description**: Save container to file asynchronously.
+
+#### Streaming
+
+##### `serialize_chunked()`
+
+```cpp
+[[nodiscard]] generator<std::vector<uint8_t>> serialize_chunked(
+    size_t chunk_size = 64 * 1024) const;
+```
+
+**Description**: Serialize in chunks using a generator.
+
+##### `deserialize_streaming()`
+
+```cpp
+[[nodiscard]] static task<Result<std::shared_ptr<value_container>>>
+    deserialize_streaming(std::span<const uint8_t> data, bool is_final = true);
+```
+
+**Description**: Deserialize with streaming support.
+
+#### Example
+
+```cpp
+#include <container/internal/async/async.h>
+using namespace container_module::async;
+
+task<void> example() {
+    // Create and populate
+    async_container cont;
+    cont.set("name", std::string("test"))
+        .set("value", static_cast<int64_t>(42));
+
+    // Async save with progress
+    auto save_result = co_await cont.save_async("data.bin",
+        [](size_t bytes, size_t total) {
+            std::cout << bytes << "/" << total << "\n";
+        });
+
+    if (!save_result.is_ok()) {
+        std::cerr << "Save failed: " << save_result.error().message << "\n";
+        co_return;
+    }
+
+    // Async load
+    async_container loaded;
+    auto load_result = co_await loaded.load_async("data.bin");
+
+    if (load_result.is_ok()) {
+        auto name = loaded.get<std::string>("name");
+        // Use loaded data
+    }
+}
+```
+
+---
+
+### Standalone File Utilities
+
+#### `read_file_async()`
+
+```cpp
+[[nodiscard]] task<Result<std::vector<uint8_t>>> read_file_async(
+    std::string_view path,
+    progress_callback callback = nullptr);
+```
+
+**Description**: Read file contents asynchronously.
+
+#### `write_file_async()`
+
+```cpp
+[[nodiscard]] task<VoidResult> write_file_async(
+    std::string_view path,
+    std::span<const uint8_t> data,
+    progress_callback callback = nullptr);
+```
+
+**Description**: Write data to file asynchronously.
+
+#### Example
+
+```cpp
+task<void> file_example() {
+    // Read
+    auto read_result = co_await read_file_async("input.bin");
+    if (read_result.is_ok()) {
+        auto& data = read_result.value();
+        // Process data
+    }
+
+    // Write
+    std::vector<uint8_t> data = {0x01, 0x02, 0x03};
+    auto write_result = co_await write_file_async("output.bin", data);
+}
+```
+
+---
+
+### thread_pool_executor
+
+**Header**: `#include <container/internal/async/thread_pool_executor.h>`
+
+Thread pool for efficient async task execution.
+
+#### Constructor
+
+```cpp
+explicit thread_pool_executor(size_t thread_count = std::thread::hardware_concurrency());
+```
+
+**Description**: Create executor with specified thread count.
+
+#### Methods
+
+##### `submit()`
+
+```cpp
+template<typename F>
+auto submit(F&& func) -> std::future<std::invoke_result_t<F>>;
+```
+
+**Description**: Submit work to the thread pool.
+
+##### `spawn()`
+
+```cpp
+template<typename T>
+void spawn(task<T> t);
+```
+
+**Description**: Spawn a coroutine task on the thread pool.
+
+##### `stop()`
+
+```cpp
+void stop();
+```
+
+**Description**: Stop the executor and wait for all tasks.
+
+#### Example
+
+```cpp
+#include <container/internal/async/thread_pool_executor.h>
+using namespace container_module::async;
+
+thread_pool_executor executor(4);
+
+// Submit lambda
+auto future = executor.submit([]() {
+    return expensive_computation();
+});
+auto result = future.get();
+
+// Spawn coroutine
+task<int> async_work() {
+    co_return 42;
+}
+executor.spawn(async_work());
+```
+
+---
+
+### Feature Detection
+
+```cpp
+namespace container_module::async {
+    inline constexpr bool has_coroutine_support = /* true if coroutines available */;
+}
+```
+
+**Usage**:
+```cpp
+#if CONTAINER_HAS_COROUTINES
+    // Use async API
+#else
+    // Fallback to sync API
+#endif
 ```
 
 ---
