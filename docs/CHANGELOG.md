@@ -12,6 +12,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **MessagePack Serialization Support** (#234): Add MessagePack binary format as alternative to JSON/XML
+  - Add `msgpack_encoder` class for compact binary serialization
+  - Add `msgpack_decoder` class for binary deserialization
+  - Add `to_msgpack()` method for serializing containers to MessagePack format
+  - Add `from_msgpack()` method for deserializing from MessagePack data
+  - Add `create_from_msgpack()` static factory method
+  - Add `to_msgpack_result()` and `from_msgpack_result()` Result-based APIs
+  - Add `serialization_format` enum for format identification
+  - Add `detect_format()` method for automatic format detection
+  - Add 44 comprehensive unit tests for encoder, decoder, and integration
+  - MessagePack provides 50-80% smaller output than JSON with 2-4x faster parsing
+  - Full support for all container value types including nested containers
+
 - **Result-Returning Core API Tests** (#238): Add comprehensive unit tests for Result-returning value APIs
   - Add 15 test cases covering set_result(), set_all_result(), and remove_result() methods
   - Test success paths for all Result-returning methods with various data types

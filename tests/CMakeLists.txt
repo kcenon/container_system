@@ -61,6 +61,7 @@ set(TEST_SOURCES
     schema_tests.cpp
     error_codes_tests.cpp
     result_api_tests.cpp
+    msgpack_tests.cpp
 )
 
 # Add async tests if coroutines are enabled
