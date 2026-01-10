@@ -53,6 +53,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "container/core/container/types.h"
 #include "container/core/container/variant_helpers.h"
 #include "container/core/container/error_codes.h"
+#include "container/core/container/schema.h"
 
 #include "container/core/value_types.h"
 #include "container/core/typed_container.h"

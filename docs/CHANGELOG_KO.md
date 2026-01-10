@@ -11,7 +11,29 @@ Container System 프로젝트의 모든 주요 변경 사항이 이 파일에 �
 
 ## [Unreleased]
 
+### Fixed
+- **스키마 range() 오버로드 모호성** (#250): range() 오버로드 모호성으로 인한 Linux/GCC 빌드 실패 수정
+  - C++20 개념(std::integral 및 std::floating_point)을 사용하여 정수형과 부동소수점형 범위 제약 구분
+  - 비템플릿 range() 오버로드를 템플릿 버전으로 대체
+  - C++20 개념 지원을 위한 <concepts> 헤더 추가
+
 ### Added
+- **런타임 스키마 검증** (#228): 데이터 무결성 검증을 위한 container_schema 클래스 추가
+  - 메서드 체이닝을 통한 스키마 정의 fluent API 추가
+  - 필드 정의를 위한 `require(key, type)` 및 `optional(key, type)` 추가
+  - 숫자 제약을 위한 `range(key, min, max)` 추가 (int64_t 및 double)
+  - 문자열/바이트 길이 검증을 위한 `length(key, min, max)` 추가
+  - 정규식 기반 문자열 검증을 위한 `pattern(key, regex)` 추가
+  - 열거형 스타일 허용 값 검증을 위한 `one_of(key, values)` 추가
+  - 사용자 정의 람다 검증기를 위한 `custom(key, validator)` 추가
+  - container_value 필드에 대한 중첩 스키마 검증 지원
+  - 첫 번째 에러 또는 nullopt를 반환하는 `validate(container)` 추가
+  - 모든 검증 에러를 반환하는 `validate_all(container)` 추가
+  - Result<T> 패턴 지원을 위한 `validate_result(container)` 추가
+  - 상세 에러 정보를 담는 `validation_error` 구조체 추가
+  - 특정 에러 코드(310-317)를 담는 `validation_codes` 네임스페이스 추가
+  - 포괄적인 단위 테스트 추가 (25개 테스트 케이스)
+  - 성능 목표: 단순 스키마(10개 필드, 정규식 제외)에서 1μs 미만
 - **배치 연산 API** (#229): 대량 삽입, 조회, 수정을 위한 최적화된 배치 API 추가
   - `bulk_insert(vector&&)`: 이동 기반 대량 삽입 (가장 효율적)
   - `bulk_insert(span, reserve_hint)`: 사전 할당을 통한 복사 기반 대량 삽입
