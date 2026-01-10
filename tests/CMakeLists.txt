@@ -58,6 +58,7 @@ set(TEST_SOURCES
     variant_value_factory_tests.cpp
     memory_pool_tests.cpp
     simd_tests.cpp
+    schema_tests.cpp
 )
 
 # Only add benchmark tests if benchmark library is available
