@@ -68,6 +68,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <functional>
 #include <atomic>
 #include <fstream>
+#include <optional>
 
 namespace container_module::async
 {
@@ -81,26 +82,49 @@ namespace container_module::async
     namespace detail
     {
         /**
-         * @brief Awaitable that runs work in a separate thread using std::async
+         * @brief Shared state for async operations
+         *
+         * This state is shared between the awaitable and the worker thread
+         * using shared_ptr, ensuring thread-safe access even when the
+         * awaitable is moved or destroyed.
          */
         template<typename T>
-        struct async_awaitable
+        struct async_state
         {
             std::function<T()> work_;
             std::optional<T> result_;
             std::exception_ptr exception_;
             std::atomic<bool> ready_{false};
 
-            explicit async_awaitable(std::function<T()> work)
+            explicit async_state(std::function<T()> work)
                 : work_(std::move(work)) {}
 
-            async_awaitable(async_awaitable&& other) noexcept
-                : work_(std::move(other.work_))
-                , result_(std::move(other.result_))
-                , exception_(std::move(other.exception_))
-                , ready_(other.ready_.load(std::memory_order_acquire))
-            {
-            }
+            // Non-copyable, non-movable
+            async_state(const async_state&) = delete;
+            async_state& operator=(const async_state&) = delete;
+            async_state(async_state&&) = delete;
+            async_state& operator=(async_state&&) = delete;
+        };
+
+        /**
+         * @brief Awaitable that runs work in a separate thread
+         *
+         * Uses shared_ptr to manage state, ensuring the worker thread
+         * can safely access state even if the awaitable is moved.
+         */
+        template<typename T>
+        struct async_awaitable
+        {
+            std::shared_ptr<async_state<T>> state_;
+
+            explicit async_awaitable(std::function<T()> work)
+                : state_(std::make_shared<async_state<T>>(std::move(work))) {}
+
+            async_awaitable(async_awaitable&&) noexcept = default;
+            async_awaitable& operator=(async_awaitable&&) noexcept = default;
+
+            async_awaitable(const async_awaitable&) = delete;
+            async_awaitable& operator=(const async_awaitable&) = delete;
 
             [[nodiscard]] bool await_ready() const noexcept
             {
@@ -109,15 +133,17 @@ namespace container_module::async
 
             void await_suspend(std::coroutine_handle<> handle)
             {
-                std::thread([this, handle]() mutable {
+                // Copy shared_ptr for thread to ensure state lifetime
+                auto state = state_;
+                std::thread([state, handle]() mutable {
                     try {
-                        result_.emplace(work_());
+                        state->result_.emplace(state->work_());
                     } catch (...) {
-                        exception_ = std::current_exception();
+                        state->exception_ = std::current_exception();
                     }
                     // Release barrier ensures all writes above are visible
                     // to the thread that reads with acquire semantics
-                    ready_.store(true, std::memory_order_release);
+                    state->ready_.store(true, std::memory_order_release);
                     handle.resume();
                 }).detach();
             }
@@ -126,14 +152,14 @@ namespace container_module::async
             {
                 // Acquire barrier synchronizes with the release store above,
                 // ensuring all writes in the worker thread are visible here
-                while (!ready_.load(std::memory_order_acquire)) {
+                while (!state_->ready_.load(std::memory_order_acquire)) {
                     // Spin until ready - in practice, handle.resume()
                     // ensures we only get here after ready_ is set
                 }
-                if (exception_) {
-                    std::rethrow_exception(exception_);
+                if (state_->exception_) {
+                    std::rethrow_exception(state_->exception_);
                 }
-                return std::move(*result_);
+                return std::move(*state_->result_);
             }
         };
 
