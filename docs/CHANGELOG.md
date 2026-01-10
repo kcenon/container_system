@@ -11,6 +11,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **Schema Constraint Validators Test Coverage** (#246): Add comprehensive unit tests for schema validation constraints
+  - Add 43 test cases covering all constraint validators
+  - Add tests for integer range validation (boundary, negative, long long types)
+  - Add tests for floating-point range validation (double and float types)
+  - Add tests for string/bytes length validation
+  - Add tests for regex pattern matching (email, phone, UUID patterns)
+  - Add tests for one_of enum-style validation (case-sensitive)
+  - Add tests for custom validator functions
+  - Add tests for nested schema validation
+  - Add tests for combined constraints and edge cases
+  - Add tests for schema utility methods (field_count, has_field, is_required)
+  - Add tests for schema copy/move semantics
+
 ### Fixed
 - **Schema range() overload ambiguity** (#250): Fix Linux/GCC build failure caused by ambiguous range() overloads
   - Use C++20 concepts (std::integral and std::floating_point) to disambiguate between integer and floating-point range constraints
