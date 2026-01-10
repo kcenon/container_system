@@ -12,6 +12,19 @@ set(EXAMPLE_PROGRAMS
     real_world_scenarios
 )
 
+# Add async coroutine example if coroutines are enabled
+if(CONTAINER_ENABLE_COROUTINES)
+    list(APPEND EXAMPLE_PROGRAMS async_coroutine_example)
+    message(STATUS "Container Example: async_coroutine_example enabled")
+endif()
+
+# Check for Asio availability
+find_package(asio CONFIG QUIET)
+if(asio_FOUND)
+    list(APPEND EXAMPLE_PROGRAMS asio_integration_example)
+    message(STATUS "Container Example: asio_integration_example enabled (Asio found)")
+endif()
+
 # TODO: Result pattern example requires container API updates
 # if(BUILD_WITH_COMMON_SYSTEM)
 #     list(APPEND EXAMPLE_PROGRAMS result_pattern_example)
@@ -40,6 +53,19 @@ foreach(EXAMPLE ${EXAMPLE_PROGRAMS})
     target_include_directories(${EXAMPLE} PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/..
     )
+
+    # Add Asio include directories for asio_integration_example
+    if(${EXAMPLE} STREQUAL "asio_integration_example" AND asio_FOUND)
+        target_link_libraries(${EXAMPLE} PRIVATE asio::asio)
+    endif()
+
+    # Add coroutine flags for async examples
+    if(${EXAMPLE} MATCHES "async_.*_example" AND CONTAINER_ENABLE_COROUTINES)
+        if(CMAKE_CXX_COMPILER_ID MATCHES "GNU")
+            target_compile_options(${EXAMPLE} PRIVATE -fcoroutines)
+        endif()
+        target_compile_definitions(${EXAMPLE} PRIVATE CONTAINER_HAS_COROUTINES=1)
+    endif()
 
     # Add compile definitions based on enabled features
     if(ENABLE_MESSAGING_FEATURES)

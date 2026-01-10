@@ -11,6 +11,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **CMake Integration and Examples** (#269): Add CMake configuration and example code for async API (Phase 5)
+  - Add `thread_pool_executor.h` for integration with common_system thread pool executor
+  - Add `async_executor_context` singleton for global executor configuration
+  - Add `executor_context_guard` RAII class for scoped executor management
+  - Add `async_coroutine_example.cpp` demonstrating coroutine-based async operations
+  - Add `asio_integration_example.cpp` showing Asio integration patterns
+  - Update `examples/CMakeLists.txt` with conditional async example builds
+  - Support both custom executor and fallback std::thread-based execution
+  - Enable seamless integration with event loops and async frameworks
+  - std::execution (P2300) support planned for future C++23 compiler adoption
+
 ### Fixed
 - **Async Awaitable Thread Safety** (#267): Fix use-after-free in async operations
   - Use `shared_ptr` for thread-safe async state management
