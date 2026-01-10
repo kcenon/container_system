@@ -11,7 +11,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- **Schema range() overload ambiguity** (#250): Fix Linux/GCC build failure caused by ambiguous range() overloads
+  - Use C++20 concepts (std::integral and std::floating_point) to disambiguate between integer and floating-point range constraints
+  - Replace non-template range() overloads with template versions
+  - Add <concepts> header for C++20 concepts support
+
 ### Added
+- **Runtime Schema Validation** (#228): Add container_schema class for data integrity validation
+  - Add fluent API for schema definition with method chaining
+  - Add `require(key, type)` and `optional(key, type)` for field definitions
+  - Add `range(key, min, max)` for numeric constraints (int64_t and double)
+  - Add `length(key, min, max)` for string/bytes length validation
+  - Add `pattern(key, regex)` for regex-based string validation
+  - Add `one_of(key, values)` for enum-style allowed value validation
+  - Add `custom(key, validator)` for user-defined lambda validators
+  - Add nested schema validation for container_value fields
+  - Add `validate(container)` returning first error or nullopt
+  - Add `validate_all(container)` returning all validation errors
+  - Add `validate_result(container)` with Result<T> pattern support
+  - Add `validation_error` struct with detailed error information
+  - Add `validation_codes` namespace with specific error codes (310-317)
+  - Add comprehensive unit tests (25 test cases)
+  - Performance target: <1μs for simple schemas (10 fields without regex)
 - **Batch Operation APIs** (#229): Add optimized batch APIs for bulk insert, query, and modify operations
   - Add `bulk_insert(vector&&)` for move-based bulk insert (most efficient)
   - Add `bulk_insert(span, reserve_hint)` for copy-based bulk insert with pre-allocation

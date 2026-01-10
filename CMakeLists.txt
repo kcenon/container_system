@@ -99,6 +99,8 @@ set(CORE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/core/container/fwd.h
     ${CMAKE_CURRENT_SOURCE_DIR}/core/container/types.h
     ${CMAKE_CURRENT_SOURCE_DIR}/core/container/variant_helpers.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/core/container/schema.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/core/container_schema.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/core/value_types.h
     ${CMAKE_CURRENT_SOURCE_DIR}/core/value_types.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/core/value_store.h
