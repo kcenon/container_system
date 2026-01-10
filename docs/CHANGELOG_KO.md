@@ -93,6 +93,12 @@ Container System 프로젝트의 모든 주요 변경 사항이 이 파일에 �
   - 스키마 복사/이동 시맨틱 테스트 추가
 
 ### Fixed
+- **async_awaitable의 Thread Sanitizer 데이터 레이스** (#266): 비동기 작업에서 ThreadSanitizer가 감지한 데이터 레이스 수정
+  - 레이스 컨디션을 유발한 `worker_` std::thread 멤버 변수 제거
+  - 사용되지 않는 `completed_` 불리언 플래그 제거
+  - 할당 레이스를 방지하기 위해 익명 스레드를 생성하고 즉시 분리
+  - 워커 스레드가 할당 완료 전에 handle.resume()을 호출할 때 스레드 할당과 경합 발생
+
 - **스키마 range() 오버로드 모호성** (#250): range() 오버로드 모호성으로 인한 Linux/GCC 빌드 실패 수정
   - C++20 개념(std::integral 및 std::floating_point)을 사용하여 정수형과 부동소수점형 범위 제약 구분
   - 비템플릿 range() 오버로드를 템플릿 버전으로 대체

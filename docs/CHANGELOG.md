@@ -93,6 +93,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Add tests for schema copy/move semantics
 
 ### Fixed
+- **Thread Sanitizer data race in async_awaitable** (#266): Fix data race detected by ThreadSanitizer in async operations
+  - Remove `worker_` std::thread member variable that caused race condition
+  - Remove unused `completed_` boolean flag
+  - Create anonymous thread and immediately detach to avoid assignment race
+  - Thread assignment could race with completion when worker called handle.resume() before assignment finished
+
 - **Schema range() overload ambiguity** (#250): Fix Linux/GCC build failure caused by ambiguous range() overloads
   - Use C++20 concepts (std::integral and std::floating_point) to disambiguate between integer and floating-point range constraints
   - Replace non-template range() overloads with template versions
