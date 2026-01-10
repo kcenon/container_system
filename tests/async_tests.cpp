@@ -301,6 +301,192 @@ TEST_F(AsyncGeneratorTest, TakeGenerator) {
 }
 
 // =============================================================================
+// async_container tests
+// =============================================================================
+
+class AsyncContainerTest : public ::testing::Test {
+protected:
+    void SetUp() override {
+        container_ = std::make_shared<container_module::value_container>();
+        container_->set("string_key", std::string("hello"));
+        container_->set("int_key", static_cast<int64_t>(42));
+        container_->set("double_key", 3.14);
+    }
+
+    void TearDown() override {
+        container_.reset();
+    }
+
+    std::shared_ptr<container_module::value_container> container_;
+};
+
+TEST_F(AsyncContainerTest, SerializeAsyncReturnsValidData) {
+    async_container async_cont(container_);
+
+    auto serialize_task = async_cont.serialize_async();
+    EXPECT_TRUE(serialize_task.valid());
+
+    // Wait for completion
+    while (!serialize_task.done()) {
+        std::this_thread::sleep_for(1ms);
+    }
+
+    auto result = serialize_task.get();
+#if CONTAINER_HAS_COMMON_RESULT
+    EXPECT_TRUE(result.is_ok());
+    EXPECT_FALSE(result.value().empty());
+#else
+    EXPECT_FALSE(result.empty());
+#endif
+}
+
+TEST_F(AsyncContainerTest, SerializeStringAsyncReturnsValidData) {
+    async_container async_cont(container_);
+
+    auto serialize_task = async_cont.serialize_string_async();
+    EXPECT_TRUE(serialize_task.valid());
+
+    while (!serialize_task.done()) {
+        std::this_thread::sleep_for(1ms);
+    }
+
+    auto result = serialize_task.get();
+#if CONTAINER_HAS_COMMON_RESULT
+    EXPECT_TRUE(result.is_ok());
+    EXPECT_FALSE(result.value().empty());
+#else
+    EXPECT_FALSE(result.empty());
+#endif
+}
+
+TEST_F(AsyncContainerTest, DeserializeAsyncRestoresData) {
+    // First serialize
+    auto serialized = container_->serialize_array();
+    EXPECT_FALSE(serialized.empty());
+
+    // Then deserialize async
+    auto deserialize_task = async_container::deserialize_async(serialized);
+    EXPECT_TRUE(deserialize_task.valid());
+
+    while (!deserialize_task.done()) {
+        std::this_thread::sleep_for(1ms);
+    }
+
+    auto result = deserialize_task.get();
+#if CONTAINER_HAS_COMMON_RESULT
+    EXPECT_TRUE(result.is_ok());
+    auto restored = result.value();
+    EXPECT_NE(restored, nullptr);
+
+    // Verify data integrity
+    auto string_val = restored->get_value("string_key");
+    ASSERT_TRUE(string_val.has_value());
+    auto* str_ptr = std::get_if<std::string>(&string_val->data);
+    ASSERT_NE(str_ptr, nullptr);
+    EXPECT_EQ(*str_ptr, "hello");
+
+    auto int_val = restored->get_value("int_key");
+    ASSERT_TRUE(int_val.has_value());
+    auto* int_ptr = std::get_if<int64_t>(&int_val->data);
+    ASSERT_NE(int_ptr, nullptr);
+    EXPECT_EQ(*int_ptr, 42);
+#else
+    EXPECT_NE(result, nullptr);
+#endif
+}
+
+TEST_F(AsyncContainerTest, DeserializeStringAsyncRestoresData) {
+    // First serialize
+    auto serialized = container_->serialize();
+    EXPECT_FALSE(serialized.empty());
+
+    // Then deserialize async
+    auto deserialize_task = async_container::deserialize_string_async(serialized);
+    EXPECT_TRUE(deserialize_task.valid());
+
+    while (!deserialize_task.done()) {
+        std::this_thread::sleep_for(1ms);
+    }
+
+    auto result = deserialize_task.get();
+#if CONTAINER_HAS_COMMON_RESULT
+    EXPECT_TRUE(result.is_ok());
+    auto restored = result.value();
+    EXPECT_NE(restored, nullptr);
+#else
+    EXPECT_NE(result, nullptr);
+#endif
+}
+
+TEST_F(AsyncContainerTest, AsyncContainerSetAndGet) {
+    async_container async_cont;
+
+    async_cont.set("name", std::string("test"))
+              .set("count", static_cast<int64_t>(100));
+
+    EXPECT_TRUE(async_cont.contains("name"));
+    EXPECT_TRUE(async_cont.contains("count"));
+
+    auto name = async_cont.get<std::string>("name");
+    ASSERT_TRUE(name.has_value());
+    EXPECT_EQ(*name, "test");
+
+    auto count = async_cont.get<int64_t>("count");
+    ASSERT_TRUE(count.has_value());
+    EXPECT_EQ(*count, 100);
+}
+
+TEST_F(AsyncContainerTest, AsyncContainerMoveSemantics) {
+    async_container async_cont1(container_);
+    EXPECT_NE(async_cont1.get_container(), nullptr);
+
+    async_container async_cont2 = std::move(async_cont1);
+    EXPECT_NE(async_cont2.get_container(), nullptr);
+    EXPECT_TRUE(async_cont2.contains("string_key"));
+}
+
+TEST_F(AsyncContainerTest, RoundTripSerializationAsync) {
+    async_container async_cont(container_);
+
+    // Serialize async
+    auto serialize_task = async_cont.serialize_async();
+    while (!serialize_task.done()) {
+        std::this_thread::sleep_for(1ms);
+    }
+
+    auto serialize_result = serialize_task.get();
+#if CONTAINER_HAS_COMMON_RESULT
+    ASSERT_TRUE(serialize_result.is_ok());
+    auto serialized = serialize_result.value();
+#else
+    auto serialized = serialize_result;
+#endif
+
+    // Deserialize async
+    auto deserialize_task = async_container::deserialize_async(serialized);
+    while (!deserialize_task.done()) {
+        std::this_thread::sleep_for(1ms);
+    }
+
+    auto deserialize_result = deserialize_task.get();
+#if CONTAINER_HAS_COMMON_RESULT
+    ASSERT_TRUE(deserialize_result.is_ok());
+    auto restored = deserialize_result.value();
+#else
+    auto restored = deserialize_result;
+#endif
+
+    EXPECT_NE(restored, nullptr);
+
+    // Verify all values survived round-trip
+    auto string_val = restored->get_value("string_key");
+    ASSERT_TRUE(string_val.has_value());
+    auto* str_ptr = std::get_if<std::string>(&string_val->data);
+    ASSERT_NE(str_ptr, nullptr);
+    EXPECT_EQ(*str_ptr, "hello");
+}
+
+// =============================================================================
 // Feature detection test
 // =============================================================================
 
