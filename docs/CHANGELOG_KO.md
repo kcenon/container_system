@@ -12,6 +12,17 @@ Container System 프로젝트의 모든 주요 변경 사항이 이 파일에 �
 ## [Unreleased]
 
 ### Added
+- **AVX-512 SIMD 지원** (#227): 최신 Intel/AMD 프로세서용 AVX-512 지원 추가
+  - AVX-512F 감지 매크로 및 512비트 SIMD 타입 추가 (`float_simd_512`, `double_simd_512`, `int32_simd_512`)
+  - AVX-512 최적화 연산 구현 (`sum_floats_avx512`, `min_float_avx512`, `max_float_avx512`)
+  - 배정밀도 SIMD 연산을 위한 `sum_doubles_avx512` 추가
+  - AVX-512 하위 기능 런타임 감지 추가 (`has_avx512f()`, `has_avx512dq()`, `has_avx512bw()`, `has_avx512vl()`)
+  - SIMD 기능 표현을 위한 `simd_level` 열거형 추가
+  - 런타임 SIMD 지원 조회를 위한 `get_best_simd_level()` 추가
+  - AVX-512 우선 디스패치 로직 업데이트 (AVX-512 > AVX2 > SSE > NEON)
+  - 컴파일 타임 및 런타임 SIMD 지원 표시를 위한 `get_simd_info()` 개선
+  - 포괄적인 SIMD 테스트 스위트 추가 (`tests/simd_tests.cpp`)
+  - AVX-512 지원 하드웨어에서 2배 성능 향상 예상
 - **Result<T> 패턴을 모든 Public API로 확장** (#231): 포괄적인 Result 기반 에러 처리 추가
   - `error_codes` 네임스페이스에 표준화된 에러 코드 추가 (core/container/error_codes.h)
     - 값 연산 (1xx): key_not_found, type_mismatch, empty_key 등

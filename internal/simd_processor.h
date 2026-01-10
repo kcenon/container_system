@@ -34,6 +34,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "container/internal/value.h"
 #include <vector>
+#include <string>
 #include <numeric>
 #include <algorithm>
 #include <cstring>
@@ -41,7 +42,15 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // Platform-specific SIMD headers
 #if defined(__x86_64__) || defined(_M_X64) || defined(__i386__) || defined(_M_IX86)
     #define HAS_X86_SIMD 1
-    #if defined(__AVX2__) || defined(HAS_AVX2)
+    #if defined(__AVX512F__) || defined(HAS_AVX512)
+        #ifndef HAS_AVX512
+            #define HAS_AVX512 1
+        #endif
+        #ifndef HAS_AVX2
+            #define HAS_AVX2 1  // AVX-512 implies AVX2
+        #endif
+        #include <immintrin.h>
+    #elif defined(__AVX2__) || defined(HAS_AVX2)
         #ifndef HAS_AVX2
             #define HAS_AVX2 1
         #endif
@@ -78,7 +87,19 @@ namespace simd
     /**
      * @brief SIMD width detection
      */
-    #if defined(HAS_AVX2) && defined(__x86_64__)
+    #if defined(HAS_AVX512) && defined(__x86_64__)
+        constexpr size_t float_simd_width = 16;  // 512-bit / 32-bit
+        constexpr size_t double_simd_width = 8;  // 512-bit / 64-bit
+        constexpr size_t float_simd_width_512 = 16;
+        constexpr size_t double_simd_width_512 = 8;
+        constexpr size_t int32_simd_width_512 = 16;
+        using float_simd = __m512;
+        using double_simd = __m512d;
+        using int32_simd = __m512i;
+        using float_simd_512 = __m512;
+        using double_simd_512 = __m512d;
+        using int32_simd_512 = __m512i;
+    #elif defined(HAS_AVX2) && defined(__x86_64__)
         constexpr size_t float_simd_width = 8;  // 256-bit / 32-bit
         constexpr size_t double_simd_width = 4; // 256-bit / 64-bit
         using float_simd = __m256;
@@ -183,6 +204,13 @@ namespace simd
 
     private:
         // Platform-specific implementations
+        #if defined(HAS_AVX512)
+        static float sum_floats_avx512(const float* data, size_t count);
+        static float min_float_avx512(const float* data, size_t count);
+        static float max_float_avx512(const float* data, size_t count);
+        static double sum_doubles_avx512(const double* data, size_t count);
+        #endif
+
         #if defined(HAS_AVX2)
         static float sum_floats_avx2(const float* data, size_t count);
         static float min_float_avx2(const float* data, size_t count);
@@ -230,6 +258,18 @@ namespace simd
     };
 
     /**
+     * @brief SIMD instruction set level enumeration
+     */
+    enum class simd_level {
+        none = 0,
+        sse2,
+        sse42,
+        avx2,
+        avx512,
+        neon
+    };
+
+    /**
      * @brief Utility to check SIMD support at runtime
      */
     class simd_support
@@ -238,18 +278,29 @@ namespace simd
         static bool has_sse2();
         static bool has_sse42();
         static bool has_avx2();
+        static bool has_avx512f();   // AVX-512 Foundation
+        static bool has_avx512dq();  // AVX-512 Double/Quad word
+        static bool has_avx512bw();  // AVX-512 Byte/Word
+        static bool has_avx512vl();  // AVX-512 Vector Length extensions
         static bool has_neon();
-        
+
+        /**
+         * @brief Get the best available SIMD instruction set level
+         */
+        static simd_level get_best_simd_level();
+
         /**
          * @brief Get a string describing available SIMD features
          */
         static std::string get_simd_info();
-        
+
         /**
          * @brief Get the optimal SIMD width for current platform
          */
         static size_t get_optimal_width() {
-            #if defined(HAS_AVX2)
+            #if defined(HAS_AVX512)
+                return 16;
+            #elif defined(HAS_AVX2)
                 return 8;
             #elif defined(HAS_SSE42) || defined(HAS_SSE2) || defined(HAS_ARM_NEON)
                 return 4;
