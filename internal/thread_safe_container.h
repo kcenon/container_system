@@ -38,13 +38,17 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <atomic>
 #include <algorithm>
 #include <concepts>
+#include <thread>
+#include <chrono>
+#include <condition_variable>
 #include "container/internal/value.h"
 #include "container/core/concepts.h"
 
 namespace container_module
 {
-    // Forward declaration
+    // Forward declarations
     class lockfree_container_reader;
+    class auto_refresh_reader;
 
     /**
      * @brief Thread-safe container with lock optimization
@@ -295,6 +299,27 @@ namespace container_module
          * @return Shared pointer to a new lock-free reader
          */
         std::shared_ptr<lockfree_container_reader> create_lockfree_reader();
+
+        /**
+         * @brief Create an auto-refreshing lock-free reader
+         *
+         * The returned reader automatically refreshes its snapshot at the specified interval
+         * using a background thread. This is useful for scenarios where you want lock-free
+         * reads with automatic updates without managing the refresh manually.
+         *
+         * @param refresh_interval The interval between automatic refreshes
+         * @return Shared pointer to a new auto-refresh reader
+         *
+         * @code
+         * auto container = std::make_shared<thread_safe_container>();
+         * auto reader = container->create_auto_refresh_reader(std::chrono::milliseconds(100));
+         *
+         * // Lock-free reads are always up-to-date within refresh_interval
+         * auto value = reader->get<int>("counter");
+         * @endcode
+         */
+        std::shared_ptr<auto_refresh_reader> create_auto_refresh_reader(
+            std::chrono::milliseconds refresh_interval);
 
     private:
         mutable std::shared_mutex mutex_;
@@ -593,12 +618,218 @@ namespace container_module
         std::atomic<size_t> refresh_count_{0};
     };
 
+    /**
+     * @brief Auto-refreshing lock-free reader
+     *
+     * This class wraps a lockfree_container_reader and automatically refreshes
+     * its snapshot at a configurable interval using a background thread.
+     * All read operations are delegated to the underlying lock-free reader.
+     *
+     * Properties:
+     * - Read: Wait-free O(1) - same as lockfree_container_reader
+     * - Refresh: Automatic in background thread
+     * - Staleness: Bounded by refresh_interval
+     *
+     * @code
+     * auto container = std::make_shared<thread_safe_container>();
+     * auto reader = std::make_shared<auto_refresh_reader>(container, std::chrono::milliseconds(100));
+     *
+     * // Lock-free reads automatically refreshed every 100ms
+     * auto value = reader->get<int>("counter");
+     *
+     * // When done, stop will be called automatically in destructor
+     * @endcode
+     */
+    class auto_refresh_reader {
+    public:
+        /**
+         * @brief Construct auto-refresh reader
+         * @param container The thread-safe container to read from
+         * @param refresh_interval The interval between automatic refreshes
+         */
+        explicit auto_refresh_reader(std::shared_ptr<thread_safe_container> container,
+                                     std::chrono::milliseconds refresh_interval)
+            : reader_(std::make_shared<lockfree_container_reader>(std::move(container)))
+            , refresh_interval_(refresh_interval)
+            , running_(true)
+        {
+            refresh_thread_ = std::thread(&auto_refresh_reader::refresh_loop, this);
+        }
+
+        /**
+         * @brief Destructor - stops the refresh thread
+         */
+        ~auto_refresh_reader() {
+            stop();
+        }
+
+        // Non-copyable
+        auto_refresh_reader(const auto_refresh_reader&) = delete;
+        auto_refresh_reader& operator=(const auto_refresh_reader&) = delete;
+
+        // Non-movable (due to thread)
+        auto_refresh_reader(auto_refresh_reader&&) = delete;
+        auto_refresh_reader& operator=(auto_refresh_reader&&) = delete;
+
+        /**
+         * @brief Stop the auto-refresh thread
+         *
+         * After calling stop(), no more automatic refreshes will occur.
+         * Manual refresh() calls are still possible.
+         */
+        void stop() {
+            {
+                std::lock_guard<std::mutex> lock(mutex_);
+                if (!running_) {
+                    return;
+                }
+                running_ = false;
+            }
+            cv_.notify_one();
+            if (refresh_thread_.joinable()) {
+                refresh_thread_.join();
+            }
+        }
+
+        /**
+         * @brief Check if auto-refresh is running
+         * @return true if auto-refresh thread is active
+         */
+        [[nodiscard]] bool is_running() const noexcept {
+            std::lock_guard<std::mutex> lock(mutex_);
+            return running_;
+        }
+
+        /**
+         * @brief Get the refresh interval
+         * @return The configured refresh interval
+         */
+        [[nodiscard]] std::chrono::milliseconds refresh_interval() const noexcept {
+            return refresh_interval_;
+        }
+
+        /**
+         * @brief Lock-free typed value read
+         *
+         * Delegates to the underlying lockfree_container_reader.
+         *
+         * @tparam T The expected value type
+         * @param key The key to look up
+         * @return Optional containing value if found and type matches
+         */
+        template<concepts::ValueVariantType T>
+        [[nodiscard]] std::optional<T> get(std::string_view key) const noexcept {
+            return reader_->get<T>(key);
+        }
+
+        /**
+         * @brief Lock-free value existence check
+         * @param key The key to check
+         * @return true if key exists in snapshot
+         */
+        [[nodiscard]] bool contains(std::string_view key) const noexcept {
+            return reader_->contains(key);
+        }
+
+        /**
+         * @brief Lock-free snapshot size check
+         * @return Number of values in the current snapshot
+         */
+        [[nodiscard]] size_t size() const noexcept {
+            return reader_->size();
+        }
+
+        /**
+         * @brief Lock-free empty check
+         * @return true if snapshot is empty
+         */
+        [[nodiscard]] bool empty() const noexcept {
+            return reader_->empty();
+        }
+
+        /**
+         * @brief Get all keys from snapshot
+         * @return Vector of keys in the current snapshot
+         */
+        [[nodiscard]] std::vector<std::string> keys() const {
+            return reader_->keys();
+        }
+
+        /**
+         * @brief Iterate over snapshot
+         * @tparam Func Callback function type
+         * @param func Callback to apply to each key-value pair
+         */
+        template<typename Func>
+        void for_each(Func&& func) const {
+            reader_->for_each(std::forward<Func>(func));
+        }
+
+        /**
+         * @brief Manual refresh (in addition to automatic)
+         *
+         * Forces an immediate refresh of the snapshot.
+         */
+        void refresh() {
+            reader_->refresh();
+        }
+
+        /**
+         * @brief Get the number of refreshes performed
+         * @return Total refresh count (automatic + manual)
+         */
+        [[nodiscard]] size_t refresh_count() const noexcept {
+            return reader_->refresh_count();
+        }
+
+        /**
+         * @brief Get the underlying lock-free reader
+         * @return Shared pointer to the underlying reader
+         */
+        [[nodiscard]] std::shared_ptr<lockfree_container_reader> reader() const noexcept {
+            return reader_;
+        }
+
+        /**
+         * @brief Get the source container
+         * @return Shared pointer to the source container
+         */
+        [[nodiscard]] std::shared_ptr<thread_safe_container> source() const noexcept {
+            return reader_->source();
+        }
+
+    private:
+        void refresh_loop() {
+            while (true) {
+                std::unique_lock<std::mutex> lock(mutex_);
+                if (cv_.wait_for(lock, refresh_interval_, [this] { return !running_; })) {
+                    break;  // Stopped
+                }
+                lock.unlock();
+                reader_->refresh();
+            }
+        }
+
+        std::shared_ptr<lockfree_container_reader> reader_;
+        std::chrono::milliseconds refresh_interval_;
+        std::thread refresh_thread_;
+        mutable std::mutex mutex_;
+        std::condition_variable cv_;
+        bool running_;
+    };
+
     // Type alias for backward compatibility
     using lockfree_reader = snapshot_reader;
 
     // Inline definition of create_lockfree_reader (must be after lockfree_container_reader is defined)
     inline std::shared_ptr<lockfree_container_reader> thread_safe_container::create_lockfree_reader() {
         return std::make_shared<lockfree_container_reader>(shared_from_this());
+    }
+
+    // Inline definition of create_auto_refresh_reader (must be after auto_refresh_reader is defined)
+    inline std::shared_ptr<auto_refresh_reader> thread_safe_container::create_auto_refresh_reader(
+        std::chrono::milliseconds refresh_interval) {
+        return std::make_shared<auto_refresh_reader>(shared_from_this(), refresh_interval);
     }
 
 } // namespace container_module

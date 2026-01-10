@@ -27,6 +27,15 @@ Container System 프로젝트의 모든 주요 변경 사항이 이 파일에 �
   - Issue #231 Phase 5: 하위 호환 Deprecated 래퍼의 일부
 
 ### Added
+- **자동 새로고침 Lock-Free 리더** (#262): 스레드 안전 컨테이너를 위한 자동 새로고침 lock-free 리더 추가 (Phase 4)
+  - 설정 가능한 새로고침 간격을 가진 `auto_refresh_reader` 클래스 추가
+  - `thread_safe_container`에 `create_auto_refresh_reader(interval)` 팩토리 메서드 추가
+  - 백그라운드 스레드가 지정된 간격으로 자동으로 스냅샷 새로고침
+  - 모든 읽기 작업은 lock-free (wait-free O(1))
+  - `stop()` 메서드와 소멸자에서 자동 정리로 적절한 생명주기 관리
+  - 기본 `lockfree_container_reader`에 모든 읽기 작업 위임
+  - 자동 새로고침 기능을 위한 6개의 포괄적인 통합 테스트 추가
+
 - **스키마 검증 역직렬화** (#249): 역직렬화 작업에 스키마 검증 지원 추가 (Phase 5)
   - 문자열 및 바이트 배열 입력을 위한 `deserialize(data, schema)` 오버로드 추가
   - Result 기반 에러 처리를 위한 `VoidResult`를 반환하는 `deserialize_result(data, schema)` 오버로드 추가
