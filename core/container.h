@@ -721,6 +721,104 @@ namespace container_module
 					 bool parse_only_header = true) noexcept;
 #endif
 
+		// =======================================================================
+		// Schema-Validated Deserialization API (Issue #249)
+		// =======================================================================
+
+		/**
+		 * @brief Deserialize from string data with schema validation
+		 *
+		 * Deserializes the data and validates it against the provided schema.
+		 * If validation fails, the container is still populated but false is returned.
+		 *
+		 * @param data_string Serialized data as a string
+		 * @param schema Schema to validate against after deserialization
+		 * @param parse_only_header If true, child values are not fully parsed
+		 * @return true on success and validation pass, false on parse error or validation failure
+		 * @exception_safety Basic guarantee - container may be partially modified
+		 *
+		 * @code
+		 * auto schema = container_schema()
+		 *     .require("name", value_types::string_value)
+		 *     .require("age", value_types::int_value)
+		 *     .range("age", 0, 150);
+		 *
+		 * if (container->deserialize(json_data, schema)) {
+		 *     // Data is valid according to schema
+		 * }
+		 * @endcode
+		 */
+		bool deserialize(const std::string& data_string,
+						 const container_schema& schema,
+						 bool parse_only_header = false);
+
+		/**
+		 * @brief Deserialize from byte array with schema validation
+		 *
+		 * @param data_array Serialized data as a byte array
+		 * @param schema Schema to validate against after deserialization
+		 * @param parse_only_header If true, child values are not fully parsed
+		 * @return true on success and validation pass, false on parse error or validation failure
+		 * @exception_safety Basic guarantee - container may be partially modified
+		 */
+		bool deserialize(const std::vector<uint8_t>& data_array,
+						 const container_schema& schema,
+						 bool parse_only_header = false);
+
+		/**
+		 * @brief Get the last validation errors from schema-validated deserialization
+		 *
+		 * Returns the validation errors from the most recent deserialize call
+		 * that used a schema. If the last deserialization was successful or
+		 * no schema was used, returns an empty vector.
+		 *
+		 * @return Vector of validation errors (empty if no errors)
+		 *
+		 * @code
+		 * if (!container->deserialize(data, schema)) {
+		 *     for (const auto& err : container->get_validation_errors()) {
+		 *         std::cerr << err.field << ": " << err.message << std::endl;
+		 *     }
+		 * }
+		 * @endcode
+		 */
+		[[nodiscard]] const std::vector<validation_error>& get_validation_errors() const noexcept;
+
+		/**
+		 * @brief Clear the stored validation errors
+		 */
+		void clear_validation_errors() noexcept;
+
+#if KCENON_HAS_COMMON_SYSTEM
+		/**
+		 * @brief Deserialize with schema validation, returning Result type
+		 *
+		 * @param data_string Serialized data as a string
+		 * @param schema Schema to validate against after deserialization
+		 * @param parse_only_header If true, child values are not fully parsed
+		 * @return VoidResult indicating success or error with details
+		 * @exception_safety Strong guarantee - no changes on error
+		 */
+		kcenon::common::VoidResult deserialize_result(
+			const std::string& data_string,
+			const container_schema& schema,
+			bool parse_only_header = false) noexcept;
+
+		/**
+		 * @brief Deserialize from byte array with schema validation, returning Result type
+		 *
+		 * @param data_array Serialized data as a byte array
+		 * @param schema Schema to validate against after deserialization
+		 * @param parse_only_header If true, child values are not fully parsed
+		 * @return VoidResult indicating success or error with details
+		 * @exception_safety Strong guarantee - no changes on error
+		 */
+		kcenon::common::VoidResult deserialize_result(
+			const std::vector<uint8_t>& data_array,
+			const container_schema& schema,
+			bool parse_only_header = false) noexcept;
+#endif
+
 		/**
 		 * @brief Generate an XML representation of this container (header +
 		 * values).
@@ -1104,6 +1202,9 @@ namespace container_module
 		// Memory allocation statistics (exposed via memory_stats())
 		mutable std::atomic<size_t> heap_allocations_{0}; ///< Track heap allocations
 		mutable std::atomic<size_t> stack_allocations_{0}; ///< Track stack allocations
+
+		// Schema validation state (Issue #249)
+		mutable std::vector<validation_error> validation_errors_; ///< Last validation errors
 	};
 
 #if CONTAINER_HAS_COMMON_RESULT
