@@ -12,6 +12,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Extend Result<T> Pattern to All Public APIs** (#231): Add comprehensive Result-based error handling
+  - Add standardized error codes in `error_codes` namespace (core/container/error_codes.h)
+    - Value operations (1xx): key_not_found, type_mismatch, empty_key, etc.
+    - Serialization (2xx): serialization_failed, deserialization_failed, etc.
+    - Validation (3xx): schema_validation_failed, constraint_violated, etc.
+    - Resource (4xx): memory_allocation_failed, file_not_found, etc.
+    - Thread safety (5xx): lock_acquisition_failed, concurrent_modification
+  - Add Result-returning value APIs:
+    - `get_result(key)`: Returns `Result<optimized_value>`
+    - `set_result(key, value)`: Returns `VoidResult`
+    - `set_all_result(vals)`: Returns `VoidResult`
+    - `remove_result(key)`: Returns `VoidResult`
+  - Add Result-returning serialization APIs:
+    - `serialize_result()`: Returns `Result<string>`
+    - `serialize_array_result()`: Returns `Result<vector<uint8_t>>`
+    - `to_json_result()`: Returns `Result<string>`
+    - `to_xml_result()`: Returns `Result<string>`
+  - Add Result-returning file operation APIs:
+    - `load_packet_result(path)`: Returns `VoidResult`
+    - `save_packet_result(path)`: Returns `VoidResult`
+  - Add migration guide: docs/guides/RESULT_PATTERN_MIGRATION.md
+  - All new methods marked with `[[nodiscard]]` attribute
 - **Zero-Copy Deserialization** (#226): Complete zero-copy deserialization implementation
   - Add `value_view` class for non-owning access to serialized data
   - Implement lazy parsing index for on-demand value lookup
