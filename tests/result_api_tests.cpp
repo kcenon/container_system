@@ -367,6 +367,297 @@ TEST_F(ResultAPITest, SetResultWithUnicodeKey)
 	EXPECT_TRUE(container->contains("키_한글"));
 }
 
+// ============================================================================
+// Serialization Result API Tests (Issue #239)
+// ============================================================================
+
+TEST_F(ResultAPITest, SerializeResultSuccess)
+{
+	// Add some values to serialize
+	container->set("name", std::string("test"));
+	container->set("value", int32_t(42));
+
+	auto result = container->serialize_result();
+	EXPECT_TRUE(kcenon::common::is_ok(result))
+		<< "serialize_result should succeed for valid container";
+
+	auto serialized = kcenon::common::get_value(result);
+	EXPECT_FALSE(serialized.empty())
+		<< "Serialized string should not be empty";
+
+	// Verify the serialized data can be deserialized
+	auto new_container = std::make_shared<value_container>();
+	EXPECT_TRUE(new_container->deserialize(serialized, false));
+	EXPECT_TRUE(new_container->contains("name"));
+	EXPECT_TRUE(new_container->contains("value"));
+}
+
+TEST_F(ResultAPITest, SerializeResultEmptyContainer)
+{
+	// Empty container should serialize successfully
+	auto result = container->serialize_result();
+	EXPECT_TRUE(kcenon::common::is_ok(result))
+		<< "serialize_result should succeed for empty container";
+
+	auto serialized = kcenon::common::get_value(result);
+	EXPECT_FALSE(serialized.empty())
+		<< "Serialized string should not be empty even for empty container";
+}
+
+TEST_F(ResultAPITest, SerializeArrayResultSuccess)
+{
+	// Add some values to serialize
+	container->set("key1", std::string("value1"));
+	container->set("key2", int32_t(100));
+
+	auto result = container->serialize_array_result();
+	EXPECT_TRUE(kcenon::common::is_ok(result))
+		<< "serialize_array_result should succeed for valid container";
+
+	auto serialized = kcenon::common::get_value(result);
+	EXPECT_FALSE(serialized.empty())
+		<< "Serialized array should not be empty";
+}
+
+TEST_F(ResultAPITest, SerializeArrayResultEmptyContainer)
+{
+	// Empty container should serialize successfully
+	auto result = container->serialize_array_result();
+	EXPECT_TRUE(kcenon::common::is_ok(result))
+		<< "serialize_array_result should succeed for empty container";
+
+	auto serialized = kcenon::common::get_value(result);
+	EXPECT_FALSE(serialized.empty())
+		<< "Serialized array should not be empty even for empty container";
+}
+
+TEST_F(ResultAPITest, ToJsonResultSuccess)
+{
+	// Add some values
+	container->set("name", std::string("test"));
+	container->set("count", int32_t(5));
+	container->set("enabled", true);
+
+	auto result = container->to_json_result();
+	EXPECT_TRUE(kcenon::common::is_ok(result))
+		<< "to_json_result should succeed for valid container";
+
+	auto json_str = kcenon::common::get_value(result);
+	EXPECT_FALSE(json_str.empty())
+		<< "JSON string should not be empty";
+
+	// Basic JSON structure validation
+	EXPECT_NE(json_str.find("name"), std::string::npos)
+		<< "JSON should contain 'name' key";
+	EXPECT_NE(json_str.find("test"), std::string::npos)
+		<< "JSON should contain 'test' value";
+}
+
+TEST_F(ResultAPITest, ToJsonResultEmptyContainer)
+{
+	auto result = container->to_json_result();
+	EXPECT_TRUE(kcenon::common::is_ok(result))
+		<< "to_json_result should succeed for empty container";
+}
+
+TEST_F(ResultAPITest, ToXmlResultSuccess)
+{
+	// Add some values
+	container->set("title", std::string("XML Test"));
+	container->set("id", int32_t(123));
+
+	auto result = container->to_xml_result();
+	EXPECT_TRUE(kcenon::common::is_ok(result))
+		<< "to_xml_result should succeed for valid container";
+
+	auto xml_str = kcenon::common::get_value(result);
+	EXPECT_FALSE(xml_str.empty())
+		<< "XML string should not be empty";
+
+	// Basic XML structure validation
+	EXPECT_NE(xml_str.find("title"), std::string::npos)
+		<< "XML should contain 'title' element";
+}
+
+TEST_F(ResultAPITest, ToXmlResultEmptyContainer)
+{
+	auto result = container->to_xml_result();
+	EXPECT_TRUE(kcenon::common::is_ok(result))
+		<< "to_xml_result should succeed for empty container";
+}
+
+TEST_F(ResultAPITest, DeserializeResultSuccess)
+{
+	// First serialize a container
+	container->set("key", std::string("value"));
+	auto serialized = container->serialize();
+
+	// Create new container and deserialize
+	auto new_container = std::make_shared<value_container>();
+	auto result = new_container->deserialize_result(serialized, false);
+	EXPECT_TRUE(kcenon::common::is_ok(result))
+		<< "deserialize_result should succeed for valid data";
+
+	// Verify deserialization
+	EXPECT_TRUE(new_container->contains("key"));
+}
+
+TEST_F(ResultAPITest, DeserializeResultInvalidData)
+{
+	// Try to deserialize invalid data
+	std::string invalid_data = "this is not valid serialized data";
+
+	auto result = container->deserialize_result(invalid_data, false);
+	EXPECT_TRUE(kcenon::common::is_error(result))
+		<< "deserialize_result should fail for invalid data";
+
+	auto error = kcenon::common::get_error(result);
+	EXPECT_EQ(error.code, error_codes::deserialization_failed)
+		<< "Error code should be deserialization_failed";
+}
+
+TEST_F(ResultAPITest, DeserializeResultEmptyData)
+{
+	// Try to deserialize empty string
+	std::string empty_data = "";
+
+	auto result = container->deserialize_result(empty_data, false);
+	EXPECT_TRUE(kcenon::common::is_error(result))
+		<< "deserialize_result should fail for empty data";
+
+	auto error = kcenon::common::get_error(result);
+	EXPECT_EQ(error.code, error_codes::deserialization_failed)
+		<< "Error code should be deserialization_failed";
+}
+
+TEST_F(ResultAPITest, DeserializeResultCorruptedData)
+{
+	// Create partially corrupted data
+	container->set("test", std::string("value"));
+	auto serialized = container->serialize();
+
+	// Corrupt the data by truncating it
+	if (serialized.length() > 10)
+	{
+		std::string corrupted = serialized.substr(0, serialized.length() / 2);
+		auto new_container = std::make_shared<value_container>();
+		auto result = new_container->deserialize_result(corrupted, false);
+
+		// Should either fail or succeed partially - implementation dependent
+		// At minimum, error handling should not throw
+		(void)result;  // Suppress unused warning - we just want to ensure no crash
+	}
+}
+
+TEST_F(ResultAPITest, DeserializeResultByteArraySuccess)
+{
+	// Serialize to array
+	container->set("byte_test", int32_t(42));
+	auto array_data = container->serialize_array();
+
+	// Deserialize from array
+	auto new_container = std::make_shared<value_container>();
+	auto result = new_container->deserialize_result(array_data, false);
+	EXPECT_TRUE(kcenon::common::is_ok(result))
+		<< "deserialize_result should succeed for valid byte array";
+
+	EXPECT_TRUE(new_container->contains("byte_test"));
+}
+
+TEST_F(ResultAPITest, DeserializeResultByteArrayInvalid)
+{
+	// Create invalid byte array
+	std::vector<uint8_t> invalid_data = {0x00, 0xFF, 0x12, 0x34};
+
+	auto result = container->deserialize_result(invalid_data, false);
+	EXPECT_TRUE(kcenon::common::is_error(result))
+		<< "deserialize_result should fail for invalid byte array";
+}
+
+TEST_F(ResultAPITest, SerializationRoundTrip)
+{
+	// Add various types of values
+	container->set("string_val", std::string("hello world"));
+	container->set("int_val", int32_t(12345));
+	container->set("double_val", 3.14159);
+	container->set("bool_val", true);
+	container->set("int64_val", int64_t(9876543210LL));
+
+	// Serialize
+	auto serialize_result = container->serialize_result();
+	EXPECT_TRUE(kcenon::common::is_ok(serialize_result));
+
+	// Deserialize to new container
+	auto new_container = std::make_shared<value_container>();
+	auto deserialize_result_val = new_container->deserialize_result(
+		kcenon::common::get_value(serialize_result), false);
+	EXPECT_TRUE(kcenon::common::is_ok(deserialize_result_val));
+
+	// Verify all values
+	auto str_result = new_container->get<std::string>("string_val");
+	EXPECT_TRUE(kcenon::common::is_ok(str_result));
+	EXPECT_EQ(kcenon::common::get_value(str_result), "hello world");
+
+	auto int_result = new_container->get<int32_t>("int_val");
+	EXPECT_TRUE(kcenon::common::is_ok(int_result));
+	EXPECT_EQ(kcenon::common::get_value(int_result), 12345);
+
+	auto double_result = new_container->get<double>("double_val");
+	EXPECT_TRUE(kcenon::common::is_ok(double_result));
+	EXPECT_DOUBLE_EQ(kcenon::common::get_value(double_result), 3.14159);
+
+	auto bool_result = new_container->get<bool>("bool_val");
+	EXPECT_TRUE(kcenon::common::is_ok(bool_result));
+	EXPECT_EQ(kcenon::common::get_value(bool_result), true);
+
+	auto int64_result = new_container->get<int64_t>("int64_val");
+	EXPECT_TRUE(kcenon::common::is_ok(int64_result));
+	EXPECT_EQ(kcenon::common::get_value(int64_result), 9876543210LL);
+}
+
+TEST_F(ResultAPITest, SerializationArrayRoundTrip)
+{
+	// Add values
+	container->set("arr_test", std::string("array round trip"));
+	container->set("arr_num", int32_t(999));
+
+	// Serialize to array
+	auto serialize_result = container->serialize_array_result();
+	EXPECT_TRUE(kcenon::common::is_ok(serialize_result));
+
+	// Deserialize from array
+	auto new_container = std::make_shared<value_container>();
+	auto deserialize_result_val = new_container->deserialize_result(
+		kcenon::common::get_value(serialize_result), false);
+	EXPECT_TRUE(kcenon::common::is_ok(deserialize_result_val));
+
+	// Verify values
+	EXPECT_TRUE(new_container->contains("arr_test"));
+	EXPECT_TRUE(new_container->contains("arr_num"));
+
+	auto str_result = new_container->get<std::string>("arr_test");
+	EXPECT_TRUE(kcenon::common::is_ok(str_result));
+	EXPECT_EQ(kcenon::common::get_value(str_result), "array round trip");
+}
+
+TEST_F(ResultAPITest, ErrorMessageContainsContext)
+{
+	// Verify error messages contain useful context
+	std::string invalid_data = "invalid_serialized_data_that_cannot_be_parsed";
+	auto result = container->deserialize_result(invalid_data, false);
+	EXPECT_TRUE(kcenon::common::is_error(result));
+
+	auto error = kcenon::common::get_error(result);
+
+	// Error message should not be empty
+	EXPECT_FALSE(error.message.empty())
+		<< "Error message should provide context about the failure";
+
+	// Error module should be set
+	EXPECT_FALSE(error.module.empty())
+		<< "Error module should identify container_system";
+}
+
 #endif  // CONTAINER_HAS_COMMON_RESULT
 
 // Main function for running tests
