@@ -2134,6 +2134,157 @@ TEST_F(SchemaValidationTest, ValidateResultFailure) {
 }
 #endif
 
+// ===========================================================================
+// Detailed Observability Metrics Tests (Issue #230)
+// ===========================================================================
+
+class MetricsTest : public ::testing::Test {
+protected:
+    void SetUp() override {
+        // Reset metrics before each test
+        value_container::reset_metrics();
+        value_container::set_metrics_enabled(true);
+    }
+
+    void TearDown() override {
+        value_container::set_metrics_enabled(false);
+    }
+};
+
+TEST_F(MetricsTest, MetricsEnabledDisabled) {
+    EXPECT_TRUE(value_container::is_metrics_enabled());
+    value_container::set_metrics_enabled(false);
+    EXPECT_FALSE(value_container::is_metrics_enabled());
+    value_container::set_metrics_enabled(true);
+    EXPECT_TRUE(value_container::is_metrics_enabled());
+}
+
+TEST_F(MetricsTest, OperationCountersIncrement) {
+    auto container = std::make_shared<value_container>();
+
+    // Perform operations
+    container->set("key1", 42);
+    container->set("key2", "hello");
+    container->get_value("key1");
+    container->get_value("key2");
+    container->serialize();
+
+    auto metrics = value_container::get_detailed_metrics();
+
+    // Check operation counts
+    EXPECT_GE(metrics.operations.writes.load(), 2U);
+    EXPECT_GE(metrics.operations.reads.load(), 2U);
+    EXPECT_GE(metrics.operations.serializations.load(), 1U);
+}
+
+TEST_F(MetricsTest, DeserializationCounter) {
+    auto container = std::make_shared<value_container>();
+    container->set("test", 123);
+    std::string serialized = container->serialize();
+
+    auto container2 = std::make_shared<value_container>();
+    container2->deserialize(serialized, false);
+
+    auto metrics = value_container::get_detailed_metrics();
+    EXPECT_GE(metrics.operations.deserializations.load(), 1U);
+}
+
+TEST_F(MetricsTest, TimingMetricsAccumulate) {
+    auto container = std::make_shared<value_container>();
+
+    // Perform several operations
+    for (int i = 0; i < 10; ++i) {
+        container->set("key" + std::to_string(i), i);
+        container->serialize();
+    }
+
+    auto metrics = value_container::get_detailed_metrics();
+
+    // Timing should be greater than 0 after operations
+    EXPECT_GT(metrics.timing.total_serialize_ns.load(), 0U);
+    EXPECT_GT(metrics.timing.total_write_ns.load(), 0U);
+}
+
+TEST_F(MetricsTest, MetricsReset) {
+    auto container = std::make_shared<value_container>();
+    container->set("key", 42);
+    container->serialize();
+
+    // Verify counters are non-zero
+    auto metrics1 = value_container::get_detailed_metrics();
+    EXPECT_GT(metrics1.operations.writes.load(), 0U);
+
+    // Reset and verify counters are zero
+    value_container::reset_metrics();
+    auto metrics2 = value_container::get_detailed_metrics();
+    EXPECT_EQ(metrics2.operations.writes.load(), 0U);
+    EXPECT_EQ(metrics2.operations.reads.load(), 0U);
+    EXPECT_EQ(metrics2.operations.serializations.load(), 0U);
+}
+
+TEST_F(MetricsTest, MetricsToJsonFormat) {
+    auto container = std::make_shared<value_container>();
+    container->set("key", 42);
+    container->serialize();
+
+    std::string json = container->metrics_to_json();
+
+    // Check JSON structure
+    EXPECT_NE(json.find("\"operations\""), std::string::npos);
+    EXPECT_NE(json.find("\"timing\""), std::string::npos);
+    EXPECT_NE(json.find("\"latency\""), std::string::npos);
+    EXPECT_NE(json.find("\"simd\""), std::string::npos);
+    EXPECT_NE(json.find("\"cache\""), std::string::npos);
+    EXPECT_NE(json.find("\"reads\""), std::string::npos);
+    EXPECT_NE(json.find("\"writes\""), std::string::npos);
+}
+
+TEST_F(MetricsTest, MetricsToPrometheusFormat) {
+    auto container = std::make_shared<value_container>();
+    container->set("key", 42);
+    container->serialize();
+
+    std::string prom = container->metrics_to_prometheus();
+
+    // Check Prometheus format
+    EXPECT_NE(prom.find("# HELP"), std::string::npos);
+    EXPECT_NE(prom.find("# TYPE"), std::string::npos);
+    EXPECT_NE(prom.find("container_operations_total"), std::string::npos);
+    EXPECT_NE(prom.find("container_serialize_latency_nanoseconds"), std::string::npos);
+}
+
+TEST_F(MetricsTest, LatencyHistogramRecording) {
+    auto container = std::make_shared<value_container>();
+
+    // Perform enough operations to populate histogram
+    for (int i = 0; i < 100; ++i) {
+        container->set("key" + std::to_string(i), i);
+    }
+
+    auto metrics = value_container::get_detailed_metrics();
+
+    // Sample count should match number of operations
+    EXPECT_GE(metrics.write_latency.sample_count.load(), 100U);
+
+    // Percentiles should be calculated
+    EXPECT_GE(metrics.write_latency.p50(), 0U);
+}
+
+TEST_F(MetricsTest, MetricsDisabledNoOverhead) {
+    value_container::set_metrics_enabled(false);
+    value_container::reset_metrics();
+
+    auto container = std::make_shared<value_container>();
+    container->set("key", 42);
+    container->serialize();
+
+    auto metrics = value_container::get_detailed_metrics();
+
+    // With metrics disabled, counters should remain zero
+    EXPECT_EQ(metrics.operations.writes.load(), 0U);
+    EXPECT_EQ(metrics.operations.serializations.load(), 0U);
+}
+
 // Main function for running tests
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);

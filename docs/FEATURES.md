@@ -143,10 +143,13 @@ auto message = messaging_container_builder()
 
 ### Performance Metrics
 - **Real-time monitoring** of container operations
-- **Operation counters** - creation, serialization, deserialization
-- **Timing metrics** - average latency per operation
-- **Memory tracking** - allocation and deallocation counts
-- **SIMD usage statistics** - operations accelerated by SIMD
+- **Operation counters** - reads, writes, serializations, deserializations, copies, moves
+- **Timing metrics** - nanosecond precision for all operations
+- **Latency histograms** - reservoir sampling for P50/P95/P99/P999 percentiles
+- **SIMD usage statistics** - operations accelerated by SIMD, scalar fallbacks
+- **Cache metrics** - key index and value cache hit/miss tracking
+- **Export formats** - JSON (Grafana/ElasticSearch) and Prometheus exposition format
+- **Zero-overhead option** - disable metrics for production performance
 
 ### External Callbacks
 - **Integration hooks** for external systems

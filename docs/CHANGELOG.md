@@ -18,6 +18,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Add <concepts> header for C++20 concepts support
 
 ### Added
+- **Detailed Observability Metrics** (#230): Add comprehensive metrics infrastructure for container operations
+  - Add `operation_counts` struct with atomic counters for reads, writes, serializations, deserializations, copies, moves
+  - Add `timing_metrics` struct with nanosecond precision for serialize/deserialize/read/write operations
+  - Add `latency_histogram` struct with reservoir sampling (1024 samples) for P50/P95/P99/P999 percentiles
+  - Add `simd_metrics` struct for SIMD operations, scalar fallbacks, and bytes processed tracking
+  - Add `cache_metrics` struct for key index and value cache hit/miss statistics
+  - Add `detailed_metrics` struct aggregating all metric types
+  - Add `scoped_timer` RAII helper for automatic latency measurement
+  - Add `metrics_manager` singleton for global metrics access with thread-safe atomic operations
+  - Add `get_detailed_metrics()`, `reset_metrics()`, `set_metrics_enabled()`, `is_metrics_enabled()` static methods
+  - Add `metrics_to_json()` for JSON export format (Grafana/ElasticSearch compatible)
+  - Add `metrics_to_prometheus()` for Prometheus exposition format
+  - Add enable/disable toggle for zero-overhead when metrics disabled
+  - Add 9 comprehensive unit tests for metrics functionality
 - **Runtime Schema Validation** (#228): Add container_schema class for data integrity validation
   - Add fluent API for schema definition with method chaining
   - Add `require(key, type)` and `optional(key, type)` for field definitions

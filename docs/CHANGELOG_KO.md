@@ -18,6 +18,20 @@ Container System 프로젝트의 모든 주요 변경 사항이 이 파일에 �
   - C++20 개념 지원을 위한 <concepts> 헤더 추가
 
 ### Added
+- **상세 관찰성 메트릭** (#230): 컨테이너 연산을 위한 포괄적인 메트릭 인프라 추가
+  - 읽기, 쓰기, 직렬화, 역직렬화, 복사, 이동을 위한 원자적 카운터가 포함된 `operation_counts` 구조체 추가
+  - 직렬화/역직렬화/읽기/쓰기 연산을 위한 나노초 정밀도의 `timing_metrics` 구조체 추가
+  - P50/P95/P99/P999 백분위수를 위한 저수지 샘플링(1024 샘플)이 포함된 `latency_histogram` 구조체 추가
+  - SIMD 연산, 스칼라 폴백, 처리된 바이트 추적을 위한 `simd_metrics` 구조체 추가
+  - 키 인덱스 및 값 캐시 히트/미스 통계를 위한 `cache_metrics` 구조체 추가
+  - 모든 메트릭 타입을 집계하는 `detailed_metrics` 구조체 추가
+  - 자동 지연 시간 측정을 위한 `scoped_timer` RAII 헬퍼 추가
+  - 스레드 안전 원자 연산을 통한 전역 메트릭 접근을 위한 `metrics_manager` 싱글톤 추가
+  - `get_detailed_metrics()`, `reset_metrics()`, `set_metrics_enabled()`, `is_metrics_enabled()` 정적 메서드 추가
+  - JSON 내보내기 형식(Grafana/ElasticSearch 호환)을 위한 `metrics_to_json()` 추가
+  - Prometheus 노출 형식을 위한 `metrics_to_prometheus()` 추가
+  - 메트릭 비활성화 시 제로 오버헤드를 위한 활성화/비활성화 토글 추가
+  - 메트릭 기능에 대한 9개의 포괄적인 단위 테스트 추가
 - **런타임 스키마 검증** (#228): 데이터 무결성 검증을 위한 container_schema 클래스 추가
   - 메서드 체이닝을 통한 스키마 정의 fluent API 추가
   - 필드 정의를 위한 `require(key, type)` 및 `optional(key, type)` 추가

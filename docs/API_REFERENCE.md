@@ -540,6 +540,166 @@ bool remove(const std::string& key);
 
 ---
 
+## Metrics
+
+### Overview
+
+**Header**: `#include <container/core/container/metrics.h>`
+
+**Description**: Comprehensive observability metrics infrastructure for monitoring container operations with nanosecond precision timing, latency histograms, and multiple export formats.
+
+### Metrics Structures
+
+#### `operation_counts`
+
+```cpp
+struct operation_counts {
+    std::atomic<uint64_t> reads{0};
+    std::atomic<uint64_t> writes{0};
+    std::atomic<uint64_t> serializations{0};
+    std::atomic<uint64_t> deserializations{0};
+    std::atomic<uint64_t> copies{0};
+    std::atomic<uint64_t> moves{0};
+};
+```
+
+**Description**: Thread-safe atomic counters for all container operations.
+
+#### `timing_metrics`
+
+```cpp
+struct timing_metrics {
+    std::atomic<uint64_t> total_serialize_ns{0};
+    std::atomic<uint64_t> total_deserialize_ns{0};
+    std::atomic<uint64_t> total_read_ns{0};
+    std::atomic<uint64_t> total_write_ns{0};
+};
+```
+
+**Description**: Cumulative timing in nanoseconds for each operation type.
+
+#### `latency_histogram`
+
+```cpp
+struct latency_histogram {
+    static constexpr size_t kReservoirSize = 1024;
+
+    void record(uint64_t latency_ns) noexcept;
+    uint64_t get_percentile(double percentile) const noexcept;
+    uint64_t p50() const noexcept;
+    uint64_t p95() const noexcept;
+    uint64_t p99() const noexcept;
+    uint64_t p999() const noexcept;
+    void reset() noexcept;
+};
+```
+
+**Description**: Latency histogram with reservoir sampling (1024 samples) for percentile calculations.
+
+**Example**:
+```cpp
+auto metrics = value_container::get_detailed_metrics();
+std::cout << "P50 serialize: " << metrics.serialize_latency.p50() << " ns\n";
+std::cout << "P99 serialize: " << metrics.serialize_latency.p99() << " ns\n";
+```
+
+### Static Methods (value_container)
+
+#### `get_detailed_metrics()`
+
+```cpp
+static detailed_metrics get_detailed_metrics();
+```
+
+**Description**: Returns a copy of current metrics state.
+
+#### `reset_metrics()`
+
+```cpp
+static void reset_metrics();
+```
+
+**Description**: Resets all metrics to zero.
+
+#### `set_metrics_enabled()` / `is_metrics_enabled()`
+
+```cpp
+static void set_metrics_enabled(bool enabled);
+static bool is_metrics_enabled();
+```
+
+**Description**: Enable/disable metrics collection. When disabled, metrics operations have zero overhead.
+
+### Instance Methods (value_container)
+
+#### `metrics_to_json()`
+
+```cpp
+std::string metrics_to_json() const;
+```
+
+**Description**: Export metrics in JSON format (Grafana/ElasticSearch compatible).
+
+**Example**:
+```cpp
+value_container c;
+c.set_metrics_enabled(true);
+// ... perform operations ...
+std::string json = c.metrics_to_json();
+```
+
+#### `metrics_to_prometheus()`
+
+```cpp
+std::string metrics_to_prometheus() const;
+```
+
+**Description**: Export metrics in Prometheus exposition format.
+
+**Example**:
+```cpp
+value_container c;
+std::string prometheus = c.metrics_to_prometheus();
+// Output: container_operations_total{type="reads"} 42
+```
+
+### Usage Example
+
+```cpp
+#include <container/container.h>
+using namespace container_module;
+
+// Enable metrics
+value_container::set_metrics_enabled(true);
+
+// Perform operations
+value_container c;
+c.set("key1", "value1");
+c.set("key2", 42);
+auto serialized = c.serialize();
+value_container c2;
+c2.deserialize(serialized);
+
+// Get metrics
+auto metrics = value_container::get_detailed_metrics();
+std::cout << "Reads: " << metrics.operations.reads.load() << "\n";
+std::cout << "Writes: " << metrics.operations.writes.load() << "\n";
+std::cout << "Serializations: " << metrics.operations.serializations.load() << "\n";
+std::cout << "P99 serialize latency: " << metrics.serialize_latency.p99() << " ns\n";
+
+// Export for monitoring
+std::string json = c.metrics_to_json();
+std::string prometheus = c.metrics_to_prometheus();
+
+// Reset metrics
+value_container::reset_metrics();
+
+// Disable for production
+value_container::set_metrics_enabled(false);
+```
+
+---
+
 ## Serialization/Deserialization
 
 ### JSON Serialization

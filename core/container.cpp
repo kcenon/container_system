@@ -109,6 +109,10 @@ namespace container_module
 									 bool parse_only_header)
 		: value_container()
 	{
+		if (metrics_manager::is_enabled())
+		{
+			metrics_manager::get().operations.copies.fetch_add(1, std::memory_order_relaxed);
+		}
 		deserialize(other.serialize(), parse_only_header);
 	}
 
@@ -136,6 +140,10 @@ namespace container_module
 		, version_(std::move(other.version_))
 		// Legacy units_ and data_type_map_ removed
 	{
+		if (metrics_manager::is_enabled())
+		{
+			metrics_manager::get().operations.moves.fetch_add(1, std::memory_order_relaxed);
+		}
 		// Reset other to a valid state
 		other.parsed_data_ = true;
 		other.changed_data_ = false;
@@ -299,6 +307,15 @@ namespace container_module
 
 	std::optional<optimized_value> value_container::get_value(const std::string& name) const noexcept
 	{
+		// Record metrics if enabled
+		auto timer = metrics_manager::make_timer(
+			metrics_manager::get().read_latency,
+			&metrics_manager::get().timing.total_read_ns);
+		if (metrics_manager::is_enabled())
+		{
+			metrics_manager::get().operations.reads.fetch_add(1, std::memory_order_relaxed);
+		}
+
 		read_lock_guard lock(this);
 
 		for (const auto& val : optimized_units_) {
@@ -319,6 +336,15 @@ namespace container_module
 
 	void value_container::set_unit_impl(const optimized_value& val)
 	{
+		// Record metrics if enabled
+		auto timer = metrics_manager::make_timer(
+			metrics_manager::get().write_latency,
+			&metrics_manager::get().timing.total_write_ns);
+		if (metrics_manager::is_enabled())
+		{
+			metrics_manager::get().operations.writes.fetch_add(1, std::memory_order_relaxed);
+		}
+
 		write_lock_guard lock(this);
 
 		// Check if key already exists
@@ -751,6 +777,15 @@ namespace container_module
 
 	std::string value_container::serialize(void) const
 	{
+		// Record metrics if enabled
+		auto timer = metrics_manager::make_timer(
+			metrics_manager::get().serialize_latency,
+			&metrics_manager::get().timing.total_serialize_ns);
+		if (metrics_manager::is_enabled())
+		{
+			metrics_manager::get().operations.serializations.fetch_add(1, std::memory_order_relaxed);
+		}
+
 		std::shared_lock<std::shared_mutex> lock(mutex_);
 
 		// If everything parsed, just rebuild data
@@ -800,6 +835,15 @@ namespace container_module
 	bool value_container::deserialize(const std::string& data_str,
 									  bool parse_only_header)
 	{
+		// Record metrics if enabled
+		auto timer = metrics_manager::make_timer(
+			metrics_manager::get().deserialize_latency,
+			&metrics_manager::get().timing.total_deserialize_ns);
+		if (metrics_manager::is_enabled())
+		{
+			metrics_manager::get().operations.deserializations.fetch_add(1, std::memory_order_relaxed);
+		}
+
 		initialize();
 		if (data_str.empty())
 			return false;
@@ -1543,6 +1587,186 @@ bool value_container::deserialize(const std::vector<uint8_t>& data_array,
 		else
 			out.clear();
 		return out;
+	}
+
+	// =======================================================================
+	// Metrics Export Implementation (Issue #230)
+	// =======================================================================
+
+	std::string value_container::metrics_to_json() const
+	{
+		auto& m = metrics_manager::get();
+
+		std::string result;
+		result.reserve(2048);  // Pre-allocate for performance
+
+		result += "{\n";
+		result += "  \"operations\": {\n";
+		result += "    \"reads\": " + std::to_string(m.operations.reads.load(std::memory_order_relaxed)) + ",\n";
+		result += "    \"writes\": " + std::to_string(m.operations.writes.load(std::memory_order_relaxed)) + ",\n";
+		result += "    \"serializations\": " + std::to_string(m.operations.serializations.load(std::memory_order_relaxed)) + ",\n";
+		result += "    \"deserializations\": " + std::to_string(m.operations.deserializations.load(std::memory_order_relaxed)) + ",\n";
+		result += "    \"copies\": " + std::to_string(m.operations.copies.load(std::memory_order_relaxed)) + ",\n";
+		result += "    \"moves\": " + std::to_string(m.operations.moves.load(std::memory_order_relaxed)) + "\n";
+		result += "  },\n";
+
+		result += "  \"timing\": {\n";
+		result += "    \"total_serialize_ns\": " + std::to_string(m.timing.total_serialize_ns.load(std::memory_order_relaxed)) + ",\n";
+		result += "    \"total_deserialize_ns\": " + std::to_string(m.timing.total_deserialize_ns.load(std::memory_order_relaxed)) + ",\n";
+		result += "    \"total_read_ns\": " + std::to_string(m.timing.total_read_ns.load(std::memory_order_relaxed)) + ",\n";
+		result += "    \"total_write_ns\": " + std::to_string(m.timing.total_write_ns.load(std::memory_order_relaxed)) + "\n";
+		result += "  },\n";
+
+		result += "  \"latency\": {\n";
+		result += "    \"serialize\": {\n";
+		result += "      \"p50_ns\": " + std::to_string(m.serialize_latency.p50()) + ",\n";
+		result += "      \"p95_ns\": " + std::to_string(m.serialize_latency.p95()) + ",\n";
+		result += "      \"p99_ns\": " + std::to_string(m.serialize_latency.p99()) + ",\n";
+		result += "      \"p999_ns\": " + std::to_string(m.serialize_latency.p999()) + ",\n";
+		result += "      \"max_ns\": " + std::to_string(m.serialize_latency.max_ns.load(std::memory_order_relaxed)) + ",\n";
+		result += "      \"avg_ns\": " + std::to_string(m.serialize_latency.avg()) + "\n";
+		result += "    },\n";
+		result += "    \"deserialize\": {\n";
+		result += "      \"p50_ns\": " + std::to_string(m.deserialize_latency.p50()) + ",\n";
+		result += "      \"p95_ns\": " + std::to_string(m.deserialize_latency.p95()) + ",\n";
+		result += "      \"p99_ns\": " + std::to_string(m.deserialize_latency.p99()) + ",\n";
+		result += "      \"p999_ns\": " + std::to_string(m.deserialize_latency.p999()) + ",\n";
+		result += "      \"max_ns\": " + std::to_string(m.deserialize_latency.max_ns.load(std::memory_order_relaxed)) + ",\n";
+		result += "      \"avg_ns\": " + std::to_string(m.deserialize_latency.avg()) + "\n";
+		result += "    },\n";
+		result += "    \"read\": {\n";
+		result += "      \"p50_ns\": " + std::to_string(m.read_latency.p50()) + ",\n";
+		result += "      \"p95_ns\": " + std::to_string(m.read_latency.p95()) + ",\n";
+		result += "      \"p99_ns\": " + std::to_string(m.read_latency.p99()) + ",\n";
+		result += "      \"p999_ns\": " + std::to_string(m.read_latency.p999()) + ",\n";
+		result += "      \"max_ns\": " + std::to_string(m.read_latency.max_ns.load(std::memory_order_relaxed)) + ",\n";
+		result += "      \"avg_ns\": " + std::to_string(m.read_latency.avg()) + "\n";
+		result += "    },\n";
+		result += "    \"write\": {\n";
+		result += "      \"p50_ns\": " + std::to_string(m.write_latency.p50()) + ",\n";
+		result += "      \"p95_ns\": " + std::to_string(m.write_latency.p95()) + ",\n";
+		result += "      \"p99_ns\": " + std::to_string(m.write_latency.p99()) + ",\n";
+		result += "      \"p999_ns\": " + std::to_string(m.write_latency.p999()) + ",\n";
+		result += "      \"max_ns\": " + std::to_string(m.write_latency.max_ns.load(std::memory_order_relaxed)) + ",\n";
+		result += "      \"avg_ns\": " + std::to_string(m.write_latency.avg()) + "\n";
+		result += "    }\n";
+		result += "  },\n";
+
+		result += "  \"simd\": {\n";
+		result += "    \"simd_operations\": " + std::to_string(m.simd.simd_operations.load(std::memory_order_relaxed)) + ",\n";
+		result += "    \"scalar_fallbacks\": " + std::to_string(m.simd.scalar_fallbacks.load(std::memory_order_relaxed)) + ",\n";
+		result += "    \"bytes_processed_simd\": " + std::to_string(m.simd.bytes_processed_simd.load(std::memory_order_relaxed)) + ",\n";
+		result += "    \"utilization_percent\": " + std::to_string(m.simd.utilization()) + "\n";
+		result += "  },\n";
+
+		result += "  \"cache\": {\n";
+		result += "    \"key_index_hits\": " + std::to_string(m.cache.key_index_hits.load(std::memory_order_relaxed)) + ",\n";
+		result += "    \"key_index_misses\": " + std::to_string(m.cache.key_index_misses.load(std::memory_order_relaxed)) + ",\n";
+		result += "    \"value_cache_hits\": " + std::to_string(m.cache.value_cache_hits.load(std::memory_order_relaxed)) + ",\n";
+		result += "    \"value_cache_misses\": " + std::to_string(m.cache.value_cache_misses.load(std::memory_order_relaxed)) + ",\n";
+		result += "    \"key_index_hit_rate_percent\": " + std::to_string(m.cache.key_index_hit_rate()) + ",\n";
+		result += "    \"value_cache_hit_rate_percent\": " + std::to_string(m.cache.value_cache_hit_rate()) + "\n";
+		result += "  }\n";
+
+		result += "}";
+
+		return result;
+	}
+
+	std::string value_container::metrics_to_prometheus() const
+	{
+		auto& m = metrics_manager::get();
+
+		std::string result;
+		result.reserve(4096);  // Pre-allocate for performance
+
+		// Operation counters
+		result += "# HELP container_operations_total Total number of container operations\n";
+		result += "# TYPE container_operations_total counter\n";
+		result += "container_operations_total{operation=\"read\"} " + std::to_string(m.operations.reads.load(std::memory_order_relaxed)) + "\n";
+		result += "container_operations_total{operation=\"write\"} " + std::to_string(m.operations.writes.load(std::memory_order_relaxed)) + "\n";
+		result += "container_operations_total{operation=\"serialize\"} " + std::to_string(m.operations.serializations.load(std::memory_order_relaxed)) + "\n";
+		result += "container_operations_total{operation=\"deserialize\"} " + std::to_string(m.operations.deserializations.load(std::memory_order_relaxed)) + "\n";
+		result += "container_operations_total{operation=\"copy\"} " + std::to_string(m.operations.copies.load(std::memory_order_relaxed)) + "\n";
+		result += "container_operations_total{operation=\"move\"} " + std::to_string(m.operations.moves.load(std::memory_order_relaxed)) + "\n";
+
+		// Timing totals
+		result += "# HELP container_operation_duration_nanoseconds_total Total time spent in operations\n";
+		result += "# TYPE container_operation_duration_nanoseconds_total counter\n";
+		result += "container_operation_duration_nanoseconds_total{operation=\"serialize\"} " + std::to_string(m.timing.total_serialize_ns.load(std::memory_order_relaxed)) + "\n";
+		result += "container_operation_duration_nanoseconds_total{operation=\"deserialize\"} " + std::to_string(m.timing.total_deserialize_ns.load(std::memory_order_relaxed)) + "\n";
+		result += "container_operation_duration_nanoseconds_total{operation=\"read\"} " + std::to_string(m.timing.total_read_ns.load(std::memory_order_relaxed)) + "\n";
+		result += "container_operation_duration_nanoseconds_total{operation=\"write\"} " + std::to_string(m.timing.total_write_ns.load(std::memory_order_relaxed)) + "\n";
+
+		// Latency percentiles - serialize
+		result += "# HELP container_serialize_latency_nanoseconds Serialize operation latency percentiles\n";
+		result += "# TYPE container_serialize_latency_nanoseconds summary\n";
+		result += "container_serialize_latency_nanoseconds{quantile=\"0.5\"} " + std::to_string(m.serialize_latency.p50()) + "\n";
+		result += "container_serialize_latency_nanoseconds{quantile=\"0.95\"} " + std::to_string(m.serialize_latency.p95()) + "\n";
+		result += "container_serialize_latency_nanoseconds{quantile=\"0.99\"} " + std::to_string(m.serialize_latency.p99()) + "\n";
+		result += "container_serialize_latency_nanoseconds{quantile=\"0.999\"} " + std::to_string(m.serialize_latency.p999()) + "\n";
+		result += "container_serialize_latency_nanoseconds_max " + std::to_string(m.serialize_latency.max_ns.load(std::memory_order_relaxed)) + "\n";
+		result += "container_serialize_latency_nanoseconds_count " + std::to_string(m.serialize_latency.sample_count.load(std::memory_order_relaxed)) + "\n";
+
+		// Latency percentiles - deserialize
+		result += "# HELP container_deserialize_latency_nanoseconds Deserialize operation latency percentiles\n";
+		result += "# TYPE container_deserialize_latency_nanoseconds summary\n";
+		result += "container_deserialize_latency_nanoseconds{quantile=\"0.5\"} " + std::to_string(m.deserialize_latency.p50()) + "\n";
+		result += "container_deserialize_latency_nanoseconds{quantile=\"0.95\"} " + std::to_string(m.deserialize_latency.p95()) + "\n";
+		result += "container_deserialize_latency_nanoseconds{quantile=\"0.99\"} " + std::to_string(m.deserialize_latency.p99()) + "\n";
+		result += "container_deserialize_latency_nanoseconds{quantile=\"0.999\"} " + std::to_string(m.deserialize_latency.p999()) + "\n";
+		result += "container_deserialize_latency_nanoseconds_max " + std::to_string(m.deserialize_latency.max_ns.load(std::memory_order_relaxed)) + "\n";
+		result += "container_deserialize_latency_nanoseconds_count " + std::to_string(m.deserialize_latency.sample_count.load(std::memory_order_relaxed)) + "\n";
+
+		// Latency percentiles - read
+		result += "# HELP container_read_latency_nanoseconds Read operation latency percentiles\n";
+		result += "# TYPE container_read_latency_nanoseconds summary\n";
+		result += "container_read_latency_nanoseconds{quantile=\"0.5\"} " + std::to_string(m.read_latency.p50()) + "\n";
+		result += "container_read_latency_nanoseconds{quantile=\"0.95\"} " + std::to_string(m.read_latency.p95()) + "\n";
+		result += "container_read_latency_nanoseconds{quantile=\"0.99\"} " + std::to_string(m.read_latency.p99()) + "\n";
+		result += "container_read_latency_nanoseconds{quantile=\"0.999\"} " + std::to_string(m.read_latency.p999()) + "\n";
+		result += "container_read_latency_nanoseconds_max " + std::to_string(m.read_latency.max_ns.load(std::memory_order_relaxed)) + "\n";
+		result += "container_read_latency_nanoseconds_count " + std::to_string(m.read_latency.sample_count.load(std::memory_order_relaxed)) + "\n";
+
+		// Latency percentiles - write
+		result += "# HELP container_write_latency_nanoseconds Write operation latency percentiles\n";
+		result += "# TYPE container_write_latency_nanoseconds summary\n";
+		result += "container_write_latency_nanoseconds{quantile=\"0.5\"} " + std::to_string(m.write_latency.p50()) + "\n";
+		result += "container_write_latency_nanoseconds{quantile=\"0.95\"} " + std::to_string(m.write_latency.p95()) + "\n";
+		result += "container_write_latency_nanoseconds{quantile=\"0.99\"} " + std::to_string(m.write_latency.p99()) + "\n";
+		result += "container_write_latency_nanoseconds{quantile=\"0.999\"} " + std::to_string(m.write_latency.p999()) + "\n";
+		result += "container_write_latency_nanoseconds_max " + std::to_string(m.write_latency.max_ns.load(std::memory_order_relaxed)) + "\n";
+		result += "container_write_latency_nanoseconds_count " + std::to_string(m.write_latency.sample_count.load(std::memory_order_relaxed)) + "\n";
+
+		// SIMD metrics
+		result += "# HELP container_simd_operations_total Total SIMD operations performed\n";
+		result += "# TYPE container_simd_operations_total counter\n";
+		result += "container_simd_operations_total " + std::to_string(m.simd.simd_operations.load(std::memory_order_relaxed)) + "\n";
+		result += "# HELP container_scalar_fallbacks_total Total scalar fallback operations\n";
+		result += "# TYPE container_scalar_fallbacks_total counter\n";
+		result += "container_scalar_fallbacks_total " + std::to_string(m.simd.scalar_fallbacks.load(std::memory_order_relaxed)) + "\n";
+		result += "# HELP container_simd_bytes_processed_total Total bytes processed via SIMD\n";
+		result += "# TYPE container_simd_bytes_processed_total counter\n";
+		result += "container_simd_bytes_processed_total " + std::to_string(m.simd.bytes_processed_simd.load(std::memory_order_relaxed)) + "\n";
+		result += "# HELP container_simd_utilization_ratio SIMD utilization ratio\n";
+		result += "# TYPE container_simd_utilization_ratio gauge\n";
+		result += "container_simd_utilization_ratio " + std::to_string(m.simd.utilization() / 100.0) + "\n";
+
+		// Cache metrics
+		result += "# HELP container_cache_hits_total Total cache hits\n";
+		result += "# TYPE container_cache_hits_total counter\n";
+		result += "container_cache_hits_total{cache=\"key_index\"} " + std::to_string(m.cache.key_index_hits.load(std::memory_order_relaxed)) + "\n";
+		result += "container_cache_hits_total{cache=\"value\"} " + std::to_string(m.cache.value_cache_hits.load(std::memory_order_relaxed)) + "\n";
+		result += "# HELP container_cache_misses_total Total cache misses\n";
+		result += "# TYPE container_cache_misses_total counter\n";
+		result += "container_cache_misses_total{cache=\"key_index\"} " + std::to_string(m.cache.key_index_misses.load(std::memory_order_relaxed)) + "\n";
+		result += "container_cache_misses_total{cache=\"value\"} " + std::to_string(m.cache.value_cache_misses.load(std::memory_order_relaxed)) + "\n";
+		result += "# HELP container_cache_hit_ratio Cache hit ratio\n";
+		result += "# TYPE container_cache_hit_ratio gauge\n";
+		result += "container_cache_hit_ratio{cache=\"key_index\"} " + std::to_string(m.cache.key_index_hit_rate() / 100.0) + "\n";
+		result += "container_cache_hit_ratio{cache=\"value\"} " + std::to_string(m.cache.value_cache_hit_rate() / 100.0) + "\n";
+
+		return result;
 	}
 
 	bool value_container::deserialize_values(const std::string& data,
