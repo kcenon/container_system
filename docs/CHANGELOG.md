@@ -11,6 +11,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- **Schema range() overload ambiguity** (#250): Fix Linux/GCC build failure caused by ambiguous range() overloads
+  - Use C++20 concepts (std::integral and std::floating_point) to disambiguate between integer and floating-point range constraints
+  - Replace non-template range() overloads with template versions
+  - Add <concepts> header for C++20 concepts support
+
 ### Added
 - **Runtime Schema Validation** (#228): Add container_schema class for data integrity validation
   - Add fluent API for schema definition with method chaining
