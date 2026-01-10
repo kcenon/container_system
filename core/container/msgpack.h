@@ -45,6 +45,15 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #pragma once
 
+// Windows macro conflict prevention
+// Windows headers define TRUE/FALSE as macros which conflict with our constants
+#ifdef _WIN32
+#pragma push_macro("TRUE")
+#pragma push_macro("FALSE")
+#undef TRUE
+#undef FALSE
+#endif
+
 #include <vector>
 #include <cstdint>
 #include <string>
@@ -977,3 +986,9 @@ namespace container_module
 	};
 
 } // namespace container_module
+
+// Restore Windows macros
+#ifdef _WIN32
+#pragma pop_macro("FALSE")
+#pragma pop_macro("TRUE")
+#endif
