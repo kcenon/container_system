@@ -60,15 +60,16 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "container/core/container.h"
 #include "container/core/container/error_codes.h"
 
-#include <memory>
-#include <vector>
-#include <string>
-#include <span>
-#include <thread>
-#include <functional>
+#include <algorithm>
 #include <atomic>
 #include <fstream>
+#include <functional>
+#include <memory>
 #include <optional>
+#include <span>
+#include <string>
+#include <thread>
+#include <vector>
 
 namespace container_module::async
 {
