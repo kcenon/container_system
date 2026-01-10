@@ -12,6 +12,19 @@ Container System 프로젝트의 모든 주요 변경 사항이 이 파일에 �
 ## [Unreleased]
 
 ### Added
+- **MessagePack 직렬화 지원** (#234): JSON/XML 대안으로 MessagePack 바이너리 포맷 추가
+  - 컴팩트한 바이너리 직렬화를 위한 `msgpack_encoder` 클래스 추가
+  - 바이너리 역직렬화를 위한 `msgpack_decoder` 클래스 추가
+  - 컨테이너를 MessagePack 포맷으로 직렬화하는 `to_msgpack()` 메서드 추가
+  - MessagePack 데이터로부터 역직렬화하는 `from_msgpack()` 메서드 추가
+  - `create_from_msgpack()` 정적 팩토리 메서드 추가
+  - `to_msgpack_result()` 및 `from_msgpack_result()` Result 기반 API 추가
+  - 포맷 식별을 위한 `serialization_format` 열거형 추가
+  - 자동 포맷 감지를 위한 `detect_format()` 메서드 추가
+  - 인코더, 디코더, 통합을 위한 44개의 포괄적인 단위 테스트 추가
+  - MessagePack은 JSON보다 50-80% 작은 출력과 2-4배 빠른 파싱 제공
+  - 중첩 컨테이너를 포함한 모든 컨테이너 값 타입 완전 지원
+
 - **Result 반환 코어 API 테스트** (#238): Result 반환 값 API에 대한 포괄적인 단위 테스트 추가
   - set_result(), set_all_result(), remove_result() 메서드를 커버하는 15개 테스트 케이스 추가
   - 다양한 데이터 타입에 대한 모든 Result 반환 메서드의 성공 경로 테스트
