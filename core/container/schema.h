@@ -69,6 +69,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <functional>
 #include <memory>
 #include <regex>
+#include <concepts>
 
 // Optional common system integration
 #if __has_include(<kcenon/common/config/feature_flags.h>)
@@ -357,22 +358,32 @@ namespace container_module
 		// =====================================================================
 
 		/**
-		 * @brief Add integer range constraint
+		 * @brief Add integer range constraint for integral types
+		 * @tparam T Integral type (int, long, int64_t, etc.)
 		 * @param key Field name (must be numeric type)
 		 * @param min Minimum value (inclusive)
 		 * @param max Maximum value (inclusive)
 		 * @return Reference to this schema for chaining
 		 */
-		container_schema& range(std::string_view key, int64_t min, int64_t max);
+		template<std::integral T>
+		container_schema& range(std::string_view key, T min, T max)
+		{
+			return range_int64(key, static_cast<int64_t>(min), static_cast<int64_t>(max));
+		}
 
 		/**
 		 * @brief Add floating-point range constraint
+		 * @tparam T Floating point type (float or double)
 		 * @param key Field name (must be float or double type)
 		 * @param min Minimum value (inclusive)
 		 * @param max Maximum value (inclusive)
 		 * @return Reference to this schema for chaining
 		 */
-		container_schema& range(std::string_view key, double min, double max);
+		template<std::floating_point T>
+		container_schema& range(std::string_view key, T min, T max)
+		{
+			return range_double(key, static_cast<double>(min), static_cast<double>(max));
+		}
 
 		/**
 		 * @brief Add string/bytes length constraint
@@ -551,6 +562,16 @@ namespace container_module
 		 */
 		field_def* find_field(std::string_view key) noexcept;
 		const field_def* find_field(std::string_view key) const noexcept;
+
+		/**
+		 * @brief Implementation for integer range constraint
+		 */
+		container_schema& range_int64(std::string_view key, int64_t min, int64_t max);
+
+		/**
+		 * @brief Implementation for double range constraint
+		 */
+		container_schema& range_double(std::string_view key, double min, double max);
 
 		/**
 		 * @brief Validate a single field

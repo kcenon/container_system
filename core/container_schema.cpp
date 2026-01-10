@@ -83,7 +83,7 @@ namespace container_module
 	// Constraint API
 	// =========================================================================
 
-	container_schema& container_schema::range(std::string_view key, int64_t min, int64_t max)
+	container_schema& container_schema::range_int64(std::string_view key, int64_t min, int64_t max)
 	{
 		if (auto* field = find_field(key))
 		{
@@ -93,7 +93,7 @@ namespace container_module
 		return *this;
 	}
 
-	container_schema& container_schema::range(std::string_view key, double min, double max)
+	container_schema& container_schema::range_double(std::string_view key, double min, double max)
 	{
 		if (auto* field = find_field(key))
 		{
