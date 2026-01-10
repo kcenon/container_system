@@ -139,7 +139,7 @@ static void BM_MemoryPoolEfficiency(benchmark::State& state)
 	auto stats = value_container::get_pool_stats();
 	state.counters["PoolHits"] = benchmark::Counter(stats.hits);
 	state.counters["PoolMisses"] = benchmark::Counter(stats.misses);
-	state.counters["HitRate"] = benchmark::Counter(stats.hit_rate,
+	state.counters["HitRate"] = benchmark::Counter(stats.hit_rate(),
 		benchmark::Counter::kAvgThreads);
 }
 

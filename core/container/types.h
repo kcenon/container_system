@@ -126,20 +126,32 @@ namespace container_module
 	};
 
 	/**
-	 * @brief Pool statistics structure (stub for API compatibility)
+	 * @brief Pool statistics structure for memory pool monitoring
 	 */
 	struct pool_stats
 	{
-		size_t hits{0};
-		size_t misses{0};
-		size_t available{0};
-		double hit_rate{0.0};
+		size_t hits{0};                // Pool allocations satisfied
+		size_t misses{0};              // Heap allocations (pool bypassed)
+		size_t small_pool_allocs{0};   // Small pool (<=64 bytes) allocations
+		size_t medium_pool_allocs{0};  // Medium pool (<=256 bytes) allocations
+		size_t deallocations{0};       // Total deallocations
+		size_t available{0};           // Free blocks available
 
 		pool_stats() = default;
+
 		pool_stats(size_t h, size_t m, size_t a)
 			: hits(h), misses(m), available(a)
-			, hit_rate(h + m > 0 ? static_cast<double>(h) / (h + m) : 0.0)
 		{}
+
+		pool_stats(size_t h, size_t m, size_t sm, size_t med, size_t deallocs, size_t avail)
+			: hits(h), misses(m), small_pool_allocs(sm), medium_pool_allocs(med)
+			, deallocations(deallocs), available(avail)
+		{}
+
+		[[nodiscard]] double hit_rate() const noexcept {
+			auto total = hits + misses;
+			return total > 0 ? static_cast<double>(hits) / static_cast<double>(total) : 0.0;
+		}
 	};
 
 } // namespace container_module

@@ -39,6 +39,7 @@ option(CONTAINER_BUILD_BENCHMARKS "Build container system benchmarks" OFF)
 option(CONTAINER_BUILD_INTEGRATION_TESTS "Build container system integration tests" ON)
 option(BUILD_FUZZ_TESTS "Build fuzz tests" OFF)
 option(BUILD_FUZZING "Build libFuzzer fuzz targets" OFF)
+option(CONTAINER_USE_MEMORY_POOL "Enable memory pool for small allocations" ON)
 set(COMMON_SYSTEM_ROOT "" CACHE PATH "Path to the common_system repository root")
 
 # Respect global BUILD_INTEGRATION_TESTS flag if set
@@ -111,6 +112,8 @@ set(INTERNAL_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/internal/value.h
     ${CMAKE_CURRENT_SOURCE_DIR}/internal/value.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/internal/variant_value_factory.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/internal/memory_pool.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/internal/pool_allocator.h
     ${CMAKE_CURRENT_SOURCE_DIR}/container/internal/thread_safe_container.h
     ${CMAKE_CURRENT_SOURCE_DIR}/container/internal/thread_safe_container.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/container/internal/simd_processor.h
@@ -232,6 +235,11 @@ endif()
 if(ENABLE_PERFORMANCE_METRICS)
     target_compile_definitions(container_system PUBLIC HAS_PERFORMANCE_METRICS)
     message(STATUS "Container: Performance metrics enabled")
+endif()
+
+if(CONTAINER_USE_MEMORY_POOL)
+    target_compile_definitions(container_system PUBLIC CONTAINER_USE_MEMORY_POOL=1)
+    message(STATUS "Container: Memory pool enabled")
 endif()
 
 ##################################################
