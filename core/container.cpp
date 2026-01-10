@@ -1459,6 +1459,530 @@ bool value_container::deserialize(const std::vector<uint8_t>& data_array,
 		return result;
 	}
 
+	// =======================================================================
+	// MessagePack Serialization Implementation (Issue #234)
+	// =======================================================================
+
+	std::vector<uint8_t> value_container::to_msgpack() const
+	{
+		// Record metrics if enabled
+		auto timer = metrics_manager::make_timer(
+			metrics_manager::get().serialize_latency,
+			&metrics_manager::get().timing.total_serialize_ns);
+		if (metrics_manager::is_enabled())
+		{
+			metrics_manager::get().operations.serializations.fetch_add(1, std::memory_order_relaxed);
+		}
+
+		std::shared_lock<std::shared_mutex> lock(mutex_);
+
+		msgpack_encoder encoder;
+
+		// Estimate buffer size: header (~100 bytes) + values
+		encoder.reserve(200 + optimized_units_.size() * 32);
+
+		// MessagePack structure:
+		// {
+		//   "header": { ... },
+		//   "values": { ... }
+		// }
+
+		// Write outer map with 2 entries (header + values)
+		encoder.write_map_header(2);
+
+		// Write "header" key
+		encoder.write_string("header");
+
+		// Calculate header entries count
+		size_t header_count = 2; // message_type and version are always present
+		if (message_type_ != "data_container")
+		{
+			header_count += 4; // target_id, target_sub_id, source_id, source_sub_id
+		}
+
+		// Write header map
+		encoder.write_map_header(header_count);
+
+		if (message_type_ != "data_container")
+		{
+			encoder.write_string("target_id");
+			encoder.write_string(target_id_);
+
+			encoder.write_string("target_sub_id");
+			encoder.write_string(target_sub_id_);
+
+			encoder.write_string("source_id");
+			encoder.write_string(source_id_);
+
+			encoder.write_string("source_sub_id");
+			encoder.write_string(source_sub_id_);
+		}
+
+		encoder.write_string("message_type");
+		encoder.write_string(message_type_);
+
+		encoder.write_string("version");
+		encoder.write_string(version_);
+
+		// Write "values" key
+		encoder.write_string("values");
+
+		// Write values map
+		encoder.write_map_header(optimized_units_.size());
+
+		for (const auto& unit : optimized_units_)
+		{
+			// Write key
+			encoder.write_string(unit.name);
+
+			// Write value based on type
+			switch (unit.type)
+			{
+			case value_types::null_value:
+				encoder.write_nil();
+				break;
+
+			case value_types::bool_value:
+				encoder.write_bool(std::get<bool>(unit.data));
+				break;
+
+			case value_types::short_value:
+				encoder.write_int(std::get<short>(unit.data));
+				break;
+
+			case value_types::ushort_value:
+				encoder.write_uint(std::get<unsigned short>(unit.data));
+				break;
+
+			case value_types::int_value:
+				encoder.write_int(std::get<int>(unit.data));
+				break;
+
+			case value_types::uint_value:
+				encoder.write_uint(std::get<unsigned int>(unit.data));
+				break;
+
+			case value_types::long_value:
+				encoder.write_int(std::get<long>(unit.data));
+				break;
+
+			case value_types::ulong_value:
+				encoder.write_uint(std::get<unsigned long>(unit.data));
+				break;
+
+			case value_types::llong_value:
+				encoder.write_int(std::get<long long>(unit.data));
+				break;
+
+			case value_types::ullong_value:
+				encoder.write_uint(std::get<unsigned long long>(unit.data));
+				break;
+
+			case value_types::float_value:
+				encoder.write_float(std::get<float>(unit.data));
+				break;
+
+			case value_types::double_value:
+				encoder.write_double(std::get<double>(unit.data));
+				break;
+
+			case value_types::string_value:
+				encoder.write_string(std::get<std::string>(unit.data));
+				break;
+
+			case value_types::bytes_value:
+				encoder.write_binary(std::get<std::vector<uint8_t>>(unit.data));
+				break;
+
+			case value_types::container_value:
+				{
+					// Nested container: serialize recursively
+					auto nested = std::get<std::shared_ptr<value_container>>(unit.data);
+					if (nested)
+					{
+						auto nested_data = nested->to_msgpack();
+						encoder.write_binary(nested_data);
+					}
+					else
+					{
+						encoder.write_nil();
+					}
+				}
+				break;
+
+			case value_types::array_value:
+				// Array values are stored as containers
+				encoder.write_nil();
+				break;
+
+			default:
+				encoder.write_nil();
+				break;
+			}
+		}
+
+		return encoder.finish();
+	}
+
+	bool value_container::from_msgpack(const std::vector<uint8_t>& data)
+	{
+		// Record metrics if enabled
+		auto timer = metrics_manager::make_timer(
+			metrics_manager::get().deserialize_latency,
+			&metrics_manager::get().timing.total_deserialize_ns);
+		if (metrics_manager::is_enabled())
+		{
+			metrics_manager::get().operations.deserializations.fetch_add(1, std::memory_order_relaxed);
+		}
+
+		if (data.empty())
+		{
+			return false;
+		}
+
+		initialize();
+
+		msgpack_decoder decoder(data);
+
+		// Expect outer map
+		auto outer_count = decoder.read_map_header();
+		if (!outer_count)
+		{
+			return false;
+		}
+
+		std::unique_lock<std::shared_mutex> lock(mutex_);
+
+		for (size_t i = 0; i < *outer_count; ++i)
+		{
+			auto key = decoder.read_string();
+			if (!key)
+			{
+				return false;
+			}
+
+			if (*key == "header")
+			{
+				auto header_count = decoder.read_map_header();
+				if (!header_count)
+				{
+					return false;
+				}
+
+				for (size_t j = 0; j < *header_count; ++j)
+				{
+					auto hkey = decoder.read_string();
+					auto hval = decoder.read_string();
+					if (!hkey || !hval)
+					{
+						return false;
+					}
+
+					if (*hkey == "target_id")
+					{
+						target_id_ = *hval;
+					}
+					else if (*hkey == "target_sub_id")
+					{
+						target_sub_id_ = *hval;
+					}
+					else if (*hkey == "source_id")
+					{
+						source_id_ = *hval;
+					}
+					else if (*hkey == "source_sub_id")
+					{
+						source_sub_id_ = *hval;
+					}
+					else if (*hkey == "message_type")
+					{
+						message_type_ = *hval;
+					}
+					else if (*hkey == "version")
+					{
+						version_ = *hval;
+					}
+				}
+			}
+			else if (*key == "values")
+			{
+				auto values_count = decoder.read_map_header();
+				if (!values_count)
+				{
+					return false;
+				}
+
+				for (size_t j = 0; j < *values_count; ++j)
+				{
+					auto vkey = decoder.read_string();
+					if (!vkey)
+					{
+						return false;
+					}
+
+					optimized_value val;
+					val.name = *vkey;
+
+					// Read value based on type
+					auto type = decoder.peek_type();
+					switch (type)
+					{
+					case msgpack_type::nil:
+						decoder.read_nil();
+						val.type = value_types::null_value;
+						val.data = std::monostate{};
+						break;
+
+					case msgpack_type::boolean:
+						{
+							auto b = decoder.read_bool();
+							if (!b)
+							{
+								return false;
+							}
+							val.type = value_types::bool_value;
+							val.data = *b;
+						}
+						break;
+
+					case msgpack_type::positive_int:
+					case msgpack_type::negative_int:
+						{
+							auto n = decoder.read_int();
+							if (!n)
+							{
+								return false;
+							}
+							// Determine best type based on value
+							if (*n >= 0 && *n <= INT32_MAX)
+							{
+								val.type = value_types::int_value;
+								val.data = static_cast<int>(*n);
+							}
+							else if (*n >= INT32_MIN && *n < 0)
+							{
+								val.type = value_types::int_value;
+								val.data = static_cast<int>(*n);
+							}
+							else
+							{
+								val.type = value_types::llong_value;
+								val.data = static_cast<long long>(*n);
+							}
+						}
+						break;
+
+					case msgpack_type::float32:
+						{
+							auto f = decoder.read_float();
+							if (!f)
+							{
+								return false;
+							}
+							val.type = value_types::float_value;
+							val.data = *f;
+						}
+						break;
+
+					case msgpack_type::float64:
+						{
+							auto d = decoder.read_double();
+							if (!d)
+							{
+								return false;
+							}
+							val.type = value_types::double_value;
+							val.data = *d;
+						}
+						break;
+
+					case msgpack_type::str:
+						{
+							auto s = decoder.read_string();
+							if (!s)
+							{
+								return false;
+							}
+							val.type = value_types::string_value;
+							val.data = *s;
+						}
+						break;
+
+					case msgpack_type::bin:
+						{
+							auto b = decoder.read_binary();
+							if (!b)
+							{
+								return false;
+							}
+							val.type = value_types::bytes_value;
+							val.data = *b;
+						}
+						break;
+
+					default:
+						// Skip unknown types
+						val.type = value_types::null_value;
+						val.data = std::monostate{};
+						break;
+					}
+
+					optimized_units_.push_back(std::move(val));
+				}
+			}
+		}
+
+		parsed_data_ = true;
+		changed_data_ = false;
+
+		return true;
+	}
+
+	std::shared_ptr<value_container> value_container::create_from_msgpack(
+		const std::vector<uint8_t>& data)
+	{
+		auto container = std::make_shared<value_container>();
+		if (container->from_msgpack(data))
+		{
+			return container;
+		}
+		return nullptr;
+	}
+
+	value_container::serialization_format value_container::detect_format(
+		const std::vector<uint8_t>& data)
+	{
+		if (data.empty())
+		{
+			return serialization_format::unknown;
+		}
+
+		// Check for MessagePack format
+		// MessagePack maps start with 0x80-0x8f (fixmap) or 0xde (map16) or 0xdf (map32)
+		uint8_t first_byte = data[0];
+		if ((first_byte >= 0x80 && first_byte <= 0x8f) ||  // fixmap
+			first_byte == 0xde ||                           // map16
+			first_byte == 0xdf)                             // map32
+		{
+			return serialization_format::msgpack;
+		}
+
+		// Check for text-based formats (convert to string for analysis)
+		std::string_view str_view(reinterpret_cast<const char*>(data.data()), data.size());
+		return detect_format(str_view);
+	}
+
+	value_container::serialization_format value_container::detect_format(
+		std::string_view data)
+	{
+		if (data.empty())
+		{
+			return serialization_format::unknown;
+		}
+
+		// Skip leading whitespace
+		size_t pos = 0;
+		while (pos < data.size() && std::isspace(static_cast<unsigned char>(data[pos])))
+		{
+			++pos;
+		}
+
+		if (pos >= data.size())
+		{
+			return serialization_format::unknown;
+		}
+
+		// Check first non-whitespace character
+		char first_char = data[pos];
+
+		// JSON starts with '{' or '['
+		if (first_char == '{' || first_char == '[')
+		{
+			return serialization_format::json;
+		}
+
+		// XML starts with '<'
+		if (first_char == '<')
+		{
+			return serialization_format::xml;
+		}
+
+		// Binary format starts with "@header"
+		if (data.substr(pos, 7) == "@header")
+		{
+			return serialization_format::binary;
+		}
+
+		// Binary format may also start with "@data"
+		if (data.substr(pos, 5) == "@data")
+		{
+			return serialization_format::binary;
+		}
+
+		return serialization_format::unknown;
+	}
+
+#if CONTAINER_HAS_COMMON_RESULT
+	kcenon::common::Result<std::vector<uint8_t>> value_container::to_msgpack_result() const noexcept
+	{
+		try
+		{
+			return kcenon::common::ok(to_msgpack());
+		}
+		catch (const std::bad_alloc&)
+		{
+			return kcenon::common::Result<std::vector<uint8_t>>(
+				kcenon::common::error_info{
+					error_codes::memory_allocation_failed,
+					error_codes::make_message(error_codes::memory_allocation_failed),
+					"container_system"});
+		}
+		catch (const std::exception& e)
+		{
+			return kcenon::common::Result<std::vector<uint8_t>>(
+				kcenon::common::error_info{
+					error_codes::serialization_failed,
+					std::string("MessagePack serialization failed: ") + e.what(),
+					"container_system"});
+		}
+	}
+
+	kcenon::common::VoidResult value_container::from_msgpack_result(
+		const std::vector<uint8_t>& data) noexcept
+	{
+		try
+		{
+			if (from_msgpack(data))
+			{
+				return kcenon::common::ok();
+			}
+			return kcenon::common::VoidResult(
+				kcenon::common::error_info{
+					error_codes::deserialization_failed,
+					error_codes::make_message(error_codes::deserialization_failed, "Invalid MessagePack data"),
+					"container_system"});
+		}
+		catch (const std::bad_alloc&)
+		{
+			return kcenon::common::VoidResult(
+				kcenon::common::error_info{
+					error_codes::memory_allocation_failed,
+					error_codes::make_message(error_codes::memory_allocation_failed),
+					"container_system"});
+		}
+		catch (const std::exception& e)
+		{
+			return kcenon::common::VoidResult(
+				kcenon::common::error_info{
+					error_codes::deserialization_failed,
+					std::string("MessagePack deserialization failed: ") + e.what(),
+					"container_system"});
+		}
+	}
+#endif
+
+	// =======================================================================
+
 	std::string value_container::datas(void) const
 	{
 		if (!parsed_data_)

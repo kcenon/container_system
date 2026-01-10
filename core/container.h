@@ -55,6 +55,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "container/core/container/error_codes.h"
 #include "container/core/container/schema.h"
 #include "container/core/container/metrics.h"
+#include "container/core/container/msgpack.h"
 
 #include "container/core/value_types.h"
 #include "container/core/typed_container.h"
@@ -731,6 +732,123 @@ namespace container_module
 		 * values).
 		 */
 		const std::string to_json(void);
+
+		// =======================================================================
+		// MessagePack Serialization API (Issue #234)
+		// =======================================================================
+
+		/**
+		 * @brief Serialize this container to MessagePack binary format
+		 *
+		 * MessagePack provides compact binary serialization with cross-language
+		 * compatibility. The output format follows the MessagePack specification:
+		 * https://github.com/msgpack/msgpack/blob/master/spec.md
+		 *
+		 * @return Vector of bytes containing the MessagePack-encoded data
+		 * @exception_safety Strong guarantee - no changes on exception
+		 * @throws std::bad_alloc if memory allocation fails
+		 *
+		 * @code
+		 * auto container = std::make_shared<value_container>();
+		 * container->set("name", "Alice").set("age", 30);
+		 * auto msgpack_data = container->to_msgpack();
+		 * // msgpack_data contains compact binary representation
+		 * @endcode
+		 */
+		std::vector<uint8_t> to_msgpack() const;
+
+		/**
+		 * @brief Deserialize from MessagePack binary format
+		 *
+		 * @param data MessagePack-encoded binary data
+		 * @return true on success, false on parse error
+		 * @exception_safety Basic guarantee - container may be partially modified
+		 *
+		 * @code
+		 * std::vector<uint8_t> msgpack_data = get_received_data();
+		 * auto container = std::make_shared<value_container>();
+		 * if (container->from_msgpack(msgpack_data)) {
+		 *     auto name = container->get_value("name");
+		 * }
+		 * @endcode
+		 */
+		bool from_msgpack(const std::vector<uint8_t>& data);
+
+		/**
+		 * @brief Create a new container from MessagePack data
+		 *
+		 * Static factory method that creates a new value_container from
+		 * MessagePack binary data.
+		 *
+		 * @param data MessagePack-encoded binary data
+		 * @return Shared pointer to the created container, or nullptr on error
+		 */
+		static std::shared_ptr<value_container> create_from_msgpack(
+			const std::vector<uint8_t>& data);
+
+		/**
+		 * @brief Serialization format enumeration
+		 */
+		enum class serialization_format
+		{
+			binary,     ///< Custom binary format (@header{{}};@data{{}};)
+			json,       ///< JSON format
+			xml,        ///< XML format
+			msgpack,    ///< MessagePack binary format
+			unknown     ///< Unknown or unrecognized format
+		};
+
+		/**
+		 * @brief Detect the serialization format of the given data
+		 *
+		 * Analyzes the data to determine which serialization format was used.
+		 * This enables automatic deserialization from any supported format.
+		 *
+		 * @param data Binary data to analyze
+		 * @return The detected serialization_format
+		 *
+		 * @code
+		 * std::vector<uint8_t> data = receive_data();
+		 * auto format = value_container::detect_format(data);
+		 * switch (format) {
+		 *     case serialization_format::msgpack:
+		 *         container->from_msgpack(data);
+		 *         break;
+		 *     case serialization_format::json:
+		 *         // Parse as JSON string
+		 *         break;
+		 *     // ...
+		 * }
+		 * @endcode
+		 */
+		static serialization_format detect_format(const std::vector<uint8_t>& data);
+
+		/**
+		 * @brief Detect the serialization format of the given string data
+		 * @param data String data to analyze
+		 * @return The detected serialization_format
+		 */
+		static serialization_format detect_format(std::string_view data);
+
+#if CONTAINER_HAS_COMMON_RESULT
+		/**
+		 * @brief Serialize to MessagePack with Result return type
+		 * @return Result containing byte vector or error info
+		 * @exception_safety No-throw guarantee
+		 */
+		[[nodiscard]] kcenon::common::Result<std::vector<uint8_t>> to_msgpack_result() const noexcept;
+
+		/**
+		 * @brief Deserialize from MessagePack with Result return type
+		 * @param data MessagePack-encoded binary data
+		 * @return VoidResult indicating success or error
+		 * @exception_safety Strong guarantee - no changes on error
+		 */
+		[[nodiscard]] kcenon::common::VoidResult from_msgpack_result(
+			const std::vector<uint8_t>& data) noexcept;
+#endif
+
+		// =======================================================================
 
 		/**
 		 * @brief Returns only the data portion's serialized string, if fully
