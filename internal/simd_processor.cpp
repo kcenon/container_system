@@ -81,6 +81,102 @@ namespace simd
         return max_val;
     }
 
+#if defined(HAS_AVX512)
+    __attribute__((target("avx512f")))
+    float simd_processor::sum_floats_avx512(const float* data, size_t count)
+    {
+        __m512 sum_vec = _mm512_setzero_ps();
+        size_t simd_end = count - (count % 16);
+
+        // Process 16 floats at a time
+        for (size_t i = 0; i < simd_end; i += 16) {
+            __m512 vec = _mm512_loadu_ps(&data[i]);
+            sum_vec = _mm512_add_ps(sum_vec, vec);
+        }
+
+        // Horizontal sum using _mm512_reduce_add_ps
+        float sum = _mm512_reduce_add_ps(sum_vec);
+
+        // Handle remaining elements
+        for (size_t i = simd_end; i < count; ++i) {
+            sum += data[i];
+        }
+
+        return sum;
+    }
+
+    __attribute__((target("avx512f")))
+    float simd_processor::min_float_avx512(const float* data, size_t count)
+    {
+        if (count == 0) return std::numeric_limits<float>::max();
+
+        __m512 min_vec = _mm512_set1_ps(std::numeric_limits<float>::max());
+        size_t simd_end = count - (count % 16);
+
+        for (size_t i = 0; i < simd_end; i += 16) {
+            __m512 vec = _mm512_loadu_ps(&data[i]);
+            min_vec = _mm512_min_ps(min_vec, vec);
+        }
+
+        // Horizontal minimum using _mm512_reduce_min_ps
+        float min_val = _mm512_reduce_min_ps(min_vec);
+
+        // Handle remaining elements
+        for (size_t i = simd_end; i < count; ++i) {
+            if (data[i] < min_val) min_val = data[i];
+        }
+
+        return min_val;
+    }
+
+    __attribute__((target("avx512f")))
+    float simd_processor::max_float_avx512(const float* data, size_t count)
+    {
+        if (count == 0) return std::numeric_limits<float>::lowest();
+
+        __m512 max_vec = _mm512_set1_ps(std::numeric_limits<float>::lowest());
+        size_t simd_end = count - (count % 16);
+
+        for (size_t i = 0; i < simd_end; i += 16) {
+            __m512 vec = _mm512_loadu_ps(&data[i]);
+            max_vec = _mm512_max_ps(max_vec, vec);
+        }
+
+        // Horizontal maximum using _mm512_reduce_max_ps
+        float max_val = _mm512_reduce_max_ps(max_vec);
+
+        // Handle remaining elements
+        for (size_t i = simd_end; i < count; ++i) {
+            if (data[i] > max_val) max_val = data[i];
+        }
+
+        return max_val;
+    }
+
+    __attribute__((target("avx512f")))
+    double simd_processor::sum_doubles_avx512(const double* data, size_t count)
+    {
+        __m512d sum_vec = _mm512_setzero_pd();
+        size_t simd_end = count - (count % 8);
+
+        // Process 8 doubles at a time
+        for (size_t i = 0; i < simd_end; i += 8) {
+            __m512d vec = _mm512_loadu_pd(&data[i]);
+            sum_vec = _mm512_add_pd(sum_vec, vec);
+        }
+
+        // Horizontal sum using _mm512_reduce_add_pd
+        double sum = _mm512_reduce_add_pd(sum_vec);
+
+        // Handle remaining elements
+        for (size_t i = simd_end; i < count; ++i) {
+            sum += data[i];
+        }
+
+        return sum;
+    }
+#endif
+
 #if defined(HAS_AVX2)
     __attribute__((target("avx2")))
     float simd_processor::sum_floats_avx2(const float* data, size_t count)
@@ -353,8 +449,10 @@ namespace simd
         }
         
         if (floats.empty()) return 0.0f;
-        
-        #if defined(HAS_AVX2)
+
+        #if defined(HAS_AVX512)
+            return sum_floats_avx512(floats.data(), floats.size());
+        #elif defined(HAS_AVX2)
             return sum_floats_avx2(floats.data(), floats.size());
         #elif defined(HAS_X86_SIMD) && (defined(HAS_SSE2) || defined(HAS_SSE42))
             return sum_floats_sse(floats.data(), floats.size());
@@ -389,8 +487,10 @@ namespace simd
         }
         
         if (floats.empty()) return std::nullopt;
-        
-        #if defined(HAS_AVX2)
+
+        #if defined(HAS_AVX512)
+            return min_float_avx512(floats.data(), floats.size());
+        #elif defined(HAS_AVX2)
             return min_float_avx2(floats.data(), floats.size());
         #elif defined(HAS_X86_SIMD) && (defined(HAS_SSE2) || defined(HAS_SSE42))
             return min_float_sse(floats.data(), floats.size());
@@ -413,8 +513,10 @@ namespace simd
         }
         
         if (floats.empty()) return std::nullopt;
-        
-        #if defined(HAS_AVX2)
+
+        #if defined(HAS_AVX512)
+            return max_float_avx512(floats.data(), floats.size());
+        #elif defined(HAS_AVX2)
             return max_float_avx2(floats.data(), floats.size());
         #elif defined(HAS_X86_SIMD) && (defined(HAS_SSE2) || defined(HAS_SSE42))
             return max_float_sse(floats.data(), floats.size());
@@ -492,6 +594,70 @@ namespace simd
         return false;
     }
 
+    bool simd_support::has_avx512f()
+    {
+        #if defined(__x86_64__) || defined(_M_X64) || defined(__i386__) || defined(_M_IX86)
+            #if defined(__GNUC__) || defined(__clang__)
+                unsigned int eax, ebx, ecx, edx;
+                if (__get_cpuid_count(7, 0, &eax, &ebx, &ecx, &edx)) {
+                    return (ebx & (1 << 16)) != 0; // AVX-512F bit
+                }
+            #endif
+        #endif
+        return false;
+    }
+
+    bool simd_support::has_avx512dq()
+    {
+        #if defined(__x86_64__) || defined(_M_X64) || defined(__i386__) || defined(_M_IX86)
+            #if defined(__GNUC__) || defined(__clang__)
+                unsigned int eax, ebx, ecx, edx;
+                if (__get_cpuid_count(7, 0, &eax, &ebx, &ecx, &edx)) {
+                    return (ebx & (1 << 17)) != 0; // AVX-512DQ bit
+                }
+            #endif
+        #endif
+        return false;
+    }
+
+    bool simd_support::has_avx512bw()
+    {
+        #if defined(__x86_64__) || defined(_M_X64) || defined(__i386__) || defined(_M_IX86)
+            #if defined(__GNUC__) || defined(__clang__)
+                unsigned int eax, ebx, ecx, edx;
+                if (__get_cpuid_count(7, 0, &eax, &ebx, &ecx, &edx)) {
+                    return (ebx & (1 << 30)) != 0; // AVX-512BW bit
+                }
+            #endif
+        #endif
+        return false;
+    }
+
+    bool simd_support::has_avx512vl()
+    {
+        #if defined(__x86_64__) || defined(_M_X64) || defined(__i386__) || defined(_M_IX86)
+            #if defined(__GNUC__) || defined(__clang__)
+                unsigned int eax, ebx, ecx, edx;
+                if (__get_cpuid_count(7, 0, &eax, &ebx, &ecx, &edx)) {
+                    return (ebx & (1 << 31)) != 0; // AVX-512VL bit
+                }
+            #endif
+        #endif
+        return false;
+    }
+
+    simd_level simd_support::get_best_simd_level()
+    {
+        #if defined(HAS_ARM_NEON)
+            return simd_level::neon;
+        #endif
+        if (has_avx512f()) return simd_level::avx512;
+        if (has_avx2()) return simd_level::avx2;
+        if (has_sse42()) return simd_level::sse42;
+        if (has_sse2()) return simd_level::sse2;
+        return simd_level::none;
+    }
+
     bool simd_support::has_neon()
     {
         #if defined(HAS_ARM_NEON)
@@ -504,8 +670,10 @@ namespace simd
     std::string simd_support::get_simd_info()
     {
         std::string info = "SIMD Support: ";
-        
-        #if defined(HAS_AVX2)
+
+        #if defined(HAS_AVX512)
+            info += "AVX-512 ";
+        #elif defined(HAS_AVX2)
             info += "AVX2 ";
         #elif defined(HAS_SSE42)
             info += "SSE4.2 ";
@@ -516,7 +684,26 @@ namespace simd
         #else
             info += "None ";
         #endif
-        
+
+        // Add runtime detection info
+        info += "(Compile-time), Runtime: ";
+        if (has_avx512f()) {
+            info += "AVX-512F ";
+            if (has_avx512dq()) info += "AVX-512DQ ";
+            if (has_avx512bw()) info += "AVX-512BW ";
+            if (has_avx512vl()) info += "AVX-512VL ";
+        } else if (has_avx2()) {
+            info += "AVX2 ";
+        } else if (has_sse42()) {
+            info += "SSE4.2 ";
+        } else if (has_sse2()) {
+            info += "SSE2 ";
+        } else if (has_neon()) {
+            info += "NEON ";
+        } else {
+            info += "None ";
+        }
+
         info += "(Width: " + std::to_string(get_optimal_width()) + ")";
         return info;
     }

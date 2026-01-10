@@ -12,6 +12,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **AVX-512 SIMD Support** (#227): Add AVX-512 support for modern Intel/AMD processors
+  - Add AVX-512F detection macros and 512-bit SIMD types (`float_simd_512`, `double_simd_512`, `int32_simd_512`)
+  - Implement AVX-512 optimized operations (`sum_floats_avx512`, `min_float_avx512`, `max_float_avx512`)
+  - Add `sum_doubles_avx512` for double precision SIMD operations
+  - Add runtime detection for AVX-512 subfeatures (`has_avx512f()`, `has_avx512dq()`, `has_avx512bw()`, `has_avx512vl()`)
+  - Add `simd_level` enum for SIMD capability representation
+  - Add `get_best_simd_level()` to query runtime SIMD support
+  - Update dispatch logic to prefer AVX-512 when available (AVX-512 > AVX2 > SSE > NEON)
+  - Enhance `get_simd_info()` to show both compile-time and runtime SIMD support
+  - Add comprehensive SIMD test suite (`tests/simd_tests.cpp`)
+  - Expected 2x performance improvement on AVX-512 capable hardware
 - **Extend Result<T> Pattern to All Public APIs** (#231): Add comprehensive Result-based error handling
   - Add standardized error codes in `error_codes` namespace (core/container/error_codes.h)
     - Value operations (1xx): key_not_found, type_mismatch, empty_key, etc.
