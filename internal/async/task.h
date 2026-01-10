@@ -59,6 +59,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <utility>
 #include <type_traits>
 #include <variant>
+#include <atomic>
 
 namespace container_module::async
 {
@@ -77,6 +78,7 @@ namespace container_module::async
         {
             std::exception_ptr exception_;
             std::coroutine_handle<> continuation_;
+            std::atomic<bool> completed_{false};
 
             /**
              * @brief Never suspend at start - start executing immediately
@@ -109,6 +111,9 @@ namespace container_module::async
                     std::coroutine_handle<Promise> handle) noexcept
                 {
                     auto& promise = handle.promise();
+                    // Mark as completed with release semantics to ensure
+                    // all prior writes are visible to threads checking done()
+                    promise.completed_.store(true, std::memory_order_release);
                     if (promise.continuation_)
                     {
                         return promise.continuation_;
@@ -294,10 +299,14 @@ namespace container_module::async
 
         /**
          * @brief Check if the coroutine is done
+         *
+         * Uses atomic flag for thread-safe completion checking.
+         * This avoids data races when polling from a different thread
+         * than the one executing the coroutine.
          */
         [[nodiscard]] bool done() const noexcept
         {
-            return handle_ && handle_.done();
+            return handle_ && handle_.promise().completed_.load(std::memory_order_acquire);
         }
 
         /**
