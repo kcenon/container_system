@@ -60,6 +60,7 @@ set(TEST_SOURCES
     simd_tests.cpp
     schema_tests.cpp
     error_codes_tests.cpp
+    result_api_tests.cpp
 )
 
 # Add async tests if coroutines are enabled
