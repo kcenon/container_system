@@ -97,7 +97,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Remove `worker_` std::thread member variable that caused race condition
   - Remove unused `completed_` boolean flag
   - Create anonymous thread and immediately detach to avoid assignment race
-  - Thread assignment could race with completion when worker called handle.resume() before assignment finished
+  - Add `std::atomic<bool> ready_` with release-acquire memory ordering for proper synchronization
+  - Store with `memory_order_release` before `handle.resume()` and load with `memory_order_acquire` in `await_resume()`
+  - Ensures all writes in worker thread are visible to the resumed coroutine
 
 - **Schema range() overload ambiguity** (#250): Fix Linux/GCC build failure caused by ambiguous range() overloads
   - Use C++20 concepts (std::integral and std::floating_point) to disambiguate between integer and floating-point range constraints

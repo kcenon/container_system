@@ -97,7 +97,9 @@ Container System 프로젝트의 모든 주요 변경 사항이 이 파일에 �
   - 레이스 컨디션을 유발한 `worker_` std::thread 멤버 변수 제거
   - 사용되지 않는 `completed_` 불리언 플래그 제거
   - 할당 레이스를 방지하기 위해 익명 스레드를 생성하고 즉시 분리
-  - 워커 스레드가 할당 완료 전에 handle.resume()을 호출할 때 스레드 할당과 경합 발생
+  - 적절한 동기화를 위해 release-acquire 메모리 순서를 가진 `std::atomic<bool> ready_` 추가
+  - `handle.resume()` 전에 `memory_order_release`로 저장하고 `await_resume()`에서 `memory_order_acquire`로 로드
+  - 워커 스레드의 모든 쓰기가 재개된 코루틴에서 가시성 보장
 
 - **스키마 range() 오버로드 모호성** (#250): range() 오버로드 모호성으로 인한 Linux/GCC 빌드 실패 수정
   - C++20 개념(std::integral 및 std::floating_point)을 사용하여 정수형과 부동소수점형 범위 제약 구분
