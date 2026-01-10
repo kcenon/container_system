@@ -65,6 +65,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <span>
 #include <thread>
 #include <functional>
+#include <atomic>
 
 namespace container_module::async
 {
@@ -79,6 +80,7 @@ namespace container_module::async
             std::function<T()> work_;
             std::optional<T> result_;
             std::exception_ptr exception_;
+            std::atomic<bool> ready_{false};
 
             explicit async_awaitable(std::function<T()> work)
                 : work_(std::move(work)) {}
@@ -87,6 +89,7 @@ namespace container_module::async
                 : work_(std::move(other.work_))
                 , result_(std::move(other.result_))
                 , exception_(std::move(other.exception_))
+                , ready_(other.ready_.load(std::memory_order_acquire))
             {
             }
 
@@ -103,12 +106,21 @@ namespace container_module::async
                     } catch (...) {
                         exception_ = std::current_exception();
                     }
+                    // Release barrier ensures all writes above are visible
+                    // to the thread that reads with acquire semantics
+                    ready_.store(true, std::memory_order_release);
                     handle.resume();
                 }).detach();
             }
 
             T await_resume()
             {
+                // Acquire barrier synchronizes with the release store above,
+                // ensuring all writes in the worker thread are visible here
+                while (!ready_.load(std::memory_order_acquire)) {
+                    // Spin until ready - in practice, handle.resume()
+                    // ensures we only get here after ready_ is set
+                }
                 if (exception_) {
                     std::rethrow_exception(exception_);
                 }
