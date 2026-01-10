@@ -40,6 +40,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "container/core/value_types.h"
 #include "container/internal/value.h"
+#include "container/internal/pool_allocator.h"
 // Legacy value includes removed - using variant-based storage only
 
 #include <fcntl.h>
@@ -845,13 +846,30 @@ bool value_container::deserialize(const std::vector<uint8_t>& data_array,
 
 	pool_stats value_container::get_pool_stats()
 	{
-		// Memory pool removed - return empty stats for API compatibility
+#if CONTAINER_USE_MEMORY_POOL
+		auto& allocator = internal::pool_allocator::instance();
+		auto stats = allocator.get_stats();
+		auto small_stats = allocator.get_small_pool_stats();
+		auto medium_stats = allocator.get_medium_pool_stats();
+
+		return pool_stats(
+			stats.pool_hits,
+			stats.pool_misses,
+			stats.small_pool_allocs,
+			stats.medium_pool_allocs,
+			stats.deallocations,
+			small_stats.free_blocks + medium_stats.free_blocks
+		);
+#else
 		return pool_stats(0, 0, 0);
+#endif
 	}
 
 	void value_container::clear_pool()
 	{
-		// Memory pool removed - no-op for API compatibility
+#if CONTAINER_USE_MEMORY_POOL
+		internal::pool_allocator::instance().reset_stats();
+#endif
 	}
 
 
