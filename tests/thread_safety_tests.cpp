@@ -1186,3 +1186,163 @@ TEST_F(ContainerThreadSafetyTest, EpochManagerDeferredDeletion) {
     // All should be deleted
     EXPECT_EQ(delete_count.load(), 10);
 }
+
+// =============================================================================
+// Auto-Refresh Reader Tests (Issue #262)
+// =============================================================================
+
+TEST(AutoRefreshReaderTest, BasicConstruction) {
+    auto container = std::make_shared<thread_safe_container>();
+    container->set("key1", value("key1", 42));
+
+    auto reader = container->create_auto_refresh_reader(std::chrono::milliseconds(50));
+
+    EXPECT_TRUE(reader->is_running());
+    EXPECT_EQ(reader->refresh_interval(), std::chrono::milliseconds(50));
+    EXPECT_EQ(reader->size(), 1U);
+
+    auto val = reader->get<int32_t>("key1");
+    EXPECT_TRUE(val.has_value());
+    EXPECT_EQ(*val, 42);
+}
+
+TEST(AutoRefreshReaderTest, AutoRefreshUpdatesValues) {
+    auto container = std::make_shared<thread_safe_container>();
+    container->set("counter", value("counter", 0));
+
+    auto reader = container->create_auto_refresh_reader(std::chrono::milliseconds(20));
+
+    // Initial value
+    auto initial = reader->get<int32_t>("counter");
+    EXPECT_TRUE(initial.has_value());
+    EXPECT_EQ(*initial, 0);
+
+    // Update container
+    container->set("counter", value("counter", 100));
+
+    // Wait for auto-refresh to catch the update
+    std::this_thread::sleep_for(std::chrono::milliseconds(50));
+
+    auto updated = reader->get<int32_t>("counter");
+    EXPECT_TRUE(updated.has_value());
+    EXPECT_EQ(*updated, 100);
+}
+
+TEST(AutoRefreshReaderTest, StopAndRestart) {
+    auto container = std::make_shared<thread_safe_container>();
+    container->set("key", value("key", std::string("test")));
+
+    auto reader = container->create_auto_refresh_reader(std::chrono::milliseconds(10));
+
+    EXPECT_TRUE(reader->is_running());
+    size_t count_before = reader->refresh_count();
+
+    // Wait for some refreshes
+    std::this_thread::sleep_for(std::chrono::milliseconds(50));
+
+    EXPECT_GT(reader->refresh_count(), count_before);
+
+    reader->stop();
+    EXPECT_FALSE(reader->is_running());
+
+    size_t count_after_stop = reader->refresh_count();
+
+    // No more refreshes after stop
+    std::this_thread::sleep_for(std::chrono::milliseconds(30));
+    EXPECT_EQ(reader->refresh_count(), count_after_stop);
+
+    // Values still accessible after stop
+    auto val = reader->get<std::string>("key");
+    EXPECT_TRUE(val.has_value());
+    EXPECT_EQ(*val, "test");
+}
+
+TEST(AutoRefreshReaderTest, ManualRefreshWhileAutoRunning) {
+    auto container = std::make_shared<thread_safe_container>();
+    container->set("value", value("value", 1));
+
+    auto reader = container->create_auto_refresh_reader(std::chrono::milliseconds(100));
+
+    size_t initial_count = reader->refresh_count();
+
+    // Manual refresh should work
+    reader->refresh();
+    EXPECT_EQ(reader->refresh_count(), initial_count + 1);
+
+    // Update container
+    container->set("value", value("value", 999));
+
+    // Manual refresh picks up change immediately
+    reader->refresh();
+    auto val = reader->get<int32_t>("value");
+    EXPECT_TRUE(val.has_value());
+    EXPECT_EQ(*val, 999);
+}
+
+TEST(AutoRefreshReaderTest, ConcurrentReads) {
+    auto container = std::make_shared<thread_safe_container>();
+    for (int i = 0; i < 100; ++i) {
+        std::string key = "key" + std::to_string(i);
+        container->set(key, value(key, i));
+    }
+
+    auto reader = container->create_auto_refresh_reader(std::chrono::milliseconds(10));
+
+    std::atomic<int> successful_reads{0};
+    std::vector<std::thread> threads;
+
+    for (int t = 0; t < 10; ++t) {
+        threads.emplace_back([&reader, &successful_reads]() {
+            for (int i = 0; i < 1000; ++i) {
+                int key_idx = i % 100;
+                auto val = reader->get<int32_t>("key" + std::to_string(key_idx));
+                if (val.has_value()) {
+                    successful_reads.fetch_add(1, std::memory_order_relaxed);
+                }
+            }
+        });
+    }
+
+    for (auto& t : threads) {
+        t.join();
+    }
+
+    EXPECT_EQ(successful_reads.load(), 10000);
+}
+
+TEST(AutoRefreshReaderTest, ContainerMethodDelegation) {
+    auto container = std::make_shared<thread_safe_container>();
+    container->set("a", value("a", 1));
+    container->set("b", value("b", 2));
+    container->set("c", value("c", 3));
+
+    auto reader = container->create_auto_refresh_reader(std::chrono::milliseconds(100));
+
+    // Test all delegated methods
+    EXPECT_EQ(reader->size(), 3U);
+    EXPECT_FALSE(reader->empty());
+    EXPECT_TRUE(reader->contains("a"));
+    EXPECT_TRUE(reader->contains("b"));
+    EXPECT_TRUE(reader->contains("c"));
+    EXPECT_FALSE(reader->contains("nonexistent"));
+
+    auto keys = reader->keys();
+    EXPECT_EQ(keys.size(), 3U);
+
+    int sum = 0;
+    reader->for_each([&sum](const std::string& key, const value& val) {
+        auto v = val.get<int32_t>();
+        if (v.has_value()) {
+            sum += static_cast<int>(*v);
+        }
+    });
+    EXPECT_EQ(sum, 6);  // 1 + 2 + 3
+
+    // Access underlying reader
+    auto underlying = reader->reader();
+    EXPECT_NE(underlying, nullptr);
+
+    // Access source container
+    auto source = reader->source();
+    EXPECT_EQ(source, container);
+}
