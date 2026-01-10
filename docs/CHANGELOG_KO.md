@@ -11,6 +11,18 @@ Container System 프로젝트의 모든 주요 변경 사항이 이 파일에 �
 
 ## [Unreleased]
 
+### Added
+- **CMake 통합 및 예제** (#269): 비동기 API를 위한 CMake 설정 및 예제 코드 추가 (Phase 5)
+  - common_system 스레드 풀 executor와의 통합을 위한 `thread_pool_executor.h` 추가
+  - 전역 executor 설정을 위한 `async_executor_context` 싱글톤 추가
+  - 범위 기반 executor 관리를 위한 `executor_context_guard` RAII 클래스 추가
+  - 코루틴 기반 비동기 작업을 보여주는 `async_coroutine_example.cpp` 추가
+  - Asio 통합 패턴을 보여주는 `asio_integration_example.cpp` 추가
+  - 조건부 비동기 예제 빌드를 위한 `examples/CMakeLists.txt` 업데이트
+  - 커스텀 executor와 대체 std::thread 기반 실행 모두 지원
+  - 이벤트 루프 및 비동기 프레임워크와의 원활한 통합 가능
+  - std::execution (P2300)은 향후 C++23 컴파일러 채택 시 지원 예정
+
 ### Fixed
 - **비동기 Awaitable 스레드 안전성** (#267): 비동기 작업에서 use-after-free 수정
   - 스레드 안전한 비동기 상태 관리를 위해 `shared_ptr` 사용
