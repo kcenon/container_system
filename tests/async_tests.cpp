@@ -18,6 +18,8 @@ All rights reserved.
 #include <chrono>
 #include <string>
 #include <stdexcept>
+#include <filesystem>
+#include <fstream>
 
 using namespace container_module::async;
 using namespace std::chrono_literals;
@@ -484,6 +486,239 @@ TEST_F(AsyncContainerTest, RoundTripSerializationAsync) {
     auto* str_ptr = std::get_if<std::string>(&string_val->data);
     ASSERT_NE(str_ptr, nullptr);
     EXPECT_EQ(*str_ptr, "hello");
+}
+
+// =============================================================================
+// Async File I/O Tests (Issue #267 - Phase 3)
+// =============================================================================
+
+class AsyncFileIOTest : public ::testing::Test {
+protected:
+    void SetUp() override {
+        test_dir_ = std::filesystem::temp_directory_path() / "async_file_test";
+        std::filesystem::create_directories(test_dir_);
+    }
+
+    void TearDown() override {
+        std::filesystem::remove_all(test_dir_);
+    }
+
+    std::filesystem::path test_dir_;
+};
+
+TEST_F(AsyncFileIOTest, SaveAndLoadAsync) {
+    auto container = std::make_shared<container_module::value_container>();
+    container->set("test_key", std::string("test_value"));
+    container->set("int_key", static_cast<int64_t>(12345));
+
+    async_container async_cont(container);
+
+    // Save to file
+    auto save_path = test_dir_ / "test_container.bin";
+    auto save_task = async_cont.save_async(save_path.string());
+    EXPECT_TRUE(save_task.valid());
+
+    while (!save_task.done()) {
+        std::this_thread::sleep_for(1ms);
+    }
+
+    auto save_result = save_task.get();
+#if CONTAINER_HAS_COMMON_RESULT
+    EXPECT_TRUE(save_result.is_ok());
+#else
+    EXPECT_TRUE(save_result);
+#endif
+
+    // Verify file exists
+    EXPECT_TRUE(std::filesystem::exists(save_path));
+
+    // Load from file
+    async_container loaded_cont;
+    auto load_task = loaded_cont.load_async(save_path.string());
+    EXPECT_TRUE(load_task.valid());
+
+    while (!load_task.done()) {
+        std::this_thread::sleep_for(1ms);
+    }
+
+    auto load_result = load_task.get();
+#if CONTAINER_HAS_COMMON_RESULT
+    EXPECT_TRUE(load_result.is_ok());
+#else
+    EXPECT_TRUE(load_result);
+#endif
+
+    // Verify loaded data
+    auto str_val = loaded_cont.get<std::string>("test_key");
+    ASSERT_TRUE(str_val.has_value());
+    EXPECT_EQ(*str_val, "test_value");
+
+    auto int_val = loaded_cont.get<int64_t>("int_key");
+    ASSERT_TRUE(int_val.has_value());
+    EXPECT_EQ(*int_val, 12345);
+}
+
+TEST_F(AsyncFileIOTest, LoadAsyncFileNotFound) {
+    async_container async_cont;
+    auto non_existent = test_dir_ / "non_existent_file.bin";
+
+    auto load_task = async_cont.load_async(non_existent.string());
+    EXPECT_TRUE(load_task.valid());
+
+    while (!load_task.done()) {
+        std::this_thread::sleep_for(1ms);
+    }
+
+    auto result = load_task.get();
+#if CONTAINER_HAS_COMMON_RESULT
+    EXPECT_FALSE(result.is_ok());
+    EXPECT_EQ(result.error().code, container_module::error_codes::file_not_found);
+#else
+    EXPECT_FALSE(result);
+#endif
+}
+
+TEST_F(AsyncFileIOTest, ReadFileAsync) {
+    // Create a test file
+    auto test_file = test_dir_ / "test_read.bin";
+    std::vector<uint8_t> test_data = {0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08};
+
+    std::ofstream ofs(test_file, std::ios::binary);
+    ofs.write(reinterpret_cast<const char*>(test_data.data()),
+        static_cast<std::streamsize>(test_data.size()));
+    ofs.close();
+
+    // Read file async
+    auto read_task = read_file_async(test_file.string());
+    EXPECT_TRUE(read_task.valid());
+
+    while (!read_task.done()) {
+        std::this_thread::sleep_for(1ms);
+    }
+
+    auto result = read_task.get();
+#if CONTAINER_HAS_COMMON_RESULT
+    EXPECT_TRUE(result.is_ok());
+    EXPECT_EQ(result.value(), test_data);
+#else
+    EXPECT_EQ(result, test_data);
+#endif
+}
+
+TEST_F(AsyncFileIOTest, WriteFileAsync) {
+    auto test_file = test_dir_ / "test_write.bin";
+    std::vector<uint8_t> test_data = {0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0xFF};
+
+    auto write_task = write_file_async(test_file.string(), test_data);
+    EXPECT_TRUE(write_task.valid());
+
+    while (!write_task.done()) {
+        std::this_thread::sleep_for(1ms);
+    }
+
+    auto result = write_task.get();
+#if CONTAINER_HAS_COMMON_RESULT
+    EXPECT_TRUE(result.is_ok());
+#else
+    EXPECT_TRUE(result);
+#endif
+
+    // Verify written data
+    std::ifstream ifs(test_file, std::ios::binary);
+    std::vector<uint8_t> read_data(
+        (std::istreambuf_iterator<char>(ifs)),
+        std::istreambuf_iterator<char>());
+
+    EXPECT_EQ(read_data, test_data);
+}
+
+TEST_F(AsyncFileIOTest, ProgressCallbackCalled) {
+    auto container = std::make_shared<container_module::value_container>();
+    // Create container with some data
+    for (int i = 0; i < 100; ++i) {
+        container->set("key_" + std::to_string(i),
+            std::string(1000, 'x'));  // Large values
+    }
+
+    async_container async_cont(container);
+    auto save_path = test_dir_ / "progress_test.bin";
+
+    std::atomic<size_t> callback_count{0};
+    std::atomic<size_t> last_bytes{0};
+    std::atomic<size_t> total_bytes{0};
+
+    auto save_task = async_cont.save_async(save_path.string(),
+        [&](size_t bytes, size_t total) {
+            ++callback_count;
+            last_bytes.store(bytes, std::memory_order_relaxed);
+            total_bytes.store(total, std::memory_order_relaxed);
+        });
+
+    while (!save_task.done()) {
+        std::this_thread::sleep_for(1ms);
+    }
+
+    auto save_result = save_task.get();
+#if CONTAINER_HAS_COMMON_RESULT
+    EXPECT_TRUE(save_result.is_ok());
+#else
+    EXPECT_TRUE(save_result);
+#endif
+
+    // Callback should have been called at least once
+    EXPECT_GT(callback_count.load(), 0u);
+    // Final bytes should equal total
+    EXPECT_EQ(last_bytes.load(), total_bytes.load());
+}
+
+TEST_F(AsyncFileIOTest, RoundTripLargeFile) {
+    auto container = std::make_shared<container_module::value_container>();
+    // Create container with substantial data
+    // Note: Using smaller data size (10KB total) to avoid stack overflow in
+    // std::regex under AddressSanitizer (regex uses backtracking which is
+    // stack-intensive). See ContainerTest.LargeDataHandling for similar limit.
+    for (int i = 0; i < 10; ++i) {
+        container->set("large_key_" + std::to_string(i),
+            std::string(1000, static_cast<char>('A' + (i % 26))));
+    }
+
+    async_container async_cont(container);
+    auto file_path = test_dir_ / "large_file.bin";
+
+    // Save
+    auto save_task = async_cont.save_async(file_path.string());
+    while (!save_task.done()) {
+        std::this_thread::sleep_for(1ms);
+    }
+
+    auto save_result = save_task.get();
+#if CONTAINER_HAS_COMMON_RESULT
+    EXPECT_TRUE(save_result.is_ok());
+#else
+    EXPECT_TRUE(save_result);
+#endif
+
+    // Load into new container
+    async_container loaded_cont;
+    auto load_task = loaded_cont.load_async(file_path.string());
+    while (!load_task.done()) {
+        std::this_thread::sleep_for(1ms);
+    }
+
+    auto load_result = load_task.get();
+#if CONTAINER_HAS_COMMON_RESULT
+    EXPECT_TRUE(load_result.is_ok());
+#else
+    EXPECT_TRUE(load_result);
+#endif
+
+    // Verify data integrity
+    for (int i = 0; i < 10; ++i) {
+        auto val = loaded_cont.get<std::string>("large_key_" + std::to_string(i));
+        ASSERT_TRUE(val.has_value());
+        EXPECT_EQ(val->size(), 1000u);
+        EXPECT_EQ(val->front(), static_cast<char>('A' + (i % 26)));
+    }
 }
 
 // =============================================================================

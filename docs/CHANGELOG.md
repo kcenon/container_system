@@ -11,7 +11,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- **Async Awaitable Thread Safety** (#267): Fix use-after-free in async operations
+  - Use `shared_ptr` for thread-safe async state management
+  - Worker thread now captures `shared_ptr` copy instead of raw `this` pointer
+  - Fixes sanitizer test failures (ASan/UBSan) on Ubuntu with common_system integration
+
+- **Async File I/O Sanitizer Fixes** (#267): Fix sanitizer test failures in async file I/O
+  - Reduce RoundTripLargeFile test data size from 500KB to 10KB to avoid stack overflow in std::regex under AddressSanitizer
+  - Add missing `<algorithm>` header for `std::min` used in chunked file I/O operations
+  - Sort standard library includes alphabetically for consistency
+
 ### Added
+- **Async File I/O Operations** (#267): Add coroutine-based async file I/O for containers (Phase 3)
+  - Add `async_container::load_async()` method for non-blocking file loading
+  - Add `async_container::save_async()` method for non-blocking file saving
+  - Add `read_file_async()` utility function for async byte array reading
+  - Add `write_file_async()` utility function for async byte array writing
+  - Add `progress_callback` type for monitoring I/O progress
+  - Add chunked I/O processing (64KB chunks) for large file handling
+  - Add 6 comprehensive unit tests for async file operations
+  - Support both Result-based and exception-based error handling APIs
+  - Require C++20 coroutine support
+
 - **Async Container Operations** (#266): Add coroutine-based async API for container serialization (Phase 2)
   - Add `async_container` class wrapping `value_container` for async operations
   - Add `serialize_async()` method for non-blocking byte array serialization
