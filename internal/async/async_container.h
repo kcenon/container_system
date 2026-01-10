@@ -79,8 +79,6 @@ namespace container_module::async
             std::function<T()> work_;
             std::optional<T> result_;
             std::exception_ptr exception_;
-            std::thread worker_;
-            bool completed_{false};
 
             explicit async_awaitable(std::function<T()> work)
                 : work_(std::move(work)) {}
@@ -89,9 +87,7 @@ namespace container_module::async
                 : work_(std::move(other.work_))
                 , result_(std::move(other.result_))
                 , exception_(std::move(other.exception_))
-                , completed_(other.completed_)
             {
-                // Note: worker_ thread handle not moved - it's detached
             }
 
             [[nodiscard]] bool await_ready() const noexcept
@@ -101,16 +97,14 @@ namespace container_module::async
 
             void await_suspend(std::coroutine_handle<> handle)
             {
-                worker_ = std::thread([this, handle]() mutable {
+                std::thread([this, handle]() mutable {
                     try {
                         result_.emplace(work_());
                     } catch (...) {
                         exception_ = std::current_exception();
                     }
-                    completed_ = true;
                     handle.resume();
-                });
-                worker_.detach();
+                }).detach();
             }
 
             T await_resume()
