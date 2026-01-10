@@ -659,7 +659,9 @@ namespace container_module
 		 * @brief Remove a value by name
 		 * @param target_name Name of value to remove
 		 * @param update_immediately Whether to update serialized data immediately
+		 * @deprecated Use remove_result() instead for Result-based error handling
 		 */
+		[[deprecated("Use remove_result() instead for Result-based error handling")]]
 		void remove(std::string_view target_name,
 					bool update_immediately = false);
 
@@ -674,7 +676,9 @@ namespace container_module
 		 * @exception_safety Strong guarantee - no changes on exception
 		 * @throws std::bad_alloc if memory allocation fails
 		 * @throws std::runtime_error if value cannot be serialized
+		 * @deprecated Use serialize_result() instead for Result-based error handling
 		 */
+		[[deprecated("Use serialize_result() instead for Result-based error handling")]]
 		std::string serialize(void) const;
 
 		/**
@@ -682,7 +686,9 @@ namespace container_module
 		 * @exception_safety Strong guarantee - no changes on exception
 		 * @throws std::bad_alloc if memory allocation fails
 		 * @throws std::runtime_error if value cannot be serialized
+		 * @deprecated Use serialize_array_result() instead for Result-based error handling
 		 */
+		[[deprecated("Use serialize_array_result() instead for Result-based error handling")]]
 		std::vector<uint8_t> serialize_array(void) const;
 
 		/**
@@ -690,7 +696,9 @@ namespace container_module
 		 * values are not fully parsed yet.
 		 * @exception_safety Basic guarantee - container may be partially modified
 		 * @return true on success, false on parse error (no exceptions thrown)
+		 * @deprecated Use deserialize_result() instead for Result-based error handling
 		 */
+		[[deprecated("Use deserialize_result() instead for Result-based error handling")]]
 		bool deserialize(const std::string& data_string,
 					 bool parse_only_header = true);
 
@@ -699,7 +707,9 @@ namespace container_module
 		 * true, child values are not fully parsed.
 		 * @exception_safety Basic guarantee - container may be partially modified
 		 * @return true on success, false on parse error (no exceptions thrown)
+		 * @deprecated Use deserialize_result() instead for Result-based error handling
 		 */
+		[[deprecated("Use deserialize_result() instead for Result-based error handling")]]
 		bool deserialize(const std::vector<uint8_t>& data_array,
 					 bool parse_only_header = true);
 
@@ -736,6 +746,7 @@ namespace container_module
 		 * @param parse_only_header If true, child values are not fully parsed
 		 * @return true on success and validation pass, false on parse error or validation failure
 		 * @exception_safety Basic guarantee - container may be partially modified
+		 * @deprecated Use deserialize_result() with schema parameter instead for Result-based error handling
 		 *
 		 * @code
 		 * auto schema = container_schema()
@@ -748,6 +759,7 @@ namespace container_module
 		 * }
 		 * @endcode
 		 */
+		[[deprecated("Use deserialize_result() with schema parameter instead for Result-based error handling")]]
 		bool deserialize(const std::string& data_string,
 						 const container_schema& schema,
 						 bool parse_only_header = false);
@@ -760,7 +772,9 @@ namespace container_module
 		 * @param parse_only_header If true, child values are not fully parsed
 		 * @return true on success and validation pass, false on parse error or validation failure
 		 * @exception_safety Basic guarantee - container may be partially modified
+		 * @deprecated Use deserialize_result() with schema parameter instead for Result-based error handling
 		 */
+		[[deprecated("Use deserialize_result() with schema parameter instead for Result-based error handling")]]
 		bool deserialize(const std::vector<uint8_t>& data_array,
 						 const container_schema& schema,
 						 bool parse_only_header = false);
@@ -822,13 +836,17 @@ namespace container_module
 		/**
 		 * @brief Generate an XML representation of this container (header +
 		 * values).
+		 * @deprecated Use to_xml_result() instead for Result-based error handling
 		 */
+		[[deprecated("Use to_xml_result() instead for Result-based error handling")]]
 		const std::string to_xml(void);
 
 		/**
 		 * @brief Generate a JSON representation of this container (header +
 		 * values).
+		 * @deprecated Use to_json_result() instead for Result-based error handling
 		 */
+		[[deprecated("Use to_json_result() instead for Result-based error handling")]]
 		const std::string to_json(void);
 
 		// =======================================================================
@@ -845,6 +863,7 @@ namespace container_module
 		 * @return Vector of bytes containing the MessagePack-encoded data
 		 * @exception_safety Strong guarantee - no changes on exception
 		 * @throws std::bad_alloc if memory allocation fails
+		 * @deprecated Use to_msgpack_result() instead for Result-based error handling
 		 *
 		 * @code
 		 * auto container = std::make_shared<value_container>();
@@ -853,6 +872,7 @@ namespace container_module
 		 * // msgpack_data contains compact binary representation
 		 * @endcode
 		 */
+		[[deprecated("Use to_msgpack_result() instead for Result-based error handling")]]
 		std::vector<uint8_t> to_msgpack() const;
 
 		/**
@@ -861,6 +881,7 @@ namespace container_module
 		 * @param data MessagePack-encoded binary data
 		 * @return true on success, false on parse error
 		 * @exception_safety Basic guarantee - container may be partially modified
+		 * @deprecated Use from_msgpack_result() instead for Result-based error handling
 		 *
 		 * @code
 		 * std::vector<uint8_t> msgpack_data = get_received_data();
@@ -870,6 +891,7 @@ namespace container_module
 		 * }
 		 * @endcode
 		 */
+		[[deprecated("Use from_msgpack_result() instead for Result-based error handling")]]
 		bool from_msgpack(const std::vector<uint8_t>& data);
 
 		/**
@@ -957,12 +979,16 @@ namespace container_module
 		/**
 		 * @brief Load from a file path (reads entire file content, then calls
 		 * deserialize).
+		 * @deprecated Use load_packet_result() instead for Result-based error handling
 		 */
+		[[deprecated("Use load_packet_result() instead for Result-based error handling")]]
 		void load_packet(const std::string& file_path);
 
 		/**
 		 * @brief Save to a file path (serialize to bytes, then write to file).
+		 * @deprecated Use save_packet_result() instead for Result-based error handling
 		 */
+		[[deprecated("Use save_packet_result() instead for Result-based error handling")]]
 		void save_packet(const std::string& file_path);
 
 		/**
