@@ -12,6 +12,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Batch Operation APIs** (#229): Add optimized batch APIs for bulk insert, query, and modify operations
+  - Add `bulk_insert(vector&&)` for move-based bulk insert (most efficient)
+  - Add `bulk_insert(span, reserve_hint)` for copy-based bulk insert with pre-allocation
+  - Add `get_batch(keys)` returning vector of optional values (single lock acquisition)
+  - Add `get_batch_map(keys)` returning map of found key-value pairs
+  - Add `contains_batch(keys)` for checking multiple keys at once
+  - Add `remove_batch(keys)` for removing multiple keys (returns count)
+  - Add `update_if(key, expected, new_value)` for conditional compare-and-swap style update
+  - Add `update_batch_if(updates)` for bulk conditional updates
+  - Add `update_spec` struct for batch update specifications
+  - Add Result-returning variants: `bulk_insert_result()`, `get_batch_result()`, `remove_batch_result()`
+  - All batch operations use single lock acquisition for efficiency
+  - Expected 3-5x performance improvement over iterative operations
+  - Add comprehensive unit tests for all batch operations
 - **AVX-512 SIMD Support** (#227): Add AVX-512 support for modern Intel/AMD processors
   - Add AVX-512F detection macros and 512-bit SIMD types (`float_simd_512`, `double_simd_512`, `int32_simd_512`)
   - Implement AVX-512 optimized operations (`sum_floats_avx512`, `min_float_avx512`, `max_float_avx512`)

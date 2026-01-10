@@ -1538,6 +1538,275 @@ TEST_F(ZeroCopyTest, MultipleValuesIndexing) {
     ASSERT_TRUE(v4.has_value());
 }
 
+// ============================================================================
+// Batch Operation Tests (Issue #229)
+// ============================================================================
+
+class BatchOperationTest : public ::testing::Test {
+protected:
+    std::unique_ptr<value_container> container;
+
+    void SetUp() override {
+        container = std::make_unique<value_container>();
+    }
+
+    void TearDown() override {
+        container.reset();
+    }
+};
+
+TEST_F(BatchOperationTest, BulkInsertMoveSemantics) {
+    std::vector<optimized_value> values;
+    values.reserve(5);
+
+    optimized_value v1;
+    v1.name = "name";
+    v1.data = std::string("Alice");
+    v1.type = value_types::string_value;
+    values.push_back(std::move(v1));
+
+    optimized_value v2;
+    v2.name = "age";
+    v2.data = 30;
+    v2.type = value_types::int_value;
+    values.push_back(std::move(v2));
+
+    optimized_value v3;
+    v3.name = "score";
+    v3.data = 95.5;
+    v3.type = value_types::double_value;
+    values.push_back(std::move(v3));
+
+    container->bulk_insert(std::move(values));
+
+    EXPECT_EQ(container->size(), 3);
+
+    auto name_val = container->get_value("name");
+    ASSERT_TRUE(name_val.has_value());
+    EXPECT_EQ(std::get<std::string>(name_val->data), "Alice");
+
+    auto age_val = container->get_value("age");
+    ASSERT_TRUE(age_val.has_value());
+    EXPECT_EQ(std::get<int>(age_val->data), 30);
+
+    auto score_val = container->get_value("score");
+    ASSERT_TRUE(score_val.has_value());
+    EXPECT_DOUBLE_EQ(std::get<double>(score_val->data), 95.5);
+}
+
+TEST_F(BatchOperationTest, BulkInsertWithSpan) {
+    std::vector<optimized_value> values;
+
+    optimized_value v1;
+    v1.name = "key1";
+    v1.data = 100;
+    v1.type = value_types::int_value;
+    values.push_back(v1);
+
+    optimized_value v2;
+    v2.name = "key2";
+    v2.data = 200;
+    v2.type = value_types::int_value;
+    values.push_back(v2);
+
+    container->bulk_insert(std::span<const optimized_value>(values), 10);
+
+    EXPECT_EQ(container->size(), 2);
+    EXPECT_TRUE(container->contains("key1"));
+    EXPECT_TRUE(container->contains("key2"));
+}
+
+TEST_F(BatchOperationTest, BulkInsertEmpty) {
+    std::vector<optimized_value> empty_values;
+    container->bulk_insert(std::move(empty_values));
+
+    EXPECT_EQ(container->size(), 0);
+    EXPECT_TRUE(container->empty());
+}
+
+TEST_F(BatchOperationTest, GetBatchBasic) {
+    container->set("name", std::string("Bob"));
+    container->set("age", 25);
+    container->set("city", std::string("Seattle"));
+
+    std::vector<std::string_view> keys = {"name", "age", "missing_key"};
+    auto results = container->get_batch(std::span<const std::string_view>(keys));
+
+    ASSERT_EQ(results.size(), 3);
+    EXPECT_TRUE(results[0].has_value());
+    EXPECT_EQ(std::get<std::string>(results[0]->data), "Bob");
+    EXPECT_TRUE(results[1].has_value());
+    EXPECT_EQ(std::get<int>(results[1]->data), 25);
+    EXPECT_FALSE(results[2].has_value());  // missing_key
+}
+
+TEST_F(BatchOperationTest, GetBatchMap) {
+    container->set("a", 1);
+    container->set("b", 2);
+    container->set("c", 3);
+
+    std::vector<std::string_view> keys = {"a", "c", "nonexistent"};
+    auto result_map = container->get_batch_map(std::span<const std::string_view>(keys));
+
+    EXPECT_EQ(result_map.size(), 2);
+    EXPECT_EQ(std::get<int>(result_map["a"].data), 1);
+    EXPECT_EQ(std::get<int>(result_map["c"].data), 3);
+    EXPECT_EQ(result_map.find("nonexistent"), result_map.end());
+}
+
+TEST_F(BatchOperationTest, ContainsBatch) {
+    container->set("exists1", 1);
+    container->set("exists2", 2);
+
+    std::vector<std::string_view> keys = {"exists1", "missing", "exists2"};
+    auto results = container->contains_batch(std::span<const std::string_view>(keys));
+
+    ASSERT_EQ(results.size(), 3);
+    EXPECT_TRUE(results[0]);   // exists1
+    EXPECT_FALSE(results[1]);  // missing
+    EXPECT_TRUE(results[2]);   // exists2
+}
+
+TEST_F(BatchOperationTest, RemoveBatch) {
+    container->set("keep1", 1);
+    container->set("remove1", 2);
+    container->set("keep2", 3);
+    container->set("remove2", 4);
+    container->set("remove3", 5);
+
+    std::vector<std::string_view> keys_to_remove = {"remove1", "remove2", "remove3", "nonexistent"};
+    size_t removed = container->remove_batch(std::span<const std::string_view>(keys_to_remove));
+
+    EXPECT_EQ(removed, 3);
+    EXPECT_EQ(container->size(), 2);
+    EXPECT_TRUE(container->contains("keep1"));
+    EXPECT_TRUE(container->contains("keep2"));
+    EXPECT_FALSE(container->contains("remove1"));
+    EXPECT_FALSE(container->contains("remove2"));
+    EXPECT_FALSE(container->contains("remove3"));
+}
+
+TEST_F(BatchOperationTest, RemoveBatchEmpty) {
+    container->set("key1", 1);
+
+    std::vector<std::string_view> empty_keys;
+    size_t removed = container->remove_batch(std::span<const std::string_view>(empty_keys));
+
+    EXPECT_EQ(removed, 0);
+    EXPECT_EQ(container->size(), 1);
+}
+
+TEST_F(BatchOperationTest, UpdateIfSuccess) {
+    container->set("counter", 10);
+
+    bool updated = container->update_if("counter", value_variant{10}, value_variant{20});
+
+    EXPECT_TRUE(updated);
+    auto val = container->get_value("counter");
+    ASSERT_TRUE(val.has_value());
+    EXPECT_EQ(std::get<int>(val->data), 20);
+}
+
+TEST_F(BatchOperationTest, UpdateIfFailureMismatch) {
+    container->set("counter", 10);
+
+    bool updated = container->update_if("counter", value_variant{99}, value_variant{20});
+
+    EXPECT_FALSE(updated);
+    auto val = container->get_value("counter");
+    ASSERT_TRUE(val.has_value());
+    EXPECT_EQ(std::get<int>(val->data), 10);  // Value unchanged
+}
+
+TEST_F(BatchOperationTest, UpdateIfKeyNotFound) {
+    container->set("counter", 10);
+
+    bool updated = container->update_if("nonexistent", value_variant{10}, value_variant{20});
+
+    EXPECT_FALSE(updated);
+}
+
+TEST_F(BatchOperationTest, UpdateBatchIf) {
+    container->set("a", 1);
+    container->set("b", 2);
+    container->set("c", 3);
+
+    std::vector<value_container::update_spec> updates = {
+        {"a", value_variant{1}, value_variant{10}},   // Should succeed
+        {"b", value_variant{99}, value_variant{20}},  // Should fail (mismatch)
+        {"c", value_variant{3}, value_variant{30}},   // Should succeed
+        {"d", value_variant{4}, value_variant{40}}    // Should fail (not found)
+    };
+
+    auto results = container->update_batch_if(std::span<const value_container::update_spec>(updates));
+
+    ASSERT_EQ(results.size(), 4);
+    EXPECT_TRUE(results[0]);   // a updated
+    EXPECT_FALSE(results[1]);  // b not updated
+    EXPECT_TRUE(results[2]);   // c updated
+    EXPECT_FALSE(results[3]);  // d not found
+
+    EXPECT_EQ(std::get<int>(container->get_value("a")->data), 10);
+    EXPECT_EQ(std::get<int>(container->get_value("b")->data), 2);  // unchanged
+    EXPECT_EQ(std::get<int>(container->get_value("c")->data), 30);
+}
+
+TEST_F(BatchOperationTest, BatchOperationsPreserveOrder) {
+    // Verify that get_batch returns results in the same order as input keys
+    container->set("z", 1);
+    container->set("a", 2);
+    container->set("m", 3);
+
+    std::vector<std::string_view> keys = {"m", "z", "a", "x"};
+    auto results = container->get_batch(std::span<const std::string_view>(keys));
+
+    ASSERT_EQ(results.size(), 4);
+    EXPECT_TRUE(results[0].has_value());
+    EXPECT_EQ(std::get<int>(results[0]->data), 3);  // m
+    EXPECT_TRUE(results[1].has_value());
+    EXPECT_EQ(std::get<int>(results[1]->data), 1);  // z
+    EXPECT_TRUE(results[2].has_value());
+    EXPECT_EQ(std::get<int>(results[2]->data), 2);  // a
+    EXPECT_FALSE(results[3].has_value());            // x (not found)
+}
+
+TEST_F(BatchOperationTest, BatchOperationsWithDuplicateKeys) {
+    container->set("key", 100);
+
+    // get_batch with duplicate keys
+    std::vector<std::string_view> keys = {"key", "key", "key"};
+    auto results = container->get_batch(std::span<const std::string_view>(keys));
+
+    ASSERT_EQ(results.size(), 3);
+    for (const auto& r : results) {
+        EXPECT_TRUE(r.has_value());
+        EXPECT_EQ(std::get<int>(r->data), 100);
+    }
+}
+
+TEST_F(BatchOperationTest, MethodChaining) {
+    std::vector<optimized_value> values1;
+    optimized_value v1;
+    v1.name = "x";
+    v1.data = 1;
+    v1.type = value_types::int_value;
+    values1.push_back(v1);
+
+    std::vector<optimized_value> values2;
+    optimized_value v2;
+    v2.name = "y";
+    v2.data = 2;
+    v2.type = value_types::int_value;
+    values2.push_back(v2);
+
+    container->bulk_insert(std::move(values1))
+             .set("z", 3);
+
+    EXPECT_EQ(container->size(), 2);
+    EXPECT_TRUE(container->contains("x"));
+    EXPECT_TRUE(container->contains("z"));
+}
+
 // Main function for running tests
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
