@@ -129,6 +129,8 @@ if(CONTAINER_ENABLE_COROUTINES)
         ${CMAKE_CURRENT_SOURCE_DIR}/internal/async/async.h
         ${CMAKE_CURRENT_SOURCE_DIR}/internal/async/task.h
         ${CMAKE_CURRENT_SOURCE_DIR}/internal/async/generator.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/internal/async/thread_pool_executor.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/internal/async/async_container.h
     )
     message(STATUS "Container: C++20 coroutine support enabled")
 endif()

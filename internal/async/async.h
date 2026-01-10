@@ -65,6 +65,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "task.h"
 #include "generator.h"
+#include "thread_pool_executor.h"
 #include "async_container.h"
 
 namespace container_module::async
