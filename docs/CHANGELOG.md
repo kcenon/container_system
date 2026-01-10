@@ -11,6 +11,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- **Windows Macro Conflict in MessagePack** (#274): Fix MSVC build failures due to TRUE/FALSE macro conflicts
+  - Add `#pragma push_macro` / `#pragma pop_macro` guards in `core/container/msgpack.h`
+  - Windows `windef.h` defines `TRUE` and `FALSE` as macros which conflict with MessagePack format constants
+  - Macros are temporarily undefined during msgpack.h parsing and restored at end of file
+  - Fixes compilation errors like `error C2059: syntax error: 'constant'` on MSVC
+
 ### Deprecated
 - **Legacy void/bool API Methods** (#241): Mark legacy methods as deprecated in favor of Result-returning APIs
   - Deprecate `serialize()` in favor of `serialize_result()`

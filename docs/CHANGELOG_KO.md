@@ -11,6 +11,13 @@ Container System 프로젝트의 모든 주요 변경 사항이 이 파일에 �
 
 ## [Unreleased]
 
+### Fixed
+- **MessagePack Windows 매크로 충돌** (#274): TRUE/FALSE 매크로 충돌로 인한 MSVC 빌드 실패 수정
+  - `core/container/msgpack.h`에 `#pragma push_macro` / `#pragma pop_macro` 가드 추가
+  - Windows `windef.h`에서 `TRUE`와 `FALSE`를 매크로로 정의하여 MessagePack 포맷 상수와 충돌
+  - msgpack.h 파싱 중 매크로를 임시로 정의 해제하고 파일 끝에서 복원
+  - MSVC에서 `error C2059: syntax error: 'constant'` 같은 컴파일 에러 수정
+
 ### Deprecated
 - **레거시 void/bool API 메서드** (#241): Result 반환 API를 위해 레거시 메서드를 deprecated로 표시
   - `serialize()`를 `serialize_result()` 대신 사용 권장
