@@ -49,6 +49,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <regex>
 #include <sstream>
 #include <fstream>
+#include <unordered_set>
 
 namespace container_module
 {
@@ -384,6 +385,213 @@ namespace container_module
 			}
 		}
 		return false;
+	}
+
+	// =======================================================================
+	// Batch Operation APIs (Issue #229)
+	// =======================================================================
+
+	value_container& value_container::bulk_insert(std::vector<optimized_value>&& values)
+	{
+		if (values.empty()) {
+			return *this;
+		}
+
+		write_lock_guard lock(this);
+
+		// Pre-allocate for efficiency
+		optimized_units_.reserve(optimized_units_.size() + values.size());
+
+		// Move all values
+		for (auto& val : values) {
+			if (use_soo_ && val.is_stack_allocated()) {
+				stack_allocations_.fetch_add(1, std::memory_order_relaxed);
+			} else {
+				heap_allocations_.fetch_add(1, std::memory_order_relaxed);
+			}
+			optimized_units_.push_back(std::move(val));
+		}
+
+		changed_data_ = true;
+		return *this;
+	}
+
+	value_container& value_container::bulk_insert(
+		std::span<const optimized_value> values,
+		size_t reserve_hint)
+	{
+		if (values.empty()) {
+			return *this;
+		}
+
+		write_lock_guard lock(this);
+
+		// Apply reserve hint or use values.size()
+		size_t reserve_size = reserve_hint > 0 ? reserve_hint : values.size();
+		optimized_units_.reserve(optimized_units_.size() + reserve_size);
+
+		// Copy all values
+		for (const auto& val : values) {
+			if (use_soo_ && val.is_stack_allocated()) {
+				stack_allocations_.fetch_add(1, std::memory_order_relaxed);
+			} else {
+				heap_allocations_.fetch_add(1, std::memory_order_relaxed);
+			}
+			optimized_units_.push_back(val);
+		}
+
+		changed_data_ = true;
+		return *this;
+	}
+
+	std::vector<std::optional<optimized_value>> value_container::get_batch(
+		std::span<const std::string_view> keys) const noexcept
+	{
+		std::vector<std::optional<optimized_value>> results;
+		results.reserve(keys.size());
+
+		read_lock_guard lock(this);
+
+		for (const auto& key : keys) {
+			std::optional<optimized_value> found = std::nullopt;
+			for (const auto& val : optimized_units_) {
+				if (val.name == key) {
+					found = val;
+					break;
+				}
+			}
+			results.push_back(std::move(found));
+		}
+
+		return results;
+	}
+
+	std::unordered_map<std::string, optimized_value> value_container::get_batch_map(
+		std::span<const std::string_view> keys) const
+	{
+		std::unordered_map<std::string, optimized_value> results;
+		results.reserve(keys.size());
+
+		read_lock_guard lock(this);
+
+		for (const auto& key : keys) {
+			for (const auto& val : optimized_units_) {
+				if (val.name == key) {
+					results[std::string(key)] = val;
+					break;
+				}
+			}
+		}
+
+		return results;
+	}
+
+	std::vector<bool> value_container::contains_batch(
+		std::span<const std::string_view> keys) const noexcept
+	{
+		std::vector<bool> results;
+		results.reserve(keys.size());
+
+		read_lock_guard lock(this);
+
+		for (const auto& key : keys) {
+			bool found = false;
+			for (const auto& val : optimized_units_) {
+				if (val.name == key) {
+					found = true;
+					break;
+				}
+			}
+			results.push_back(found);
+		}
+
+		return results;
+	}
+
+	size_t value_container::remove_batch(std::span<const std::string_view> keys)
+	{
+		if (keys.empty()) {
+			return 0;
+		}
+
+		write_lock_guard lock(this);
+
+		if (!parsed_data_) {
+			deserialize_values(data_string_, false);
+		}
+
+		// Build a set of keys for O(1) lookup
+		std::unordered_set<std::string_view> key_set(keys.begin(), keys.end());
+
+		// Count and remove matching elements
+		size_t original_size = optimized_units_.size();
+		optimized_units_.erase(
+			std::remove_if(optimized_units_.begin(), optimized_units_.end(),
+						   [&key_set](const optimized_value& ov) {
+							   return key_set.find(ov.name) != key_set.end();
+						   }),
+			optimized_units_.end());
+
+		size_t removed = original_size - optimized_units_.size();
+		if (removed > 0) {
+			changed_data_ = true;
+		}
+
+		return removed;
+	}
+
+	bool value_container::update_if(
+		std::string_view key,
+		const value_variant& expected,
+		value_variant&& new_value)
+	{
+		write_lock_guard lock(this);
+
+		for (auto& val : optimized_units_) {
+			if (val.name == key) {
+				// Compare current value with expected
+				if (val.data == expected) {
+					val.data = std::move(new_value);
+					val.type = static_cast<value_types>(val.data.index());
+					changed_data_ = true;
+					return true;
+				}
+				return false;
+			}
+		}
+
+		return false;
+	}
+
+	std::vector<bool> value_container::update_batch_if(
+		std::span<const update_spec> updates)
+	{
+		std::vector<bool> results;
+		results.reserve(updates.size());
+
+		if (updates.empty()) {
+			return results;
+		}
+
+		write_lock_guard lock(this);
+
+		for (const auto& update : updates) {
+			bool updated = false;
+			for (auto& val : optimized_units_) {
+				if (val.name == update.key) {
+					if (val.data == update.expected) {
+						val.data = update.new_value;
+						val.type = static_cast<value_types>(val.data.index());
+						changed_data_ = true;
+						updated = true;
+					}
+					break;
+				}
+			}
+			results.push_back(updated);
+		}
+
+		return results;
 	}
 
 	std::optional<optimized_value> value_container::get_variant_value(const std::string& key) const noexcept
@@ -1007,6 +1215,87 @@ bool value_container::deserialize(const std::vector<uint8_t>& data_array,
 				kcenon::common::error_info{
 					error_codes::file_write_error,
 					std::string("File write error: ") + e.what(),
+					"container_system"});
+		}
+	}
+
+	// =======================================================================
+	// Batch Operation APIs with Result return type (Issue #229)
+	// =======================================================================
+
+	kcenon::common::VoidResult value_container::bulk_insert_result(
+		std::vector<optimized_value>&& values) noexcept
+	{
+		try
+		{
+			bulk_insert(std::move(values));
+			return kcenon::common::ok();
+		}
+		catch (const std::bad_alloc&)
+		{
+			return kcenon::common::VoidResult(
+				kcenon::common::error_info{
+					error_codes::memory_allocation_failed,
+					error_codes::make_message(error_codes::memory_allocation_failed),
+					"container_system"});
+		}
+		catch (const std::exception& e)
+		{
+			return kcenon::common::VoidResult(
+				kcenon::common::error_info{
+					error_codes::invalid_value,
+					std::string("Bulk insert failed: ") + e.what(),
+					"container_system"});
+		}
+	}
+
+	kcenon::common::Result<std::vector<std::optional<optimized_value>>>
+		value_container::get_batch_result(
+			std::span<const std::string_view> keys) const noexcept
+	{
+		try
+		{
+			return kcenon::common::ok(get_batch(keys));
+		}
+		catch (const std::bad_alloc&)
+		{
+			return kcenon::common::Result<std::vector<std::optional<optimized_value>>>(
+				kcenon::common::error_info{
+					error_codes::memory_allocation_failed,
+					error_codes::make_message(error_codes::memory_allocation_failed),
+					"container_system"});
+		}
+		catch (const std::exception& e)
+		{
+			return kcenon::common::Result<std::vector<std::optional<optimized_value>>>(
+				kcenon::common::error_info{
+					error_codes::invalid_value,
+					std::string("Batch get failed: ") + e.what(),
+					"container_system"});
+		}
+	}
+
+	kcenon::common::Result<size_t> value_container::remove_batch_result(
+		std::span<const std::string_view> keys) noexcept
+	{
+		try
+		{
+			return kcenon::common::ok(remove_batch(keys));
+		}
+		catch (const std::bad_alloc&)
+		{
+			return kcenon::common::Result<size_t>(
+				kcenon::common::error_info{
+					error_codes::memory_allocation_failed,
+					error_codes::make_message(error_codes::memory_allocation_failed),
+					"container_system"});
+		}
+		catch (const std::exception& e)
+		{
+			return kcenon::common::Result<size_t>(
+				kcenon::common::error_info{
+					error_codes::invalid_value,
+					std::string("Batch remove failed: ") + e.what(),
 					"container_system"});
 		}
 	}

@@ -359,6 +359,127 @@ namespace container_module
 		[[nodiscard]] bool contains(std::string_view key) const noexcept;
 
 		// =======================================================================
+		// Batch Operation APIs (Issue #229)
+		// =======================================================================
+
+		/**
+		 * @brief Bulk insert values with move semantics (most efficient)
+		 * @param values Vector of values to insert (moved)
+		 * @return Reference to this container for method chaining
+		 * @exception_safety Strong guarantee - no changes on exception
+		 * @note Uses single lock acquisition for entire batch
+		 */
+		value_container& bulk_insert(std::vector<optimized_value>&& values);
+
+		/**
+		 * @brief Bulk insert values with optional pre-allocation hint
+		 * @param values Span of values to insert
+		 * @param reserve_hint Hint for pre-allocating storage capacity
+		 * @return Reference to this container for method chaining
+		 * @exception_safety Strong guarantee - no changes on exception
+		 * @note Uses single lock acquisition for entire batch
+		 */
+		value_container& bulk_insert(std::span<const optimized_value> values,
+									 size_t reserve_hint = 0);
+
+		/**
+		 * @brief Get multiple values at once (single lock acquisition)
+		 * @param keys Span of keys to retrieve
+		 * @return Vector of optional values in same order as keys
+		 * @exception_safety No-throw guarantee
+		 * @note Returns nullopt for keys not found
+		 */
+		[[nodiscard]] std::vector<std::optional<optimized_value>> get_batch(
+			std::span<const std::string_view> keys) const noexcept;
+
+		/**
+		 * @brief Get multiple values as a map
+		 * @param keys Span of keys to retrieve
+		 * @return Map of found key-value pairs
+		 * @exception_safety Strong guarantee
+		 * @note Only includes keys that were found
+		 */
+		[[nodiscard]] std::unordered_map<std::string, optimized_value> get_batch_map(
+			std::span<const std::string_view> keys) const;
+
+		/**
+		 * @brief Check multiple keys existence at once
+		 * @param keys Span of keys to check
+		 * @return Vector of booleans in same order as keys
+		 * @exception_safety No-throw guarantee
+		 */
+		[[nodiscard]] std::vector<bool> contains_batch(
+			std::span<const std::string_view> keys) const noexcept;
+
+		/**
+		 * @brief Remove multiple keys at once
+		 * @param keys Span of keys to remove
+		 * @return Number of keys actually removed
+		 * @exception_safety Strong guarantee
+		 * @note Uses single lock acquisition for entire batch
+		 */
+		size_t remove_batch(std::span<const std::string_view> keys);
+
+		/**
+		 * @brief Conditional update (compare-and-swap style)
+		 * @param key Key to update
+		 * @param expected Expected current value
+		 * @param new_value New value to set if current matches expected
+		 * @return true if update was performed, false if current value didn't match
+		 * @exception_safety Strong guarantee
+		 */
+		bool update_if(std::string_view key,
+					   const value_variant& expected,
+					   value_variant&& new_value);
+
+		/**
+		 * @brief Specification for conditional batch update
+		 */
+		struct update_spec {
+			std::string key;           ///< Key to update
+			value_variant expected;    ///< Expected current value
+			value_variant new_value;   ///< New value to set if match
+		};
+
+		/**
+		 * @brief Bulk conditional update
+		 * @param updates Span of update specifications
+		 * @return Vector of booleans indicating which updates succeeded
+		 * @exception_safety Strong guarantee
+		 * @note Uses single lock acquisition for entire batch
+		 */
+		std::vector<bool> update_batch_if(std::span<const update_spec> updates);
+
+#if CONTAINER_HAS_COMMON_RESULT
+		/**
+		 * @brief Bulk insert with Result return type
+		 * @param values Vector of values to insert (moved)
+		 * @return VoidResult indicating success or error
+		 * @exception_safety Strong guarantee
+		 */
+		[[nodiscard]] kcenon::common::VoidResult bulk_insert_result(
+			std::vector<optimized_value>&& values) noexcept;
+
+		/**
+		 * @brief Get multiple values with Result return type
+		 * @param keys Span of keys to retrieve
+		 * @return Result containing vector of optional values or error
+		 * @exception_safety No-throw guarantee
+		 */
+		[[nodiscard]] kcenon::common::Result<std::vector<std::optional<optimized_value>>>
+			get_batch_result(std::span<const std::string_view> keys) const noexcept;
+
+		/**
+		 * @brief Remove multiple keys with Result return type
+		 * @param keys Span of keys to remove
+		 * @return Result containing number of removed keys or error
+		 * @exception_safety Strong guarantee
+		 */
+		[[nodiscard]] kcenon::common::Result<size_t> remove_batch_result(
+			std::span<const std::string_view> keys) noexcept;
+#endif
+
+		// =======================================================================
 		// Zero-Copy Deserialization API (Issue #226)
 		// =======================================================================
 
