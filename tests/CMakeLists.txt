@@ -59,6 +59,7 @@ set(TEST_SOURCES
     memory_pool_tests.cpp
     simd_tests.cpp
     schema_tests.cpp
+    error_codes_tests.cpp
 )
 
 # Only add benchmark tests if benchmark library is available

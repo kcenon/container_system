@@ -1,7 +1,7 @@
 # container_system API 레퍼런스
 
 > **버전**: 0.2.1
-> **최종 업데이트**: 2025-12-10
+> **최종 업데이트**: 2026-01-10
 > **상태**: C++20 Concepts 통합 완료, variant_value_v2로 마이그레이션 중 (Phase 2 진행 중)
 
 ## 목차
@@ -10,7 +10,8 @@
 2. [C++20 Concepts](#c20-concepts)
 3. [variant_value_v2 (권장)](#variant_value_v2-권장)
 4. [Container](#container)
-5. [직렬화/역직렬화](#직렬화역직렬화)
+5. [에러 코드](#에러-코드)
+6. [직렬화/역직렬화](#직렬화역직렬화)
 
 ---
 
@@ -331,6 +332,168 @@ bool remove(const std::string& key);
 **반환값**:
 - `true`: 성공적으로 제거됨
 - `false`: 키가 존재하지 않음
+
+---
+
+## 에러 코드
+
+### 개요
+
+**헤더**: `#include <container/core/container/error_codes.h>`
+
+**설명**: container_system Result<T> 패턴을 위한 표준화된 에러 코드입니다. 에러 코드는 쉬운 식별과 처리를 위해 백의 자리 숫자로 카테고리가 구분됩니다.
+
+**네임스페이스**: `container_module::error_codes`
+
+### 에러 코드 카테고리
+
+| 카테고리 | 범위 | 설명 |
+|----------|------|------|
+| 값 연산 | 1xx (100-199) | 키/값 접근 및 수정 오류 |
+| 직렬화 | 2xx (200-299) | 데이터 형식 및 인코딩 오류 |
+| 검증 | 3xx (300-399) | 스키마 및 제약 검증 오류 |
+| 리소스 | 4xx (400-499) | 파일 및 메모리 리소스 오류 |
+| 스레드 안전성 | 5xx (500-599) | 동시성 및 락 오류 |
+
+### 에러 코드 참조
+
+#### 값 연산 (1xx)
+
+| 코드 | 이름 | 설명 |
+|------|------|------|
+| 100 | `key_not_found` | 요청한 키가 컨테이너에 존재하지 않음 |
+| 101 | `type_mismatch` | 값 타입이 요청한 타입과 일치하지 않음 |
+| 102 | `value_out_of_range` | 숫자 값이 유효 범위를 벗어남 |
+| 103 | `invalid_value` | 연산에 유효하지 않은 값 |
+| 104 | `key_already_exists` | 고유 키가 필요한데 키가 이미 존재함 |
+| 105 | `empty_key` | 빈 키 이름이 제공됨 |
+
+#### 직렬화 (2xx)
+
+| 코드 | 이름 | 설명 |
+|------|------|------|
+| 200 | `serialization_failed` | 직렬화 연산 실패 |
+| 201 | `deserialization_failed` | 역직렬화 연산 실패 |
+| 202 | `invalid_format` | 데이터 형식이 유효하지 않거나 인식할 수 없음 |
+| 203 | `version_mismatch` | 데이터 버전이 예상 버전과 일치하지 않음 |
+| 204 | `corrupted_data` | 데이터가 손상되었거나 불완전함 |
+| 205 | `header_parse_failed` | 헤더 파싱 실패 |
+| 206 | `value_parse_failed` | 값 파싱 실패 |
+| 207 | `encoding_error` | 인코딩/디코딩 오류 (예: 유효하지 않은 UTF-8) |
+
+#### 검증 (3xx)
+
+| 코드 | 이름 | 설명 |
+|------|------|------|
+| 300 | `schema_validation_failed` | 스키마 검증 실패 |
+| 301 | `missing_required_field` | 필수 필드가 누락됨 |
+| 302 | `constraint_violated` | 제약 조건 위반 |
+| 303 | `type_constraint_violated` | 타입 제약 조건 불충족 |
+| 304 | `max_size_exceeded` | 최대 크기 초과 |
+
+#### 리소스 (4xx)
+
+| 코드 | 이름 | 설명 |
+|------|------|------|
+| 400 | `memory_allocation_failed` | 메모리 할당 실패 |
+| 401 | `file_not_found` | 파일을 찾을 수 없음 |
+| 402 | `file_read_error` | 파일 읽기 오류 |
+| 403 | `file_write_error` | 파일 쓰기 오류 |
+| 404 | `permission_denied` | 권한 거부 |
+| 405 | `resource_exhausted` | 리소스 고갈 |
+| 406 | `io_error` | I/O 연산 실패 |
+
+#### 스레드 안전성 (5xx)
+
+| 코드 | 이름 | 설명 |
+|------|------|------|
+| 500 | `lock_acquisition_failed` | 락 획득 실패 |
+| 501 | `concurrent_modification` | 동시 수정 감지됨 |
+| 502 | `lock_timeout` | 데드락 감지 또는 타임아웃 |
+
+### 유틸리티 함수
+
+#### `get_message(int code)`
+
+에러 코드에 대한 사람이 읽을 수 있는 메시지를 반환합니다.
+
+```cpp
+#include <container/core/container/error_codes.h>
+
+using namespace container_module::error_codes;
+
+auto msg = get_message(key_not_found);  // "Key not found" 반환
+auto msg2 = get_message(999);           // "Unknown error" 반환
+```
+
+#### `get_category(int code)`
+
+에러 코드의 카테고리 이름을 반환합니다.
+
+```cpp
+auto cat = get_category(100);   // "value_operation" 반환
+auto cat2 = get_category(200);  // "serialization" 반환
+auto cat3 = get_category(300);  // "validation" 반환
+auto cat4 = get_category(400);  // "resource" 반환
+auto cat5 = get_category(500);  // "thread_safety" 반환
+```
+
+#### 카테고리 확인 함수
+
+```cpp
+// 에러가 특정 카테고리에 속하는지 확인
+bool is_value_error(int code);         // 1xx 범위인지 확인
+bool is_serialization_error(int code); // 2xx 범위인지 확인
+bool is_validation_error(int code);    // 3xx 범위인지 확인
+bool is_resource_error(int code);      // 4xx 범위인지 확인
+bool is_thread_error(int code);        // 5xx 범위인지 확인
+
+// 사용 예시
+if (is_resource_error(err.code)) {
+    // 리소스 관련 에러 처리
+}
+```
+
+#### `make_message(int code, std::string_view detail = "")`
+
+컨텍스트가 포함된 상세 에러 메시지를 생성합니다.
+
+```cpp
+auto msg = make_message(file_not_found, "/path/to/file.txt");
+// "File not found: /path/to/file.txt" 반환
+```
+
+### 사용 예시
+
+```cpp
+#include <container/core/container/error_codes.h>
+
+using namespace container_module;
+using namespace container_module::error_codes;
+
+Result<int> get_value(const value_container& c, std::string_view key) {
+    auto val = c.get_value(key);
+    if (!val) {
+        return error(error_info{
+            key_not_found,
+            make_message(key_not_found, key),
+            "container_system"
+        });
+    }
+    // 값 처리...
+}
+
+// 에러 처리
+auto result = get_value(container, "user_id");
+if (!result) {
+    const auto& err = result.error();
+    if (is_value_error(err.code)) {
+        // 값 관련 에러 처리
+    } else if (is_resource_error(err.code)) {
+        // 리소스 관련 에러 처리
+    }
+}
+```
 
 ---
 

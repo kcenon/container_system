@@ -1,7 +1,7 @@
 # container_system API Reference
 
 > **Version**: 0.2.1
-> **Last Updated**: 2025-12-10
+> **Last Updated**: 2026-01-10
 > **Status**: C++20 Concepts integrated, migrating to variant_value_v2 (Phase 2 in progress)
 
 ## Table of Contents
@@ -10,7 +10,8 @@
 2. [C++20 Concepts](#c20-concepts)
 3. [variant_value_v2 (Recommended)](#variant_value_v2-recommended)
 4. [Container](#container)
-5. [Serialization/Deserialization](#serializationdeserialization)
+5. [Error Codes](#error-codes)
+6. [Serialization/Deserialization](#serializationdeserialization)
 
 ---
 
@@ -696,6 +697,168 @@ value_container::reset_metrics();
 
 // Disable for production
 value_container::set_metrics_enabled(false);
+```
+
+---
+
+## Error Codes
+
+### Overview
+
+**Header**: `#include <container/core/container/error_codes.h>`
+
+**Description**: Standardized error codes for container_system Result<T> pattern. Error codes are organized into categories by hundreds digit for easy identification and handling.
+
+**Namespace**: `container_module::error_codes`
+
+### Error Code Categories
+
+| Category | Range | Description |
+|----------|-------|-------------|
+| Value operations | 1xx (100-199) | Key/value access and modification errors |
+| Serialization | 2xx (200-299) | Data format and encoding errors |
+| Validation | 3xx (300-399) | Schema and constraint validation errors |
+| Resource | 4xx (400-499) | File and memory resource errors |
+| Thread safety | 5xx (500-599) | Concurrency and locking errors |
+
+### Error Codes Reference
+
+#### Value Operations (1xx)
+
+| Code | Name | Description |
+|------|------|-------------|
+| 100 | `key_not_found` | Requested key does not exist in the container |
+| 101 | `type_mismatch` | Value type does not match the requested type |
+| 102 | `value_out_of_range` | Numeric value is outside the valid range |
+| 103 | `invalid_value` | Value is invalid for the operation |
+| 104 | `key_already_exists` | Key already exists when unique key required |
+| 105 | `empty_key` | Empty key name provided |
+
+#### Serialization (2xx)
+
+| Code | Name | Description |
+|------|------|-------------|
+| 200 | `serialization_failed` | Serialization operation failed |
+| 201 | `deserialization_failed` | Deserialization operation failed |
+| 202 | `invalid_format` | Data format is invalid or unrecognized |
+| 203 | `version_mismatch` | Data version does not match expected version |
+| 204 | `corrupted_data` | Data is corrupted or incomplete |
+| 205 | `header_parse_failed` | Header parsing failed |
+| 206 | `value_parse_failed` | Value parsing failed |
+| 207 | `encoding_error` | Encoding/decoding error (e.g., invalid UTF-8) |
+
+#### Validation (3xx)
+
+| Code | Name | Description |
+|------|------|-------------|
+| 300 | `schema_validation_failed` | Schema validation failed |
+| 301 | `missing_required_field` | Required field is missing |
+| 302 | `constraint_violated` | Constraint was violated |
+| 303 | `type_constraint_violated` | Type constraint not satisfied |
+| 304 | `max_size_exceeded` | Maximum size exceeded |
+
+#### Resource (4xx)
+
+| Code | Name | Description |
+|------|------|-------------|
+| 400 | `memory_allocation_failed` | Memory allocation failed |
+| 401 | `file_not_found` | File not found |
+| 402 | `file_read_error` | File read error |
+| 403 | `file_write_error` | File write error |
+| 404 | `permission_denied` | Permission denied |
+| 405 | `resource_exhausted` | Resource exhausted |
+| 406 | `io_error` | I/O operation failed |
+
+#### Thread Safety (5xx)
+
+| Code | Name | Description |
+|------|------|-------------|
+| 500 | `lock_acquisition_failed` | Lock acquisition failed |
+| 501 | `concurrent_modification` | Concurrent modification detected |
+| 502 | `lock_timeout` | Deadlock detected or timeout |
+
+### Utility Functions
+
+#### `get_message(int code)`
+
+Returns a human-readable message for an error code.
+
+```cpp
+#include <container/core/container/error_codes.h>
+
+using namespace container_module::error_codes;
+
+auto msg = get_message(key_not_found);  // Returns "Key not found"
+auto msg2 = get_message(999);           // Returns "Unknown error"
+```
+
+#### `get_category(int code)`
+
+Returns the category name for an error code.
+
+```cpp
+auto cat = get_category(100);   // Returns "value_operation"
+auto cat2 = get_category(200);  // Returns "serialization"
+auto cat3 = get_category(300);  // Returns "validation"
+auto cat4 = get_category(400);  // Returns "resource"
+auto cat5 = get_category(500);  // Returns "thread_safety"
+```
+
+#### Category Check Functions
+
+```cpp
+// Check if error belongs to a specific category
+bool is_value_error(int code);         // Check if 1xx range
+bool is_serialization_error(int code); // Check if 2xx range
+bool is_validation_error(int code);    // Check if 3xx range
+bool is_resource_error(int code);      // Check if 4xx range
+bool is_thread_error(int code);        // Check if 5xx range
+
+// Example usage
+if (is_resource_error(err.code)) {
+    // Handle resource-related errors
+}
+```
+
+#### `make_message(int code, std::string_view detail = "")`
+
+Builds a detailed error message with context.
+
+```cpp
+auto msg = make_message(file_not_found, "/path/to/file.txt");
+// Returns "File not found: /path/to/file.txt"
+```
+
+### Usage Example
+
+```cpp
+#include <container/core/container/error_codes.h>
+
+using namespace container_module;
+using namespace container_module::error_codes;
+
+Result<int> get_value(const value_container& c, std::string_view key) {
+    auto val = c.get_value(key);
+    if (!val) {
+        return error(error_info{
+            key_not_found,
+            make_message(key_not_found, key),
+            "container_system"
+        });
+    }
+    // Process value...
+}
+
+// Error handling
+auto result = get_value(container, "user_id");
+if (!result) {
+    const auto& err = result.error();
+    if (is_value_error(err.code)) {
+        // Handle value-related errors
+    } else if (is_resource_error(err.code)) {
+        // Handle resource-related errors
+    }
+}
 ```
 
 ---
