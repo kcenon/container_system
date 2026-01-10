@@ -310,6 +310,268 @@ for (int i = 0; i < 100; ++i) {
 container->set_values(bulk_values);  // Single operation
 ```
 
+## C++20 Coroutine Async API
+
+The Container System provides comprehensive C++20 coroutine-based asynchronous APIs for non-blocking serialization, deserialization, and file operations.
+
+### Coroutine Types
+
+#### task<T>
+A lazy coroutine task type that represents an asynchronous computation:
+
+```cpp
+#include <container/internal/async/async.h>
+using namespace container_module::async;
+
+// Basic task usage
+task<int> compute_async() {
+    co_return 42;
+}
+
+// Task chaining with co_await
+task<int> chained_computation() {
+    int value = co_await compute_async();
+    co_return value * 2;
+}
+
+// Exception propagation
+task<void> may_throw() {
+    throw std::runtime_error("async error");
+    co_return;
+}
+```
+
+Features:
+- **Lazy evaluation** - computation starts only when awaited
+- **Move semantics** - tasks are movable but not copyable
+- **Exception propagation** - exceptions are captured and rethrown on `get()`
+- **Ready tasks** - create immediately-ready tasks with `make_ready_task()`
+
+#### generator<T>
+A coroutine generator for streaming sequences of values:
+
+```cpp
+// Generate a range of values lazily
+generator<int> range(int start, int end) {
+    for (int i = start; i < end; ++i) {
+        co_yield i;
+    }
+}
+
+// Iterate over generated values
+for (int value : range(0, 100)) {
+    std::cout << value << "\n";
+}
+
+// Infinite sequence with take()
+generator<int> infinite_sequence() {
+    int i = 0;
+    while (true) {
+        co_yield i++;
+    }
+}
+
+// Limit infinite sequences
+for (int value : take(infinite_sequence(), 10)) {
+    process(value);
+}
+```
+
+Features:
+- **Lazy generation** - values produced on-demand
+- **Memory efficient** - only one value in memory at a time
+- **Range-based for support** - standard iteration syntax
+- **Exception handling** - exceptions propagate to consumer
+
+### Async Container
+
+The `async_container` class wraps `value_container` with async operations:
+
+```cpp
+#include <container/internal/async/async.h>
+using namespace container_module::async;
+
+// Create async container
+async_container cont;
+cont.set("name", std::string("test"))
+    .set("value", static_cast<int64_t>(42));
+
+// Async serialization
+task<void> serialize_example() {
+    async_container cont;
+    cont.set("data", std::string("example"));
+
+    auto result = co_await cont.serialize_async();
+    if (result.is_ok()) {
+        auto& bytes = result.value();
+        // Use serialized data
+    }
+}
+
+// Async deserialization
+task<void> deserialize_example(std::span<const uint8_t> data) {
+    auto result = co_await async_container::deserialize_async(data);
+    if (result.is_ok()) {
+        auto container = result.value();
+        // Use restored container
+    }
+}
+```
+
+### Async File I/O
+
+Non-blocking file operations with progress callbacks:
+
+```cpp
+// Async file save
+task<void> save_data() {
+    async_container cont;
+    cont.set("key", std::string("value"));
+
+    // Optional progress callback
+    auto result = co_await cont.save_async("data.bin",
+        [](size_t bytes, size_t total) {
+            std::cout << "Progress: " << (bytes * 100 / total) << "%\n";
+        });
+
+    if (result.is_ok()) {
+        std::cout << "File saved successfully\n";
+    }
+}
+
+// Async file load
+task<void> load_data() {
+    async_container cont;
+    auto result = co_await cont.load_async("data.bin");
+
+    if (result.is_ok()) {
+        auto value = cont.get<std::string>("key");
+        // Use loaded data
+    }
+}
+
+// Standalone file utilities
+task<void> file_utilities() {
+    // Read file async
+    auto read_result = co_await read_file_async("input.bin");
+    if (read_result.is_ok()) {
+        auto& data = read_result.value();
+        // Process data
+    }
+
+    // Write file async
+    std::vector<uint8_t> data = {0x01, 0x02, 0x03};
+    auto write_result = co_await write_file_async("output.bin", data);
+}
+```
+
+### Streaming Serialization
+
+For large containers, use chunked serialization to avoid memory spikes:
+
+```cpp
+// Serialize in chunks
+task<void> stream_to_network(async_container& cont) {
+    // 64KB chunks
+    for (auto& chunk : cont.serialize_chunked(64 * 1024)) {
+        co_await network_send_async(chunk);
+    }
+}
+
+// Streaming deserialization
+task<void> streaming_deserialize(std::span<const uint8_t> data) {
+    auto result = co_await async_container::deserialize_streaming(data, true);
+    if (result.is_ok()) {
+        auto container = result.value();
+        // Use container
+    }
+}
+```
+
+### Thread Pool Integration
+
+The `thread_pool_executor` provides efficient async execution:
+
+```cpp
+#include <container/internal/async/thread_pool_executor.h>
+
+// Create executor with custom thread count
+thread_pool_executor executor(4);
+
+// Submit work
+auto future = executor.submit([]() {
+    return expensive_computation();
+});
+
+// Get result
+auto result = future.get();
+
+// Execute coroutine on pool
+task<int> async_work() {
+    co_return 42;
+}
+
+executor.spawn(async_work());
+```
+
+### Boost.Asio Integration
+
+Example integration with Boost.Asio event loop:
+
+```cpp
+#include <asio/awaitable.hpp>
+#include <asio/co_spawn.hpp>
+
+asio::awaitable<void> handle_client(tcp::socket socket) {
+    // Read data from socket
+    std::vector<uint8_t> buffer(1024);
+    auto bytes_read = co_await socket.async_read_some(
+        asio::buffer(buffer), asio::use_awaitable);
+
+    // Deserialize container async
+    buffer.resize(bytes_read);
+    auto result = co_await async_container::deserialize_async(buffer);
+
+    if (result.is_ok()) {
+        auto container = result.value();
+
+        // Process and respond
+        async_container response;
+        response.set("status", std::string("ok"));
+
+        auto serialized = co_await response.serialize_async();
+        if (serialized.is_ok()) {
+            co_await socket.async_write_some(
+                asio::buffer(serialized.value()), asio::use_awaitable);
+        }
+    }
+}
+```
+
+### Compiler Requirements
+
+| Compiler | Minimum Version |
+|----------|-----------------|
+| GCC | 10+ (full support in 11+) |
+| Clang | 13+ |
+| MSVC | 2019 16.8+ |
+
+### CMake Configuration
+
+Enable/disable coroutine support:
+
+```cmake
+# Enable coroutines (default: ON)
+option(CONTAINER_ENABLE_COROUTINES "Enable C++20 coroutine-based async API" ON)
+
+# Check at runtime
+#if CONTAINER_HAS_COROUTINES
+    // Coroutine code
+#else
+    // Fallback code
+#endif
+```
+
 ## Real-World Use Cases
 
 ### Financial Trading System
