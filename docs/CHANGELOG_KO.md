@@ -12,6 +12,18 @@ Container System 프로젝트의 모든 주요 변경 사항이 이 파일에 �
 ## [Unreleased]
 
 ### Added
+- **비동기 컨테이너 작업** (#266): 컨테이너 직렬화를 위한 코루틴 기반 비동기 API 추가 (Phase 2)
+  - 비동기 작업을 위해 `value_container`를 래핑하는 `async_container` 클래스 추가
+  - 논블로킹 바이트 배열 직렬화를 위한 `serialize_async()` 메서드 추가
+  - 논블로킹 문자열 직렬화를 위한 `serialize_string_async()` 메서드 추가
+  - 바이트로부터 비동기 역직렬화를 위한 `deserialize_async()` 정적 메서드 추가
+  - 문자열로부터 비동기 역직렬화를 위한 `deserialize_string_async()` 정적 메서드 추가
+  - CPU 바운드 작업 오프로딩을 위한 `detail::async_awaitable`을 통한 스레드 풀 통합 추가
+  - 기본 컨테이너로 포워딩하는 편의 메서드: `set()`, `get()`, `contains()` 추가
+  - 비동기 컨테이너 작업을 위한 7개의 포괄적인 단위 테스트 추가
+  - Result 기반 및 예외 기반 에러 처리 API 모두 지원
+  - C++20 코루틴 지원 필요
+
 - **MessagePack 직렬화 지원** (#234): JSON/XML 대안으로 MessagePack 바이너리 포맷 추가
   - 컴팩트한 바이너리 직렬화를 위한 `msgpack_encoder` 클래스 추가
   - 바이너리 역직렬화를 위한 `msgpack_decoder` 클래스 추가
