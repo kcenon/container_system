@@ -27,6 +27,13 @@ Container System 프로젝트의 모든 주요 변경 사항이 이 파일에 �
   - Issue #231 Phase 5: 하위 호환 Deprecated 래퍼의 일부
 
 ### Added
+- **Lock-Free 리더 검증** (#263): lock-free 리더를 위한 스트레스 테스트 및 벤치마크 추가 (Phase 5)
+  - 100만 읽기를 수행하는 100개 동시 리더로 스트레스 테스트 추가
+  - 50개 리더, 5개 라이터, 주기적 새로고침을 포함한 혼합 읽기/쓰기 스트레스 테스트 추가
+  - 높은 부하 상태에서 연속 자동 새로고침 테스트 추가
+  - 수동 비교 테스트를 위한 비활성화된 성능 벤치마크 추가
+  - 모든 테스트가 경합 상태에서 스레드 안전성과 정확성 검증
+
 - **자동 새로고침 Lock-Free 리더** (#262): 스레드 안전 컨테이너를 위한 자동 새로고침 lock-free 리더 추가 (Phase 4)
   - 설정 가능한 새로고침 간격을 가진 `auto_refresh_reader` 클래스 추가
   - `thread_safe_container`에 `create_auto_refresh_reader(interval)` 팩토리 메서드 추가

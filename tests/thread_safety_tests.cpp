@@ -1346,3 +1346,223 @@ TEST(AutoRefreshReaderTest, ContainerMethodDelegation) {
     auto source = reader->source();
     EXPECT_EQ(source, container);
 }
+
+// =============================================================================
+// Lock-Free Reader Stress Tests and Benchmarks (Issue #263)
+// =============================================================================
+
+TEST(LockFreeReaderStressTest, StressTest100ConcurrentReaders) {
+    auto container = std::make_shared<thread_safe_container>();
+
+    // Initialize container with test data
+    for (int i = 0; i < 100; ++i) {
+        std::string key = "key" + std::to_string(i);
+        container->set(key, value(key, i * 2));
+    }
+
+    lockfree_container_reader reader(container);
+
+    std::atomic<uint64_t> total_reads{0};
+    std::atomic<uint64_t> successful_reads{0};
+    std::vector<std::thread> threads;
+
+    constexpr int kNumReaders = 100;
+    constexpr int kReadsPerThread = 10000;
+
+    for (int t = 0; t < kNumReaders; ++t) {
+        threads.emplace_back([&reader, &total_reads, &successful_reads, t]() {
+            for (int i = 0; i < kReadsPerThread; ++i) {
+                int key_idx = (t + i) % 100;
+                auto val = reader.get<int32_t>("key" + std::to_string(key_idx));
+                total_reads.fetch_add(1, std::memory_order_relaxed);
+                if (val.has_value() && *val == key_idx * 2) {
+                    successful_reads.fetch_add(1, std::memory_order_relaxed);
+                }
+            }
+        });
+    }
+
+    for (auto& t : threads) {
+        t.join();
+    }
+
+    EXPECT_EQ(total_reads.load(), static_cast<uint64_t>(kNumReaders * kReadsPerThread));
+    EXPECT_EQ(successful_reads.load(), static_cast<uint64_t>(kNumReaders * kReadsPerThread));
+}
+
+TEST(LockFreeReaderStressTest, MixedReadWriteWithRefresh) {
+    auto container = std::make_shared<thread_safe_container>();
+
+    // Initialize with some data
+    for (int i = 0; i < 50; ++i) {
+        std::string key = "key" + std::to_string(i);
+        container->set(key, value(key, i));
+    }
+
+    lockfree_container_reader reader(container);
+
+    std::atomic<bool> stop_flag{false};
+    std::atomic<uint64_t> read_count{0};
+    std::atomic<uint64_t> write_count{0};
+    std::atomic<uint64_t> refresh_count{0};
+
+    std::vector<std::thread> readers;
+    std::vector<std::thread> writers;
+    std::thread refresher;
+
+    // 50 reader threads
+    for (int t = 0; t < 50; ++t) {
+        readers.emplace_back([&reader, &stop_flag, &read_count, t]() {
+            while (!stop_flag.load(std::memory_order_relaxed)) {
+                int key_idx = t % 50;
+                auto val = reader.get<int32_t>("key" + std::to_string(key_idx));
+                read_count.fetch_add(1, std::memory_order_relaxed);
+                // Small yield to prevent busy spinning
+                if (read_count.load(std::memory_order_relaxed) % 1000 == 0) {
+                    std::this_thread::yield();
+                }
+            }
+        });
+    }
+
+    // 5 writer threads
+    for (int t = 0; t < 5; ++t) {
+        writers.emplace_back([&container, &stop_flag, &write_count, t]() {
+            int counter = 0;
+            while (!stop_flag.load(std::memory_order_relaxed)) {
+                int key_idx = (t * 10 + counter) % 50;
+                std::string key = "key" + std::to_string(key_idx);
+                container->set(key, value(key, counter));
+                write_count.fetch_add(1, std::memory_order_relaxed);
+                counter++;
+                std::this_thread::sleep_for(std::chrono::microseconds(100));
+            }
+        });
+    }
+
+    // Refresh thread
+    refresher = std::thread([&reader, &stop_flag, &refresh_count]() {
+        while (!stop_flag.load(std::memory_order_relaxed)) {
+            reader.refresh();
+            refresh_count.fetch_add(1, std::memory_order_relaxed);
+            std::this_thread::sleep_for(std::chrono::milliseconds(10));
+        }
+    });
+
+    // Run for 500ms
+    std::this_thread::sleep_for(std::chrono::milliseconds(500));
+    stop_flag.store(true, std::memory_order_relaxed);
+
+    for (auto& t : readers) {
+        t.join();
+    }
+    for (auto& t : writers) {
+        t.join();
+    }
+    refresher.join();
+
+    // Verify significant activity occurred
+    EXPECT_GT(read_count.load(), 100000U);  // Should have many reads
+    EXPECT_GT(write_count.load(), 100U);     // Should have some writes
+    EXPECT_GT(refresh_count.load(), 10U);    // Should have multiple refreshes
+}
+
+TEST(LockFreeReaderStressTest, ContinuousRefreshUnderLoad) {
+    auto container = std::make_shared<thread_safe_container>();
+
+    for (int i = 0; i < 100; ++i) {
+        std::string key = "key" + std::to_string(i);
+        container->set(key, value(key, i));
+    }
+
+    auto reader = container->create_auto_refresh_reader(std::chrono::milliseconds(5));
+
+    std::atomic<uint64_t> read_count{0};
+    std::atomic<bool> stop_flag{false};
+    std::vector<std::thread> threads;
+
+    // 100 reader threads
+    for (int t = 0; t < 100; ++t) {
+        threads.emplace_back([&reader, &stop_flag, &read_count]() {
+            while (!stop_flag.load(std::memory_order_relaxed)) {
+                for (int i = 0; i < 100; ++i) {
+                    auto val = reader->get<int32_t>("key" + std::to_string(i));
+                    read_count.fetch_add(1, std::memory_order_relaxed);
+                }
+            }
+        });
+    }
+
+    // Run for 500ms with continuous auto-refresh
+    std::this_thread::sleep_for(std::chrono::milliseconds(500));
+    stop_flag.store(true, std::memory_order_relaxed);
+
+    for (auto& t : threads) {
+        t.join();
+    }
+
+    EXPECT_GT(read_count.load(), 100000U);  // Should have many reads
+    EXPECT_GT(reader->refresh_count(), 50U);  // Should have ~100 refreshes (500ms / 5ms)
+}
+
+// Performance benchmark (disabled by default, enable for manual testing)
+TEST(LockFreeReaderBenchmark, DISABLED_CompareWithMutexBased) {
+    auto container = std::make_shared<thread_safe_container>();
+
+    for (int i = 0; i < 100; ++i) {
+        std::string key = "key" + std::to_string(i);
+        container->set(key, value(key, i));
+    }
+
+    lockfree_container_reader lockfree_reader(container);
+
+    constexpr int kIterations = 100000;
+    constexpr int kNumThreads = 10;
+
+    // Benchmark lock-free reader
+    auto lockfree_start = std::chrono::high_resolution_clock::now();
+    {
+        std::vector<std::thread> threads;
+        for (int t = 0; t < kNumThreads; ++t) {
+            threads.emplace_back([&lockfree_reader, t]() {
+                for (int i = 0; i < kIterations; ++i) {
+                    auto val = lockfree_reader.get<int32_t>("key" + std::to_string((t + i) % 100));
+                    (void)val;
+                }
+            });
+        }
+        for (auto& t : threads) {
+            t.join();
+        }
+    }
+    auto lockfree_end = std::chrono::high_resolution_clock::now();
+    auto lockfree_ns = std::chrono::duration_cast<std::chrono::nanoseconds>(
+        lockfree_end - lockfree_start).count();
+
+    // Benchmark mutex-based direct access
+    auto mutex_start = std::chrono::high_resolution_clock::now();
+    {
+        std::vector<std::thread> threads;
+        for (int t = 0; t < kNumThreads; ++t) {
+            threads.emplace_back([&container, t]() {
+                for (int i = 0; i < kIterations; ++i) {
+                    auto val = container->get("key" + std::to_string((t + i) % 100));
+                    (void)val;
+                }
+            });
+        }
+        for (auto& t : threads) {
+            t.join();
+        }
+    }
+    auto mutex_end = std::chrono::high_resolution_clock::now();
+    auto mutex_ns = std::chrono::duration_cast<std::chrono::nanoseconds>(
+        mutex_end - mutex_start).count();
+
+    double lockfree_per_op = static_cast<double>(lockfree_ns) / (kNumThreads * kIterations);
+    double mutex_per_op = static_cast<double>(mutex_ns) / (kNumThreads * kIterations);
+    double improvement = mutex_per_op / lockfree_per_op;
+
+    // Lock-free should be at least 2x faster under contention
+    EXPECT_GT(improvement, 2.0);
+}
