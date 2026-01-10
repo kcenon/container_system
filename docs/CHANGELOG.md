@@ -12,6 +12,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Schema-Validated Deserialization** (#249): Add schema validation support for deserialize operations (Phase 5)
+  - Add `deserialize(data, schema)` overloads for string and byte array inputs
+  - Add `deserialize_result(data, schema)` overloads returning `VoidResult` for Result-based error handling
+  - Add `get_validation_errors()` method to retrieve detailed validation errors after deserialization
+  - Add `clear_validation_errors()` method to reset stored validation state
+  - Validation errors include field names, descriptive messages, and error codes
+  - Supports all schema constraints: type checking, ranges, length, patterns, enum values, custom validators, and nested schemas
+  - Add 9 comprehensive unit tests for schema-validated deserialization
+  - Completes the schema validation feature (#228)
+
 - **CMake Integration and Examples** (#269): Add CMake configuration and example code for async API (Phase 5)
   - Add `thread_pool_executor.h` for integration with common_system thread pool executor
   - Add `async_executor_context` singleton for global executor configuration
