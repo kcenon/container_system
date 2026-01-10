@@ -8,6 +8,8 @@ All rights reserved.
 #include <gtest/gtest.h>
 #include "test_compat.h"
 #include "container/internal/memory_pool.h"
+#include "container/internal/rcu_value.h"
+#include "container/internal/epoch_manager.h"
 
 #include <thread>
 #include <vector>
@@ -759,4 +761,428 @@ TEST_F(ContainerThreadSafetyTest, SetGetVariantAPI) {
     // Test get_variant with non-existent key
     auto missing = container.get_variant("non_existent");
     EXPECT_FALSE(missing.has_value());
+}
+
+// Test 17: Lock-free container reader basic operations
+TEST_F(ContainerThreadSafetyTest, LockFreeReaderBasicOperations) {
+    auto container = std::make_shared<thread_safe_container>();
+
+    // Populate container
+    container->set_typed("int_key", 42);
+    container->set_typed("string_key", std::string("hello"));
+    container->set_typed("double_key", 3.14159);
+
+    // Create lock-free reader
+    lockfree_container_reader reader(container);
+
+    // Verify lock-free reads
+    auto int_val = reader.get<int32_t>("int_key");
+    ASSERT_TRUE(int_val.has_value());
+    EXPECT_EQ(int_val.value(), 42);
+
+    auto str_val = reader.get<std::string>("string_key");
+    ASSERT_TRUE(str_val.has_value());
+    EXPECT_EQ(str_val.value(), "hello");
+
+    auto dbl_val = reader.get<double>("double_key");
+    ASSERT_TRUE(dbl_val.has_value());
+    EXPECT_NEAR(dbl_val.value(), 3.14159, 0.0001);
+
+    // Test contains
+    EXPECT_TRUE(reader.contains("int_key"));
+    EXPECT_FALSE(reader.contains("non_existent"));
+
+    // Test size
+    EXPECT_EQ(reader.size(), 3);
+
+    // Test empty
+    EXPECT_FALSE(reader.empty());
+
+    // Test keys
+    auto keys = reader.keys();
+    EXPECT_EQ(keys.size(), 3);
+}
+
+// Test 18: Lock-free reader refresh functionality
+TEST_F(ContainerThreadSafetyTest, LockFreeReaderRefresh) {
+    auto container = std::make_shared<thread_safe_container>();
+    container->set_typed("key1", 100);
+
+    lockfree_container_reader reader(container);
+
+    // Initial read
+    auto val1 = reader.get<int32_t>("key1");
+    ASSERT_TRUE(val1.has_value());
+    EXPECT_EQ(val1.value(), 100);
+
+    // Modify container
+    container->set_typed("key1", 200);
+    container->set_typed("key2", 300);
+
+    // Reader still sees old snapshot
+    auto val1_stale = reader.get<int32_t>("key1");
+    ASSERT_TRUE(val1_stale.has_value());
+    EXPECT_EQ(val1_stale.value(), 100);
+
+    auto val2_missing = reader.get<int32_t>("key2");
+    EXPECT_FALSE(val2_missing.has_value());
+
+    // Refresh and verify new values
+    reader.refresh();
+    EXPECT_GE(reader.refresh_count(), 2);
+
+    auto val1_new = reader.get<int32_t>("key1");
+    ASSERT_TRUE(val1_new.has_value());
+    EXPECT_EQ(val1_new.value(), 200);
+
+    auto val2_new = reader.get<int32_t>("key2");
+    ASSERT_TRUE(val2_new.has_value());
+    EXPECT_EQ(val2_new.value(), 300);
+}
+
+// Test 19: Lock-free reader concurrent reads (no locking)
+TEST_F(ContainerThreadSafetyTest, LockFreeReaderConcurrentReads) {
+    auto container = std::make_shared<thread_safe_container>();
+
+    // Populate container
+    for (int i = 0; i < 100; ++i) {
+        std::string key = "key_" + std::to_string(i);
+        container->set(key, value(key, i * 2));
+    }
+
+    lockfree_container_reader reader(container);
+
+    const int num_readers = 50;
+    const int reads_per_thread = 10000;
+
+    std::vector<std::thread> threads;
+    std::atomic<int> errors{0};
+    std::atomic<size_t> total_reads{0};
+    std::barrier sync_point(num_readers);
+
+    for (int i = 0; i < num_readers; ++i) {
+        threads.emplace_back([&, thread_id = i]() {
+            sync_point.arrive_and_wait();  // All threads start together
+
+            std::mt19937 rng(thread_id);
+            std::uniform_int_distribution<int> dist(0, 99);
+
+            for (int j = 0; j < reads_per_thread; ++j) {
+                try {
+                    int key_idx = dist(rng);
+                    std::string key = "key_" + std::to_string(key_idx);
+
+                    // Lock-free read!
+                    auto val = reader.get<int32_t>(key);
+                    if (val.has_value() && val.value() != key_idx * 2) {
+                        ++errors;
+                    }
+                    total_reads.fetch_add(1, std::memory_order_relaxed);
+                } catch (...) {
+                    ++errors;
+                }
+            }
+        });
+    }
+
+    for (auto& t : threads) {
+        t.join();
+    }
+
+    EXPECT_EQ(errors.load(), 0);
+    EXPECT_EQ(total_reads.load(), num_readers * reads_per_thread);
+}
+
+// Test 20: Lock-free reader with concurrent writes to source
+TEST_F(ContainerThreadSafetyTest, LockFreeReaderConcurrentWithWrites) {
+    auto container = std::make_shared<thread_safe_container>();
+
+    // Pre-populate
+    for (int i = 0; i < 50; ++i) {
+        std::string key = "key_" + std::to_string(i);
+        container->set(key, value(key, i));
+    }
+
+    lockfree_container_reader reader(container);
+
+    const int num_readers = 20;
+    const int num_writers = 5;
+    const int num_refreshers = 2;
+    const int operations_per_thread = 2000;
+
+    std::vector<std::thread> threads;
+    std::atomic<int> errors{0};
+    std::atomic<bool> done{false};
+    std::latch completion_latch(num_readers + num_writers);
+
+    // Reader threads (lock-free reads)
+    for (int i = 0; i < num_readers; ++i) {
+        threads.emplace_back([&, thread_id = i]() {
+            std::mt19937 rng(thread_id);
+            std::uniform_int_distribution<int> dist(0, 49);
+
+            for (int j = 0; j < operations_per_thread; ++j) {
+                try {
+                    int key_idx = dist(rng);
+                    std::string key = "key_" + std::to_string(key_idx);
+
+                    // Lock-free read - should never throw or crash
+                    auto val = reader.get<int32_t>(key);
+                    // Value may or may not exist depending on refresh state
+                    (void)val;
+                } catch (...) {
+                    ++errors;
+                }
+            }
+            completion_latch.count_down();
+        });
+    }
+
+    // Writer threads (modify source container)
+    for (int i = 0; i < num_writers; ++i) {
+        threads.emplace_back([&, thread_id = i]() {
+            std::mt19937 rng(thread_id + 100);
+            std::uniform_int_distribution<int> dist(0, 49);
+
+            for (int j = 0; j < operations_per_thread; ++j) {
+                try {
+                    int key_idx = dist(rng);
+                    std::string key = "key_" + std::to_string(key_idx);
+                    container->set(key, value(key, thread_id * 10000 + j));
+                } catch (...) {
+                    ++errors;
+                }
+
+                if (j % 100 == 0) {
+                    std::this_thread::yield();
+                }
+            }
+            completion_latch.count_down();
+        });
+    }
+
+    // Refresher threads
+    for (int i = 0; i < num_refreshers; ++i) {
+        threads.emplace_back([&reader, &done, &errors]() {
+            while (!done.load()) {
+                try {
+                    reader.refresh();
+                } catch (...) {
+                    ++errors;
+                }
+                std::this_thread::yield();
+            }
+        });
+    }
+
+    // Wait for readers and writers to complete
+    completion_latch.wait();
+    done.store(true);
+
+    for (auto& t : threads) {
+        t.join();
+    }
+
+    EXPECT_EQ(errors.load(), 0);
+    EXPECT_GT(reader.refresh_count(), 1);
+}
+
+// Test 21: Lock-free reader for_each iteration
+TEST_F(ContainerThreadSafetyTest, LockFreeReaderForEach) {
+    auto container = std::make_shared<thread_safe_container>();
+
+    // Populate
+    for (int i = 0; i < 100; ++i) {
+        std::string key = "item_" + std::to_string(i);
+        container->set(key, value(key, i * 3));
+    }
+
+    lockfree_container_reader reader(container);
+
+    // Iterate using for_each
+    size_t count = 0;
+    int64_t sum = 0;
+    reader.for_each([&count, &sum](const std::string& key, const value& val) {
+        ++count;
+        auto int_val = val.get<int32_t>();
+        if (int_val.has_value()) {
+            sum += int_val.value();
+        }
+        (void)key;
+    });
+
+    EXPECT_EQ(count, 100);
+    // Sum of 0*3 + 1*3 + 2*3 + ... + 99*3 = 3 * (99 * 100 / 2) = 14850
+    EXPECT_EQ(sum, 14850);
+}
+
+// Test 22: Lock-free reader with factory method
+TEST_F(ContainerThreadSafetyTest, LockFreeReaderFactoryMethod) {
+    auto container = std::make_shared<thread_safe_container>();
+    container->set_typed("test", 42);
+
+    // Create reader using factory method
+    auto reader = container->create_lockfree_reader();
+    ASSERT_NE(reader, nullptr);
+
+    auto val = reader->get<int32_t>("test");
+    ASSERT_TRUE(val.has_value());
+    EXPECT_EQ(val.value(), 42);
+
+    // Verify source is correct
+    EXPECT_EQ(reader->source(), container);
+}
+
+// Test 23: RCU value basic operations
+TEST_F(ContainerThreadSafetyTest, RcuValueBasicOperations) {
+    rcu_value<int> counter{0};
+
+    // Read initial value
+    auto snapshot = counter.read();
+    ASSERT_NE(snapshot, nullptr);
+    EXPECT_EQ(*snapshot, 0);
+
+    // Update value
+    counter.update(42);
+    EXPECT_EQ(counter.update_count(), 1);
+
+    // Read new value
+    auto new_snapshot = counter.read();
+    ASSERT_NE(new_snapshot, nullptr);
+    EXPECT_EQ(*new_snapshot, 42);
+
+    // Old snapshot still valid
+    EXPECT_EQ(*snapshot, 0);
+}
+
+// Test 24: RCU value concurrent operations
+TEST_F(ContainerThreadSafetyTest, RcuValueConcurrentOperations) {
+    rcu_value<std::string> data{"initial"};
+
+    const int num_readers = 30;
+    const int num_writers = 5;
+    const int operations_per_thread = 5000;
+
+    std::vector<std::thread> threads;
+    std::atomic<int> errors{0};
+    std::barrier sync_point(num_readers + num_writers);
+
+    // Reader threads
+    for (int i = 0; i < num_readers; ++i) {
+        threads.emplace_back([&]() {
+            sync_point.arrive_and_wait();
+
+            for (int j = 0; j < operations_per_thread; ++j) {
+                try {
+                    auto snapshot = data.read();
+                    // Just access the data
+                    if (snapshot && snapshot->empty()) {
+                        // Valid but empty string is unexpected in this test
+                    }
+                } catch (...) {
+                    ++errors;
+                }
+            }
+        });
+    }
+
+    // Writer threads
+    for (int i = 0; i < num_writers; ++i) {
+        threads.emplace_back([&, thread_id = i]() {
+            sync_point.arrive_and_wait();
+
+            for (int j = 0; j < operations_per_thread; ++j) {
+                try {
+                    data.update("thread_" + std::to_string(thread_id) + "_" + std::to_string(j));
+                } catch (...) {
+                    ++errors;
+                }
+
+                if (j % 100 == 0) {
+                    std::this_thread::yield();
+                }
+            }
+        });
+    }
+
+    for (auto& t : threads) {
+        t.join();
+    }
+
+    EXPECT_EQ(errors.load(), 0);
+    EXPECT_GT(data.update_count(), 0);
+}
+
+// Test 25: RCU value compare and update
+TEST_F(ContainerThreadSafetyTest, RcuValueCompareAndUpdate) {
+    rcu_value<int> counter{0};
+
+    // Successful CAS
+    auto expected = counter.read();
+    EXPECT_TRUE(counter.compare_and_update(expected, 1));
+    EXPECT_EQ(*counter.read(), 1);
+
+    // Failed CAS (expected doesn't match)
+    EXPECT_FALSE(counter.compare_and_update(expected, 2));
+    EXPECT_EQ(*counter.read(), 1);
+
+    // Successful CAS with new expected
+    expected = counter.read();
+    EXPECT_TRUE(counter.compare_and_update(expected, 100));
+    EXPECT_EQ(*counter.read(), 100);
+}
+
+// Test 26: Epoch manager basic operations
+TEST_F(ContainerThreadSafetyTest, EpochManagerBasicOperations) {
+    epoch_manager& em = epoch_manager::instance();
+
+    // Enter and exit critical section
+    EXPECT_FALSE(em.in_critical_section());
+    em.enter_critical();
+    EXPECT_TRUE(em.in_critical_section());
+    em.exit_critical();
+    EXPECT_FALSE(em.in_critical_section());
+}
+
+// Test 27: Epoch guard RAII
+TEST_F(ContainerThreadSafetyTest, EpochGuardRAII) {
+    epoch_manager& em = epoch_manager::instance();
+
+    EXPECT_FALSE(em.in_critical_section());
+
+    {
+        epoch_guard guard;
+        EXPECT_TRUE(em.in_critical_section());
+    }
+
+    EXPECT_FALSE(em.in_critical_section());
+}
+
+// Test 28: Epoch manager deferred deletion
+TEST_F(ContainerThreadSafetyTest, EpochManagerDeferredDeletion) {
+    epoch_manager& em = epoch_manager::instance();
+
+    std::atomic<int> delete_count{0};
+
+    // Defer deletion of some objects
+    for (int i = 0; i < 10; ++i) {
+        int* ptr = new int(i);
+        em.defer_delete(ptr, [&delete_count](void* p) {
+            delete static_cast<int*>(p);
+            ++delete_count;
+        });
+    }
+
+    EXPECT_GT(em.pending_count(), 0);
+
+    // Advance epochs and trigger GC
+    for (int i = 0; i < 5; ++i) {
+        em.try_gc();
+    }
+
+    // Force GC to clean up any remaining
+    em.force_gc();
+
+    // All should be deleted
+    EXPECT_EQ(delete_count.load(), 10);
 }
