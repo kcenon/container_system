@@ -12,6 +12,17 @@ Container System 프로젝트의 모든 주요 변경 사항이 이 파일에 �
 ## [Unreleased]
 
 ### Added
+- **C++20 코루틴 비동기 API** (#233): 논블로킹 작업을 위한 코루틴 기반 비동기 타입 추가 (Phase 1)
+  - 적절한 예외 전파를 지원하는 비동기 작업용 `task<T>` 코루틴 타입 추가
+  - void 반환 코루틴을 위한 `task<void>` 특수화 추가
+  - STL 호환 반복자를 통한 지연 시퀀스 생성용 `generator<T>` 추가
+  - `make_ready_task()` 및 `make_exceptional_task()` 헬퍼 함수 추가
+  - 제너레이터 출력 제한을 위한 `take()` 헬퍼 추가
+  - CMake 옵션 `CONTAINER_ENABLE_COROUTINES` 추가 (기본값: ON)
+  - 코루틴 타입을 위한 19개의 포괄적인 단위 테스트 추가
+  - 효율적인 코루틴 체이닝을 위한 대칭 전송(symmetric transfer) 지원
+  - `<coroutine>` 헤더 지원 C++20 필요 (GCC 10+, Clang 13+, MSVC 2019 16.8+)
+
 - **진정한 Lock-Free RCU 리더** (#232): Read-Copy-Update 패턴을 사용한 lock-free 읽기 경로 구현
   - 대기 없는 원자적 읽기와 copy-on-write 업데이트를 위한 `rcu_value<T>` 템플릿 클래스 추가
   - 진정한 lock-free 읽기(뮤텍스 획득 없음)를 제공하는 `lockfree_container_reader` 클래스 추가
