@@ -43,6 +43,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 namespace container_module
 {
+    // Forward declaration
+    class lockfree_container_reader;
+
     /**
      * @brief Thread-safe container with lock optimization
      * 
@@ -283,6 +286,16 @@ namespace container_module
          */
         value& operator[](const std::string& key);
 
+        /**
+         * @brief Create a lock-free reader for this container
+         *
+         * The returned reader provides truly lock-free reads using the RCU pattern.
+         * Call refresh() on the reader periodically to update its snapshot.
+         *
+         * @return Shared pointer to a new lock-free reader
+         */
+        std::shared_ptr<lockfree_container_reader> create_lockfree_reader();
+
     private:
         mutable std::shared_mutex mutex_;
         value_map values_;
@@ -341,7 +354,251 @@ namespace container_module
         mutable std::shared_mutex snapshot_mutex_;
     };
 
+    /**
+     * @brief True lock-free reader using RCU (Read-Copy-Update) pattern
+     *
+     * Unlike snapshot_reader which still uses a shared_mutex for snapshot access,
+     * this class provides genuinely lock-free reads using atomic shared_ptr operations.
+     * The trade-off is that reads may return slightly stale data between refreshes.
+     *
+     * Properties:
+     * - Read: Wait-free O(1) - no locks, no blocking, no spinning
+     * - Refresh: Blocking (acquires source container lock)
+     * - Memory: Automatic reclamation via shared_ptr reference counting
+     *
+     * Use this when:
+     * - You need true lock-free reads (e.g., signal handlers, real-time systems)
+     * - Read performance is critical and slight staleness is acceptable
+     * - You have many concurrent readers
+     *
+     * @code
+     * // Create lock-free reader
+     * auto container = std::make_shared<thread_safe_container>();
+     * lockfree_container_reader reader(container);
+     *
+     * // Lock-free reads from any thread
+     * auto value = reader.get<int>("counter");  // No locks!
+     *
+     * // Periodic refresh (e.g., from background thread)
+     * reader.refresh();
+     * @endcode
+     */
+    class lockfree_container_reader {
+    public:
+        using snapshot_type = std::unordered_map<std::string, value>;
+        using snapshot_ptr = std::shared_ptr<const snapshot_type>;
+
+        /**
+         * @brief Construct reader from container
+         * @param container The thread-safe container to read from
+         */
+        explicit lockfree_container_reader(std::shared_ptr<thread_safe_container> container)
+            : container_(std::move(container))
+            , snapshot_(std::make_shared<const snapshot_type>())
+        {
+            refresh();
+        }
+
+        /**
+         * @brief Copy constructor
+         */
+        lockfree_container_reader(const lockfree_container_reader& other)
+            : container_(other.container_)
+            , snapshot_(std::atomic_load_explicit(&other.snapshot_, std::memory_order_acquire))
+        {}
+
+        /**
+         * @brief Move constructor
+         */
+        lockfree_container_reader(lockfree_container_reader&& other) noexcept
+            : container_(std::move(other.container_))
+            , snapshot_(std::atomic_load_explicit(&other.snapshot_, std::memory_order_acquire))
+        {}
+
+        /**
+         * @brief Copy assignment
+         */
+        lockfree_container_reader& operator=(const lockfree_container_reader& other) {
+            if (this != &other) {
+                container_ = other.container_;
+                auto new_snapshot = std::atomic_load_explicit(&other.snapshot_, std::memory_order_acquire);
+                std::atomic_store_explicit(&snapshot_, new_snapshot, std::memory_order_release);
+            }
+            return *this;
+        }
+
+        /**
+         * @brief Move assignment
+         */
+        lockfree_container_reader& operator=(lockfree_container_reader&& other) noexcept {
+            if (this != &other) {
+                container_ = std::move(other.container_);
+                auto new_snapshot = std::atomic_load_explicit(&other.snapshot_, std::memory_order_acquire);
+                std::atomic_store_explicit(&snapshot_, new_snapshot, std::memory_order_release);
+            }
+            return *this;
+        }
+
+        /**
+         * @brief Destructor
+         */
+        ~lockfree_container_reader() = default;
+
+        /**
+         * @brief Lock-free typed value read
+         *
+         * This operation is wait-free: it completes in O(1) time regardless of
+         * what other threads are doing. The snapshot may be stale; call refresh()
+         * to update.
+         *
+         * @tparam T The expected value type (must satisfy ValueVariantType)
+         * @param key The key to look up
+         * @return Optional containing value if found and type matches
+         *
+         * Thread safety: Safe to call concurrently with any operation including refresh()
+         */
+        template<concepts::ValueVariantType T>
+        [[nodiscard]] std::optional<T> get(std::string_view key) const noexcept {
+            auto snap = std::atomic_load_explicit(&snapshot_, std::memory_order_acquire);
+            if (!snap) {
+                return std::nullopt;
+            }
+
+            auto it = snap->find(std::string(key));
+            if (it != snap->end()) {
+                return it->second.get<T>();
+            }
+            return std::nullopt;
+        }
+
+        /**
+         * @brief Lock-free value existence check
+         *
+         * @param key The key to check
+         * @return true if key exists in snapshot, false otherwise
+         *
+         * Thread safety: Safe to call concurrently with any operation
+         */
+        [[nodiscard]] bool contains(std::string_view key) const noexcept {
+            auto snap = std::atomic_load_explicit(&snapshot_, std::memory_order_acquire);
+            if (!snap) {
+                return false;
+            }
+            return snap->find(std::string(key)) != snap->end();
+        }
+
+        /**
+         * @brief Lock-free snapshot size check
+         *
+         * @return Number of values in the current snapshot
+         *
+         * Thread safety: Safe to call concurrently with any operation
+         */
+        [[nodiscard]] size_t size() const noexcept {
+            auto snap = std::atomic_load_explicit(&snapshot_, std::memory_order_acquire);
+            return snap ? snap->size() : 0;
+        }
+
+        /**
+         * @brief Lock-free empty check
+         *
+         * @return true if snapshot is empty, false otherwise
+         *
+         * Thread safety: Safe to call concurrently with any operation
+         */
+        [[nodiscard]] bool empty() const noexcept {
+            return size() == 0;
+        }
+
+        /**
+         * @brief Get all keys from snapshot (lock-free)
+         *
+         * @return Vector of keys in the current snapshot
+         *
+         * Thread safety: Safe to call concurrently with any operation
+         */
+        [[nodiscard]] std::vector<std::string> keys() const {
+            auto snap = std::atomic_load_explicit(&snapshot_, std::memory_order_acquire);
+            std::vector<std::string> result;
+            if (snap) {
+                result.reserve(snap->size());
+                for (const auto& [key, val] : *snap) {
+                    result.push_back(key);
+                }
+            }
+            return result;
+        }
+
+        /**
+         * @brief Iterate over snapshot (lock-free for snapshot access)
+         *
+         * The callback is called for each key-value pair in the snapshot.
+         * The iteration itself is lock-free, but the callback may perform
+         * locking operations.
+         *
+         * @tparam Func Callback function type: void(const std::string&, const value&)
+         * @param func Callback to apply to each key-value pair
+         *
+         * Thread safety: Safe to call concurrently with any operation
+         */
+        template<typename Func>
+        void for_each(Func&& func) const {
+            auto snap = std::atomic_load_explicit(&snapshot_, std::memory_order_acquire);
+            if (snap) {
+                for (const auto& [key, val] : *snap) {
+                    func(key, val);
+                }
+            }
+        }
+
+        /**
+         * @brief Refresh snapshot from source container
+         *
+         * This operation acquires the container's read lock to create a new snapshot.
+         * After this call returns, subsequent lock-free reads will see the updated data.
+         *
+         * Thread safety: Safe to call concurrently with reads, but multiple
+         * concurrent refreshes may waste work (only one will "win").
+         */
+        void refresh() {
+            auto new_snapshot = std::make_shared<snapshot_type>();
+            container_->for_each([&new_snapshot](const std::string& key, const value& val) {
+                new_snapshot->emplace(key, val);
+            });
+            std::atomic_store_explicit(&snapshot_,
+                                      snapshot_ptr(new_snapshot),
+                                      std::memory_order_release);
+            refresh_count_.fetch_add(1, std::memory_order_relaxed);
+        }
+
+        /**
+         * @brief Get the number of refreshes performed
+         * @return Refresh count since construction
+         */
+        [[nodiscard]] size_t refresh_count() const noexcept {
+            return refresh_count_.load(std::memory_order_relaxed);
+        }
+
+        /**
+         * @brief Get the source container
+         * @return Shared pointer to the source container
+         */
+        [[nodiscard]] std::shared_ptr<thread_safe_container> source() const noexcept {
+            return container_;
+        }
+
+    private:
+        std::shared_ptr<thread_safe_container> container_;
+        snapshot_ptr snapshot_;
+        std::atomic<size_t> refresh_count_{0};
+    };
+
     // Type alias for backward compatibility
     using lockfree_reader = snapshot_reader;
+
+    // Inline definition of create_lockfree_reader (must be after lockfree_container_reader is defined)
+    inline std::shared_ptr<lockfree_container_reader> thread_safe_container::create_lockfree_reader() {
+        return std::make_shared<lockfree_container_reader>(shared_from_this());
+    }
 
 } // namespace container_module
