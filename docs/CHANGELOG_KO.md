@@ -11,6 +11,21 @@ Container System 프로젝트의 모든 주요 변경 사항이 이 파일에 �
 
 ## [Unreleased]
 
+### Deprecated
+- **레거시 void/bool API 메서드** (#241): Result 반환 API를 위해 레거시 메서드를 deprecated로 표시
+  - `serialize()`를 `serialize_result()` 대신 사용 권장
+  - `serialize_array()`를 `serialize_array_result()` 대신 사용 권장
+  - `deserialize()`를 `deserialize_result()` 대신 사용 권장
+  - `to_json()`을 `to_json_result()` 대신 사용 권장
+  - `to_xml()`을 `to_xml_result()` 대신 사용 권장
+  - `to_msgpack()`을 `to_msgpack_result()` 대신 사용 권장
+  - `from_msgpack()`을 `from_msgpack_result()` 대신 사용 권장
+  - `load_packet()`을 `load_packet_result()` 대신 사용 권장
+  - `save_packet()`을 `save_packet_result()` 대신 사용 권장
+  - `remove()`를 `remove_result()` 대신 사용 권장
+  - 마이그레이션 지침 및 예제가 포함된 `docs/guides/RESULT_API_MIGRATION_GUIDE.md` 추가
+  - Issue #231 Phase 5: 하위 호환 Deprecated 래퍼의 일부
+
 ### Added
 - **스키마 검증 역직렬화** (#249): 역직렬화 작업에 스키마 검증 지원 추가 (Phase 5)
   - 문자열 및 바이트 배열 입력을 위한 `deserialize(data, schema)` 오버로드 추가
