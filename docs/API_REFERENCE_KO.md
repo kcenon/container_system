@@ -10,8 +10,9 @@
 2. [C++20 Concepts](#c20-concepts)
 3. [variant_value_v2 (권장)](#variant_value_v2-권장)
 4. [Container](#container)
-5. [에러 코드](#에러-코드)
-6. [직렬화/역직렬화](#직렬화역직렬화)
+5. [비동기 API (C++20 코루틴)](#비동기-api-c20-코루틴)
+6. [에러 코드](#에러-코드)
+7. [직렬화/역직렬화](#직렬화역직렬화)
 
 ---
 
@@ -332,6 +333,447 @@ bool remove(const std::string& key);
 **반환값**:
 - `true`: 성공적으로 제거됨
 - `false`: 키가 존재하지 않음
+
+---
+
+## 비동기 API (C++20 코루틴)
+
+### 개요
+
+**헤더**: `#include <container/internal/async/async.h>`
+
+**네임스페이스**: `container_module::async`
+
+**설명**: 논블로킹 컨테이너 연산을 위한 C++20 코루틴 기반 비동기 API.
+
+**요구사항**:
+- C++20 코루틴 지원 컴파일러
+- GCC 10+ (11+에서 완전 지원), Clang 13+, MSVC 2019 16.8+
+- CMake 옵션: `CONTAINER_ENABLE_COROUTINES=ON` (기본값)
+
+### task<T>
+
+비동기 계산을 나타내는 지연 코루틴 태스크 타입.
+
+#### 메서드
+
+##### `valid()`
+
+```cpp
+[[nodiscard]] bool valid() const noexcept;
+```
+
+**설명**: 태스크가 유효한 코루틴 핸들을 보유하고 있는지 확인.
+
+##### `done()`
+
+```cpp
+[[nodiscard]] bool done() const noexcept;
+```
+
+**설명**: 코루틴이 완료되었는지 확인.
+
+##### `get()`
+
+```cpp
+T get();                    // task<T>의 경우
+void get();                 // task<void>의 경우
+```
+
+**설명**: 태스크의 결과를 가져옴. 캡처된 예외를 재발생시킴.
+
+#### 팩토리 함수
+
+##### `make_ready_task()`
+
+```cpp
+template<typename T>
+task<T> make_ready_task(T value);
+
+task<void> make_ready_task();
+```
+
+**설명**: 즉시 완료된 태스크를 생성.
+
+##### `make_exceptional_task()`
+
+```cpp
+template<typename T>
+task<T> make_exceptional_task(std::exception_ptr ex);
+```
+
+**설명**: 주어진 예외를 재발생시킬 태스크를 생성.
+
+#### 예시
+
+```cpp
+#include <container/internal/async/async.h>
+using namespace container_module::async;
+
+task<int> compute() {
+    co_return 42;
+}
+
+task<int> chained() {
+    int value = co_await compute();
+    co_return value * 2;
+}
+
+// 사용법
+auto t = chained();
+while (!t.done()) {
+    std::this_thread::sleep_for(1ms);
+}
+int result = t.get();  // 84
+```
+
+---
+
+### generator<T>
+
+값 시퀀스를 지연 생성하는 코루틴 제너레이터.
+
+#### 메서드
+
+##### `valid()`
+
+```cpp
+[[nodiscard]] bool valid() const noexcept;
+```
+
+**설명**: 제너레이터가 유효한 코루틴 핸들을 보유하고 있는지 확인.
+
+##### `begin()` / `end()`
+
+```cpp
+iterator begin();
+std::default_sentinel_t end();
+```
+
+**설명**: 범위 기반 for 루프 지원.
+
+#### 유틸리티 함수
+
+##### `take()`
+
+```cpp
+template<typename T>
+generator<T> take(generator<T> gen, size_t count);
+```
+
+**설명**: 제너레이터가 최대 `count`개의 값만 생성하도록 제한.
+
+#### 예시
+
+```cpp
+generator<int> range(int start, int end) {
+    for (int i = start; i < end; ++i) {
+        co_yield i;
+    }
+}
+
+// 사용법
+for (int value : range(0, 10)) {
+    std::cout << value << "\n";
+}
+
+// 무한 시퀀스에 take() 사용
+generator<int> infinite() {
+    int i = 0;
+    while (true) co_yield i++;
+}
+
+for (int value : take(infinite(), 5)) {
+    process(value);
+}
+```
+
+---
+
+### async_container
+
+코루틴 기반 연산이 가능한 `value_container`의 비동기 래퍼.
+
+#### 생성자
+
+```cpp
+async_container();                                          // 빈 컨테이너
+explicit async_container(std::shared_ptr<value_container> container);  // 기존 컨테이너 래핑
+async_container(async_container&& other) noexcept;         // 이동 생성자
+```
+
+#### 컨테이너 접근
+
+##### `get_container()`
+
+```cpp
+[[nodiscard]] std::shared_ptr<value_container> get_container() const noexcept;
+```
+
+**설명**: 기본 컨테이너를 가져옴.
+
+##### `set_container()`
+
+```cpp
+void set_container(std::shared_ptr<value_container> container) noexcept;
+```
+
+**설명**: 기본 컨테이너를 교체.
+
+#### 값 연산
+
+##### `set()`
+
+```cpp
+template<typename T>
+async_container& set(std::string_view key, T&& value);
+```
+
+**설명**: 컨테이너에 값을 설정. 체이닝을 위해 `*this`를 반환.
+
+##### `get()`
+
+```cpp
+template<typename T>
+[[nodiscard]] std::optional<T> get(std::string_view key) const;
+```
+
+**설명**: 컨테이너에서 타입이 지정된 값을 가져옴.
+
+##### `contains()`
+
+```cpp
+[[nodiscard]] bool contains(std::string_view key) const noexcept;
+```
+
+**설명**: 키가 존재하는지 확인.
+
+#### 비동기 직렬화
+
+##### `serialize_async()`
+
+```cpp
+[[nodiscard]] task<Result<std::vector<uint8_t>>> serialize_async() const;
+```
+
+**설명**: 컨테이너를 바이트 배열로 비동기 직렬화.
+
+##### `serialize_string_async()`
+
+```cpp
+[[nodiscard]] task<Result<std::string>> serialize_string_async() const;
+```
+
+**설명**: 컨테이너를 문자열로 비동기 직렬화.
+
+#### 비동기 역직렬화
+
+##### `deserialize_async()`
+
+```cpp
+[[nodiscard]] static task<Result<std::shared_ptr<value_container>>>
+    deserialize_async(std::span<const uint8_t> data);
+```
+
+**설명**: 바이트 배열에서 비동기 역직렬화.
+
+##### `deserialize_string_async()`
+
+```cpp
+[[nodiscard]] static task<Result<std::shared_ptr<value_container>>>
+    deserialize_string_async(std::string_view data);
+```
+
+**설명**: 문자열에서 비동기 역직렬화.
+
+#### 비동기 파일 I/O
+
+##### `load_async()`
+
+```cpp
+[[nodiscard]] task<VoidResult> load_async(
+    std::string_view path,
+    progress_callback callback = nullptr);
+```
+
+**설명**: 파일에서 컨테이너를 비동기 로드.
+
+**파라미터**:
+- `path`: 로드할 파일 경로
+- `callback`: 선택적 프로그레스 콜백 `void(size_t bytes, size_t total)`
+
+##### `save_async()`
+
+```cpp
+[[nodiscard]] task<VoidResult> save_async(
+    std::string_view path,
+    progress_callback callback = nullptr);
+```
+
+**설명**: 컨테이너를 파일에 비동기 저장.
+
+#### 스트리밍
+
+##### `serialize_chunked()`
+
+```cpp
+[[nodiscard]] generator<std::vector<uint8_t>> serialize_chunked(
+    size_t chunk_size = 64 * 1024) const;
+```
+
+**설명**: 제너레이터를 사용하여 청크로 직렬화.
+
+##### `deserialize_streaming()`
+
+```cpp
+[[nodiscard]] static task<Result<std::shared_ptr<value_container>>>
+    deserialize_streaming(std::span<const uint8_t> data, bool is_final = true);
+```
+
+**설명**: 스트리밍 지원으로 역직렬화.
+
+#### 예시
+
+```cpp
+#include <container/internal/async/async.h>
+using namespace container_module::async;
+
+task<void> example() {
+    // 생성 및 채우기
+    async_container cont;
+    cont.set("name", std::string("test"))
+        .set("value", static_cast<int64_t>(42));
+
+    // 프로그레스와 함께 비동기 저장
+    auto save_result = co_await cont.save_async("data.bin",
+        [](size_t bytes, size_t total) {
+            std::cout << bytes << "/" << total << "\n";
+        });
+
+    if (!save_result.is_ok()) {
+        std::cerr << "저장 실패: " << save_result.error().message << "\n";
+        co_return;
+    }
+
+    // 비동기 로드
+    async_container loaded;
+    auto load_result = co_await loaded.load_async("data.bin");
+
+    if (load_result.is_ok()) {
+        auto name = loaded.get<std::string>("name");
+        // 로드된 데이터 사용
+    }
+}
+```
+
+---
+
+### 독립 파일 유틸리티
+
+#### `read_file_async()`
+
+```cpp
+[[nodiscard]] task<Result<std::vector<uint8_t>>> read_file_async(
+    std::string_view path,
+    progress_callback callback = nullptr);
+```
+
+**설명**: 파일 내용을 비동기로 읽음.
+
+#### `write_file_async()`
+
+```cpp
+[[nodiscard]] task<VoidResult> write_file_async(
+    std::string_view path,
+    std::span<const uint8_t> data,
+    progress_callback callback = nullptr);
+```
+
+**설명**: 데이터를 파일에 비동기로 쓰기.
+
+---
+
+### thread_pool_executor
+
+**헤더**: `#include <container/internal/async/thread_pool_executor.h>`
+
+효율적인 비동기 태스크 실행을 위한 스레드 풀.
+
+#### 생성자
+
+```cpp
+explicit thread_pool_executor(size_t thread_count = std::thread::hardware_concurrency());
+```
+
+**설명**: 지정된 스레드 수로 executor를 생성.
+
+#### 메서드
+
+##### `submit()`
+
+```cpp
+template<typename F>
+auto submit(F&& func) -> std::future<std::invoke_result_t<F>>;
+```
+
+**설명**: 스레드 풀에 작업을 제출.
+
+##### `spawn()`
+
+```cpp
+template<typename T>
+void spawn(task<T> t);
+```
+
+**설명**: 스레드 풀에서 코루틴 태스크를 실행.
+
+##### `stop()`
+
+```cpp
+void stop();
+```
+
+**설명**: executor를 중지하고 모든 태스크가 완료될 때까지 대기.
+
+#### 예시
+
+```cpp
+#include <container/internal/async/thread_pool_executor.h>
+using namespace container_module::async;
+
+thread_pool_executor executor(4);
+
+// 람다 제출
+auto future = executor.submit([]() {
+    return expensive_computation();
+});
+auto result = future.get();
+
+// 코루틴 실행
+task<int> async_work() {
+    co_return 42;
+}
+executor.spawn(async_work());
+```
+
+---
+
+### 기능 감지
+
+```cpp
+namespace container_module::async {
+    inline constexpr bool has_coroutine_support = /* 코루틴 사용 가능 시 true */;
+}
+```
+
+**사용법**:
+```cpp
+#if CONTAINER_HAS_COROUTINES
+    // 비동기 API 사용
+#else
+    // 동기 API로 폴백
+#endif
+```
 
 ---
 

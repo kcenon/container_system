@@ -299,6 +299,177 @@ reader.join();
 
 ---
 
+## C++20 코루틴 비동기 API
+
+Container System은 논블로킹 직렬화, 역직렬화 및 파일 작업을 위한 포괄적인 C++20 코루틴 기반 비동기 API를 제공합니다.
+
+### 코루틴 타입
+
+#### task<T>
+
+비동기 계산을 나타내는 지연 코루틴 태스크 타입:
+
+```cpp
+#include <container/internal/async/async.h>
+using namespace container_module::async;
+
+// 기본 태스크 사용
+task<int> compute_async() {
+    co_return 42;
+}
+
+// co_await로 태스크 체이닝
+task<int> chained_computation() {
+    int value = co_await compute_async();
+    co_return value * 2;
+}
+```
+
+특징:
+- **지연 평가** - await될 때만 계산 시작
+- **이동 시맨틱** - 태스크는 이동 가능하지만 복사 불가
+- **예외 전파** - 예외가 캡처되어 `get()`에서 재발생
+- **즉시 완료 태스크** - `make_ready_task()`로 생성
+
+#### generator<T>
+
+값 시퀀스를 스트리밍하는 코루틴 제너레이터:
+
+```cpp
+// 범위 값을 지연 생성
+generator<int> range(int start, int end) {
+    for (int i = start; i < end; ++i) {
+        co_yield i;
+    }
+}
+
+// 생성된 값을 반복
+for (int value : range(0, 100)) {
+    std::cout << value << "\n";
+}
+
+// take()로 무한 시퀀스 제한
+for (int value : take(infinite_sequence(), 10)) {
+    process(value);
+}
+```
+
+### 비동기 컨테이너
+
+`async_container` 클래스는 `value_container`를 비동기 연산으로 래핑합니다:
+
+```cpp
+#include <container/internal/async/async.h>
+using namespace container_module::async;
+
+// 비동기 컨테이너 생성
+async_container cont;
+cont.set("name", std::string("test"))
+    .set("value", static_cast<int64_t>(42));
+
+// 비동기 직렬화
+task<void> serialize_example() {
+    async_container cont;
+    cont.set("data", std::string("example"));
+
+    auto result = co_await cont.serialize_async();
+    if (result.is_ok()) {
+        auto& bytes = result.value();
+        // 직렬화된 데이터 사용
+    }
+}
+```
+
+### 비동기 파일 I/O
+
+프로그레스 콜백이 있는 논블로킹 파일 작업:
+
+```cpp
+// 비동기 파일 저장
+task<void> save_data() {
+    async_container cont;
+    cont.set("key", std::string("value"));
+
+    // 선택적 프로그레스 콜백
+    auto result = co_await cont.save_async("data.bin",
+        [](size_t bytes, size_t total) {
+            std::cout << "진행률: " << (bytes * 100 / total) << "%\n";
+        });
+
+    if (result.is_ok()) {
+        std::cout << "파일 저장 성공\n";
+    }
+}
+
+// 비동기 파일 로드
+task<void> load_data() {
+    async_container cont;
+    auto result = co_await cont.load_async("data.bin");
+
+    if (result.is_ok()) {
+        auto value = cont.get<std::string>("key");
+        // 로드된 데이터 사용
+    }
+}
+```
+
+### 스트리밍 직렬화
+
+대용량 컨테이너의 경우 메모리 급증을 방지하기 위해 청크 직렬화 사용:
+
+```cpp
+// 청크로 직렬화
+task<void> stream_to_network(async_container& cont) {
+    // 64KB 청크
+    for (auto& chunk : cont.serialize_chunked(64 * 1024)) {
+        co_await network_send_async(chunk);
+    }
+}
+```
+
+### 스레드 풀 통합
+
+`thread_pool_executor`는 효율적인 비동기 실행을 제공합니다:
+
+```cpp
+#include <container/internal/async/thread_pool_executor.h>
+
+// 사용자 정의 스레드 수로 executor 생성
+thread_pool_executor executor(4);
+
+// 작업 제출
+auto future = executor.submit([]() {
+    return expensive_computation();
+});
+
+// 결과 가져오기
+auto result = future.get();
+```
+
+### 컴파일러 요구사항
+
+| 컴파일러 | 최소 버전 |
+|----------|----------|
+| GCC | 10+ (11+에서 완전 지원) |
+| Clang | 13+ |
+| MSVC | 2019 16.8+ |
+
+### CMake 설정
+
+```cmake
+# 코루틴 활성화 (기본: ON)
+option(CONTAINER_ENABLE_COROUTINES "Enable C++20 coroutine-based async API" ON)
+
+# 런타임에서 확인
+#if CONTAINER_HAS_COROUTINES
+    // 코루틴 코드
+#else
+    // 폴백 코드
+#endif
+```
+
+---
+
 ## 통합 기능
 
 ### messaging_system 통합
