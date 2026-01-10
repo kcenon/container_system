@@ -12,6 +12,17 @@ Container System 프로젝트의 모든 주요 변경 사항이 이 파일에 �
 ## [Unreleased]
 
 ### Added
+- **진정한 Lock-Free RCU 리더** (#232): Read-Copy-Update 패턴을 사용한 lock-free 읽기 경로 구현
+  - 대기 없는 원자적 읽기와 copy-on-write 업데이트를 위한 `rcu_value<T>` 템플릿 클래스 추가
+  - 진정한 lock-free 읽기(뮤텍스 획득 없음)를 제공하는 `lockfree_container_reader` 클래스 추가
+  - 에포크 기반 메모리 회수를 위한 `epoch_manager` 싱글톤 추가
+  - 자동 임계 영역 관리를 위한 `epoch_guard` RAII 헬퍼 추가
+  - `thread_safe_container`에 `create_lockfree_reader()` 팩토리 메서드 추가
+  - 스냅샷 기반 격리를 통한 대기 없는 O(1) 읽기 제공
+  - `compare_and_update()` 메서드를 통한 compare-and-swap 업데이트 지원
+  - lock-free 기능을 위한 12개의 포괄적인 단위 테스트 추가
+  - 읽기 집중 동시성 워크로드에서 5-50배 성능 향상 기대
+
 - **에러 코드 단위 테스트** (#237): 에러 코드 모듈에 대한 포괄적인 단위 테스트 추가
   - 모든 에러 코드와 유틸리티 함수를 커버하는 34개 테스트 케이스 추가
   - 모든 카테고리(1xx-5xx)의 에러 코드 값 검증 테스트
