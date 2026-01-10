@@ -54,6 +54,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "container/core/container/variant_helpers.h"
 #include "container/core/container/error_codes.h"
 #include "container/core/container/schema.h"
+#include "container/core/container/metrics.h"
 
 #include "container/core/value_types.h"
 #include "container/core/typed_container.h"
@@ -759,6 +760,57 @@ namespace container_module
 				stack_allocations_.load(std::memory_order_relaxed)
 			};
 		}
+
+		// =======================================================================
+		// Detailed Observability Metrics API (Issue #230)
+		// =======================================================================
+
+		/**
+		 * @brief Get detailed metrics snapshot
+		 * @return Copy of current detailed metrics
+		 */
+		static detailed_metrics get_detailed_metrics()
+		{
+			return metrics_manager::get();
+		}
+
+		/**
+		 * @brief Reset all detailed metrics
+		 */
+		static void reset_metrics()
+		{
+			metrics_manager::reset();
+		}
+
+		/**
+		 * @brief Enable or disable metrics collection
+		 * @param enabled true to enable, false to disable
+		 */
+		static void set_metrics_enabled(bool enabled)
+		{
+			metrics_manager::set_enabled(enabled);
+		}
+
+		/**
+		 * @brief Check if metrics collection is enabled
+		 * @return true if metrics are being collected
+		 */
+		static bool is_metrics_enabled()
+		{
+			return metrics_manager::is_enabled();
+		}
+
+		/**
+		 * @brief Export metrics as JSON string
+		 * @return JSON representation of current metrics
+		 */
+		std::string metrics_to_json() const;
+
+		/**
+		 * @brief Export metrics in Prometheus format
+		 * @return Prometheus-compatible metrics string
+		 */
+		std::string metrics_to_prometheus() const;
 
 		/**
 		 * @brief Get total memory footprint estimate in bytes
