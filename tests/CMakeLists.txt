@@ -62,6 +62,12 @@ set(TEST_SOURCES
     error_codes_tests.cpp
 )
 
+# Add async tests if coroutines are enabled
+if(CONTAINER_ENABLE_COROUTINES)
+    list(APPEND TEST_SOURCES async_tests.cpp)
+    message(STATUS "Container: Async coroutine tests enabled")
+endif()
+
 # Only add benchmark tests if benchmark library is available
 if(benchmark_FOUND OR BENCHMARK_FOUND)
     # list(APPEND TEST_SOURCES benchmark_tests.cpp)  # TODO: REACT-003 - requires legacy API migration
