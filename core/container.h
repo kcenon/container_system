@@ -472,6 +472,26 @@ namespace container_module
 		 * @exception_safety No-throw guarantee
 		 */
 		[[nodiscard]] kcenon::common::Result<std::string> to_xml_result() noexcept;
+
+		// =======================================================================
+		// Result-based File Operations API (Issue #231)
+		// =======================================================================
+
+		/**
+		 * @brief Load from a file path with Result return type
+		 * @param file_path Path to the file to load
+		 * @return VoidResult indicating success or error (file_not_found, file_read_error)
+		 * @exception_safety Strong guarantee - no changes on exception
+		 */
+		[[nodiscard]] kcenon::common::VoidResult load_packet_result(const std::string& file_path) noexcept;
+
+		/**
+		 * @brief Save to a file path with Result return type
+		 * @param file_path Path to the file to save
+		 * @return VoidResult indicating success or error (file_write_error)
+		 * @exception_safety Strong guarantee - no changes on exception
+		 */
+		[[nodiscard]] kcenon::common::VoidResult save_packet_result(const std::string& file_path) noexcept;
 #endif
 
 		// =======================================================================

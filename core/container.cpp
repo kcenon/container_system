@@ -48,6 +48,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <regex>
 #include <sstream>
+#include <fstream>
 
 namespace container_module
 {
@@ -906,6 +907,106 @@ bool value_container::deserialize(const std::vector<uint8_t>& data_array,
 				kcenon::common::error_info{
 					error_codes::serialization_failed,
 					std::string("XML serialization failed: ") + e.what(),
+					"container_system"});
+		}
+	}
+
+	kcenon::common::VoidResult value_container::load_packet_result(
+		const std::string& file_path) noexcept
+	{
+		try
+		{
+			std::ifstream file(file_path, std::ios::binary);
+			if (!file)
+			{
+				return kcenon::common::VoidResult(
+					kcenon::common::error_info{
+						error_codes::file_not_found,
+						error_codes::make_message(error_codes::file_not_found, file_path),
+						"container_system"});
+			}
+
+			std::string content((std::istreambuf_iterator<char>(file)),
+								std::istreambuf_iterator<char>());
+
+			if (file.bad())
+			{
+				return kcenon::common::VoidResult(
+					kcenon::common::error_info{
+						error_codes::file_read_error,
+						error_codes::make_message(error_codes::file_read_error, file_path),
+						"container_system"});
+			}
+
+			return deserialize_result(content, false);
+		}
+		catch (const std::bad_alloc&)
+		{
+			return kcenon::common::VoidResult(
+				kcenon::common::error_info{
+					error_codes::memory_allocation_failed,
+					error_codes::make_message(error_codes::memory_allocation_failed, file_path),
+					"container_system"});
+		}
+		catch (const std::exception& e)
+		{
+			return kcenon::common::VoidResult(
+				kcenon::common::error_info{
+					error_codes::file_read_error,
+					std::string("File read error: ") + e.what(),
+					"container_system"});
+		}
+	}
+
+	kcenon::common::VoidResult value_container::save_packet_result(
+		const std::string& file_path) noexcept
+	{
+		try
+		{
+			auto serialize_res = serialize_result();
+			if (!serialize_res.is_ok())
+			{
+				return kcenon::common::VoidResult(serialize_res.error());
+			}
+
+			std::ofstream file(file_path, std::ios::binary | std::ios::trunc);
+			if (!file)
+			{
+				return kcenon::common::VoidResult(
+					kcenon::common::error_info{
+						error_codes::file_write_error,
+						error_codes::make_message(error_codes::file_write_error, file_path),
+						"container_system"});
+			}
+
+			const auto& content = serialize_res.value();
+			file.write(content.data(), static_cast<std::streamsize>(content.size()));
+
+			if (file.bad())
+			{
+				return kcenon::common::VoidResult(
+					kcenon::common::error_info{
+						error_codes::file_write_error,
+						error_codes::make_message(error_codes::file_write_error, file_path),
+						"container_system"});
+			}
+
+			return kcenon::common::ok();
+		}
+		catch (const std::bad_alloc&)
+		{
+			return kcenon::common::VoidResult(
+				kcenon::common::error_info{
+					error_codes::memory_allocation_failed,
+					error_codes::make_message(error_codes::memory_allocation_failed, file_path),
+					"container_system"});
+		}
+		catch (const std::exception& e)
+		{
+			return kcenon::common::VoidResult(
+				kcenon::common::error_info{
+					error_codes::file_write_error,
+					std::string("File write error: ") + e.what(),
 					"container_system"});
 		}
 	}
