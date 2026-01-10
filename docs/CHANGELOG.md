@@ -12,6 +12,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Result-Returning Core API Tests** (#238): Add comprehensive unit tests for Result-returning value APIs
+  - Add 15 test cases covering set_result(), set_all_result(), and remove_result() methods
+  - Test success paths for all Result-returning methods with various data types
+  - Test empty key error handling with error_codes::empty_key verification
+  - Test key not found error handling with error_codes::key_not_found verification
+  - Test edge cases: special characters, long keys, unicode keys in key names
+  - Test bulk operations with set_all_result() including partial failure scenarios
+  - Verify error messages are descriptive and contain relevant context
+
 - **C++20 Coroutine Async API** (#233): Add coroutine-based async types for non-blocking operations (Phase 1)
   - Add `task<T>` coroutine type for async operations with proper exception propagation
   - Add `task<void>` specialization for void-returning coroutines

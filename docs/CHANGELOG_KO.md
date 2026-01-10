@@ -12,6 +12,15 @@ Container System 프로젝트의 모든 주요 변경 사항이 이 파일에 �
 ## [Unreleased]
 
 ### Added
+- **Result 반환 코어 API 테스트** (#238): Result 반환 값 API에 대한 포괄적인 단위 테스트 추가
+  - set_result(), set_all_result(), remove_result() 메서드를 커버하는 15개 테스트 케이스 추가
+  - 다양한 데이터 타입에 대한 모든 Result 반환 메서드의 성공 경로 테스트
+  - error_codes::empty_key 검증을 통한 빈 키 에러 처리 테스트
+  - error_codes::key_not_found 검증을 통한 키 없음 에러 처리 테스트
+  - 엣지 케이스 테스트: 키 이름에 특수 문자, 긴 키, 유니코드 키
+  - 부분 실패 시나리오를 포함한 set_all_result() 대량 작업 테스트
+  - 에러 메시지가 설명적이고 관련 컨텍스트를 포함하는지 검증
+
 - **C++20 코루틴 비동기 API** (#233): 논블로킹 작업을 위한 코루틴 기반 비동기 타입 추가 (Phase 1)
   - 적절한 예외 전파를 지원하는 비동기 작업용 `task<T>` 코루틴 타입 추가
   - void 반환 코루틴을 위한 `task<void>` 특수화 추가
