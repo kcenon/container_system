@@ -111,12 +111,16 @@ namespace container_module::async
                     std::coroutine_handle<Promise> handle) noexcept
                 {
                     auto& promise = handle.promise();
+                    // Read continuation BEFORE marking as complete to avoid
+                    // data race with destructor. Once completed_ is true,
+                    // the task owner may destroy the coroutine frame.
+                    auto continuation = promise.continuation_;
                     // Mark as completed with release semantics to ensure
                     // all prior writes are visible to threads checking done()
                     promise.completed_.store(true, std::memory_order_release);
-                    if (promise.continuation_)
+                    if (continuation)
                     {
-                        return promise.continuation_;
+                        return continuation;
                     }
                     return std::noop_coroutine();
                 }
