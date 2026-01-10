@@ -1807,6 +1807,333 @@ TEST_F(BatchOperationTest, MethodChaining) {
     EXPECT_TRUE(container->contains("z"));
 }
 
+// ============================================================================
+// Schema Validation Tests (Issue #228)
+// ============================================================================
+
+#include "container/core/container/schema.h"
+
+class SchemaValidationTest : public ::testing::Test {
+protected:
+    std::shared_ptr<value_container> container;
+
+    void SetUp() override {
+        container = std::make_shared<value_container>();
+    }
+};
+
+TEST_F(SchemaValidationTest, RequiredFieldPresent) {
+    container->set("user_id", std::string("U12345"));
+
+    auto schema = container_schema()
+        .require("user_id", value_types::string_value);
+
+    auto result = schema.validate(*container);
+    EXPECT_FALSE(result.has_value()) << "Validation should pass when required field is present";
+}
+
+TEST_F(SchemaValidationTest, RequiredFieldMissing) {
+    auto schema = container_schema()
+        .require("user_id", value_types::string_value);
+
+    auto result = schema.validate(*container);
+    ASSERT_TRUE(result.has_value()) << "Validation should fail when required field is missing";
+    EXPECT_EQ(result->code, validation_codes::missing_required);
+    EXPECT_EQ(result->field, "user_id");
+}
+
+TEST_F(SchemaValidationTest, OptionalFieldMissing) {
+    auto schema = container_schema()
+        .optional("phone", value_types::string_value);
+
+    auto result = schema.validate(*container);
+    EXPECT_FALSE(result.has_value()) << "Validation should pass when optional field is missing";
+}
+
+TEST_F(SchemaValidationTest, TypeMismatch) {
+    container->set("age", std::string("not_a_number"));
+
+    auto schema = container_schema()
+        .require("age", value_types::int_value);
+
+    auto result = schema.validate(*container);
+    ASSERT_TRUE(result.has_value()) << "Validation should fail on type mismatch";
+    EXPECT_EQ(result->code, validation_codes::type_mismatch);
+}
+
+TEST_F(SchemaValidationTest, IntegerRangeValid) {
+    container->set("age", 25);
+
+    auto schema = container_schema()
+        .require("age", value_types::int_value)
+        .range("age", 0LL, 150LL);
+
+    auto result = schema.validate(*container);
+    EXPECT_FALSE(result.has_value()) << "Validation should pass for value in range";
+}
+
+TEST_F(SchemaValidationTest, IntegerRangeInvalid) {
+    container->set("age", 200);
+
+    auto schema = container_schema()
+        .require("age", value_types::int_value)
+        .range("age", 0LL, 150LL);
+
+    auto result = schema.validate(*container);
+    ASSERT_TRUE(result.has_value()) << "Validation should fail for value out of range";
+    EXPECT_EQ(result->code, validation_codes::out_of_range);
+}
+
+TEST_F(SchemaValidationTest, DoubleRangeValid) {
+    container->set("price", 99.99);
+
+    auto schema = container_schema()
+        .require("price", value_types::double_value)
+        .range("price", 0.0, 1000.0);
+
+    auto result = schema.validate(*container);
+    EXPECT_FALSE(result.has_value()) << "Validation should pass for double in range";
+}
+
+TEST_F(SchemaValidationTest, DoubleRangeInvalid) {
+    container->set("price", 1500.0);
+
+    auto schema = container_schema()
+        .require("price", value_types::double_value)
+        .range("price", 0.0, 1000.0);
+
+    auto result = schema.validate(*container);
+    ASSERT_TRUE(result.has_value()) << "Validation should fail for double out of range";
+    EXPECT_EQ(result->code, validation_codes::out_of_range);
+}
+
+TEST_F(SchemaValidationTest, StringLengthValid) {
+    container->set("username", std::string("john_doe"));
+
+    auto schema = container_schema()
+        .require("username", value_types::string_value)
+        .length("username", 3, 20);
+
+    auto result = schema.validate(*container);
+    EXPECT_FALSE(result.has_value()) << "Validation should pass for valid string length";
+}
+
+TEST_F(SchemaValidationTest, StringLengthTooShort) {
+    container->set("username", std::string("ab"));
+
+    auto schema = container_schema()
+        .require("username", value_types::string_value)
+        .length("username", 3, 20);
+
+    auto result = schema.validate(*container);
+    ASSERT_TRUE(result.has_value()) << "Validation should fail for too short string";
+    EXPECT_EQ(result->code, validation_codes::invalid_length);
+}
+
+TEST_F(SchemaValidationTest, StringLengthTooLong) {
+    container->set("username", std::string("this_is_a_very_long_username"));
+
+    auto schema = container_schema()
+        .require("username", value_types::string_value)
+        .length("username", 3, 20);
+
+    auto result = schema.validate(*container);
+    ASSERT_TRUE(result.has_value()) << "Validation should fail for too long string";
+    EXPECT_EQ(result->code, validation_codes::invalid_length);
+}
+
+TEST_F(SchemaValidationTest, PatternValid) {
+    container->set("email", std::string("user@example.com"));
+
+    auto schema = container_schema()
+        .require("email", value_types::string_value)
+        .pattern("email", R"(^[\w\.-]+@[\w\.-]+\.\w+$)");
+
+    auto result = schema.validate(*container);
+    EXPECT_FALSE(result.has_value()) << "Validation should pass for valid email pattern";
+}
+
+TEST_F(SchemaValidationTest, PatternInvalid) {
+    container->set("email", std::string("not-an-email"));
+
+    auto schema = container_schema()
+        .require("email", value_types::string_value)
+        .pattern("email", R"(^[\w\.-]+@[\w\.-]+\.\w+$)");
+
+    auto result = schema.validate(*container);
+    ASSERT_TRUE(result.has_value()) << "Validation should fail for invalid email pattern";
+    EXPECT_EQ(result->code, validation_codes::pattern_mismatch);
+}
+
+TEST_F(SchemaValidationTest, OneOfValid) {
+    container->set("role", std::string("admin"));
+
+    auto schema = container_schema()
+        .require("role", value_types::string_value)
+        .one_of("role", {"admin", "user", "guest"});
+
+    auto result = schema.validate(*container);
+    EXPECT_FALSE(result.has_value()) << "Validation should pass for allowed value";
+}
+
+TEST_F(SchemaValidationTest, OneOfInvalid) {
+    container->set("role", std::string("superuser"));
+
+    auto schema = container_schema()
+        .require("role", value_types::string_value)
+        .one_of("role", {"admin", "user", "guest"});
+
+    auto result = schema.validate(*container);
+    ASSERT_TRUE(result.has_value()) << "Validation should fail for non-allowed value";
+    EXPECT_EQ(result->code, validation_codes::not_in_allowed_values);
+}
+
+TEST_F(SchemaValidationTest, CustomValidatorSuccess) {
+    container->set("quantity", 10);
+
+    auto schema = container_schema()
+        .require("quantity", value_types::int_value)
+        .custom("quantity", [](const optimized_value& val) -> std::optional<std::string> {
+            if (auto* p = std::get_if<int>(&val.data)) {
+                if (*p > 0) return std::nullopt;  // Valid
+            }
+            return "Quantity must be positive";
+        });
+
+    auto result = schema.validate(*container);
+    EXPECT_FALSE(result.has_value()) << "Validation should pass for valid custom validation";
+}
+
+TEST_F(SchemaValidationTest, CustomValidatorFailure) {
+    container->set("quantity", -5);
+
+    auto schema = container_schema()
+        .require("quantity", value_types::int_value)
+        .custom("quantity", [](const optimized_value& val) -> std::optional<std::string> {
+            if (auto* p = std::get_if<int>(&val.data)) {
+                if (*p > 0) return std::nullopt;
+            }
+            return "Quantity must be positive";
+        });
+
+    auto result = schema.validate(*container);
+    ASSERT_TRUE(result.has_value()) << "Validation should fail for custom validation";
+    EXPECT_EQ(result->code, validation_codes::custom_validation_failed);
+}
+
+TEST_F(SchemaValidationTest, ValidateAllReturnsMultipleErrors) {
+    container->set("age", std::string("not_a_number"));  // Type mismatch
+    // "name" is missing (required)
+
+    auto schema = container_schema()
+        .require("name", value_types::string_value)
+        .require("age", value_types::int_value);
+
+    auto errors = schema.validate_all(*container);
+    EXPECT_EQ(errors.size(), 2) << "Should have 2 validation errors";
+}
+
+TEST_F(SchemaValidationTest, NestedSchemaValid) {
+    auto nested_container = std::make_shared<value_container>();
+    nested_container->set("street", std::string("123 Main St"));
+    nested_container->set("city", std::string("Boston"));
+
+    container->set("address", nested_container);
+
+    auto address_schema = container_schema()
+        .require("street", value_types::string_value)
+        .require("city", value_types::string_value);
+
+    auto schema = container_schema()
+        .require("address", value_types::container_value, address_schema);
+
+    auto result = schema.validate(*container);
+    EXPECT_FALSE(result.has_value()) << "Validation should pass for valid nested schema";
+}
+
+TEST_F(SchemaValidationTest, NestedSchemaInvalid) {
+    auto nested_container = std::make_shared<value_container>();
+    nested_container->set("street", std::string("123 Main St"));
+    // Missing "city"
+
+    container->set("address", nested_container);
+
+    auto address_schema = container_schema()
+        .require("street", value_types::string_value)
+        .require("city", value_types::string_value);
+
+    auto schema = container_schema()
+        .require("address", value_types::container_value, address_schema);
+
+    auto result = schema.validate(*container);
+    ASSERT_TRUE(result.has_value()) << "Validation should fail for invalid nested schema";
+    EXPECT_EQ(result->code, validation_codes::nested_validation_failed);
+}
+
+TEST_F(SchemaValidationTest, SchemaFieldCount) {
+    auto schema = container_schema()
+        .require("id", value_types::string_value)
+        .require("name", value_types::string_value)
+        .optional("email", value_types::string_value);
+
+    EXPECT_EQ(schema.field_count(), 3);
+}
+
+TEST_F(SchemaValidationTest, HasFieldAndIsRequired) {
+    auto schema = container_schema()
+        .require("id", value_types::string_value)
+        .optional("email", value_types::string_value);
+
+    EXPECT_TRUE(schema.has_field("id"));
+    EXPECT_TRUE(schema.has_field("email"));
+    EXPECT_FALSE(schema.has_field("phone"));
+
+    EXPECT_TRUE(schema.is_required("id"));
+    EXPECT_FALSE(schema.is_required("email"));
+    EXPECT_FALSE(schema.is_required("phone"));
+}
+
+TEST_F(SchemaValidationTest, ComplexSchemaValidation) {
+    container->set("user_id", std::string("U12345"))
+             .set("age", 25)
+             .set("email", std::string("user@example.com"))
+             .set("role", std::string("admin"));
+
+    auto schema = container_schema()
+        .require("user_id", value_types::string_value)
+        .require("age", value_types::int_value)
+        .range("age", 0LL, 150LL)
+        .require("email", value_types::string_value)
+        .pattern("email", R"(^[\w\.-]+@[\w\.-]+\.\w+$)")
+        .optional("phone", value_types::string_value)
+        .length("phone", 10, 15)
+        .require("role", value_types::string_value)
+        .one_of("role", {"admin", "user", "guest"});
+
+    auto result = schema.validate(*container);
+    EXPECT_FALSE(result.has_value()) << "Complex validation should pass for valid data";
+}
+
+#if SCHEMA_HAS_COMMON_RESULT
+TEST_F(SchemaValidationTest, ValidateResultSuccess) {
+    container->set("id", std::string("123"));
+
+    auto schema = container_schema()
+        .require("id", value_types::string_value);
+
+    auto result = schema.validate_result(*container);
+    EXPECT_TRUE(kcenon::common::is_ok(result)) << "validate_result should return ok for valid data";
+}
+
+TEST_F(SchemaValidationTest, ValidateResultFailure) {
+    auto schema = container_schema()
+        .require("id", value_types::string_value);
+
+    auto result = schema.validate_result(*container);
+    EXPECT_TRUE(kcenon::common::is_error(result)) << "validate_result should return error for invalid data";
+}
+#endif
+
 // Main function for running tests
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
