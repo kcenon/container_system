@@ -93,13 +93,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Add tests for schema copy/move semantics
 
 ### Fixed
-- **Thread Sanitizer data race in async_awaitable** (#266): Fix data race detected by ThreadSanitizer in async operations
+- **Thread Sanitizer data race in async operations** (#266): Fix data race detected by ThreadSanitizer in async operations
   - Remove `worker_` std::thread member variable that caused race condition
   - Remove unused `completed_` boolean flag
   - Create anonymous thread and immediately detach to avoid assignment race
   - Add `std::atomic<bool> ready_` with release-acquire memory ordering for proper synchronization
   - Store with `memory_order_release` before `handle.resume()` and load with `memory_order_acquire` in `await_resume()`
   - Ensures all writes in worker thread are visible to the resumed coroutine
+  - Add `std::atomic<bool> completed_` to `promise_base` for thread-safe `task::done()` checking
+  - Set `completed_` with release semantics in `final_awaiter::await_suspend()` before resuming continuation
+  - Use acquire semantics in `task::done()` to synchronize with the setter, avoiding data race when polling completion
 
 - **Schema range() overload ambiguity** (#250): Fix Linux/GCC build failure caused by ambiguous range() overloads
   - Use C++20 concepts (std::integral and std::floating_point) to disambiguate between integer and floating-point range constraints
