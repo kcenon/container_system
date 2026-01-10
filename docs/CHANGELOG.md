@@ -12,6 +12,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **C++20 Coroutine Async API** (#233): Add coroutine-based async types for non-blocking operations (Phase 1)
+  - Add `task<T>` coroutine type for async operations with proper exception propagation
+  - Add `task<void>` specialization for void-returning coroutines
+  - Add `generator<T>` for lazy sequence generation with STL-compatible iteration
+  - Add `make_ready_task()` and `make_exceptional_task()` helper functions
+  - Add `take()` helper for limiting generator output
+  - Add CMake option `CONTAINER_ENABLE_COROUTINES` (default: ON)
+  - Add 19 comprehensive unit tests for coroutine types
+  - Support symmetric transfer for efficient coroutine chaining
+  - Require C++20 with `<coroutine>` header support (GCC 10+, Clang 13+, MSVC 2019 16.8+)
+
 - **True Lock-Free RCU Reader** (#232): Implement lock-free read path using Read-Copy-Update pattern
   - Add `rcu_value<T>` template class for wait-free atomic reads with copy-on-write updates
   - Add `lockfree_container_reader` class with true lock-free reads (no mutex acquisition)
