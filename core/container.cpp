@@ -256,6 +256,11 @@ namespace container_module
 		return message_type_;
 	}
 
+#ifndef CONTAINER_NO_LEGACY_API
+	// =======================================================================
+	// Deprecated Value Management API Implementation
+	// =======================================================================
+
 	void value_container::add_value(const std::string& name, value_types type, value_variant data)
 	{
 		write_lock_guard lock(this);
@@ -304,6 +309,7 @@ namespace container_module
 			// Skip incompatible types: thread_safe_container, array_variant
 		});
 	}
+#endif // CONTAINER_NO_LEGACY_API
 
 	std::optional<optimized_value> value_container::get_value(const std::string& name) const noexcept
 	{
@@ -367,6 +373,7 @@ namespace container_module
 		}
 	}
 
+#ifndef CONTAINER_NO_LEGACY_API
 	// =======================================================================
 	// Deprecated methods (delegating to implementation)
 	// =======================================================================
@@ -382,6 +389,7 @@ namespace container_module
 			set_unit_impl(val);
 		}
 	}
+#endif // CONTAINER_NO_LEGACY_API
 
 	// =======================================================================
 	// Unified Value Setter API (Issue #207)
@@ -731,11 +739,12 @@ namespace container_module
 
 	// =======================================================================
 
+#ifndef CONTAINER_NO_LEGACY_API
 	void value_container::remove(std::string_view target_name,
 								 bool update_immediately)
 	{
 		std::unique_lock<std::shared_mutex> lock(mutex_);
-		
+
 		if (!parsed_data_)
 		{
 			deserialize_values(data_string_, false);
@@ -759,6 +768,7 @@ namespace container_module
 			data_string_ = datas();
 		}
 	}
+#endif // CONTAINER_NO_LEGACY_API
 
 
 
@@ -1454,6 +1464,11 @@ void value_container::clear_validation_errors() noexcept
 	}
 #endif
 
+#ifndef CONTAINER_NO_LEGACY_API
+	// =======================================================================
+	// Deprecated Format Conversion API Implementation
+	// =======================================================================
+
 	const std::string value_container::to_xml(void)
 	{
 		std::unique_lock<std::shared_mutex> lock(mutex_);
@@ -1567,11 +1582,13 @@ void value_container::clear_validation_errors() noexcept
 		formatter::format_to(std::back_inserter(result), "}}");
 		return result;
 	}
+#endif // CONTAINER_NO_LEGACY_API
 
 	// =======================================================================
 	// MessagePack Serialization Implementation (Issue #234)
 	// =======================================================================
 
+#ifndef CONTAINER_NO_LEGACY_API
 	std::vector<uint8_t> value_container::to_msgpack() const
 	{
 		// Record metrics if enabled
@@ -1957,6 +1974,7 @@ void value_container::clear_validation_errors() noexcept
 		}
 		return nullptr;
 	}
+#endif // CONTAINER_NO_LEGACY_API
 
 	value_container::serialization_format value_container::detect_format(
 		const std::vector<uint8_t>& data)
@@ -2112,6 +2130,11 @@ void value_container::clear_validation_errors() noexcept
 		return result;
 	}
 
+#ifndef CONTAINER_NO_LEGACY_API
+	// =======================================================================
+	// Deprecated File I/O API Implementation
+	// =======================================================================
+
 	void value_container::load_packet(const std::string& file_path)
 	{
 		// TODO: Implement file loading without file_handler
@@ -2127,6 +2150,7 @@ void value_container::clear_validation_errors() noexcept
 		(void)file_path;
 		throw std::runtime_error("File saving not implemented - file_handler not available");
 	}
+#endif // CONTAINER_NO_LEGACY_API
 
 	size_t value_container::memory_footprint() const
 	{
