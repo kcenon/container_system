@@ -157,7 +157,7 @@ TEST_F(ValueOperationsTest, DoubleValuePrecision)
     // Test serialization preserves precision
     // Note: Serialization may lose some precision due to string conversion
     // Use EXPECT_NEAR with appropriate epsilon for roundtrip tests
-    container->add(double_val);
+    container->set("pi", precise_value);
     auto restored = RoundTripSerialize();
 
     // Allow for precision loss during serialization/deserialization
@@ -189,7 +189,7 @@ TEST_F(ValueOperationsTest, LongLongValues)
 
     EXPECT_EQ(to_llong(*llong_val), large_value);
 
-    container->add(llong_val);
+    container->set("large", large_value);
     auto restored = RoundTripSerialize();
     EXPECT_EQ(ov_to_llong(restored->get_value("large")), large_value);
 }
@@ -217,9 +217,8 @@ TEST_F(ValueOperationsTest, ValueTypeIdentification)
 TEST_F(ValueOperationsTest, SpecialStringCharacters)
 {
     std::string special = "Line1\nLine2\tTab\rReturn";
-    auto str_val = make_string_value("special", special);
 
-    container->add(str_val);
+    container->set("special", special);
     auto restored = RoundTripSerialize();
 
     auto restored_val = restored->get_value("special");
@@ -232,13 +231,9 @@ TEST_F(ValueOperationsTest, SpecialStringCharacters)
  */
 TEST_F(ValueOperationsTest, EmptyAndWhitespaceStrings)
 {
-    auto empty = make_string_value("empty", "");
-    auto whitespace = make_string_value("whitespace", "   ");
-    auto mixed = make_string_value("mixed", "  text  ");
-
-    container->add(empty);
-    container->add(whitespace);
-    container->add(mixed);
+    container->set("empty", "");
+    container->set("whitespace", "   ");
+    container->set("mixed", "  text  ");
 
     auto restored = RoundTripSerialize();
 

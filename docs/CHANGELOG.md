@@ -11,6 +11,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- **Test Migration to Unified API** (#284, #297): Migrate all test files from deprecated API to unified API
+  - Replace `add(make_*_value())` with `set()` throughout test files
+  - Replace `serialize()` with `serialize_string(serialization_format::binary).value()`
+  - Replace `to_json()`/`to_xml()` with `serialize_string(serialization_format::json/xml).value()`
+  - Replace `deserialize()` with `deserialize_result()` or `deserialize(span, format)`
+  - Replace `set_value()` with `set()`
+  - All tests now pass with `CONTAINER_NO_LEGACY_API` defined
+  - Updated tests that relied on deprecated duplicate-key behavior
+
+### Added
+- **Legacy API Deprecation Timeline** (#284): Document clear deprecation timeline in `legacy_api.h`
+  - **v2.x**: Deprecated methods available by default with warnings
+  - **v3.0**: Deprecated methods require explicit include of `legacy_api.h`
+  - **v4.0**: Deprecated methods removed entirely
+  - Add `CONTAINER_NO_LEGACY_API` compile flag to disable deprecated API at build time
+  - Complete migration guide with unified API replacements in `legacy_api.h` documentation
+
 ### Fixed
 - **Windows Macro Conflict in MessagePack** (#274): Fix MSVC build failures due to TRUE/FALSE macro conflicts
   - Add `#pragma push_macro` / `#pragma pop_macro` guards in `core/container/msgpack.h`

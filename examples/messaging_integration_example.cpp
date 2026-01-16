@@ -59,10 +59,10 @@ void demonstrate_basic_usage() {
     container->set_message_type("user_data");
 
     // Add values using set_value
-    container->set_value("user_id", static_cast<int64_t>(12345L));
-    container->set_value("username", std::string("john_doe"));
-    container->set_value("balance", 1500.75);
-    container->set_value("active", true);
+    container->set("user_id", static_cast<int64_t>(12345L));
+    container->set("username", std::string("john_doe"));
+    container->set("balance", 1500.75);
+    container->set("active", true);
 
     std::cout << "Created container with 4 values\n";
     std::cout << "Message type: " << container->message_type() << "\n";
@@ -70,7 +70,7 @@ void demonstrate_basic_usage() {
     std::cout << "Target: " << container->target_id() << ":" << container->target_sub_id() << "\n";
 
     // Serialize
-    std::string serialized = container->serialize();
+    std::string serialized = container->serialize_string(value_container::serialization_format::binary).value();
     std::cout << "Serialized size: " << serialized.size() << " bytes\n";
 }
 
@@ -81,11 +81,11 @@ void demonstrate_value_access() {
     container->set_message_type("value_access_demo");
 
     // Add various values
-    container->set_value("request_id", static_cast<int32_t>(789));
-    container->set_value("priority", static_cast<int32_t>(1));
-    container->set_value("payload", std::string("Important data"));
-    container->set_value("timestamp", static_cast<int64_t>(1672531200L));
-    container->set_value("is_urgent", true);
+    container->set("request_id", static_cast<int32_t>(789));
+    container->set("priority", static_cast<int32_t>(1));
+    container->set("payload", std::string("Important data"));
+    container->set("timestamp", static_cast<int64_t>(1672531200L));
+    container->set("is_urgent", true);
 
     // Access values using get_value and std::get_if
     if (auto val = container->get_value("request_id")) {
@@ -122,14 +122,14 @@ void demonstrate_serialization_roundtrip() {
     source->set_target("receiver", "app_2");
     source->set_message_type("roundtrip_test");
 
-    source->set_value("int_val", static_cast<int32_t>(42));
-    source->set_value("double_val", 3.14159);
-    source->set_value("string_val", std::string("Hello, World!"));
-    source->set_value("bool_val", true);
-    source->set_value("long_val", static_cast<int64_t>(9876543210L));
+    source->set("int_val", static_cast<int32_t>(42));
+    source->set("double_val", 3.14159);
+    source->set("string_val", std::string("Hello, World!"));
+    source->set("bool_val", true);
+    source->set("long_val", static_cast<int64_t>(9876543210L));
 
     // Serialize
-    std::string serialized = source->serialize();
+    std::string serialized = source->serialize_string(value_container::serialization_format::binary).value();
     std::cout << "Serialized " << source->size() << " values to " << serialized.size() << " bytes\n";
 
     // Deserialize
@@ -165,7 +165,7 @@ void demonstrate_compatibility() {
     // Demonstrate that the same container can be used in different contexts
     auto container = std::make_shared<value_container>();
     container->set_message_type("compatibility_test");
-    container->set_value("demo_value", static_cast<int32_t>(123));
+    container->set("demo_value", static_cast<int32_t>(123));
 
     std::cout << "Container can be used standalone or as part of messaging system\n";
     std::cout << "Type safety and performance remain consistent across usage patterns\n";
@@ -181,9 +181,9 @@ void performance_comparison() {
     for (int i = 0; i < iterations; ++i) {
         auto container = std::make_shared<value_container>();
         container->set_message_type("perf_test");
-        container->set_value("index", static_cast<int32_t>(i));
-        container->set_value("data", std::string("test_data"));
-        std::string serialized = container->serialize();
+        container->set("index", static_cast<int32_t>(i));
+        container->set("data", std::string("test_data"));
+        std::string serialized = container->serialize_string(value_container::serialization_format::binary).value();
     }
     auto standard_time = std::chrono::high_resolution_clock::now() - start;
 
@@ -203,11 +203,11 @@ void demonstrate_memory_efficiency() {
     container->set_message_type("memory_test");
 
     // Add various values
-    container->set_value("small_int", static_cast<int32_t>(42));
-    container->set_value("large_string", std::string(1000, 'x'));
-    container->set_value("double_val", 123.456);
-    container->set_value("bool_val", true);
-    container->set_value("long_val", static_cast<int64_t>(9999999999L));
+    container->set("small_int", static_cast<int32_t>(42));
+    container->set("large_string", std::string(1000, 'x'));
+    container->set("double_val", 123.456);
+    container->set("bool_val", true);
+    container->set("long_val", static_cast<int64_t>(9999999999L));
 
     // Get memory stats
     auto [heap, stack] = container->memory_stats();

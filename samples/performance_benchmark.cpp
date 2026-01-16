@@ -40,7 +40,7 @@ private:
         for (int i = 0; i < iterations; ++i) {
             std::string key = "key_" + std::to_string(i);
             std::string value = "value_" + std::to_string(i);
-            container->set_value(key, value);
+            container->set(key, value);
         }
         auto end = std::chrono::high_resolution_clock::now();
 
@@ -114,7 +114,7 @@ private:
             auto container = std::make_shared<value_container>();
             auto start = std::chrono::high_resolution_clock::now();
             for (int i = 0; i < iterations; ++i) {
-                container->set_value("str_" + std::to_string(i), std::string("value_" + std::to_string(i)));
+                container->set("str_" + std::to_string(i), std::string("value_" + std::to_string(i)));
             }
             auto end = std::chrono::high_resolution_clock::now();
             auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
@@ -126,7 +126,7 @@ private:
             auto container = std::make_shared<value_container>();
             auto start = std::chrono::high_resolution_clock::now();
             for (int i = 0; i < iterations; ++i) {
-                container->set_value("int_" + std::to_string(i), static_cast<int32_t>(i));
+                container->set("int_" + std::to_string(i), static_cast<int32_t>(i));
             }
             auto end = std::chrono::high_resolution_clock::now();
             auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
@@ -138,7 +138,7 @@ private:
             auto container = std::make_shared<value_container>();
             auto start = std::chrono::high_resolution_clock::now();
             for (int i = 0; i < iterations; ++i) {
-                container->set_value("dbl_" + std::to_string(i), static_cast<double>(i * 1.5));
+                container->set("dbl_" + std::to_string(i), static_cast<double>(i * 1.5));
             }
             auto end = std::chrono::high_resolution_clock::now();
             auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
@@ -150,7 +150,7 @@ private:
             auto container = std::make_shared<value_container>();
             auto start = std::chrono::high_resolution_clock::now();
             for (int i = 0; i < iterations; ++i) {
-                container->set_value("bool_" + std::to_string(i), i % 2 == 0);
+                container->set("bool_" + std::to_string(i), i % 2 == 0);
             }
             auto end = std::chrono::high_resolution_clock::now();
             auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
@@ -166,7 +166,7 @@ private:
         auto container = std::make_shared<value_container>();
 
         for (int i = 0; i < iterations; ++i) {
-            container->set_value("key_" + std::to_string(i), static_cast<int32_t>(i));
+            container->set("key_" + std::to_string(i), static_cast<int32_t>(i));
         }
 
         auto [heap, stack] = container->memory_stats();
@@ -194,16 +194,16 @@ private:
 
             switch (value_type) {
                 case 0:
-                    container->set_value(key, std::string("value_" + std::to_string(i)));
+                    container->set(key, std::string("value_" + std::to_string(i)));
                     break;
                 case 1:
-                    container->set_value(key, static_cast<int32_t>(i));
+                    container->set(key, static_cast<int32_t>(i));
                     break;
                 case 2:
-                    container->set_value(key, static_cast<double>(i * 1.5));
+                    container->set(key, static_cast<double>(i * 1.5));
                     break;
                 case 3:
-                    container->set_value(key, i % 2 == 0);
+                    container->set(key, i % 2 == 0);
                     break;
             }
         }

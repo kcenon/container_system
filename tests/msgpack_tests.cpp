@@ -290,11 +290,12 @@ protected:
 };
 
 TEST_F(ContainerMsgpackTest, EmptyContainerRoundTrip) {
-    auto data = container->to_msgpack();
+    auto data = container->serialize(value_container::serialization_format::msgpack).value();
     EXPECT_FALSE(data.empty());
 
-    auto restored = value_container::create_from_msgpack(data);
-    ASSERT_NE(restored, nullptr);
+    auto restored = std::make_shared<value_container>();
+    auto result = restored->deserialize(std::span<const uint8_t>(data), value_container::serialization_format::msgpack);
+    ASSERT_TRUE(result.is_ok());
 
     EXPECT_EQ(restored->message_type(), container->message_type());
 }
@@ -305,11 +306,12 @@ TEST_F(ContainerMsgpackTest, ContainerWithValuesRoundTrip) {
     container->set("score", 95.5);
     container->set("active", true);
 
-    auto data = container->to_msgpack();
+    auto data = container->serialize(value_container::serialization_format::msgpack).value();
     EXPECT_FALSE(data.empty());
 
-    auto restored = value_container::create_from_msgpack(data);
-    ASSERT_NE(restored, nullptr);
+    auto restored = std::make_shared<value_container>();
+    auto result = restored->deserialize(std::span<const uint8_t>(data), value_container::serialization_format::msgpack);
+    ASSERT_TRUE(result.is_ok());
 
     auto name = restored->get_value("name");
     ASSERT_TRUE(name.has_value());
@@ -332,9 +334,10 @@ TEST_F(ContainerMsgpackTest, ContainerWithBinaryData) {
     std::vector<uint8_t> binary = {0x01, 0x02, 0x03, 0x04, 0x05};
     container->set("data", binary);
 
-    auto msgpack_data = container->to_msgpack();
-    auto restored = value_container::create_from_msgpack(msgpack_data);
-    ASSERT_NE(restored, nullptr);
+    auto msgpack_data = container->serialize(value_container::serialization_format::msgpack).value();
+    auto restored = std::make_shared<value_container>();
+    auto result = restored->deserialize(std::span<const uint8_t>(msgpack_data), value_container::serialization_format::msgpack);
+    ASSERT_TRUE(result.is_ok());
 
     auto data = restored->get_value("data");
     ASSERT_TRUE(data.has_value());
@@ -346,9 +349,10 @@ TEST_F(ContainerMsgpackTest, ContainerWithHeader) {
     container->set_target("target_app", "instance2");
     container->set_message_type("test_message");
 
-    auto data = container->to_msgpack();
-    auto restored = value_container::create_from_msgpack(data);
-    ASSERT_NE(restored, nullptr);
+    auto data = container->serialize(value_container::serialization_format::msgpack).value();
+    auto restored = std::make_shared<value_container>();
+    auto result = restored->deserialize(std::span<const uint8_t>(data), value_container::serialization_format::msgpack);
+    ASSERT_TRUE(result.is_ok());
 
     EXPECT_EQ(restored->source_id(), "source_app");
     EXPECT_EQ(restored->source_sub_id(), "instance1");
@@ -359,11 +363,11 @@ TEST_F(ContainerMsgpackTest, ContainerWithHeader) {
 
 TEST_F(ContainerMsgpackTest, FromMsgpackMethod) {
     container->set("key", std::string("value"));
-    auto data = container->to_msgpack();
+    auto data = container->serialize(value_container::serialization_format::msgpack).value();
 
     auto new_container = std::make_shared<value_container>();
-    bool result = new_container->from_msgpack(data);
-    EXPECT_TRUE(result);
+    auto result = new_container->deserialize(std::span<const uint8_t>(data), value_container::serialization_format::msgpack);
+    EXPECT_TRUE(result.is_ok());
 
     auto key = new_container->get_value("key");
     ASSERT_TRUE(key.has_value());
@@ -372,20 +376,21 @@ TEST_F(ContainerMsgpackTest, FromMsgpackMethod) {
 
 TEST_F(ContainerMsgpackTest, InvalidDataReturnsFalse) {
     std::vector<uint8_t> invalid_data = {0x00, 0x01, 0x02};
-    bool result = container->from_msgpack(invalid_data);
-    EXPECT_FALSE(result);
+    auto result = container->deserialize(std::span<const uint8_t>(invalid_data), value_container::serialization_format::msgpack);
+    EXPECT_FALSE(result.is_ok());
 }
 
 TEST_F(ContainerMsgpackTest, EmptyDataReturnsFalse) {
     std::vector<uint8_t> empty_data;
-    bool result = container->from_msgpack(empty_data);
-    EXPECT_FALSE(result);
+    auto result = container->deserialize(std::span<const uint8_t>(empty_data), value_container::serialization_format::msgpack);
+    EXPECT_FALSE(result.is_ok());
 }
 
 TEST_F(ContainerMsgpackTest, CreateFromMsgpackWithInvalidData) {
     std::vector<uint8_t> invalid_data = {0x00, 0x01, 0x02};
-    auto restored = value_container::create_from_msgpack(invalid_data);
-    EXPECT_EQ(restored, nullptr);
+    auto restored = std::make_shared<value_container>();
+    auto result = restored->deserialize(std::span<const uint8_t>(invalid_data), value_container::serialization_format::msgpack);
+    EXPECT_FALSE(result.is_ok());
 }
 
 // ============================================================================
@@ -459,23 +464,23 @@ protected:
 };
 
 TEST_F(MsgpackResultApiTest, ToMsgpackResultSuccess) {
-    auto result = container->to_msgpack_result();
+    auto result = container->serialize(value_container::serialization_format::msgpack);
     EXPECT_TRUE(result.is_ok());
     EXPECT_FALSE(result.value().empty());
 }
 
 TEST_F(MsgpackResultApiTest, FromMsgpackResultSuccess) {
-    auto data = container->to_msgpack();
+    auto data = container->serialize(value_container::serialization_format::msgpack).value();
     auto new_container = std::make_shared<value_container>();
 
-    auto result = new_container->from_msgpack_result(data);
+    auto result = new_container->deserialize(std::span<const uint8_t>(data), value_container::serialization_format::msgpack);
     EXPECT_TRUE(result.is_ok());
 }
 
 TEST_F(MsgpackResultApiTest, FromMsgpackResultFailure) {
     std::vector<uint8_t> invalid_data = {0x00, 0x01};
-    auto result = container->from_msgpack_result(invalid_data);
-    EXPECT_TRUE(result.is_err());
+    auto result = container->deserialize(std::span<const uint8_t>(invalid_data), value_container::serialization_format::msgpack);
+    EXPECT_FALSE(result.is_ok());
 }
 #endif
 
@@ -498,13 +503,13 @@ protected:
 
 TEST_F(MsgpackPerformanceTest, CompareOutputSize) {
     // Get binary serialization size
-    auto binary_data = container->serialize_array();
+    auto binary_data = container->serialize_string(value_container::serialization_format::binary).value();
 
     // Get JSON size
-    auto json_data = container->to_json();
+    auto json_data = container->serialize_string(value_container::serialization_format::json).value();
 
     // Get MessagePack size
-    auto msgpack_data = container->to_msgpack();
+    auto msgpack_data = container->serialize(value_container::serialization_format::msgpack).value();
 
     // MessagePack should be smaller than JSON
     EXPECT_LT(msgpack_data.size(), json_data.size());
@@ -516,9 +521,10 @@ TEST_F(MsgpackPerformanceTest, CompareOutputSize) {
 }
 
 TEST_F(MsgpackPerformanceTest, RoundTripPreservesData) {
-    auto msgpack_data = container->to_msgpack();
-    auto restored = value_container::create_from_msgpack(msgpack_data);
-    ASSERT_NE(restored, nullptr);
+    auto msgpack_data = container->serialize(value_container::serialization_format::msgpack).value();
+    auto restored = std::make_shared<value_container>();
+    auto result = restored->deserialize(std::span<const uint8_t>(msgpack_data), value_container::serialization_format::msgpack);
+    ASSERT_TRUE(result.is_ok());
 
     // Verify all values are preserved
     for (int i = 0; i < 100; ++i) {

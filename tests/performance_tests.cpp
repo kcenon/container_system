@@ -173,8 +173,7 @@ TEST_F(PerformanceTest, ValueAdditionPerformance) {
 
                 for (int j = 0; j < values_per_container; ++j) {
                     std::string key = "key_" + std::to_string(j);
-                    auto value = make_int_value(key, i * j);
-                    container->add(value);
+                    container->set(key, i * j);
                 }
             }
         });
@@ -199,15 +198,15 @@ TEST_F(PerformanceTest, SerializationPerformance) {
     container->set_message_type("serialization_benchmark");
 
     // Add various types of values
-    container->add(make_string_value("string_data", "Lorem ipsum dolor sit amet, consectetur adipiscing elit"));
-    container->add(make_int_value("int_data", 123456789));
-    container->add(make_llong_value("long_data", 9223372036854775807LL));
-    container->add(make_double_value("double_data", 3.141592653589793));
-    container->add(make_bool_value("bool_data", true));
+    container->set("string_data", "Lorem ipsum dolor sit amet, consectetur adipiscing elit");
+    container->set("int_data", 123456789);
+    container->set("long_data", 9223372036854775807LL);
+    container->set("double_data", 3.141592653589793);
+    container->set("bool_data", true);
 
     // Add binary data
     std::vector<uint8_t> binary_data(1024, 0xAB);
-    container->add(make_bytes_value("bytes_data", binary_data));
+    container->set("bytes_data", binary_data);
 
     std::vector<double> serialization_rates;
     const int num_runs = 10;
@@ -218,7 +217,7 @@ TEST_F(PerformanceTest, SerializationPerformance) {
 
         auto duration = measure_time([&]() {
             for (int i = 0; i < BENCHMARK_ITERATIONS; ++i) {
-                serialized_data.push_back(container->serialize());
+                serialized_data.push_back(container->serialize_string(value_container::serialization_format::binary).value());
             }
         });
 
@@ -241,11 +240,11 @@ TEST_F(PerformanceTest, DeserializationPerformance) {
     original->set_target("deserialization_target", "perf_handler");
     original->set_message_type("deserialization_benchmark");
 
-    original->add(make_string_value("test_string", "Performance test data"));
-    original->add(make_int_value("test_int", 42));
-    original->add(make_double_value("test_double", 2.71828));
+    original->set("test_string", "Performance test data");
+    original->set("test_int", 42);
+    original->set("test_double", 2.71828);
 
-    std::string serialized_data = original->serialize();
+    std::string serialized_data = original->serialize_string(value_container::serialization_format::binary).value();
 
     std::vector<double> deserialization_rates;
     const int num_runs = 10;
@@ -254,7 +253,7 @@ TEST_F(PerformanceTest, DeserializationPerformance) {
         auto duration = measure_time([&]() {
             for (int i = 0; i < BENCHMARK_ITERATIONS; ++i) {
                 auto container = std::make_shared<value_container>();
-                container->deserialize(serialized_data);
+                container->deserialize_result(serialized_data);
             }
         });
 
@@ -312,13 +311,13 @@ TEST_F(PerformanceTest, ThreadSafetyStressTest) {
                 container->set_message_type("stress_test");
 
                 // Add random values
-                container->add(make_int_value("iteration", i));
-                container->add(make_int_value("thread_id", t));
-                container->add(make_string_value("data", "stress_test_data_" + std::to_string(i)));
+                container->set("iteration", i);
+                container->set("thread_id", t);
+                container->set("data", "stress_test_data_" + std::to_string(i));
 
                 // Serialize occasionally
                 if (i % 100 == 0) {
-                    container->serialize();
+                    container->serialize_string(value_container::serialization_format::binary).value();
                 }
 
                 // Use fetch_add for atomic increment
@@ -375,9 +374,9 @@ TEST_F(PerformanceTest, MemoryUsageTest) {
         container->set_message_type("memory_benchmark");
 
         // Add some values
-        container->add(make_int_value("index", i));
-        container->add(make_string_value("description", "Memory test container " + std::to_string(i)));
-        container->add(make_double_value("value", i * 3.14159));
+        container->set("index", i);
+        container->set("description", "Memory test container " + std::to_string(i));
+        container->set("value", i * 3.14159);
 
         containers.push_back(container);
     }
@@ -392,7 +391,7 @@ TEST_F(PerformanceTest, MemoryUsageTest) {
     auto serialization_start = std::chrono::high_resolution_clock::now();
 
     for (const auto& container : containers) {
-        serialized_containers.push_back(container->serialize());
+        serialized_containers.push_back(container->serialize_string(value_container::serialization_format::binary).value());
     }
 
     auto serialization_end = std::chrono::high_resolution_clock::now();
@@ -512,19 +511,19 @@ TEST_F(PerformanceTest, LargeScaleStressTest) {
             std::string key = "key_" + std::to_string(j);
             switch (j % 5) {
                 case 0:
-                    container->add(make_string_value(key, "stress_test_" + std::to_string(i)));
+                    container->set(key, "stress_test_" + std::to_string(i));
                     break;
                 case 1:
-                    container->add(make_int_value(key, i + j));
+                    container->set(key, i + j);
                     break;
                 case 2:
-                    container->add(make_double_value(key, (i + j) * 0.001));
+                    container->set(key, (i + j) * 0.001);
                     break;
                 case 3:
-                    container->add(make_bool_value(key, (i + j) % 2 == 0));
+                    container->set(key, (i + j) % 2 == 0);
                     break;
                 case 4:
-                    container->add(make_int_value(key, (i * 1000 + j) % 2147483647));
+                    container->set(key, (i * 1000 + j) % 2147483647);
                     break;
             }
         }
@@ -543,7 +542,7 @@ TEST_F(PerformanceTest, LargeScaleStressTest) {
     serialized_data.reserve(stress_containers);
 
     for (size_t i = 0; i < stress_containers_vec.size(); ++i) {
-        serialized_data.push_back(stress_containers_vec[i]->serialize());
+        serialized_data.push_back(stress_containers_vec[i]->serialize_string(value_container::serialization_format::binary).value());
 
         if ((i + 1) % 10000 == 0) {
             std::cout << "Serialized " << (i + 1) << " containers..." << std::endl;
