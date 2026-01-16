@@ -255,26 +255,11 @@ namespace container_module
 		 * @exception_safety Strong guarantee - no changes on exception
 		 * @throws std::bad_alloc if memory allocation fails
 		 * @deprecated Use set() instead for unified API
+		 * @note Implementation in legacy_api.h
 		 */
 		template<typename T>
 		[[deprecated("Use set() instead")]]
-		void add_value(const std::string& name, T&& data_val) {
-			write_lock_guard lock(this);
-
-			optimized_value val;
-			val.name = name;
-			val.data = std::forward<T>(data_val);
-			val.type = static_cast<value_types>(val.data.index());
-
-			optimized_units_.push_back(std::move(val));
-			changed_data_ = true;
-
-			if (use_soo_ && val.is_stack_allocated()) {
-				stack_allocations_.fetch_add(1, std::memory_order_relaxed);
-			} else {
-				heap_allocations_.fetch_add(1, std::memory_order_relaxed);
-			}
-		}
+		void add_value(const std::string& name, T&& data_val);
 
 		/**
 		 * @brief Legacy compatibility: Add a value object to the container
@@ -313,16 +298,11 @@ namespace container_module
 		 * @param data_val The value to store
 		 * @exception_safety Strong guarantee - no changes on exception
 		 * @deprecated Use set() instead for unified API
+		 * @note Implementation in legacy_api.h
 		 */
 		template<typename T>
 		[[deprecated("Use set() instead")]]
-		void set_value(const std::string& key, T&& data_val) {
-			optimized_value val;
-			val.name = key;
-			val.data = std::forward<T>(data_val);
-			val.type = static_cast<value_types>(val.data.index());
-			set_unit_impl(val);
-		}
+		void set_value(const std::string& key, T&& data_val);
 #endif // CONTAINER_NO_LEGACY_API
 
 		// =======================================================================
@@ -1461,3 +1441,12 @@ namespace container_module
 #endif
 
 } // namespace container_module
+
+// =============================================================================
+// Legacy API Template Implementations
+// =============================================================================
+// Include legacy API implementations after the class definition is complete.
+// This allows the template implementations to access all class members.
+#ifndef CONTAINER_NO_LEGACY_API
+#include "container/core/container/legacy_api.h"
+#endif
