@@ -556,34 +556,46 @@ namespace container_module
 
 		// =======================================================================
 		// Result-based Serialization API (Issue #231)
+		// Note: These format-specific methods are deprecated in favor of the
+		// unified serialization API (serialize(format), serialize_string(format)).
+		// See Issue #286 and #292 for migration guidance.
 		// =======================================================================
 
 		/**
-		 * @brief Serialize this container with Result return type
+		 * @brief Serialize this container with Result return type (binary format)
 		 * @return Result containing serialized string or error info
 		 * @exception_safety No-throw guarantee
+		 * @deprecated Use serialize(serialization_format::binary) or
+		 *             serialize_string(serialization_format::binary) instead
 		 */
+		[[deprecated("Use serialize(serialization_format::binary) or serialize_string(serialization_format::binary) instead")]]
 		[[nodiscard]] kcenon::common::Result<std::string> serialize_result() const noexcept;
 
 		/**
-		 * @brief Serialize to raw byte array with Result return type
+		 * @brief Serialize to raw byte array with Result return type (binary format)
 		 * @return Result containing byte array or error info
 		 * @exception_safety No-throw guarantee
+		 * @deprecated Use serialize(serialization_format::binary) instead
 		 */
+		[[deprecated("Use serialize(serialization_format::binary) instead")]]
 		[[nodiscard]] kcenon::common::Result<std::vector<uint8_t>> serialize_array_result() const noexcept;
 
 		/**
 		 * @brief Generate JSON representation with Result return type
 		 * @return Result containing JSON string or error info
 		 * @exception_safety No-throw guarantee
+		 * @deprecated Use serialize_string(serialization_format::json) instead
 		 */
+		[[deprecated("Use serialize_string(serialization_format::json) instead")]]
 		[[nodiscard]] kcenon::common::Result<std::string> to_json_result() noexcept;
 
 		/**
 		 * @brief Generate XML representation with Result return type
 		 * @return Result containing XML string or error info
 		 * @exception_safety No-throw guarantee
+		 * @deprecated Use serialize_string(serialization_format::xml) instead
 		 */
+		[[deprecated("Use serialize_string(serialization_format::xml) instead")]]
 		[[nodiscard]] kcenon::common::Result<std::string> to_xml_result() noexcept;
 
 		// =======================================================================
@@ -1093,7 +1105,9 @@ namespace container_module
 		 * @brief Serialize to MessagePack with Result return type
 		 * @return Result containing byte vector or error info
 		 * @exception_safety No-throw guarantee
+		 * @deprecated Use serialize(serialization_format::msgpack) instead
 		 */
+		[[deprecated("Use serialize(serialization_format::msgpack) instead")]]
 		[[nodiscard]] kcenon::common::Result<std::vector<uint8_t>> to_msgpack_result() const noexcept;
 
 		/**
@@ -1101,7 +1115,9 @@ namespace container_module
 		 * @param data MessagePack-encoded binary data
 		 * @return VoidResult indicating success or error
 		 * @exception_safety Strong guarantee - no changes on error
+		 * @deprecated Use deserialize(data, serialization_format::msgpack) instead
 		 */
+		[[deprecated("Use deserialize(data, serialization_format::msgpack) instead")]]
 		[[nodiscard]] kcenon::common::VoidResult from_msgpack_result(
 			const std::vector<uint8_t>& data) noexcept;
 #endif
