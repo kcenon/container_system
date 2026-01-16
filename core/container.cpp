@@ -2106,6 +2106,267 @@ void value_container::clear_validation_errors() noexcept
 					"container_system"});
 		}
 	}
+
+	// =======================================================================
+	// Unified Serialization API (Issue #286)
+	// =======================================================================
+
+	kcenon::common::Result<std::vector<uint8_t>> value_container::serialize(
+		serialization_format fmt) const noexcept
+	{
+		try
+		{
+			switch (fmt)
+			{
+			case serialization_format::binary:
+			{
+				auto result = serialize_array_result();
+				if (!result.is_ok())
+				{
+					return kcenon::common::Result<std::vector<uint8_t>>(result.error());
+				}
+				return result;
+			}
+			case serialization_format::json:
+			{
+				// Cast away const for to_json (it modifies internal state)
+				auto* mutable_this = const_cast<value_container*>(this);
+				auto result = mutable_this->to_json_result();
+				if (!result.is_ok())
+				{
+					return kcenon::common::Result<std::vector<uint8_t>>(result.error());
+				}
+				const auto& str = result.value();
+				return kcenon::common::ok(std::vector<uint8_t>(str.begin(), str.end()));
+			}
+			case serialization_format::xml:
+			{
+				// Cast away const for to_xml (it modifies internal state)
+				auto* mutable_this = const_cast<value_container*>(this);
+				auto result = mutable_this->to_xml_result();
+				if (!result.is_ok())
+				{
+					return kcenon::common::Result<std::vector<uint8_t>>(result.error());
+				}
+				const auto& str = result.value();
+				return kcenon::common::ok(std::vector<uint8_t>(str.begin(), str.end()));
+			}
+			case serialization_format::msgpack:
+			{
+				return to_msgpack_result();
+			}
+			case serialization_format::auto_detect:
+			case serialization_format::unknown:
+			default:
+				return kcenon::common::Result<std::vector<uint8_t>>(
+					kcenon::common::error_info{
+						error_codes::invalid_format,
+						"Cannot serialize with auto_detect or unknown format",
+						"container_system"});
+			}
+		}
+		catch (const std::bad_alloc&)
+		{
+			return kcenon::common::Result<std::vector<uint8_t>>(
+				kcenon::common::error_info{
+					error_codes::memory_allocation_failed,
+					error_codes::make_message(error_codes::memory_allocation_failed),
+					"container_system"});
+		}
+		catch (const std::exception& e)
+		{
+			return kcenon::common::Result<std::vector<uint8_t>>(
+				kcenon::common::error_info{
+					error_codes::serialization_failed,
+					std::string("Serialization failed: ") + e.what(),
+					"container_system"});
+		}
+	}
+
+	kcenon::common::Result<std::string> value_container::serialize_string(
+		serialization_format fmt) const noexcept
+	{
+		try
+		{
+			switch (fmt)
+			{
+			case serialization_format::binary:
+			{
+				return serialize_result();
+			}
+			case serialization_format::json:
+			{
+				// Cast away const for to_json (it modifies internal state)
+				auto* mutable_this = const_cast<value_container*>(this);
+				return mutable_this->to_json_result();
+			}
+			case serialization_format::xml:
+			{
+				// Cast away const for to_xml (it modifies internal state)
+				auto* mutable_this = const_cast<value_container*>(this);
+				return mutable_this->to_xml_result();
+			}
+			case serialization_format::msgpack:
+			{
+				auto result = to_msgpack_result();
+				if (!result.is_ok())
+				{
+					return kcenon::common::Result<std::string>(result.error());
+				}
+				const auto& bytes = result.value();
+				return kcenon::common::ok(std::string(bytes.begin(), bytes.end()));
+			}
+			case serialization_format::auto_detect:
+			case serialization_format::unknown:
+			default:
+				return kcenon::common::Result<std::string>(
+					kcenon::common::error_info{
+						error_codes::invalid_format,
+						"Cannot serialize with auto_detect or unknown format",
+						"container_system"});
+			}
+		}
+		catch (const std::bad_alloc&)
+		{
+			return kcenon::common::Result<std::string>(
+				kcenon::common::error_info{
+					error_codes::memory_allocation_failed,
+					error_codes::make_message(error_codes::memory_allocation_failed),
+					"container_system"});
+		}
+		catch (const std::exception& e)
+		{
+			return kcenon::common::Result<std::string>(
+				kcenon::common::error_info{
+					error_codes::serialization_failed,
+					std::string("Serialization failed: ") + e.what(),
+					"container_system"});
+		}
+	}
+
+	kcenon::common::VoidResult value_container::deserialize(
+		std::span<const uint8_t> data) noexcept
+	{
+		// Auto-detect format
+		std::vector<uint8_t> data_vec(data.begin(), data.end());
+		auto fmt = detect_format(data_vec);
+		return deserialize(data, fmt);
+	}
+
+	kcenon::common::VoidResult value_container::deserialize(
+		std::span<const uint8_t> data,
+		serialization_format fmt) noexcept
+	{
+		try
+		{
+			// Handle auto-detect
+			if (fmt == serialization_format::auto_detect)
+			{
+				std::vector<uint8_t> data_vec(data.begin(), data.end());
+				fmt = detect_format(data_vec);
+			}
+
+			switch (fmt)
+			{
+			case serialization_format::binary:
+			case serialization_format::json:
+			case serialization_format::xml:
+			{
+				// Convert to string for text-based formats
+				std::string str_data(data.begin(), data.end());
+				return deserialize_result(str_data, false);
+			}
+			case serialization_format::msgpack:
+			{
+				std::vector<uint8_t> data_vec(data.begin(), data.end());
+				return from_msgpack_result(data_vec);
+			}
+			case serialization_format::unknown:
+			default:
+				return kcenon::common::VoidResult(
+					kcenon::common::error_info{
+						error_codes::invalid_format,
+						"Unknown or unsupported serialization format",
+						"container_system"});
+			}
+		}
+		catch (const std::bad_alloc&)
+		{
+			return kcenon::common::VoidResult(
+				kcenon::common::error_info{
+					error_codes::memory_allocation_failed,
+					error_codes::make_message(error_codes::memory_allocation_failed),
+					"container_system"});
+		}
+		catch (const std::exception& e)
+		{
+			return kcenon::common::VoidResult(
+				kcenon::common::error_info{
+					error_codes::deserialization_failed,
+					std::string("Deserialization failed: ") + e.what(),
+					"container_system"});
+		}
+	}
+
+	kcenon::common::VoidResult value_container::deserialize(
+		std::string_view data) noexcept
+	{
+		// Auto-detect format
+		auto fmt = detect_format(data);
+		return deserialize(data, fmt);
+	}
+
+	kcenon::common::VoidResult value_container::deserialize(
+		std::string_view data,
+		serialization_format fmt) noexcept
+	{
+		try
+		{
+			// Handle auto-detect
+			if (fmt == serialization_format::auto_detect)
+			{
+				fmt = detect_format(data);
+			}
+
+			switch (fmt)
+			{
+			case serialization_format::binary:
+			case serialization_format::json:
+			case serialization_format::xml:
+			{
+				return deserialize_result(std::string(data), false);
+			}
+			case serialization_format::msgpack:
+			{
+				std::vector<uint8_t> data_vec(data.begin(), data.end());
+				return from_msgpack_result(data_vec);
+			}
+			case serialization_format::unknown:
+			default:
+				return kcenon::common::VoidResult(
+					kcenon::common::error_info{
+						error_codes::invalid_format,
+						"Unknown or unsupported serialization format",
+						"container_system"});
+			}
+		}
+		catch (const std::bad_alloc&)
+		{
+			return kcenon::common::VoidResult(
+				kcenon::common::error_info{
+					error_codes::memory_allocation_failed,
+					error_codes::make_message(error_codes::memory_allocation_failed),
+					"container_system"});
+		}
+		catch (const std::exception& e)
+		{
+			return kcenon::common::VoidResult(
+				kcenon::common::error_info{
+					error_codes::deserialization_failed,
+					std::string("Deserialization failed: ") + e.what(),
+					"container_system"});
+		}
+	}
 #endif
 
 	// =======================================================================

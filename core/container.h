@@ -950,8 +950,131 @@ namespace container_module
 			json,       ///< JSON format
 			xml,        ///< XML format
 			msgpack,    ///< MessagePack binary format
+			auto_detect,///< Auto-detect format during deserialization
 			unknown     ///< Unknown or unrecognized format
 		};
+
+		// =======================================================================
+		// Unified Serialization API (Issue #286)
+		// =======================================================================
+
+		/**
+		 * @brief Unified serialization method
+		 *
+		 * Single entry point for all serialization formats. Replaces format-specific
+		 * methods (to_json, to_xml, to_msgpack, serialize).
+		 *
+		 * @param fmt Serialization format (binary, json, xml, msgpack)
+		 * @return Result containing serialized data or error
+		 * @exception_safety No-throw guarantee
+		 *
+		 * @code
+		 * auto container = std::make_shared<value_container>();
+		 * container->set("name", "Alice").set("age", 30);
+		 *
+		 * // Serialize to different formats
+		 * auto json_result = container->serialize(serialization_format::json);
+		 * auto msgpack_result = container->serialize(serialization_format::msgpack);
+		 * auto binary_result = container->serialize(serialization_format::binary);
+		 * @endcode
+		 */
+#if CONTAINER_HAS_COMMON_RESULT
+		[[nodiscard]] kcenon::common::Result<std::vector<uint8_t>> serialize(
+			serialization_format fmt) const noexcept;
+#endif
+
+		/**
+		 * @brief Convenience method for string-based serialization formats
+		 *
+		 * Returns serialized data as a string. Preferred for json and xml formats.
+		 *
+		 * @param fmt Serialization format (binary, json, xml; msgpack returns binary)
+		 * @return Result containing serialized string or error
+		 * @exception_safety No-throw guarantee
+		 *
+		 * @code
+		 * auto json_str = container->serialize_string(serialization_format::json);
+		 * if (json_str.is_ok()) {
+		 *     std::cout << json_str.value() << std::endl;
+		 * }
+		 * @endcode
+		 */
+#if CONTAINER_HAS_COMMON_RESULT
+		[[nodiscard]] kcenon::common::Result<std::string> serialize_string(
+			serialization_format fmt) const noexcept;
+#endif
+
+		/**
+		 * @brief Unified deserialization with auto-detection
+		 *
+		 * Automatically detects the serialization format and deserializes.
+		 *
+		 * @param data Binary data to deserialize
+		 * @return VoidResult indicating success or error
+		 * @exception_safety Strong guarantee - no changes on error
+		 *
+		 * @code
+		 * std::vector<uint8_t> data = receive_data();
+		 * auto result = container->deserialize(data);
+		 * if (result.is_ok()) {
+		 *     // Container is now populated
+		 * }
+		 * @endcode
+		 */
+#if CONTAINER_HAS_COMMON_RESULT
+		[[nodiscard]] kcenon::common::VoidResult deserialize(
+			std::span<const uint8_t> data) noexcept;
+#endif
+
+		/**
+		 * @brief Unified deserialization with explicit format
+		 *
+		 * Deserializes data using the specified format.
+		 *
+		 * @param data Binary data to deserialize
+		 * @param fmt Expected serialization format
+		 * @return VoidResult indicating success or error
+		 * @exception_safety Strong guarantee - no changes on error
+		 *
+		 * @code
+		 * auto result = container->deserialize(msgpack_data, serialization_format::msgpack);
+		 * @endcode
+		 */
+#if CONTAINER_HAS_COMMON_RESULT
+		[[nodiscard]] kcenon::common::VoidResult deserialize(
+			std::span<const uint8_t> data,
+			serialization_format fmt) noexcept;
+#endif
+
+		/**
+		 * @brief Unified string deserialization with auto-detection
+		 *
+		 * Automatically detects the serialization format and deserializes from string.
+		 *
+		 * @param data String data to deserialize
+		 * @return VoidResult indicating success or error
+		 * @exception_safety Strong guarantee - no changes on error
+		 */
+#if CONTAINER_HAS_COMMON_RESULT
+		[[nodiscard]] kcenon::common::VoidResult deserialize(
+			std::string_view data) noexcept;
+#endif
+
+		/**
+		 * @brief Unified string deserialization with explicit format
+		 *
+		 * Deserializes string data using the specified format.
+		 *
+		 * @param data String data to deserialize
+		 * @param fmt Expected serialization format
+		 * @return VoidResult indicating success or error
+		 * @exception_safety Strong guarantee - no changes on error
+		 */
+#if CONTAINER_HAS_COMMON_RESULT
+		[[nodiscard]] kcenon::common::VoidResult deserialize(
+			std::string_view data,
+			serialization_format fmt) noexcept;
+#endif
 
 		/**
 		 * @brief Detect the serialization format of the given data
