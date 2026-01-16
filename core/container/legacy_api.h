@@ -52,18 +52,24 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * | `set_value<T>(key, val)` | `set(key, val)` |
  * | `remove(name)` | `remove_result(name)` |
  *
- * ### Serialization
+ * ### Serialization (Use Unified API)
  *
- * | Deprecated Method | Replacement |
- * |-------------------|-------------|
- * | `serialize()` | `serialize_result()` or `serialize(format)` |
- * | `serialize_array()` | `serialize_array_result()` or `serialize(format)` |
- * | `deserialize(string, bool)` | `deserialize_result()` or `deserialize(span)` |
- * | `deserialize(vector, bool)` | `deserialize_result()` or `deserialize(span)` |
- * | `to_xml()` | `to_xml_result()` or `serialize_string(xml)` |
- * | `to_json()` | `to_json_result()` or `serialize_string(json)` |
- * | `to_msgpack()` | `to_msgpack_result()` or `serialize(msgpack)` |
- * | `from_msgpack(data)` | `from_msgpack_result()` or `deserialize(data, msgpack)` |
+ * | Deprecated Method | Unified API Replacement |
+ * |-------------------|-------------------------|
+ * | `serialize()` | `serialize_string(serialization_format::binary)` |
+ * | `serialize_array()` | `serialize(serialization_format::binary)` |
+ * | `serialize_result()` | `serialize_string(serialization_format::binary)` |
+ * | `serialize_array_result()` | `serialize(serialization_format::binary)` |
+ * | `deserialize(string, bool)` | `deserialize(string_view)` |
+ * | `deserialize(vector, bool)` | `deserialize(span<const uint8_t>)` |
+ * | `to_xml()` | `serialize_string(serialization_format::xml)` |
+ * | `to_xml_result()` | `serialize_string(serialization_format::xml)` |
+ * | `to_json()` | `serialize_string(serialization_format::json)` |
+ * | `to_json_result()` | `serialize_string(serialization_format::json)` |
+ * | `to_msgpack()` | `serialize(serialization_format::msgpack)` |
+ * | `to_msgpack_result()` | `serialize(serialization_format::msgpack)` |
+ * | `from_msgpack(data)` | `deserialize(data, serialization_format::msgpack)` |
+ * | `from_msgpack_result(data)` | `deserialize(data, serialization_format::msgpack)` |
  *
  * ### File I/O
  *
@@ -132,26 +138,62 @@ namespace container_module
  * @brief Deprecated methods for serialization and format conversion
  *
  * These methods are deprecated and will be removed in a future version.
- * Use the Result-based API or unified serialization API instead.
+ * **Use the unified serialization API as the primary approach.**
  *
- * ## Recommended Alternatives
+ * ## Recommended Alternatives (Unified API - Preferred)
  *
- * ### For Result-based error handling:
- * - `serialize()` -> `serialize_result()`
- * - `serialize_array()` -> `serialize_array_result()`
- * - `deserialize()` -> `deserialize_result()`
- * - `to_xml()` -> `to_xml_result()`
- * - `to_json()` -> `to_json_result()`
- * - `to_msgpack()` -> `to_msgpack_result()`
- * - `from_msgpack()` -> `from_msgpack_result()`
- * - `load_packet()` -> `load_packet_result()`
- * - `save_packet()` -> `save_packet_result()`
+ * The unified API provides a single entry point for all serialization formats:
  *
- * ### For unified format-agnostic API:
- * - `serialize(serialization_format::json)` - serialize to any format
- * - `serialize_string(serialization_format::json)` - serialize to string
- * - `deserialize(data)` - auto-detect format
+ * ### Serialization:
+ * - `serialize(serialization_format::binary)` - serialize to binary format
+ * - `serialize(serialization_format::json)` - serialize to JSON
+ * - `serialize(serialization_format::xml)` - serialize to XML
+ * - `serialize(serialization_format::msgpack)` - serialize to MessagePack
+ * - `serialize_string(format)` - serialize to string (for text formats)
+ *
+ * ### Deserialization:
+ * - `deserialize(data)` - auto-detect format and deserialize
  * - `deserialize(data, serialization_format::msgpack)` - explicit format
+ * - `deserialize(string_view)` - deserialize from string with auto-detection
+ *
+ * ## Migration from Format-Specific Methods
+ *
+ * | Deprecated Method | Unified API Replacement |
+ * |-------------------|-------------------------|
+ * | `serialize()` | `serialize_string(serialization_format::binary)` |
+ * | `serialize_array()` | `serialize(serialization_format::binary)` |
+ * | `serialize_result()` | `serialize_string(serialization_format::binary)` |
+ * | `serialize_array_result()` | `serialize(serialization_format::binary)` |
+ * | `to_xml()` | `serialize_string(serialization_format::xml)` |
+ * | `to_xml_result()` | `serialize_string(serialization_format::xml)` |
+ * | `to_json()` | `serialize_string(serialization_format::json)` |
+ * | `to_json_result()` | `serialize_string(serialization_format::json)` |
+ * | `to_msgpack()` | `serialize(serialization_format::msgpack)` |
+ * | `to_msgpack_result()` | `serialize(serialization_format::msgpack)` |
+ * | `from_msgpack(data)` | `deserialize(data, serialization_format::msgpack)` |
+ * | `from_msgpack_result(data)` | `deserialize(data, serialization_format::msgpack)` |
+ * | `deserialize(string)` | `deserialize(string_view)` |
+ * | `deserialize(vector)` | `deserialize(span<const uint8_t>)` |
+ *
+ * ## Example Migration
+ *
+ * @code
+ * // Old code (deprecated):
+ * auto json_result = container->to_json_result();
+ * auto msgpack_result = container->to_msgpack_result();
+ *
+ * // New code (unified API):
+ * auto json_result = container->serialize_string(serialization_format::json);
+ * auto msgpack_result = container->serialize(serialization_format::msgpack);
+ *
+ * // Old deserialization:
+ * container->from_msgpack_result(data);
+ *
+ * // New deserialization (with auto-detection):
+ * container->deserialize(std::span{data});
+ * // Or explicit format:
+ * container->deserialize(std::span{data}, serialization_format::msgpack);
+ * @endcode
  *
  * @{
  */
