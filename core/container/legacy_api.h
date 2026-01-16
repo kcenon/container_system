@@ -34,10 +34,13 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * @file core/container/legacy_api.h
  * @brief Legacy API declarations and inline implementations
  *
- * This header contains deprecated value management methods that are maintained
- * for backward compatibility. New code should use the unified API instead.
+ * This header contains deprecated value management and serialization methods
+ * that are maintained for backward compatibility. New code should use the
+ * unified API instead.
  *
  * ## Migration Guide
+ *
+ * ### Value Management
  *
  * | Deprecated Method | Replacement |
  * |-------------------|-------------|
@@ -48,6 +51,33 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * | `set_units(vals)` | `set_all(vals)` |
  * | `set_value<T>(key, val)` | `set(key, val)` |
  * | `remove(name)` | `remove_result(name)` |
+ *
+ * ### Serialization
+ *
+ * | Deprecated Method | Replacement |
+ * |-------------------|-------------|
+ * | `serialize()` | `serialize_result()` or `serialize(format)` |
+ * | `serialize_array()` | `serialize_array_result()` or `serialize(format)` |
+ * | `deserialize(string, bool)` | `deserialize_result()` or `deserialize(span)` |
+ * | `deserialize(vector, bool)` | `deserialize_result()` or `deserialize(span)` |
+ * | `to_xml()` | `to_xml_result()` or `serialize_string(xml)` |
+ * | `to_json()` | `to_json_result()` or `serialize_string(json)` |
+ * | `to_msgpack()` | `to_msgpack_result()` or `serialize(msgpack)` |
+ * | `from_msgpack(data)` | `from_msgpack_result()` or `deserialize(data, msgpack)` |
+ *
+ * ### File I/O
+ *
+ * | Deprecated Method | Replacement |
+ * |-------------------|-------------|
+ * | `load_packet(path)` | `load_packet_result(path)` |
+ * | `save_packet(path)` | `save_packet_result(path)` |
+ *
+ * ### Schema-Validated Deserialization
+ *
+ * | Deprecated Method | Replacement |
+ * |-------------------|-------------|
+ * | `deserialize(string, schema, bool)` | `deserialize_result(string, schema, bool)` |
+ * | `deserialize(vector, schema, bool)` | `deserialize_result(vector, schema, bool)` |
  *
  * ## Disabling Legacy API
  *
@@ -70,6 +100,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * @see value_container::set() for the unified value setter API
  * @see value_container::set_all() for bulk value operations
+ * @see value_container::serialize(serialization_format) for unified serialization
+ * @see value_container::deserialize(std::span<const uint8_t>) for unified deserialization
  */
 
 #pragma once
@@ -88,6 +120,54 @@ namespace container_module
  *
  * These methods are deprecated and will be removed in a future version.
  * Use the unified set()/set_all() API instead.
+ * @{
+ */
+
+/**
+ * @}
+ */
+
+/**
+ * @defgroup LegacySerialization Legacy Serialization API
+ * @brief Deprecated methods for serialization and format conversion
+ *
+ * These methods are deprecated and will be removed in a future version.
+ * Use the Result-based API or unified serialization API instead.
+ *
+ * ## Recommended Alternatives
+ *
+ * ### For Result-based error handling:
+ * - `serialize()` -> `serialize_result()`
+ * - `serialize_array()` -> `serialize_array_result()`
+ * - `deserialize()` -> `deserialize_result()`
+ * - `to_xml()` -> `to_xml_result()`
+ * - `to_json()` -> `to_json_result()`
+ * - `to_msgpack()` -> `to_msgpack_result()`
+ * - `from_msgpack()` -> `from_msgpack_result()`
+ * - `load_packet()` -> `load_packet_result()`
+ * - `save_packet()` -> `save_packet_result()`
+ *
+ * ### For unified format-agnostic API:
+ * - `serialize(serialization_format::json)` - serialize to any format
+ * - `serialize_string(serialization_format::json)` - serialize to string
+ * - `deserialize(data)` - auto-detect format
+ * - `deserialize(data, serialization_format::msgpack)` - explicit format
+ *
+ * @{
+ */
+
+/**
+ * @}
+ */
+
+/**
+ * @defgroup LegacyFileIO Legacy File I/O API
+ * @brief Deprecated methods for file operations
+ *
+ * These methods are deprecated and will be removed in a future version.
+ * Use the Result-based API instead:
+ * - `load_packet()` -> `load_packet_result()`
+ * - `save_packet()` -> `save_packet_result()`
  * @{
  */
 
