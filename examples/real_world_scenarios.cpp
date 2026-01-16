@@ -174,8 +174,8 @@ private:
         container->set_target("iot_analytics_service", "data_processor");
         container->set_message_type("sensor_data_batch");
 
-        container->set_value("batch_size", static_cast<int32_t>(batch.size()));
-        container->set_value("batch_timestamp", static_cast<int64_t>(
+        container->set("batch_size", static_cast<int32_t>(batch.size()));
+        container->set("batch_timestamp", static_cast<int64_t>(
             std::chrono::duration_cast<std::chrono::milliseconds>(
                 std::chrono::system_clock::now().time_since_epoch()).count()));
 
@@ -183,15 +183,15 @@ private:
             const auto& reading = batch[i];
             std::string prefix = "reading_" + std::to_string(i) + "_";
 
-            container->set_value(prefix + "device_id", reading.device_id);
-            container->set_value(prefix + "sensor_type", reading.sensor_type);
-            container->set_value(prefix + "value", reading.value);
-            container->set_value(prefix + "timestamp", static_cast<int64_t>(
+            container->set(prefix + "device_id", reading.device_id);
+            container->set(prefix + "sensor_type", reading.sensor_type);
+            container->set(prefix + "value", reading.value);
+            container->set(prefix + "timestamp", static_cast<int64_t>(
                 std::chrono::duration_cast<std::chrono::milliseconds>(
                     reading.timestamp.time_since_epoch()).count()));
         }
 
-        std::string serialized = container->serialize();
+        std::string serialized = container->serialize_string(value_container::serialization_format::binary).value();
         std::cout << "  Sent IoT batch: " << batch.size() << " readings, "
                   << serialized.size() << " bytes" << std::endl;
     }
@@ -300,28 +300,28 @@ private:
         container->set_target("compliance_service", "transaction_monitor");
         container->set_message_type(is_suspicious ? "suspicious_transaction" : "normal_transaction");
 
-        container->set_value("transaction_id", transaction.transaction_id);
-        container->set_value("account_from", transaction.account_from);
-        container->set_value("account_to", transaction.account_to);
-        container->set_value("amount", transaction.amount);
-        container->set_value("currency", transaction.currency);
-        container->set_value("transaction_type", transaction.transaction_type);
-        container->set_value("timestamp", static_cast<int64_t>(
+        container->set("transaction_id", transaction.transaction_id);
+        container->set("account_from", transaction.account_from);
+        container->set("account_to", transaction.account_to);
+        container->set("amount", transaction.amount);
+        container->set("currency", transaction.currency);
+        container->set("transaction_type", transaction.transaction_type);
+        container->set("timestamp", static_cast<int64_t>(
             std::chrono::duration_cast<std::chrono::milliseconds>(
                 transaction.timestamp.time_since_epoch()).count()));
-        container->set_value("risk_score", is_suspicious ? 85.0 : 15.0);
+        container->set("risk_score", is_suspicious ? 85.0 : 15.0);
 
         if (is_suspicious) {
             fraud_alerts_++;
-            container->set_value("alert_reason",
+            container->set("alert_reason",
                 std::string(transaction.amount > 5000.0 ? "high_amount" : "same_account"));
-            container->set_value("requires_manual_review", true);
+            container->set("requires_manual_review", true);
 
             std::cout << "  FRAUD ALERT: " << transaction.transaction_id
                       << " Amount: $" << transaction.amount << std::endl;
         }
 
-        container->serialize();
+        container->serialize_string(value_container::serialization_format::binary).value();
     }
 };
 
@@ -427,14 +427,14 @@ private:
         container->set_target("game_server", "event_processor");
         container->set_message_type("game_event");
 
-        container->set_value("player_id", event.player_id);
-        container->set_value("event_type", event.event_type);
-        container->set_value("timestamp", static_cast<int64_t>(
+        container->set("player_id", event.player_id);
+        container->set("event_type", event.event_type);
+        container->set("timestamp", static_cast<int64_t>(
             std::chrono::duration_cast<std::chrono::milliseconds>(
                 event.timestamp.time_since_epoch()).count()));
 
         for (const auto& data_pair : event.event_data) {
-            container->set_value(data_pair.first, data_pair.second);
+            container->set(data_pair.first, data_pair.second);
         }
 
         if (event.event_data.find("score") != event.event_data.end()) {
@@ -453,7 +453,7 @@ private:
             }
         }
 
-        container->serialize();
+        container->serialize_string(value_container::serialization_format::binary).value();
     }
 
     void send_achievement_notification(const std::string& player_id, const std::string& achievement) {
@@ -462,9 +462,9 @@ private:
         notification->set_target("notification_service", "player_notifier");
         notification->set_message_type("achievement_unlocked");
 
-        notification->set_value("player_id", player_id);
-        notification->set_value("achievement_name", achievement);
-        notification->set_value("timestamp", static_cast<int64_t>(
+        notification->set("player_id", player_id);
+        notification->set("achievement_name", achievement);
+        notification->set("timestamp", static_cast<int64_t>(
             std::chrono::duration_cast<std::chrono::milliseconds>(
                 std::chrono::system_clock::now().time_since_epoch()).count()));
 
@@ -588,22 +588,22 @@ private:
         container->set_target("search_indexer", "text_analyzer");
         container->set_message_type("document_processing");
 
-        container->set_value("document_id", document.document_id);
-        container->set_value("title", document.title);
-        container->set_value("author", document.author);
-        container->set_value("category", document.category);
-        container->set_value("content_length", static_cast<int32_t>(document.content.length()));
-        container->set_value("upload_timestamp", static_cast<int64_t>(
+        container->set("document_id", document.document_id);
+        container->set("title", document.title);
+        container->set("author", document.author);
+        container->set("category", document.category);
+        container->set("content_length", static_cast<int32_t>(document.content.length()));
+        container->set("upload_timestamp", static_cast<int64_t>(
             std::chrono::duration_cast<std::chrono::milliseconds>(
                 document.upload_time.time_since_epoch()).count()));
-        container->set_value("tag_count", static_cast<int32_t>(document.tags.size()));
-        container->set_value("content", document.content);
+        container->set("tag_count", static_cast<int32_t>(document.tags.size()));
+        container->set("content", document.content);
 
         for (size_t i = 0; i < document.tags.size(); ++i) {
-            container->set_value("tag_" + std::to_string(i), document.tags[i]);
+            container->set("tag_" + std::to_string(i), document.tags[i]);
         }
 
-        container->serialize();
+        container->serialize_string(value_container::serialization_format::binary).value();
         create_search_index_entry(document);
         documents_indexed_++;
 
@@ -618,15 +618,15 @@ private:
         index_container->set_target("search_service", "index_updater");
         index_container->set_message_type("search_index_update");
 
-        index_container->set_value("document_id", document.document_id);
-        index_container->set_value("indexed_title", document.title);
-        index_container->set_value("indexed_category", document.category);
-        index_container->set_value("word_count", static_cast<int32_t>(count_words(document.content)));
-        index_container->set_value("index_timestamp", static_cast<int64_t>(
+        index_container->set("document_id", document.document_id);
+        index_container->set("indexed_title", document.title);
+        index_container->set("indexed_category", document.category);
+        index_container->set("word_count", static_cast<int32_t>(count_words(document.content)));
+        index_container->set("index_timestamp", static_cast<int64_t>(
             std::chrono::duration_cast<std::chrono::milliseconds>(
                 std::chrono::system_clock::now().time_since_epoch()).count()));
 
-        index_container->serialize();
+        index_container->serialize_string(value_container::serialization_format::binary).value();
     }
 
     size_t count_words(const std::string& text) {

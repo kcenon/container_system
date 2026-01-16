@@ -139,7 +139,7 @@ public:
         }
 
         // Compare serialized forms (most reliable for deep comparison)
-        return c1->serialize() == c2->serialize();
+        return c1->serialize_string(value_container::serialization_format::binary).value() == c2->serialize_string(value_container::serialization_format::binary).value();
     }
 
     /**
@@ -152,16 +152,15 @@ public:
 
         if (depth > 0) {
             auto nested = CreateNestedContainer(depth - 1);
-            std::string nested_data = nested->serialize();
+            std::string nested_data = nested->serialize_string(value_container::serialization_format::binary).value();
             std::string key = "nested_" + std::to_string(depth);
             std::vector<uint8_t> nested_bytes(nested_data.begin(), nested_data.end());
-            root->add(std::make_shared<value>(key, value_types::container_value,
-                                             nested_bytes));
+            root->set(key, nested_bytes);
         }
 
         std::string key = "data_" + std::to_string(depth);
         std::string str_value = "level_" + std::to_string(depth);
-        root->add(make_string_value(key, str_value));
+        root->set(key, str_value);
 
         return root;
     }
@@ -239,14 +238,14 @@ public:
         container->set_message_type("mixed_types");
 
         // Add different value types
-        container->add(make_string_value("str_val", "test_string"));
-        container->add(make_int_value("int_val", 42));
-        container->add(make_llong_value("long_val", 9223372036854775807LL));
-        container->add(make_double_value("double_val", 3.14159));
-        container->add(make_bool_value("bool_val", true));
+        container->set("str_val", "test_string");
+        container->set("int_val", 42);
+        container->set("long_val", 9223372036854775807LL);
+        container->set("double_val", 3.14159);
+        container->set("bool_val", true);
 
         std::vector<uint8_t> bytes = {0x01, 0x02, 0x03, 0x04};
-        container->add(make_bytes_value("bytes_val", bytes));
+        container->set("bytes_val", bytes);
 
         return container;
     }
@@ -257,7 +256,7 @@ public:
     static double CalculateSerializationOverhead(
         std::shared_ptr<value_container> container)
     {
-        std::string serialized = container->serialize();
+        std::string serialized = container->serialize_string(value_container::serialization_format::binary).value();
         // Estimate raw data size (simplified)
         size_t raw_size = 100; // Header estimate
 
@@ -325,7 +324,7 @@ public:
     {
         try {
             // Serialize
-            std::string serialized = container->serialize();
+            std::string serialized = container->serialize_string(value_container::serialization_format::binary).value();
 
             if (serialized.empty()) {
                 std::cerr << "ERROR: Serialization produced empty string" << std::endl;
@@ -422,9 +421,9 @@ public:
         while (current_size < target_bytes) {
             std::string key = "key_" + std::to_string(counter);
             std::string value = GenerateRandomString(100);
-            container->add(make_string_value(key, value));
+            container->set(key, value);
 
-            current_size = container->serialize().size();
+            current_size = container->serialize_string(value_container::serialization_format::binary).value().size();
             counter++;
         }
 

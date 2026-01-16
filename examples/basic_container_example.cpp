@@ -71,29 +71,29 @@ void demonstrate_value_types() {
     container->set_message_type("value_types_demo");
 
     // String value using new set_value API
-    container->set_value("username", std::string("john_doe"));
+    container->set("username", std::string("john_doe"));
     std::cout << "Added string value: username = john_doe" << std::endl;
 
     // Integer value
-    container->set_value("user_id", static_cast<int32_t>(12345));
+    container->set("user_id", static_cast<int32_t>(12345));
     std::cout << "Added int value: user_id = 12345" << std::endl;
 
     // Long value (timestamp)
     auto timestamp = std::chrono::duration_cast<std::chrono::seconds>(
         std::chrono::system_clock::now().time_since_epoch()).count();
-    container->set_value("timestamp", static_cast<int64_t>(timestamp));
+    container->set("timestamp", static_cast<int64_t>(timestamp));
     std::cout << "Added long value: timestamp = " << timestamp << std::endl;
 
     // Float value
-    container->set_value("score", 98.5f);
+    container->set("score", 98.5f);
     std::cout << "Added float value: score = 98.5" << std::endl;
 
     // Double value
-    container->set_value("account_balance", 1500.75);
+    container->set("account_balance", 1500.75);
     std::cout << "Added double value: account_balance = 1500.75" << std::endl;
 
     // Boolean value
-    container->set_value("is_active", true);
+    container->set("is_active", true);
     std::cout << "Added bool value: is_active = true" << std::endl;
 
     std::cout << "Total values added: 6" << std::endl;
@@ -108,14 +108,14 @@ void demonstrate_serialization() {
     container->set_target("deserialize_test", "test_handler");
     container->set_message_type("serialization_test");
 
-    container->set_value("message", std::string("Hello, Serialization!"));
-    container->set_value("count", static_cast<int32_t>(42));
-    container->set_value("pi", 3.14159);
-    container->set_value("success", true);
+    container->set("message", std::string("Hello, Serialization!"));
+    container->set("count", static_cast<int32_t>(42));
+    container->set("pi", 3.14159);
+    container->set("success", true);
 
     // Serialize
     std::cout << "Serializing container..." << std::endl;
-    std::string serialized_data = container->serialize();
+    std::string serialized_data = container->serialize_string(value_container::serialization_format::binary).value();
     std::cout << "Serialized size: " << serialized_data.size() << " bytes" << std::endl;
 
     // Deserialize
@@ -149,10 +149,10 @@ void demonstrate_value_access() {
     container->set_message_type("value_access_test");
 
     // Add sample data using set_value
-    container->set_value("product_name", std::string("Super Widget"));
-    container->set_value("price", 29.99);
-    container->set_value("quantity", static_cast<int32_t>(100));
-    container->set_value("in_stock", true);
+    container->set("product_name", std::string("Super Widget"));
+    container->set("price", 29.99);
+    container->set("quantity", static_cast<int32_t>(100));
+    container->set("in_stock", true);
 
     std::cout << "Container contains 4 values" << std::endl;
 
@@ -191,9 +191,9 @@ void demonstrate_iteration() {
     container->set_message_type("iteration_test");
 
     // Add multiple items
-    container->set_value("item_1", std::string("first"));
-    container->set_value("item_2", std::string("second"));
-    container->set_value("item_3", std::string("third"));
+    container->set("item_1", std::string("first"));
+    container->set("item_2", std::string("second"));
+    container->set("item_3", std::string("third"));
 
     std::cout << "Added 3 values with different names" << std::endl;
 
@@ -221,8 +221,8 @@ void demonstrate_performance_basics() {
         container->set_target("perf_server", "handler");
         container->set_message_type("performance_test");
 
-        container->set_value("index", static_cast<int32_t>(i));
-        container->set_value("data", std::string("test_data_" + std::to_string(i)));
+        container->set("index", static_cast<int32_t>(i));
+        container->set("data", std::string("test_data_" + std::to_string(i)));
 
         containers.push_back(container);
     }
@@ -245,7 +245,7 @@ void demonstrate_performance_basics() {
     serialized_data.reserve(num_operations);
 
     for (const auto& container : containers) {
-        serialized_data.push_back(container->serialize());
+        serialized_data.push_back(container->serialize_string(value_container::serialization_format::binary).value());
     }
 
     end_time = std::chrono::high_resolution_clock::now();
