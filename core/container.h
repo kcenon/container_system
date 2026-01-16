@@ -228,6 +228,14 @@ namespace container_module
 
 		// Value management methods
 
+#ifndef CONTAINER_NO_LEGACY_API
+		// =======================================================================
+		// Deprecated Value Management API
+		// These methods are deprecated and will be removed in a future version.
+		// Use the unified set()/set_all() API instead.
+		// Define CONTAINER_NO_LEGACY_API to exclude these methods.
+		// =======================================================================
+
 		/**
 		 * @brief Add a value to the container
 		 * @param name Value name/key
@@ -315,6 +323,7 @@ namespace container_module
 			val.type = static_cast<value_types>(val.data.index());
 			set_unit_impl(val);
 		}
+#endif // CONTAINER_NO_LEGACY_API
 
 		// =======================================================================
 		// Unified Value Setter API (Issue #207)
@@ -655,6 +664,11 @@ namespace container_module
 		 */
 		std::optional<optimized_value> get_value(const std::string& name) const noexcept;
 
+#ifndef CONTAINER_NO_LEGACY_API
+		// =======================================================================
+		// Deprecated Removal API
+		// =======================================================================
+
 		/**
 		 * @brief Remove a value by name
 		 * @param target_name Name of value to remove
@@ -664,11 +678,19 @@ namespace container_module
 		[[deprecated("Use remove_result() instead for Result-based error handling")]]
 		void remove(std::string_view target_name,
 					bool update_immediately = false);
+#endif // CONTAINER_NO_LEGACY_API
 
 		/**
 		 * @brief Reinitialize the entire container to defaults.
 		 */
 		void initialize(void);
+
+		// =======================================================================
+		// Core Serialization API
+		// Note: These methods are deprecated but still required internally
+		// (used by constructors). They cannot be conditionally excluded.
+		// Use the Result-based API (serialize_result, etc.) for new code.
+		// =======================================================================
 
 		/**
 		 * @brief Serialize this container (header + data).
@@ -735,6 +757,7 @@ namespace container_module
 		// Schema-Validated Deserialization API (Issue #249)
 		// =======================================================================
 
+#ifndef CONTAINER_NO_LEGACY_API
 		/**
 		 * @brief Deserialize from string data with schema validation
 		 *
@@ -778,6 +801,7 @@ namespace container_module
 		bool deserialize(const std::vector<uint8_t>& data_array,
 						 const container_schema& schema,
 						 bool parse_only_header = false);
+#endif // CONTAINER_NO_LEGACY_API
 
 		/**
 		 * @brief Get the last validation errors from schema-validated deserialization
@@ -833,6 +857,11 @@ namespace container_module
 			bool parse_only_header = false) noexcept;
 #endif
 
+#ifndef CONTAINER_NO_LEGACY_API
+		// =======================================================================
+		// Deprecated Format Conversion API
+		// =======================================================================
+
 		/**
 		 * @brief Generate an XML representation of this container (header +
 		 * values).
@@ -848,11 +877,13 @@ namespace container_module
 		 */
 		[[deprecated("Use to_json_result() instead for Result-based error handling")]]
 		const std::string to_json(void);
+#endif // CONTAINER_NO_LEGACY_API
 
 		// =======================================================================
 		// MessagePack Serialization API (Issue #234)
 		// =======================================================================
 
+#ifndef CONTAINER_NO_LEGACY_API
 		/**
 		 * @brief Serialize this container to MessagePack binary format
 		 *
@@ -893,6 +924,7 @@ namespace container_module
 		 */
 		[[deprecated("Use from_msgpack_result() instead for Result-based error handling")]]
 		bool from_msgpack(const std::vector<uint8_t>& data);
+#endif // CONTAINER_NO_LEGACY_API
 
 		/**
 		 * @brief Create a new container from MessagePack data
@@ -902,9 +934,12 @@ namespace container_module
 		 *
 		 * @param data MessagePack-encoded binary data
 		 * @return Shared pointer to the created container, or nullptr on error
+		 * @note Requires CONTAINER_NO_LEGACY_API to be undefined (uses from_msgpack internally)
 		 */
+#ifndef CONTAINER_NO_LEGACY_API
 		static std::shared_ptr<value_container> create_from_msgpack(
 			const std::vector<uint8_t>& data);
+#endif // CONTAINER_NO_LEGACY_API
 
 		/**
 		 * @brief Serialization format enumeration
@@ -976,6 +1011,11 @@ namespace container_module
 		 */
 		std::string datas(void) const;
 
+#ifndef CONTAINER_NO_LEGACY_API
+		// =======================================================================
+		// Deprecated File I/O API
+		// =======================================================================
+
 		/**
 		 * @brief Load from a file path (reads entire file content, then calls
 		 * deserialize).
@@ -990,6 +1030,7 @@ namespace container_module
 		 */
 		[[deprecated("Use save_packet_result() instead for Result-based error handling")]]
 		void save_packet(const std::string& file_path);
+#endif // CONTAINER_NO_LEGACY_API
 
 		/**
 		 * @brief Get memory usage statistics
