@@ -98,7 +98,7 @@ protected:
         for (size_t i = 0; i < num_values; ++i) {
             std::string key = "key_" + std::to_string(i);
             std::string value = "value_" + std::to_string(i);
-            test_container->add(make_string_value(key, value));
+            test_container->set(key, value);
         }
 
         return test_container;
@@ -109,7 +109,7 @@ protected:
      */
     void AddStringValue(const std::string& key, const std::string& value)
     {
-        container->add(make_string_value(key, value));
+        container->set(key, value);
     }
 
     /**
@@ -119,11 +119,11 @@ protected:
     void AddNumericValue(const std::string& key, T value)
     {
         if constexpr (std::is_same_v<T, int>) {
-            container->add(make_int_value(key, value));
+            container->set(key, value);
         } else if constexpr (std::is_same_v<T, long long>) {
-            container->add(make_llong_value(key, value));
+            container->set(key, value);
         } else if constexpr (std::is_same_v<T, double>) {
-            container->add(make_double_value(key, value));
+            container->set(key, value);
         }
     }
 
@@ -132,7 +132,7 @@ protected:
      */
     void AddBoolValue(const std::string& key, bool value)
     {
-        container->add(make_bool_value(key, value));
+        container->set(key, value);
     }
 
     /**
@@ -140,7 +140,7 @@ protected:
      */
     void AddBytesValue(const std::string& key, const std::vector<uint8_t>& data)
     {
-        container->add(make_bytes_value(key, data));
+        container->set(key, data);
     }
 
     /**
@@ -165,7 +165,7 @@ protected:
      */
     std::shared_ptr<value_container> RoundTripSerialize()
     {
-        std::string serialized = container->serialize();
+        std::string serialized = container->serialize_string(value_container::serialization_format::binary).value();
         return std::make_shared<value_container>(serialized, false);  // false = parse all
     }
 
@@ -179,7 +179,7 @@ protected:
      */
     std::shared_ptr<value_container> RoundTripSerializeHeaderOnly()
     {
-        std::string serialized = container->serialize();
+        std::string serialized = container->serialize_string(value_container::serialization_format::binary).value();
         return std::make_shared<value_container>(serialized, true);  // true = header only
     }
 
@@ -190,7 +190,7 @@ protected:
     int64_t MeasureSerializationTime()
     {
         auto start = std::chrono::high_resolution_clock::now();
-        std::string serialized = container->serialize();
+        std::string serialized = container->serialize_string(value_container::serialization_format::binary).value();
         auto end = std::chrono::high_resolution_clock::now();
 
         return std::chrono::duration_cast<std::chrono::microseconds>(

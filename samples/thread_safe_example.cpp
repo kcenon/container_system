@@ -25,8 +25,8 @@ int main() {
     std::mutex container_mutex;
 
     // Initialize some shared data using new set_value API
-    container->set_value("counter", static_cast<int32_t>(0));
-    container->set_value("total_operations", static_cast<int32_t>(0));
+    container->set("counter", static_cast<int32_t>(0));
+    container->set("total_operations", static_cast<int32_t>(0));
 
     std::cout << "Container initialized for multi-threaded access" << std::endl;
 
@@ -68,7 +68,7 @@ int main() {
                         std::lock_guard<std::mutex> lock(container_mutex);
                         if (auto current = container->get_value("counter")) {
                             if (auto* val = std::get_if<int32_t>(&current->data)) {
-                                container->set_value("counter", static_cast<int32_t>(*val + 1));
+                                container->set("counter", static_cast<int32_t>(*val + 1));
                                 global_counter.fetch_add(1, std::memory_order_relaxed);
                             }
                         }
@@ -78,14 +78,14 @@ int main() {
                         std::lock_guard<std::mutex> lock(container_mutex);
                         std::string thread_key = "thread_" + std::to_string(i);
                         std::string thread_data = "data_from_thread_" + std::to_string(i) + "_op_" + std::to_string(op);
-                        container->set_value(thread_key, thread_data);
+                        container->set(thread_key, thread_data);
                         break;
                     }
                     case 3: { // Update total operations
                         std::lock_guard<std::mutex> lock(container_mutex);
                         if (auto total_ops = container->get_value("total_operations")) {
                             if (auto* val = std::get_if<int32_t>(&total_ops->data)) {
-                                container->set_value("total_operations", static_cast<int32_t>(*val + 1));
+                                container->set("total_operations", static_cast<int32_t>(*val + 1));
                             }
                         }
                         break;
@@ -141,7 +141,7 @@ int main() {
     for (int i = 0; i < perf_iterations; ++i) {
         std::string key = "perf_key_" + std::to_string(i);
         std::string value = "perf_value_" + std::to_string(i);
-        perf_container->set_value(key, value);
+        perf_container->set(key, value);
     }
 
     auto end_time = std::chrono::high_resolution_clock::now();

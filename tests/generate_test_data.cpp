@@ -42,54 +42,54 @@ int main() {
     // Null value (type 0) - not implemented in C++, skip
 
     // Bool value (type 1)
-    cont->add(make_bool_value("bool_true", true));
-    cont->add(make_bool_value("bool_false", false));
+    cont->set("bool_true", true);
+    cont->set("bool_false", false);
 
     // Short value (type 2)
-    cont->add(make_short_value("short_neg", static_cast<short>(-1000)));
-    cont->add(make_short_value("short_pos", static_cast<short>(1000)));
+    cont->set("short_neg", static_cast<short>(-1000));
+    cont->set("short_pos", static_cast<short>(1000));
 
     // UShort value (type 3)
-    cont->add(make_ushort_value("ushort", static_cast<unsigned short>(50000)));
+    cont->set("ushort", static_cast<unsigned short>(50000));
 
     // Int value (type 4)
-    cont->add(make_int_value("int_neg", -1000000));
-    cont->add(make_int_value("int_pos", 1000000));
+    cont->set("int_neg", -1000000);
+    cont->set("int_pos", 1000000);
 
     // UInt value (type 5)
-    cont->add(make_uint_value("uint", 3000000000U));
+    cont->set("uint", 3000000000U);
 
     // Long value (type 6) - 32-bit enforced
-    cont->add(make_long_value("long_32bit", 2000000000L));
+    cont->set("long_32bit", 2000000000L);
 
     // ULong value (type 7) - 32-bit enforced
-    cont->add(make_ulong_value("ulong_32bit", 3500000000UL));
+    cont->set("ulong_32bit", 3500000000UL);
 
     // LLong value (type 8) - 64-bit
-    cont->add(make_llong_value("llong_64bit", 5000000000LL));
+    cont->set("llong_64bit", 5000000000LL);
 
     // ULLong value (type 9) - 64-bit
-    cont->add(make_ullong_value("ullong_64bit", 10000000000ULL));
+    cont->set("ullong_64bit", 10000000000ULL);
 
     // Float value (type 10)
-    cont->add(make_float_value("float_pi", 3.14159f));
+    cont->set("float_pi", 3.14159f);
 
     // Double value (type 11)
-    cont->add(make_double_value("double_pi", 3.141592653589793));
+    cont->set("double_pi", 3.141592653589793);
 
     // Bytes value (type 12)
     std::vector<uint8_t> bytes_data = {0x01, 0x02, 0x03, 0xFF, 0xFE};
-    cont->add(make_bytes_value("bytes_test", bytes_data));
+    cont->set("bytes_test", bytes_data);
 
     // String value (type 13)
-    cont->add(make_string_value("string_hello", "Hello from C++!"));
-    cont->add(make_string_value("string_utf8", "UTF-8: 한글 테스트"));
+    cont->set("string_hello", "Hello from C++!");
+    cont->set("string_utf8", "UTF-8: 한글 테스트");
 
     // Container value (type 14) - nested
     auto nested = std::make_shared<value_container>();
     nested->set_message_type("nested_container");
-    nested->add(make_int_value("nested_int", 42));
-    nested->add(make_string_value("nested_str", "nested"));
+    nested->set("nested_int", 42);
+    nested->set("nested_str", "nested");
     cont->add(nested);
 
     // Serialize to file
@@ -110,7 +110,7 @@ int main() {
     // Also generate a simple test case with just one long value
     auto simple = std::make_shared<value_container>();
     simple->set_message_type("simple_test");
-    simple->add(make_long_value("timestamp", 1234567890L));
+    simple->set("timestamp", 1234567890L);
     auto simple_data = simple->serialize_array();
 
     std::ofstream simple_file("test_data_cpp_simple.bin", std::ios::binary);

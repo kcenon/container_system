@@ -126,29 +126,28 @@ TEST_F(ContainerLifecycleTest, ValueAdditionAndRetrieval)
 }
 
 /**
- * Test 5: Multiple values with same key
- * Note: With variant-based storage, set_value updates existing keys.
- * Use add() or add_value() to add multiple values with the same key.
+ * Test 5: set() with same key updates existing value
+ * Note: With the unified set() API, setting a key that already exists
+ * updates the value rather than adding a duplicate.
  */
-TEST_F(ContainerLifecycleTest, MultipleValuesWithSameKey)
+TEST_F(ContainerLifecycleTest, SetSameKeyUpdatesValue)
 {
-    // Use add() to allow duplicate keys
-    container->add(make_string_value("item", "first"));
-    container->add(make_string_value("item", "second"));
-    container->add(make_string_value("item", "third"));
+    // set() updates existing keys
+    container->set("item", "first");
+    container->set("item", "second");
+    container->set("item", "third");
 
-    // Iterate through container to find all values with key "item"
+    // Only one value should exist with the key "item"
     std::vector<std::string> items;
     for (const auto& val : *container) {
         if (val.name == "item") {
             items.push_back(ov_to_string(std::make_optional(val)));
         }
     }
-    ASSERT_EQ(items.size(), 3);
+    ASSERT_EQ(items.size(), 1);
 
-    EXPECT_EQ(items[0], "first");
-    EXPECT_EQ(items[1], "second");
-    EXPECT_EQ(items[2], "third");
+    // The value should be the last set value
+    EXPECT_EQ(items[0], "third");
 }
 
 /**
@@ -159,7 +158,7 @@ TEST_F(ContainerLifecycleTest, SerializationRoundtrip)
     AddStringValue("test_key", "test_value");
     AddNumericValue("number", 123);
 
-    std::string serialized = container->serialize();
+    std::string serialized = container->serialize_string(value_container::serialization_format::binary).value();
     EXPECT_FALSE(serialized.empty());
     EXPECT_TRUE(TestHelpers::IsValidSerializedData(serialized));
 
@@ -180,10 +179,11 @@ TEST_F(ContainerLifecycleTest, BinaryArraySerialization)
     std::vector<uint8_t> test_bytes = {0x01, 0x02, 0x03, 0xFF, 0xFE};
     AddBytesValue("binary_data", test_bytes);
 
-    auto serialized_array = container->serialize_array();
+    auto serialized_array = container->serialize(value_container::serialization_format::binary).value();
     EXPECT_FALSE(serialized_array.empty());
 
-    auto restored = std::make_shared<value_container>(serialized_array, false);
+    auto restored = std::make_shared<value_container>();
+    (void)restored->deserialize(std::span<const uint8_t>(serialized_array), value_container::serialization_format::binary);
     auto restored_bytes = restored->get_value("binary_data");
 
     EXPECT_FALSE(ov_is_null(restored_bytes));
@@ -240,13 +240,13 @@ TEST_F(ContainerLifecycleTest, NestedContainerStructure)
 {
     auto nested = std::make_shared<value_container>();
     nested->set_message_type("nested_msg");
-    nested->add(make_string_value("nested_key", "nested_value"));
+    nested->set("nested_key", "nested_value");
 
     // Serialize nested container
-    std::string nested_data = nested->serialize();
+    std::string nested_data = nested->serialize_string(value_container::serialization_format::binary).value();
 
     // Store as string value (container serialized form)
-    container->set_value("child_data", nested_data);
+    container->set("child_data", nested_data);
 
     auto child_val = container->get_value("child_data");
     EXPECT_FALSE(ov_is_null(child_val));
@@ -266,7 +266,7 @@ TEST_F(ContainerLifecycleTest, MultiLevelNestedContainers)
     auto nested = TestHelpers::CreateNestedContainer(3);
     ASSERT_NE(nested, nullptr);
 
-    std::string serialized = nested->serialize();
+    std::string serialized = nested->serialize_string(value_container::serialization_format::binary).value();
     auto restored = std::make_shared<value_container>(serialized, false);
 
     EXPECT_EQ(restored->message_type(), "root_level");
@@ -284,7 +284,7 @@ TEST_F(ContainerLifecycleTest, ValueRemoval)
 
     EXPECT_FALSE(ov_is_null(container->get_value("key2")));
 
-    container->remove("key2", true);
+    (void)container->remove_result("key2");
 
     // After removal, key2 should not exist
     // Note: Implementation may return null_value instead of actually removing
@@ -305,7 +305,7 @@ TEST_F(ContainerLifecycleTest, ClearAllValues)
     container->clear_value();
 
     // After clear, container should be empty
-    std::string serialized = container->serialize();
+    std::string serialized = container->serialize_string(value_container::serialization_format::binary).value();
     auto restored = std::make_shared<value_container>(serialized, false);
 
     // Values should be cleared, but header should remain
@@ -319,7 +319,7 @@ TEST_F(ContainerLifecycleTest, EmptyContainerSerialization)
 {
     auto empty = std::make_shared<value_container>();
 
-    std::string serialized = empty->serialize();
+    std::string serialized = empty->serialize_string(value_container::serialization_format::binary).value();
     EXPECT_FALSE(serialized.empty());
 
     auto restored = std::make_shared<value_container>(serialized, false);
@@ -334,7 +334,7 @@ TEST_F(ContainerLifecycleTest, MixedValueTypesLifecycle)
     auto mixed = TestHelpers::CreateMixedTypeContainer();
 
     // Serialize and deserialize
-    std::string serialized = mixed->serialize();
+    std::string serialized = mixed->serialize_string(value_container::serialization_format::binary).value();
     auto restored = std::make_shared<value_container>(serialized, false);
 
     // Verify all value types preserved

@@ -100,7 +100,7 @@ TEST_F(SerializationPerformanceTest, BinarySerializationThroughput)
     auto test_container = CreateTestContainer(10);
 
     auto ops_per_sec = TestHelpers::MeasureThroughput([&test_container]() {
-        std::string serialized = test_container->serialize();
+        std::string serialized = test_container->serialize_string(value_container::serialization_format::binary).value();
     }, ITERATIONS);
 
     std::cout << "Binary serialization: " << ops_per_sec << " ops/sec" << std::endl;
@@ -120,7 +120,7 @@ TEST_F(SerializationPerformanceTest, DeserializationThroughput)
     }
 
     auto test_container = CreateTestContainer(10);
-    std::string serialized = test_container->serialize();
+    std::string serialized = test_container->serialize_string(value_container::serialization_format::binary).value();
 
     auto ops_per_sec = TestHelpers::MeasureThroughput([&serialized]() {
         auto c = std::make_shared<value_container>(serialized, false);
@@ -146,7 +146,7 @@ TEST_F(SerializationPerformanceTest, ValueAdditionThroughput)
 
     auto ops_per_sec = TestHelpers::MeasureThroughput([]() {
         auto temp = std::make_shared<value_container>();
-        temp->add(make_string_value("key", "value"));
+        temp->set("key", "value");
     }, ITERATIONS);
 
     std::cout << "Value addition: " << ops_per_sec << " ops/sec" << std::endl;
@@ -170,7 +170,7 @@ TEST_F(SerializationPerformanceTest, SerializationScalability)
 
         auto start = std::chrono::high_resolution_clock::now();
         for (size_t i = 0; i < 100; ++i) {
-            std::string serialized = test_container->serialize();
+            std::string serialized = test_container->serialize_string(value_container::serialization_format::binary).value();
         }
         auto end = std::chrono::high_resolution_clock::now();
 
@@ -190,13 +190,13 @@ TEST_F(SerializationPerformanceTest, SerializationScalability)
 TEST_F(SerializationPerformanceTest, MemoryOverhead)
 {
     auto empty_container = std::make_shared<value_container>();
-    std::string empty_serialized = empty_container->serialize();
+    std::string empty_serialized = empty_container->serialize_string(value_container::serialization_format::binary).value();
 
     auto container_10 = CreateTestContainer(10);
-    std::string serialized_10 = container_10->serialize();
+    std::string serialized_10 = container_10->serialize_string(value_container::serialization_format::binary).value();
 
     auto container_100 = CreateTestContainer(100);
-    std::string serialized_100 = container_100->serialize();
+    std::string serialized_100 = container_100->serialize_string(value_container::serialization_format::binary).value();
 
     std::cout << "Empty container size: " << empty_serialized.size() << " bytes" << std::endl;
     std::cout << "10 values container: " << serialized_10.size() << " bytes" << std::endl;
@@ -218,7 +218,7 @@ TEST_F(SerializationPerformanceTest, JSONSerializationPerformance)
     auto test_container = CreateTestContainer(10);
 
     auto ops_per_sec = TestHelpers::MeasureThroughput([&test_container]() {
-        std::string json = test_container->to_json();
+        std::string json = test_container->serialize_string(value_container::serialization_format::json).value();
     }, ITERATIONS / 2); // JSON is slower, use fewer iterations
 
     std::cout << "JSON serialization: " << ops_per_sec << " ops/sec" << std::endl;
@@ -238,7 +238,7 @@ TEST_F(SerializationPerformanceTest, XMLSerializationPerformance)
     auto test_container = CreateTestContainer(10);
 
     auto ops_per_sec = TestHelpers::MeasureThroughput([&test_container]() {
-        std::string xml = test_container->to_xml();
+        std::string xml = test_container->serialize_string(value_container::serialization_format::xml).value();
     }, ITERATIONS / 2); // XML is slower, use fewer iterations
 
     std::cout << "XML serialization: " << ops_per_sec << " ops/sec" << std::endl;
@@ -258,7 +258,7 @@ TEST_F(SerializationPerformanceTest, LargeContainerSerialization)
     auto large_container = CreateTestContainer(1000);
 
     auto start = std::chrono::high_resolution_clock::now();
-    std::string serialized = large_container->serialize();
+    std::string serialized = large_container->serialize_string(value_container::serialization_format::binary).value();
     auto end = std::chrono::high_resolution_clock::now();
 
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
@@ -286,7 +286,7 @@ TEST_F(SerializationPerformanceTest, NestedContainerPerformance)
 
     auto start = std::chrono::high_resolution_clock::now();
     for (size_t i = 0; i < 100; ++i) {
-        std::string serialized = nested->serialize();
+        std::string serialized = nested->serialize_string(value_container::serialization_format::binary).value();
     }
     auto end = std::chrono::high_resolution_clock::now();
 

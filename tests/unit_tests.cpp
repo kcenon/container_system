@@ -212,9 +212,9 @@ TEST_F(ContainerTest, ContainerValueManagement) {
     std::string value1 = "value1";
     std::string key2 = "key2";
     std::string key3 = "key3";
-    container->add(make_string_value(key1, value1));
-    container->add(make_int_value(key2, 100));
-    container->add(make_bool_value(key3, true));
+    container->set(key1, value1);
+    container->set(key2, 100);
+    container->set(key3, true);
 
     // Retrieve values
     auto val1 = container->get_value("key1");
@@ -240,11 +240,11 @@ TEST_F(ContainerTest, ContainerSerialization) {
     std::string str_key = "str";
     std::string str_val = "hello";
     std::string num_key = "num";
-    container->add(make_string_value(str_key, str_val));
-    container->add(make_int_value(num_key, 42));
+    container->set(str_key, str_val);
+    container->set(num_key, 42);
 
     // Serialize
-    std::string serialized = container->serialize();
+    std::string serialized = container->serialize_string(value_container::serialization_format::binary).value();
 
     // Deserialize - parse_only_header=false to parse values too
     auto new_container = std::make_unique<value_container>(serialized, false);
@@ -265,14 +265,14 @@ TEST_F(ContainerTest, NestedContainerSupport) {
     nested->set_message_type("nested_msg");
     std::string nested_key = "nested_key";
     std::string nested_value = "nested_value";
-    nested->add(make_string_value(nested_key, nested_value));
+    nested->set(nested_key, nested_value);
 
     // Serialize nested container
-    std::string nested_data = nested->serialize();
+    std::string nested_data = nested->serialize_string(value_container::serialization_format::binary).value();
 
     // Add to main container as string value (containing serialized container data)
     std::string child_key = "child";
-    container->add(make_string_value(child_key, nested_data));
+    container->set(child_key, nested_data);
 
     // Retrieve nested container data
     auto child_val = container->get_value("child");
@@ -303,9 +303,9 @@ TEST_F(ContainerTest, DISABLED_MultipleValuesWithSameName) {
     std::string val1 = "first";
     std::string val2 = "second";
     std::string val3 = "third";
-    container->add(make_string_value(key, val1));
-    container->add(make_string_value(key, val2));
-    container->add(make_string_value(key, val3));
+    container->set(key, val1);
+    container->set(key, val2);
+    container->set(key, val3);
 
     // Get first value with name (current API behavior)
     auto item = container->get_value("item");
@@ -317,7 +317,7 @@ TEST_F(ContainerTest, ContainerCopy) {
     container->set_message_type("original");
     std::string key = "key";
     std::string val = "value";
-    container->add(make_string_value(key, val));
+    container->set(key, val);
 
     // Deep copy
     auto copy = container->copy(true);
@@ -339,10 +339,10 @@ TEST_F(ContainerTest, LargeDataHandling) {
     std::string large_data(10 * 1024, 'X'); // 10KB of X's
     std::string key = "large";
 
-    container->add(make_string_value(key, large_data));
+    container->set(key, large_data);
 
     // Serialize and deserialize - parse_only_header=false to parse values too
-    std::string serialized = container->serialize();
+    std::string serialized = container->serialize_string(value_container::serialization_format::binary).value();
     auto restored = std::make_unique<value_container>(serialized, false);
 
     EXPECT_EQ(ov_to_string(restored->get_value("large")), large_data);
@@ -358,14 +358,11 @@ TEST(ThreadSafetyTest, ConcurrentReads) {
 
     // Add test data
     for (int i = 0; i < 100; ++i) {
-        container->add(make_int_value(
-            std::string("key") + std::to_string(i),
-            i
-        ));
+        container->set(std::string("key") + std::to_string(i), i);
     }
 
     // Serialize once
-    std::string serialized = container->serialize();
+    std::string serialized = container->serialize_string(value_container::serialization_format::binary).value();
 
     // Multiple threads reading
     const int num_threads = 10;
@@ -490,12 +487,12 @@ TEST(PerformanceTest, DISABLED_SerializationSpeed) {
     for (int i = 0; i < 1000; ++i) {
         std::string key = std::string("key") + std::to_string(i);
         std::string value = std::string("value") + std::to_string(i);
-        container->add(make_string_value(key, value));
+        container->set(key, value);
     }
 
     // Measure serialization time
     auto start = std::chrono::high_resolution_clock::now();
-    std::string serialized = container->serialize();
+    std::string serialized = container->serialize_string(value_container::serialization_format::binary).value();
     auto end = std::chrono::high_resolution_clock::now();
 
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
@@ -515,9 +512,9 @@ TEST(PerformanceTest, DISABLED_DeserializationSpeed) {
     for (int i = 0; i < 1000; ++i) {
         std::string key = std::string("key") + std::to_string(i);
         std::string value = std::string("value") + std::to_string(i);
-        container->add(make_string_value(key, value));
+        container->set(key, value);
     }
-    std::string serialized = container->serialize();
+    std::string serialized = container->serialize_string(value_container::serialization_format::binary).value();
 
     // Measure deserialization time
     auto start = std::chrono::high_resolution_clock::now();
@@ -537,9 +534,9 @@ TEST(PerformanceTest, DISABLED_DeserializationSpeed) {
 
 TEST(EdgeCaseTest, EmptyContainer) {
     auto container = std::make_unique<value_container>();
-    
+
     // Serialize empty container
-    std::string serialized = container->serialize();
+    std::string serialized = container->serialize_string(value_container::serialization_format::binary).value();
     
     // Deserialize
     auto restored = std::make_unique<value_container>(serialized);
@@ -561,12 +558,12 @@ TEST(EdgeCaseTest, DISABLED_SpecialCharacters) {
     std::string numeric_key = "key123";
     std::string numeric_value = "value3";
 
-    container->add(make_string_value(underscore_key, underscore_value));
-    container->add(make_string_value(camel_key, camel_value));
-    container->add(make_string_value(numeric_key, numeric_value));
+    container->set(underscore_key, underscore_value);
+    container->set(camel_key, camel_value);
+    container->set(numeric_key, numeric_value);
 
     // Serialize and restore
-    std::string serialized = container->serialize();
+    std::string serialized = container->serialize_string(value_container::serialization_format::binary).value();
     auto restored = std::make_unique<value_container>(serialized);
 
     // Verify values preserved
@@ -804,9 +801,9 @@ protected:
 TEST_F(JSONEscapingTest, QuoteEscaping) {
     std::string key = "message";
     std::string value = "Hello \"World\"";
-    container->add(make_string_value(key, value));
+    container->set(key, value);
 
-    std::string json = container->to_json();
+    std::string json = container->serialize_string(value_container::serialization_format::json).value();
 
     // Verify that quotes are escaped
     EXPECT_NE(json.find("Hello \\\"World\\\""), std::string::npos)
@@ -816,9 +813,9 @@ TEST_F(JSONEscapingTest, QuoteEscaping) {
 TEST_F(JSONEscapingTest, BackslashEscaping) {
     std::string key = "path";
     std::string value = "C:\\Users\\test";
-    container->add(make_string_value(key, value));
+    container->set(key, value);
 
-    std::string json = container->to_json();
+    std::string json = container->serialize_string(value_container::serialization_format::json).value();
 
     // Verify that backslashes are escaped
     EXPECT_NE(json.find("C:\\\\Users\\\\test"), std::string::npos)
@@ -828,9 +825,9 @@ TEST_F(JSONEscapingTest, BackslashEscaping) {
 TEST_F(JSONEscapingTest, NewlineEscaping) {
     std::string key = "multiline";
     std::string value = "line1\nline2\r\nline3";
-    container->add(make_string_value(key, value));
+    container->set(key, value);
 
-    std::string json = container->to_json();
+    std::string json = container->serialize_string(value_container::serialization_format::json).value();
 
     // Verify that newlines are escaped
     EXPECT_NE(json.find("line1\\nline2\\r\\nline3"), std::string::npos)
@@ -840,9 +837,9 @@ TEST_F(JSONEscapingTest, NewlineEscaping) {
 TEST_F(JSONEscapingTest, TabEscaping) {
     std::string key = "tabbed";
     std::string value = "col1\tcol2\tcol3";
-    container->add(make_string_value(key, value));
+    container->set(key, value);
 
-    std::string json = container->to_json();
+    std::string json = container->serialize_string(value_container::serialization_format::json).value();
 
     // Verify that tabs are escaped
     EXPECT_NE(json.find("col1\\tcol2\\tcol3"), std::string::npos)
@@ -852,9 +849,9 @@ TEST_F(JSONEscapingTest, TabEscaping) {
 TEST_F(JSONEscapingTest, ControlCharacterEscaping) {
     std::string key = "control";
     std::string value = std::string("before\x01\x02\x03" "after");
-    container->add(make_string_value(key, value));
+    container->set(key, value);
 
-    std::string json = container->to_json();
+    std::string json = container->serialize_string(value_container::serialization_format::json).value();
 
     // Verify that control characters are escaped as \uXXXX
     EXPECT_NE(json.find("\\u0001"), std::string::npos)
@@ -868,9 +865,9 @@ TEST_F(JSONEscapingTest, ControlCharacterEscaping) {
 TEST_F(JSONEscapingTest, FormFeedAndBackspaceEscaping) {
     std::string key = "special";
     std::string value = "form\ffeed\bbackspace";
-    container->add(make_string_value(key, value));
+    container->set(key, value);
 
-    std::string json = container->to_json();
+    std::string json = container->serialize_string(value_container::serialization_format::json).value();
 
     // Verify that form feed and backspace are escaped
     EXPECT_NE(json.find("form\\ffeed\\bbackspace"), std::string::npos)
@@ -880,9 +877,9 @@ TEST_F(JSONEscapingTest, FormFeedAndBackspaceEscaping) {
 TEST_F(JSONEscapingTest, AllSpecialCharactersCombined) {
     std::string key = "complex";
     std::string value = "Quote: \" Backslash: \\ Newline:\n Tab:\t End";
-    container->add(make_string_value(key, value));
+    container->set(key, value);
 
-    std::string json = container->to_json();
+    std::string json = container->serialize_string(value_container::serialization_format::json).value();
 
     // Verify all special characters are escaped
     EXPECT_NE(json.find("Quote: \\\""), std::string::npos)
@@ -899,7 +896,7 @@ TEST_F(JSONEscapingTest, HeaderFieldEscaping) {
     container->set_source("source\"id", "sub\\id");
     container->set_target("target\nid", "sub\tid");
 
-    std::string json = container->to_json();
+    std::string json = container->serialize_string(value_container::serialization_format::json).value();
 
     // Verify header fields are escaped
     EXPECT_NE(json.find("source\\\"id"), std::string::npos)
@@ -916,9 +913,9 @@ TEST_F(JSONEscapingTest, FieldNameEscaping) {
     // Field names with special characters should also be escaped
     std::string key = "field\"name";
     std::string value = "value";
-    container->add(make_string_value(key, value));
+    container->set(key, value);
 
-    std::string json = container->to_json();
+    std::string json = container->serialize_string(value_container::serialization_format::json).value();
 
     // Verify field name is escaped
     EXPECT_NE(json.find("field\\\"name"), std::string::npos)
@@ -928,9 +925,9 @@ TEST_F(JSONEscapingTest, FieldNameEscaping) {
 TEST_F(JSONEscapingTest, ValidJSONOutput) {
     std::string key = "test";
     std::string value = "Hello \"World\" with \\ and \n special chars";
-    container->add(make_string_value(key, value));
+    container->set(key, value);
 
-    std::string json = container->to_json();
+    std::string json = container->serialize_string(value_container::serialization_format::json).value();
 
     // Basic JSON structure validation
     EXPECT_EQ(json.front(), '{');
@@ -952,9 +949,9 @@ TEST_F(JSONEscapingTest, ValidJSONOutput) {
 TEST_F(JSONEscapingTest, EmptyStringValue) {
     std::string key = "empty";
     std::string value = "";
-    container->add(make_string_value(key, value));
+    container->set(key, value);
 
-    std::string json = container->to_json();
+    std::string json = container->serialize_string(value_container::serialization_format::json).value();
 
     // Empty string should produce valid JSON with empty value
     EXPECT_NE(json.find("\"empty\":\"\""), std::string::npos)
@@ -964,10 +961,10 @@ TEST_F(JSONEscapingTest, EmptyStringValue) {
 TEST_F(JSONEscapingTest, NumericValuesUnchanged) {
     std::string key1 = "int_val";
     std::string key2 = "double_val";
-    container->add(make_int_value(key1, 42));
-    container->add(make_double_value(key2, 3.14));
+    container->set(key1, 42);
+    container->set(key2, 3.14);
 
-    std::string json = container->to_json();
+    std::string json = container->serialize_string(value_container::serialization_format::json).value();
 
     // Numeric values should not be quoted or escaped
     EXPECT_NE(json.find("\"int_val\":42"), std::string::npos)
@@ -1035,9 +1032,9 @@ protected:
 TEST_F(XMLEncodingTest, AmpersandEncoding) {
     std::string key = "query";
     std::string value = "a & b";
-    container->add(make_string_value(key, value));
+    container->set(key, value);
 
-    std::string xml = container->to_xml();
+    std::string xml = container->serialize_string(value_container::serialization_format::xml).value();
 
     EXPECT_NE(xml.find("a &amp; b"), std::string::npos)
         << "Expected encoded ampersand in XML output: " << xml;
@@ -1046,9 +1043,9 @@ TEST_F(XMLEncodingTest, AmpersandEncoding) {
 TEST_F(XMLEncodingTest, LessThanEncoding) {
     std::string key = "query";
     std::string value = "SELECT * FROM users WHERE id < 5";
-    container->add(make_string_value(key, value));
+    container->set(key, value);
 
-    std::string xml = container->to_xml();
+    std::string xml = container->serialize_string(value_container::serialization_format::xml).value();
 
     EXPECT_NE(xml.find("id &lt; 5"), std::string::npos)
         << "Expected encoded less-than in XML output: " << xml;
@@ -1057,9 +1054,9 @@ TEST_F(XMLEncodingTest, LessThanEncoding) {
 TEST_F(XMLEncodingTest, GreaterThanEncoding) {
     std::string key = "query";
     std::string value = "x > 10";
-    container->add(make_string_value(key, value));
+    container->set(key, value);
 
-    std::string xml = container->to_xml();
+    std::string xml = container->serialize_string(value_container::serialization_format::xml).value();
 
     EXPECT_NE(xml.find("x &gt; 10"), std::string::npos)
         << "Expected encoded greater-than in XML output: " << xml;
@@ -1068,9 +1065,9 @@ TEST_F(XMLEncodingTest, GreaterThanEncoding) {
 TEST_F(XMLEncodingTest, QuoteEncoding) {
     std::string key = "message";
     std::string value = "Hello \"World\"";
-    container->add(make_string_value(key, value));
+    container->set(key, value);
 
-    std::string xml = container->to_xml();
+    std::string xml = container->serialize_string(value_container::serialization_format::xml).value();
 
     EXPECT_NE(xml.find("Hello &quot;World&quot;"), std::string::npos)
         << "Expected encoded quotes in XML output: " << xml;
@@ -1079,9 +1076,9 @@ TEST_F(XMLEncodingTest, QuoteEncoding) {
 TEST_F(XMLEncodingTest, ApostropheEncoding) {
     std::string key = "message";
     std::string value = "It's working";
-    container->add(make_string_value(key, value));
+    container->set(key, value);
 
-    std::string xml = container->to_xml();
+    std::string xml = container->serialize_string(value_container::serialization_format::xml).value();
 
     EXPECT_NE(xml.find("It&apos;s working"), std::string::npos)
         << "Expected encoded apostrophe in XML output: " << xml;
@@ -1090,9 +1087,9 @@ TEST_F(XMLEncodingTest, ApostropheEncoding) {
 TEST_F(XMLEncodingTest, AllSpecialCharactersCombined) {
     std::string key = "complex";
     std::string value = "a < b & c > d \"quoted\" and 'apostrophe'";
-    container->add(make_string_value(key, value));
+    container->set(key, value);
 
-    std::string xml = container->to_xml();
+    std::string xml = container->serialize_string(value_container::serialization_format::xml).value();
 
     EXPECT_NE(xml.find("a &lt; b &amp; c &gt; d &quot;quoted&quot; and &apos;apostrophe&apos;"), std::string::npos)
         << "Expected all XML special characters encoded: " << xml;
@@ -1101,9 +1098,9 @@ TEST_F(XMLEncodingTest, AllSpecialCharactersCombined) {
 TEST_F(XMLEncodingTest, ControlCharacterEncoding) {
     std::string key = "control";
     std::string value = std::string("before\x01\x02" "after");
-    container->add(make_string_value(key, value));
+    container->set(key, value);
 
-    std::string xml = container->to_xml();
+    std::string xml = container->serialize_string(value_container::serialization_format::xml).value();
 
     EXPECT_NE(xml.find("&#x01;"), std::string::npos)
         << "Expected encoded control character &#x01; in XML output: " << xml;
@@ -1114,9 +1111,9 @@ TEST_F(XMLEncodingTest, ControlCharacterEncoding) {
 TEST_F(XMLEncodingTest, WhitespacePreserved) {
     std::string key = "whitespace";
     std::string value = "line1\nline2\tcolumn2\rend";
-    container->add(make_string_value(key, value));
+    container->set(key, value);
 
-    std::string xml = container->to_xml();
+    std::string xml = container->serialize_string(value_container::serialization_format::xml).value();
 
     // Tab, newline, and carriage return should be preserved (not encoded)
     EXPECT_NE(xml.find("line1\nline2\tcolumn2\rend"), std::string::npos)
@@ -1127,7 +1124,7 @@ TEST_F(XMLEncodingTest, HeaderFieldEncoding) {
     container->set_source("source<id", "sub&id");
     container->set_target("target>id", "sub\"id");
 
-    std::string xml = container->to_xml();
+    std::string xml = container->serialize_string(value_container::serialization_format::xml).value();
 
     EXPECT_NE(xml.find("source&lt;id"), std::string::npos)
         << "Expected encoded less-than in source_id: " << xml;
@@ -1142,9 +1139,9 @@ TEST_F(XMLEncodingTest, HeaderFieldEncoding) {
 TEST_F(XMLEncodingTest, ValidXMLStructure) {
     std::string key = "test";
     std::string value = "Hello <World> with & special chars";
-    container->add(make_string_value(key, value));
+    container->set(key, value);
 
-    std::string xml = container->to_xml();
+    std::string xml = container->serialize_string(value_container::serialization_format::xml).value();
 
     // Basic XML structure validation
     EXPECT_EQ(xml.substr(0, 11), "<container>");
@@ -1156,10 +1153,10 @@ TEST_F(XMLEncodingTest, ValidXMLStructure) {
 }
 
 TEST_F(XMLEncodingTest, NumericValuesUnchanged) {
-    container->add(make_int_value("int_val", 42));
-    container->add(make_double_value("double_val", 3.14));
+    container->set(std::string("int_val"), 42);
+    container->set(std::string("double_val"), 3.14);
 
-    std::string xml = container->to_xml();
+    std::string xml = container->serialize_string(value_container::serialization_format::xml).value();
 
     EXPECT_NE(xml.find("<int_val>42</int_val>"), std::string::npos)
         << "Expected integer value unchanged in XML output: " << xml;
@@ -1329,7 +1326,7 @@ TEST_F(UnifiedSetterAPITest, SerializationWithNewAPI) {
              .set("bool_val", true)
              .set("double_val", 2.718);
 
-    std::string serialized = container->serialize();
+    std::string serialized = container->serialize_string(value_container::serialization_format::binary).value();
     EXPECT_FALSE(serialized.empty());
 
     auto restored = std::make_shared<value_container>(serialized, false);
@@ -1381,7 +1378,7 @@ TEST_F(ZeroCopyTest, ZeroCopyModeEnabledOnParseOnlyHeader) {
     original->set("count", 42);
 
     // Serialize it
-    std::string serialized = original->serialize();
+    std::string serialized = original->serialize_string(value_container::serialization_format::binary).value();
 
     // Deserialize with parse_only_header = true
     auto restored = std::make_shared<value_container>(serialized, true);
@@ -1397,7 +1394,7 @@ TEST_F(ZeroCopyTest, ZeroCopyModeDisabledOnFullParse) {
     original->set("name", std::string("test_value"));
 
     // Serialize it
-    std::string serialized = original->serialize();
+    std::string serialized = original->serialize_string(value_container::serialization_format::binary).value();
 
     // Deserialize with parse_only_header = false
     auto restored = std::make_shared<value_container>(serialized, false);
@@ -1414,7 +1411,7 @@ TEST_F(ZeroCopyTest, GetViewReturnsValueInZeroCopyMode) {
     original->set("number", 42);
 
     // Serialize and restore with lazy parsing
-    std::string serialized = original->serialize();
+    std::string serialized = original->serialize_string(value_container::serialization_format::binary).value();
     auto restored = std::make_shared<value_container>(serialized, true);
 
     ASSERT_TRUE(restored->is_zero_copy_mode());
@@ -1431,7 +1428,7 @@ TEST_F(ZeroCopyTest, GetViewReturnsNulloptForMissingKey) {
     original->set_message_type("test_message");
     original->set("existing", std::string("value"));
 
-    std::string serialized = original->serialize();
+    std::string serialized = original->serialize_string(value_container::serialization_format::binary).value();
     auto restored = std::make_shared<value_container>(serialized, true);
 
     ASSERT_TRUE(restored->is_zero_copy_mode());
@@ -1446,7 +1443,7 @@ TEST_F(ZeroCopyTest, GetViewReturnsNulloptWhenNotInZeroCopyMode) {
     original->set_message_type("test_message");
     original->set("key", std::string("value"));
 
-    std::string serialized = original->serialize();
+    std::string serialized = original->serialize_string(value_container::serialization_format::binary).value();
     // Full parse (not zero-copy mode)
     auto restored = std::make_shared<value_container>(serialized, false);
 
@@ -1461,7 +1458,7 @@ TEST_F(ZeroCopyTest, ValueViewAsStringReturnsOwnedCopy) {
     auto original = std::make_shared<value_container>();
     original->set("text", std::string("test string data"));
 
-    std::string serialized = original->serialize();
+    std::string serialized = original->serialize_string(value_container::serialization_format::binary).value();
     auto restored = std::make_shared<value_container>(serialized, true);
 
     auto view = restored->get_view("text");
@@ -1477,7 +1474,7 @@ TEST_F(ZeroCopyTest, ValueViewNumericParsing) {
     original->set("int_val", 12345);
     original->set("float_val", 3.14f);
 
-    std::string serialized = original->serialize();
+    std::string serialized = original->serialize_string(value_container::serialization_format::binary).value();
     auto restored = std::make_shared<value_container>(serialized, true);
 
     // Integer value
@@ -1500,7 +1497,7 @@ TEST_F(ZeroCopyTest, EnsureIndexBuiltDoesNotCrash) {
     original->set("key1", std::string("value1"));
     original->set("key2", 100);
 
-    std::string serialized = original->serialize();
+    std::string serialized = original->serialize_string(value_container::serialization_format::binary).value();
     auto restored = std::make_shared<value_container>(serialized, true);
 
     // Should not crash
@@ -1518,7 +1515,7 @@ TEST_F(ZeroCopyTest, MultipleValuesIndexing) {
     original->set("third", std::string("three"));
     original->set("fourth", 4);
 
-    std::string serialized = original->serialize();
+    std::string serialized = original->serialize_string(value_container::serialization_format::binary).value();
     auto restored = std::make_shared<value_container>(serialized, true);
 
     // All values should be accessible
@@ -2167,7 +2164,7 @@ TEST_F(MetricsTest, OperationCountersIncrement) {
     container->set("key2", "hello");
     container->get_value("key1");
     container->get_value("key2");
-    container->serialize();
+    container->serialize_string(value_container::serialization_format::binary).value();
 
     auto metrics = value_container::get_detailed_metrics();
 
@@ -2180,10 +2177,10 @@ TEST_F(MetricsTest, OperationCountersIncrement) {
 TEST_F(MetricsTest, DeserializationCounter) {
     auto container = std::make_shared<value_container>();
     container->set("test", 123);
-    std::string serialized = container->serialize();
+    std::string serialized = container->serialize_string(value_container::serialization_format::binary).value();
 
     auto container2 = std::make_shared<value_container>();
-    container2->deserialize(serialized, false);
+    container2->deserialize_result(serialized, false);
 
     auto metrics = value_container::get_detailed_metrics();
     EXPECT_GE(metrics.operations.deserializations.load(), 1U);
@@ -2195,7 +2192,7 @@ TEST_F(MetricsTest, TimingMetricsAccumulate) {
     // Perform several operations
     for (int i = 0; i < 10; ++i) {
         container->set("key" + std::to_string(i), i);
-        container->serialize();
+        container->serialize_string(value_container::serialization_format::binary).value();
     }
 
     auto metrics = value_container::get_detailed_metrics();
@@ -2208,7 +2205,7 @@ TEST_F(MetricsTest, TimingMetricsAccumulate) {
 TEST_F(MetricsTest, MetricsReset) {
     auto container = std::make_shared<value_container>();
     container->set("key", 42);
-    container->serialize();
+    container->serialize_string(value_container::serialization_format::binary).value();
 
     // Verify counters are non-zero
     auto metrics1 = value_container::get_detailed_metrics();
@@ -2225,7 +2222,7 @@ TEST_F(MetricsTest, MetricsReset) {
 TEST_F(MetricsTest, MetricsToJsonFormat) {
     auto container = std::make_shared<value_container>();
     container->set("key", 42);
-    container->serialize();
+    container->serialize_string(value_container::serialization_format::binary).value();
 
     std::string json = container->metrics_to_json();
 
@@ -2242,7 +2239,7 @@ TEST_F(MetricsTest, MetricsToJsonFormat) {
 TEST_F(MetricsTest, MetricsToPrometheusFormat) {
     auto container = std::make_shared<value_container>();
     container->set("key", 42);
-    container->serialize();
+    container->serialize_string(value_container::serialization_format::binary).value();
 
     std::string prom = container->metrics_to_prometheus();
 
@@ -2276,7 +2273,7 @@ TEST_F(MetricsTest, MetricsDisabledNoOverhead) {
 
     auto container = std::make_shared<value_container>();
     container->set("key", 42);
-    container->serialize();
+    container->serialize_string(value_container::serialization_format::binary).value();
 
     auto metrics = value_container::get_detailed_metrics();
 

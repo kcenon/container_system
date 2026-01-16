@@ -186,26 +186,29 @@ static void BM_ContainerAddValue(benchmark::State& state) {
 }
 BENCHMARK(BM_ContainerAddValue);
 
+// Note: BM_ContainerAddValue uses raw add() with pre-created value object,
+// which is different from the deprecated make_xxx_value pattern being migrated.
+
 static void BM_ContainerAddMultipleValues(benchmark::State& state) {
     auto container = std::make_unique<value_container>();
-    std::vector<std::shared_ptr<value>> values;
-    
-    // Pre-create values
+
+    // Pre-create key-value pairs
+    std::vector<std::pair<std::string, std::string>> kv_pairs;
     for (int i = 0; i < state.range(0); ++i) {
-        values.push_back(make_string_value(
-            "key" + std::to_string(i), 
+        kv_pairs.push_back({
+            "key" + std::to_string(i),
             "value" + std::to_string(i)
-        ));
+        });
     }
-    
+
     for (auto _ : state) {
         state.PauseTiming();
         // Clear container
         container = std::make_unique<value_container>();
         state.ResumeTiming();
-        
-        for (const auto& val : values) {
-            container->add(val);
+
+        for (const auto& kv : kv_pairs) {
+            container->set(kv.first, kv.second);
         }
     }
     state.SetItemsProcessed(state.iterations() * state.range(0));
@@ -217,12 +220,12 @@ static void BM_ContainerGetValue(benchmark::State& state) {
     
     // Add values
     for (int i = 0; i < state.range(0); ++i) {
-        container->add(make_string_value(
-            "key" + std::to_string(i), 
+        container->set(
+            "key" + std::to_string(i),
             "value" + std::to_string(i)
-        ));
+        );
     }
-    
+
     // Lookup middle value
     std::string lookup_key = "key" + std::to_string(state.range(0) / 2);
     
@@ -245,14 +248,14 @@ static void BM_ContainerSerialize(benchmark::State& state) {
     
     // Add values
     for (int i = 0; i < state.range(0); ++i) {
-        container->add(make_string_value(
-            "key" + std::to_string(i), 
+        container->set(
+            "key" + std::to_string(i),
             "value" + std::to_string(i)
-        ));
+        );
     }
-    
+
     for (auto _ : state) {
-        std::string serialized = container->serialize();
+        std::string serialized = container->serialize_string(value_container::serialization_format::binary).value();
         benchmark::DoNotOptimize(serialized);
     }
     state.SetItemsProcessed(state.iterations() * state.range(0));
@@ -267,16 +270,17 @@ static void BM_ContainerDeserialize(benchmark::State& state) {
     
     // Add values
     for (int i = 0; i < state.range(0); ++i) {
-        container->add(make_string_value(
-            "key" + std::to_string(i), 
+        container->set(
+            "key" + std::to_string(i),
             "value" + std::to_string(i)
-        ));
+        );
     }
-    
-    std::string serialized = container->serialize();
-    
+
+    std::string serialized = container->serialize_string(value_container::serialization_format::binary).value();
+
     for (auto _ : state) {
-        auto new_container = std::make_unique<value_container>(serialized);
+        auto new_container = std::make_unique<value_container>();
+        new_container->deserialize_result(serialized);
         benchmark::DoNotOptimize(new_container);
     }
     state.SetItemsProcessed(state.iterations() * state.range(0));
@@ -293,12 +297,12 @@ static void BM_ContainerToJSON(benchmark::State& state) {
     
     // Add values
     for (int i = 0; i < state.range(0); ++i) {
-        container->add(make_string_value(
-            "key" + std::to_string(i), 
+        container->set(
+            "key" + std::to_string(i),
             "value" + std::to_string(i)
-        ));
+        );
     }
-    
+
     for (auto _ : state) {
         std::string json = container->to_json();
         benchmark::DoNotOptimize(json);
@@ -313,12 +317,12 @@ static void BM_ContainerToXML(benchmark::State& state) {
     
     // Add values
     for (int i = 0; i < state.range(0); ++i) {
-        container->add(make_string_value(
-            "key" + std::to_string(i), 
+        container->set(
+            "key" + std::to_string(i),
             "value" + std::to_string(i)
-        ));
+        );
     }
-    
+
     for (auto _ : state) {
         std::string xml = container->to_xml();
         benchmark::DoNotOptimize(xml);
@@ -336,11 +340,12 @@ static void BM_LargeStringHandling(benchmark::State& state) {
     
     for (auto _ : state) {
         auto container = std::make_unique<value_container>();
-        container->add(make_string_value("large", large_data));
-        
-        std::string serialized = container->serialize();
-        auto restored = std::make_unique<value_container>(serialized);
-        
+        container->set("large", large_data);
+
+        std::string serialized = container->serialize_string(value_container::serialization_format::binary).value();
+        auto restored = std::make_unique<value_container>();
+        restored->deserialize_result(serialized);
+
         benchmark::DoNotOptimize(restored);
     }
     state.SetBytesProcessed(state.iterations() * state.range(0));
@@ -354,11 +359,12 @@ static void BM_LargeBinaryHandling(benchmark::State& state) {
     
     for (auto _ : state) {
         auto container = std::make_unique<value_container>();
-        container->add(make_bytes_value("binary", binary_data));
-        
-        std::string serialized = container->serialize();
-        auto restored = std::make_unique<value_container>(serialized);
-        
+        container->set("binary", binary_data);
+
+        std::string serialized = container->serialize_string(value_container::serialization_format::binary).value();
+        auto restored = std::make_unique<value_container>();
+        restored->deserialize_result(serialized);
+
         benchmark::DoNotOptimize(restored);
     }
     state.SetBytesProcessed(state.iterations() * state.range(0));
@@ -491,10 +497,10 @@ static void BM_NestedContainer_Create(benchmark::State& state) {
         for (int i = 0; i < depth; ++i) {
             auto nested = std::make_unique<value_container>();
             nested->set_message_type("level_" + std::to_string(i));
-            nested->add(make_string_value("data", "value"));
-            
+            nested->set("data", "value");
+
             // Serialize nested container
-            std::string nested_data = nested->serialize();
+            std::string nested_data = nested->serialize_string(value_container::serialization_format::binary).value();
             current->add(std::make_shared<value>("child", value_types::container_value, nested_data));
             
             if (i < depth - 1) {
@@ -521,18 +527,17 @@ static void BM_NestedContainer_Serialize(benchmark::State& state) {
         
         auto nested = std::make_unique<value_container>();
         nested->set_message_type("level_" + std::to_string(level));
-        nested->add(make_string_value("data", 
-                                         "value_at_level_" + std::to_string(level)));
-        
+        nested->set("data", "value_at_level_" + std::to_string(level));
+
         // Serialize nested container and add as container value
-        std::string nested_data = nested->serialize();
+        std::string nested_data = nested->serialize_string(value_container::serialization_format::binary).value();
         parent->add(std::make_shared<value>("child", value_types::container_value, nested_data));
     };
     
     create_nested(root.get(), 0);
-    
+
     for (auto _ : state) {
-        std::string serialized = root->serialize();
+        std::string serialized = root->serialize_string(value_container::serialization_format::binary).value();
         benchmark::DoNotOptimize(serialized);
     }
 }
@@ -547,10 +552,10 @@ static void BM_SIMD_StringSearch(benchmark::State& state) {
     
     // Add many string values
     for (int i = 0; i < 1000; ++i) {
-        container->add(make_string_value(
-            "key" + std::to_string(i), 
+        container->set(
+            "key" + std::to_string(i),
             generate_random_string(64)
-        ));
+        );
     }
     
     // Search for values containing specific pattern
@@ -574,10 +579,10 @@ static void BM_WorstCase_ManyDuplicateKeys(benchmark::State& state) {
     
     // Add many values with the same key
     for (int i = 0; i < state.range(0); ++i) {
-        container->add(make_string_value(
-            "duplicate_key", 
+        container->set(
+            "duplicate_key",
             "value_" + std::to_string(i)
-        ));
+        );
     }
     
     for (auto _ : state) {
@@ -597,20 +602,21 @@ static void BM_WorstCase_DeepNesting(benchmark::State& state) {
         nested->set_message_type("nested_" + std::to_string(i));
         
         for (int j = 0; j < 10; ++j) {
-            nested->add(make_string_value(
-                "data_" + std::to_string(j), 
+            nested->set(
+                "data_" + std::to_string(j),
                 "value"
-            ));
+            );
         }
-        
+
         // Serialize nested container and add
-        std::string nested_data = nested->serialize();
+        std::string nested_data = nested->serialize_string(value_container::serialization_format::binary).value();
         container->add(std::make_shared<value>("container_" + std::to_string(i), value_types::container_value, nested_data));
     }
-    
+
     for (auto _ : state) {
-        std::string serialized = container->serialize();
-        auto restored = std::make_unique<value_container>(serialized);
+        std::string serialized = container->serialize_string(value_container::serialization_format::binary).value();
+        auto restored = std::make_unique<value_container>();
+        restored->deserialize_result(serialized);
         benchmark::DoNotOptimize(restored);
     }
 }

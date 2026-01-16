@@ -94,11 +94,11 @@ public:
         container->set_message_type("user_profile_update");
 
         // Add different types of values using set_value
-        container->set_value("username", std::string("john_doe"));
-        container->set_value("user_id", static_cast<int32_t>(12345));
-        container->set_value("account_balance", 1500.75);
-        container->set_value("is_premium", true);
-        container->set_value("last_login", static_cast<int64_t>(
+        container->set("username", std::string("john_doe"));
+        container->set("user_id", static_cast<int32_t>(12345));
+        container->set("account_balance", 1500.75);
+        container->set("is_premium", true);
+        container->set("last_login", static_cast<int64_t>(
             std::chrono::duration_cast<std::chrono::seconds>(
                 std::chrono::system_clock::now().time_since_epoch()).count()));
 
@@ -122,7 +122,7 @@ public:
         }
 
         // Demonstrate serialization
-        std::string serialized = container->serialize();
+        std::string serialized = container->serialize_string(value_container::serialization_format::binary).value();
         std::cout << "  Serialized size: " << serialized.size() << " bytes" << std::endl;
 
         // Demonstrate deserialization
@@ -165,10 +165,10 @@ public:
                     container->set_target("consumer_pool", "any_available");
                     container->set_message_type("work_item");
 
-                    container->set_value("producer_id", static_cast<int32_t>(p));
-                    container->set_value("item_id", static_cast<int32_t>(i));
-                    container->set_value("random_value", static_cast<int32_t>(dis(gen)));
-                    container->set_value("timestamp", static_cast<int64_t>(
+                    container->set("producer_id", static_cast<int32_t>(p));
+                    container->set("item_id", static_cast<int32_t>(i));
+                    container->set("random_value", static_cast<int32_t>(dis(gen)));
+                    container->set("timestamp", static_cast<int64_t>(
                         std::chrono::duration_cast<std::chrono::milliseconds>(
                             std::chrono::system_clock::now().time_since_epoch()).count()));
 
@@ -211,7 +211,7 @@ public:
 
                     if (container) {
                         // Process container (serialize/deserialize simulation)
-                        std::string serialized = container->serialize();
+                        std::string serialized = container->serialize_string(value_container::serialization_format::binary).value();
                         processed_bytes_ += serialized.size();
 
                         auto processed = std::make_shared<value_container>(serialized);
@@ -259,7 +259,7 @@ public:
 
         // Empty container serialization
         auto empty_container = std::make_shared<value_container>();
-        std::string empty_serialized = empty_container->serialize();
+        std::string empty_serialized = empty_container->serialize_string(value_container::serialization_format::binary).value();
         auto empty_deserialized = std::make_shared<value_container>(empty_serialized);
         std::cout << "  - Empty container serialization/deserialization works" << std::endl;
 
@@ -267,9 +267,9 @@ public:
         std::string large_string(10000, 'A');
         auto large_container = std::make_shared<value_container>();
         large_container->set_message_type("large_data_test");
-        large_container->set_value("large_data", large_string);
+        large_container->set("large_data", large_string);
 
-        std::string large_serialized = large_container->serialize();
+        std::string large_serialized = large_container->serialize_string(value_container::serialization_format::binary).value();
         auto large_deserialized = std::make_shared<value_container>(large_serialized);
 
         if (auto recovered_value = large_deserialized->get_value("large_data")) {
@@ -303,13 +303,13 @@ public:
             container->set_target("high_freq_server", "handler");
             container->set_message_type("ping");
 
-            container->set_value("sequence", static_cast<int32_t>(i));
-            container->set_value("timestamp", static_cast<int64_t>(
+            container->set("sequence", static_cast<int32_t>(i));
+            container->set("timestamp", static_cast<int64_t>(
                 std::chrono::duration_cast<std::chrono::microseconds>(
                     std::chrono::system_clock::now().time_since_epoch()).count()));
 
             // Quick serialization test
-            container->serialize();
+            container->serialize_string(value_container::serialization_format::binary).value();
         }
 
         auto end_time = std::chrono::high_resolution_clock::now();
@@ -332,12 +332,12 @@ public:
 
             // Simulate large file data using string
             std::string file_data(50000, static_cast<char>(i % 256));
-            container->set_value("file_content", file_data);
-            container->set_value("filename", std::string("large_file_" + std::to_string(i) + ".dat"));
-            container->set_value("file_size", static_cast<int32_t>(file_data.size()));
+            container->set("file_content", file_data);
+            container->set("filename", std::string("large_file_" + std::to_string(i) + ".dat"));
+            container->set("file_size", static_cast<int32_t>(file_data.size()));
 
             // Serialization test
-            std::string serialized = container->serialize();
+            std::string serialized = container->serialize_string(value_container::serialization_format::binary).value();
             processed_bytes_ += serialized.size();
         }
 

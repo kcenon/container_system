@@ -90,9 +90,7 @@ TEST_F(ErrorHandlingTest, EmptyKeyOperations)
  */
 TEST_F(ErrorHandlingTest, NullValueConversions)
 {
-    std::vector<uint8_t> empty_data;
-    auto null_val = std::make_shared<value>("null", value_types::null_value, empty_data);
-    container->add(null_val);
+    container->set("null", std::monostate{});
 
     auto retrieved = container->get_value("null");
     EXPECT_TRUE(ov_is_null(retrieved));
@@ -151,7 +149,7 @@ TEST_F(ErrorHandlingTest, CorruptedHeaderData)
     container->set_target("target", "");
     AddStringValue("key", "value");
 
-    std::string serialized = container->serialize();
+    std::string serialized = container->serialize_string(value_container::serialization_format::binary).value();
 
     // Corrupt the header portion
     if (serialized.size() > 50) {
@@ -177,7 +175,7 @@ TEST_F(ErrorHandlingTest, VeryLongStringValues)
     AddStringValue("long", long_string);
 
     EXPECT_NO_THROW({
-        std::string serialized = container->serialize();
+        std::string serialized = container->serialize_string(value_container::serialization_format::binary).value();
         auto restored = std::make_shared<value_container>(serialized, false);
     });
 }
@@ -209,24 +207,27 @@ TEST_F(ErrorHandlingTest, RapidSerializationStress)
 
     EXPECT_NO_THROW({
         for (int i = 0; i < 1000; ++i) {
-            std::string serialized = container->serialize();
+            std::string serialized = container->serialize_string(value_container::serialization_format::binary).value();
         }
     });
 }
 
 /**
- * Test 10: Container with many duplicate keys
+ * Test 10: Container with many unique keys
+ * Note: With unified set() API, duplicate keys are updated instead of duplicated.
+ * This test verifies handling of many unique keys instead.
  */
-TEST_F(ErrorHandlingTest, ManyDuplicateKeys)
+TEST_F(ErrorHandlingTest, ManyUniqueKeys)
 {
     for (int i = 0; i < 100; ++i) {
-        AddStringValue("duplicate", "value_" + std::to_string(i));
+        AddStringValue("key_" + std::to_string(i), "value_" + std::to_string(i));
     }
 
-    // Count values with "duplicate" key using iterator
+    // Count all values
     size_t count = 0;
     for (const auto& val : *container) {
-        if (val.name == "duplicate") count++;
+        (void)val;
+        count++;
     }
     EXPECT_EQ(count, 100);
 
@@ -235,8 +236,10 @@ TEST_F(ErrorHandlingTest, ManyDuplicateKeys)
         auto restored = RoundTripSerialize();
         size_t restored_count = 0;
         for (const auto& val : *restored) {
-            if (val.name == "duplicate") restored_count++;
+            (void)val;
+            restored_count++;
         }
+        EXPECT_EQ(restored_count, 100);
     });
 }
 
@@ -280,7 +283,7 @@ TEST_F(ErrorHandlingTest, SpecialCharactersInKeys)
 
     // Verify serialization handles special keys
     EXPECT_NO_THROW({
-        std::string serialized = container->serialize();
+        std::string serialized = container->serialize_string(value_container::serialization_format::binary).value();
         auto restored = std::make_shared<value_container>(serialized, false);
     });
 }

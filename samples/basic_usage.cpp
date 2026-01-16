@@ -20,11 +20,11 @@ int main() {
     container->set_message_type("user_profile");
 
     // Set various types of values using new set_value API
-    container->set_value("user_id", std::string("12345"));
-    container->set_value("username", std::string("john_doe"));
-    container->set_value("age", static_cast<int32_t>(30));
-    container->set_value("is_active", true);
-    container->set_value("balance", 1000.50);
+    container->set("user_id", std::string("12345"));
+    container->set("username", std::string("john_doe"));
+    container->set("age", static_cast<int32_t>(30));
+    container->set("is_active", true);
+    container->set("balance", 1000.50);
 
     std::cout << "Container message type: " << container->message_type() << std::endl;
 
