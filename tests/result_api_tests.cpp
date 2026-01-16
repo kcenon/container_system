@@ -924,6 +924,278 @@ TEST_F(FileOperationResultAPITest, FileOperationErrorMessages)
 		<< "Error module should be container_system";
 }
 
+// ============================================================================
+// Unified Serialization API Tests (Issue #286)
+// ============================================================================
+
+class UnifiedSerializationAPITest : public ::testing::Test
+{
+protected:
+	void SetUp() override
+	{
+		container = std::make_shared<value_container>();
+		container->set_source("test_source", "test_sub");
+		container->set_target("test_target", "target_sub");
+		container->set_message_type("test_message");
+		container->set("string_key", std::string("test_value"));
+		container->set("int_key", int32_t(42));
+		container->set("double_key", 3.14);
+		container->set("bool_key", true);
+	}
+
+	void TearDown() override { container.reset(); }
+
+	std::shared_ptr<value_container> container;
+};
+
+TEST_F(UnifiedSerializationAPITest, SerializeBinaryFormat)
+{
+	auto result = container->serialize(value_container::serialization_format::binary);
+	EXPECT_TRUE(kcenon::common::is_ok(result))
+		<< "serialize(binary) should succeed";
+
+	const auto& data = kcenon::common::get_value(result);
+	EXPECT_FALSE(data.empty()) << "Serialized binary data should not be empty";
+
+	// Verify it contains header marker
+	std::string str_data(data.begin(), data.end());
+	EXPECT_NE(str_data.find("@header"), std::string::npos)
+		<< "Binary format should contain @header marker";
+}
+
+TEST_F(UnifiedSerializationAPITest, SerializeJsonFormat)
+{
+	auto result = container->serialize(value_container::serialization_format::json);
+	EXPECT_TRUE(kcenon::common::is_ok(result))
+		<< "serialize(json) should succeed";
+
+	const auto& data = kcenon::common::get_value(result);
+	EXPECT_FALSE(data.empty()) << "Serialized JSON data should not be empty";
+
+	// Verify it's valid JSON-like format
+	std::string str_data(data.begin(), data.end());
+	EXPECT_NE(str_data.find("{"), std::string::npos)
+		<< "JSON format should contain opening brace";
+}
+
+TEST_F(UnifiedSerializationAPITest, SerializeXmlFormat)
+{
+	auto result = container->serialize(value_container::serialization_format::xml);
+	EXPECT_TRUE(kcenon::common::is_ok(result))
+		<< "serialize(xml) should succeed";
+
+	const auto& data = kcenon::common::get_value(result);
+	EXPECT_FALSE(data.empty()) << "Serialized XML data should not be empty";
+
+	// Verify it's valid XML-like format
+	std::string str_data(data.begin(), data.end());
+	EXPECT_NE(str_data.find("<container>"), std::string::npos)
+		<< "XML format should contain <container> root element";
+}
+
+TEST_F(UnifiedSerializationAPITest, SerializeMsgpackFormat)
+{
+	auto result = container->serialize(value_container::serialization_format::msgpack);
+	EXPECT_TRUE(kcenon::common::is_ok(result))
+		<< "serialize(msgpack) should succeed";
+
+	const auto& data = kcenon::common::get_value(result);
+	EXPECT_FALSE(data.empty()) << "Serialized MessagePack data should not be empty";
+}
+
+TEST_F(UnifiedSerializationAPITest, SerializeInvalidFormat)
+{
+	auto result = container->serialize(value_container::serialization_format::auto_detect);
+	EXPECT_TRUE(kcenon::common::is_error(result))
+		<< "serialize(auto_detect) should fail";
+
+	auto error = kcenon::common::get_error(result);
+	EXPECT_EQ(error.code, error_codes::invalid_format)
+		<< "Error code should be invalid_format";
+}
+
+TEST_F(UnifiedSerializationAPITest, SerializeStringBinaryFormat)
+{
+	auto result = container->serialize_string(value_container::serialization_format::binary);
+	EXPECT_TRUE(kcenon::common::is_ok(result))
+		<< "serialize_string(binary) should succeed";
+
+	const auto& str = kcenon::common::get_value(result);
+	EXPECT_FALSE(str.empty()) << "Serialized string should not be empty";
+	EXPECT_NE(str.find("@header"), std::string::npos)
+		<< "Binary format should contain @header marker";
+}
+
+TEST_F(UnifiedSerializationAPITest, SerializeStringJsonFormat)
+{
+	auto result = container->serialize_string(value_container::serialization_format::json);
+	EXPECT_TRUE(kcenon::common::is_ok(result))
+		<< "serialize_string(json) should succeed";
+
+	const auto& str = kcenon::common::get_value(result);
+	EXPECT_FALSE(str.empty()) << "Serialized JSON string should not be empty";
+	EXPECT_NE(str.find("{"), std::string::npos)
+		<< "JSON format should contain opening brace";
+}
+
+TEST_F(UnifiedSerializationAPITest, SerializeStringXmlFormat)
+{
+	auto result = container->serialize_string(value_container::serialization_format::xml);
+	EXPECT_TRUE(kcenon::common::is_ok(result))
+		<< "serialize_string(xml) should succeed";
+
+	const auto& str = kcenon::common::get_value(result);
+	EXPECT_FALSE(str.empty()) << "Serialized XML string should not be empty";
+	EXPECT_NE(str.find("<container>"), std::string::npos)
+		<< "XML format should contain <container> root element";
+}
+
+TEST_F(UnifiedSerializationAPITest, DeserializeBinaryFormat)
+{
+	// First serialize
+	auto serialize_result = container->serialize(value_container::serialization_format::binary);
+	ASSERT_TRUE(kcenon::common::is_ok(serialize_result));
+
+	const auto& data = kcenon::common::get_value(serialize_result);
+
+	// Then deserialize into new container
+	auto new_container = std::make_shared<value_container>();
+	auto deser_result = new_container->deserialize(
+		std::span<const uint8_t>(data),
+		value_container::serialization_format::binary);
+	EXPECT_TRUE(kcenon::common::is_ok(deser_result))
+		<< "deserialize(binary) should succeed";
+
+	// Verify data was restored
+	EXPECT_EQ(new_container->source_id(), "test_source");
+	EXPECT_TRUE(new_container->contains("string_key"));
+}
+
+TEST_F(UnifiedSerializationAPITest, DeserializeMsgpackFormat)
+{
+	// First serialize to msgpack
+	auto serialize_result = container->serialize(value_container::serialization_format::msgpack);
+	ASSERT_TRUE(kcenon::common::is_ok(serialize_result));
+
+	const auto& data = kcenon::common::get_value(serialize_result);
+
+	// Then deserialize into new container
+	auto new_container = std::make_shared<value_container>();
+	auto deser_result = new_container->deserialize(
+		std::span<const uint8_t>(data),
+		value_container::serialization_format::msgpack);
+	EXPECT_TRUE(kcenon::common::is_ok(deser_result))
+		<< "deserialize(msgpack) should succeed";
+
+	// Verify data was restored
+	EXPECT_EQ(new_container->source_id(), "test_source");
+	EXPECT_TRUE(new_container->contains("string_key"));
+	EXPECT_TRUE(new_container->contains("int_key"));
+}
+
+TEST_F(UnifiedSerializationAPITest, DeserializeAutoDetectBinary)
+{
+	// Serialize to binary format
+	auto serialize_result = container->serialize(value_container::serialization_format::binary);
+	ASSERT_TRUE(kcenon::common::is_ok(serialize_result));
+
+	const auto& data = kcenon::common::get_value(serialize_result);
+
+	// Auto-detect and deserialize
+	auto new_container = std::make_shared<value_container>();
+	auto deser_result = new_container->deserialize(std::span<const uint8_t>(data));
+	EXPECT_TRUE(kcenon::common::is_ok(deser_result))
+		<< "deserialize(auto_detect) should succeed for binary data";
+
+	EXPECT_EQ(new_container->source_id(), "test_source");
+}
+
+TEST_F(UnifiedSerializationAPITest, DeserializeAutoDetectMsgpack)
+{
+	// Serialize to msgpack format
+	auto serialize_result = container->serialize(value_container::serialization_format::msgpack);
+	ASSERT_TRUE(kcenon::common::is_ok(serialize_result));
+
+	const auto& data = kcenon::common::get_value(serialize_result);
+
+	// Auto-detect and deserialize
+	auto new_container = std::make_shared<value_container>();
+	auto deser_result = new_container->deserialize(std::span<const uint8_t>(data));
+	EXPECT_TRUE(kcenon::common::is_ok(deser_result))
+		<< "deserialize(auto_detect) should succeed for msgpack data";
+
+	EXPECT_EQ(new_container->source_id(), "test_source");
+}
+
+TEST_F(UnifiedSerializationAPITest, DeserializeStringView)
+{
+	// Serialize to binary string
+	auto serialize_result = container->serialize_string(value_container::serialization_format::binary);
+	ASSERT_TRUE(kcenon::common::is_ok(serialize_result));
+
+	const auto& str = kcenon::common::get_value(serialize_result);
+
+	// Deserialize from string_view
+	auto new_container = std::make_shared<value_container>();
+	auto deser_result = new_container->deserialize(std::string_view(str));
+	EXPECT_TRUE(kcenon::common::is_ok(deser_result))
+		<< "deserialize(string_view) should succeed";
+
+	EXPECT_EQ(new_container->source_id(), "test_source");
+}
+
+TEST_F(UnifiedSerializationAPITest, DeserializeStringViewWithFormat)
+{
+	// Serialize to binary string
+	auto serialize_result = container->serialize_string(value_container::serialization_format::binary);
+	ASSERT_TRUE(kcenon::common::is_ok(serialize_result));
+
+	const auto& str = kcenon::common::get_value(serialize_result);
+
+	// Deserialize from string_view with explicit format
+	auto new_container = std::make_shared<value_container>();
+	auto deser_result = new_container->deserialize(
+		std::string_view(str),
+		value_container::serialization_format::binary);
+	EXPECT_TRUE(kcenon::common::is_ok(deser_result))
+		<< "deserialize(string_view, binary) should succeed";
+
+	EXPECT_EQ(new_container->source_id(), "test_source");
+}
+
+TEST_F(UnifiedSerializationAPITest, RoundTripAllFormats)
+{
+	// Test round-trip for formats that support full deserialization
+	// Note: JSON and XML are output-only formats in the current implementation
+	// (no from_json/from_xml methods exist)
+	std::vector<value_container::serialization_format> formats = {
+		value_container::serialization_format::binary,
+		value_container::serialization_format::msgpack
+	};
+
+	for (auto fmt : formats) {
+		// Serialize
+		auto ser_result = container->serialize(fmt);
+		ASSERT_TRUE(kcenon::common::is_ok(ser_result))
+			<< "serialize should succeed for format " << static_cast<int>(fmt);
+
+		const auto& data = kcenon::common::get_value(ser_result);
+
+		// Deserialize
+		auto new_container = std::make_shared<value_container>();
+		auto deser_result = new_container->deserialize(
+			std::span<const uint8_t>(data), fmt);
+		EXPECT_TRUE(kcenon::common::is_ok(deser_result))
+			<< "deserialize should succeed for format " << static_cast<int>(fmt);
+
+		// Verify key data
+		EXPECT_EQ(new_container->source_id(), "test_source")
+			<< "source_id should match for format " << static_cast<int>(fmt);
+		EXPECT_TRUE(new_container->contains("string_key"))
+			<< "string_key should exist for format " << static_cast<int>(fmt);
+	}
+}
+
 #endif  // CONTAINER_HAS_COMMON_RESULT
 
 // Main function for running tests
