@@ -31,7 +31,12 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
 // Internal implementation file - suppress deprecation warnings
+// Legacy API implementations are always needed here regardless of user settings
 #define CONTAINER_INTERNAL_INCLUDE
+#ifdef CONTAINER_NO_LEGACY_API
+#undef CONTAINER_NO_LEGACY_API
+#define CONTAINER_NO_LEGACY_API_WAS_DEFINED
+#endif
 #include "container/core/container.h"
 #undef CONTAINER_INTERNAL_INCLUDE
 
