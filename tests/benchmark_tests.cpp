@@ -169,25 +169,21 @@ static void BM_ContainerCreation_Empty(benchmark::State& state) {
 }
 BENCHMARK(BM_ContainerCreation_Empty);
 
-static void BM_ContainerAddValue(benchmark::State& state) {
+static void BM_ContainerSetValue(benchmark::State& state) {
     auto container = std::make_unique<value_container>();
-    auto val = make_string_value("test", "data");
-    
+
     for (auto _ : state) {
         state.PauseTiming();
         // Reset container by removing all values
-        while (container->get_value("test") && !container->get_value("test")->is_null()) {
-            container->remove("test");
+        if (container->contains("test")) {
+            container->remove_result("test");
         }
         state.ResumeTiming();
-        
-        container->add(val);
+
+        container->set("test", std::string("data"));
     }
 }
-BENCHMARK(BM_ContainerAddValue);
-
-// Note: BM_ContainerAddValue uses raw add() with pre-created value object,
-// which is different from the deprecated make_xxx_value pattern being migrated.
+BENCHMARK(BM_ContainerSetValue);
 
 static void BM_ContainerAddMultipleValues(benchmark::State& state) {
     auto container = std::make_unique<value_container>();

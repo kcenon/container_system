@@ -220,10 +220,9 @@ TEST_F(GrpcServiceTest, ProcessContainerWithValues) {
     container->set_source("client", "session1");
     container->set_target("server", "handler1");
     container->set_message_type("data_request");
-    container->add_value("count", value_types::int_value, 42);
-    container->add_value("name", value_types::string_value,
-                          std::string("test_name"));
-    container->add_value("flag", value_types::bool_value, true);
+    container->set("count", 42);
+    container->set("name", std::string("test_name"));
+    container->set("flag", true);
 
     auto result = client_->process(container);
 
@@ -243,12 +242,12 @@ TEST_F(GrpcServiceTest, ProcessContainerWithValues) {
 TEST_F(GrpcServiceTest, ProcessWithCustomProcessor) {
     // Set up processor that modifies containers
     StartServerWithProcessor([](auto container) {
-        container->add_value("processed", value_types::bool_value, true);
-        container->add_value("timestamp", value_types::llong_value,
-                              static_cast<long long>(
-                                  std::chrono::system_clock::now()
-                                      .time_since_epoch()
-                                      .count()));
+        container->set("processed", true);
+        container->set("timestamp",
+                        static_cast<int64_t>(
+                            std::chrono::system_clock::now()
+                                .time_since_epoch()
+                                .count()));
         return container;
     });
 
@@ -276,8 +275,7 @@ TEST_F(GrpcServiceTest, SendContainer) {
 
     auto container = std::make_shared<value_container>();
     container->set_message_type("send_test");
-    container->add_value("data", value_types::string_value,
-                          std::string("test data"));
+    container->set("data", std::string("test data"));
 
     auto result = client_->send(container);
 
@@ -354,8 +352,8 @@ TEST_F(GrpcServiceTest, ConcurrentRequests) {
             for (int req = 0; req < REQUESTS_PER_CLIENT; ++req) {
                 auto container = std::make_shared<value_container>();
                 container->set_message_type("concurrent_test");
-                container->add_value("client_id", value_types::int_value, client_id);
-                container->add_value("request_id", value_types::int_value, req);
+                container->set("client_id", client_id);
+                container->set("request_id", req);
 
                 auto result = client.process(container);
                 if (result.success) {
@@ -388,9 +386,9 @@ TEST_F(GrpcServiceTest, ProcessLargeContainer) {
 
     // Add 100 values
     for (int i = 0; i < 100; ++i) {
-        container->add_value("int_" + std::to_string(i), value_types::int_value, i);
-        container->add_value("str_" + std::to_string(i), value_types::string_value,
-                              std::string(100, static_cast<char>('A' + (i % 26))));
+        container->set("int_" + std::to_string(i), i);
+        container->set("str_" + std::to_string(i),
+                        std::string(100, static_cast<char>('A' + (i % 26))));
     }
 
     auto result = client_->process(container);
@@ -416,7 +414,7 @@ TEST_F(GrpcServiceTest, ProcessContainerWithBinaryData) {
     for (size_t i = 0; i < binary_data.size(); ++i) {
         binary_data[i] = static_cast<uint8_t>(i % 256);
     }
-    container->add_value("binary", value_types::bytes_value, binary_data);
+    container->set("binary", binary_data);
 
     auto result = client_->process(container);
 
@@ -439,11 +437,11 @@ TEST_F(GrpcServiceTest, ProcessNestedContainers) {
 
     auto inner = std::make_shared<value_container>();
     inner->set_message_type("inner");
-    inner->add_value("inner_val", value_types::int_value, 999);
+    inner->set("inner_val", 999);
 
     auto container = std::make_shared<value_container>();
     container->set_message_type("outer");
-    container->add_value("nested", value_types::container_value, inner);
+    container->set("nested", inner);
 
     auto result = client_->process(container);
 
@@ -475,7 +473,7 @@ TEST_F(GrpcServiceTest, SendBatchContainers) {
     for (int i = 0; i < 5; ++i) {
         auto container = std::make_shared<value_container>();
         container->set_message_type("batch_item_" + std::to_string(i));
-        container->add_value("index", value_types::int_value, i);
+        container->set("index", i);
         containers.push_back(container);
     }
 

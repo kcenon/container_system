@@ -100,10 +100,10 @@ bool demo_simple_request(container_grpc::grpc_client& client) {
     request->set_message_type("simple_request");
 
     // Add various value types
-    request->add_value("greeting", std::string("Hello, gRPC!"));
-    request->add_value("count", 42);
-    request->add_value("temperature", 36.5);
-    request->add_value("enabled", true);
+    request->set("greeting", std::string("Hello, gRPC!"));
+    request->set("count", 42);
+    request->set("temperature", 36.5);
+    request->set("enabled", true);
 
     print_container(request, "Request");
 
@@ -129,8 +129,8 @@ bool demo_batch_request(container_grpc::grpc_client& client) {
         container->set_source("client_example", "demo2");
         container->set_target("server", "batch_processor");
         container->set_message_type("batch_item");
-        container->add_value("item_id", i);
-        container->add_value("data", std::string("Item " + std::to_string(i)));
+        container->set("item_id", i);
+        container->set("data", std::string("Item " + std::to_string(i)));
         batch.push_back(container);
     }
 
@@ -178,8 +178,8 @@ bool demo_streaming(container_grpc::grpc_client& client) {
     request->set_source("client_example", "demo4");
     request->set_target("server", "streamer");
     request->set_message_type("subscribe");
-    request->add_value("topic", std::string("updates"));
-    request->add_value("max_items", 5);
+    request->set("topic", std::string("updates"));
+    request->set("max_items", 5);
 
     int received_count = 0;
 

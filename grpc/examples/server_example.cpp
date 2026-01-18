@@ -90,12 +90,12 @@ std::shared_ptr<container_module::value_container> echo_processor(
         echo_val.name = "echo_" + val.name;
         echo_val.type = val.type;
         echo_val.data = val.data;
-        response->set_unit(echo_val);
+        response->set(echo_val);
     }
 
     // Add processing metadata
-    response->add_value("processed", true);
-    response->add_value("original_type", request->message_type());
+    response->set("processed", true);
+    response->set("original_type", request->message_type());
 
     return response;
 }

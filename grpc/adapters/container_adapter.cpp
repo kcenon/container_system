@@ -356,12 +356,16 @@ container_adapter::from_grpc_recursive(
             if (grpc_val.has_container_val()) {
                 auto nested =
                     from_grpc_recursive(grpc_val.container_val(), depth + 1);
-                container->add_value(grpc_val.name(), type,
+                container->set(grpc_val.name(),
                     std::shared_ptr<container_module::value_container>(nested));
             }
         } else {
             auto data = get_variant_from_grpc(grpc_val, type);
-            container->add_value(grpc_val.name(), type, data);
+            container_module::optimized_value val;
+            val.name = grpc_val.name();
+            val.type = type;
+            val.data = data;
+            container->set(val);
         }
     }
 

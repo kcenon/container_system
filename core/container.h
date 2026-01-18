@@ -228,83 +228,6 @@ namespace container_module
 
 		// Value management methods
 
-#ifndef CONTAINER_NO_LEGACY_API
-		// =======================================================================
-		// Deprecated Value Management API
-		// These methods are deprecated and will be removed in a future version.
-		// Use the unified set()/set_all() API instead.
-		// Define CONTAINER_NO_LEGACY_API to exclude these methods.
-		// =======================================================================
-
-		/**
-		 * @brief Add a value to the container
-		 * @param name Value name/key
-		 * @param type Value type enumeration
-		 * @param data Value data as variant
-		 * @exception_safety Strong guarantee - no changes on exception
-		 * @throws std::bad_alloc if memory allocation fails
-		 * @deprecated Use set() instead for unified API
-		 */
-		[[deprecated("Use set() instead")]]
-		void add_value(const std::string& name, value_types type, value_variant data);
-
-		/**
-		 * @brief Add a value to the container (template version for type deduction)
-		 * @param name Value name/key
-		 * @param value Value of any supported type in value_variant
-		 * @exception_safety Strong guarantee - no changes on exception
-		 * @throws std::bad_alloc if memory allocation fails
-		 * @deprecated Use set() instead for unified API
-		 * @note Implementation in legacy_api.h
-		 */
-		template<typename T>
-		[[deprecated("Use set() instead")]]
-		void add_value(const std::string& name, T&& data_val);
-
-		/**
-		 * @brief Legacy compatibility: Add a value object to the container
-		 * @param val Shared pointer to value object
-		 * @deprecated Use set_value() or add_value() instead
-		 */
-		[[deprecated("Use set_value() or add_value() instead. "
-		             "See docs/advanced/VARIANT_VALUE_V2_MIGRATION_GUIDE.md")]]
-		void add(std::shared_ptr<value> val);
-
-		// =======================================================================
-		// MIGRATE-002: variant_value_v2 Support API
-		// =======================================================================
-
-		/**
-		 * @brief Set a single optimized_value, updating if key exists
-		 * @param val The optimized_value to set
-		 * @exception_safety Strong guarantee - no changes on exception
-		 * @deprecated Use set(const optimized_value&) instead for unified API
-		 */
-		[[deprecated("Use set(const optimized_value&) instead")]]
-		void set_unit(const optimized_value& val);
-
-		/**
-		 * @brief Set multiple optimized_values, updating existing keys
-		 * @param vals Vector of optimized_values to set
-		 * @exception_safety Strong guarantee - no changes on exception
-		 * @deprecated Use set_all(std::span<const optimized_value>) instead for unified API
-		 */
-		[[deprecated("Use set_all(std::span<const optimized_value>) instead")]]
-		void set_units(const std::vector<optimized_value>& vals);
-
-		/**
-		 * @brief Convenience method to set a typed value by key
-		 * @param key The value key/name
-		 * @param data_val The value to store
-		 * @exception_safety Strong guarantee - no changes on exception
-		 * @deprecated Use set() instead for unified API
-		 * @note Implementation in legacy_api.h
-		 */
-		template<typename T>
-		[[deprecated("Use set() instead")]]
-		void set_value(const std::string& key, T&& data_val);
-#endif // CONTAINER_NO_LEGACY_API
-
 		// =======================================================================
 		// Unified Value Setter API (Issue #207)
 		// =======================================================================
@@ -658,22 +581,6 @@ namespace container_module
 		 * @exception_safety No-throw guarantee
 		 */
 		std::optional<optimized_value> get_value(const std::string& name) const noexcept;
-
-#ifndef CONTAINER_NO_LEGACY_API
-		// =======================================================================
-		// Deprecated Removal API
-		// =======================================================================
-
-		/**
-		 * @brief Remove a value by name
-		 * @param target_name Name of value to remove
-		 * @param update_immediately Whether to update serialized data immediately
-		 * @deprecated Use remove_result() instead for Result-based error handling
-		 */
-		[[deprecated("Use remove_result() instead for Result-based error handling")]]
-		void remove(std::string_view target_name,
-					bool update_immediately = false);
-#endif // CONTAINER_NO_LEGACY_API
 
 		/**
 		 * @brief Reinitialize the entire container to defaults.
@@ -1502,12 +1409,3 @@ namespace container_module
 #endif
 
 } // namespace container_module
-
-// =============================================================================
-// Legacy API Template Implementations
-// =============================================================================
-// Include legacy API implementations after the class definition is complete.
-// This allows the template implementations to access all class members.
-#ifndef CONTAINER_NO_LEGACY_API
-#include "container/core/container/legacy_api.h"
-#endif

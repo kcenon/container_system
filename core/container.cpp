@@ -30,15 +30,7 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-// Internal implementation file - suppress deprecation warnings
-// Legacy API implementations are always needed here regardless of user settings
-#define CONTAINER_INTERNAL_INCLUDE
-#ifdef CONTAINER_NO_LEGACY_API
-#undef CONTAINER_NO_LEGACY_API
-#define CONTAINER_NO_LEGACY_API_WAS_DEFINED
-#endif
 #include "container/core/container.h"
-#undef CONTAINER_INTERNAL_INCLUDE
 
 #include "utilities/core/formatter.h"
 #include "utilities/core/convert_string.h"
@@ -261,61 +253,6 @@ namespace container_module
 		return message_type_;
 	}
 
-#ifndef CONTAINER_NO_LEGACY_API
-	// =======================================================================
-	// Deprecated Value Management API Implementation
-	// =======================================================================
-
-	void value_container::add_value(const std::string& name, value_types type, value_variant data)
-	{
-		write_lock_guard lock(this);
-
-		optimized_value val;
-		val.name = name;
-		val.type = type;
-		val.data = std::move(data);
-
-		optimized_units_.push_back(std::move(val));
-		changed_data_ = true;
-
-		if (use_soo_ && val.is_stack_allocated()) {
-			stack_allocations_.fetch_add(1, std::memory_order_relaxed);
-		} else {
-			heap_allocations_.fetch_add(1, std::memory_order_relaxed);
-		}
-	}
-
-	void value_container::add(std::shared_ptr<value> val)
-	{
-		if (!val) {
-			return;
-		}
-
-		std::string name_str = std::string(val->name());
-
-		// Handle only types compatible with value_variant
-		val->visit([this, &name_str](const auto& data) {
-			using T = std::decay_t<decltype(data)>;
-			if constexpr (std::is_same_v<T, std::monostate>) {
-				// Skip monostate
-			} else if constexpr (std::is_same_v<T, bool> ||
-								 std::is_same_v<T, int16_t> ||
-								 std::is_same_v<T, uint16_t> ||
-								 std::is_same_v<T, int32_t> ||
-								 std::is_same_v<T, uint32_t> ||
-								 std::is_same_v<T, int64_t> ||
-								 std::is_same_v<T, uint64_t> ||
-								 std::is_same_v<T, float> ||
-								 std::is_same_v<T, double> ||
-								 std::is_same_v<T, std::string> ||
-								 std::is_same_v<T, std::vector<uint8_t>>) {
-				this->add_value(name_str, data);
-			}
-			// Skip incompatible types: thread_safe_container, array_variant
-		});
-	}
-#endif // CONTAINER_NO_LEGACY_API
-
 	std::optional<optimized_value> value_container::get_value(const std::string& name) const noexcept
 	{
 		// Record metrics if enabled
@@ -377,24 +314,6 @@ namespace container_module
 			heap_allocations_.fetch_add(1, std::memory_order_relaxed);
 		}
 	}
-
-#ifndef CONTAINER_NO_LEGACY_API
-	// =======================================================================
-	// Deprecated methods (delegating to implementation)
-	// =======================================================================
-
-	void value_container::set_unit(const optimized_value& val)
-	{
-		set_unit_impl(val);
-	}
-
-	void value_container::set_units(const std::vector<optimized_value>& vals)
-	{
-		for (const auto& val : vals) {
-			set_unit_impl(val);
-		}
-	}
-#endif // CONTAINER_NO_LEGACY_API
 
 	// =======================================================================
 	// Unified Value Setter API (Issue #207)
@@ -743,40 +662,6 @@ namespace container_module
 	}
 
 	// =======================================================================
-
-#ifndef CONTAINER_NO_LEGACY_API
-	void value_container::remove(std::string_view target_name,
-								 bool update_immediately)
-	{
-		std::unique_lock<std::shared_mutex> lock(mutex_);
-
-		if (!parsed_data_)
-		{
-			deserialize_values(data_string_, false);
-		}
-		bool found = true;
-		while (found)
-		{
-			found = false;
-		auto it = std::find_if(optimized_units_.begin(), optimized_units_.end(),
-							   [&target_name](const optimized_value& ov)
-							   { return (ov.name == target_name); });
-		if (it != optimized_units_.end())
-		{
-			optimized_units_.erase(it);
-				found = true;
-			}
-		}
-		changed_data_ = !update_immediately;
-		if (update_immediately)
-		{
-			data_string_ = datas();
-		}
-	}
-#endif // CONTAINER_NO_LEGACY_API
-
-
-
 
 	void value_container::initialize(void)
 	{
