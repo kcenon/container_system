@@ -11,6 +11,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Breaking Changes
+- **Enable CONTAINER_NO_LEGACY_API by Default** (#305): Remove deprecated serialization methods
+  - **BREAKING**: `CONTAINER_NO_LEGACY_API` is now enabled by default in CMakeLists.txt
+  - **Migration Required**: If you use deprecated methods, set `CONTAINER_LEGACY_API=ON` in CMake, or migrate to unified API
+  - **Removed Methods** (~25 deprecated methods):
+    - `serialize_result()`, `serialize_array_result()` - Use `serialize(serialization_format::binary)` instead
+    - `to_json_result()`, `to_xml_result()` - Use `serialize_string(serialization_format::json/xml)` instead
+    - `to_msgpack_result()`, `from_msgpack_result()` - Use `serialize/deserialize(serialization_format::msgpack)` instead
+    - `to_json()`, `to_xml()`, `to_msgpack()`, `from_msgpack()` - Use unified serialization API
+    - `create_from_msgpack()` - Use `deserialize(data, serialization_format::msgpack)` instead
+    - `load_packet()`, `save_packet()` - Use `load_packet_result()`, `save_packet_result()` instead
+    - Schema-validated `deserialize(data, schema)` - Use `deserialize_result(data, schema)` instead
+  - **Code Reduction**: `container.h` reduced from 1412 to 1193 lines (~220 lines removed)
+  - **Gradual Migration**: Users can enable `CONTAINER_LEGACY_API=ON` in CMake for gradual migration
+
 ### Changed
 - **Migrate Deprecated API to Unified Serialization** (#301): Update internal implementations to use unified serialization API
   - Replace `serialize_result()` with `serialize_string(serialization_format::binary)` in `save_packet_result()`

@@ -41,6 +41,7 @@ option(BUILD_FUZZ_TESTS "Build fuzz tests" OFF)
 option(BUILD_FUZZING "Build libFuzzer fuzz targets" OFF)
 option(CONTAINER_USE_MEMORY_POOL "Enable memory pool for small allocations" ON)
 option(CONTAINER_ENABLE_COROUTINES "Enable C++20 coroutine-based async API" ON)
+option(CONTAINER_LEGACY_API "Enable deprecated legacy API (OFF by default since v0.2.0)" OFF)
 set(COMMON_SYSTEM_ROOT "" CACHE PATH "Path to the common_system repository root")
 
 # Respect global BUILD_INTEGRATION_TESTS flag if set
@@ -267,6 +268,16 @@ if(CONTAINER_ENABLE_COROUTINES)
             target_compile_options(container_system PUBLIC -fcoroutines)
         endif()
     endif()
+endif()
+
+# Legacy API configuration (Issue #305)
+# Default: Legacy API disabled (CONTAINER_NO_LEGACY_API defined)
+# Set CONTAINER_LEGACY_API=ON to enable deprecated methods for gradual migration
+if(CONTAINER_LEGACY_API)
+    message(STATUS "Container: Legacy API enabled (for migration)")
+else()
+    target_compile_definitions(container_system PUBLIC CONTAINER_NO_LEGACY_API)
+    message(STATUS "Container: Legacy API disabled (using unified API)")
 endif()
 
 ##################################################
