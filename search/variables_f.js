@@ -1,0 +1,24 @@
+var searchData=
+[
+  ['raw_5fdata_5fptr_5f_0',['raw_data_ptr_',['../d9/dad/classcontainer__module_1_1value__container.html#aade33509366bef01070891c8a5f28a3c',1,'container_module::value_container']]],
+  ['read_5fcount_1',['read_count',['../d5/df7/structcontainer__module_1_1thread__safe__container_1_1Statistics.html#a54fed83abc185d020266782c9c9eaef1',1,'container_module::thread_safe_container::Statistics']]],
+  ['read_5fcount_5f_2',['read_count_',['../d0/dee/classcontainer__module_1_1value__store.html#a462ce9ce0fd7b5883b695a926737c8bf',1,'container_module::value_store::read_count_'],['../db/de5/classcontainer__module_1_1thread__safe__container.html#a1b9b4c97b0fdf810e20df9784be80f2b',1,'container_module::thread_safe_container::read_count_'],['../d5/df9/classcontainer__module_1_1value.html#a04ff19636631e6f23b0abd7145142331',1,'container_module::value::read_count_']]],
+  ['read_5flatency_3',['read_latency',['../da/d44/structcontainer__module_1_1detailed__metrics.html#abc67e07006baed29983c75dd3d9b00b2',1,'container_module::detailed_metrics']]],
+  ['reader_5f_4',['reader_',['../d2/d5e/classcontainer__module_1_1auto__refresh__reader.html#ab8cb15450961cee87b2d773551d0b2d2',1,'container_module::auto_refresh_reader']]],
+  ['readings_5fcollected_5f_5',['readings_collected_',['../de/deb/classscenarios_1_1IoTDataCollectionSystem.html#aee944ea58cbccfefc31f761912cecd02',1,'scenarios::IoTDataCollectionSystem']]],
+  ['reads_6',['reads',['../db/d77/structcontainer__module_1_1operation__counts.html#a13110292d3249929a3de3ed2e9b1d66b',1,'container_module::operation_counts']]],
+  ['ready_5f_7',['ready_',['../de/db2/structcontainer__module_1_1async_1_1detail_1_1async__state.html#a8f154244daba5e5ddec56e148719b88c',1,'container_module::async::detail::async_state::ready_'],['../d0/de7/structcontainer__module_1_1async_1_1detail_1_1executor__state.html#a76b8521feec437e0657369a6b5479860',1,'container_module::async::detail::executor_state::ready_']]],
+  ['reclaimed_5fcount_5f_8',['reclaimed_count_',['../d4/d78/classcontainer__module_1_1epoch__manager.html#a85bfb0199118fc9056f585df2a7bc1f6',1,'container_module::epoch_manager']]],
+  ['refresh_5fcount_5f_9',['refresh_count_',['../d8/dba/classcontainer__module_1_1lockfree__container__reader.html#a9bc91e805fa4cac94d0a68976a3cb87f',1,'container_module::lockfree_container_reader']]],
+  ['refresh_5finterval_5f_10',['refresh_interval_',['../d2/d5e/classcontainer__module_1_1auto__refresh__reader.html#a7a9e29cfeff08bd70a7ca07b4b6803af',1,'container_module::auto_refresh_reader']]],
+  ['refresh_5fthread_5f_11',['refresh_thread_',['../d2/d5e/classcontainer__module_1_1auto__refresh__reader.html#a83719d3fec0c2665a87cb90dec892bd2',1,'container_module::auto_refresh_reader']]],
+  ['required_12',['required',['../d7/d0a/structcontainer__module_1_1container__schema_1_1field__def.html#ac6a8ecb056476bc98f10b9f406dcd8a7',1,'container_module::container_schema::field_def']]],
+  ['reservoir_13',['reservoir',['../dc/d55/structcontainer__module_1_1latency__histogram.html#a4867e8d5776bb284b7d9c97d6548179b',1,'container_module::latency_histogram']]],
+  ['reservoir_5fcount_14',['reservoir_count',['../dc/d55/structcontainer__module_1_1latency__histogram.html#ac1af0065ad880c584203ba83e2fed513',1,'container_module::latency_histogram']]],
+  ['resource_5fexhausted_15',['resource_exhausted',['../dd/df7/namespacecontainer__module_1_1error__codes.html#ae2f5c36247d7aecb9d218722aea1ad3f',1,'container_module::error_codes']]],
+  ['result_5f_16',['result_',['../de/db2/structcontainer__module_1_1async_1_1detail_1_1async__state.html#a706d3c0825febd0d0a08bbfa11db04f2',1,'container_module::async::detail::async_state::result_'],['../d4/d9d/structcontainer__module_1_1async_1_1detail_1_1promise__type.html#adaefd6da0cedd21abf22f2aed30f4476',1,'container_module::async::detail::promise_type::result_'],['../d0/de7/structcontainer__module_1_1async_1_1detail_1_1executor__state.html#a1582f9b8e51ab500741d888cbfda6a52',1,'container_module::async::detail::executor_state::result_']]],
+  ['result_5fsize_5f_17',['result_size_',['../d0/d4f/classcontainer__module_1_1integration_1_1container__performance__monitor.html#ad5bb39b16c8d5d60f87f91ebfa8bddbd',1,'container_module::integration::container_performance_monitor']]],
+  ['retire_5fmutex_5f_18',['retire_mutex_',['../d4/d78/classcontainer__module_1_1epoch__manager.html#a31ad66097f698c9338854206b63603e3',1,'container_module::epoch_manager']]],
+  ['retired_5f_19',['retired_',['../d4/d78/classcontainer__module_1_1epoch__manager.html#a728b68592087d1b7073605396a08b4ff',1,'container_module::epoch_manager']]],
+  ['running_5f_20',['running_',['../d2/d5e/classcontainer__module_1_1auto__refresh__reader.html#af9e224d70bf58bdf9875e25e1fc71d7b',1,'container_module::auto_refresh_reader::running_'],['../d6/d71/classAdvancedContainerExample.html#a43832c8ab438ac26e34a62588d153a56',1,'AdvancedContainerExample::running_']]]
+];

@@ -1,0 +1,15 @@
+<map id="container_module::internal::pool_allocate" name="container_module::internal::pool_allocate">
+<area shape="rect" id="Node000001" title="Allocate and construct an object using pool allocation." alt="" coords="5,77,203,117"/>
+<area shape="rect" id="Node000002" href="$dc/d4b/classcontainer__module_1_1internal_1_1pool__allocator.html#ac57f0e6cec0da7786beba3acbf9ed31a" title="Allocate memory from the appropriate pool." alt="" coords="251,13,449,53"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="181,74,259,54,260,59,182,79"/>
+<area shape="rect" id="Node000005" href="$dc/d4b/classcontainer__module_1_1internal_1_1pool__allocator.html#ae624175a71c95e4f69ab6ab76b93fb12" title="Deallocate memory to the appropriate pool." alt="" coords="251,77,449,117"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="203,94,237,94,237,99,203,99"/>
+<area shape="rect" id="Node000007" href="$dc/d4b/classcontainer__module_1_1internal_1_1pool__allocator.html#a41af9218d7b3eaafcc50f88232c536e5" title="Get the singleton instance." alt="" coords="251,141,449,181"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="182,114,260,135,259,140,181,119"/>
+<area shape="rect" id="Node000003" href="$dd/dbf/classcontainer__module_1_1internal_1_1fixed__block__pool.html#af5991692abdc8c060fa5db78ae6fa693" title=" " alt="" coords="505,13,704,53"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="449,30,492,30,492,35,449,35"/>
+<area shape="rect" id="Node000004" href="$dd/dbf/classcontainer__module_1_1internal_1_1fixed__block__pool.html#a5474853454069ebfe819048939f80734" title=" " alt="" coords="760,5,959,60"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="704,30,746,30,746,35,704,35"/>
+<area shape="rect" id="Node000006" href="$dd/dbf/classcontainer__module_1_1internal_1_1fixed__block__pool.html#a72730d95fa3f1101ec7f9ce7a240ccc5" title=" " alt="" coords="497,77,712,117"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="449,94,484,94,484,99,449,99"/>
+</map>

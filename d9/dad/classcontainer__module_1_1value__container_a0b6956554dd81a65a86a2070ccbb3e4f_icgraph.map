@@ -1,0 +1,5 @@
+<map id="container_module::value_container::to_msgpack_impl" name="container_module::value_container::to_msgpack_impl">
+<area shape="rect" id="Node000001" title="Internal implementation for MessagePack serialization." alt="" coords="236,5,449,45"/>
+<area shape="rect" id="Node000002" href="$d9/dad/classcontainer__module_1_1value__container.html#a484fb40781633a77087602c184a6cdd9" title="Serialize this container to MessagePack binary format." alt="" coords="5,5,188,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="222,28,188,28,188,23,222,23"/>
+</map>

@@ -1,0 +1,13 @@
+<map id="main" name="main">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,121,60,146"/>
+<area shape="rect" id="Node000002" href="$d9/d1c/classscenarios_1_1ContentManagementSystem.html#ac381fb4cf74f4df16cb0b900fa6e6a2d" title=" " alt="" coords="108,5,340,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="41,119,68,87,107,55,119,49,121,53,109,60,72,91,45,122"/>
+<area shape="rect" id="Node000003" href="$d8/d6d/classscenarios_1_1FinancialTransactionSystem.html#aef874f8cd076e20d24cd29b2f724864a" title=" " alt="" coords="112,70,336,125"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="60,126,98,118,99,124,61,131"/>
+<area shape="rect" id="Node000004" href="$d5/d1c/classscenarios_1_1GamingEventSystem.html#ad3cfd4bf8a91bcfc503171191396b5d2" title=" " alt="" coords="109,149,339,189"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="61,136,105,144,104,149,60,141"/>
+<area shape="rect" id="Node000005" href="$de/deb/classscenarios_1_1IoTDataCollectionSystem.html#af1b110c2ff3ed8f9c0b7e480593c10db" title=" " alt="" coords="113,213,335,253"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="47,144,73,172,109,199,123,206,120,210,107,204,70,176,43,148"/>
+<area shape="rect" id="Node000006" href="$de/deb/classscenarios_1_1IoTDataCollectionSystem.html#ab3378a367ae308589f4081b80596d143" title=" " alt="" coords="388,213,596,253"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="336,231,374,231,374,236,336,236"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="container_module::value_container::value_container" name="container_module::value_container::value_container">
+<area shape="rect" id="Node000001" title="Move constructor." alt="" coords="5,37,208,77"/>
+<area shape="rect" id="Node000002" href="$da/d48/classcontainer__module_1_1metrics__manager.html#adc8d9e289a738526a21347608ad93c04" title="Get the singleton metrics instance." alt="" coords="256,5,452,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="208,42,242,37,243,42,209,47"/>
+<area shape="rect" id="Node000003" href="$da/d48/classcontainer__module_1_1metrics__manager.html#a58c3ac237c495aef1052f618df063119" title="Check if metrics collection is enabled." alt="" coords="256,69,452,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="209,68,243,72,242,78,208,73"/>
+</map>

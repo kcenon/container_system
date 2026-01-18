@@ -1,0 +1,40 @@
+<map id="container_module::metrics_manager::make_timer" name="container_module::metrics_manager::make_timer">
+<area shape="rect" id="Node000001" title="Create a scoped timer if metrics are enabled." alt="" coords="795,380,991,420"/>
+<area shape="rect" id="Node000002" href="$d9/dad/classcontainer__module_1_1value__container.html#aae51c06e58ddd8f44996c07f5cf4142e" title="Deserialize from string. If parse_only_header is true, child values are not fully parsed yet...." alt="" coords="540,163,723,203"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="857,373,745,274,658,205,661,201,748,270,861,369"/>
+<area shape="rect" id="Node000008" href="$d9/dad/classcontainer__module_1_1value__container.html#a3776b629e34bea460a37cc75105a1f51" title="Internal implementation for MessagePack deserialization." alt="" coords="516,284,747,324"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="837,377,746,339,709,327,711,321,748,333,839,372"/>
+<area shape="rect" id="Node000009" href="$d9/dad/classcontainer__module_1_1value__container.html#afa472c8044735fb859a148533c2c2d21" title="Get a value by name." alt="" coords="540,348,723,388"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="781,389,722,382,723,377,782,384"/>
+<area shape="rect" id="Node000011" href="$d9/dad/classcontainer__module_1_1value__container.html#a5629503c3a96a5804f0613d7bd63a74c" title="Internal implementation for binary serialization." alt="" coords="537,412,726,452"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="782,416,727,423,726,418,781,411"/>
+<area shape="rect" id="Node000015" href="$d9/dad/classcontainer__module_1_1value__container.html#adbc1f9b885e005f07c0cdd42ddaa08bc" title="Internal implementation for setting a single optimized_value." alt="" coords="538,504,725,544"/>
+<area shape="poly" id="edge15_Node000001_Node000015" title=" " alt="" coords="838,429,676,506,674,501,836,424"/>
+<area shape="rect" id="Node000019" href="$d9/dad/classcontainer__module_1_1value__container.html#a0b6956554dd81a65a86a2070ccbb3e4f" title="Internal implementation for MessagePack serialization." alt="" coords="525,568,738,608"/>
+<area shape="poly" id="edge19_Node000001_Node000019" title=" " alt="" coords="873,433,821,497,787,530,748,558,724,570,721,566,745,554,783,526,817,493,869,429"/>
+<area shape="rect" id="Node000003" href="$d9/dad/classcontainer__module_1_1value__container.html#a7539bd21ce23370c37e025f52f67d58a" title="Deserialize from a raw byte array. If parse_only_header is true, child values are not fully parsed...." alt="" coords="271,5,453,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="597,155,539,107,504,82,467,60,440,48,442,43,469,55,507,77,542,102,601,151"/>
+<area shape="rect" id="Node000004" href="$d9/dad/classcontainer__module_1_1value__container.html#a161eb3fc0910f0af3d42d7d926a7fb97" title="Construct from a serialized data string. If parse_only_header==true, only parse the header part,..." alt="" coords="261,69,463,109"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="566,160,467,124,430,112,432,107,469,119,568,155"/>
+<area shape="rect" id="Node000005" href="$d9/dad/classcontainer__module_1_1value__container.html#a05ffd9fd90384cb244c1f9400bd4ecf7" title="Construct from a raw byte array. If parse_only_header==true, only parse the header part,..." alt="" coords="261,133,463,173"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="526,174,463,167,464,162,527,169"/>
+<area shape="rect" id="Node000006" href="$d9/dad/classcontainer__module_1_1value__container.html#a611e8c57bc25142f572a7f82fd1829fa" title="Copy constructor from another value_container. If parse_only_header==true, only parse the header port..." alt="" coords="5,252,208,292"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="527,197,397,215,257,239,185,255,184,249,255,233,397,210,526,192"/>
+<area shape="rect" id="Node000007" href="$d9/dad/classcontainer__module_1_1value__container.html#ae4aa9e95aadd89c1f2bb0d82a002b20a" title="Copy from an existing pointer. If parse_only_header==true, only parse header." alt="" coords="261,248,463,288"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="555,209,427,251,425,245,554,204"/>
+<area shape="rect" id="Node000010" href="$da/dab/classcontainer__module_1_1optimized__container.html#af8470bed20f173ea3c12e9154a21d171" title="Fast value lookup using hash map (O(1))" alt="" coords="256,312,468,352"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="526,357,468,349,469,344,526,351"/>
+<area shape="rect" id="Node000012" href="$d9/dad/classcontainer__module_1_1value__container.html#a9ff2f0546dce25613097b3e7d1ba7735" title="Serialize this container (header + data)." alt="" coords="271,376,453,416"/>
+<area shape="poly" id="edge11_Node000011_Node000012" title=" " alt="" coords="523,420,453,411,454,406,523,415"/>
+<area shape="rect" id="Node000014" href="$d9/dad/classcontainer__module_1_1value__container.html#aceca2563736534676267b40406d067c2" title="Serialize to a raw byte array. @exception_safety Strong guarantee &#45; no changes on exception." alt="" coords="265,440,459,480"/>
+<area shape="poly" id="edge14_Node000011_Node000014" title=" " alt="" coords="523,446,460,453,459,447,522,441"/>
+<area shape="poly" id="edge13_Node000012_Node000006" title=" " alt="" coords="273,374,255,366,189,331,134,295,137,290,191,326,257,362,275,369"/>
+<area shape="rect" id="Node000013" href="$d9/dad/classcontainer__module_1_1value__container.html#adda28e731359ee08f344277ee62c4b2a" title="Create a copy of this container. If containing_values == false, the returned container only has the h..." alt="" coords="15,376,198,416"/>
+<area shape="poly" id="edge12_Node000012_Node000013" title=" " alt="" coords="257,399,198,399,198,393,257,393"/>
+<area shape="rect" id="Node000016" href="$d9/dad/classcontainer__module_1_1value__container.html#a1454b34f521727b8ba231ab78ecd2a64" title="Set a single optimized_value (unified API)" alt="" coords="271,504,453,544"/>
+<area shape="poly" id="edge16_Node000015_Node000016" title=" " alt="" coords="524,527,454,527,454,521,524,521"/>
+<area shape="rect" id="Node000017" href="$d9/dad/classcontainer__module_1_1value__container.html#a84a72d9fc9a8b7cce2d31f746ce06640" title="Set a typed value by key (unified API)" alt="" coords="271,568,453,608"/>
+<area shape="poly" id="edge17_Node000015_Node000017" title=" " alt="" coords="534,550,447,571,446,565,532,545"/>
+<area shape="rect" id="Node000018" href="$d9/dad/classcontainer__module_1_1value__container.html#a651d3f3c9bb404abe916291c7d18f89d" title="Set multiple optimized_values at once (unified API)" alt="" coords="271,632,453,672"/>
+<area shape="poly" id="edge18_Node000015_Node000018" title=" " alt="" coords="527,552,518,558,502,573,494,589,486,606,470,622,448,634,445,630,466,618,481,603,490,587,498,570,514,554,525,548"/>
+</map>

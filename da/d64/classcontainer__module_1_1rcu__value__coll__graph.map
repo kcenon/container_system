@@ -1,0 +1,9 @@
+<map id="container_module::rcu_value&lt; T &gt;" name="container_module::rcu_value&lt; T &gt;">
+<area shape="rect" id="Node000001" title="Lock&#45;free value wrapper using Read&#45;Copy&#45;Update (RCU) pattern." alt="" coords="109,261,287,561"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,133,193,199"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="115,198,134,245,129,247,110,200"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="88,5,111,71"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="102,71,102,117,97,117,97,71"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="218,133,373,199"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="285,200,266,247,261,245,280,198"/>
+</map>

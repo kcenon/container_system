@@ -1,0 +1,36 @@
+<map id="container_module::value_bridge::to_legacy" name="container_module::value_bridge::to_legacy">
+<area shape="rect" id="Node000001" title="Convert modern variant_value_v2 to legacy value." alt="" coords="5,274,188,314"/>
+<area shape="rect" id="Node000002" href="$d0/dfe/classcontainer__module_1_1value__bridge.html#ad9bec487a6e5f996db62953ab842989c" title=" " alt="" coords="237,274,447,314"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="188,300,223,300,223,305,188,305"/>
+<area shape="rect" id="Node000004" href="$dd/dd3/classcontainer__module_1_1variant__value__v2.html#ad9d4c1f70a7e0ae1076d26c717876df0" title="Get the name of this value (lock&#45;free, immutable)" alt="" coords="496,202,689,242"/>
+<area shape="poly" id="edge21_Node000001_Node000004" title=" " alt="" coords="99,273,112,222,137,156,155,122,177,89,203,60,235,37,290,10,316,4,341,3,391,12,449,37,494,68,531,108,559,150,579,188,575,190,555,153,527,111,490,72,447,41,390,17,340,8,317,10,292,15,237,41,207,64,181,93,160,125,142,158,117,224,104,274"/>
+<area shape="rect" id="Node000005" href="$d0/dfe/classcontainer__module_1_1value__bridge.html#a83bfd16b2854f62f94437c6b16a5865e" title=" " alt="" coords="240,338,444,378"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="175,311,252,332,251,337,173,316"/>
+<area shape="rect" id="Node000006" href="$d0/dfe/classcontainer__module_1_1value__bridge.html#a02d9bb1cd56a3f6540033dc297696925" title=" " alt="" coords="236,51,448,91"/>
+<area shape="poly" id="edge8_Node000001_Node000006" title=" " alt="" coords="105,273,124,236,152,190,189,142,234,101,243,95,246,100,238,105,193,146,156,193,128,238,109,275"/>
+<area shape="rect" id="Node000007" href="$d0/dfe/classcontainer__module_1_1value__bridge.html#afbbfda588a4646d83ab862dc702ebfbb" title=" " alt="" coords="251,116,433,170"/>
+<area shape="poly" id="edge11_Node000001_Node000007" title=" " alt="" coords="117,272,168,226,235,179,245,174,247,179,237,184,171,230,120,276"/>
+<area shape="rect" id="Node000008" href="$d0/dfe/classcontainer__module_1_1value__bridge.html#a8be2fb5629efa130c9c01cc514b6ffd9" title=" " alt="" coords="251,402,433,457"/>
+<area shape="poly" id="edge14_Node000001_Node000008" title=" " alt="" coords="125,312,175,349,237,387,251,394,249,399,235,392,173,354,122,316"/>
+<area shape="rect" id="Node000009" href="$dd/dd3/classcontainer__module_1_1variant__value__v2.html#af0c797c36e1223cefddd2ab3b79675cb" title="Get the value_types enum (NOT variant::index()!)" alt="" coords="496,442,689,482"/>
+<area shape="poly" id="edge23_Node000001_Node000009" title=" " alt="" coords="109,313,127,349,155,392,192,435,213,453,237,467,270,480,304,489,375,496,444,492,506,482,507,487,445,497,375,501,303,494,268,485,235,472,210,457,188,439,150,396,122,351,104,315"/>
+<area shape="rect" id="Node000010" href="$d0/dfe/classcontainer__module_1_1value__bridge.html#ab3ea5e667dd2783116693107de7ea826" title=" " alt="" coords="251,194,433,249"/>
+<area shape="poly" id="edge18_Node000001_Node000010" title=" " alt="" coords="165,271,237,250,238,255,166,276"/>
+<area shape="rect" id="Node000011" href="$d0/dfe/classcontainer__module_1_1value__bridge.html#a297cb787bdd55a15195f83b76aee2ca5" title=" " alt="" coords="251,532,433,572"/>
+<area shape="poly" id="edge22_Node000001_Node000011" title=" " alt="" coords="108,313,125,354,153,407,191,463,213,489,238,512,256,524,253,528,234,516,209,493,187,466,149,410,121,356,103,315"/>
+<area shape="poly" id="edge4_Node000002_Node000001" title=" " alt="" coords="236,287,201,288,201,282,236,282"/>
+<area shape="rect" id="Node000003" href="$dd/dd3/classcontainer__module_1_1variant__value__v2.html#a38606c558aca2e7b163af5c63e4dd0fe" title="Type&#45;safe getter with optional return." alt="" coords="496,270,689,310"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="447,289,482,289,482,294,447,295"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="412,271,508,243,510,248,413,276"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="416,335,505,311,506,316,417,340"/>
+<area shape="poly" id="edge7_Node000005_Node000004" title=" " alt="" coords="426,335,446,324,462,308,470,291,478,273,494,256,510,246,513,250,498,260,483,276,475,293,466,311,450,328,429,340"/>
+<area shape="poly" id="edge9_Node000006_Node000003" title=" " alt="" coords="434,89,450,101,465,120,472,140,475,178,478,215,484,233,498,252,507,260,503,264,494,256,480,236,473,216,470,178,467,141,460,123,446,105,431,93"/>
+<area shape="poly" id="edge10_Node000006_Node000004" title=" " alt="" coords="422,89,449,101,513,144,564,190,561,194,510,149,447,105,420,94"/>
+<area shape="poly" id="edge12_Node000007_Node000003" title=" " alt="" coords="433,168,450,180,466,198,474,217,482,234,498,252,512,261,509,266,494,256,478,237,470,219,462,201,446,184,430,173"/>
+<area shape="poly" id="edge13_Node000007_Node000004" title=" " alt="" coords="431,168,516,195,514,200,429,173"/>
+<area shape="poly" id="edge15_Node000008_Node000003" title=" " alt="" coords="420,400,447,387,504,352,554,316,557,320,507,357,449,392,423,405"/>
+<area shape="poly" id="edge16_Node000008_Node000004" title=" " alt="" coords="431,400,446,388,459,372,465,356,469,323,474,290,481,273,494,256,504,247,508,251,498,260,485,276,479,292,475,324,470,357,463,374,450,392,434,404"/>
+<area shape="poly" id="edge17_Node000008_Node000009" title=" " alt="" coords="434,439,483,445,482,450,433,444"/>
+<area shape="poly" id="edge19_Node000010_Node000003" title=" " alt="" coords="434,244,506,263,504,269,433,249"/>
+<area shape="poly" id="edge20_Node000010_Node000004" title=" " alt="" coords="434,219,482,219,482,224,434,224"/>
+</map>

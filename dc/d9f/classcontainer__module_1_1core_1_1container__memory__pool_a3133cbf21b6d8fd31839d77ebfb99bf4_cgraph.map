@@ -1,0 +1,7 @@
+<map id="container_module::core::container_memory_pool::acquire" name="container_module::core::container_memory_pool::acquire">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,30,193,85"/>
+<area shape="rect" id="Node000002" href="$d6/d67/classcontainer__module_1_1value__pool.html#a848164f83ec1ac0ff216789b77074d2f" title="Allocate an object from the pool." alt="" coords="241,5,424,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="193,42,228,37,228,42,194,47"/>
+<area shape="rect" id="Node000003" href="$d6/d67/classcontainer__module_1_1value__pool.html#a72510e6e5bf51b91571d928dbbb62990" title="Get singleton instance of the pool." alt="" coords="241,69,424,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="194,68,228,72,228,78,193,73"/>
+</map>

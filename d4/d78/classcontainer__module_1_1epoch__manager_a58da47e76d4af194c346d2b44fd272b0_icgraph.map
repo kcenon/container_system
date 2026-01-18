@@ -1,0 +1,13 @@
+<map id="container_module::epoch_manager::thread_epoch" name="container_module::epoch_manager::thread_epoch">
+<area shape="rect" id="Node000001" title="Get thread&#45;local epoch reference." alt="" coords="475,69,661,109"/>
+<area shape="rect" id="Node000002" href="$d4/d78/classcontainer__module_1_1epoch__manager.html#aa1336a9613306a56212a7995350de2e6" title="Enter critical section (pin to current epoch)" alt="" coords="240,5,427,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="480,68,406,48,408,43,482,63"/>
+<area shape="rect" id="Node000004" href="$d4/d78/classcontainer__module_1_1epoch__manager.html#a765dc0a70290fd2c82fa0e3d2b22728c" title="Exit critical section." alt="" coords="240,69,427,109"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="461,92,427,92,427,87,461,87"/>
+<area shape="rect" id="Node000006" href="$d4/d78/classcontainer__module_1_1epoch__manager.html#a301819b7856cec54260b6b07c3130812" title="Check if current thread is in critical section." alt="" coords="240,134,427,189"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="490,116,424,137,422,131,488,111"/>
+<area shape="rect" id="Node000003" href="$d0/d37/classcontainer__module_1_1epoch__guard.html#aa0c19c7ac9cf1212b0f8818b2f5c209d" title="Enter critical section." alt="" coords="5,5,192,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="227,28,192,28,192,23,227,23"/>
+<area shape="rect" id="Node000005" href="$d0/d37/classcontainer__module_1_1epoch__guard.html#aa05c47ba785d5c1e6a0935935374cd49" title="Exit critical section." alt="" coords="5,69,192,109"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="227,92,192,92,192,87,227,87"/>
+</map>

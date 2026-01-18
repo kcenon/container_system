@@ -1,0 +1,27 @@
+<map id="container_module::integration::messaging_container_builder::optimize_for_speed" name="container_module::integration::messaging_container_builder::optimize_for_speed">
+<area shape="rect" id="Node000001" title=" " alt="" coords="915,142,1136,197"/>
+<area shape="rect" id="Node000002" href="$d6/d71/classAdvancedContainerExample.html#a78efa0a41a4dd62ea14d74f5637b2b71" title="Demonstrates batch processing with messaging features." alt="" coords="633,5,867,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="976,136,924,100,865,66,820,48,822,43,868,62,927,95,979,131"/>
+<area shape="rect" id="Node000003" href="$d6/d71/classAdvancedContainerExample.html#a809c347379d7d3b0c6870db6266a09f8" title="Demonstrates enhanced messaging features." alt="" coords="371,46,577,101"/>
+<area shape="poly" id="edge7_Node000001_Node000003" title=" " alt="" coords="952,139,910,123,866,111,792,96,716,86,577,77,578,72,716,81,792,91,867,105,912,118,954,134"/>
+<area shape="rect" id="Node000006" href="$d5/d4e/messaging__integration__example_8cpp.html#ac5dd2ecaf0cf22081be447c9ddcf17a7" title=" " alt="" coords="663,120,837,160"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="901,159,837,152,838,147,901,153"/>
+<area shape="rect" id="Node000008" href="$d6/d71/classAdvancedContainerExample.html#a7c4289a3d4ae9f52e02276bca0019c0a" title="Demonstrates multi&#45;threaded producer&#45;consumer pattern." alt="" coords="368,174,580,229"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="901,179,580,198,580,193,901,174"/>
+<area shape="rect" id="Node000009" href="$d5/d1c/classscenarios_1_1GamingEventSystem.html#a3403e62957e14344283e707976f4380b" title=" " alt="" coords="635,235,865,275"/>
+<area shape="poly" id="edge10_Node000001_Node000009" title=" " alt="" coords="924,203,816,237,815,232,923,198"/>
+<area shape="rect" id="Node000010" href="$de/deb/classscenarios_1_1IoTDataCollectionSystem.html#ab3378a367ae308589f4081b80596d143" title=" " alt="" coords="646,299,854,339"/>
+<area shape="poly" id="edge11_Node000001_Node000010" title=" " alt="" coords="986,208,932,250,868,289,839,301,837,296,865,284,929,246,983,204"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="622,50,578,58,577,53,621,45"/>
+<area shape="rect" id="Node000004" href="$d6/d71/classAdvancedContainerExample.html#a168b0d067662dce9193f2fcef87dd352" title="Runs all demonstrations." alt="" coords="108,117,315,157"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="358,104,295,120,294,115,357,99"/>
+<area shape="rect" id="Node000005" href="$d8/d75/advanced__container__example_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,125,60,150"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="94,140,60,140,60,135,94,135"/>
+<area shape="rect" id="Node000007" href="$d5/d4e/messaging__integration__example_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="447,125,501,150"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="649,142,501,140,501,135,649,136"/>
+<area shape="poly" id="edge9_Node000008_Node000004" title=" " alt="" coords="354,175,293,160,295,155,355,170"/>
+<area shape="rect" id="Node000011" href="$de/deb/classscenarios_1_1IoTDataCollectionSystem.html#af1b110c2ff3ed8f9c0b7e480593c10db" title=" " alt="" coords="363,299,585,339"/>
+<area shape="poly" id="edge12_Node000010_Node000011" title=" " alt="" coords="632,321,585,321,585,316,632,316"/>
+<area shape="rect" id="Node000012" href="$d9/dd3/real__world__scenarios_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="184,306,239,331"/>
+<area shape="poly" id="edge13_Node000011_Node000012" title=" " alt="" coords="349,321,239,321,239,316,349,316"/>
+</map>

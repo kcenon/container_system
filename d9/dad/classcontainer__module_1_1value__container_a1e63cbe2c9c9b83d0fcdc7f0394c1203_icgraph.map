@@ -1,0 +1,19 @@
+<map id="container_module::value_container::clear_value" name="container_module::value_container::clear_value">
+<area shape="rect" id="Node000001" title="Clear all stored child values." alt="" coords="765,165,948,205"/>
+<area shape="rect" id="Node000002" href="$d9/dad/classcontainer__module_1_1value__container.html#ae6e8db192169bc9209fe6727d1bd6a65" title="Reinitialize the entire container to defaults." alt="" coords="535,165,717,205"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="752,188,718,188,718,183,752,183"/>
+<area shape="rect" id="Node000003" href="$d9/dad/classcontainer__module_1_1value__container.html#aae51c06e58ddd8f44996c07f5cf4142e" title="Deserialize from string. If parse_only_header is true, child values are not fully parsed yet...." alt="" coords="280,133,463,173"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="521,175,462,167,463,162,521,170"/>
+<area shape="rect" id="Node000009" href="$d9/dad/classcontainer__module_1_1value__container.html#a3776b629e34bea460a37cc75105a1f51" title="Internal implementation for MessagePack deserialization." alt="" coords="256,197,487,237"/>
+<area shape="poly" id="edge8_Node000002_Node000009" title=" " alt="" coords="521,201,487,205,487,200,521,196"/>
+<area shape="rect" id="Node000004" href="$d9/dad/classcontainer__module_1_1value__container.html#a7539bd21ce23370c37e025f52f67d58a" title="Deserialize from a raw byte array. If parse_only_header is true, child values are not fully parsed...." alt="" coords="15,5,198,45"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="328,128,271,93,207,60,177,48,179,43,209,55,274,89,331,123"/>
+<area shape="rect" id="Node000005" href="$d9/dad/classcontainer__module_1_1value__container.html#a161eb3fc0910f0af3d42d7d926a7fb97" title="Construct from a serialized data string. If parse_only_header==true, only parse the header part,..." alt="" coords="5,69,208,109"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="274,133,189,112,191,107,275,127"/>
+<area shape="rect" id="Node000006" href="$d9/dad/classcontainer__module_1_1value__container.html#a05ffd9fd90384cb244c1f9400bd4ecf7" title="Construct from a raw byte array. If parse_only_header==true, only parse the header part,..." alt="" coords="5,133,208,173"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="266,156,208,156,208,151,266,151"/>
+<area shape="rect" id="Node000007" href="$d9/dad/classcontainer__module_1_1value__container.html#a611e8c57bc25142f572a7f82fd1829fa" title="Copy constructor from another value_container. If parse_only_header==true, only parse the header port..." alt="" coords="5,197,208,237"/>
+<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="275,179,191,200,189,195,274,174"/>
+<area shape="rect" id="Node000008" href="$d9/dad/classcontainer__module_1_1value__container.html#ae4aa9e95aadd89c1f2bb0d82a002b20a" title="Copy from an existing pointer. If parse_only_header==true, only parse header." alt="" coords="5,261,208,301"/>
+<area shape="poly" id="edge7_Node000003_Node000008" title=" " alt="" coords="269,181,258,187,242,202,234,218,226,235,210,251,189,263,186,259,206,247,221,232,229,216,238,199,254,183,266,176"/>
+</map>
