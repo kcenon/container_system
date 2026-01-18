@@ -1345,18 +1345,18 @@ TEST_F(UnifiedSetterAPITest, GetWithResultType) {
     container->set("string_key", std::string("hello"));
 
     auto int_result = container->get<int32_t>("int_key");
-    EXPECT_TRUE(kcenon::common::is_ok(int_result));
-    EXPECT_EQ(kcenon::common::get_value(int_result), 42);
+    EXPECT_TRUE(int_result.is_ok());
+    EXPECT_EQ(int_result.value(), 42);
 
     auto string_result = container->get<std::string>("string_key");
-    EXPECT_TRUE(kcenon::common::is_ok(string_result));
-    EXPECT_EQ(kcenon::common::get_value(string_result), "hello");
+    EXPECT_TRUE(string_result.is_ok());
+    EXPECT_EQ(string_result.value(), "hello");
 
     auto missing_result = container->get<int32_t>("nonexistent");
-    EXPECT_TRUE(kcenon::common::is_error(missing_result));
+    EXPECT_TRUE(missing_result.is_err());
 
     auto type_mismatch = container->get<std::string>("int_key");
-    EXPECT_TRUE(kcenon::common::is_error(type_mismatch));
+    EXPECT_TRUE(type_mismatch.is_err());
 }
 #endif
 
@@ -2119,7 +2119,7 @@ TEST_F(SchemaValidationTest, ValidateResultSuccess) {
         .require("id", value_types::string_value);
 
     auto result = schema.validate_result(*container);
-    EXPECT_TRUE(kcenon::common::is_ok(result)) << "validate_result should return ok for valid data";
+    EXPECT_TRUE(result.is_ok()) << "validate_result should return ok for valid data";
 }
 
 TEST_F(SchemaValidationTest, ValidateResultFailure) {
@@ -2127,7 +2127,7 @@ TEST_F(SchemaValidationTest, ValidateResultFailure) {
         .require("id", value_types::string_value);
 
     auto result = schema.validate_result(*container);
-    EXPECT_TRUE(kcenon::common::is_error(result)) << "validate_result should return error for invalid data";
+    EXPECT_TRUE(result.is_err()) << "validate_result should return error for invalid data";
 }
 #endif
 
