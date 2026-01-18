@@ -477,53 +477,6 @@ namespace container_module
 		 */
 		[[nodiscard]] kcenon::common::VoidResult remove_result(std::string_view target_name) noexcept;
 
-#ifndef CONTAINER_NO_LEGACY_API
-		// =======================================================================
-		// Deprecated Result-based Serialization API (Issue #231, #299)
-		// Note: These format-specific methods are deprecated in favor of the
-		// unified serialization API (serialize(format), serialize_string(format)).
-		// See Issue #286 and #292 for migration guidance.
-		// Define CONTAINER_NO_LEGACY_API to exclude these methods.
-		// =======================================================================
-
-		/**
-		 * @brief Serialize this container with Result return type (binary format)
-		 * @return Result containing serialized string or error info
-		 * @exception_safety No-throw guarantee
-		 * @deprecated Use serialize(serialization_format::binary) or
-		 *             serialize_string(serialization_format::binary) instead
-		 */
-		[[deprecated("Use serialize(serialization_format::binary) or serialize_string(serialization_format::binary) instead")]]
-		[[nodiscard]] kcenon::common::Result<std::string> serialize_result() const noexcept;
-
-		/**
-		 * @brief Serialize to raw byte array with Result return type (binary format)
-		 * @return Result containing byte array or error info
-		 * @exception_safety No-throw guarantee
-		 * @deprecated Use serialize(serialization_format::binary) instead
-		 */
-		[[deprecated("Use serialize(serialization_format::binary) instead")]]
-		[[nodiscard]] kcenon::common::Result<std::vector<uint8_t>> serialize_array_result() const noexcept;
-
-		/**
-		 * @brief Generate JSON representation with Result return type
-		 * @return Result containing JSON string or error info
-		 * @exception_safety No-throw guarantee
-		 * @deprecated Use serialize_string(serialization_format::json) instead
-		 */
-		[[deprecated("Use serialize_string(serialization_format::json) instead")]]
-		[[nodiscard]] kcenon::common::Result<std::string> to_json_result() noexcept;
-
-		/**
-		 * @brief Generate XML representation with Result return type
-		 * @return Result containing XML string or error info
-		 * @exception_safety No-throw guarantee
-		 * @deprecated Use serialize_string(serialization_format::xml) instead
-		 */
-		[[deprecated("Use serialize_string(serialization_format::xml) instead")]]
-		[[nodiscard]] kcenon::common::Result<std::string> to_xml_result() noexcept;
-#endif // CONTAINER_NO_LEGACY_API
-
 		// =======================================================================
 		// Result-based File Operations API (Issue #231)
 		// =======================================================================
@@ -659,52 +612,6 @@ namespace container_module
 		// Schema-Validated Deserialization API (Issue #249)
 		// =======================================================================
 
-#ifndef CONTAINER_NO_LEGACY_API
-		/**
-		 * @brief Deserialize from string data with schema validation
-		 *
-		 * Deserializes the data and validates it against the provided schema.
-		 * If validation fails, the container is still populated but false is returned.
-		 *
-		 * @param data_string Serialized data as a string
-		 * @param schema Schema to validate against after deserialization
-		 * @param parse_only_header If true, child values are not fully parsed
-		 * @return true on success and validation pass, false on parse error or validation failure
-		 * @exception_safety Basic guarantee - container may be partially modified
-		 * @deprecated Use deserialize_result() with schema parameter instead for Result-based error handling
-		 *
-		 * @code
-		 * auto schema = container_schema()
-		 *     .require("name", value_types::string_value)
-		 *     .require("age", value_types::int_value)
-		 *     .range("age", 0, 150);
-		 *
-		 * if (container->deserialize(json_data, schema)) {
-		 *     // Data is valid according to schema
-		 * }
-		 * @endcode
-		 */
-		[[deprecated("Use deserialize_result() with schema parameter instead for Result-based error handling")]]
-		bool deserialize(const std::string& data_string,
-						 const container_schema& schema,
-						 bool parse_only_header = false);
-
-		/**
-		 * @brief Deserialize from byte array with schema validation
-		 *
-		 * @param data_array Serialized data as a byte array
-		 * @param schema Schema to validate against after deserialization
-		 * @param parse_only_header If true, child values are not fully parsed
-		 * @return true on success and validation pass, false on parse error or validation failure
-		 * @exception_safety Basic guarantee - container may be partially modified
-		 * @deprecated Use deserialize_result() with schema parameter instead for Result-based error handling
-		 */
-		[[deprecated("Use deserialize_result() with schema parameter instead for Result-based error handling")]]
-		bool deserialize(const std::vector<uint8_t>& data_array,
-						 const container_schema& schema,
-						 bool parse_only_header = false);
-#endif // CONTAINER_NO_LEGACY_API
-
 		/**
 		 * @brief Get the last validation errors from schema-validated deserialization
 		 *
@@ -759,89 +666,9 @@ namespace container_module
 			bool parse_only_header = false) noexcept;
 #endif
 
-#ifndef CONTAINER_NO_LEGACY_API
-		// =======================================================================
-		// Deprecated Format Conversion API
-		// =======================================================================
-
-		/**
-		 * @brief Generate an XML representation of this container (header +
-		 * values).
-		 * @deprecated Use to_xml_result() instead for Result-based error handling
-		 */
-		[[deprecated("Use to_xml_result() instead for Result-based error handling")]]
-		const std::string to_xml(void);
-
-		/**
-		 * @brief Generate a JSON representation of this container (header +
-		 * values).
-		 * @deprecated Use to_json_result() instead for Result-based error handling
-		 */
-		[[deprecated("Use to_json_result() instead for Result-based error handling")]]
-		const std::string to_json(void);
-#endif // CONTAINER_NO_LEGACY_API
-
 		// =======================================================================
 		// MessagePack Serialization API (Issue #234)
 		// =======================================================================
-
-#ifndef CONTAINER_NO_LEGACY_API
-		/**
-		 * @brief Serialize this container to MessagePack binary format
-		 *
-		 * MessagePack provides compact binary serialization with cross-language
-		 * compatibility. The output format follows the MessagePack specification:
-		 * https://github.com/msgpack/msgpack/blob/master/spec.md
-		 *
-		 * @return Vector of bytes containing the MessagePack-encoded data
-		 * @exception_safety Strong guarantee - no changes on exception
-		 * @throws std::bad_alloc if memory allocation fails
-		 * @deprecated Use to_msgpack_result() instead for Result-based error handling
-		 *
-		 * @code
-		 * auto container = std::make_shared<value_container>();
-		 * container->set("name", "Alice").set("age", 30);
-		 * auto msgpack_data = container->to_msgpack();
-		 * // msgpack_data contains compact binary representation
-		 * @endcode
-		 */
-		[[deprecated("Use to_msgpack_result() instead for Result-based error handling")]]
-		std::vector<uint8_t> to_msgpack() const;
-
-		/**
-		 * @brief Deserialize from MessagePack binary format
-		 *
-		 * @param data MessagePack-encoded binary data
-		 * @return true on success, false on parse error
-		 * @exception_safety Basic guarantee - container may be partially modified
-		 * @deprecated Use from_msgpack_result() instead for Result-based error handling
-		 *
-		 * @code
-		 * std::vector<uint8_t> msgpack_data = get_received_data();
-		 * auto container = std::make_shared<value_container>();
-		 * if (container->from_msgpack(msgpack_data)) {
-		 *     auto name = container->get_value("name");
-		 * }
-		 * @endcode
-		 */
-		[[deprecated("Use from_msgpack_result() instead for Result-based error handling")]]
-		bool from_msgpack(const std::vector<uint8_t>& data);
-#endif // CONTAINER_NO_LEGACY_API
-
-		/**
-		 * @brief Create a new container from MessagePack data
-		 *
-		 * Static factory method that creates a new value_container from
-		 * MessagePack binary data.
-		 *
-		 * @param data MessagePack-encoded binary data
-		 * @return Shared pointer to the created container, or nullptr on error
-		 * @note Requires CONTAINER_NO_LEGACY_API to be undefined (uses from_msgpack internally)
-		 */
-#ifndef CONTAINER_NO_LEGACY_API
-		static std::shared_ptr<value_container> create_from_msgpack(
-			const std::vector<uint8_t>& data);
-#endif // CONTAINER_NO_LEGACY_API
 
 		/**
 		 * @brief Serialization format enumeration
@@ -1010,30 +837,6 @@ namespace container_module
 		 */
 		static serialization_format detect_format(std::string_view data);
 
-#if CONTAINER_HAS_COMMON_RESULT
-#ifndef CONTAINER_NO_LEGACY_API
-		/**
-		 * @brief Serialize to MessagePack with Result return type
-		 * @return Result containing byte vector or error info
-		 * @exception_safety No-throw guarantee
-		 * @deprecated Use serialize(serialization_format::msgpack) instead
-		 */
-		[[deprecated("Use serialize(serialization_format::msgpack) instead")]]
-		[[nodiscard]] kcenon::common::Result<std::vector<uint8_t>> to_msgpack_result() const noexcept;
-
-		/**
-		 * @brief Deserialize from MessagePack with Result return type
-		 * @param data MessagePack-encoded binary data
-		 * @return VoidResult indicating success or error
-		 * @exception_safety Strong guarantee - no changes on error
-		 * @deprecated Use deserialize(data, serialization_format::msgpack) instead
-		 */
-		[[deprecated("Use deserialize(data, serialization_format::msgpack) instead")]]
-		[[nodiscard]] kcenon::common::VoidResult from_msgpack_result(
-			const std::vector<uint8_t>& data) noexcept;
-#endif // CONTAINER_NO_LEGACY_API
-#endif
-
 		// =======================================================================
 
 		/**
@@ -1041,27 +844,6 @@ namespace container_module
 		 * parsed.
 		 */
 		std::string datas(void) const;
-
-#ifndef CONTAINER_NO_LEGACY_API
-		// =======================================================================
-		// Deprecated File I/O API
-		// =======================================================================
-
-		/**
-		 * @brief Load from a file path (reads entire file content, then calls
-		 * deserialize).
-		 * @deprecated Use load_packet_result() instead for Result-based error handling
-		 */
-		[[deprecated("Use load_packet_result() instead for Result-based error handling")]]
-		void load_packet(const std::string& file_path);
-
-		/**
-		 * @brief Save to a file path (serialize to bytes, then write to file).
-		 * @deprecated Use save_packet_result() instead for Result-based error handling
-		 */
-		[[deprecated("Use save_packet_result() instead for Result-based error handling")]]
-		void save_packet(const std::string& file_path);
-#endif // CONTAINER_NO_LEGACY_API
 
 		/**
 		 * @brief Get memory usage statistics
