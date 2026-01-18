@@ -803,44 +803,6 @@ bool value_container::deserialize(const std::vector<uint8_t>& data_array,
 // Schema-Validated Deserialization API (Issue #249)
 // =============================================================================
 
-#ifndef CONTAINER_NO_LEGACY_API
-bool value_container::deserialize(const std::string& data_string,
-								  const container_schema& schema,
-								  bool parse_only_header)
-{
-	// Clear previous validation errors
-	validation_errors_.clear();
-
-	// First, deserialize the data
-	if (!deserialize(data_string, parse_only_header))
-	{
-		return false;
-	}
-
-	// Then validate against the schema
-	validation_errors_ = schema.validate_all(*this);
-	return validation_errors_.empty();
-}
-
-bool value_container::deserialize(const std::vector<uint8_t>& data_array,
-								  const container_schema& schema,
-								  bool parse_only_header)
-{
-	// Clear previous validation errors
-	validation_errors_.clear();
-
-	// First, deserialize the data
-	if (!deserialize(data_array, parse_only_header))
-	{
-		return false;
-	}
-
-	// Then validate against the schema
-	validation_errors_ = schema.validate_all(*this);
-	return validation_errors_.empty();
-}
-#endif // CONTAINER_NO_LEGACY_API
-
 const std::vector<validation_error>& value_container::get_validation_errors() const noexcept
 {
 	return validation_errors_;
@@ -1077,117 +1039,6 @@ void value_container::clear_validation_errors() noexcept
 					"container_system"});
 		}
 	}
-
-#ifndef CONTAINER_NO_LEGACY_API
-	// =======================================================================
-	// Deprecated Result-based Serialization API Implementation (Issue #299)
-	// =======================================================================
-
-	kcenon::common::Result<std::string> value_container::serialize_result() const noexcept
-	{
-		try
-		{
-			return kcenon::common::ok(serialize_impl());
-		}
-		catch (const std::bad_alloc&)
-		{
-			return kcenon::common::Result<std::string>(
-				kcenon::common::error_info{
-					error_codes::memory_allocation_failed,
-					error_codes::make_message(error_codes::memory_allocation_failed),
-					"container_system"});
-		}
-		catch (const std::exception& e)
-		{
-			return kcenon::common::Result<std::string>(
-				kcenon::common::error_info{
-					error_codes::serialization_failed,
-					std::string("Serialization failed: ") + e.what(),
-					"container_system"});
-		}
-	}
-
-	kcenon::common::Result<std::vector<uint8_t>> value_container::serialize_array_result() const noexcept
-	{
-		try
-		{
-			auto [arr, err] = convert_string::to_array(serialize_impl());
-			if (!err.empty())
-			{
-				return kcenon::common::Result<std::vector<uint8_t>>(
-					kcenon::common::error_info{
-						error_codes::encoding_error,
-						std::string("Encoding error: ") + err,
-						"container_system"});
-			}
-			return kcenon::common::ok(std::move(arr));
-		}
-		catch (const std::bad_alloc&)
-		{
-			return kcenon::common::Result<std::vector<uint8_t>>(
-				kcenon::common::error_info{
-					error_codes::memory_allocation_failed,
-					error_codes::make_message(error_codes::memory_allocation_failed),
-					"container_system"});
-		}
-		catch (const std::exception& e)
-		{
-			return kcenon::common::Result<std::vector<uint8_t>>(
-				kcenon::common::error_info{
-					error_codes::serialization_failed,
-					std::string("Serialization failed: ") + e.what(),
-					"container_system"});
-		}
-	}
-
-	kcenon::common::Result<std::string> value_container::to_json_result() noexcept
-	{
-		try
-		{
-			return kcenon::common::ok(to_json_impl());
-		}
-		catch (const std::bad_alloc&)
-		{
-			return kcenon::common::Result<std::string>(
-				kcenon::common::error_info{
-					error_codes::memory_allocation_failed,
-					error_codes::make_message(error_codes::memory_allocation_failed),
-					"container_system"});
-		}
-		catch (const std::exception& e)
-		{
-			return kcenon::common::Result<std::string>(
-				kcenon::common::error_info{
-					error_codes::serialization_failed,
-					std::string("JSON serialization failed: ") + e.what(),
-					"container_system"});
-		}
-	}
-
-	kcenon::common::Result<std::string> value_container::to_xml_result() noexcept
-	{
-		try
-		{
-			return kcenon::common::ok(to_xml_impl());
-		}
-		catch (const std::bad_alloc&)
-		{
-			return kcenon::common::Result<std::string>(
-				kcenon::common::error_info{
-					error_codes::memory_allocation_failed,
-					error_codes::make_message(error_codes::memory_allocation_failed),
-					"container_system"});
-		}
-		catch (const std::exception& e)
-		{
-			return kcenon::common::Result<std::string>(
-				kcenon::common::error_info{
-					error_codes::serialization_failed,
-					std::string("XML serialization failed: ") + e.what(),
-					"container_system"});
-		}
-	}
-#endif // CONTAINER_NO_LEGACY_API
 
 	kcenon::common::VoidResult value_container::load_packet_result(
 		const std::string& file_path) noexcept
@@ -1488,22 +1339,6 @@ void value_container::clear_validation_errors() noexcept
 		formatter::format_to(std::back_inserter(result), "}}");
 		return result;
 	}
-
-#ifndef CONTAINER_NO_LEGACY_API
-	// =======================================================================
-	// Deprecated Format Conversion API Implementation
-	// =======================================================================
-
-	const std::string value_container::to_xml(void)
-	{
-		return to_xml_impl();
-	}
-
-	const std::string value_container::to_json(void)
-	{
-		return to_json_impl();
-	}
-#endif // CONTAINER_NO_LEGACY_API
 
 	// =======================================================================
 	// MessagePack Internal Implementation (Issue #234, #299)
@@ -1884,33 +1719,6 @@ void value_container::clear_validation_errors() noexcept
 		return true;
 	}
 
-#ifndef CONTAINER_NO_LEGACY_API
-	// =======================================================================
-	// Deprecated MessagePack API (Issue #234)
-	// =======================================================================
-
-	std::vector<uint8_t> value_container::to_msgpack() const
-	{
-		return to_msgpack_impl();
-	}
-
-	bool value_container::from_msgpack(const std::vector<uint8_t>& data)
-	{
-		return from_msgpack_impl(data);
-	}
-
-	std::shared_ptr<value_container> value_container::create_from_msgpack(
-		const std::vector<uint8_t>& data)
-	{
-		auto container = std::make_shared<value_container>();
-		if (container->from_msgpack_impl(data))
-		{
-			return container;
-		}
-		return nullptr;
-	}
-#endif // CONTAINER_NO_LEGACY_API
-
 	value_container::serialization_format value_container::detect_format(
 		const std::vector<uint8_t>& data)
 	{
@@ -1985,69 +1793,6 @@ void value_container::clear_validation_errors() noexcept
 	}
 
 #if CONTAINER_HAS_COMMON_RESULT
-#ifndef CONTAINER_NO_LEGACY_API
-	// =======================================================================
-	// Deprecated MessagePack Result API (Issue #299)
-	// =======================================================================
-
-	kcenon::common::Result<std::vector<uint8_t>> value_container::to_msgpack_result() const noexcept
-	{
-		try
-		{
-			return kcenon::common::ok(to_msgpack_impl());
-		}
-		catch (const std::bad_alloc&)
-		{
-			return kcenon::common::Result<std::vector<uint8_t>>(
-				kcenon::common::error_info{
-					error_codes::memory_allocation_failed,
-					error_codes::make_message(error_codes::memory_allocation_failed),
-					"container_system"});
-		}
-		catch (const std::exception& e)
-		{
-			return kcenon::common::Result<std::vector<uint8_t>>(
-				kcenon::common::error_info{
-					error_codes::serialization_failed,
-					std::string("MessagePack serialization failed: ") + e.what(),
-					"container_system"});
-		}
-	}
-
-	kcenon::common::VoidResult value_container::from_msgpack_result(
-		const std::vector<uint8_t>& data) noexcept
-	{
-		try
-		{
-			if (from_msgpack_impl(data))
-			{
-				return kcenon::common::ok();
-			}
-			return kcenon::common::VoidResult(
-				kcenon::common::error_info{
-					error_codes::deserialization_failed,
-					error_codes::make_message(error_codes::deserialization_failed, "Invalid MessagePack data"),
-					"container_system"});
-		}
-		catch (const std::bad_alloc&)
-		{
-			return kcenon::common::VoidResult(
-				kcenon::common::error_info{
-					error_codes::memory_allocation_failed,
-					error_codes::make_message(error_codes::memory_allocation_failed),
-					"container_system"});
-		}
-		catch (const std::exception& e)
-		{
-			return kcenon::common::VoidResult(
-				kcenon::common::error_info{
-					error_codes::deserialization_failed,
-					std::string("MessagePack deserialization failed: ") + e.what(),
-					"container_system"});
-		}
-	}
-#endif // CONTAINER_NO_LEGACY_API
-
 	// =======================================================================
 	// Unified Serialization API (Issue #286)
 	// =======================================================================
@@ -2337,28 +2082,6 @@ void value_container::clear_validation_errors() noexcept
 		formatter::format_to(std::back_inserter(result), "}}}};");
 		return result;
 	}
-
-#ifndef CONTAINER_NO_LEGACY_API
-	// =======================================================================
-	// Deprecated File I/O API Implementation
-	// =======================================================================
-
-	void value_container::load_packet(const std::string& file_path)
-	{
-		// TODO: Implement file loading without file_handler
-		// For now, this functionality is disabled
-		(void)file_path;
-		throw std::runtime_error("File loading not implemented - file_handler not available");
-	}
-
-	void value_container::save_packet(const std::string& file_path)
-	{
-		// TODO: Implement file saving without file_handler
-		// For now, this functionality is disabled
-		(void)file_path;
-		throw std::runtime_error("File saving not implemented - file_handler not available");
-	}
-#endif // CONTAINER_NO_LEGACY_API
 
 	size_t value_container::memory_footprint() const
 	{
