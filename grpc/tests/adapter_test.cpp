@@ -113,8 +113,8 @@ TEST_F(ContainerAdapterTest, RoundTripWithHeaderFields) {
 // =============================================================================
 
 TEST_F(ContainerAdapterTest, ConvertBoolValue) {
-    sample_container_->add_value("bool_true", value_types::bool_value, true);
-    sample_container_->add_value("bool_false", value_types::bool_value, false);
+    sample_container_->set("bool_true", true);
+    sample_container_->set("bool_false", false);
 
     auto grpc = container_adapter::to_grpc(*sample_container_);
     auto restored = container_adapter::from_grpc(grpc);
@@ -133,16 +133,12 @@ TEST_F(ContainerAdapterTest, ConvertBoolValue) {
 
 TEST_F(ContainerAdapterTest, ConvertIntegerTypes) {
     // Test various integer types
-    sample_container_->add_value("short_val", value_types::short_value,
-                                  static_cast<short>(32767));
-    sample_container_->add_value("ushort_val", value_types::ushort_value,
-                                  static_cast<unsigned short>(65535));
-    sample_container_->add_value("int_val", value_types::int_value, 2147483647);
-    sample_container_->add_value("uint_val", value_types::uint_value, 4294967295U);
-    sample_container_->add_value("long_val", value_types::long_value,
-                                  static_cast<long>(2147483647L));
-    sample_container_->add_value("llong_val", value_types::llong_value,
-                                  9223372036854775807LL);
+    sample_container_->set("short_val", static_cast<int16_t>(32767));
+    sample_container_->set("ushort_val", static_cast<uint16_t>(65535));
+    sample_container_->set("int_val", 2147483647);
+    sample_container_->set("uint_val", 4294967295U);
+    sample_container_->set("long_val", static_cast<int32_t>(2147483647L));
+    sample_container_->set("llong_val", 9223372036854775807LL);
 
     auto grpc = container_adapter::to_grpc(*sample_container_);
     auto restored = container_adapter::from_grpc(grpc);
@@ -163,9 +159,8 @@ TEST_F(ContainerAdapterTest, ConvertIntegerTypes) {
 }
 
 TEST_F(ContainerAdapterTest, ConvertFloatingPointTypes) {
-    sample_container_->add_value("float_val", value_types::float_value, 3.14159f);
-    sample_container_->add_value("double_val", value_types::double_value,
-                                  3.141592653589793);
+    sample_container_->set("float_val", 3.14159f);
+    sample_container_->set("double_val", 3.141592653589793);
 
     auto grpc = container_adapter::to_grpc(*sample_container_);
     auto restored = container_adapter::from_grpc(grpc);
@@ -183,8 +178,7 @@ TEST_F(ContainerAdapterTest, ConvertFloatingPointTypes) {
 
 TEST_F(ContainerAdapterTest, ConvertStringValue) {
     std::string test_string = "Hello, gRPC World!";
-    sample_container_->add_value("string_val", value_types::string_value,
-                                  test_string);
+    sample_container_->set("string_val", test_string);
 
     auto grpc = container_adapter::to_grpc(*sample_container_);
     auto restored = container_adapter::from_grpc(grpc);
@@ -197,8 +191,7 @@ TEST_F(ContainerAdapterTest, ConvertStringValue) {
 }
 
 TEST_F(ContainerAdapterTest, ConvertEmptyString) {
-    sample_container_->add_value("empty_string", value_types::string_value,
-                                  std::string(""));
+    sample_container_->set("empty_string", std::string(""));
 
     auto grpc = container_adapter::to_grpc(*sample_container_);
     auto restored = container_adapter::from_grpc(grpc);
@@ -212,7 +205,7 @@ TEST_F(ContainerAdapterTest, ConvertEmptyString) {
 
 TEST_F(ContainerAdapterTest, ConvertBytesValue) {
     std::vector<uint8_t> test_bytes = {0x00, 0x01, 0x02, 0xFF, 0xFE, 0xFD};
-    sample_container_->add_value("bytes_val", value_types::bytes_value, test_bytes);
+    sample_container_->set("bytes_val", test_bytes);
 
     auto grpc = container_adapter::to_grpc(*sample_container_);
     auto restored = container_adapter::from_grpc(grpc);
@@ -225,8 +218,7 @@ TEST_F(ContainerAdapterTest, ConvertBytesValue) {
 }
 
 TEST_F(ContainerAdapterTest, ConvertNullValue) {
-    sample_container_->add_value("null_val", value_types::null_value,
-                                  std::monostate{});
+    sample_container_->set("null_val", std::monostate{});
 
     auto grpc = container_adapter::to_grpc(*sample_container_);
     auto restored = container_adapter::from_grpc(grpc);
@@ -245,12 +237,10 @@ TEST_F(ContainerAdapterTest, ConvertNullValue) {
 TEST_F(ContainerAdapterTest, ConvertNestedContainer) {
     auto nested = std::make_shared<value_container>();
     nested->set_message_type("nested_type");
-    nested->add_value("nested_int", value_types::int_value, 42);
-    nested->add_value("nested_string", value_types::string_value,
-                       std::string("nested value"));
+    nested->set("nested_int", 42);
+    nested->set("nested_string", std::string("nested value"));
 
-    sample_container_->add_value("nested_container", value_types::container_value,
-                                  nested);
+    sample_container_->set("nested_container", nested);
 
     auto grpc = container_adapter::to_grpc(*sample_container_);
     auto restored = container_adapter::from_grpc(grpc);
@@ -275,19 +265,19 @@ TEST_F(ContainerAdapterTest, ConvertDeeplyNestedContainer) {
     // Create 3 levels of nesting
     auto level3 = std::make_shared<value_container>();
     level3->set_message_type("level3");
-    level3->add_value("depth", value_types::int_value, 3);
+    level3->set("depth", 3);
 
     auto level2 = std::make_shared<value_container>();
     level2->set_message_type("level2");
-    level2->add_value("depth", value_types::int_value, 2);
-    level2->add_value("child", value_types::container_value, level3);
+    level2->set("depth", 2);
+    level2->set("child", level3);
 
     auto level1 = std::make_shared<value_container>();
     level1->set_message_type("level1");
-    level1->add_value("depth", value_types::int_value, 1);
-    level1->add_value("child", value_types::container_value, level2);
+    level1->set("depth", 1);
+    level1->set("child", level2);
 
-    sample_container_->add_value("root_child", value_types::container_value, level1);
+    sample_container_->set("root_child", level1);
 
     auto grpc = container_adapter::to_grpc(*sample_container_);
     auto restored = container_adapter::from_grpc(grpc);
@@ -320,10 +310,8 @@ TEST_F(ContainerAdapterTest, ConvertDeeplyNestedContainer) {
 // =============================================================================
 
 TEST_F(ContainerAdapterTest, ConvertSpecialFloatValues) {
-    sample_container_->add_value("infinity", value_types::double_value,
-                                  std::numeric_limits<double>::infinity());
-    sample_container_->add_value("neg_infinity", value_types::double_value,
-                                  -std::numeric_limits<double>::infinity());
+    sample_container_->set("infinity", std::numeric_limits<double>::infinity());
+    sample_container_->set("neg_infinity", -std::numeric_limits<double>::infinity());
 
     auto grpc = container_adapter::to_grpc(*sample_container_);
     auto restored = container_adapter::from_grpc(grpc);
@@ -348,7 +336,7 @@ TEST_F(ContainerAdapterTest, ConvertLargeBinaryData) {
         large_data[i] = static_cast<uint8_t>(i % 256);
     }
 
-    sample_container_->add_value("large_bytes", value_types::bytes_value, large_data);
+    sample_container_->set("large_bytes", large_data);
 
     auto grpc = container_adapter::to_grpc(*sample_container_);
     auto restored = container_adapter::from_grpc(grpc);
@@ -364,7 +352,7 @@ TEST_F(ContainerAdapterTest, ConvertLargeBinaryData) {
 
 TEST_F(ContainerAdapterTest, ConvertUnicodeString) {
     std::string unicode_str = u8"Hello \u4e16\u754c \U0001F600"; // "Hello 世界 😀"
-    sample_container_->add_value("unicode", value_types::string_value, unicode_str);
+    sample_container_->set("unicode", unicode_str);
 
     auto grpc = container_adapter::to_grpc(*sample_container_);
     auto restored = container_adapter::from_grpc(grpc);
@@ -378,8 +366,7 @@ TEST_F(ContainerAdapterTest, ConvertUnicodeString) {
 
 TEST_F(ContainerAdapterTest, ConvertMultipleValuesPreservesOrder) {
     for (int i = 0; i < 10; ++i) {
-        sample_container_->add_value("value_" + std::to_string(i),
-                                      value_types::int_value, i * 10);
+        sample_container_->set("value_" + std::to_string(i), i * 10);
     }
 
     auto grpc = container_adapter::to_grpc(*sample_container_);
@@ -399,9 +386,8 @@ TEST_F(ContainerAdapterTest, ConvertMultipleValuesPreservesOrder) {
 // =============================================================================
 
 TEST_F(ContainerAdapterTest, CanConvertValidContainer) {
-    sample_container_->add_value("int", value_types::int_value, 42);
-    sample_container_->add_value("string", value_types::string_value,
-                                  std::string("test"));
+    sample_container_->set("int", 42);
+    sample_container_->set("string", std::string("test"));
 
     EXPECT_TRUE(container_adapter::can_convert(*sample_container_));
 }
