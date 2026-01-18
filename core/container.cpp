@@ -790,7 +790,11 @@ namespace container_module
 		clear_value();
 	}
 
-	std::string value_container::serialize(void) const
+	// =======================================================================
+	// Internal Serialization Implementations (Issue #299)
+	// =======================================================================
+
+	std::string value_container::serialize_impl() const
 	{
 		// Record metrics if enabled
 		auto timer = metrics_manager::make_timer(
@@ -837,9 +841,14 @@ namespace container_module
 		return result;
 	}
 
+	std::string value_container::serialize(void) const
+	{
+		return serialize_impl();
+	}
+
 	std::vector<uint8_t> value_container::serialize_array(void) const
 	{
-		auto [arr, err] = convert_string::to_array(serialize());
+		auto [arr, err] = convert_string::to_array(serialize_impl());
 		if (!err.empty())
 		{
 			return {};
@@ -1182,11 +1191,16 @@ void value_container::clear_validation_errors() noexcept
 		}
 	}
 
+#ifndef CONTAINER_NO_LEGACY_API
+	// =======================================================================
+	// Deprecated Result-based Serialization API Implementation (Issue #299)
+	// =======================================================================
+
 	kcenon::common::Result<std::string> value_container::serialize_result() const noexcept
 	{
 		try
 		{
-			return kcenon::common::ok(serialize());
+			return kcenon::common::ok(serialize_impl());
 		}
 		catch (const std::bad_alloc&)
 		{
@@ -1210,7 +1224,7 @@ void value_container::clear_validation_errors() noexcept
 	{
 		try
 		{
-			auto [arr, err] = convert_string::to_array(serialize());
+			auto [arr, err] = convert_string::to_array(serialize_impl());
 			if (!err.empty())
 			{
 				return kcenon::common::Result<std::vector<uint8_t>>(
@@ -1243,7 +1257,7 @@ void value_container::clear_validation_errors() noexcept
 	{
 		try
 		{
-			return kcenon::common::ok(to_json());
+			return kcenon::common::ok(to_json_impl());
 		}
 		catch (const std::bad_alloc&)
 		{
@@ -1267,7 +1281,7 @@ void value_container::clear_validation_errors() noexcept
 	{
 		try
 		{
-			return kcenon::common::ok(to_xml());
+			return kcenon::common::ok(to_xml_impl());
 		}
 		catch (const std::bad_alloc&)
 		{
@@ -1286,6 +1300,7 @@ void value_container::clear_validation_errors() noexcept
 					"container_system"});
 		}
 	}
+#endif // CONTAINER_NO_LEGACY_API
 
 	kcenon::common::VoidResult value_container::load_packet_result(
 		const std::string& file_path) noexcept
@@ -1469,12 +1484,11 @@ void value_container::clear_validation_errors() noexcept
 	}
 #endif
 
-#ifndef CONTAINER_NO_LEGACY_API
 	// =======================================================================
-	// Deprecated Format Conversion API Implementation
+	// Internal Format Conversion Implementations (Issue #299)
 	// =======================================================================
 
-	const std::string value_container::to_xml(void)
+	std::string value_container::to_xml_impl()
 	{
 		std::unique_lock<std::shared_mutex> lock(mutex_);
 
@@ -1521,7 +1535,7 @@ void value_container::clear_validation_errors() noexcept
 		return result;
 	}
 
-	const std::string value_container::to_json(void)
+	std::string value_container::to_json_impl()
 	{
 		std::unique_lock<std::shared_mutex> lock(mutex_);
 
@@ -1559,42 +1573,56 @@ void value_container::clear_validation_errors() noexcept
 		// values
 		formatter::format_to(std::back_inserter(result), "\"values\":{{");
 		bool first = true;
-	for (auto& u : optimized_units_)
-	{
-		if (!first)
+		for (auto& u : optimized_units_)
 		{
-			formatter::format_to(std::back_inserter(result), ",");
-		}
-		std::string value_str = variant_helpers::to_string(u.data, u.type);
-		std::string escaped_name = variant_helpers::json_escape(u.name);
+			if (!first)
+			{
+				formatter::format_to(std::back_inserter(result), ",");
+			}
+			std::string value_str = variant_helpers::to_string(u.data, u.type);
+			std::string escaped_name = variant_helpers::json_escape(u.name);
 
-		// String and bytes values need quotes
-		if (u.type == value_types::string_value || u.type == value_types::bytes_value)
-		{
-			std::string escaped_value = variant_helpers::json_escape(value_str);
-			formatter::format_to(std::back_inserter(result), "\"{}\":\"{}\"",
-								 escaped_name, escaped_value);
+			// String and bytes values need quotes
+			if (u.type == value_types::string_value || u.type == value_types::bytes_value)
+			{
+				std::string escaped_value = variant_helpers::json_escape(value_str);
+				formatter::format_to(std::back_inserter(result), "\"{}\":\"{}\"",
+									 escaped_name, escaped_value);
+			}
+			else
+			{
+				formatter::format_to(std::back_inserter(result), "\"{}\":{}",
+									 escaped_name, value_str);
+			}
+			first = false;
 		}
-		else
-		{
-			formatter::format_to(std::back_inserter(result), "\"{}\":{}",
-								 escaped_name, value_str);
-		}
-		first = false;
-	}
 		formatter::format_to(std::back_inserter(result),
 							 "}}"); // end values
 		formatter::format_to(std::back_inserter(result), "}}");
 		return result;
 	}
+
+#ifndef CONTAINER_NO_LEGACY_API
+	// =======================================================================
+	// Deprecated Format Conversion API Implementation
+	// =======================================================================
+
+	const std::string value_container::to_xml(void)
+	{
+		return to_xml_impl();
+	}
+
+	const std::string value_container::to_json(void)
+	{
+		return to_json_impl();
+	}
 #endif // CONTAINER_NO_LEGACY_API
 
 	// =======================================================================
-	// MessagePack Serialization Implementation (Issue #234)
+	// MessagePack Internal Implementation (Issue #234, #299)
 	// =======================================================================
 
-#ifndef CONTAINER_NO_LEGACY_API
-	std::vector<uint8_t> value_container::to_msgpack() const
+	std::vector<uint8_t> value_container::to_msgpack_impl() const
 	{
 		// Record metrics if enabled
 		auto timer = metrics_manager::make_timer(
@@ -1731,7 +1759,7 @@ void value_container::clear_validation_errors() noexcept
 					auto nested = std::get<std::shared_ptr<value_container>>(unit.data);
 					if (nested)
 					{
-						auto nested_data = nested->to_msgpack();
+						auto nested_data = nested->to_msgpack_impl();
 						encoder.write_binary(nested_data);
 					}
 					else
@@ -1755,7 +1783,7 @@ void value_container::clear_validation_errors() noexcept
 		return encoder.finish();
 	}
 
-	bool value_container::from_msgpack(const std::vector<uint8_t>& data)
+	bool value_container::from_msgpack_impl(const std::vector<uint8_t>& data)
 	{
 		// Record metrics if enabled
 		auto timer = metrics_manager::make_timer(
@@ -1969,11 +1997,26 @@ void value_container::clear_validation_errors() noexcept
 		return true;
 	}
 
+#ifndef CONTAINER_NO_LEGACY_API
+	// =======================================================================
+	// Deprecated MessagePack API (Issue #234)
+	// =======================================================================
+
+	std::vector<uint8_t> value_container::to_msgpack() const
+	{
+		return to_msgpack_impl();
+	}
+
+	bool value_container::from_msgpack(const std::vector<uint8_t>& data)
+	{
+		return from_msgpack_impl(data);
+	}
+
 	std::shared_ptr<value_container> value_container::create_from_msgpack(
 		const std::vector<uint8_t>& data)
 	{
 		auto container = std::make_shared<value_container>();
-		if (container->from_msgpack(data))
+		if (container->from_msgpack_impl(data))
 		{
 			return container;
 		}
@@ -2055,11 +2098,16 @@ void value_container::clear_validation_errors() noexcept
 	}
 
 #if CONTAINER_HAS_COMMON_RESULT
+#ifndef CONTAINER_NO_LEGACY_API
+	// =======================================================================
+	// Deprecated MessagePack Result API (Issue #299)
+	// =======================================================================
+
 	kcenon::common::Result<std::vector<uint8_t>> value_container::to_msgpack_result() const noexcept
 	{
 		try
 		{
-			return kcenon::common::ok(to_msgpack());
+			return kcenon::common::ok(to_msgpack_impl());
 		}
 		catch (const std::bad_alloc&)
 		{
@@ -2084,7 +2132,7 @@ void value_container::clear_validation_errors() noexcept
 	{
 		try
 		{
-			if (from_msgpack(data))
+			if (from_msgpack_impl(data))
 			{
 				return kcenon::common::ok();
 			}
@@ -2111,6 +2159,7 @@ void value_container::clear_validation_errors() noexcept
 					"container_system"});
 		}
 	}
+#endif // CONTAINER_NO_LEGACY_API
 
 	// =======================================================================
 	// Unified Serialization API (Issue #286)
@@ -2125,40 +2174,35 @@ void value_container::clear_validation_errors() noexcept
 			{
 			case serialization_format::binary:
 			{
-				auto result = serialize_array_result();
-				if (!result.is_ok())
+				auto [arr, err] = convert_string::to_array(serialize_impl());
+				if (!err.empty())
 				{
-					return kcenon::common::Result<std::vector<uint8_t>>(result.error());
+					return kcenon::common::Result<std::vector<uint8_t>>(
+						kcenon::common::error_info{
+							error_codes::encoding_error,
+							std::string("Encoding error: ") + err,
+							"container_system"});
 				}
-				return result;
+				return kcenon::common::ok(std::move(arr));
 			}
 			case serialization_format::json:
 			{
-				// Cast away const for to_json (it modifies internal state)
+				// Cast away const for to_json_impl (it modifies internal state)
 				auto* mutable_this = const_cast<value_container*>(this);
-				auto result = mutable_this->to_json_result();
-				if (!result.is_ok())
-				{
-					return kcenon::common::Result<std::vector<uint8_t>>(result.error());
-				}
-				const auto& str = result.value();
+				auto str = mutable_this->to_json_impl();
 				return kcenon::common::ok(std::vector<uint8_t>(str.begin(), str.end()));
 			}
 			case serialization_format::xml:
 			{
-				// Cast away const for to_xml (it modifies internal state)
+				// Cast away const for to_xml_impl (it modifies internal state)
 				auto* mutable_this = const_cast<value_container*>(this);
-				auto result = mutable_this->to_xml_result();
-				if (!result.is_ok())
-				{
-					return kcenon::common::Result<std::vector<uint8_t>>(result.error());
-				}
-				const auto& str = result.value();
+				auto str = mutable_this->to_xml_impl();
 				return kcenon::common::ok(std::vector<uint8_t>(str.begin(), str.end()));
 			}
 			case serialization_format::msgpack:
 			{
-				return to_msgpack_result();
+				auto data = to_msgpack_impl();
+				return kcenon::common::ok(std::move(data));
 			}
 			case serialization_format::auto_detect:
 			case serialization_format::unknown:
@@ -2197,28 +2241,23 @@ void value_container::clear_validation_errors() noexcept
 			{
 			case serialization_format::binary:
 			{
-				return serialize_result();
+				return kcenon::common::ok(serialize_impl());
 			}
 			case serialization_format::json:
 			{
-				// Cast away const for to_json (it modifies internal state)
+				// Cast away const for to_json_impl (it modifies internal state)
 				auto* mutable_this = const_cast<value_container*>(this);
-				return mutable_this->to_json_result();
+				return kcenon::common::ok(mutable_this->to_json_impl());
 			}
 			case serialization_format::xml:
 			{
-				// Cast away const for to_xml (it modifies internal state)
+				// Cast away const for to_xml_impl (it modifies internal state)
 				auto* mutable_this = const_cast<value_container*>(this);
-				return mutable_this->to_xml_result();
+				return kcenon::common::ok(mutable_this->to_xml_impl());
 			}
 			case serialization_format::msgpack:
 			{
-				auto result = to_msgpack_result();
-				if (!result.is_ok())
-				{
-					return kcenon::common::Result<std::string>(result.error());
-				}
-				const auto& bytes = result.value();
+				auto bytes = to_msgpack_impl();
 				return kcenon::common::ok(std::string(bytes.begin(), bytes.end()));
 			}
 			case serialization_format::auto_detect:
@@ -2284,7 +2323,15 @@ void value_container::clear_validation_errors() noexcept
 			case serialization_format::msgpack:
 			{
 				std::vector<uint8_t> data_vec(data.begin(), data.end());
-				return from_msgpack_result(data_vec);
+				if (from_msgpack_impl(data_vec))
+				{
+					return kcenon::common::ok();
+				}
+				return kcenon::common::VoidResult(
+					kcenon::common::error_info{
+						error_codes::deserialization_failed,
+						error_codes::make_message(error_codes::deserialization_failed, "Invalid MessagePack data"),
+						"container_system"});
 			}
 			case serialization_format::unknown:
 			default:
@@ -2344,7 +2391,15 @@ void value_container::clear_validation_errors() noexcept
 			case serialization_format::msgpack:
 			{
 				std::vector<uint8_t> data_vec(data.begin(), data.end());
-				return from_msgpack_result(data_vec);
+				if (from_msgpack_impl(data_vec))
+				{
+					return kcenon::common::ok();
+				}
+				return kcenon::common::VoidResult(
+					kcenon::common::error_info{
+						error_codes::deserialization_failed,
+						error_codes::make_message(error_codes::deserialization_failed, "Invalid MessagePack data"),
+						"container_system"});
 			}
 			case serialization_format::unknown:
 			default:
