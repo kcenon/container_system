@@ -803,6 +803,7 @@ bool value_container::deserialize(const std::vector<uint8_t>& data_array,
 // Schema-Validated Deserialization API (Issue #249)
 // =============================================================================
 
+#ifndef CONTAINER_NO_LEGACY_API
 bool value_container::deserialize(const std::string& data_string,
 								  const container_schema& schema,
 								  bool parse_only_header)
@@ -838,6 +839,7 @@ bool value_container::deserialize(const std::vector<uint8_t>& data_array,
 	validation_errors_ = schema.validate_all(*this);
 	return validation_errors_.empty();
 }
+#endif // CONTAINER_NO_LEGACY_API
 
 const std::vector<validation_error>& value_container::get_validation_errors() const noexcept
 {
@@ -1239,7 +1241,7 @@ void value_container::clear_validation_errors() noexcept
 	{
 		try
 		{
-			auto serialize_res = serialize_result();
+			auto serialize_res = serialize_string(serialization_format::binary);
 			if (!serialize_res.is_ok())
 			{
 				return kcenon::common::VoidResult(serialize_res.error());

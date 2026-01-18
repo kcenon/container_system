@@ -362,8 +362,10 @@ TEST_F(AsyncContainerTest, SerializeStringAsyncReturnsValidData) {
 }
 
 TEST_F(AsyncContainerTest, DeserializeAsyncRestoresData) {
-    // First serialize
-    auto serialized = container_->serialize_array();
+    // First serialize using unified API
+    auto serialize_result = container_->serialize(container_module::value_container::serialization_format::binary);
+    ASSERT_TRUE(serialize_result.is_ok());
+    auto serialized = serialize_result.value();
     EXPECT_FALSE(serialized.empty());
 
     // Then deserialize async
@@ -398,8 +400,10 @@ TEST_F(AsyncContainerTest, DeserializeAsyncRestoresData) {
 }
 
 TEST_F(AsyncContainerTest, DeserializeStringAsyncRestoresData) {
-    // First serialize
-    auto serialized = container_->serialize();
+    // First serialize using unified API
+    auto serialize_result = container_->serialize_string(container_module::value_container::serialization_format::binary);
+    ASSERT_TRUE(serialize_result.is_ok());
+    auto serialized = serialize_result.value();
     EXPECT_FALSE(serialized.empty());
 
     // Then deserialize async
@@ -838,8 +842,10 @@ TEST_F(AsyncStreamingTest, SerializeChunkedEmptyContainer) {
 }
 
 TEST_F(AsyncStreamingTest, DeserializeStreamingComplete) {
-    // First serialize the container
-    auto serialized = container_->serialize_array();
+    // First serialize the container using unified API
+    auto serialize_result = container_->serialize(container_module::value_container::serialization_format::binary);
+    ASSERT_TRUE(serialize_result.is_ok());
+    auto serialized = serialize_result.value();
     EXPECT_FALSE(serialized.empty());
 
     // Deserialize with is_final=true
@@ -869,8 +875,10 @@ TEST_F(AsyncStreamingTest, DeserializeStreamingComplete) {
 }
 
 TEST_F(AsyncStreamingTest, DeserializeStreamingIncomplete) {
-    // First serialize the container
-    auto serialized = container_->serialize_array();
+    // First serialize the container using unified API
+    auto serialize_result = container_->serialize(container_module::value_container::serialization_format::binary);
+    ASSERT_TRUE(serialize_result.is_ok());
+    auto serialized = serialize_result.value();
     EXPECT_FALSE(serialized.empty());
 
     // Deserialize with is_final=false should fail/return error

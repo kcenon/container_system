@@ -290,7 +290,7 @@ BENCHMARK(BM_ContainerDeserialize)->Range(1, 1000);
 static void BM_ContainerToJSON(benchmark::State& state) {
     auto container = std::make_unique<value_container>();
     container->set_message_type("benchmark");
-    
+
     // Add values
     for (int i = 0; i < state.range(0); ++i) {
         container->set(
@@ -300,8 +300,8 @@ static void BM_ContainerToJSON(benchmark::State& state) {
     }
 
     for (auto _ : state) {
-        std::string json = container->to_json();
-        benchmark::DoNotOptimize(json);
+        auto result = container->serialize_string(value_container::serialization_format::json);
+        benchmark::DoNotOptimize(result);
     }
     state.SetItemsProcessed(state.iterations() * state.range(0));
 }
@@ -310,7 +310,7 @@ BENCHMARK(BM_ContainerToJSON)->Range(1, 100);
 static void BM_ContainerToXML(benchmark::State& state) {
     auto container = std::make_unique<value_container>();
     container->set_message_type("benchmark");
-    
+
     // Add values
     for (int i = 0; i < state.range(0); ++i) {
         container->set(
@@ -320,8 +320,8 @@ static void BM_ContainerToXML(benchmark::State& state) {
     }
 
     for (auto _ : state) {
-        std::string xml = container->to_xml();
-        benchmark::DoNotOptimize(xml);
+        auto result = container->serialize_string(value_container::serialization_format::xml);
+        benchmark::DoNotOptimize(result);
     }
     state.SetItemsProcessed(state.iterations() * state.range(0));
 }

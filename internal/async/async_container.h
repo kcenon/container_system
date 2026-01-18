@@ -570,7 +570,7 @@ namespace container_module::async
     {
         auto container = container_;
         auto result = co_await detail::make_async_awaitable([container]() {
-            return container->serialize_array_result();
+            return container->serialize(value_container::serialization_format::binary);
         });
         co_return result;
     }
@@ -580,7 +580,7 @@ namespace container_module::async
     {
         auto container = container_;
         auto result = co_await detail::make_async_awaitable([container]() {
-            return container->serialize_result();
+            return container->serialize_string(value_container::serialization_format::binary);
         });
         co_return result;
     }
@@ -687,7 +687,7 @@ namespace container_module::async
         std::string path_str(path);
         auto result = co_await detail::make_async_awaitable(
             [container, path_str, callback]() -> kcenon::common::VoidResult {
-                auto data_result = container->serialize_array_result();
+                auto data_result = container->serialize(value_container::serialization_format::binary);
                 if (!data_result.is_ok()) {
                     return kcenon::common::VoidResult(data_result.error());
                 }
@@ -838,7 +838,7 @@ namespace container_module::async
     inline generator<std::vector<uint8_t>>
         async_container::serialize_chunked(size_t chunk_size) const
     {
-        auto data_result = container_->serialize_array_result();
+        auto data_result = container_->serialize(value_container::serialization_format::binary);
         if (!data_result.is_ok()) {
             co_return;
         }

@@ -371,6 +371,7 @@ TEST_F(ResultAPITest, SetResultWithUnicodeKey)
 
 // ============================================================================
 // Serialization Result API Tests (Issue #239)
+// Using unified serialization API (Issue #286)
 // ============================================================================
 
 TEST_F(ResultAPITest, SerializeResultSuccess)
@@ -379,9 +380,9 @@ TEST_F(ResultAPITest, SerializeResultSuccess)
 	container->set("name", std::string("test"));
 	container->set("value", int32_t(42));
 
-	auto result = container->serialize_result();
+	auto result = container->serialize_string(value_container::serialization_format::binary);
 	EXPECT_TRUE(result.is_ok())
-		<< "serialize_result should succeed for valid container";
+		<< "serialize_string should succeed for valid container";
 
 	auto serialized = result.value();
 	EXPECT_FALSE(serialized.empty())
@@ -389,7 +390,8 @@ TEST_F(ResultAPITest, SerializeResultSuccess)
 
 	// Verify the serialized data can be deserialized
 	auto new_container = std::make_shared<value_container>();
-	EXPECT_TRUE(new_container->deserialize(serialized, false));
+	auto deser_result = new_container->deserialize_result(serialized, false);
+	EXPECT_TRUE(deser_result.is_ok());
 	EXPECT_TRUE(new_container->contains("name"));
 	EXPECT_TRUE(new_container->contains("value"));
 }
@@ -397,9 +399,9 @@ TEST_F(ResultAPITest, SerializeResultSuccess)
 TEST_F(ResultAPITest, SerializeResultEmptyContainer)
 {
 	// Empty container should serialize successfully
-	auto result = container->serialize_result();
+	auto result = container->serialize_string(value_container::serialization_format::binary);
 	EXPECT_TRUE(result.is_ok())
-		<< "serialize_result should succeed for empty container";
+		<< "serialize_string should succeed for empty container";
 
 	auto serialized = result.value();
 	EXPECT_FALSE(serialized.empty())
@@ -412,9 +414,9 @@ TEST_F(ResultAPITest, SerializeArrayResultSuccess)
 	container->set("key1", std::string("value1"));
 	container->set("key2", int32_t(100));
 
-	auto result = container->serialize_array_result();
+	auto result = container->serialize(value_container::serialization_format::binary);
 	EXPECT_TRUE(result.is_ok())
-		<< "serialize_array_result should succeed for valid container";
+		<< "serialize should succeed for valid container";
 
 	auto serialized = result.value();
 	EXPECT_FALSE(serialized.empty())
@@ -424,9 +426,9 @@ TEST_F(ResultAPITest, SerializeArrayResultSuccess)
 TEST_F(ResultAPITest, SerializeArrayResultEmptyContainer)
 {
 	// Empty container should serialize successfully
-	auto result = container->serialize_array_result();
+	auto result = container->serialize(value_container::serialization_format::binary);
 	EXPECT_TRUE(result.is_ok())
-		<< "serialize_array_result should succeed for empty container";
+		<< "serialize should succeed for empty container";
 
 	auto serialized = result.value();
 	EXPECT_FALSE(serialized.empty())
@@ -440,9 +442,9 @@ TEST_F(ResultAPITest, ToJsonResultSuccess)
 	container->set("count", int32_t(5));
 	container->set("enabled", true);
 
-	auto result = container->to_json_result();
+	auto result = container->serialize_string(value_container::serialization_format::json);
 	EXPECT_TRUE(result.is_ok())
-		<< "to_json_result should succeed for valid container";
+		<< "serialize_string(json) should succeed for valid container";
 
 	auto json_str = result.value();
 	EXPECT_FALSE(json_str.empty())
@@ -457,9 +459,9 @@ TEST_F(ResultAPITest, ToJsonResultSuccess)
 
 TEST_F(ResultAPITest, ToJsonResultEmptyContainer)
 {
-	auto result = container->to_json_result();
+	auto result = container->serialize_string(value_container::serialization_format::json);
 	EXPECT_TRUE(result.is_ok())
-		<< "to_json_result should succeed for empty container";
+		<< "serialize_string(json) should succeed for empty container";
 }
 
 TEST_F(ResultAPITest, ToXmlResultSuccess)
@@ -468,9 +470,9 @@ TEST_F(ResultAPITest, ToXmlResultSuccess)
 	container->set("title", std::string("XML Test"));
 	container->set("id", int32_t(123));
 
-	auto result = container->to_xml_result();
+	auto result = container->serialize_string(value_container::serialization_format::xml);
 	EXPECT_TRUE(result.is_ok())
-		<< "to_xml_result should succeed for valid container";
+		<< "serialize_string(xml) should succeed for valid container";
 
 	auto xml_str = result.value();
 	EXPECT_FALSE(xml_str.empty())
@@ -483,16 +485,18 @@ TEST_F(ResultAPITest, ToXmlResultSuccess)
 
 TEST_F(ResultAPITest, ToXmlResultEmptyContainer)
 {
-	auto result = container->to_xml_result();
+	auto result = container->serialize_string(value_container::serialization_format::xml);
 	EXPECT_TRUE(result.is_ok())
-		<< "to_xml_result should succeed for empty container";
+		<< "serialize_string(xml) should succeed for empty container";
 }
 
 TEST_F(ResultAPITest, DeserializeResultSuccess)
 {
 	// First serialize a container
 	container->set("key", std::string("value"));
-	auto serialized = container->serialize();
+	auto serialize_res = container->serialize_string(value_container::serialization_format::binary);
+	ASSERT_TRUE(serialize_res.is_ok());
+	auto serialized = serialize_res.value();
 
 	// Create new container and deserialize
 	auto new_container = std::make_shared<value_container>();
@@ -536,7 +540,9 @@ TEST_F(ResultAPITest, DeserializeResultCorruptedData)
 {
 	// Create partially corrupted data
 	container->set("test", std::string("value"));
-	auto serialized = container->serialize();
+	auto serialize_res = container->serialize_string(value_container::serialization_format::binary);
+	ASSERT_TRUE(serialize_res.is_ok());
+	auto serialized = serialize_res.value();
 
 	// Corrupt the data by truncating it
 	if (serialized.length() > 10)
@@ -555,7 +561,9 @@ TEST_F(ResultAPITest, DeserializeResultByteArraySuccess)
 {
 	// Serialize to array
 	container->set("byte_test", int32_t(42));
-	auto array_data = container->serialize_array();
+	auto serialize_res = container->serialize(value_container::serialization_format::binary);
+	ASSERT_TRUE(serialize_res.is_ok());
+	auto array_data = serialize_res.value();
 
 	// Deserialize from array
 	auto new_container = std::make_shared<value_container>();
@@ -585,8 +593,8 @@ TEST_F(ResultAPITest, SerializationRoundTrip)
 	container->set("bool_val", true);
 	container->set("int64_val", int64_t(9876543210LL));
 
-	// Serialize
-	auto serialize_result = container->serialize_result();
+	// Serialize using unified API
+	auto serialize_result = container->serialize_string(value_container::serialization_format::binary);
 	EXPECT_TRUE(serialize_result.is_ok());
 
 	// Deserialize to new container
@@ -623,8 +631,8 @@ TEST_F(ResultAPITest, SerializationArrayRoundTrip)
 	container->set("arr_test", std::string("array round trip"));
 	container->set("arr_num", int32_t(999));
 
-	// Serialize to array
-	auto serialize_result = container->serialize_array_result();
+	// Serialize to array using unified API
+	auto serialize_result = container->serialize(value_container::serialization_format::binary);
 	EXPECT_TRUE(serialize_result.is_ok());
 
 	// Deserialize from array

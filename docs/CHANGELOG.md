@@ -12,6 +12,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
+- **Migrate Deprecated API to Unified Serialization** (#301): Update internal implementations to use unified serialization API
+  - Replace `serialize_result()` with `serialize_string(serialization_format::binary)` in `save_packet_result()`
+  - Replace `serialize_array_result()` with `serialize(serialization_format::binary)` in async operations
+  - Update `async_container.h` to use unified serialization API throughout
+  - Add `#ifndef CONTAINER_NO_LEGACY_API` guards for schema-validated `deserialize()` implementations
+  - Update test files (`result_api_tests.cpp`, `benchmark_tests.cpp`, `async_tests.cpp`) to use unified API
+  - Build and tests pass with `CONTAINER_NO_LEGACY_API` defined
+
 - **Test Migration to Unified API** (#284, #297): Migrate all test files from deprecated API to unified API
   - Replace `add(make_*_value())` with `set()` throughout test files
   - Replace `serialize()` with `serialize_string(serialization_format::binary).value()`
