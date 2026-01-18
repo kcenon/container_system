@@ -720,14 +720,14 @@ TEST_F(SchemaTest, DeserializeWithSchema_ValidData) {
 	source->set("name", std::string("Alice"));
 	source->set("age", 30);
 	auto serialize_result = source->serialize_string(value_container::serialization_format::binary);
-	ASSERT_TRUE(kcenon::common::is_ok(serialize_result));
-	auto serialized_data = kcenon::common::get_value(serialize_result);
+	ASSERT_TRUE(serialize_result.is_ok());
+	auto serialized_data = serialize_result.value();
 
 	// Deserialize with schema validation
 	auto target = std::make_unique<value_container>();
 	auto result = target->deserialize_result(serialized_data, schema, false);
 
-	EXPECT_TRUE(kcenon::common::is_ok(result));
+	EXPECT_TRUE(result.is_ok());
 	EXPECT_TRUE(target->get_validation_errors().empty());
 
 	auto name_opt = target->get_value("name");
@@ -744,13 +744,13 @@ TEST_F(SchemaTest, DeserializeWithSchema_MissingRequiredField) {
 	source->set("name", std::string("Alice"));
 	// Missing 'age' field
 	auto serialize_result = source->serialize_string(value_container::serialization_format::binary);
-	ASSERT_TRUE(kcenon::common::is_ok(serialize_result));
-	auto serialized_data = kcenon::common::get_value(serialize_result);
+	ASSERT_TRUE(serialize_result.is_ok());
+	auto serialized_data = serialize_result.value();
 
 	auto target = std::make_unique<value_container>();
 	auto result = target->deserialize_result(serialized_data, schema, false);
 
-	EXPECT_FALSE(kcenon::common::is_ok(result));
+	EXPECT_FALSE(result.is_ok());
 	EXPECT_FALSE(target->get_validation_errors().empty());
 	EXPECT_EQ(target->get_validation_errors()[0].code, validation_codes::missing_required);
 }
@@ -763,13 +763,13 @@ TEST_F(SchemaTest, DeserializeWithSchema_InvalidRange) {
 	auto source = std::make_unique<value_container>();
 	source->set("age", 200);  // Out of range
 	auto serialize_result = source->serialize_string(value_container::serialization_format::binary);
-	ASSERT_TRUE(kcenon::common::is_ok(serialize_result));
-	auto serialized_data = kcenon::common::get_value(serialize_result);
+	ASSERT_TRUE(serialize_result.is_ok());
+	auto serialized_data = serialize_result.value();
 
 	auto target = std::make_unique<value_container>();
 	auto result = target->deserialize_result(serialized_data, schema, false);
 
-	EXPECT_FALSE(kcenon::common::is_ok(result));
+	EXPECT_FALSE(result.is_ok());
 	EXPECT_FALSE(target->get_validation_errors().empty());
 	EXPECT_EQ(target->get_validation_errors()[0].code, validation_codes::out_of_range);
 }
@@ -781,13 +781,13 @@ TEST_F(SchemaTest, DeserializeWithSchema_ByteArray) {
 	auto source = std::make_unique<value_container>();
 	source->set("name", std::string("Bob"));
 	auto serialize_result = source->serialize(value_container::serialization_format::binary);
-	ASSERT_TRUE(kcenon::common::is_ok(serialize_result));
-	auto serialized_bytes = kcenon::common::get_value(serialize_result);
+	ASSERT_TRUE(serialize_result.is_ok());
+	auto serialized_bytes = serialize_result.value();
 
 	auto target = std::make_unique<value_container>();
 	auto result = target->deserialize_result(serialized_bytes, schema, false);
 
-	EXPECT_TRUE(kcenon::common::is_ok(result));
+	EXPECT_TRUE(result.is_ok());
 	EXPECT_TRUE(target->get_validation_errors().empty());
 }
 
@@ -801,8 +801,8 @@ TEST_F(SchemaTest, ClearValidationErrors) {
 		.require("missing", value_types::string_value);
 
 	auto serialize_result = container->serialize_string(value_container::serialization_format::binary);
-	ASSERT_TRUE(kcenon::common::is_ok(serialize_result));
-	auto serialized_data = kcenon::common::get_value(serialize_result);
+	ASSERT_TRUE(serialize_result.is_ok());
+	auto serialized_data = serialize_result.value();
 
 	auto target = std::make_unique<value_container>();
 	(void)target->deserialize_result(serialized_data, schema, false);
@@ -820,8 +820,8 @@ TEST_F(SchemaTest, DeserializeWithSchema_CollectsAllErrors) {
 
 	// Empty container - all required fields missing
 	auto serialize_result = container->serialize_string(value_container::serialization_format::binary);
-	ASSERT_TRUE(kcenon::common::is_ok(serialize_result));
-	auto serialized_data = kcenon::common::get_value(serialize_result);
+	ASSERT_TRUE(serialize_result.is_ok());
+	auto serialized_data = serialize_result.value();
 
 	auto target = std::make_unique<value_container>();
 	(void)target->deserialize_result(serialized_data, schema, false);
@@ -838,13 +838,13 @@ TEST_F(SchemaTest, DeserializeWithSchema_PatternValidation) {
 	auto source = std::make_unique<value_container>();
 	source->set("email", std::string("invalid-email"));  // No @ symbol
 	auto serialize_result = source->serialize_string(value_container::serialization_format::binary);
-	ASSERT_TRUE(kcenon::common::is_ok(serialize_result));
-	auto serialized_data = kcenon::common::get_value(serialize_result);
+	ASSERT_TRUE(serialize_result.is_ok());
+	auto serialized_data = serialize_result.value();
 
 	auto target = std::make_unique<value_container>();
 	auto result = target->deserialize_result(serialized_data, schema, false);
 
-	EXPECT_FALSE(kcenon::common::is_ok(result));
+	EXPECT_FALSE(result.is_ok());
 	EXPECT_EQ(target->get_validation_errors()[0].code, validation_codes::pattern_mismatch);
 }
 
@@ -856,13 +856,13 @@ TEST_F(SchemaTest, DeserializeWithSchema_OneOfValidation) {
 	auto source = std::make_unique<value_container>();
 	source->set("status", std::string("unknown"));
 	auto serialize_result = source->serialize_string(value_container::serialization_format::binary);
-	ASSERT_TRUE(kcenon::common::is_ok(serialize_result));
-	auto serialized_data = kcenon::common::get_value(serialize_result);
+	ASSERT_TRUE(serialize_result.is_ok());
+	auto serialized_data = serialize_result.value();
 
 	auto target = std::make_unique<value_container>();
 	auto result = target->deserialize_result(serialized_data, schema, false);
 
-	EXPECT_FALSE(kcenon::common::is_ok(result));
+	EXPECT_FALSE(result.is_ok());
 	EXPECT_EQ(target->get_validation_errors()[0].code, validation_codes::not_in_allowed_values);
 }
 

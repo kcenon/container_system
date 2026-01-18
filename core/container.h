@@ -554,11 +554,13 @@ namespace container_module
 		 */
 		[[nodiscard]] kcenon::common::VoidResult remove_result(std::string_view target_name) noexcept;
 
+#ifndef CONTAINER_NO_LEGACY_API
 		// =======================================================================
-		// Result-based Serialization API (Issue #231)
+		// Deprecated Result-based Serialization API (Issue #231, #299)
 		// Note: These format-specific methods are deprecated in favor of the
 		// unified serialization API (serialize(format), serialize_string(format)).
 		// See Issue #286 and #292 for migration guidance.
+		// Define CONTAINER_NO_LEGACY_API to exclude these methods.
 		// =======================================================================
 
 		/**
@@ -597,6 +599,7 @@ namespace container_module
 		 */
 		[[deprecated("Use serialize_string(serialization_format::xml) instead")]]
 		[[nodiscard]] kcenon::common::Result<std::string> to_xml_result() noexcept;
+#endif // CONTAINER_NO_LEGACY_API
 
 		// =======================================================================
 		// Result-based File Operations API (Issue #231)
@@ -1101,6 +1104,7 @@ namespace container_module
 		static serialization_format detect_format(std::string_view data);
 
 #if CONTAINER_HAS_COMMON_RESULT
+#ifndef CONTAINER_NO_LEGACY_API
 		/**
 		 * @brief Serialize to MessagePack with Result return type
 		 * @return Result containing byte vector or error info
@@ -1120,6 +1124,7 @@ namespace container_module
 		[[deprecated("Use deserialize(data, serialization_format::msgpack) instead")]]
 		[[nodiscard]] kcenon::common::VoidResult from_msgpack_result(
 			const std::vector<uint8_t>& data) noexcept;
+#endif // CONTAINER_NO_LEGACY_API
 #endif
 
 		// =======================================================================
@@ -1319,6 +1324,46 @@ namespace container_module
 		 * @note Used by both deprecated and new API methods
 		 */
 		void set_unit_impl(const optimized_value& val);
+
+		// =======================================================================
+		// Internal Serialization Implementations (Issue #299)
+		// These are the core implementations used by both legacy and unified APIs.
+		// =======================================================================
+
+		/**
+		 * @brief Internal implementation for binary serialization
+		 * @return Serialized string
+		 * @throws std::bad_alloc, std::runtime_error on failure
+		 */
+		std::string serialize_impl() const;
+
+		/**
+		 * @brief Internal implementation for JSON serialization
+		 * @return JSON string
+		 * @throws std::bad_alloc, std::runtime_error on failure
+		 */
+		std::string to_json_impl();
+
+		/**
+		 * @brief Internal implementation for XML serialization
+		 * @return XML string
+		 * @throws std::bad_alloc, std::runtime_error on failure
+		 */
+		std::string to_xml_impl();
+
+		/**
+		 * @brief Internal implementation for MessagePack serialization
+		 * @return MessagePack byte vector
+		 * @throws std::bad_alloc, std::runtime_error on failure
+		 */
+		std::vector<uint8_t> to_msgpack_impl() const;
+
+		/**
+		 * @brief Internal implementation for MessagePack deserialization
+		 * @param data MessagePack-encoded binary data
+		 * @return true on success, false on parse error
+		 */
+		bool from_msgpack_impl(const std::vector<uint8_t>& data);
 
 		// Thread-safe lock guard classes
 		// Always acquire lock to eliminate TOCTOU vulnerability (see #190)
