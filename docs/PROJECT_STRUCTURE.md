@@ -164,7 +164,7 @@ container_system/
 ├── 📄 .gitignore                   # Git ignore rules
 ├── 📄 LICENSE                      # BSD 3-Clause license
 ├── 📄 README.md                    # Main README
-├── 📄 README_KO.md                 # Korean README
+├── 📄 README.kr.md                 # Korean README
 └── 📄 BASELINE.md                  # User-facing performance baseline
 ```
 
@@ -645,7 +645,7 @@ cmake --build build --config Release
 
 ### Documentation Files
 - **Markdown**: `docs/<TOPIC>.md`
-- **Korean Translation**: `docs/<TOPIC>_KO.md`
+- **Korean Translation**: `docs/<TOPIC>.kr.md`
 
 ## Code Organization Best Practices
 

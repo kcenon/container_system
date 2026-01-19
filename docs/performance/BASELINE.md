@@ -1,6 +1,6 @@
 # Container System - Performance Baseline Metrics
 
-**Language**: **English** | [한국어](BASELINE_KO.md)
+**Language**: **English** | [한국어](BASELINE.kr.md)
 
 > **📊 Developer Note**: For raw benchmark data and CI baseline thresholds used in automated testing,
 > see [`benchmarks/BASELINE.md`](../../benchmarks/BASELINE.md)
