@@ -2,7 +2,7 @@
 
 > **Version:** 0.1.0.0
 > **Last Updated:** 2025-10-22
-> **Language:** **English** | [한국어](STRUCTURE_KO.md)
+> **Language:** **English** | [한국어](STRUCTURE.kr.md)
 
 ---
 
@@ -145,23 +145,23 @@ container_system/
 ├── 📄 dependency.ps1                       # Windows dependency script (PowerShell)
 │
 ├── 📄 README.md                            # Main README
-├── 📄 README_KO.md                         # Korean README
+├── 📄 README.kr.md                         # Korean README
 ├── 📄 CHANGELOG.md                         # Version changelog
-├── 📄 CHANGELOG_KO.md                      # Korean changelog
+├── 📄 CHANGELOG.kr.md                      # Korean changelog
 ├── 📄 ARCHITECTURE.md                      # Architecture documentation
 ├── 📄 STRUCTURE.md                         # This file
 ├── 📄 INTEGRATION.md                       # Integration guide
 ├── 📄 MIGRATION.md                         # Migration guide
 ├── 📄 BASELINE.md                          # Performance baseline
-├── 📄 BASELINE_KO.md                       # Korean baseline
+├── 📄 BASELINE.kr.md                       # Korean baseline
 ├── 📄 PERFORMANCE.md                       # Performance documentation
-├── 📄 PERFORMANCE_KO.md                    # Korean performance docs
+├── 📄 PERFORMANCE.kr.md                    # Korean performance docs
 ├── 📄 IMPLEMENTATION_SUMMARY.md            # Implementation summary
-├── 📄 IMPLEMENTATION_SUMMARY_KO.md         # Korean implementation summary
+├── 📄 IMPLEMENTATION_SUMMARY.kr.md         # Korean implementation summary
 ├── 📄 IMPROVEMENTS.md                      # Improvement plans
-├── 📄 IMPROVEMENTS_KO.md                   # Korean improvement plans
+├── 📄 IMPROVEMENTS.kr.md                   # Korean improvement plans
 ├── 📄 SANITIZER_TEST_RESULTS.md            # Sanitizer test results
-├── 📄 SANITIZER_TEST_RESULTS_KO.md         # Korean sanitizer results
+├── 📄 SANITIZER_TEST_RESULTS.kr.md         # Korean sanitizer results
 │
 ├── 📄 Doxyfile                             # Doxygen configuration
 ├── 📄 mainpage.dox                         # Doxygen main page
@@ -585,23 +585,23 @@ docs/
 
 # Root documentation
 README.md                               # Main README (English)
-README_KO.md                            # Korean README
+README.kr.md                            # Korean README
 CHANGELOG.md                            # Version changelog (English)
-CHANGELOG_KO.md                         # Korean changelog
+CHANGELOG.kr.md                         # Korean changelog
 ARCHITECTURE.md                         # Architecture documentation
 STRUCTURE.md                            # This file
 INTEGRATION.md                          # Integration guide
 MIGRATION.md                            # Migration guide from messaging_system
 BASELINE.md                             # Performance baseline (English)
-BASELINE_KO.md                          # Korean baseline
+BASELINE.kr.md                          # Korean baseline
 PERFORMANCE.md                          # Performance documentation (English)
-PERFORMANCE_KO.md                       # Korean performance docs
+PERFORMANCE.kr.md                       # Korean performance docs
 IMPLEMENTATION_SUMMARY.md               # Implementation summary (English)
-IMPLEMENTATION_SUMMARY_KO.md            # Korean implementation summary
+IMPLEMENTATION_SUMMARY.kr.md            # Korean implementation summary
 IMPROVEMENTS.md                         # Improvement plans (English)
-IMPROVEMENTS_KO.md                      # Korean improvement plans
+IMPROVEMENTS.kr.md                      # Korean improvement plans
 SANITIZER_TEST_RESULTS.md               # Sanitizer results (English)
-SANITIZER_TEST_RESULTS_KO.md            # Korean sanitizer results
+SANITIZER_TEST_RESULTS.kr.md            # Korean sanitizer results
 ```
 
 ### Documentation Categories

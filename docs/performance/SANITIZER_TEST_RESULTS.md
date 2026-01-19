@@ -1,6 +1,6 @@
 # Sanitizer Test Results
 
-> **Language:** **English** | [한국어](SANITIZER_TEST_RESULTS_KO.md)
+> **Language:** **English** | [한국어](SANITIZER_TEST_RESULTS.kr.md)
 
 ## Executive Summary
 

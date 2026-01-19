@@ -1,6 +1,6 @@
 # Container System Documentation
 
-> **Language:** **English** | [한국어](README_KO.md)
+> **Language:** **English** | [한국어](README.kr.md)
 
 **Version:** 0.1.0
 **Last Updated:** 2025-11-11
@@ -28,7 +28,7 @@ Welcome to the container_system documentation! A type-safe, high-performance con
 
 | Document | Description | Korean | Lines |
 |----------|-------------|--------|-------|
-| [01-ARCHITECTURE.md](01-ARCHITECTURE.md) | System architecture, design patterns, SIMD optimization | [🇰🇷](01-ARCHITECTURE_KO.md) | 800+ |
+| [01-ARCHITECTURE.md](01-ARCHITECTURE.md) | System architecture, design patterns, SIMD optimization | [🇰🇷](01-ARCHITECTURE.kr.md) | 800+ |
 
 ### 📗 User Guides
 
@@ -45,16 +45,16 @@ Welcome to the container_system documentation! A type-safe, high-performance con
 | [ADR-001-Type-System-Unification.md](advanced/ADR-001-Type-System-Unification.md) | Architecture decision record | 200+ |
 | [VALUE_STORE_DESIGN.md](advanced/VALUE_STORE_DESIGN.md) | Value store design | 150+ |
 | [VARIANT_VALUE_V2_MIGRATION_GUIDE.md](advanced/VARIANT_VALUE_V2_MIGRATION_GUIDE.md) | V2 migration | 200+ |
-| [IMPLEMENTATION_SUMMARY.md](advanced/IMPLEMENTATION_SUMMARY.md) | Implementation status | [🇰🇷](advanced/IMPLEMENTATION_SUMMARY_KO.md) |
-| [IMPROVEMENTS.md](advanced/IMPROVEMENTS.md) | Planned improvements | [🇰🇷](advanced/IMPROVEMENTS_KO.md) |
+| [IMPLEMENTATION_SUMMARY.md](advanced/IMPLEMENTATION_SUMMARY.md) | Implementation status | [🇰🇷](advanced/IMPLEMENTATION_SUMMARY.kr.md) |
+| [IMPROVEMENTS.md](advanced/IMPROVEMENTS.md) | Planned improvements | [🇰🇷](advanced/IMPROVEMENTS.kr.md) |
 
 ### 📊 Performance
 
 | Document | Description | Korean | Lines |
 |----------|-------------|--------|-------|
-| [BASELINE.md](performance/BASELINE.md) | 5M containers/s, 2M serialize/s | [🇰🇷](performance/BASELINE_KO.md) | 300+ |
-| [PERFORMANCE.md](performance/PERFORMANCE.md) | Detailed performance analysis | [🇰🇷](performance/PERFORMANCE_KO.md) | 400+ |
-| [SANITIZER_TEST_RESULTS.md](performance/SANITIZER_TEST_RESULTS.md) | TSan, ASan, UBSan results | [🇰🇷](performance/SANITIZER_TEST_RESULTS_KO.md) | 200+ |
+| [BASELINE.md](performance/BASELINE.md) | 5M containers/s, 2M serialize/s | [🇰🇷](performance/BASELINE.kr.md) | 300+ |
+| [PERFORMANCE.md](performance/PERFORMANCE.md) | Detailed performance analysis | [🇰🇷](performance/PERFORMANCE.kr.md) | 400+ |
+| [SANITIZER_TEST_RESULTS.md](performance/SANITIZER_TEST_RESULTS.md) | TSan, ASan, UBSan results | [🇰🇷](performance/SANITIZER_TEST_RESULTS.kr.md) | 200+ |
 
 ### 🤝 Contributing
 

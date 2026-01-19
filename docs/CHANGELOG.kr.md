@@ -457,7 +457,7 @@ Container System 프로젝트의 모든 주요 변경 사항이 이 파일에 �
 
 ### 1.0.0으로 마이그레이션
 
-자세한 마이그레이션 지침은 [MIGRATION.md](MIGRATION_KO.md)를 참조하세요.
+자세한 마이그레이션 지침은 [MIGRATION.md](MIGRATION.kr.md)를 참조하세요.
 
 #### 빠른 마이그레이션 예제
 

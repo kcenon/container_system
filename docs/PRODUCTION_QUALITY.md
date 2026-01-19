@@ -676,7 +676,7 @@ python scripts/compare_benchmarks.py \
 
 **Language Support**:
 - English (primary)
-- Korean (`*_KO.md` files)
+- Korean (`*.kr.md` files)
 
 ## Security Quality
 

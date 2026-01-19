@@ -166,7 +166,7 @@ container_system/
 ├── 📄 .gitignore
 ├── 📄 LICENSE
 ├── 📄 README.md
-├── 📄 README_KO.md
+├── 📄 README.kr.md
 └── 📄 BASELINE.md
 ```
 
@@ -585,13 +585,13 @@ cmake --build build --config Release
 
 ### 문서 파일
 - **Markdown**: `docs/<TOPIC>.md`
-- **한국어 번역**: `docs/<TOPIC>_KO.md`
+- **한국어 번역**: `docs/<TOPIC>.kr.md`
 
 ## 참고 문서
 
-- [FEATURES.md](FEATURES.md) / [FEATURES_KO.md](FEATURES_KO.md) - 완전한 기능 문서
-- [BENCHMARKS.md](BENCHMARKS.md) / [BENCHMARKS_KO.md](BENCHMARKS_KO.md) - 성능 벤치마크
-- [PRODUCTION_QUALITY.md](PRODUCTION_QUALITY.md) / [PRODUCTION_QUALITY_KO.md](PRODUCTION_QUALITY_KO.md) - 품질 메트릭
+- [FEATURES.md](FEATURES.md) / [FEATURES.kr.md](FEATURES.kr.md) - 완전한 기능 문서
+- [BENCHMARKS.md](BENCHMARKS.md) / [BENCHMARKS.kr.md](BENCHMARKS.kr.md) - 성능 벤치마크
+- [PRODUCTION_QUALITY.md](PRODUCTION_QUALITY.md) / [PRODUCTION_QUALITY.kr.md](PRODUCTION_QUALITY.kr.md) - 품질 메트릭
 - [ARCHITECTURE.md](ARCHITECTURE.md) - 아키텍처 가이드
 - [BUILD_GUIDE.md](guides/BUILD_GUIDE.md) - 상세 빌드 지침
 
