@@ -10,7 +10,128 @@ All rights reserved.
 #include <string>
 #include <vector>
 
+// Disable deprecation warnings for testing legacy factory functions
+#if defined(__clang__) || defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#elif defined(_MSC_VER)
+#pragma warning(push)
+#pragma warning(disable: 4996)
+#endif
+
 using namespace container_module;
+
+// ============================================================================
+// Modern factory API tests (factory::make, factory::make_null)
+// ============================================================================
+
+TEST(ModernFactoryTest, MakeWithBool) {
+    auto v = factory::make("flag", true);
+    EXPECT_EQ(v.name(), "flag");
+    EXPECT_EQ(v.type(), value_types::bool_value);
+    EXPECT_TRUE(v.get<bool>().value());
+}
+
+TEST(ModernFactoryTest, MakeWithInt) {
+    auto v = factory::make("count", 42);
+    EXPECT_EQ(v.name(), "count");
+    EXPECT_EQ(v.type(), value_types::int_value);
+    EXPECT_EQ(v.get<int32_t>().value(), 42);
+}
+
+TEST(ModernFactoryTest, MakeWithInt64) {
+    auto v = factory::make("large", int64_t{1234567890123456LL});
+    EXPECT_EQ(v.type(), value_types::long_value);
+    EXPECT_EQ(v.get<int64_t>().value(), 1234567890123456LL);
+}
+
+TEST(ModernFactoryTest, MakeWithDouble) {
+    auto v = factory::make("pi", 3.14159);
+    EXPECT_EQ(v.type(), value_types::double_value);
+    EXPECT_DOUBLE_EQ(v.get<double>().value(), 3.14159);
+}
+
+TEST(ModernFactoryTest, MakeWithString) {
+    auto v = factory::make("name", std::string("John"));
+    EXPECT_EQ(v.type(), value_types::string_value);
+    EXPECT_EQ(v.get<std::string>().value(), "John");
+}
+
+TEST(ModernFactoryTest, MakeWithBytes) {
+    std::vector<uint8_t> data = {0x01, 0x02, 0x03};
+    auto v = factory::make("binary", data);
+    EXPECT_EQ(v.type(), value_types::bytes_value);
+    EXPECT_EQ(v.get<std::vector<uint8_t>>().value(), data);
+}
+
+TEST(ModernFactoryTest, MakeNull) {
+    auto v = factory::make_null("empty");
+    EXPECT_EQ(v.name(), "empty");
+    EXPECT_EQ(v.type(), value_types::null_value);
+    EXPECT_TRUE(v.is_null());
+}
+
+TEST(ModernFactoryTest, MakeNullWithoutName) {
+    auto v = factory::make_null();
+    EXPECT_EQ(v.name(), "");
+    EXPECT_TRUE(v.is_null());
+}
+
+TEST(ModernFactoryTest, MakeArray) {
+    auto v = factory::make_array("items", {
+        value("a", 1),
+        value("b", std::string("two")),
+        value("c", true)
+    });
+    EXPECT_EQ(v.type(), value_types::array_value);
+
+    auto result = v.get<array_variant>();
+    ASSERT_TRUE(result.has_value());
+    EXPECT_EQ(result.value().values.size(), 3u);
+}
+
+TEST(ModernFactoryTest, MakeEmptyArray) {
+    auto v = factory::make_empty_array("empty");
+    EXPECT_EQ(v.type(), value_types::array_value);
+
+    auto result = v.get<array_variant>();
+    ASSERT_TRUE(result.has_value());
+    EXPECT_TRUE(result.value().values.empty());
+}
+
+TEST(ModernFactoryTest, MakeBytesFromRawPointer) {
+    uint8_t data[] = {0xDE, 0xAD, 0xBE, 0xEF};
+    auto v = factory::make_bytes("raw", data, sizeof(data));
+    EXPECT_EQ(v.type(), value_types::bytes_value);
+
+    auto result = v.get<std::vector<uint8_t>>();
+    ASSERT_TRUE(result.has_value());
+    EXPECT_EQ(result.value().size(), 4u);
+    EXPECT_EQ(result.value()[0], 0xDE);
+}
+
+TEST(ModernFactoryTest, MakeBytesFromString) {
+    auto v = factory::make_bytes_from_string("encoded", "hello");
+    EXPECT_EQ(v.type(), value_types::bytes_value);
+
+    auto result = v.get<std::vector<uint8_t>>();
+    ASSERT_TRUE(result.has_value());
+    EXPECT_EQ(result.value().size(), 5u);
+}
+
+TEST(ModernFactoryTest, DirectConstructorEquivalence) {
+    // Verify that factory::make produces the same result as direct constructor
+    auto v1 = factory::make("test", 42);
+    auto v2 = value("test", 42);
+
+    EXPECT_EQ(v1.name(), v2.name());
+    EXPECT_EQ(v1.type(), v2.type());
+    EXPECT_EQ(v1.get<int32_t>().value(), v2.get<int32_t>().value());
+}
+
+// ============================================================================
+// Legacy factory tests (deprecated but still functional)
+// ============================================================================
 
 // ============================================================================
 // Null value tests
@@ -408,3 +529,10 @@ TEST(VariantValueFactoryTest, NumericBoundaries) {
     EXPECT_EQ(max_uint32.get<uint32_t>().value(), UINT32_MAX);
     EXPECT_EQ(max_int64.get<int64_t>().value(), INT64_MAX);
 }
+
+// Restore warning settings
+#if defined(__clang__) || defined(__GNUC__)
+#pragma GCC diagnostic pop
+#elif defined(_MSC_VER)
+#pragma warning(pop)
+#endif
