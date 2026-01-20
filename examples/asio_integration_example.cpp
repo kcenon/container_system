@@ -115,7 +115,7 @@ public:
                       std::function<void(std::vector<uint8_t>)> callback) {
         // Post work to the strand for thread-safe execution
         asio::post(strand_, [this, container, callback]() {
-            auto serialized = container->serialize_array();
+            auto serialized = container->serialize(value_container::serialization_format::binary).value_or(std::vector<uint8_t>{});
             print_info("Processed container: " + std::to_string(serialized.size()) + " bytes");
             if (callback) {
                 callback(std::move(serialized));
@@ -200,7 +200,7 @@ void demonstrate_scheduled_processing() {
     timer.expires_after(std::chrono::milliseconds(100));
     timer.async_wait([container](const asio::error_code& ec) {
         if (!ec) {
-            auto serialized = container->serialize_array();
+            auto serialized = container->serialize(value_container::serialization_format::binary).value_or(std::vector<uint8_t>{});
             print_success("Timer triggered! Serialized " +
                          std::to_string(serialized.size()) + " bytes");
         }
@@ -239,7 +239,7 @@ void demonstrate_concurrent_processing() {
             container->set("task_id", static_cast<int32_t>(i));
             container->set("data", std::string("Task data " + std::to_string(i)));
 
-            auto serialized = container->serialize_array();
+            auto serialized = container->serialize(value_container::serialization_format::binary).value_or(std::vector<uint8_t>{});
 
             int count = completed_count.fetch_add(1) + 1;
             std::cout << "  Task " << i << " completed (" << count << "/" << total_tasks << ")" << std::endl;
@@ -280,7 +280,7 @@ void demonstrate_message_queue() {
             container->set("seq", static_cast<int32_t>(i));
             container->set("body", std::string("Message " + std::to_string(i)));
 
-            auto serialized = container->serialize_array();
+            auto serialized = container->serialize(value_container::serialization_format::binary).value_or(std::vector<uint8_t>{});
 
             {
                 std::lock_guard<std::mutex> lock(queue_mutex);

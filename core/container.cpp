@@ -110,7 +110,7 @@ namespace container_module
 		{
 			metrics_manager::get().operations.copies.fetch_add(1, std::memory_order_relaxed);
 		}
-		deserialize(other.serialize(), parse_only_header);
+		deserialize(other.serialize_impl(), parse_only_header);
 	}
 
 	value_container::value_container(std::shared_ptr<value_container> other,
@@ -119,7 +119,7 @@ namespace container_module
 	{
 		if (other)
 		{
-			deserialize(other->serialize(), parse_only_header);
+			deserialize(other->serialize_impl(), parse_only_header);
 		}
 	}
 
@@ -216,7 +216,7 @@ namespace container_module
 	std::shared_ptr<value_container> value_container::copy(
 		bool containing_values)
 	{
-		auto newC = std::make_shared<value_container>(serialize(),
+		auto newC = std::make_shared<value_container>(serialize_impl(),
 													  !containing_values);
 		if (!containing_values && newC)
 		{
@@ -724,21 +724,6 @@ namespace container_module
 		result.append(ds);
 
 		return result;
-	}
-
-	std::string value_container::serialize(void) const
-	{
-		return serialize_impl();
-	}
-
-	std::vector<uint8_t> value_container::serialize_array(void) const
-	{
-		auto [arr, err] = convert_string::to_array(serialize_impl());
-		if (!err.empty())
-		{
-			return {};
-		}
-		return arr;
 	}
 
 	bool value_container::deserialize(const std::string& data_str,
@@ -2149,7 +2134,7 @@ void value_container::clear_validation_errors() noexcept
 
 	std::ostream& operator<<(std::ostream& out, value_container& other)
 	{
-		out << other.serialize();
+		out << other.serialize_impl();
 		return out;
 	}
 
@@ -2157,13 +2142,13 @@ void value_container::clear_validation_errors() noexcept
 							 std::shared_ptr<value_container> other)
 	{
 		if (other)
-			out << other->serialize();
+			out << other->serialize_impl();
 		return out;
 	}
 
 	std::string& operator<<(std::string& out, value_container& other)
 	{
-		out = other.serialize();
+		out = other.serialize_impl();
 		return out;
 	}
 
@@ -2171,7 +2156,7 @@ void value_container::clear_validation_errors() noexcept
 							std::shared_ptr<value_container> other)
 	{
 		if (other)
-			out = other->serialize();
+			out = other->serialize_impl();
 		else
 			out.clear();
 		return out;

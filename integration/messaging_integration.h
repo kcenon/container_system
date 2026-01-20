@@ -133,14 +133,6 @@ public:
     messaging_container_builder& message_type(const std::string& type);
 
     /**
-     * @brief Add value using deprecated API
-     * @deprecated Use set() instead for unified API
-     */
-    template<typename T>
-    [[deprecated("Use set() instead")]]
-    messaging_container_builder& add_value(const std::string& key, T&& value);
-
-    /**
      * @brief Set a value by key (unified API)
      * @param key The value key/name
      * @param value The value to store
@@ -188,43 +180,12 @@ messaging_container_builder& messaging_container_builder::set(const std::string&
 
     if constexpr (std::is_same_v<DecayedT, std::shared_ptr<value_container>>) {
         // Handle nested containers by serializing and storing as bytes
-        std::string serialized_data = value->serialize();
-        std::vector<uint8_t> bytes(serialized_data.begin(), serialized_data.end());
-        container_->set(key, bytes);
-    } else if constexpr (std::is_same_v<DecayedT, bool>) {
-        container_->set(key, value);
-    } else if constexpr (concepts::IntegralType<DecayedT>) {
-        if constexpr (sizeof(DecayedT) <= 4) {
-            container_->set(key, static_cast<int32_t>(value));
-        } else {
-            container_->set(key, static_cast<int64_t>(value));
+        auto result = value->serialize_string(value_container::serialization_format::binary);
+        if (result.is_ok()) {
+            std::string serialized_data = result.value();
+            std::vector<uint8_t> bytes(serialized_data.begin(), serialized_data.end());
+            container_->set(key, bytes);
         }
-    } else if constexpr (concepts::FloatingPointType<DecayedT>) {
-        if constexpr (std::is_same_v<DecayedT, float>) {
-            container_->set(key, value);
-        } else {
-            container_->set(key, value);
-        }
-    } else if constexpr (std::is_same_v<DecayedT, std::string>) {
-        container_->set(key, std::string(value));
-    } else if constexpr (concepts::StringLike<DecayedT>) {
-        container_->set(key, std::string(value));
-    }
-
-    return *this;
-}
-
-// Template implementation for add_value (deprecated)
-// Uses concepts to provide clearer error messages for unsupported types
-template<typename T>
-messaging_container_builder& messaging_container_builder::add_value(const std::string& key, T&& value) {
-    using DecayedT = std::decay_t<T>;
-
-    if constexpr (std::is_same_v<DecayedT, std::shared_ptr<value_container>>) {
-        // Handle nested containers by serializing and storing as bytes
-        std::string serialized_data = value->serialize();
-        std::vector<uint8_t> bytes(serialized_data.begin(), serialized_data.end());
-        container_->set(key, bytes);
     } else if constexpr (std::is_same_v<DecayedT, bool>) {
         container_->set(key, value);
     } else if constexpr (concepts::IntegralType<DecayedT>) {
