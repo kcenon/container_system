@@ -132,6 +132,30 @@ namespace error_codes = ::common::error_codes;
 
 namespace container_module
 {
+	// =======================================================================
+	// Unified Getter API Types (Issue #309)
+	// =======================================================================
+
+	/**
+	 * @brief Tag type for zero-copy view access
+	 * @code
+	 * auto view = container.get("key", as_view);
+	 * @endcode
+	 */
+	struct view_tag {};
+
+	/**
+	 * @brief Tag instance for zero-copy view access
+	 */
+	inline constexpr view_tag as_view{};
+
+	/**
+	 * @brief Options for batch get operations
+	 */
+	struct batch_options {
+		bool as_map = false;  ///< Return unordered_map instead of vector
+	};
+
 	/**
 	 * @class value_container
 	 * @brief A high-level container for messages, including source/target IDs,
@@ -274,6 +298,71 @@ namespace container_module
 		[[nodiscard]] bool contains(std::string_view key) const noexcept;
 
 		// =======================================================================
+		// Unified Getter API (Issue #309)
+		// Types (view_tag, as_view, batch_options) are defined at namespace level
+		// =======================================================================
+
+		/**
+		 * @brief Get a single value by key (unified API)
+		 * @param key Value name/key to search for
+		 * @return Optional containing the optimized_value if found, nullopt otherwise
+		 * @exception_safety No-throw guarantee
+		 * @code
+		 * auto value = container.get("key");
+		 * if (value) {
+		 *     // use value
+		 * }
+		 * @endcode
+		 */
+		[[nodiscard]] std::optional<optimized_value> get(std::string_view key) const noexcept;
+
+		/**
+		 * @brief Get a zero-copy view of a value by key (unified API)
+		 * @param key Value name/key to search for
+		 * @param tag Tag dispatch for view access (use as_view)
+		 * @return Optional containing value_view if found and zero-copy mode is enabled
+		 * @note Returns nullopt if not in zero-copy mode or key not found
+		 * @exception_safety No-throw guarantee
+		 * @code
+		 * auto view = container.get("key", as_view);
+		 * if (view) {
+		 *     std::cout << view->as_string();
+		 * }
+		 * @endcode
+		 */
+		[[nodiscard]] std::optional<value_view> get(std::string_view key, view_tag tag) const noexcept;
+
+		/**
+		 * @brief Get multiple values at once (unified API)
+		 * @param keys Span of keys to retrieve
+		 * @param opts Options controlling return type (default: vector)
+		 * @return Vector of optional values in same order as keys (when opts.as_map is false)
+		 *         or Map of found key-value pairs (when opts.as_map is true)
+		 * @exception_safety No-throw guarantee
+		 * @code
+		 * // Get as vector (default)
+		 * auto values = container.get(keys);
+		 *
+		 * // Get as map
+		 * auto map = container.get(keys, {.as_map = true});
+		 * @endcode
+		 */
+		[[nodiscard]] std::vector<std::optional<optimized_value>> get(
+			std::span<const std::string_view> keys,
+			batch_options opts = {}) const noexcept;
+
+		/**
+		 * @brief Get multiple values as a map (unified API)
+		 * @param keys Span of keys to retrieve
+		 * @param opts Options with as_map=true
+		 * @return Map of found key-value pairs
+		 * @exception_safety Strong guarantee
+		 * @note Only includes keys that were found
+		 */
+		[[nodiscard]] std::unordered_map<std::string, optimized_value> get_as_map(
+			std::span<const std::string_view> keys) const;
+
+		// =======================================================================
 		// Batch Operation APIs (Issue #229)
 		// =======================================================================
 
@@ -303,7 +392,9 @@ namespace container_module
 		 * @return Vector of optional values in same order as keys
 		 * @exception_safety No-throw guarantee
 		 * @note Returns nullopt for keys not found
+		 * @deprecated Use get(keys) instead
 		 */
+		[[deprecated("Use get(keys) instead")]]
 		[[nodiscard]] std::vector<std::optional<optimized_value>> get_batch(
 			std::span<const std::string_view> keys) const noexcept;
 
@@ -313,7 +404,9 @@ namespace container_module
 		 * @return Map of found key-value pairs
 		 * @exception_safety Strong guarantee
 		 * @note Only includes keys that were found
+		 * @deprecated Use get_as_map(keys) instead
 		 */
+		[[deprecated("Use get_as_map(keys) instead")]]
 		[[nodiscard]] std::unordered_map<std::string, optimized_value> get_batch_map(
 			std::span<const std::string_view> keys) const;
 
@@ -404,7 +497,9 @@ namespace container_module
 		 * @return Optional containing value_view if found and zero-copy mode is enabled
 		 * @note Returns nullopt if not in zero-copy mode or key not found
 		 * @exception_safety No-throw guarantee
+		 * @deprecated Use get(key, as_view) instead
 		 */
+		[[deprecated("Use get(key, as_view) instead")]]
 		[[nodiscard]] std::optional<value_view> get_view(std::string_view key) const noexcept;
 
 		/**
@@ -499,12 +594,16 @@ namespace container_module
 #endif
 
 		// =======================================================================
+		// Deprecated Getter Methods (Issue #309 - Use unified get() instead)
+		// =======================================================================
 
 		/**
 		 * @brief Get a value as optimized_value (alias for get_value)
 		 * @param key Value name/key to search for
 		 * @return Optional containing the optimized_value if found
+		 * @deprecated Use get(key) instead
 		 */
+		[[deprecated("Use get(key) instead")]]
 		std::optional<optimized_value> get_variant_value(const std::string& key) const noexcept;
 
 		/**
@@ -532,7 +631,9 @@ namespace container_module
 		 * @param name Value name/key to search for
 		 * @return Optional containing the optimized_value if found, nullopt otherwise
 		 * @exception_safety No-throw guarantee
+		 * @deprecated Use get(key) instead
 		 */
+		[[deprecated("Use get(key) instead")]]
 		std::optional<optimized_value> get_value(const std::string& name) const noexcept;
 
 		/**
