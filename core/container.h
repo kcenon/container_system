@@ -249,6 +249,7 @@ namespace container_module
 		std::string target_id(void) const noexcept;
 		std::string target_sub_id(void) const noexcept;
 		std::string message_type(void) const noexcept;
+		std::string version(void) const noexcept;
 
 		// Value management methods
 
@@ -1089,37 +1090,9 @@ namespace container_module
 		void set_unit_impl(const optimized_value& val);
 
 		// =======================================================================
-		// Internal Serialization Implementations (Issue #299)
-		// These are the core implementations used by both legacy and unified APIs.
+		// Internal Deserialization Implementation (Issue #299)
+		// Note: Serialization implementations moved to serializer strategies (Issue #315)
 		// =======================================================================
-
-		/**
-		 * @brief Internal implementation for binary serialization
-		 * @return Serialized string
-		 * @throws std::bad_alloc, std::runtime_error on failure
-		 */
-		std::string serialize_impl() const;
-
-		/**
-		 * @brief Internal implementation for JSON serialization
-		 * @return JSON string
-		 * @throws std::bad_alloc, std::runtime_error on failure
-		 */
-		std::string to_json_impl();
-
-		/**
-		 * @brief Internal implementation for XML serialization
-		 * @return XML string
-		 * @throws std::bad_alloc, std::runtime_error on failure
-		 */
-		std::string to_xml_impl();
-
-		/**
-		 * @brief Internal implementation for MessagePack serialization
-		 * @return MessagePack byte vector
-		 * @throws std::bad_alloc, std::runtime_error on failure
-		 */
-		std::vector<uint8_t> to_msgpack_impl() const;
 
 		/**
 		 * @brief Internal implementation for MessagePack deserialization
