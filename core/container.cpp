@@ -275,6 +275,105 @@ namespace container_module
 	}
 
 	// =======================================================================
+	// Unified Getter API Implementation (Issue #309)
+	// =======================================================================
+
+	std::optional<optimized_value> value_container::get(std::string_view key) const noexcept
+	{
+		// Record metrics if enabled
+		auto timer = metrics_manager::make_timer(
+			metrics_manager::get().read_latency,
+			&metrics_manager::get().timing.total_read_ns);
+		if (metrics_manager::is_enabled())
+		{
+			metrics_manager::get().operations.reads.fetch_add(1, std::memory_order_relaxed);
+		}
+
+		read_lock_guard lock(this);
+
+		for (const auto& val : optimized_units_) {
+			if (val.name == key) {
+				return val;
+			}
+		}
+		return std::nullopt;
+	}
+
+	std::optional<value_view> value_container::get(std::string_view key, view_tag /*tag*/) const noexcept
+	{
+		read_lock_guard lock(this);
+
+		// Zero-copy mode requires raw_data_ptr_ to be valid
+		if (!zero_copy_mode_ || !raw_data_ptr_) {
+			return std::nullopt;
+		}
+
+		// Build index if not already built
+		if (!index_built_) {
+			build_index();
+		}
+
+		// Search in the index
+		if (value_index_) {
+			for (const auto& entry : *value_index_) {
+				if (entry.name == key) {
+					const char* data_ptr = raw_data_ptr_->data();
+					return value_view(
+						entry.name.data(), entry.name.size(),
+						data_ptr + entry.value_offset, entry.value_length,
+						entry.type
+					);
+				}
+			}
+		}
+
+		return std::nullopt;
+	}
+
+	std::vector<std::optional<optimized_value>> value_container::get(
+		std::span<const std::string_view> keys,
+		batch_options /*opts*/) const noexcept
+	{
+		std::vector<std::optional<optimized_value>> results;
+		results.reserve(keys.size());
+
+		read_lock_guard lock(this);
+
+		for (const auto& key : keys) {
+			std::optional<optimized_value> found = std::nullopt;
+			for (const auto& val : optimized_units_) {
+				if (val.name == key) {
+					found = val;
+					break;
+				}
+			}
+			results.push_back(std::move(found));
+		}
+
+		return results;
+	}
+
+	std::unordered_map<std::string, optimized_value> value_container::get_as_map(
+		std::span<const std::string_view> keys) const
+	{
+		std::unordered_map<std::string, optimized_value> results;
+		results.reserve(keys.size());
+
+		read_lock_guard lock(this);
+
+		for (const auto& key : keys) {
+			for (const auto& val : optimized_units_) {
+				if (val.name == key) {
+					results[std::string(key)] = val;
+					break;
+				}
+			}
+		}
+
+		return results;
+	}
+
+	// =======================================================================
 	// MIGRATE-002: variant_value_v2 Support API Implementation
 	// =======================================================================
 
