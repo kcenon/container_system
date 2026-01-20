@@ -107,10 +107,18 @@ set(CORE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/core/value_types.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/core/value_store.h
     ${CMAKE_CURRENT_SOURCE_DIR}/core/value_store.cpp
-    # Serializer strategy pattern (Issue #310, #313)
+    # Serializer strategy pattern (Issue #310, #313, #314)
     ${CMAKE_CURRENT_SOURCE_DIR}/core/serializers/serializer_strategy.h
     ${CMAKE_CURRENT_SOURCE_DIR}/core/serializers/serializer_factory.h
     ${CMAKE_CURRENT_SOURCE_DIR}/core/serializers/serializer_factory.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/core/serializers/binary_serializer.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/core/serializers/binary_serializer.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/core/serializers/json_serializer.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/core/serializers/json_serializer.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/core/serializers/xml_serializer.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/core/serializers/xml_serializer.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/core/serializers/msgpack_serializer.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/core/serializers/msgpack_serializer.cpp
 )
 
 # Legacy value files removed - using variant-based storage only

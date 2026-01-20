@@ -30,54 +30,39 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#include "serializer_factory.h"
-#include "binary_serializer.h"
-#include "json_serializer.h"
 #include "xml_serializer.h"
-#include "msgpack_serializer.h"
+#include "container/core/container.h"
 
 namespace container_module
 {
 
-std::unique_ptr<serializer_strategy>
-serializer_factory::create(serialization_format fmt) noexcept
+#if KCENON_HAS_COMMON_SYSTEM
+kcenon::common::Result<std::vector<uint8_t>>
+xml_serializer::serialize(const value_container& container) const noexcept
 {
-	switch (fmt)
+	try
 	{
-		case serialization_format::binary:
-			return std::make_unique<binary_serializer>();
+		// Delegate to the container's existing serialize_string implementation
+		auto str_result = container.serialize_string(
+			value_container::serialization_format::xml);
+		if (!str_result.is_ok())
+		{
+			return kcenon::common::Result<std::vector<uint8_t>>(str_result.error());
+		}
 
-		case serialization_format::json:
-			return std::make_unique<json_serializer>();
-
-		case serialization_format::xml:
-			return std::make_unique<xml_serializer>();
-
-		case serialization_format::msgpack:
-			return std::make_unique<msgpack_serializer>();
-
-		case serialization_format::auto_detect:
-		case serialization_format::unknown:
-		default:
-			return nullptr;
+		const auto& str = str_result.value();
+		std::vector<uint8_t> result(str.begin(), str.end());
+		return kcenon::common::ok(std::move(result));
+	}
+	catch (const std::exception& e)
+	{
+		return kcenon::common::Result<std::vector<uint8_t>>(
+			kcenon::common::error_info{
+				-1,
+				std::string("XML serialization failed: ") + e.what(),
+				"xml_serializer"});
 	}
 }
-
-bool serializer_factory::is_supported(serialization_format fmt) noexcept
-{
-	switch (fmt)
-	{
-		case serialization_format::binary:
-		case serialization_format::json:
-		case serialization_format::xml:
-		case serialization_format::msgpack:
-			return true;
-
-		case serialization_format::auto_detect:
-		case serialization_format::unknown:
-		default:
-			return false;
-	}
-}
+#endif
 
 } // namespace container_module

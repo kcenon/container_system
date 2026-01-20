@@ -30,54 +30,64 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#include "serializer_factory.h"
-#include "binary_serializer.h"
-#include "json_serializer.h"
-#include "xml_serializer.h"
-#include "msgpack_serializer.h"
+/**
+ * @file core/serializers/binary_serializer.h
+ * @brief Binary format serializer implementation
+ *
+ * Implements the serializer_strategy interface for the custom binary format
+ * (@header{};@data{};). Part of the unified serialization API (Issue #314).
+ */
+
+#pragma once
+
+#include "serializer_strategy.h"
 
 namespace container_module
 {
 
-std::unique_ptr<serializer_strategy>
-serializer_factory::create(serialization_format fmt) noexcept
-{
-	switch (fmt)
+	/**
+	 * @brief Binary format serializer
+	 *
+	 * Serializes value_container to the custom binary format:
+	 * @header{{[key,value];...}};@data{{[key,value];...}};
+	 */
+	class binary_serializer : public serializer_strategy
 	{
-		case serialization_format::binary:
-			return std::make_unique<binary_serializer>();
+	public:
+		binary_serializer() = default;
+		~binary_serializer() override = default;
 
-		case serialization_format::json:
-			return std::make_unique<json_serializer>();
+#if KCENON_HAS_COMMON_SYSTEM
+		/**
+		 * @brief Serialize a value_container to binary format
+		 *
+		 * @param container The container to serialize
+		 * @return Result containing serialized bytes or error
+		 * @exception_safety No-throw guarantee
+		 */
+		[[nodiscard]] kcenon::common::Result<std::vector<uint8_t>>
+			serialize(const value_container& container) const noexcept override;
+#endif
 
-		case serialization_format::xml:
-			return std::make_unique<xml_serializer>();
+		/**
+		 * @brief Get the format this serializer handles
+		 *
+		 * @return serialization_format::binary
+		 */
+		[[nodiscard]] serialization_format format() const noexcept override
+		{
+			return serialization_format::binary;
+		}
 
-		case serialization_format::msgpack:
-			return std::make_unique<msgpack_serializer>();
-
-		case serialization_format::auto_detect:
-		case serialization_format::unknown:
-		default:
-			return nullptr;
-	}
-}
-
-bool serializer_factory::is_supported(serialization_format fmt) noexcept
-{
-	switch (fmt)
-	{
-		case serialization_format::binary:
-		case serialization_format::json:
-		case serialization_format::xml:
-		case serialization_format::msgpack:
-			return true;
-
-		case serialization_format::auto_detect:
-		case serialization_format::unknown:
-		default:
-			return false;
-	}
-}
+		/**
+		 * @brief Get a human-readable name for this serializer
+		 *
+		 * @return "Binary"
+		 */
+		[[nodiscard]] std::string_view name() const noexcept override
+		{
+			return "Binary";
+		}
+	};
 
 } // namespace container_module
