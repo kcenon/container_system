@@ -45,7 +45,8 @@ static void BM_Serialize_Small(benchmark::State& state) {
     c->set("key2", 42);
 
     for (auto _ : state) {
-        auto data = c->serialize();
+        auto result = c->serialize_string(value_container::serialization_format::binary);
+        auto data = result.is_ok() ? result.value() : "";
         benchmark::DoNotOptimize(data);
         state.SetBytesProcessed(data.size());
     }
@@ -59,7 +60,8 @@ static void BM_Serialize_Large(benchmark::State& state) {
     }
 
     for (auto _ : state) {
-        auto data = c->serialize();
+        auto result = c->serialize_string(value_container::serialization_format::binary);
+        auto data = result.is_ok() ? result.value() : "";
         benchmark::DoNotOptimize(data);
         state.SetBytesProcessed(data.size());
     }
@@ -71,7 +73,8 @@ static void BM_Deserialize(benchmark::State& state) {
     for (int i = 0; i < 100; ++i) {
         c->set("key_" + std::to_string(i), i);
     }
-    auto data = c->serialize();
+    auto result = c->serialize_string(value_container::serialization_format::binary);
+    auto data = result.is_ok() ? result.value() : "";
 
     for (auto _ : state) {
         auto deserialized = std::make_shared<value_container>(data);
@@ -86,7 +89,8 @@ static void BM_SerializeDeserialize_RoundTrip(benchmark::State& state) {
         auto c = std::make_shared<value_container>();
         c->set("test", std::string("data"));
 
-        auto data = c->serialize();
+        auto result = c->serialize_string(value_container::serialization_format::binary);
+        auto data = result.is_ok() ? result.value() : "";
         auto c2 = std::make_shared<value_container>(data);
 
         benchmark::DoNotOptimize(c2);

@@ -82,7 +82,8 @@ std::string messaging_integration::serialize_for_messaging(
     auto start = std::chrono::high_resolution_clock::now();
 #endif
 
-    std::string result = container->serialize();
+    auto serialize_result = container->serialize_string(value_container::serialization_format::binary);
+    std::string result = serialize_result.is_ok() ? serialize_result.value() : "";
 
     // TODO: Add compression support when ENABLE_COMPRESSION is available
     if (compress) {

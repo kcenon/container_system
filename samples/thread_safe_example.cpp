@@ -157,7 +157,8 @@ int main() {
     std::string serialized;
     {
         std::lock_guard<std::mutex> lock(container_mutex);
-        serialized = container->serialize();
+        auto result = container->serialize_string(value_container::serialization_format::binary);
+        serialized = result.is_ok() ? result.value() : "";
     }
 
     std::cout << "Container serialized successfully" << std::endl;

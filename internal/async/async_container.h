@@ -898,7 +898,8 @@ namespace container_module::async
     {
         auto container = container_;
         auto result = co_await detail::make_async_awaitable([container]() {
-            return container->serialize_array();
+            auto serialize_result = container->serialize(serialization_format::binary);
+            return serialize_result.is_ok() ? serialize_result.value() : std::vector<uint8_t>{};
         });
         co_return result;
     }
@@ -908,7 +909,8 @@ namespace container_module::async
     {
         auto container = container_;
         auto result = co_await detail::make_async_awaitable([container]() {
-            return container->serialize();
+            auto serialize_result = container->serialize_string(serialization_format::binary);
+            return serialize_result.is_ok() ? serialize_result.value() : std::string{};
         });
         co_return result;
     }
@@ -986,7 +988,11 @@ namespace container_module::async
         std::string path_str(path);
         auto result = co_await detail::make_async_awaitable(
             [container, path_str, callback]() {
-                auto data = container->serialize_array();
+                auto serialize_result = container->serialize(serialization_format::binary);
+                if (!serialize_result.is_ok()) {
+                    return false;
+                }
+                auto data = serialize_result.value();
                 if (data.empty()) {
                     return false;
                 }
@@ -1100,7 +1106,11 @@ namespace container_module::async
     inline generator<std::vector<uint8_t>>
         async_container::serialize_chunked(size_t chunk_size) const
     {
-        auto full_data = container_->serialize_array();
+        auto serialize_result = container_->serialize(serialization_format::binary);
+        if (!serialize_result.is_ok()) {
+            co_return;
+        }
+        auto full_data = serialize_result.value();
         if (full_data.empty()) {
             co_return;
         }

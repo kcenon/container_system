@@ -71,7 +71,8 @@ int main() {
     // 4. Container serialization
     std::cout << "\n4. Serialization:" << std::endl;
 
-    std::string serialized = container->serialize();
+    auto serialize_result = container->serialize_string(value_container::serialization_format::binary);
+    std::string serialized = serialize_result.is_ok() ? serialize_result.value() : "";
     std::cout << "Serialized container size: " << serialized.length() << " bytes" << std::endl;
 
     // 5. Container deserialization

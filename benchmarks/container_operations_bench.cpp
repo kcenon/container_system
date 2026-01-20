@@ -86,7 +86,8 @@ static void BM_Container_Clone(benchmark::State& state) {
     }
 
     for (auto _ : state) {
-        auto serialized = c->serialize();
+        auto result = c->serialize_string(value_container::serialization_format::binary);
+        auto serialized = result.is_ok() ? result.value() : "";
         auto cloned = std::make_shared<value_container>(serialized);
         benchmark::DoNotOptimize(cloned);
     }

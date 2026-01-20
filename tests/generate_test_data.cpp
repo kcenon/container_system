@@ -93,7 +93,8 @@ int main() {
     cont->add(nested);
 
     // Serialize to file
-    auto serialized = cont->serialize_array();
+    auto serialize_result = cont->serialize(value_container::serialization_format::binary);
+    auto serialized = serialize_result.is_ok() ? serialize_result.value() : std::vector<uint8_t>{};
 
     std::ofstream outfile("test_data_cpp.bin", std::ios::binary);
     if (!outfile) {
@@ -111,7 +112,8 @@ int main() {
     auto simple = std::make_shared<value_container>();
     simple->set_message_type("simple_test");
     simple->set("timestamp", 1234567890L);
-    auto simple_data = simple->serialize_array();
+    auto simple_result = simple->serialize(value_container::serialization_format::binary);
+    auto simple_data = simple_result.is_ok() ? simple_result.value() : std::vector<uint8_t>{};
 
     std::ofstream simple_file("test_data_cpp_simple.bin", std::ios::binary);
     simple_file.write(reinterpret_cast<const char*>(simple_data.data()), simple_data.size());

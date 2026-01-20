@@ -540,56 +540,6 @@ namespace container_module
 		 */
 		void initialize(void);
 
-		// =======================================================================
-		// Core Serialization API
-		// Note: These methods are deprecated but still required internally
-		// (used by constructors). They cannot be conditionally excluded.
-		// Use the Result-based API (serialize_result, etc.) for new code.
-		// =======================================================================
-
-		/**
-		 * @brief Serialize this container (header + data).
-		 * @return The string form.
-		 * @exception_safety Strong guarantee - no changes on exception
-		 * @throws std::bad_alloc if memory allocation fails
-		 * @throws std::runtime_error if value cannot be serialized
-		 * @deprecated Use serialize_result() instead for Result-based error handling
-		 */
-		[[deprecated("Use serialize_result() instead for Result-based error handling")]]
-		std::string serialize(void) const;
-
-		/**
-		 * @brief Serialize to a raw byte array.
-		 * @exception_safety Strong guarantee - no changes on exception
-		 * @throws std::bad_alloc if memory allocation fails
-		 * @throws std::runtime_error if value cannot be serialized
-		 * @deprecated Use serialize_array_result() instead for Result-based error handling
-		 */
-		[[deprecated("Use serialize_array_result() instead for Result-based error handling")]]
-		std::vector<uint8_t> serialize_array(void) const;
-
-		/**
-		 * @brief Deserialize from string. If parse_only_header is true, child
-		 * values are not fully parsed yet.
-		 * @exception_safety Basic guarantee - container may be partially modified
-		 * @return true on success, false on parse error (no exceptions thrown)
-		 * @deprecated Use deserialize_result() instead for Result-based error handling
-		 */
-		[[deprecated("Use deserialize_result() instead for Result-based error handling")]]
-		bool deserialize(const std::string& data_string,
-					 bool parse_only_header = true);
-
-		/**
-		 * @brief Deserialize from a raw byte array. If parse_only_header is
-		 * true, child values are not fully parsed.
-		 * @exception_safety Basic guarantee - container may be partially modified
-		 * @return true on success, false on parse error (no exceptions thrown)
-		 * @deprecated Use deserialize_result() instead for Result-based error handling
-		 */
-		[[deprecated("Use deserialize_result() instead for Result-based error handling")]]
-		bool deserialize(const std::vector<uint8_t>& data_array,
-					 bool parse_only_header = true);
-
 #if KCENON_HAS_COMMON_SYSTEM
 		/**
 		 * @brief Deserialize returning common_system result to carry error context.
@@ -1000,6 +950,29 @@ namespace container_module
 	/** @} */
 
 	private:
+		// =======================================================================
+		// Internal Deserialization Methods
+		// Used by constructors - not part of public API
+		// =======================================================================
+
+		/**
+		 * @brief Internal deserialize from string
+		 * @param data_string Serialized data string
+		 * @param parse_only_header If true, only parse header (lazy parsing)
+		 * @return true on success, false on parse error
+		 */
+		bool deserialize(const std::string& data_string,
+						 bool parse_only_header = true);
+
+		/**
+		 * @brief Internal deserialize from byte array
+		 * @param data_array Serialized data as bytes
+		 * @param parse_only_header If true, only parse header (lazy parsing)
+		 * @return true on success, false on parse error
+		 */
+		bool deserialize(const std::vector<uint8_t>& data_array,
+						 bool parse_only_header = true);
+
 		bool deserialize_values(const std::string& data,
 								bool parse_only_header);
 		void parsing(std::string_view source_name,

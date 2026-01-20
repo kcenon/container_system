@@ -12,6 +12,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Breaking Changes
+- **Remove Deprecated Serialization Methods** (#307): Complete removal of deprecated serialization API
+  - **BREAKING**: Remove `serialize()` (void return) - Use `serialize_string(serialization_format::binary)` instead
+  - **BREAKING**: Remove `serialize_array()` - Use `serialize(serialization_format::binary)` instead
+  - **BREAKING**: Remove public `deserialize(string)` and `deserialize(vector<uint8_t>)` - Use `deserialize_result()` instead
+  - **BREAKING**: Remove deprecated `add_value()` from `messaging_container_builder` - Use `set()` instead
+  - Internal `deserialize()` methods moved to private (used by constructors)
+  - Update internal usages: ostream operators now use `serialize_impl()`
+  - Update samples, examples, and benchmarks to use Result-based API
+  - Async container operations now use `serialize(format)` / `serialize_string(format)`
+
 - **Enable CONTAINER_NO_LEGACY_API by Default** (#305): Remove deprecated serialization methods
   - **BREAKING**: `CONTAINER_NO_LEGACY_API` is now enabled by default in CMakeLists.txt
   - **Migration Required**: If you use deprecated methods, set `CONTAINER_LEGACY_API=ON` in CMake, or migrate to unified API

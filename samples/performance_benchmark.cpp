@@ -83,7 +83,8 @@ private:
 
             // Benchmark serialization
             auto start = std::chrono::high_resolution_clock::now();
-            std::string serialized = container->serialize();
+            auto result = container->serialize_string(value_container::serialization_format::binary);
+            std::string serialized = result.is_ok() ? result.value() : "";
             auto end = std::chrono::high_resolution_clock::now();
 
             auto serialize_duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
