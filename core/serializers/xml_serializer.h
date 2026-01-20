@@ -67,6 +67,15 @@ namespace container_module
 		 */
 		[[nodiscard]] kcenon::common::Result<std::vector<uint8_t>>
 			serialize(const value_container& container) const noexcept override;
+
+		/**
+		 * @brief Serialize a value_container to XML string format
+		 *
+		 * @param container The container to serialize
+		 * @return Serialized XML string
+		 * @throws std::bad_alloc on memory allocation failure
+		 */
+		[[nodiscard]] std::string serialize_to_string(const value_container& container) const;
 #endif
 
 		/**

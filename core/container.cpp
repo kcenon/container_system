@@ -38,6 +38,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "container/core/value_types.h"
 #include "container/internal/value.h"
 #include "container/internal/pool_allocator.h"
+#include "container/core/serializers/serializer_factory.h"
+#include "container/core/serializers/binary_serializer.h"
+#include "container/core/serializers/json_serializer.h"
+#include "container/core/serializers/xml_serializer.h"
+#include "container/core/serializers/msgpack_serializer.h"
 // Legacy value includes removed - using variant-based storage only
 
 #include <fcntl.h>
@@ -110,7 +115,8 @@ namespace container_module
 		{
 			metrics_manager::get().operations.copies.fetch_add(1, std::memory_order_relaxed);
 		}
-		deserialize(other.serialize_impl(), parse_only_header);
+		binary_serializer serializer;
+		deserialize(serializer.serialize_to_string(other), parse_only_header);
 	}
 
 	value_container::value_container(std::shared_ptr<value_container> other,
@@ -119,7 +125,8 @@ namespace container_module
 	{
 		if (other)
 		{
-			deserialize(other->serialize_impl(), parse_only_header);
+			binary_serializer serializer;
+			deserialize(serializer.serialize_to_string(*other), parse_only_header);
 		}
 	}
 
@@ -216,7 +223,8 @@ namespace container_module
 	std::shared_ptr<value_container> value_container::copy(
 		bool containing_values)
 	{
-		auto newC = std::make_shared<value_container>(serialize_impl(),
+		binary_serializer serializer;
+		auto newC = std::make_shared<value_container>(serializer.serialize_to_string(*this),
 													  !containing_values);
 		if (!containing_values && newC)
 		{
@@ -251,6 +259,12 @@ namespace container_module
 	{
 		std::shared_lock<std::shared_mutex> lock(mutex_);
 		return message_type_;
+	}
+
+	std::string value_container::version(void) const noexcept
+	{
+		std::shared_lock<std::shared_mutex> lock(mutex_);
+		return version_;
 	}
 
 	std::optional<optimized_value> value_container::get_value(const std::string& name) const noexcept
@@ -774,56 +788,9 @@ namespace container_module
 		clear_value();
 	}
 
-	// =======================================================================
-	// Internal Serialization Implementations (Issue #299)
-	// =======================================================================
-
-	std::string value_container::serialize_impl() const
-	{
-		// Record metrics if enabled
-		auto timer = metrics_manager::make_timer(
-			metrics_manager::get().serialize_latency,
-			&metrics_manager::get().timing.total_serialize_ns);
-		if (metrics_manager::is_enabled())
-		{
-			metrics_manager::get().operations.serializations.fetch_add(1, std::memory_order_relaxed);
-		}
-
-		std::shared_lock<std::shared_mutex> lock(mutex_);
-
-		// If everything parsed, just rebuild data
-		std::string ds = (parsed_data_ ? datas() : data_string_);
-
-		// Compose header with pre-allocated buffer to reduce reallocations
-		// Estimate: header is typically ~150 bytes, reserve more to be safe
-		std::string result;
-		result.reserve(200 + ds.size());
-
-		// Note: In fmt library, {{}} produces single {}, so {{{{}}}} produces {{}}
-		formatter::format_to(std::back_inserter(result), "@header={{{{");
-
-		if (message_type_ != "data_container")
-		{
-			formatter::format_to(std::back_inserter(result), "[{},{}];",
-								 TARGET_ID, target_id_);
-			formatter::format_to(std::back_inserter(result), "[{},{}];",
-								 TARGET_SUB_ID, target_sub_id_);
-			formatter::format_to(std::back_inserter(result), "[{},{}];",
-								 SOURCE_ID, source_id_);
-			formatter::format_to(std::back_inserter(result), "[{},{}];",
-								 SOURCE_SUB_ID, source_sub_id_);
-		}
-		formatter::format_to(std::back_inserter(result), "[{},{}];",
-							 MESSAGE_TYPE, message_type_);
-		formatter::format_to(std::back_inserter(result), "[{},{}];",
-							 MESSAGE_VERSION, version_);
-		formatter::format_to(std::back_inserter(result), "}}}};");
-
-		// Append data section directly (avoids string concatenation copy)
-		result.append(ds);
-
-		return result;
-	}
+	// Note: serialize_impl() removed in Issue #315
+	// Serialization logic moved to binary_serializer strategy class
+	// See: core/serializers/binary_serializer.cpp
 
 	bool value_container::deserialize(const std::string& data_str,
 									  bool parse_only_header)
@@ -1306,288 +1273,15 @@ void value_container::clear_validation_errors() noexcept
 	}
 #endif
 
-	// =======================================================================
-	// Internal Format Conversion Implementations (Issue #299)
-	// =======================================================================
-
-	std::string value_container::to_xml_impl()
-	{
-		std::unique_lock<std::shared_mutex> lock(mutex_);
-
-		if (!parsed_data_)
-		{
-			deserialize_values(data_string_, false);
-		}
-		std::string result;
-		formatter::format_to(std::back_inserter(result), "<container>");
-		formatter::format_to(std::back_inserter(result), "<header>");
-		if (message_type_ != "data_container")
-		{
-			formatter::format_to(std::back_inserter(result),
-								 "<target_id>{}</target_id>",
-								 variant_helpers::xml_encode(target_id_));
-			formatter::format_to(std::back_inserter(result),
-								 "<target_sub_id>{}</target_sub_id>",
-								 variant_helpers::xml_encode(target_sub_id_));
-			formatter::format_to(std::back_inserter(result),
-								 "<source_id>{}</source_id>",
-								 variant_helpers::xml_encode(source_id_));
-			formatter::format_to(std::back_inserter(result),
-								 "<source_sub_id>{}</source_sub_id>",
-								 variant_helpers::xml_encode(source_sub_id_));
-		}
-		formatter::format_to(std::back_inserter(result),
-							 "<message_type>{}</message_type>",
-							 variant_helpers::xml_encode(message_type_));
-		formatter::format_to(std::back_inserter(result),
-							 "<version>{}</version>",
-							 variant_helpers::xml_encode(version_));
-		formatter::format_to(std::back_inserter(result), "</header>");
-
-		formatter::format_to(std::back_inserter(result), "<values>");
-		for (auto& u : optimized_units_)
-		{
-			std::string value_str = variant_helpers::to_string(u.data, u.type);
-			formatter::format_to(std::back_inserter(result), "<{}>{}</{}>",
-								 u.name, variant_helpers::xml_encode(value_str),
-								 u.name);
-		}
-		formatter::format_to(std::back_inserter(result), "</values>");
-		formatter::format_to(std::back_inserter(result), "</container>");
-		return result;
-	}
-
-	std::string value_container::to_json_impl()
-	{
-		std::unique_lock<std::shared_mutex> lock(mutex_);
-
-		if (!parsed_data_)
-		{
-			deserialize_values(data_string_, false);
-		}
-		std::string result;
-		formatter::format_to(std::back_inserter(result), "{{");
-		// header
-		formatter::format_to(std::back_inserter(result), "\"header\":{{");
-		if (message_type_ != "data_container")
-		{
-			formatter::format_to(std::back_inserter(result),
-								 "\"target_id\":\"{}\",",
-								 variant_helpers::json_escape(target_id_));
-			formatter::format_to(std::back_inserter(result),
-								 "\"target_sub_id\":\"{}\",",
-								 variant_helpers::json_escape(target_sub_id_));
-			formatter::format_to(std::back_inserter(result),
-								 "\"source_id\":\"{}\",",
-								 variant_helpers::json_escape(source_id_));
-			formatter::format_to(std::back_inserter(result),
-								 "\"source_sub_id\":\"{}\",",
-								 variant_helpers::json_escape(source_sub_id_));
-		}
-		formatter::format_to(std::back_inserter(result),
-							 "\"message_type\":\"{}\"",
-							 variant_helpers::json_escape(message_type_));
-		formatter::format_to(std::back_inserter(result), ",\"version\":\"{}\"",
-							 variant_helpers::json_escape(version_));
-		formatter::format_to(std::back_inserter(result),
-							 "}},"); // end header
-
-		// values
-		formatter::format_to(std::back_inserter(result), "\"values\":{{");
-		bool first = true;
-		for (auto& u : optimized_units_)
-		{
-			if (!first)
-			{
-				formatter::format_to(std::back_inserter(result), ",");
-			}
-			std::string value_str = variant_helpers::to_string(u.data, u.type);
-			std::string escaped_name = variant_helpers::json_escape(u.name);
-
-			// String and bytes values need quotes
-			if (u.type == value_types::string_value || u.type == value_types::bytes_value)
-			{
-				std::string escaped_value = variant_helpers::json_escape(value_str);
-				formatter::format_to(std::back_inserter(result), "\"{}\":\"{}\"",
-									 escaped_name, escaped_value);
-			}
-			else
-			{
-				formatter::format_to(std::back_inserter(result), "\"{}\":{}",
-									 escaped_name, value_str);
-			}
-			first = false;
-		}
-		formatter::format_to(std::back_inserter(result),
-							 "}}"); // end values
-		formatter::format_to(std::back_inserter(result), "}}");
-		return result;
-	}
+	// Note: to_xml_impl(), to_json_impl(), to_msgpack_impl() removed in Issue #315
+	// Serialization logic moved to respective serializer strategy classes:
+	// - core/serializers/xml_serializer.cpp
+	// - core/serializers/json_serializer.cpp
+	// - core/serializers/msgpack_serializer.cpp
 
 	// =======================================================================
-	// MessagePack Internal Implementation (Issue #234, #299)
+	// MessagePack Internal Deserialization Implementation (Issue #234, #299)
 	// =======================================================================
-
-	std::vector<uint8_t> value_container::to_msgpack_impl() const
-	{
-		// Record metrics if enabled
-		auto timer = metrics_manager::make_timer(
-			metrics_manager::get().serialize_latency,
-			&metrics_manager::get().timing.total_serialize_ns);
-		if (metrics_manager::is_enabled())
-		{
-			metrics_manager::get().operations.serializations.fetch_add(1, std::memory_order_relaxed);
-		}
-
-		std::shared_lock<std::shared_mutex> lock(mutex_);
-
-		msgpack_encoder encoder;
-
-		// Estimate buffer size: header (~100 bytes) + values
-		encoder.reserve(200 + optimized_units_.size() * 32);
-
-		// MessagePack structure:
-		// {
-		//   "header": { ... },
-		//   "values": { ... }
-		// }
-
-		// Write outer map with 2 entries (header + values)
-		encoder.write_map_header(2);
-
-		// Write "header" key
-		encoder.write_string("header");
-
-		// Calculate header entries count
-		size_t header_count = 2; // message_type and version are always present
-		if (message_type_ != "data_container")
-		{
-			header_count += 4; // target_id, target_sub_id, source_id, source_sub_id
-		}
-
-		// Write header map
-		encoder.write_map_header(header_count);
-
-		if (message_type_ != "data_container")
-		{
-			encoder.write_string("target_id");
-			encoder.write_string(target_id_);
-
-			encoder.write_string("target_sub_id");
-			encoder.write_string(target_sub_id_);
-
-			encoder.write_string("source_id");
-			encoder.write_string(source_id_);
-
-			encoder.write_string("source_sub_id");
-			encoder.write_string(source_sub_id_);
-		}
-
-		encoder.write_string("message_type");
-		encoder.write_string(message_type_);
-
-		encoder.write_string("version");
-		encoder.write_string(version_);
-
-		// Write "values" key
-		encoder.write_string("values");
-
-		// Write values map
-		encoder.write_map_header(optimized_units_.size());
-
-		for (const auto& unit : optimized_units_)
-		{
-			// Write key
-			encoder.write_string(unit.name);
-
-			// Write value based on type
-			switch (unit.type)
-			{
-			case value_types::null_value:
-				encoder.write_nil();
-				break;
-
-			case value_types::bool_value:
-				encoder.write_bool(std::get<bool>(unit.data));
-				break;
-
-			case value_types::short_value:
-				encoder.write_int(std::get<short>(unit.data));
-				break;
-
-			case value_types::ushort_value:
-				encoder.write_uint(std::get<unsigned short>(unit.data));
-				break;
-
-			case value_types::int_value:
-				encoder.write_int(std::get<int>(unit.data));
-				break;
-
-			case value_types::uint_value:
-				encoder.write_uint(std::get<unsigned int>(unit.data));
-				break;
-
-			case value_types::long_value:
-				encoder.write_int(std::get<long>(unit.data));
-				break;
-
-			case value_types::ulong_value:
-				encoder.write_uint(std::get<unsigned long>(unit.data));
-				break;
-
-			case value_types::llong_value:
-				encoder.write_int(std::get<long long>(unit.data));
-				break;
-
-			case value_types::ullong_value:
-				encoder.write_uint(std::get<unsigned long long>(unit.data));
-				break;
-
-			case value_types::float_value:
-				encoder.write_float(std::get<float>(unit.data));
-				break;
-
-			case value_types::double_value:
-				encoder.write_double(std::get<double>(unit.data));
-				break;
-
-			case value_types::string_value:
-				encoder.write_string(std::get<std::string>(unit.data));
-				break;
-
-			case value_types::bytes_value:
-				encoder.write_binary(std::get<std::vector<uint8_t>>(unit.data));
-				break;
-
-			case value_types::container_value:
-				{
-					// Nested container: serialize recursively
-					auto nested = std::get<std::shared_ptr<value_container>>(unit.data);
-					if (nested)
-					{
-						auto nested_data = nested->to_msgpack_impl();
-						encoder.write_binary(nested_data);
-					}
-					else
-					{
-						encoder.write_nil();
-					}
-				}
-				break;
-
-			case value_types::array_value:
-				// Array values are stored as containers
-				encoder.write_nil();
-				break;
-
-			default:
-				encoder.write_nil();
-				break;
-			}
-		}
-
-		return encoder.finish();
-	}
 
 	bool value_container::from_msgpack_impl(const std::vector<uint8_t>& data)
 	{
@@ -1884,96 +1578,75 @@ void value_container::clear_validation_errors() noexcept
 	kcenon::common::Result<std::vector<uint8_t>> value_container::serialize(
 		serialization_format fmt) const noexcept
 	{
-		try
+		// Record metrics if enabled
+		auto timer = metrics_manager::make_timer(
+			metrics_manager::get().serialize_latency,
+			&metrics_manager::get().timing.total_serialize_ns);
+		if (metrics_manager::is_enabled())
 		{
-			switch (fmt)
-			{
-			case serialization_format::binary:
-			{
-				auto [arr, err] = convert_string::to_array(serialize_impl());
-				if (!err.empty())
-				{
-					return kcenon::common::Result<std::vector<uint8_t>>(
-						kcenon::common::error_info{
-							error_codes::encoding_error,
-							std::string("Encoding error: ") + err,
-							"container_system"});
-				}
-				return kcenon::common::ok(std::move(arr));
-			}
-			case serialization_format::json:
-			{
-				// Cast away const for to_json_impl (it modifies internal state)
-				auto* mutable_this = const_cast<value_container*>(this);
-				auto str = mutable_this->to_json_impl();
-				return kcenon::common::ok(std::vector<uint8_t>(str.begin(), str.end()));
-			}
-			case serialization_format::xml:
-			{
-				// Cast away const for to_xml_impl (it modifies internal state)
-				auto* mutable_this = const_cast<value_container*>(this);
-				auto str = mutable_this->to_xml_impl();
-				return kcenon::common::ok(std::vector<uint8_t>(str.begin(), str.end()));
-			}
-			case serialization_format::msgpack:
-			{
-				auto data = to_msgpack_impl();
-				return kcenon::common::ok(std::move(data));
-			}
-			case serialization_format::auto_detect:
-			case serialization_format::unknown:
-			default:
-				return kcenon::common::Result<std::vector<uint8_t>>(
-					kcenon::common::error_info{
-						error_codes::invalid_format,
-						"Cannot serialize with auto_detect or unknown format",
-						"container_system"});
-			}
+			metrics_manager::get().operations.serializations.fetch_add(1, std::memory_order_relaxed);
 		}
-		catch (const std::bad_alloc&)
+
+		// Convert internal format enum to serializer format enum
+		auto serializer_fmt = static_cast<container_module::serialization_format>(
+			static_cast<int>(fmt));
+
+		// Use serializer factory to create appropriate serializer
+		auto serializer = serializer_factory::create(serializer_fmt);
+		if (!serializer)
 		{
 			return kcenon::common::Result<std::vector<uint8_t>>(
 				kcenon::common::error_info{
-					error_codes::memory_allocation_failed,
-					error_codes::make_message(error_codes::memory_allocation_failed),
+					error_codes::invalid_format,
+					"Cannot serialize with auto_detect or unknown format",
 					"container_system"});
 		}
-		catch (const std::exception& e)
-		{
-			return kcenon::common::Result<std::vector<uint8_t>>(
-				kcenon::common::error_info{
-					error_codes::serialization_failed,
-					std::string("Serialization failed: ") + e.what(),
-					"container_system"});
-		}
+
+		return serializer->serialize(*this);
 	}
 
 	kcenon::common::Result<std::string> value_container::serialize_string(
 		serialization_format fmt) const noexcept
 	{
+		// Record metrics if enabled
+		auto timer = metrics_manager::make_timer(
+			metrics_manager::get().serialize_latency,
+			&metrics_manager::get().timing.total_serialize_ns);
+		if (metrics_manager::is_enabled())
+		{
+			metrics_manager::get().operations.serializations.fetch_add(1, std::memory_order_relaxed);
+		}
+
 		try
 		{
+			// Use format-specific serializers with serialize_to_string
 			switch (fmt)
 			{
 			case serialization_format::binary:
 			{
-				return kcenon::common::ok(serialize_impl());
+				binary_serializer serializer;
+				return kcenon::common::ok(serializer.serialize_to_string(*this));
 			}
 			case serialization_format::json:
 			{
-				// Cast away const for to_json_impl (it modifies internal state)
-				auto* mutable_this = const_cast<value_container*>(this);
-				return kcenon::common::ok(mutable_this->to_json_impl());
+				json_serializer serializer;
+				return kcenon::common::ok(serializer.serialize_to_string(*this));
 			}
 			case serialization_format::xml:
 			{
-				// Cast away const for to_xml_impl (it modifies internal state)
-				auto* mutable_this = const_cast<value_container*>(this);
-				return kcenon::common::ok(mutable_this->to_xml_impl());
+				xml_serializer serializer;
+				return kcenon::common::ok(serializer.serialize_to_string(*this));
 			}
 			case serialization_format::msgpack:
 			{
-				auto bytes = to_msgpack_impl();
+				// MessagePack is binary format, convert to string
+				msgpack_serializer serializer;
+				auto result = serializer.serialize(*this);
+				if (!result.is_ok())
+				{
+					return kcenon::common::Result<std::string>(result.error());
+				}
+				const auto& bytes = result.value();
 				return kcenon::common::ok(std::string(bytes.begin(), bytes.end()));
 			}
 			case serialization_format::auto_detect:
@@ -2233,7 +1906,8 @@ void value_container::clear_validation_errors() noexcept
 
 	std::ostream& operator<<(std::ostream& out, value_container& other)
 	{
-		out << other.serialize_impl();
+		binary_serializer serializer;
+		out << serializer.serialize_to_string(other);
 		return out;
 	}
 
@@ -2241,13 +1915,17 @@ void value_container::clear_validation_errors() noexcept
 							 std::shared_ptr<value_container> other)
 	{
 		if (other)
-			out << other->serialize_impl();
+		{
+			binary_serializer serializer;
+			out << serializer.serialize_to_string(*other);
+		}
 		return out;
 	}
 
 	std::string& operator<<(std::string& out, value_container& other)
 	{
-		out = other.serialize_impl();
+		binary_serializer serializer;
+		out = serializer.serialize_to_string(other);
 		return out;
 	}
 
@@ -2255,7 +1933,10 @@ void value_container::clear_validation_errors() noexcept
 							std::shared_ptr<value_container> other)
 	{
 		if (other)
-			out = other->serialize_impl();
+		{
+			binary_serializer serializer;
+			out = serializer.serialize_to_string(*other);
+		}
 		else
 			out.clear();
 		return out;
