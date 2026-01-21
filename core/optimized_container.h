@@ -17,6 +17,24 @@ namespace container_module {
  * @class optimized_container
  * @brief Performance-optimized value_container with zero-copy operations
  *
+ * @deprecated Use `basic_value_container<indexed_storage_policy>` (alias: `fast_policy_container`)
+ *             from `policy_container.h` instead. This class will be removed in the next major version.
+ *
+ * Migration example:
+ * @code
+ * // Old code:
+ * optimized_container oc;
+ * oc.get_value_fast("key");
+ *
+ * // New code:
+ * #include "core/policy_container.h"
+ * fast_policy_container fc;  // or: basic_value_container<indexed_storage_policy>
+ * fc.get("key");
+ * @endcode
+ *
+ * @see basic_value_container<indexed_storage_policy> for the replacement
+ * @see Issue #320, #328 for migration details
+ *
  * Improvements over value_container:
  * - std::string_view for accessors (zero-copy)
  * - Move semantics for all modifiers
@@ -44,6 +62,7 @@ namespace container_module {
  * auto value = container.get_value_fast("key");  // O(1) instead of O(n)
  * @endcode
  */
+[[deprecated("Use fast_policy_container (basic_value_container<indexed_storage_policy>) from policy_container.h instead. See Issue #328 for migration guide.")]]
 class optimized_container : public value_container {
 public:
     using value_container::value_container;

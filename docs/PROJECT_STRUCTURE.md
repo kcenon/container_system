@@ -14,7 +14,8 @@ container_system/
 │   ├── concepts.h                  # C++20 concepts for type validation (NEW)
 │   ├── container.h                 # Main container class
 │   ├── container.cpp               # Container implementation
-│   ├── typed_container.h           # SIMD-friendly typed container (uses TriviallyCopyable concept)
+│   ├── simd_batch.h                # SIMD-friendly batch container (renamed from typed_container, uses TriviallyCopyable concept)
+│   ├── typed_container.h           # Deprecated: redirects to simd_batch.h
 │   ├── value_types.h               # Value type enumerations
 │   ├── value_types.cpp             # Value type implementation
 │   ├── value_store.h               # Value storage abstraction
@@ -201,7 +202,7 @@ using namespace container_module::concepts;
 
 // Using TriviallyCopyable for SIMD-friendly containers
 template<TriviallyCopyable TValue>
-class typed_container { /* ... */ };
+class simd_batch { /* ... */ };  // Renamed from typed_container (Issue #328)
 
 // Using KeyValueCallback for iteration
 template<KeyValueCallback Func>
@@ -209,7 +210,7 @@ void for_each(Func&& func) const;
 ```
 
 **Integration Points**:
-- `typed_container.h` - Uses `TriviallyCopyable` concept
+- `simd_batch.h` - Uses `TriviallyCopyable` concept
 - `thread_safe_container.h` - Uses `KeyValueCallback`, `MutableKeyValueCallback`, `ValueMapCallback`, `ConstValueMapCallback`
 - `value.h` - Uses `ValueVariantType`, `ValueVisitor`
 - `variant_value_factory.h` - Uses `Arithmetic`

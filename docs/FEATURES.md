@@ -192,7 +192,7 @@ value make_numeric_value(std::string_view name, T value);
 
 // TriviallyCopyable - SIMD-friendly types
 template<TriviallyCopyable T>
-class typed_container { /* ... */ };
+class simd_batch { /* ... */ };  // Renamed from typed_container (Issue #328)
 
 // KeyValueCallback - Iteration function signatures
 template<KeyValueCallback Func>
