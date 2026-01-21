@@ -97,6 +97,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #endif
 
 #include <memory>
+#include <mutex>
 #include <string_view>
 #include <shared_mutex>
 #include <optional>
