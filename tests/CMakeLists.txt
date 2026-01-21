@@ -63,6 +63,7 @@ set(TEST_SOURCES
     result_api_tests.cpp
     msgpack_tests.cpp
     storage_policy_tests.cpp
+    policy_container_tests.cpp
 )
 
 # Add async tests if coroutines are enabled
