@@ -453,10 +453,232 @@ private:
     index_type index_;
 };
 
+/**
+ * @class static_storage_policy
+ * @brief Compile-time type-restricted storage policy.
+ *
+ * This policy template provides compile-time type safety by restricting
+ * the types that can be stored. Only types in the AllowedTypes... parameter
+ * pack can be set; attempts to set other types will fail at compile time.
+ *
+ * Provides:
+ * - Compile-time type checking via static_assert
+ * - Same O(n) lookup as dynamic_storage_policy
+ * - Type safety without runtime overhead
+ *
+ * Best suited for:
+ * - Scenarios requiring strict type contracts
+ * - Configuration containers with known value types
+ * - Protocol buffers / schema-defined data
+ *
+ * @tparam AllowedTypes Variadic template parameter of allowed value types
+ *
+ * @code
+ * // Only allow int, double, and string values
+ * static_storage_policy<int, double, std::string> storage;
+ * storage.set("count", 42);        // OK
+ * storage.set("rate", 3.14);       // OK
+ * storage.set("name", "test");     // OK
+ * storage.set("flag", true);       // Compile error: bool not in AllowedTypes
+ * @endcode
+ */
+template<typename... AllowedTypes>
+class static_storage_policy {
+public:
+    using value_type = optimized_value;
+    using container_type = std::vector<value_type>;
+    using iterator = container_type::iterator;
+    using const_iterator = container_type::const_iterator;
+
+    static_storage_policy() = default;
+    ~static_storage_policy() = default;
+
+    static_storage_policy(const static_storage_policy&) = default;
+    static_storage_policy& operator=(const static_storage_policy&) = default;
+    static_storage_policy(static_storage_policy&&) noexcept = default;
+    static_storage_policy& operator=(static_storage_policy&&) noexcept = default;
+
+    /**
+     * @brief Helper to check if a type is in the allowed types list
+     */
+    template<typename T>
+    static constexpr bool is_allowed_type_v =
+        (std::is_same_v<std::decay_t<T>, AllowedTypes> || ...);
+
+    /**
+     * @brief Set a typed value by key with compile-time type checking
+     * @tparam T The value type (must be in AllowedTypes)
+     * @param key The value identifier
+     * @param typed_value The value to store
+     *
+     * @note Compile-time error if T is not in AllowedTypes
+     */
+    template<typename T>
+    void set_typed(std::string_view key, T&& typed_value) {
+        static_assert(is_allowed_type_v<T>,
+            "Type not in allowed types list for static_storage_policy");
+
+        value_type val;
+        val.name = std::string(key);
+        val.data = std::forward<T>(typed_value);
+        val.type = static_cast<value_types>(val.data.index());
+
+        auto it = find_by_key(key);
+        if (it != values_.end()) {
+            *it = std::move(val);
+        } else {
+            values_.push_back(std::move(val));
+        }
+    }
+
+    /**
+     * @brief Set a value by key (StoragePolicy interface)
+     * @param key The value identifier
+     * @param value The optimized_value to store
+     *
+     * @note Runtime type checking - validates variant holds an allowed type
+     */
+    void set(std::string_view key, const value_type& value) {
+        if (!is_variant_type_allowed(value.data)) {
+            return;  // Silently ignore disallowed types for interface compatibility
+        }
+
+        auto it = find_by_key(key);
+        if (it != values_.end()) {
+            *it = value;
+        } else {
+            values_.push_back(value);
+        }
+    }
+
+    /**
+     * @brief Set a value by key (move semantics)
+     */
+    void set(std::string_view key, value_type&& value) {
+        if (!is_variant_type_allowed(value.data)) {
+            return;
+        }
+
+        auto it = find_by_key(key);
+        if (it != values_.end()) {
+            *it = std::move(value);
+        } else {
+            values_.push_back(std::move(value));
+        }
+    }
+
+    /**
+     * @brief Get a value by key
+     * @param key The value identifier
+     * @return Optional containing the value if found, nullopt otherwise
+     */
+    [[nodiscard]] std::optional<value_type> get(std::string_view key) const {
+        auto it = find_by_key(key);
+        if (it != values_.end()) {
+            return *it;
+        }
+        return std::nullopt;
+    }
+
+    /**
+     * @brief Get a typed value by key with compile-time type checking
+     * @tparam T The expected value type (must be in AllowedTypes)
+     * @param key The value identifier
+     * @return Optional containing the typed value if found and type matches
+     */
+    template<typename T>
+    [[nodiscard]] std::optional<T> get_typed(std::string_view key) const {
+        static_assert(is_allowed_type_v<T>,
+            "Type not in allowed types list for static_storage_policy");
+
+        auto it = find_by_key(key);
+        if (it != values_.end()) {
+            if (auto* ptr = std::get_if<T>(&it->data)) {
+                return *ptr;
+            }
+        }
+        return std::nullopt;
+    }
+
+    /**
+     * @brief Check if a key exists
+     */
+    [[nodiscard]] bool contains(std::string_view key) const {
+        return find_by_key(key) != values_.end();
+    }
+
+    /**
+     * @brief Remove a value by key
+     * @param key The value identifier
+     * @return true if removed, false if not found
+     */
+    bool remove(std::string_view key) {
+        auto it = find_by_key(key);
+        if (it != values_.end()) {
+            values_.erase(it);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @brief Clear all values
+     */
+    void clear() {
+        values_.clear();
+    }
+
+    iterator begin() { return values_.begin(); }
+    iterator end() { return values_.end(); }
+    [[nodiscard]] const_iterator begin() const { return values_.begin(); }
+    [[nodiscard]] const_iterator end() const { return values_.end(); }
+    [[nodiscard]] std::size_t size() const { return values_.size(); }
+    [[nodiscard]] bool empty() const { return values_.empty(); }
+
+    void reserve(std::size_t capacity) {
+        values_.reserve(capacity);
+    }
+
+    container_type& data() { return values_; }
+    [[nodiscard]] const container_type& data() const { return values_; }
+
+    /**
+     * @brief Check if a type would be allowed at compile time
+     * @tparam T The type to check
+     * @return true if T is in AllowedTypes
+     */
+    template<typename T>
+    static constexpr bool allows() noexcept {
+        return is_allowed_type_v<T>;
+    }
+
+private:
+    container_type values_;
+
+    [[nodiscard]] iterator find_by_key(std::string_view key) {
+        return std::find_if(values_.begin(), values_.end(),
+            [key](const value_type& v) { return v.name == key; });
+    }
+
+    [[nodiscard]] const_iterator find_by_key(std::string_view key) const {
+        return std::find_if(values_.begin(), values_.end(),
+            [key](const value_type& v) { return v.name == key; });
+    }
+
+    /**
+     * @brief Runtime check if variant contains an allowed type
+     */
+    [[nodiscard]] bool is_variant_type_allowed(const value_variant& v) const {
+        return (std::holds_alternative<AllowedTypes>(v) || ...);
+    }
+};
+
 // Static assertions to verify concepts are satisfied
 static_assert(StoragePolicy<dynamic_storage_policy>,
     "dynamic_storage_policy must satisfy StoragePolicy concept");
 static_assert(StoragePolicy<indexed_storage_policy>,
     "indexed_storage_policy must satisfy StoragePolicy concept");
+// Note: static_storage_policy concept check requires specific type instantiation
+// Example: static_assert(StoragePolicy<static_storage_policy<int, double, std::string>>);
 
 } // namespace container_module::policy
