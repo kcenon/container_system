@@ -64,7 +64,9 @@ namespace container_module
 	struct pool_stats;
 
 	// Type alias for container shared pointer
-	using value_container_ptr = std::shared_ptr<value_container>;
+	// Note: Prefer message_buffer_ptr for new code (see Issue #321)
+	using value_container_ptr [[deprecated("Use message_buffer_ptr instead (Issue #321)")]]
+		= std::shared_ptr<value_container>;
 
 	// Forward declaration of value_variant (full definition in types.h)
 	// Note: std::variant cannot be forward declared, so we provide a comment

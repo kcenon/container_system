@@ -308,6 +308,72 @@ make
 
 ---
 
+## value_container → message_buffer Migration (v2.0+)
+
+Starting from v2.0.0, we recommend using `message_buffer` instead of `value_container`.
+The `message_buffer` name better describes the class's purpose: a serializable message
+buffer for network transmission, avoiding confusion with STL containers.
+
+### Why the Name Change?
+
+| Issue | Old Name | Problem |
+|-------|----------|---------|
+| Naming conflict | `container` | Confuses with `std::vector`, `std::map` |
+| Purpose unclear | `value_container` | Doesn't reveal serialization purpose |
+| Redundant namespace | `container_module::container` | `container::container` is redundant |
+
+### Quick Migration
+
+**Before**:
+```cpp
+#include <container/container.h>
+
+container_module::value_container msg;
+container_module::value_container_ptr ptr = std::make_shared<container_module::value_container>();
+```
+
+**After**:
+```cpp
+#include <container/container.h>
+
+container_module::message_buffer msg;
+container_module::message_buffer_ptr ptr = std::make_shared<container_module::message_buffer>();
+```
+
+### Migration Steps
+
+1. **Replace type names**:
+   - `value_container` → `message_buffer`
+   - `value_container_ptr` → `message_buffer_ptr`
+
+2. **Namespace remains the same**: `container_module` (for now)
+
+3. **API is unchanged**: All methods work identically
+
+### Deprecation Timeline
+
+| Version | Status |
+|---------|--------|
+| v2.0.0 | `message_buffer` alias introduced |
+| v2.1.0 | `value_container_ptr` deprecated warning |
+| v3.0.0 | `value_container` name removed (planned) |
+
+### Compatibility
+
+Both names can be used interchangeably during the migration period:
+
+```cpp
+// These are equivalent
+container_module::value_container c1;
+container_module::message_buffer c2;
+
+// Type alias - both refer to the same class
+static_assert(std::is_same_v<container_module::value_container,
+                             container_module::message_buffer>);
+```
+
+---
+
 ## Support
 
 Need help with migration?
@@ -318,5 +384,5 @@ Need help with migration?
 
 ---
 
-**Last Updated**: 2025-10-22
-**Migration Script Version**: 1.0.0
+**Last Updated**: 2026-01-22
+**Migration Script Version**: 1.1.0
