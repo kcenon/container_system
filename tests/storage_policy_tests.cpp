@@ -495,3 +495,285 @@ TEST(StoragePolicyEdgeCases, DirectDataAccess) {
     const auto& const_data = const_storage.data();
     EXPECT_EQ(const_data.size(), 1u);
 }
+
+// ============================================================================
+// Static Storage Policy Tests (Issue #325)
+// ============================================================================
+
+// Type alias for commonly used static storage policy
+using IntDoubleStringPolicy = static_storage_policy<int, double, std::string>;
+
+class StaticStoragePolicyTest : public ::testing::Test {
+protected:
+    IntDoubleStringPolicy storage;
+
+    void SetUp() override {
+        storage.clear();
+    }
+
+    optimized_value make_int_value(const std::string& name, int data) {
+        optimized_value val;
+        val.name = name;
+        val.type = value_types::int_value;
+        val.data = data;
+        return val;
+    }
+
+    optimized_value make_double_value(const std::string& name, double data) {
+        optimized_value val;
+        val.name = name;
+        val.type = value_types::double_value;
+        val.data = data;
+        return val;
+    }
+
+    optimized_value make_string_value(const std::string& name, const std::string& data) {
+        optimized_value val;
+        val.name = name;
+        val.type = value_types::string_value;
+        val.data = data;
+        return val;
+    }
+
+    optimized_value make_bool_value(const std::string& name, bool data) {
+        optimized_value val;
+        val.name = name;
+        val.type = value_types::bool_value;
+        val.data = data;
+        return val;
+    }
+};
+
+TEST_F(StaticStoragePolicyTest, ConceptSatisfied) {
+    static_assert(StoragePolicy<IntDoubleStringPolicy>,
+        "static_storage_policy<int, double, string> must satisfy StoragePolicy concept");
+    SUCCEED();
+}
+
+TEST_F(StaticStoragePolicyTest, InitiallyEmpty) {
+    EXPECT_TRUE(storage.empty());
+    EXPECT_EQ(storage.size(), 0u);
+}
+
+TEST_F(StaticStoragePolicyTest, SetAndGetAllowedTypes) {
+    storage.set("int_key", make_int_value("int_key", 42));
+    storage.set("double_key", make_double_value("double_key", 3.14));
+    storage.set("string_key", make_string_value("string_key", "hello"));
+
+    EXPECT_EQ(storage.size(), 3u);
+
+    auto int_result = storage.get("int_key");
+    ASSERT_TRUE(int_result.has_value());
+    EXPECT_EQ(std::get<int>(int_result->data), 42);
+
+    auto double_result = storage.get("double_key");
+    ASSERT_TRUE(double_result.has_value());
+    EXPECT_DOUBLE_EQ(std::get<double>(double_result->data), 3.14);
+
+    auto string_result = storage.get("string_key");
+    ASSERT_TRUE(string_result.has_value());
+    EXPECT_EQ(std::get<std::string>(string_result->data), "hello");
+}
+
+TEST_F(StaticStoragePolicyTest, SetTypedCompileTimeCheck) {
+    // These should compile (types are allowed)
+    storage.set_typed("count", 42);
+    storage.set_typed("rate", 3.14);
+    storage.set_typed("name", std::string("test"));
+
+    EXPECT_EQ(storage.size(), 3u);
+
+    // Verify values
+    auto count = storage.get_typed<int>("count");
+    ASSERT_TRUE(count.has_value());
+    EXPECT_EQ(*count, 42);
+
+    auto rate = storage.get_typed<double>("rate");
+    ASSERT_TRUE(rate.has_value());
+    EXPECT_DOUBLE_EQ(*rate, 3.14);
+
+    auto name = storage.get_typed<std::string>("name");
+    ASSERT_TRUE(name.has_value());
+    EXPECT_EQ(*name, "test");
+}
+
+TEST_F(StaticStoragePolicyTest, GetTypedWrongType) {
+    storage.set_typed("count", 42);
+
+    // Key exists but type is wrong
+    auto result = storage.get_typed<double>("count");
+    EXPECT_FALSE(result.has_value());
+}
+
+TEST_F(StaticStoragePolicyTest, GetTypedNonExistent) {
+    auto result = storage.get_typed<int>("nonexistent");
+    EXPECT_FALSE(result.has_value());
+}
+
+TEST_F(StaticStoragePolicyTest, DisallowedTypeIgnored) {
+    // bool is not in AllowedTypes, so it should be silently ignored
+    storage.set("bool_key", make_bool_value("bool_key", true));
+
+    // Value should not be stored
+    EXPECT_FALSE(storage.contains("bool_key"));
+    EXPECT_EQ(storage.size(), 0u);
+}
+
+TEST_F(StaticStoragePolicyTest, AllowsStaticCheck) {
+    // Compile-time checks for allowed types
+    static_assert(IntDoubleStringPolicy::allows<int>(), "int should be allowed");
+    static_assert(IntDoubleStringPolicy::allows<double>(), "double should be allowed");
+    static_assert(IntDoubleStringPolicy::allows<std::string>(), "string should be allowed");
+    static_assert(!IntDoubleStringPolicy::allows<bool>(), "bool should not be allowed");
+    static_assert(!IntDoubleStringPolicy::allows<float>(), "float should not be allowed");
+    static_assert(!IntDoubleStringPolicy::allows<long>(), "long should not be allowed");
+    SUCCEED();
+}
+
+TEST_F(StaticStoragePolicyTest, SetUpdatesExistingValue) {
+    storage.set_typed("key", 10);
+    storage.set_typed("key", 20);
+
+    EXPECT_EQ(storage.size(), 1u);
+    auto result = storage.get_typed<int>("key");
+    ASSERT_TRUE(result.has_value());
+    EXPECT_EQ(*result, 20);
+}
+
+TEST_F(StaticStoragePolicyTest, Contains) {
+    storage.set_typed("key1", 42);
+
+    EXPECT_TRUE(storage.contains("key1"));
+    EXPECT_FALSE(storage.contains("key2"));
+}
+
+TEST_F(StaticStoragePolicyTest, Remove) {
+    storage.set_typed("key1", 42);
+    storage.set_typed("key2", 100);
+
+    EXPECT_TRUE(storage.remove("key1"));
+    EXPECT_FALSE(storage.contains("key1"));
+    EXPECT_TRUE(storage.contains("key2"));
+    EXPECT_EQ(storage.size(), 1u);
+}
+
+TEST_F(StaticStoragePolicyTest, RemoveNonExistent) {
+    EXPECT_FALSE(storage.remove("nonexistent"));
+}
+
+TEST_F(StaticStoragePolicyTest, Clear) {
+    storage.set_typed("key1", 1);
+    storage.set_typed("key2", 2.0);
+    storage.set_typed("key3", std::string("three"));
+
+    EXPECT_EQ(storage.size(), 3u);
+
+    storage.clear();
+
+    EXPECT_TRUE(storage.empty());
+    EXPECT_EQ(storage.size(), 0u);
+}
+
+TEST_F(StaticStoragePolicyTest, IteratorTraversal) {
+    storage.set_typed("key1", 1);
+    storage.set_typed("key2", 2.0);
+    storage.set_typed("key3", std::string("three"));
+
+    std::vector<std::string> keys;
+    for (const auto& val : storage) {
+        keys.push_back(val.name);
+    }
+
+    EXPECT_EQ(keys.size(), 3u);
+    EXPECT_TRUE(std::find(keys.begin(), keys.end(), "key1") != keys.end());
+    EXPECT_TRUE(std::find(keys.begin(), keys.end(), "key2") != keys.end());
+    EXPECT_TRUE(std::find(keys.begin(), keys.end(), "key3") != keys.end());
+}
+
+TEST_F(StaticStoragePolicyTest, CopyConstructor) {
+    storage.set_typed("key1", 42);
+    storage.set_typed("key2", 3.14);
+
+    IntDoubleStringPolicy copy(storage);
+
+    EXPECT_EQ(copy.size(), 2u);
+    EXPECT_TRUE(copy.contains("key1"));
+    EXPECT_TRUE(copy.contains("key2"));
+}
+
+TEST_F(StaticStoragePolicyTest, MoveConstructor) {
+    storage.set_typed("key1", 42);
+
+    IntDoubleStringPolicy moved(std::move(storage));
+
+    EXPECT_EQ(moved.size(), 1u);
+    EXPECT_TRUE(moved.contains("key1"));
+}
+
+TEST_F(StaticStoragePolicyTest, Reserve) {
+    storage.reserve(100);
+    SUCCEED();
+}
+
+TEST_F(StaticStoragePolicyTest, DirectDataAccess) {
+    storage.set_typed("key1", 10);
+
+    auto& data = storage.data();
+    EXPECT_EQ(data.size(), 1u);
+    EXPECT_EQ(data[0].name, "key1");
+
+    const IntDoubleStringPolicy& const_storage = storage;
+    const auto& const_data = const_storage.data();
+    EXPECT_EQ(const_data.size(), 1u);
+}
+
+// Test with different type combinations
+TEST(StaticStoragePolicyVariants, SingleTypePolicy) {
+    static_storage_policy<int> int_only;
+
+    static_assert(static_storage_policy<int>::allows<int>(), "int should be allowed");
+    static_assert(!static_storage_policy<int>::allows<double>(), "double should not be allowed");
+
+    int_only.set_typed("count", 42);
+    EXPECT_EQ(int_only.size(), 1u);
+
+    auto result = int_only.get_typed<int>("count");
+    ASSERT_TRUE(result.has_value());
+    EXPECT_EQ(*result, 42);
+}
+
+TEST(StaticStoragePolicyVariants, NumericTypesOnly) {
+    static_storage_policy<int, float, double> numeric;
+
+    numeric.set_typed("int_val", 42);
+    numeric.set_typed("float_val", 3.14f);
+    numeric.set_typed("double_val", 2.718);
+
+    EXPECT_EQ(numeric.size(), 3u);
+
+    // String should be ignored
+    optimized_value str_val;
+    str_val.name = "str_val";
+    str_val.type = value_types::string_value;
+    str_val.data = std::string("ignored");
+    numeric.set("str_val", str_val);
+
+    EXPECT_EQ(numeric.size(), 3u);
+    EXPECT_FALSE(numeric.contains("str_val"));
+}
+
+TEST(StaticStoragePolicyVariants, MixedTypePreservation) {
+    // Test that types are correctly preserved through storage
+    static_storage_policy<int, std::string> mixed;
+
+    mixed.set_typed("int_key", 42);
+    mixed.set_typed("str_key", std::string("hello"));
+
+    auto int_result = mixed.get("int_key");
+    ASSERT_TRUE(int_result.has_value());
+    EXPECT_TRUE(std::holds_alternative<int>(int_result->data));
+
+    auto str_result = mixed.get("str_key");
+    ASSERT_TRUE(str_result.has_value());
+    EXPECT_TRUE(std::holds_alternative<std::string>(str_result->data));
+}
