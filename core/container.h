@@ -1237,4 +1237,27 @@ namespace container_module
 	}
 #endif
 
+	// =======================================================================
+	// Type Alias for Migration (Issue #321, #332)
+	// =======================================================================
+
+	/**
+	 * @brief New preferred name for value_container
+	 *
+	 * `message_buffer` is the recommended name for new code, as it better
+	 * describes the class's purpose: a serializable message buffer for
+	 * network transmission, not an STL-like container.
+	 *
+	 * @code
+	 * // Recommended usage:
+	 * container_module::message_buffer msg;
+	 * msg.set("name", "John");
+	 * auto bytes = msg.serialize(serialization_format::json);
+	 * @endcode
+	 *
+	 * @see value_container (legacy name)
+	 * @since 2.0.0
+	 */
+	using message_buffer = value_container;
+
 } // namespace container_module

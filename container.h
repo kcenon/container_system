@@ -37,7 +37,18 @@
  * @code
  * // Recommended usage:
  * #include <container/container.h>
+ *
+ * // Create a message buffer (preferred name for serializable containers)
+ * container_module::message_buffer msg;
+ * msg.set("name", "Alice");
+ * msg.set("age", 30);
+ *
+ * // value_container is still supported (legacy name)
+ * container_module::value_container container;  // Same as message_buffer
  * @endcode
+ *
+ * @note Since v2.0.0, `message_buffer` is the preferred name for `value_container`.
+ *       Both names refer to the same class and can be used interchangeably.
  */
 
 #pragma once
