@@ -84,18 +84,18 @@ concept TriviallyCopyable = std::is_trivially_copyable_v<T>;
 #include <container/core/concepts.h>
 using namespace container_module::concepts;
 
-// SIMD 친화적 배치를 위한 typed_container에서 사용
+// SIMD 친화적 배치를 위한 simd_batch에서 사용 (Issue #328에서 typed_container에서 이름 변경)
 template<TriviallyCopyable TValue>
-class typed_container {
+class simd_batch {
     std::vector<TValue> values_;
 public:
     void push(const TValue& value) { values_.push_back(value); }
 };
 
 // 사용법
-typed_container<int> int_container;       // OK: int는 trivially copyable
-typed_container<double> double_container; // OK: double은 trivially copyable
-// typed_container<std::string> str_container; // 오류: std::string은 trivially copyable이 아님
+simd_batch<int> int_container;       // OK: int는 trivially copyable
+simd_batch<double> double_container; // OK: double은 trivially copyable
+// simd_batch<std::string> str_container; // 오류: std::string은 trivially copyable이 아님
 ```
 
 ### 값 타입 Concepts
@@ -146,7 +146,7 @@ container.for_each([](const std::string& key, const value& val) {
 | `Arithmetic` | 정수 또는 부동소수점 타입 | 숫자 값 생성을 위한 템플릿 제약 |
 | `IntegralType` | 정수 타입 | 메시징 통합에서 타입 검사 |
 | `FloatingPointType` | 부동소수점 타입 | 메시징 통합에서 타입 검사 |
-| `TriviallyCopyable` | memcpy/SIMD 안전 타입 | `typed_container` 템플릿 제약 |
+| `TriviallyCopyable` | memcpy/SIMD 안전 타입 | `simd_batch` 템플릿 제약 |
 | `ValueVariantType` | `ValueVariant`에 유효한 타입 | 타입 안전 값 연산 |
 | `StringLike` | 문자열 변환 가능 타입 | 문자열 값 처리 |
 | `KeyValueCallback` | const 반복 콜백 | `for_each()` 함수 |

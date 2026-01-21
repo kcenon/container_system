@@ -1,55 +1,19 @@
 // BSD 3-Clause License
 //
-// High-level typed container helper for SIMD-friendly batches.
+// DEPRECATED: This header is deprecated. Use simd_batch.h instead.
+// This file now redirects to simd_batch.h for backward compatibility.
+// See Issue #328 for migration details.
 
 #pragma once
 
-#include "container/core/concepts.h"
-#include <type_traits>
-#include <vector>
-#include <cstddef>
-#include <utility>
-#include <concepts>
+#if defined(__GNUC__) || defined(__clang__)
+    #pragma message("Warning: typed_container.h is deprecated. Use simd_batch.h instead. See Issue #328.")
+#elif defined(_MSC_VER)
+    #pragma message("Warning: typed_container.h is deprecated. Use simd_batch.h instead. See Issue #328.")
+#endif
 
-namespace container_module::core {
+// Include the new header which provides the deprecated alias
+#include "container/core/simd_batch.h"
 
-/**
- * @brief Lightweight container enforcing trivially copyable payloads.
- *
- * Designed for SIMD optimized serialization paths where deterministic layout is required.
- *
- * @tparam TValue Type that must satisfy the TriviallyCopyable concept
- */
-template<container_module::concepts::TriviallyCopyable TValue>
-class typed_container {
-
-public:
-    explicit typed_container(std::size_t reserve = 0) {
-        values_.reserve(reserve);
-    }
-
-    void push(const TValue& value) {
-        values_.push_back(value);
-    }
-
-    void push(TValue&& value) {
-        values_.push_back(std::move(value));
-    }
-
-    [[nodiscard]] const std::vector<TValue>& values() const noexcept {
-        return values_;
-    }
-
-    [[nodiscard]] std::size_t size() const noexcept {
-        return values_.size();
-    }
-
-    void clear() {
-        values_.clear();
-    }
-
-private:
-    std::vector<TValue> values_;
-};
-
-} // namespace container_module::core
+// Note: typed_container is now a deprecated alias for simd_batch
+// defined in simd_batch.h

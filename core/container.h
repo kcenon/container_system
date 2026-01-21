@@ -58,7 +58,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "container/core/container/msgpack.h"
 
 #include "container/core/value_types.h"
-#include "container/core/typed_container.h"
+#include "container/core/simd_batch.h"  // Renamed from typed_container.h (Issue #328)
 #include "container/internal/value.h"
 #include "container/internal/value_view.h"
 
