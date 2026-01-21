@@ -19,195 +19,269 @@ All rights reserved.
 
 namespace container_module
 {
+    // ============================================================================
+    // Modern Factory API (Recommended)
+    // ============================================================================
+
     /**
-     * @brief Factory functions for creating value instances
+     * @brief Modern factory namespace for creating value instances
      *
-     * These functions provide a convenient, type-safe way to create variant values
-     * without needing to specify template parameters or handle type conversions manually.
+     * Provides a unified, minimal API for value creation:
+     * - factory::make<T>() for typed values
+     * - factory::make_null() for null values
      *
      * Usage examples:
      * ```cpp
-     * auto v1 = make_bool_value("enabled", true);
-     * auto v2 = make_int_value("count", 42);
-     * auto v3 = make_string_value("name", "John");
-     * auto v4 = make_array_value("items", {v1, v2, v3});
+     * auto v1 = factory::make("enabled", true);       // bool
+     * auto v2 = factory::make("count", 42);           // int
+     * auto v3 = factory::make("name", std::string("John")); // string
+     * auto v4 = factory::make_null("empty");          // null
+     *
+     * // Or use constructors directly (preferred):
+     * auto v5 = value("flag", true);
+     * auto v6 = value("num", 42);
      * ```
      */
+    namespace factory
+    {
+        /**
+         * @brief Generic factory template for creating typed values
+         *
+         * Forwards arguments to the value constructor with perfect forwarding.
+         * This is a thin wrapper that provides a consistent factory interface.
+         *
+         * @tparam T The value type (automatically deduced)
+         * @param name Value name
+         * @param val The value to store
+         * @return value containing the specified data
+         */
+        template<typename T>
+        inline value make(std::string_view name, T&& val) {
+            return value(name, std::forward<T>(val));
+        }
+
+        /**
+         * @brief Create a null value
+         *
+         * Explicit factory for null value creation when a named null is needed.
+         *
+         * @param name Value name (default: empty string)
+         * @return value containing null (std::monostate)
+         */
+        inline value make_null(std::string_view name = "") {
+            return value(name);
+        }
+
+        /**
+         * @brief Create an array value from vector of shared_ptr<value>
+         */
+        inline value make_array(std::string_view name,
+                               std::vector<std::shared_ptr<value>> values) {
+            array_variant arr;
+            arr.values = std::move(values);
+            return value(name, std::move(arr));
+        }
+
+        /**
+         * @brief Create an array value from initializer list
+         */
+        inline value make_array(
+            std::string_view name,
+            std::initializer_list<value> values)
+        {
+            array_variant arr;
+            arr.values.reserve(values.size());
+            for (const auto& v : values) {
+                arr.values.push_back(std::make_shared<value>(v));
+            }
+            return value(name, std::move(arr));
+        }
+
+        /**
+         * @brief Create an empty array value
+         */
+        inline value make_empty_array(std::string_view name) {
+            return value(name, array_variant{});
+        }
+
+        /**
+         * @brief Create a container value
+         */
+        inline value make_container(std::string_view name,
+                                   std::shared_ptr<thread_safe_container> container) {
+            return value(name, std::move(container));
+        }
+
+        /**
+         * @brief Create a bytes value from raw data pointer
+         */
+        inline value make_bytes(std::string_view name,
+                               const uint8_t* data,
+                               size_t size) {
+            return value(name, std::vector<uint8_t>(data, data + size));
+        }
+
+        /**
+         * @brief Create a bytes value from string (copy bytes)
+         * Note: This treats the string as binary data
+         */
+        inline value make_bytes_from_string(std::string_view name, std::string_view data) {
+            return value(name, std::vector<uint8_t>(
+                reinterpret_cast<const uint8_t*>(data.data()),
+                reinterpret_cast<const uint8_t*>(data.data() + data.size())
+            ));
+        }
+
+    } // namespace factory
 
     // ============================================================================
-    // Null value
+    // Deprecated Factory Functions
+    // ============================================================================
+    // These functions are deprecated. Use value constructors directly or
+    // factory::make<T>() for new code.
     // ============================================================================
 
     /**
      * @brief Create a null value
+     * @deprecated Use value(name) constructor or factory::make_null() instead
      */
+    [[deprecated("Use value(name) constructor or factory::make_null() instead")]]
     inline value make_null_value(std::string_view name = "") {
         return value(name);
     }
 
-    // ============================================================================
-    // Boolean value
-    // ============================================================================
-
     /**
      * @brief Create a boolean value
+     * @deprecated Use value(name, val) constructor or factory::make() instead
      */
+    [[deprecated("Use value(name, val) constructor or factory::make() instead")]]
     inline value make_bool_value(std::string_view name, bool val) {
         return value(name, val);
     }
 
-    // ============================================================================
-    // Numeric values
-    // ============================================================================
-
     /**
      * @brief Create a short (int16_t) value
+     * @deprecated Use value(name, val) constructor or factory::make() instead
      */
+    [[deprecated("Use value(name, val) constructor or factory::make() instead")]]
     inline value make_short_value(std::string_view name, int16_t val) {
         return value(name, val);
     }
 
     /**
      * @brief Create an unsigned short (uint16_t) value
+     * @deprecated Use value(name, val) constructor or factory::make() instead
      */
+    [[deprecated("Use value(name, val) constructor or factory::make() instead")]]
     inline value make_ushort_value(std::string_view name, uint16_t val) {
         return value(name, val);
     }
 
     /**
      * @brief Create an int (int32_t) value
+     * @deprecated Use value(name, val) constructor or factory::make() instead
      */
+    [[deprecated("Use value(name, val) constructor or factory::make() instead")]]
     inline value make_int_value(std::string_view name, int32_t val) {
         return value(name, val);
     }
 
     /**
      * @brief Create an unsigned int (uint32_t) value
+     * @deprecated Use value(name, val) constructor or factory::make() instead
      */
+    [[deprecated("Use value(name, val) constructor or factory::make() instead")]]
     inline value make_uint_value(std::string_view name, uint32_t val) {
         return value(name, val);
     }
 
     /**
      * @brief Create a long (int64_t) value
+     * @deprecated Use value(name, val) constructor or factory::make() instead
      */
+    [[deprecated("Use value(name, val) constructor or factory::make() instead")]]
     inline value make_long_value(std::string_view name, int64_t val) {
         return value(name, val);
     }
 
     /**
      * @brief Create an unsigned long (uint64_t) value
+     * @deprecated Use value(name, val) constructor or factory::make() instead
      */
+    [[deprecated("Use value(name, val) constructor or factory::make() instead")]]
     inline value make_ulong_value(std::string_view name, uint64_t val) {
         return value(name, val);
     }
 
     /**
      * @brief Create a float value
+     * @deprecated Use value(name, val) constructor or factory::make() instead
      */
+    [[deprecated("Use value(name, val) constructor or factory::make() instead")]]
     inline value make_float_value(std::string_view name, float val) {
         return value(name, val);
     }
 
     /**
      * @brief Create a double value
+     * @deprecated Use value(name, val) constructor or factory::make() instead
      */
+    [[deprecated("Use value(name, val) constructor or factory::make() instead")]]
     inline value make_double_value(std::string_view name, double val) {
         return value(name, val);
     }
 
     /**
      * @brief Generic numeric value factory with automatic type deduction
-     *
-     * Automatically selects the appropriate numeric type based on T:
-     * - bool → bool_value
-     * - int16_t, short → short_value
-     * - uint16_t, unsigned short → ushort_value
-     * - int32_t, int → int_value
-     * - uint32_t, unsigned int → uint_value
-     * - int64_t, long, long long → long_value
-     * - uint64_t, unsigned long, unsigned long long → ulong_value
-     * - float → float_value
-     * - double → double_value
-     *
-     * @tparam T Numeric type (must satisfy Arithmetic concept)
-     * @param name Value name
-     * @param value Numeric value
-     * @return value with appropriate type
+     * @deprecated Use value(name, val) constructor or factory::make() instead
      */
     template<concepts::Arithmetic T>
-    inline value make_numeric_value(std::string_view name, T value) {
-        if constexpr (std::is_same_v<T, bool>) {
-            return make_bool_value(name, value);
-        } else if constexpr (std::is_same_v<T, int16_t> || std::is_same_v<T, short>) {
-            return make_short_value(name, static_cast<int16_t>(value));
-        } else if constexpr (std::is_same_v<T, uint16_t> || std::is_same_v<T, unsigned short>) {
-            return make_ushort_value(name, static_cast<uint16_t>(value));
-        } else if constexpr (std::is_same_v<T, int32_t> || std::is_same_v<T, int>) {
-            return make_int_value(name, static_cast<int32_t>(value));
-        } else if constexpr (std::is_same_v<T, uint32_t> || std::is_same_v<T, unsigned int>) {
-            return make_uint_value(name, static_cast<uint32_t>(value));
-        } else if constexpr (std::is_same_v<T, int64_t> ||
-                           std::is_same_v<T, long> ||
-                           std::is_same_v<T, long long>) {
-            return make_long_value(name, static_cast<int64_t>(value));
-        } else if constexpr (std::is_same_v<T, uint64_t> ||
-                           std::is_same_v<T, unsigned long> ||
-                           std::is_same_v<T, unsigned long long>) {
-            return make_ulong_value(name, static_cast<uint64_t>(value));
-        } else if constexpr (std::is_same_v<T, float>) {
-            return make_float_value(name, value);
-        } else if constexpr (std::is_same_v<T, double>) {
-            return make_double_value(name, value);
-        } else {
-            // Fallback: use the closest integer type
-            if constexpr (sizeof(T) <= sizeof(int32_t)) {
-                return make_int_value(name, static_cast<int32_t>(value));
-            } else {
-                return make_long_value(name, static_cast<int64_t>(value));
-            }
-        }
+    [[deprecated("Use value(name, val) constructor or factory::make() instead")]]
+    inline value make_numeric_value(std::string_view name, T val) {
+        return value(name, val);
     }
-
-    // ============================================================================
-    // String values
-    // ============================================================================
 
     /**
      * @brief Create a string value
+     * @deprecated Use value(name, val) constructor or factory::make() instead
      */
+    [[deprecated("Use value(name, val) constructor or factory::make() instead")]]
     inline value make_string_value(std::string_view name, std::string str) {
         return value(name, std::move(str));
     }
 
     /**
      * @brief Create a string value from string_view
+     * @deprecated Use value(name, std::string(str)) constructor instead
      */
+    [[deprecated("Use value(name, std::string(str)) constructor instead")]]
     inline value make_string_value(std::string_view name, std::string_view str) {
         return value(name, std::string(str));
     }
 
     /**
      * @brief Create a string value from C-string
+     * @deprecated Use value(name, std::string(str)) constructor instead
      */
+    [[deprecated("Use value(name, std::string(str)) constructor instead")]]
     inline value make_string_value(std::string_view name, const char* str) {
         return value(name, std::string(str));
     }
 
-    // ============================================================================
-    // Bytes values
-    // ============================================================================
-
     /**
      * @brief Create a bytes value
+     * @deprecated Use value(name, data) constructor or factory::make() instead
      */
+    [[deprecated("Use value(name, data) constructor or factory::make() instead")]]
     inline value make_bytes_value(std::string_view name, std::vector<uint8_t> data) {
         return value(name, std::move(data));
     }
 
     /**
      * @brief Create a bytes value from raw data
+     * @deprecated Use factory::make_bytes() instead
      */
+    [[deprecated("Use factory::make_bytes() instead")]]
     inline value make_bytes_value(std::string_view name,
                                              const uint8_t* data,
                                              size_t size) {
@@ -216,8 +290,9 @@ namespace container_module
 
     /**
      * @brief Create a bytes value from string (copy bytes)
-     * Note: This treats the string as binary data, not as a null-terminated C string
+     * @deprecated Use factory::make_bytes_from_string() instead
      */
+    [[deprecated("Use factory::make_bytes_from_string() instead")]]
     inline value make_bytes_from_string(std::string_view name, std::string_view data) {
         return value(name, std::vector<uint8_t>(
             reinterpret_cast<const uint8_t*>(data.data()),
@@ -225,25 +300,21 @@ namespace container_module
         ));
     }
 
-    // ============================================================================
-    // Container values
-    // ============================================================================
-
     /**
      * @brief Create a container value
+     * @deprecated Use value(name, container) constructor or factory::make_container() instead
      */
+    [[deprecated("Use value(name, container) constructor or factory::make_container() instead")]]
     inline value make_container_value(std::string_view name,
                                                  std::shared_ptr<thread_safe_container> container) {
         return value(name, std::move(container));
     }
 
-    // ============================================================================
-    // Array values
-    // ============================================================================
-
     /**
      * @brief Create an array value
+     * @deprecated Use factory::make_array() instead
      */
+    [[deprecated("Use factory::make_array() instead")]]
     inline value make_array_value(std::string_view name,
                                              std::vector<std::shared_ptr<value>> values) {
         array_variant arr;
@@ -253,7 +324,9 @@ namespace container_module
 
     /**
      * @brief Create an array value from initializer list
+     * @deprecated Use factory::make_array() instead
      */
+    [[deprecated("Use factory::make_array() instead")]]
     inline value make_array_value(
         std::string_view name,
         std::initializer_list<value> values)
@@ -268,7 +341,9 @@ namespace container_module
 
     /**
      * @brief Create an empty array value
+     * @deprecated Use factory::make_empty_array() instead
      */
+    [[deprecated("Use factory::make_empty_array() instead")]]
     inline value make_empty_array_value(std::string_view name) {
         return value(name, array_variant{});
     }
