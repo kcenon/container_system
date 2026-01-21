@@ -16,7 +16,8 @@ container_system/
 │   ├── concepts.h                  # 타입 검증을 위한 C++20 concepts (신규)
 │   ├── container.h                 # 메인 컨테이너 클래스
 │   ├── container.cpp               # 컨테이너 구현
-│   ├── typed_container.h           # SIMD 친화적 타입 컨테이너 (TriviallyCopyable concept 사용)
+│   ├── simd_batch.h                # SIMD 친화적 배치 컨테이너 (typed_container에서 이름 변경, TriviallyCopyable concept 사용)
+│   ├── typed_container.h           # Deprecated: simd_batch.h로 리다이렉트
 │   ├── value_types.h               # Value 타입 열거형
 │   ├── value_types.cpp             # Value 타입 구현
 │   ├── value_store.h               # Value 저장소 추상화
@@ -203,7 +204,7 @@ using namespace container_module::concepts;
 
 // SIMD 친화적 컨테이너를 위한 TriviallyCopyable 사용
 template<TriviallyCopyable TValue>
-class typed_container { /* ... */ };
+class simd_batch { /* ... */ };  // typed_container에서 이름 변경 (Issue #328)
 
 // 반복을 위한 KeyValueCallback 사용
 template<KeyValueCallback Func>
@@ -211,7 +212,7 @@ void for_each(Func&& func) const;
 ```
 
 **통합 지점**:
-- `typed_container.h` - `TriviallyCopyable` concept 사용
+- `simd_batch.h` - `TriviallyCopyable` concept 사용
 - `thread_safe_container.h` - `KeyValueCallback`, `MutableKeyValueCallback`, `ValueMapCallback`, `ConstValueMapCallback` 사용
 - `value.h` - `ValueVariantType`, `ValueVisitor` 사용
 - `variant_value_factory.h` - `Arithmetic` 사용

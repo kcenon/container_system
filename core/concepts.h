@@ -95,7 +95,7 @@ concept UnsignedIntegral = std::unsigned_integral<T>;
  * Example usage:
  * @code
  * template<TriviallyCopyable T>
- * class typed_container { ... };
+ * class simd_batch { ... };  // Renamed from typed_container (Issue #328)
  * @endcode
  */
 template<typename T>

@@ -120,18 +120,18 @@ concept TriviallyCopyable = std::is_trivially_copyable_v<T>;
 #include <container/core/concepts.h>
 using namespace container_module::concepts;
 
-// Used in typed_container for SIMD-friendly batches
+// Used in simd_batch for SIMD-friendly batches (renamed from typed_container in Issue #328)
 template<TriviallyCopyable TValue>
-class typed_container {
+class simd_batch {
     std::vector<TValue> values_;
 public:
     void push(const TValue& value) { values_.push_back(value); }
 };
 
 // Usage
-typed_container<int> int_container;       // OK: int is trivially copyable
-typed_container<double> double_container; // OK: double is trivially copyable
-// typed_container<std::string> str_container; // Error: std::string is not trivially copyable
+simd_batch<int> int_container;       // OK: int is trivially copyable
+simd_batch<double> double_container; // OK: double is trivially copyable
+// simd_batch<std::string> str_container; // Error: std::string is not trivially copyable
 ```
 
 ### Value Type Concepts
@@ -346,7 +346,7 @@ concept ContainerValue =
 | `FloatingPointType` | Floating-point types | Type checking in messaging integration |
 | `SignedIntegral` | Signed integral types | Numeric validation |
 | `UnsignedIntegral` | Unsigned integral types | Numeric validation |
-| `TriviallyCopyable` | Types safe for memcpy/SIMD | `typed_container` template constraint |
+| `TriviallyCopyable` | Types safe for memcpy/SIMD | `simd_batch` template constraint |
 | `ValueVariantType` | Types valid for `ValueVariant` | Type-safe value operations |
 | `NumericValueType` | Numeric types excluding bool | Value factory operations |
 | `StringLike` | String-convertible types | String value handling |
