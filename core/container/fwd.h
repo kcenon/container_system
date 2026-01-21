@@ -70,4 +70,22 @@ namespace container_module
 	// Note: std::variant cannot be forward declared, so we provide a comment
 	// for documentation purposes. Include types.h for the actual definition.
 
+	// =======================================================================
+	// Type Alias for Migration (Issue #321, #332)
+	// =======================================================================
+
+	/**
+	 * @brief Forward declaration of message_buffer alias
+	 *
+	 * `message_buffer` is the preferred name for `value_container` since v2.0.0.
+	 * This alias better describes the class's purpose: a serializable message
+	 * buffer for network transmission.
+	 *
+	 * @see value_container for the actual implementation
+	 */
+	using message_buffer = value_container;
+
+	/// @brief Shared pointer to message_buffer (preferred name)
+	using message_buffer_ptr = std::shared_ptr<message_buffer>;
+
 } // namespace container_module
