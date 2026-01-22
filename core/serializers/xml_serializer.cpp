@@ -38,7 +38,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 namespace container_module
 {
 
-#if KCENON_HAS_COMMON_SYSTEM
+#if CONTAINER_HAS_RESULT
 kcenon::common::Result<std::vector<uint8_t>>
 xml_serializer::serialize(const value_container& container) const noexcept
 {

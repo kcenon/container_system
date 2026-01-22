@@ -45,20 +45,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <string>
 #include <vector>
 
-// Include feature flags for unified macro detection
-#if __has_include(<kcenon/common/config/feature_flags.h>)
-    #include <kcenon/common/config/feature_flags.h>
-#endif
-
-// Optional common system integration
-#if KCENON_HAS_COMMON_SYSTEM
-    #if __has_include(<kcenon/common/patterns/result.h>)
-        #include <kcenon/common/patterns/result.h>
-    #elif __has_include(<common/patterns/result.h>)
-        #include <common/patterns/result.h>
-        namespace kcenon::common = ::common;
-    #endif
-#endif
+// Unified Result<T> integration (Issue #335)
+#include "container/core/container/result_integration.h"
 
 namespace container_module
 {
@@ -97,7 +85,7 @@ namespace container_module
 	public:
 		virtual ~serializer_strategy() = default;
 
-#if KCENON_HAS_COMMON_SYSTEM
+#if CONTAINER_HAS_RESULT
 		/**
 		 * @brief Serialize a value_container to bytes
 		 *
