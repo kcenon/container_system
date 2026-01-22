@@ -864,7 +864,7 @@ void value_container::clear_validation_errors() noexcept
 	validation_errors_.clear();
 }
 
-#if KCENON_HAS_COMMON_SYSTEM
+#if CONTAINER_HAS_RESULT
 	kcenon::common::VoidResult value_container::deserialize_result(
 		const std::string& data_str,
 		bool parse_only_header) noexcept

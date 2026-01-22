@@ -71,27 +71,12 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <regex>
 #include <concepts>
 
-// Optional common system integration
-#if __has_include(<kcenon/common/config/feature_flags.h>)
-	#include <kcenon/common/config/feature_flags.h>
-#endif
+// Unified Result<T> integration (Issue #335)
+#include "container/core/container/result_integration.h"
 
-#if KCENON_HAS_COMMON_SYSTEM
-	#if __has_include(<kcenon/common/patterns/result.h>)
-		#include <kcenon/common/patterns/result.h>
-		#ifndef SCHEMA_HAS_COMMON_RESULT
-		#define SCHEMA_HAS_COMMON_RESULT 1
-		#endif
-	#elif __has_include(<common/patterns/result.h>)
-		#include <common/patterns/result.h>
-		#ifndef SCHEMA_HAS_COMMON_RESULT
-		#define SCHEMA_HAS_COMMON_RESULT 1
-		#endif
-	#else
-		#define SCHEMA_HAS_COMMON_RESULT 0
-	#endif
-#else
-	#define SCHEMA_HAS_COMMON_RESULT 0
+// Backward compatibility alias
+#ifndef SCHEMA_HAS_COMMON_RESULT
+#define SCHEMA_HAS_COMMON_RESULT CONTAINER_HAS_RESULT
 #endif
 
 namespace container_module

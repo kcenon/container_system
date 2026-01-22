@@ -60,41 +60,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "container/core/container/error_codes.h"
 #include "container/core/value_types.h"
 
-// Include feature flags for unified macro detection
-#if __has_include(<kcenon/common/config/feature_flags.h>)
-    #include <kcenon/common/config/feature_flags.h>
-#endif
-
-// Optional common system integration
-#if KCENON_HAS_COMMON_SYSTEM
-    #if __has_include(<kcenon/common/patterns/result.h>)
-        #include <kcenon/common/patterns/result.h>
-        #ifndef POLICY_CONTAINER_HAS_COMMON_RESULT
-        #define POLICY_CONTAINER_HAS_COMMON_RESULT 1
-        #endif
-    #elif __has_include(<common/patterns/result.h>)
-        #include <common/patterns/result.h>
-        #ifndef POLICY_CONTAINER_HAS_COMMON_RESULT
-        #define POLICY_CONTAINER_HAS_COMMON_RESULT 1
-        #endif
-        #ifndef KCENON_COMMON_POLICY_FALLBACK_DEFINED
-        #define KCENON_COMMON_POLICY_FALLBACK_DEFINED
-        namespace kcenon::common {
-            using ::common::error_info;
-            template<typename T>
-            using Result = ::common::Result<T>;
-            using VoidResult = ::common::VoidResult;
-            using ::common::ok;
-            using ::common::error;
-            namespace error_codes = ::common::error_codes;
-        }
-        #endif
-    #else
-        #define POLICY_CONTAINER_HAS_COMMON_RESULT 0
-    #endif
-#else
-    #define POLICY_CONTAINER_HAS_COMMON_RESULT 0
-#endif
+// Unified Result<T> integration (Issue #335)
+#include "container/core/container/result_integration.h"
 
 #include <memory>
 #include <mutex>
@@ -381,7 +348,7 @@ public:
     // Result-based API (when common_system is available)
     // =========================================================================
 
-#if POLICY_CONTAINER_HAS_COMMON_RESULT
+#if CONTAINER_HAS_RESULT
     /**
      * @brief Get a typed value with Result return type
      * @tparam T Expected value type
