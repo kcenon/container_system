@@ -57,7 +57,7 @@ namespace container_module
 		binary_serializer() = default;
 		~binary_serializer() override = default;
 
-#if KCENON_HAS_COMMON_SYSTEM
+#if CONTAINER_HAS_RESULT
 		/**
 		 * @brief Serialize a value_container to binary format
 		 *

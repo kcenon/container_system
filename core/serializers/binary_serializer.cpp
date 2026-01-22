@@ -49,7 +49,7 @@ namespace
 	inline constexpr int MESSAGE_VERSION = 6;
 } // anonymous namespace
 
-#if KCENON_HAS_COMMON_SYSTEM
+#if CONTAINER_HAS_RESULT
 kcenon::common::Result<std::vector<uint8_t>>
 binary_serializer::serialize(const value_container& container) const noexcept
 {

@@ -62,27 +62,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "container/internal/value.h"
 #include "container/internal/value_view.h"
 
-// Include feature flags for unified macro detection
-#if __has_include(<kcenon/common/config/feature_flags.h>)
-    #include <kcenon/common/config/feature_flags.h>
-#endif
-
-// Optional common system integration (using unified KCENON_HAS_COMMON_SYSTEM flag)
-#if KCENON_HAS_COMMON_SYSTEM
-    #if __has_include(<kcenon/common/patterns/result.h>)
-        #include <kcenon/common/patterns/result.h>
-        #define CONTAINER_HAS_COMMON_RESULT 1
-    #elif __has_include(<common/patterns/result.h>)
-        #include <common/patterns/result.h>
-        #define CONTAINER_HAS_COMMON_RESULT 1
-        // Create namespace alias for compatibility
-        namespace kcenon::common = ::common;
-    #else
-        #define CONTAINER_HAS_COMMON_RESULT 0
-    #endif
-#else
-    #define CONTAINER_HAS_COMMON_RESULT 0
-#endif
+// Unified Result<T> integration (Issue #335)
+#include "container/core/container/result_integration.h"
 
 #include <memory>
 #include <vector>
@@ -93,42 +74,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <unordered_map>
 #include <optional>
 #include <span>
-
-#if KCENON_HAS_COMMON_SYSTEM
-#if __has_include(<kcenon/common/patterns/result.h>)
-#include <kcenon/common/patterns/result.h>
-#elif __has_include(<common/patterns/result.h>)
-#include <common/patterns/result.h>
-#ifndef KCENON_COMMON_RESULT_FALLBACK_DEFINED
-#define KCENON_COMMON_RESULT_FALLBACK_DEFINED
-namespace kcenon {
-namespace common {
-using ::common::error_info;
-template<typename T>
-using Result = ::common::Result<T>;
-using VoidResult = ::common::VoidResult;
-using ::common::ok;
-using ::common::error;
-using ::common::is_ok;
-using ::common::is_error;
-using ::common::get_value;
-using ::common::get_error;
-using ::common::get_if_ok;
-using ::common::get_if_error;
-using ::common::value_or;
-using ::common::map;
-using ::common::and_then;
-using ::common::or_else;
-using ::common::try_catch;
-// Import common system error codes as namespace alias (not 'using namespace')
-namespace error_codes = ::common::error_codes;
-} // namespace common
-} // namespace kcenon
-#endif // KCENON_COMMON_RESULT_FALLBACK_DEFINED
-#else
-#error "Unable to locate common system result header."
-#endif
-#endif
 
 namespace container_module
 {
