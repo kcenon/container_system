@@ -58,6 +58,7 @@ set(TEST_SOURCES
     variant_value_factory_tests.cpp
     memory_pool_tests.cpp
     simd_tests.cpp
+    simd_policies_tests.cpp
     schema_tests.cpp
     error_codes_tests.cpp
     result_api_tests.cpp
