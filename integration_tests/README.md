@@ -350,9 +350,9 @@ When adding new integration tests:
 
 ## Related Documentation
 
-- `/Users/dongcheolshin/Sources/container_system/BASELINE.md` - Performance baselines
-- `/Users/dongcheolshin/Sources/container_system/README.md` - Container system overview
-- `/Users/dongcheolshin/Sources/container_system/tests/` - Unit tests
+- [docs/performance/BASELINE.md](../docs/performance/BASELINE.md) - Performance baselines
+- [README.md](../README.md) - Container system overview
+- [tests/](../tests/) - Unit tests
 
 ## License
 

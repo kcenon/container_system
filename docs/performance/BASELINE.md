@@ -2,8 +2,9 @@
 
 **Language**: **English** | [한국어](BASELINE.kr.md)
 
-> **📊 Developer Note**: For raw benchmark data and CI baseline thresholds used in automated testing,
-> see [`benchmarks/BASELINE.md`](../../benchmarks/BASELINE.md)
+> **📊 Developer Note**: For automated CI benchmark results and latest baseline thresholds,
+> see [`benchmarks/BASELINE.md`](../../benchmarks/BASELINE.md). This file (docs/performance/BASELINE.md)
+> serves as the primary performance documentation and historical baseline reference.
 
 **Version**: 0.1.0.0
 **Date**: 2025-10-09
