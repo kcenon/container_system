@@ -75,7 +75,7 @@ Benchmark results are stored as artifacts for 90 days:
 ## Related Documentation
 
 - [TESTING.md](TESTING.md) - Comprehensive testing guide including benchmark details
-- [BASELINE.md](../BASELINE.md) - Overall system performance baselines
+- [BASELINE.md](BASELINE.md) - Overall system performance baselines
 - [PERFORMANCE.md](PERFORMANCE.md) - Performance optimization strategies
 
 ---

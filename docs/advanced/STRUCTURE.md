@@ -152,8 +152,6 @@ container_system/
 ├── 📄 STRUCTURE.md                         # This file
 ├── 📄 INTEGRATION.md                       # Integration guide
 ├── 📄 MIGRATION.md                         # Migration guide
-├── 📄 BASELINE.md                          # Performance baseline
-├── 📄 BASELINE.kr.md                       # Korean baseline
 ├── 📄 PERFORMANCE.md                       # Performance documentation
 ├── 📄 PERFORMANCE.kr.md                    # Korean performance docs
 ├── 📄 IMPLEMENTATION_SUMMARY.md            # Implementation summary
@@ -592,8 +590,6 @@ ARCHITECTURE.md                         # Architecture documentation
 STRUCTURE.md                            # This file
 INTEGRATION.md                          # Integration guide
 MIGRATION.md                            # Migration guide from messaging_system
-BASELINE.md                             # Performance baseline (English)
-BASELINE.kr.md                          # Korean baseline
 PERFORMANCE.md                          # Performance documentation (English)
 PERFORMANCE.kr.md                       # Korean performance docs
 IMPLEMENTATION_SUMMARY.md               # Implementation summary (English)
@@ -620,7 +616,7 @@ SANITIZER_TEST_RESULTS.kr.md            # Korean sanitizer results
 **3. Development Documentation:**
 - IMPLEMENTATION_SUMMARY.md: Implementation details
 - PERFORMANCE.md: Performance characteristics
-- BASELINE.md: Performance baselines
+- performance/BASELINE.md: Performance baselines
 - SANITIZER_TEST_RESULTS.md: Testing results
 
 **4. Migration Documentation:**
