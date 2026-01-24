@@ -165,8 +165,7 @@ container_system/
 ├── 📄 .gitignore                   # Git ignore rules
 ├── 📄 LICENSE                      # BSD 3-Clause license
 ├── 📄 README.md                    # Main README
-├── 📄 README.kr.md                 # Korean README
-└── 📄 BASELINE.md                  # User-facing performance baseline
+└── 📄 README.kr.md                 # Korean README
 ```
 
 ## Core Module Files

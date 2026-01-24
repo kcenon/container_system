@@ -167,8 +167,7 @@ container_system/
 ├── 📄 .gitignore
 ├── 📄 LICENSE
 ├── 📄 README.md
-├── 📄 README.kr.md
-└── 📄 BASELINE.md
+└── 📄 README.kr.md
 ```
 
 ## 코어 모듈 파일

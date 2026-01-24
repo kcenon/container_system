@@ -799,7 +799,7 @@ python scripts/compare_benchmarks.py \
 - [BENCHMARKS.md](BENCHMARKS.md) - Performance benchmarks
 - [PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md) - Code organization
 - [ARCHITECTURE.md](ARCHITECTURE.md) - Architecture guide
-- [BASELINE.md](../BASELINE.md) - Performance baselines
+- [BASELINE.md](performance/BASELINE.md) - Performance baselines
 
 ---
 
