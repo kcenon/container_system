@@ -158,9 +158,37 @@ def main():
     # Ensure output directory exists
     Path(args.output).parent.mkdir(parents=True, exist_ok=True)
 
-    # Write output
-    with open(args.output, 'w') as f:
-        f.write(markdown)
+    # Read existing file if it exists
+    output_path = Path(args.output)
+    if output_path.exists():
+        with open(output_path, 'r') as f:
+            existing_content = f.read()
+
+        # Find AUTO-GENERATED markers
+        start_marker = '<!-- AUTO-GENERATED: DO NOT EDIT MANUALLY -->'
+        end_marker = '<!-- END AUTO-GENERATED -->'
+
+        start_idx = existing_content.find(start_marker)
+        end_idx = existing_content.find(end_marker)
+
+        if start_idx != -1 and end_idx != -1:
+            # Replace only the auto-generated section
+            before = existing_content[:start_idx + len(start_marker)]
+            after = existing_content[end_idx:]
+
+            # Add markers and content
+            new_content = f"{before}\n<!-- This section is automatically updated by CI -->\n\n{markdown}\n{after}"
+
+            with open(output_path, 'w') as f:
+                f.write(new_content)
+        else:
+            # No markers found, write as new file
+            with open(output_path, 'w') as f:
+                f.write(markdown)
+    else:
+        # New file, write markdown only
+        with open(output_path, 'w') as f:
+            f.write(markdown)
 
     print(f"Baseline updated: {args.output}")
 
