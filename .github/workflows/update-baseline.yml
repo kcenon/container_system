@@ -76,7 +76,7 @@ jobs:
 
       - name: Generate baseline report
         run: |
-          python3 scripts/update_baseline.py baseline.json benchmarks/BASELINE.md
+          python3 scripts/update_baseline.py baseline.json docs/performance/BASELINE.md
 
       - name: Archive baseline JSON
         run: |
@@ -90,7 +90,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add benchmarks/BASELINE.md benchmarks/baselines/
+          git add docs/performance/BASELINE.md benchmarks/baselines/
           if git diff --staged --quiet; then
             echo "No changes to commit"
           else
@@ -104,5 +104,5 @@ jobs:
           name: performance-baseline
           path: |
             baseline.json
-            benchmarks/BASELINE.md
+            docs/performance/BASELINE.md
           retention-days: 90
