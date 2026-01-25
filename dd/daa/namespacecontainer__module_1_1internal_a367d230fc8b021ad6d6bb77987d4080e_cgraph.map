@@ -1,0 +1,9 @@
+<map id="container_module::internal::pool_deallocate" name="container_module::internal::pool_deallocate">
+<area shape="rect" id="Node000001" title="Destroy and deallocate an object allocated with pool_allocate." alt="" coords="5,37,203,77"/>
+<area shape="rect" id="Node000002" href="$dc/d4b/classcontainer__module_1_1internal_1_1pool__allocator.html#ae624175a71c95e4f69ab6ab76b93fb12" title="Deallocate memory to the appropriate pool." alt="" coords="251,5,449,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="203,42,237,37,237,43,203,47"/>
+<area shape="rect" id="Node000004" href="$dc/d4b/classcontainer__module_1_1internal_1_1pool__allocator.html#a41af9218d7b3eaafcc50f88232c536e5" title="Get the singleton instance." alt="" coords="251,69,449,109"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="203,68,238,72,237,77,203,73"/>
+<area shape="rect" id="Node000003" href="$dd/dbf/classcontainer__module_1_1internal_1_1fixed__block__pool.html#a72730d95fa3f1101ec7f9ce7a240ccc5" title=" " alt="" coords="497,5,712,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="449,23,484,23,484,28,449,28"/>
+</map>

@@ -1,0 +1,13 @@
+<map id="container_module::scoped_timer" name="container_module::scoped_timer">
+<area shape="rect" id="Node000001" title="RAII timer for measuring operation latency." alt="" coords="5,653,191,873"/>
+<area shape="rect" id="Node000002" href="$dc/d55/structcontainer__module_1_1latency__histogram.html" title="Approximate latency histogram using reservoir sampling." alt="" coords="139,276,326,576"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="175,577,150,639,146,637,170,575"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="70,5,241,71"/>
+<area shape="poly" id="edge6_Node000001_Node000003" title=" " alt="" coords="140,72,105,146,88,191,75,238,62,342,60,448,67,548,78,637,72,638,62,549,55,448,57,341,70,237,83,190,100,144,135,70"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="158,71,161,137,170,213,180,259,175,261,165,214,155,137,153,71"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="283,133,500,213"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="213,68,310,123,307,128,210,73"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="369,215,337,265,332,262,364,212"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="525,141,679,206"/>
+<area shape="poly" id="edge5_Node000002_Node000005" title=" " alt="" coords="557,208,341,354,338,350,554,204"/>
+</map>

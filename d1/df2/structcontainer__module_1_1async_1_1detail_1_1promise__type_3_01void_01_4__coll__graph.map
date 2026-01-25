@@ -1,0 +1,7 @@
+<map id="container_module::async::detail::promise_type&lt; void &gt;" name="container_module::async::detail::promise_type&lt; void &gt;">
+<area shape="rect" id="Node000001" title="Promise type for void&#45;returning tasks." alt="" coords="5,323,183,457"/>
+<area shape="rect" id="Node000002" href="$d4/d62/structcontainer__module_1_1async_1_1detail_1_1promise__base.html" title="Base promise type with common functionality." alt="" coords="5,133,183,273"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="97,287,97,322,91,322,91,287"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="21,5,167,71"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="97,71,97,117,91,117,91,71"/>
+</map>

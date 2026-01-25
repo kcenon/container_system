@@ -1,0 +1,5 @@
+<map id="container_module::metrics_manager::make_timer" name="container_module::metrics_manager::make_timer">
+<area shape="rect" id="Node000001" title="Create a scoped timer if metrics are enabled." alt="" coords="5,5,201,45"/>
+<area shape="rect" id="Node000002" href="$da/d48/classcontainer__module_1_1metrics__manager.html#a58c3ac237c495aef1052f618df063119" title="Check if metrics collection is enabled." alt="" coords="249,5,445,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="201,23,236,23,236,28,201,28"/>
+</map>

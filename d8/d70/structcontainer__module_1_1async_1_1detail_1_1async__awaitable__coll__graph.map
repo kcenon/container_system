@@ -1,0 +1,5 @@
+<map id="container_module::async::detail::async_awaitable&lt; T &gt;" name="container_module::async::detail::async_awaitable&lt; T &gt;">
+<area shape="rect" id="Node000001" title="Awaitable that runs work in a separate thread." alt="" coords="5,163,220,383"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="19,5,206,100"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="115,100,115,146,110,146,110,100"/>
+</map>

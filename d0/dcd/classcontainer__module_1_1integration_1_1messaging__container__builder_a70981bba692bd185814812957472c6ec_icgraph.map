@@ -1,0 +1,41 @@
+<map id="container_module::integration::messaging_container_builder::add_value" name="container_module::integration::messaging_container_builder::add_value">
+<area shape="rect" id="Node000001" title=" " alt="" coords="936,323,1157,378"/>
+<area shape="rect" id="Node000002" href="$d9/d1c/classscenarios_1_1ContentManagementSystem.html#aef3b7b96cf92379c055400a8378098b1" title=" " alt="" coords="633,5,888,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1032,311,1014,254,984,186,942,117,916,86,886,59,867,48,870,43,890,55,920,83,946,114,988,183,1019,252,1038,309"/>
+<area shape="rect" id="Node000003" href="$d6/d71/classAdvancedContainerExample.html#a78efa0a41a4dd62ea14d74f5637b2b71" title="Demonstrates batch processing with messaging features." alt="" coords="644,69,877,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="1025,312,1002,269,971,220,932,172,886,130,852,112,855,107,890,126,936,168,976,217,1007,267,1030,310"/>
+<area shape="rect" id="Node000004" href="$d6/d71/classAdvancedContainerExample.html#a809c347379d7d3b0c6870db6266a09f8" title="Demonstrates enhanced messaging features." alt="" coords="371,119,577,174"/>
+<area shape="poly" id="edge10_Node000001_Node000004" title=" " alt="" coords="1021,313,998,277,967,239,930,203,887,174,849,159,810,147,729,134,649,131,578,135,577,129,649,126,729,129,811,142,851,154,889,170,933,198,971,235,1002,274,1026,310"/>
+<area shape="rect" id="Node000007" href="$d5/d4e/messaging__integration__example_8cpp.html#ac5dd2ecaf0cf22081be447c9ddcf17a7" title=" " alt="" coords="673,184,848,224"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="1003,316,950,275,887,238,847,224,849,219,889,234,953,271,1006,312"/>
+<area shape="rect" id="Node000009" href="$d6/d71/classAdvancedContainerExample.html#a1f207a927af61cbca1745044efc6b130" title="Demonstrates external integration features." alt="" coords="371,270,577,325"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="922,342,577,310,578,304,922,336"/>
+<area shape="rect" id="Node000010" href="$d6/d71/classAdvancedContainerExample.html#a7c4289a3d4ae9f52e02276bca0019c0a" title="Demonstrates multi&#45;threaded producer&#45;consumer pattern." alt="" coords="368,349,580,403"/>
+<area shape="poly" id="edge11_Node000001_Node000010" title=" " alt="" coords="922,359,580,374,580,369,922,353"/>
+<area shape="rect" id="Node000011" href="$d5/d4e/messaging__integration__example_8cpp.html#a9fa03b4d998ed7c123c77fb416cc4bc7" title=" " alt="" coords="663,248,858,288"/>
+<area shape="poly" id="edge13_Node000001_Node000011" title=" " alt="" coords="938,322,830,291,831,285,939,317"/>
+<area shape="rect" id="Node000012" href="$d9/d1c/classscenarios_1_1ContentManagementSystem.html#a6975d3a43b1e3d4046b4b4cb6bca535d" title=" " alt="" coords="646,413,875,453"/>
+<area shape="poly" id="edge15_Node000001_Node000012" title=" " alt="" coords="939,384,831,416,830,411,938,379"/>
+<area shape="rect" id="Node000013" href="$d5/d1c/classscenarios_1_1GamingEventSystem.html#a3403e62957e14344283e707976f4380b" title=" " alt="" coords="646,477,875,517"/>
+<area shape="poly" id="edge16_Node000001_Node000013" title=" " alt="" coords="1006,389,953,430,889,468,858,480,856,475,887,463,950,426,1003,385"/>
+<area shape="rect" id="Node000014" href="$d8/d6d/classscenarios_1_1FinancialTransactionSystem.html#a37cbcf1e27f0bcafcd915047004bd726" title=" " alt="" coords="649,541,873,581"/>
+<area shape="poly" id="edge17_Node000001_Node000014" title=" " alt="" coords="1023,391,968,463,931,500,889,532,865,544,863,539,887,527,928,496,964,460,1019,388"/>
+<area shape="rect" id="Node000015" href="$d5/d1c/classscenarios_1_1GamingEventSystem.html#a59259bf430f8d9addd2901141209351c" title=" " alt="" coords="644,605,877,645"/>
+<area shape="poly" id="edge18_Node000001_Node000015" title=" " alt="" coords="1033,392,1011,439,980,494,940,549,916,574,890,596,869,608,866,603,886,591,912,570,936,546,976,491,1006,437,1028,389"/>
+<area shape="rect" id="Node000016" href="$de/deb/classscenarios_1_1IoTDataCollectionSystem.html#ab3378a367ae308589f4081b80596d143" title=" " alt="" coords="657,669,865,709"/>
+<area shape="poly" id="edge19_Node000001_Node000016" title=" " alt="" coords="1039,392,1020,452,991,524,948,597,921,630,890,659,867,673,864,669,886,655,917,627,943,594,986,522,1015,450,1034,390"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="647,115,578,129,577,123,646,109"/>
+<area shape="rect" id="Node000005" href="$d6/d71/classAdvancedContainerExample.html#a168b0d067662dce9193f2fcef87dd352" title="Runs all demonstrations." alt="" coords="108,277,315,317"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="396,182,364,198,297,240,241,279,238,275,294,236,361,194,393,177"/>
+<area shape="rect" id="Node000006" href="$d8/d75/advanced__container__example_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,285,60,310"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="94,300,60,300,60,295,94,295"/>
+<area shape="rect" id="Node000008" href="$d5/d4e/messaging__integration__example_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="447,209,501,234"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="660,213,502,222,502,217,659,207"/>
+<area shape="poly" id="edge9_Node000009_Node000005" title=" " alt="" coords="357,300,315,300,315,295,357,295"/>
+<area shape="poly" id="edge12_Node000010_Node000005" title=" " alt="" coords="368,347,278,320,280,315,370,342"/>
+<area shape="poly" id="edge14_Node000011_Node000008" title=" " alt="" coords="650,253,501,228,502,223,650,247"/>
+<area shape="rect" id="Node000017" href="$de/deb/classscenarios_1_1IoTDataCollectionSystem.html#af1b110c2ff3ed8f9c0b7e480593c10db" title=" " alt="" coords="363,669,585,709"/>
+<area shape="poly" id="edge20_Node000016_Node000017" title=" " alt="" coords="643,692,586,692,586,687,643,687"/>
+<area shape="rect" id="Node000018" href="$d9/dd3/real__world__scenarios_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="184,677,239,702"/>
+<area shape="poly" id="edge21_Node000017_Node000018" title=" " alt="" coords="349,692,239,692,239,687,349,687"/>
+</map>

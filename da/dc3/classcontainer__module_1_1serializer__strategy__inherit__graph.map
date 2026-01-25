@@ -1,0 +1,11 @@
+<map id="container_module::serializer_strategy" name="container_module::serializer_strategy">
+<area shape="rect" id="Node000001" title="Abstract base class for serialization strategies." alt="" coords="296,5,495,225"/>
+<area shape="rect" id="Node000002" href="$d1/d85/classcontainer__module_1_1binary__serializer.html" title="Binary format serializer." alt="" coords="5,273,185,413"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="286,202,187,276,184,272,283,198"/>
+<area shape="rect" id="Node000003" href="$d9/d49/classcontainer__module_1_1json__serializer.html" title="JSON format serializer." alt="" coords="209,273,376,413"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="343,239,327,274,322,272,338,236"/>
+<area shape="rect" id="Node000004" href="$d3/dc4/classcontainer__module_1_1msgpack__serializer.html" title="MessagePack format serializer." alt="" coords="400,273,599,413"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="454,236,470,272,465,274,449,239"/>
+<area shape="rect" id="Node000005" href="$d1/d46/classcontainer__module_1_1xml__serializer.html" title="XML format serializer." alt="" coords="623,273,787,413"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="507,194,613,271,624,279,621,283,610,275,504,199"/>
+</map>

@@ -1,0 +1,29 @@
+<map id="container_module::metrics_manager::make_timer" name="container_module::metrics_manager::make_timer">
+<area shape="rect" id="Node000001" title="Create a scoped timer if metrics are enabled." alt="" coords="544,237,740,277"/>
+<area shape="rect" id="Node000002" href="$d9/dad/classcontainer__module_1_1value__container.html#aae51c06e58ddd8f44996c07f5cf4142e" title="Internal deserialize from string." alt="" coords="289,109,472,149"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="603,231,553,196,495,164,464,152,466,147,497,159,556,192,606,227"/>
+<area shape="rect" id="Node000007" href="$d9/dad/classcontainer__module_1_1value__container.html#a3776b629e34bea460a37cc75105a1f51" title="Internal implementation for MessagePack deserialization." alt="" coords="265,173,496,213"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="546,237,462,216,463,211,547,231"/>
+<area shape="rect" id="Node000008" href="$d9/dad/classcontainer__module_1_1value__container.html#ac04d3ddd1f085cc164c051fd89ca210c" title="Get a single value by key (unified API)" alt="" coords="289,237,472,277"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="531,260,472,260,472,255,531,255"/>
+<area shape="rect" id="Node000009" href="$d9/dad/classcontainer__module_1_1value__container.html#afa472c8044735fb859a148533c2c2d21" title="Get a value by name." alt="" coords="289,301,472,341"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="547,283,463,304,462,299,546,278"/>
+<area shape="rect" id="Node000011" href="$d9/dad/classcontainer__module_1_1value__container.html#adbc1f9b885e005f07c0cdd42ddaa08bc" title="Internal implementation for setting a single optimized_value." alt="" coords="287,381,474,421"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="604,288,554,322,497,356,437,384,435,379,495,351,551,317,601,283"/>
+<area shape="rect" id="Node000003" href="$d9/dad/classcontainer__module_1_1value__container.html#a7539bd21ce23370c37e025f52f67d58a" title="Internal deserialize from byte array." alt="" coords="20,5,203,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="325,106,216,60,182,48,184,43,218,55,327,101"/>
+<area shape="rect" id="Node000004" href="$d9/dad/classcontainer__module_1_1value__container.html#a161eb3fc0910f0af3d42d7d926a7fb97" title="Construct from a serialized data string. If parse_only_header==true, only parse the header part,..." alt="" coords="10,69,213,109"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="275,116,213,107,213,102,276,111"/>
+<area shape="rect" id="Node000005" href="$da/dab/classcontainer__module_1_1optimized__container.html#a161eb3fc0910f0af3d42d7d926a7fb97" title="Construct from a serialized data string. If parse_only_header==true, only parse the header part,..." alt="" coords="5,133,217,173"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="276,141,218,147,217,141,275,136"/>
+<area shape="rect" id="Node000006" href="$d9/dad/classcontainer__module_1_1value__container.html#a05ffd9fd90384cb244c1f9400bd4ecf7" title="Construct from a raw byte array. If parse_only_header==true, only parse the header part,..." alt="" coords="10,197,213,237"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="288,156,266,164,218,188,185,200,183,195,216,183,264,159,287,151"/>
+<area shape="rect" id="Node000010" href="$da/dab/classcontainer__module_1_1optimized__container.html#af8470bed20f173ea3c12e9154a21d171" title="Fast value lookup using hash map (O(1))" alt="" coords="5,285,217,325"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="275,318,217,314,218,309,276,312"/>
+<area shape="rect" id="Node000012" href="$d9/dad/classcontainer__module_1_1value__container.html#a1454b34f521727b8ba231ab78ecd2a64" title="Set a single optimized_value (unified API)" alt="" coords="20,349,203,389"/>
+<area shape="poly" id="edge11_Node000011_Node000012" title=" " alt="" coords="273,391,203,383,203,378,274,386"/>
+<area shape="rect" id="Node000013" href="$d9/dad/classcontainer__module_1_1value__container.html#a84a72d9fc9a8b7cce2d31f746ce06640" title="Set a typed value by key (unified API)" alt="" coords="20,413,203,453"/>
+<area shape="poly" id="edge12_Node000011_Node000013" title=" " alt="" coords="274,417,203,425,203,420,273,411"/>
+<area shape="rect" id="Node000014" href="$d9/dad/classcontainer__module_1_1value__container.html#a651d3f3c9bb404abe916291c7d18f89d" title="Set multiple optimized_values at once (unified API)" alt="" coords="20,477,203,517"/>
+<area shape="poly" id="edge13_Node000011_Node000014" title=" " alt="" coords="320,429,218,468,182,480,180,475,216,463,318,424"/>
+</map>

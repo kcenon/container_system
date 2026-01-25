@@ -1,0 +1,35 @@
+<map id="container_module::validation_error::validation_error" name="container_module::validation_error::validation_error">
+<area shape="rect" id="Node000001" title=" " alt="" coords="521,229,733,269"/>
+<area shape="rect" id="Node000002" href="$dc/d80/structcontainer__module_1_1validation__error.html#afdc2a8798b84b8d593da89c367fbad32" title="Create error for custom validation failure." alt="" coords="261,5,473,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="606,218,584,181,553,139,515,96,472,60,450,48,453,43,475,55,519,92,557,135,588,178,611,216"/>
+<area shape="rect" id="Node000004" href="$dc/d80/structcontainer__module_1_1validation__error.html#a45a83b24036bbf4291e20fe6598e4bf8" title="Create error for invalid length." alt="" coords="261,69,473,109"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="596,222,541,172,508,146,472,124,446,112,448,107,475,119,511,142,545,167,600,218"/>
+<area shape="rect" id="Node000006" href="$dc/d80/structcontainer__module_1_1validation__error.html#aada72def6b1a0320f213848f7149b897" title="Create error for missing required field." alt="" coords="261,133,473,173"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="568,226,472,188,437,176,439,171,474,183,569,221"/>
+<area shape="rect" id="Node000008" href="$dc/d80/structcontainer__module_1_1validation__error.html#a5c7155e2ecc71a21a12782f5ec66dbae" title="Create error for nested validation failure." alt="" coords="261,197,473,237"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="508,237,473,233,474,228,508,232"/>
+<area shape="rect" id="Node000010" href="$dc/d80/structcontainer__module_1_1validation__error.html#aa8e028bba5669f006e865d9ce9741b33" title="Create error for value not in allowed list." alt="" coords="261,261,473,301"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="508,267,474,271,473,266,508,261"/>
+<area shape="rect" id="Node000012" href="$dc/d80/structcontainer__module_1_1validation__error.html#a089bfe304f17713da5ef77628caa2db2" title="Create error for out of range value." alt="" coords="261,325,473,365"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="569,278,474,316,439,328,437,323,472,311,568,273"/>
+<area shape="rect" id="Node000014" href="$dc/d80/structcontainer__module_1_1validation__error.html#a1eb73cf73df453a843412ea7ce34faae" title="Create error for pattern mismatch." alt="" coords="261,389,473,429"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="600,281,545,331,511,357,475,380,448,392,446,387,472,375,508,353,541,327,596,277"/>
+<area shape="rect" id="Node000016" href="$dc/d80/structcontainer__module_1_1validation__error.html#a1c64d17e0b6eb961d6298fbe7aaf50d3" title="Create error for type mismatch." alt="" coords="261,453,473,493"/>
+<area shape="poly" id="edge15_Node000001_Node000016" title=" " alt="" coords="611,283,588,320,557,363,519,407,475,444,453,456,450,451,472,439,515,403,553,360,584,317,606,280"/>
+<area shape="rect" id="Node000003" href="$da/db0/classcontainer__module_1_1container__schema.html#a29ce0c8600975de5a94df039777055a1" title="Validate custom validators." alt="" coords="5,5,213,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="247,28,214,28,214,23,247,23"/>
+<area shape="rect" id="Node000005" href="$da/db0/classcontainer__module_1_1container__schema.html#a49d4043208d59600a5940c403ac4ba86" title="Validate length constraint." alt="" coords="5,69,213,109"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="247,92,214,92,214,87,247,87"/>
+<area shape="rect" id="Node000007" href="$da/db0/classcontainer__module_1_1container__schema.html#ae401afbe6da0135455b0f83b544e0753" title="Validate a container and collect all errors." alt="" coords="5,133,213,173"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="247,156,214,156,214,151,247,151"/>
+<area shape="rect" id="Node000009" href="$da/db0/classcontainer__module_1_1container__schema.html#af96124f9e41c337c46f0228dcccdccb3" title="Validate nested schema." alt="" coords="5,197,213,237"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="247,220,214,220,214,215,247,215"/>
+<area shape="rect" id="Node000011" href="$da/db0/classcontainer__module_1_1container__schema.html#a92a7792a5537eac75ac141e92a79b2de" title="Validate allowed values constraint." alt="" coords="5,261,213,301"/>
+<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="247,284,214,284,214,279,247,279"/>
+<area shape="rect" id="Node000013" href="$da/db0/classcontainer__module_1_1container__schema.html#ae0df04cfb0d431ebad3c4b36b93ef457" title="Validate range constraint." alt="" coords="5,325,213,365"/>
+<area shape="poly" id="edge12_Node000012_Node000013" title=" " alt="" coords="247,348,214,348,214,343,247,343"/>
+<area shape="rect" id="Node000015" href="$da/db0/classcontainer__module_1_1container__schema.html#a24d888fcb3bc9a2f91e80ce79dc00579" title="Validate pattern constraint." alt="" coords="5,389,213,429"/>
+<area shape="poly" id="edge14_Node000014_Node000015" title=" " alt="" coords="247,412,214,412,214,407,247,407"/>
+<area shape="rect" id="Node000017" href="$da/db0/classcontainer__module_1_1container__schema.html#a1aa7a97cf5360a99efdc55254d6c363f" title="Validate type constraint." alt="" coords="5,453,213,493"/>
+<area shape="poly" id="edge16_Node000016_Node000017" title=" " alt="" coords="247,476,214,476,214,471,247,471"/>
+</map>

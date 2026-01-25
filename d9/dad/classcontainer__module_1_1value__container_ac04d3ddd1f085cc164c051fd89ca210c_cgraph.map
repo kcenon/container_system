@@ -1,0 +1,10 @@
+<map id="container_module::value_container::get" name="container_module::value_container::get">
+<area shape="rect" id="Node000001" title="Get a single value by key (unified API)" alt="" coords="5,63,188,103"/>
+<area shape="rect" id="Node000002" href="$da/d48/classcontainer__module_1_1metrics__manager.html#adc8d9e289a738526a21347608ad93c04" title="Get the singleton metrics instance." alt="" coords="236,5,432,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="179,60,237,46,238,51,181,65"/>
+<area shape="rect" id="Node000003" href="$da/d48/classcontainer__module_1_1metrics__manager.html#a58c3ac237c495aef1052f618df063119" title="Check if metrics collection is enabled." alt="" coords="480,92,676,132"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="188,86,466,103,466,108,188,91"/>
+<area shape="rect" id="Node000004" href="$da/d48/classcontainer__module_1_1metrics__manager.html#a4a48c65dfeb635da6321106d4b0dc6c2" title="Create a scoped timer if metrics are enabled." alt="" coords="236,120,432,160"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="181,100,238,114,237,119,179,105"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="432,126,466,122,467,127,432,131"/>
+</map>

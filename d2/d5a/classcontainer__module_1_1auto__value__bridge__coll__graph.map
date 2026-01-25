@@ -1,0 +1,30 @@
+<map id="container_module::auto_value_bridge" name="container_module::auto_value_bridge">
+<area shape="rect" id="Node000001" title="RAII wrapper for automatic legacy value conversion." alt="" coords="389,908,558,1168"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="923,5,1109,85"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="923,56,818,68,705,87,653,99,606,114,569,131,545,149,536,232,520,429,486,892,481,891,515,428,531,232,540,147,567,126,604,109,651,94,704,81,818,63,922,51"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="931,158,1101,253"/>
+<area shape="poly" id="edge10_Node000009_Node000002" title=" " alt="" coords="1019,86,1019,142,1013,142,1013,86"/>
+<area shape="rect" id="Node000003" href="$d5/df9/classcontainer__module_1_1value.html" title="The base class for all values stored in the container system." alt="" coords="814,340,1002,845"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="1000,475,1032,427,1063,375,1090,319,1111,262,1122,218,1126,182,1118,148,1096,111,1086,98,1090,95,1101,108,1123,146,1131,182,1127,219,1116,263,1095,321,1068,377,1037,430,1004,478"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="819,998,997,1078"/>
+<area shape="poly" id="edge8_Node000008_Node000003" title=" " alt="" coords="931,846,929,884,919,982,914,981,924,884,925,845"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="1207,165,1356,245"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="1236,257,1004,496,1000,492,1232,254"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="365,173,443,238"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="406,238,412,277,419,297,429,314,466,359,509,400,557,436,606,468,707,519,799,556,797,561,705,524,604,472,554,440,506,404,462,363,424,318,414,299,407,278,401,239"/>
+<area shape="rect" id="Node000011" href="$dd/dd3/classcontainer__module_1_1variant__value__v2.html" title="Enhanced type&#45;safe value with perfect legacy compatibility." alt="" coords="205,423,390,763"/>
+<area shape="poly" id="edge13_Node000011_Node000005" title=" " alt="" coords="376,240,359,262,345,288,325,346,312,407,307,406,320,345,340,286,354,260,372,237"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="339,5,469,85"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="407,99,407,172,401,172,401,99"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="554,173,713,238"/>
+<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="658,237,807,445,802,448,654,240"/>
+<area shape="poly" id="edge7_Node000003_Node000008" title=" " alt="" coords="890,999,872,945,859,884,856,862,862,862,864,884,878,944,895,997"/>
+<area shape="poly" id="edge9_Node000003_Node000009" title=" " alt="" coords="1006,253,986,325,980,323,1001,252"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="737,148,906,263"/>
+<area shape="poly" id="edge11_Node000003_Node000010" title=" " alt="" coords="834,262,845,315,847,324,842,325,840,317,829,263"/>
+<area shape="poly" id="edge12_Node000001_Node000011" title=" " alt="" coords="367,762,419,892,414,894,362,764"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="185,173,319,238"/>
+<area shape="poly" id="edge14_Node000011_Node000012" title=" " alt="" coords="254,238,256,316,267,406,261,407,251,316,249,238"/>
+<area shape="rect" id="Node000013" title=" " alt="" coords="5,173,160,238"/>
+<area shape="poly" id="edge15_Node000011_Node000013" title=" " alt="" coords="103,237,199,410,194,412,98,239"/>
+</map>

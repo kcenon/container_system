@@ -1,0 +1,11 @@
+<map id="container_module::policy::static_storage_policy&lt; AllowedTypes &gt;" name="container_module::policy::static_storage_policy&lt; AllowedTypes &gt;">
+<area shape="rect" id="Node000001" title="Compile&#45;time type&#45;restricted storage policy." alt="" coords="9,628,206,1003"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="40,485,175,565"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="110,565,110,612,105,612,105,565"/>
+<area shape="rect" id="Node000003" href="$d8/de4/structcontainer__module_1_1optimized__value.html" title="Optimized value storage with Small Object Optimization." alt="" coords="5,263,209,423"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="110,423,110,469,105,469,105,423"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="68,135,147,200"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="110,200,110,246,105,246,105,200"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="42,5,173,85"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="110,99,110,134,105,134,105,99"/>
+</map>

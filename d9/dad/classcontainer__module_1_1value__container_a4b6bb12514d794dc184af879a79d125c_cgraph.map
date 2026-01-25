@@ -1,0 +1,17 @@
+<map id="container_module::value_container::to_xml_impl" name="container_module::value_container::to_xml_impl">
+<area shape="rect" id="Node000001" title="Internal implementation for XML serialization." alt="" coords="5,141,188,181"/>
+<area shape="rect" id="Node000002" href="$d9/dad/classcontainer__module_1_1value__container.html#a17826f3cac07988dcce03e62f03c798e" title=" " alt="" coords="241,30,424,85"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="139,139,235,95,252,88,254,93,237,100,141,144"/>
+<area shape="rect" id="Node000006" href="$d1/daf/classutility__module_1_1formatter.html#a1833466f2e4df9a2dbab6204dbb95800" title=" " alt="" coords="239,109,426,149"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="188,146,225,141,226,146,189,152"/>
+<area shape="rect" id="Node000007" href="$d7/d42/namespacecontainer__module_1_1variant__helpers.html#ab4598dd877663bab369141b75a742c18" title="Convert value_variant to string representation." alt="" coords="236,173,429,213"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="189,171,223,176,222,181,188,176"/>
+<area shape="rect" id="Node000008" href="$d7/d42/namespacecontainer__module_1_1variant__helpers.html#a684e03d81a5fcc9f8623e0ad8393286a" title="Encode a string for XML output per XML 1.0 specification." alt="" coords="236,237,429,277"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="140,179,237,223,257,230,255,235,235,228,137,184"/>
+<area shape="rect" id="Node000003" href="$d1/d1a/namespacecontainer__module.html#a83ed4416891be1a3f3191bf92b50b3e9" title="Convert a string&#45;based type indicator (e.g., &quot;4&quot;) to a value_types enum." alt="" coords="477,5,673,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="424,43,463,37,464,43,424,48"/>
+<area shape="rect" id="Node000005" href="$d9/dad/classcontainer__module_1_1value__container.html#a40e1ea012f2f6562f76bb6414eacd322" title="Returns iterator to end of values." alt="" coords="484,69,667,109"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="424,67,471,73,470,78,424,72"/>
+<area shape="rect" id="Node000004" href="$d1/d1a/namespacecontainer__module.html#ac03e62099dde8cbf072a3a4c635382bf" title="Compile&#45;time conversion from string to value_types." alt="" coords="721,5,889,45"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="674,23,708,23,708,28,674,28"/>
+</map>

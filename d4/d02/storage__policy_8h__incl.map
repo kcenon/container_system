@@ -1,0 +1,23 @@
+<map id="core/storage_policy.h" name="core/storage_policy.h">
+<area shape="rect" id="Node000001" title="Storage policy interfaces for unified container architecture." alt="" coords="592,5,751,31"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,79,185,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="592,31,416,51,199,81,198,76,415,46,591,25"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="210,79,365,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="615,33,379,81,378,76,614,28"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="389,86,469,111"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="634,33,481,81,474,84,472,79,480,76,632,28"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="493,86,567,111"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="652,33,564,82,562,77,649,29"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="591,86,650,111"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="666,32,638,76,633,73,662,29"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="675,86,772,111"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="681,29,710,73,706,76,677,32"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="796,86,859,111"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="695,28,794,78,791,82,693,33"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="883,86,1007,111"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="712,28,892,80,891,85,710,33"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="1031,86,1117,111"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="751,27,878,46,1020,76,1031,79,1030,84,1019,81,877,52,750,32"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="1141,86,1212,111"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="751,21,926,39,1028,54,1129,76,1139,79,1137,84,1128,81,1027,60,925,44,751,26"/>
+</map>

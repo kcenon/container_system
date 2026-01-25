@@ -1,0 +1,22 @@
+<map id="container_module::value::size" name="container_module::value::size">
+<area shape="rect" id="Node000001" title=" " alt="" coords="724,165,907,205"/>
+<area shape="rect" id="Node000002" href="$df/df7/classcontainer__module_1_1bytes__value.html#a313ee54be7cf995579a518f89005cc87" title=" " alt="" coords="488,5,671,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="786,157,737,107,707,82,675,60,651,48,653,43,677,55,710,78,741,103,790,153"/>
+<area shape="rect" id="Node000003" href="$df/df7/classcontainer__module_1_1bytes__value.html#aa1557b4dda3330946f8a404ca1b8911e" title=" " alt="" coords="488,69,671,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="760,162,675,124,643,112,645,107,677,119,763,157"/>
+<area shape="rect" id="Node000004" href="$db/d1c/classcontainer__module_1_1variant__value.html#a5c5afd0733f589cfd58ffdd6c17d1574" title="Serialize to binary format." alt="" coords="483,133,676,173"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="710,174,676,169,676,164,711,168"/>
+<area shape="rect" id="Node000005" href="$dd/dd3/classcontainer__module_1_1variant__value__v2.html#ac7e934be08be1d54d8ae7783d3f92547" title="Serialize data portion based on type." alt="" coords="483,197,676,237"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="711,202,676,207,676,202,710,197"/>
+<area shape="rect" id="Node000009" href="$dd/dd3/classcontainer__module_1_1variant__value__v2.html#aa94a2decfb5f103ac1f2d3f27b4393fa" title="Convert to JSON representation." alt="" coords="483,261,676,301"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="763,214,677,252,645,264,643,259,675,247,760,209"/>
+<area shape="rect" id="Node000010" href="$dd/dd3/classcontainer__module_1_1variant__value__v2.html#a43d748a7f678fef92e631261626030d1" title="Convert to string representation." alt="" coords="483,325,676,365"/>
+<area shape="poly" id="edge10_Node000001_Node000010" title=" " alt="" coords="790,218,741,267,710,293,677,316,653,328,651,323,675,311,707,289,737,263,786,214"/>
+<area shape="rect" id="Node000006" href="$dd/dd3/classcontainer__module_1_1variant__value__v2.html#a9c363992dfbe99e3e1a19ae62e7fb98d" title="Serialize to binary format (legacy compatible)" alt="" coords="241,197,435,237"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="469,229,435,229,435,224,469,224"/>
+<area shape="poly" id="edge7_Node000006_Node000005" title=" " alt="" coords="448,206,483,206,483,211,448,211"/>
+<area shape="rect" id="Node000007" href="$d1/d1a/namespacecontainer__module.html#a367a883eb38c222ee73536e395f115a1" title="Create a copy of a variant_value_v2 with a new name." alt="" coords="8,165,191,205"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="227,205,190,200,191,195,228,200"/>
+<area shape="rect" id="Node000008" href="$d0/dfe/classcontainer__module_1_1value__bridge.html#abd036dde0b63607ed5232a1e0054a953" title="Test round&#45;trip conversion (modern → legacy → modern)" alt="" coords="5,229,193,269"/>
+<area shape="poly" id="edge8_Node000006_Node000008" title=" " alt="" coords="228,235,194,239,193,234,227,229"/>
+</map>
