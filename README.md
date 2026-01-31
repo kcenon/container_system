@@ -28,6 +28,11 @@ Making high-performance data serialization **accessible**, **type-safe**, and **
 
 ### What is container_system?
 
+container_system provides **container-specific optimizations** for common_system:
+
+- **fast_parser.h**: High-performance parsing optimizations for serialization formats
+- Dependencies on common_system are managed via CMake FetchContent
+
 container_system is a **high-performance serializable data container library** that provides:
 
 1. **Type-safe key-value storage**: Store and retrieve heterogeneous data with compile-time type safety

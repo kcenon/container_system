@@ -2,9 +2,15 @@ cmake_minimum_required(VERSION 3.16)
 
 ##################################################
 # Container System CMakeLists.txt
-# 
-# Independent container system with advanced C++20 features
-# Provides type-safe, serializable data containers.
+#
+# Container-specific optimizations for common_system
+#
+# Purpose:
+#   - fast_parser.h: High-performance parsing optimizations
+#   - Type-safe, serializable data containers with SIMD acceleration
+#   - Dependencies managed via CMake FetchContent
+#
+# See SCOPE.md for detailed boundaries and responsibilities
 ##################################################
 
 # Project definition
