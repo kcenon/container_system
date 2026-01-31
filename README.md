@@ -145,28 +145,16 @@ common_system (ONLY required ecosystem dependency)
 
 ### Installation
 
-#### Step 1: Clone Dependencies
+container_system automatically fetches `common_system` using CMake FetchContent during build. No manual dependency cloning required.
+
+#### Quick Start Build
 
 ```bash
-# Clone common_system (required)
-git clone https://github.com/kcenon/common_system.git
-
 # Clone container_system
 git clone https://github.com/kcenon/container_system.git
-```
-
-#### Step 2: Install Dependencies and Build
-
-```bash
 cd container_system
 
-# Install dependencies (cross-platform)
-./scripts/dependency.sh      # Linux/macOS
-# or
-scripts\dependency.bat       # Windows (CMD)
-.\scripts\dependency.ps1     # Windows (PowerShell)
-
-# Build project
+# Build (common_system will be fetched automatically)
 ./scripts/build.sh           # Linux/macOS
 # or
 scripts\build.bat            # Windows (CMD)
@@ -174,6 +162,57 @@ scripts\build.bat            # Windows (CMD)
 
 # Run examples
 ./build/examples/basic_container_example
+```
+
+#### Alternative: Local Development with common_system
+
+If you're developing both `container_system` and `common_system` simultaneously:
+
+```bash
+# Clone both repositories as siblings
+git clone https://github.com/kcenon/common_system.git
+git clone https://github.com/kcenon/container_system.git
+
+cd container_system
+
+# CMake will detect ../common_system automatically
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+cmake --build build -j$(nproc)
+```
+
+#### Dependency Resolution Priority
+
+The build system searches for `common_system` in this order:
+
+1. **Cache variable**: `COMMON_SYSTEM_ROOT` (CMake option)
+2. **Environment variable**: `$COMMON_SYSTEM_ROOT`
+3. **Sibling directory**: `../common_system` (local development)
+4. **Subdirectory**: `./common_system` (CI/CD)
+5. **FetchContent**: Automatic download from GitHub (default)
+
+To force FetchContent:
+
+```bash
+cmake -S . -B build -DUNIFIED_ALLOW_FETCHCONTENT=ON
+```
+
+To use a specific common_system location:
+
+```bash
+cmake -S . -B build -DCOMMON_SYSTEM_ROOT=/path/to/common_system
+```
+
+#### Offline Build
+
+For offline or airgapped environments, pre-populate the CMake FetchContent cache:
+
+```bash
+# Pre-fetch dependencies
+cmake -S . -B build_deps -DCMAKE_BUILD_TYPE=Release
+
+# Later, build offline using the cache
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DFETCHCONTENT_FULLY_DISCONNECTED=ON
+cmake --build build
 ```
 
 ## Core Features
@@ -395,18 +434,58 @@ cd build && ctest
 
 ### CMake Integration
 
-```cmake
-# Add as subdirectory
-add_subdirectory(container_system)
-target_link_libraries(your_target PRIVATE ContainerSystem::container)
+#### Option 1: FetchContent (Recommended)
 
-# Or using FetchContent
+```cmake
 include(FetchContent)
+
+# Fetch container_system (common_system will be fetched automatically)
 FetchContent_Declare(
     container_system
     GIT_REPOSITORY https://github.com/kcenon/container_system.git
     GIT_TAG main
 )
+FetchContent_MakeAvailable(container_system)
+
+target_link_libraries(your_target PRIVATE ContainerSystem::container)
+```
+
+#### Option 2: Add as Subdirectory
+
+```cmake
+# If you have container_system as a subdirectory
+add_subdirectory(container_system)
+target_link_libraries(your_target PRIVATE ContainerSystem::container)
+```
+
+#### Dependency Management
+
+container_system automatically handles `common_system` dependency:
+
+```cmake
+# In your project's CMakeLists.txt
+include(FetchContent)
+
+FetchContent_Declare(
+    container_system
+    GIT_REPOSITORY https://github.com/kcenon/container_system.git
+    GIT_TAG main
+)
+
+# common_system will be fetched automatically via UnifiedDependencies.cmake
+FetchContent_MakeAvailable(container_system)
+
+# Link against container_system
+target_link_libraries(my_app PRIVATE ContainerSystem::container)
+```
+
+**Advanced**: Override common_system location:
+
+```cmake
+# Use specific common_system location
+set(COMMON_SYSTEM_ROOT "/path/to/custom/common_system" CACHE PATH "Path to common_system")
+
+FetchContent_Declare(container_system ...)
 FetchContent_MakeAvailable(container_system)
 ```
 
