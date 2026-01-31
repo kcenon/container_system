@@ -24,6 +24,50 @@ The Container System is a high-performance C++20 type-safe container framework d
 
 Making high-performance data serialization **accessible**, **type-safe**, and **efficient** for developers worldwide.
 
+## Purpose and Scope
+
+### What is container_system?
+
+container_system is a **high-performance serializable data container library** that provides:
+
+1. **Type-safe key-value storage**: Store and retrieve heterogeneous data with compile-time type safety
+2. **Multiple serialization formats**: Binary, JSON, and XML with automatic format detection
+3. **SIMD-optimized operations**: Hardware-accelerated processing for numeric arrays and batch operations
+4. **Messaging system integration**: Native support for building structured messages for inter-process communication
+
+### When to Use container_system
+
+**Use container_system for:**
+- Building type-safe message payloads for messaging systems
+- High-performance data serialization (1.8M ops/sec)
+- Cross-platform data interchange with format flexibility
+- Applications requiring SIMD-accelerated container operations
+- Systems needing thread-safe concurrent data access
+
+**Use common_system instead for:**
+- General utilities (logging, error handling, configuration management)
+- Dependency injection infrastructure
+- Abstract interfaces and design patterns
+- Cross-cutting concerns (adapters, bootstrap, utilities)
+
+### Relationship with common_system
+
+```
+common_system (Foundation)
+       │
+       │ depends on
+       ▼
+container_system (Data Serialization)
+       │
+       │ used by
+       ▼
+messaging_system, network_system, database_system
+```
+
+- **common_system**: Provides foundational infrastructure (DI, logging, error handling, interfaces)
+- **container_system**: Specializes in high-performance data containers and serialization
+- **Other systems**: Consume container_system for data exchange and storage
+
 ## Quick Start
 
 ### Basic Usage Example
