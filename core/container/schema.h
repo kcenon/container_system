@@ -58,9 +58,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #pragma once
 
-#include "container/core/container/types.h"
-#include "container/core/container/error_codes.h"
-#include "container/core/value_types.h"
+#include "core/container/types.h"
+#include "core/container/error_codes.h"
+#include "core/value_types.h"
 
 #include <string>
 #include <string_view>
@@ -72,7 +72,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <concepts>
 
 // Unified Result<T> integration (Issue #335)
-#include "container/core/container/result_integration.h"
+#include "core/container/result_integration.h"
 
 // Backward compatibility alias
 #ifndef SCHEMA_HAS_COMMON_RESULT

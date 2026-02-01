@@ -40,7 +40,7 @@
  */
 
 #include <gtest/gtest.h>
-#include "container/core/policy_container.h"
+#include "core/policy_container.h"
 
 #include <thread>
 #include <vector>

@@ -42,7 +42,7 @@
  * - Large: Direct heap allocation (bypasses pool)
  */
 
-#include "container/internal/memory_pool.h"
+#include "internal/memory_pool.h"
 
 #include <cstddef>
 #include <atomic>

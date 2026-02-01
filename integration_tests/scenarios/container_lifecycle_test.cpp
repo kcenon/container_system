@@ -48,7 +48,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <gtest/gtest.h>
 #include "framework/system_fixture.h"
 #include "framework/test_helpers.h"
-#include <container/core/container.h>
+#include <core/container.h>
 
 using namespace container_module;
 using namespace container_module::testing;

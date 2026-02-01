@@ -40,7 +40,7 @@
  */
 
 #include <gtest/gtest.h>
-#include "container/core/storage_policy.h"
+#include "core/storage_policy.h"
 
 #include <string>
 #include <algorithm>

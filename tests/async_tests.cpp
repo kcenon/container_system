@@ -8,7 +8,7 @@ All rights reserved.
 #include <gtest/gtest.h>
 
 // Include async header first to get CONTAINER_HAS_COROUTINES definition
-#include "container/internal/async/async.h"
+#include "internal/async/async.h"
 
 #if CONTAINER_HAS_COROUTINES
 

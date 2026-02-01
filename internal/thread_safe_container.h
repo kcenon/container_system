@@ -41,8 +41,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <thread>
 #include <chrono>
 #include <condition_variable>
-#include "container/internal/value.h"
-#include "container/core/concepts.h"
+#include "internal/value.h"
+#include "core/concepts.h"
 
 namespace container_module
 {

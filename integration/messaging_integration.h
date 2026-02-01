@@ -34,9 +34,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 // Internal implementation file - suppress deprecation warnings
 #define CONTAINER_INTERNAL_INCLUDE
-#include "container/core/container.h"
+#include "core/container.h"
 #undef CONTAINER_INTERNAL_INCLUDE
-#include "container/core/concepts.h"
+#include "core/concepts.h"
 #include <functional>
 #include <memory>
 #include <concepts>

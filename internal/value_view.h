@@ -56,7 +56,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #pragma once
 
-#include "container/core/value_types.h"
+#include "core/value_types.h"
 
 #include <string>
 #include <string_view>

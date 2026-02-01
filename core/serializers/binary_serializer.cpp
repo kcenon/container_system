@@ -31,7 +31,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
 #include "binary_serializer.h"
-#include "container/core/container.h"
+#include "core/container.h"
 #include "utilities/core/convert_string.h"
 #include "utilities/core/formatter.h"
 

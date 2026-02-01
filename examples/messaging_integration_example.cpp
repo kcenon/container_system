@@ -45,7 +45,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <iomanip>
 
 // Include the container system
-#include "container/container.h"
+#include "container.h"
 
 using namespace container_module;
 
