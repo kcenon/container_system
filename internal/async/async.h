@@ -36,7 +36,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * Include this header to use async features:
  * @code
- * #include <container/internal/async/async.h>
+ * #include <internal/async/async.h>
  *
  * using namespace container_module::async;
  *

@@ -36,10 +36,10 @@
 #include <atomic>
 
 #ifdef HAS_MESSAGING_FEATURES
-#include "container/integration/messaging_integration.h"
+#include "integration/messaging_integration.h"
 #endif
 
-#include "container/core/container.h"
+#include "core/container.h"
 
 using namespace container_module;
 

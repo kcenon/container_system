@@ -42,7 +42,7 @@
  */
 
 #include <gtest/gtest.h>
-#include <container/internal/memory_pool.h>
+#include <internal/memory_pool.h>
 #include <thread>
 #include <vector>
 #include <algorithm>
@@ -534,8 +534,8 @@ TEST_F(MemoryPoolTest, ManyBlocksPerChunk) {
 // Pool Allocator Integration Tests
 // ============================================================================
 
-#include <container/internal/pool_allocator.h>
-#include <container/core/container.h>
+#include <internal/pool_allocator.h>
+#include <core/container.h>
 
 using namespace container_module::internal;
 

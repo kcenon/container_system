@@ -43,7 +43,7 @@
  */
 
 #include <gtest/gtest.h>
-#include <container/internal/simd_policies.h>
+#include <internal/simd_policies.h>
 #include <vector>
 #include <random>
 #include <numeric>

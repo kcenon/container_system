@@ -37,7 +37,7 @@
  * - Iterator properties (begin/end, size, empty)
  */
 
-#include "container/core/container.h"
+#include "core/container.h"
 #include <algorithm>
 #include <iostream>
 #include <numeric>
