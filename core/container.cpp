@@ -30,19 +30,19 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#include "container/core/container.h"
+#include "core/container.h"
 
 #include "utilities/core/formatter.h"
 #include "utilities/core/convert_string.h"
 
-#include "container/core/value_types.h"
-#include "container/internal/value.h"
-#include "container/internal/pool_allocator.h"
-#include "container/core/serializers/serializer_factory.h"
-#include "container/core/serializers/binary_serializer.h"
-#include "container/core/serializers/json_serializer.h"
-#include "container/core/serializers/xml_serializer.h"
-#include "container/core/serializers/msgpack_serializer.h"
+#include "core/value_types.h"
+#include "internal/value.h"
+#include "internal/pool_allocator.h"
+#include "core/serializers/serializer_factory.h"
+#include "core/serializers/binary_serializer.h"
+#include "core/serializers/json_serializer.h"
+#include "core/serializers/xml_serializer.h"
+#include "core/serializers/msgpack_serializer.h"
 // Legacy value includes removed - using variant-based storage only
 
 #include <fcntl.h>

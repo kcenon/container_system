@@ -38,7 +38,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * @code
  * // Recommended usage:
- * #include <container/container.h>
+ * #include <container.h>
  * @endcode
  *
  * @see container_module::value_container
@@ -49,21 +49,21 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // =============================================================================
 // Sub-headers (modular include structure)
 // =============================================================================
-#include "container/core/container/fwd.h"
-#include "container/core/container/types.h"
-#include "container/core/container/variant_helpers.h"
-#include "container/core/container/error_codes.h"
-#include "container/core/container/schema.h"
-#include "container/core/container/metrics.h"
-#include "container/core/container/msgpack.h"
+#include "core/container/fwd.h"
+#include "core/container/types.h"
+#include "core/container/variant_helpers.h"
+#include "core/container/error_codes.h"
+#include "core/container/schema.h"
+#include "core/container/metrics.h"
+#include "core/container/msgpack.h"
 
-#include "container/core/value_types.h"
-#include "container/core/simd_batch.h"  // Renamed from typed_container.h (Issue #328)
-#include "container/internal/value.h"
-#include "container/internal/value_view.h"
+#include "core/value_types.h"
+#include "core/simd_batch.h"  // Renamed from typed_container.h (Issue #328)
+#include "internal/value.h"
+#include "internal/value_view.h"
 
 // Unified Result<T> integration (Issue #335)
-#include "container/core/container/result_integration.h"
+#include "core/container/result_integration.h"
 
 #include <memory>
 #include <vector>

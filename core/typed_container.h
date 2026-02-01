@@ -13,7 +13,7 @@
 #endif
 
 // Include the new header which provides the deprecated alias
-#include "container/core/simd_batch.h"
+#include "core/simd_batch.h"
 
 // Note: typed_container is now a deprecated alias for simd_batch
 // defined in simd_batch.h

@@ -31,8 +31,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
 #include "msgpack_serializer.h"
-#include "container/core/container.h"
-#include "container/core/container/msgpack.h"
+#include "core/container.h"
+#include "core/container/msgpack.h"
 
 namespace container_module
 {

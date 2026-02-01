@@ -31,8 +31,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
 #include "xml_serializer.h"
-#include "container/core/container.h"
-#include "container/core/container/variant_helpers.h"
+#include "core/container.h"
+#include "core/container/variant_helpers.h"
 #include "utilities/core/formatter.h"
 
 namespace container_module

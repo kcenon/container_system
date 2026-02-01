@@ -39,7 +39,7 @@
  */
 
 #include <gtest/gtest.h>
-#include <container/internal/simd_processor.h>
+#include <internal/simd_processor.h>
 #include <vector>
 #include <random>
 #include <numeric>

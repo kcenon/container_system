@@ -136,10 +136,10 @@ set(INTERNAL_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/internal/variant_value_factory.h
     ${CMAKE_CURRENT_SOURCE_DIR}/internal/memory_pool.h
     ${CMAKE_CURRENT_SOURCE_DIR}/internal/pool_allocator.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/container/internal/thread_safe_container.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/container/internal/thread_safe_container.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/container/internal/simd_processor.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/container/internal/simd_processor.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/internal/thread_safe_container.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/internal/thread_safe_container.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/internal/simd_processor.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/internal/simd_processor.cpp
 )
 
 # Async coroutine files (C++20)
@@ -519,10 +519,9 @@ include(GNUInstallDirs)
 # Canonical Include Path Configuration
 # =============================================================================
 # The canonical include path for container_system is:
-#     #include <container/container.h>
+#     #include <container.h>
 #
 # The following directories are installed:
-#   - container/ (symlink to project root, for include path resolution)
 #   - core/      (core container implementation)
 #   - internal/  (internal implementation details)
 #   - integration/ (integration adapters)

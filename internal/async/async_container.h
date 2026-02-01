@@ -58,8 +58,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "task.h"
 #include "generator.h"
-#include "container/core/container.h"
-#include "container/core/container/error_codes.h"
+#include "core/container.h"
+#include "core/container/error_codes.h"
 
 #include <algorithm>
 #include <atomic>

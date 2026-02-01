@@ -45,7 +45,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <gtest/gtest.h>
 #include "test_compat.h"
-#include <container/core/container/schema.h>
+#include <core/container/schema.h>
 
 using namespace container_module;
 

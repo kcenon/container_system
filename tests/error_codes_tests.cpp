@@ -43,7 +43,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 #include <gtest/gtest.h>
-#include <container/core/container/error_codes.h>
+#include <core/container/error_codes.h>
 
 using namespace container_module;
 using namespace container_module::error_codes;

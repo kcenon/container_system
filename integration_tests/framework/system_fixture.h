@@ -33,7 +33,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #pragma once
 
 #include <gtest/gtest.h>
-#include <container/core/container.h>
+#include <core/container.h>
 #include "../../tests/test_compat.h"
 #include <memory>
 #include <string>

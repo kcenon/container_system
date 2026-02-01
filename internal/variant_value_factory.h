@@ -7,9 +7,9 @@ All rights reserved.
 
 #pragma once
 
-#include "container/internal/value.h"
-#include "container/core/value_types.h"
-#include "container/core/concepts.h"
+#include "internal/value.h"
+#include "core/value_types.h"
+#include "core/concepts.h"
 #include <string>
 #include <string_view>
 #include <vector>

@@ -40,11 +40,11 @@
 #include <iomanip>
 #include <cstdlib>
 
-#include "container/core/container.h"
+#include "core/container.h"
 #include "test_compat.h"
 
 #ifdef HAS_MESSAGING_FEATURES
-#include "container/integration/messaging_integration.h"
+#include "integration/messaging_integration.h"
 #endif
 
 using namespace container_module;

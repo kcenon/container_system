@@ -7,9 +7,9 @@ All rights reserved.
 
 #include <gtest/gtest.h>
 #include "test_compat.h"
-#include "container/internal/memory_pool.h"
-#include "container/internal/rcu_value.h"
-#include "container/internal/epoch_manager.h"
+#include "internal/memory_pool.h"
+#include "internal/rcu_value.h"
+#include "internal/epoch_manager.h"
 
 #include <thread>
 #include <vector>
