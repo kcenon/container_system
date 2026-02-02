@@ -32,7 +32,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #pragma once
 
-#include "internal/value.h"
+#include "value.h"
 #include <vector>
 #include <string>
 #include <numeric>

@@ -49,21 +49,21 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // =============================================================================
 // Sub-headers (modular include structure)
 // =============================================================================
-#include "core/container/fwd.h"
-#include "core/container/types.h"
-#include "core/container/variant_helpers.h"
-#include "core/container/error_codes.h"
-#include "core/container/schema.h"
-#include "core/container/metrics.h"
-#include "core/container/msgpack.h"
+#include "container/fwd.h"
+#include "container/types.h"
+#include "container/variant_helpers.h"
+#include "container/error_codes.h"
+#include "container/schema.h"
+#include "container/metrics.h"
+#include "container/msgpack.h"
 
-#include "core/value_types.h"
-#include "core/simd_batch.h"  // Renamed from typed_container.h (Issue #328)
+#include "value_types.h"
+#include "simd_batch.h"  // Renamed from typed_container.h (Issue #328)
 #include "internal/value.h"
 #include "internal/value_view.h"
 
 // Unified Result<T> integration (Issue #335)
-#include "core/container/result_integration.h"
+#include "container/result_integration.h"
 
 #include <memory>
 #include <vector>

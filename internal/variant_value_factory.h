@@ -7,7 +7,7 @@ All rights reserved.
 
 #pragma once
 
-#include "internal/value.h"
+#include "value.h"
 #include "core/value_types.h"
 #include "core/concepts.h"
 #include <string>

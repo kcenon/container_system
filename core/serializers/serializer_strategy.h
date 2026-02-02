@@ -46,7 +46,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <vector>
 
 // Unified Result<T> integration (Issue #335)
-#include "core/container/result_integration.h"
+#include "../container/result_integration.h"
 
 namespace container_module
 {
