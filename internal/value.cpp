@@ -5,8 +5,8 @@ Copyright (c) 2024, 🍀☀🌕🌥 🌊
 All rights reserved.
 *****************************************************************************/
 
-#include "internal/value.h"
-#include "internal/thread_safe_container.h"
+#include "value.h"
+#include "thread_safe_container.h"
 #include <sstream>
 #include <iomanip>
 #include <cstring>

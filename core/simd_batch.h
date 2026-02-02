@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include "core/concepts.h"
+#include "concepts.h"
 #include <type_traits>
 #include <vector>
 #include <cstddef>

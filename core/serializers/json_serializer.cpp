@@ -31,8 +31,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
 #include "json_serializer.h"
-#include "core/container.h"
-#include "core/container/variant_helpers.h"
+#include "../container.h"
+#include "../container/variant_helpers.h"
 #include "utilities/core/formatter.h"
 
 namespace container_module
