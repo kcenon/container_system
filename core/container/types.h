@@ -43,7 +43,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #pragma once
 
-#include "core/value_types.h"
+#include "../value_types.h"
 
 // Note: When included from container.h, these paths resolve correctly
 // via the container -> . symlink in project root

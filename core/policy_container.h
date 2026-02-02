@@ -55,13 +55,13 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #pragma once
 
-#include "core/storage_policy.h"
-#include "core/container/types.h"
-#include "core/container/error_codes.h"
-#include "core/value_types.h"
+#include "storage_policy.h"
+#include "container/types.h"
+#include "container/error_codes.h"
+#include "value_types.h"
 
 // Unified Result<T> integration (Issue #335)
-#include "core/container/result_integration.h"
+#include "container/result_integration.h"
 
 #include <memory>
 #include <mutex>

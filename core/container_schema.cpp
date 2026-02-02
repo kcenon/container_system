@@ -35,8 +35,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * @brief Implementation of container_schema class
  */
 
-#include "core/container/schema.h"
-#include "core/container.h"
+#include "container/schema.h"
+#include "container.h"
 
 #include <algorithm>
 #include <cmath>
