@@ -275,33 +275,36 @@ cmake --build build
 
 ## Architecture Overview
 
+### Ecosystem Position
+
 ```
                     ┌─────────────────┐
-                    │ utilities_module│
-                    │   (Foundation)  │
+                    │  common_system  │
+                    │  (Foundation)   │
                     └────────┬────────┘
                              │
-         ┌───────────────────┼───────────────────┐
-         │                   │                   │
-         ▼                   ▼                   ▼
-┌────────────────┐  ┌────────────────┐  ┌────────────────┐
-│ container_system│  │messaging_system│  │ network_system │
-│  (This Project) │◄─│   (Consumer)   │◄─│  (Transport)   │
-└────────────────┘  └────────────────┘  └────────────────┘
-         │
-         └──────────────────────┐
-                                ▼
-                    ┌────────────────────┐
-                    │  database_system   │
-                    │     (Storage)      │
-                    └────────────────────┘
+                             ▼
+                    ┌─────────────────┐
+                    │container_system │
+                    │(Data Containers)│
+                    └────────┬────────┘
+                             │ used by
+       ┌─────────────────────┼─────────────────────┐
+       │                     │                     │
+       ▼                     ▼                     ▼
+┌──────────────┐    ┌────────────────┐    ┌──────────────┐
+│network_system│    │database_system │    │Other systems │
+└──────────────┘    └────────────────┘    └──────────────┘
 ```
 
+container_system has **minimal dependencies** - only common_system is required.
+This makes it ideal as a foundational data layer for the ecosystem.
+
 **Integration Benefits**:
-- **Type-safe messaging**: Prevents runtime errors
-- **Performance-optimized**: SIMD acceleration for high-throughput
-- **Universal serialization**: Binary, JSON, XML for diverse needs
-- **Unified data model**: Consistent structure across ecosystem
+- **Type-safe data containers**: Prevents runtime errors with compile-time checks
+- **Performance-optimized**: SIMD acceleration for high-throughput operations
+- **Universal serialization**: Binary, JSON, XML for diverse integration needs
+- **Unified data model**: Consistent structure across the entire ecosystem
 
 🏗️ **[Architecture Guide →](docs/ARCHITECTURE.md)**
 
