@@ -2,7 +2,7 @@
 
 > **Language:** **English** | [한국어](README.kr.md)
 
-**Version:** 0.1.0
+**Version:** 0.1.0.0
 **Last Updated:** 2025-11-11
 **Status:** Comprehensive
 
@@ -67,7 +67,7 @@ Welcome to the container_system documentation! A type-safe, high-performance con
 ## Project Information
 
 ### Current Status
-- **Version**: 0.1.0 (Type-safe variant system)
+- **Version**: 0.1.0.0 (Type-safe variant system)
 - **C++ Standard**: C++20
 - **License**: BSD 3-Clause
 
