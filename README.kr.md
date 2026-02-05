@@ -465,7 +465,7 @@ container_system의 표준 include 경로는 다음과 같습니다:
 
 ## 기여하기
 
-기여를 환영합니다! 자세한 내용은 [기여 가이드](docs/CONTRIBUTING.md)를 참조하세요.
+기여를 환영합니다! 자세한 내용은 [기여 가이드](docs/contributing/CONTRIBUTING.md)를 참조하세요.
 
 ### 개발 설정
 
@@ -486,7 +486,7 @@ container_system의 표준 include 경로는 다음과 같습니다:
 
 - 💬 [GitHub Discussions](https://github.com/kcenon/container_system/discussions)
 - 🐛 [이슈 트래커](https://github.com/kcenon/container_system/issues)
-- 🤝 [기여 가이드](docs/CONTRIBUTING.md)
+- 🤝 [기여 가이드](docs/contributing/CONTRIBUTING.md)
 - 📧 이메일: kcenon@naver.com
 
 ## 라이선스

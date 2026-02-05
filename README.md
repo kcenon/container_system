@@ -593,7 +593,7 @@ The canonical include path for container_system is:
 
 ## Contributing
 
-We welcome contributions! Please see our [Contributing Guide](docs/CONTRIBUTING.md) for details.
+We welcome contributions! Please see our [Contributing Guide](docs/contributing/CONTRIBUTING.md) for details.
 
 ### Development Setup
 
