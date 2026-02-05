@@ -1,6 +1,6 @@
 # container_system API Reference
 
-> **Version**: 0.2.1
+> **Version**: 0.2.1.0
 > **Last Updated**: 2026-01-10
 > **Status**: C++20 Concepts integrated, migrating to variant_value_v2 (Phase 2 in progress)
 
@@ -1433,5 +1433,5 @@ int i = val_new.get<int>();
 
 **Created**: 2025-11-21
 **Updated**: 2025-12-10
-**Version**: 0.2.1
+**Version**: 0.2.1.0
 **Author**: kcenon@naver.com

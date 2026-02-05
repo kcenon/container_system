@@ -1,7 +1,7 @@
 # Result API Migration Guide
 
 > **Status**: Ready for Production
-> **Version**: 2.0.0
+> **Version**: 0.2.0.0
 > **Last Updated**: 2025-01-11
 >
 > **IMPORTANT**: As of this version, the void/bool returning methods are **DEPRECATED**
