@@ -272,7 +272,7 @@ class value {
 **Purpose**: Type enumeration and type identification
 
 **Key Features**:
-- 15 distinct value types (null to string)
+- 16 distinct value types (null to array)
 - Type code mapping ('0' to 'f')
 - Type name conversion utilities
 
@@ -282,7 +282,7 @@ enum class value_types : char {
     null_value = '0',
     bool_value = '1',
     char_value = '2',
-    // ... (15 types total)
+    // ... (16 types total, indices 0-15)
     string_value = 'f'
 };
 ```

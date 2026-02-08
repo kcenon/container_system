@@ -2,8 +2,8 @@
 
 **언어:** [English](README.md) | **한국어**
 
-**최종 업데이트**: 2025-11-28
-**버전**: 0.1.0
+**최종 업데이트**: 2026-02-08
+**버전**: 0.1.1.0
 
 이 문서는 container_system의 모든 기능에 대한 포괄적인 세부 정보를 제공합니다.
 
@@ -17,6 +17,10 @@
 - [SIMD 최적화](#simd-최적화)
 - [메모리 풀링](#메모리-풀링)
 - [스레드 안전성](#스레드-안전성)
+- [소규모 객체 최적화](#소규모-객체-최적화)
+- [Result API 및 반복자](#result-api-및-반복자)
+- [고속 파서 최적화](#고속-파서-최적화)
+- [C++20 코루틴 비동기 API](#c20-코루틴-비동기-api)
 - [통합 기능](#통합-기능)
 
 ---
@@ -96,6 +100,7 @@ int_val.visit([](auto&& value) {
 | **문자열** | `std::string`, `std::string_view` |
 | **바이트** | `std::vector<uint8_t>`, `std::span<const uint8_t>` |
 | **컨테이너** | `std::vector<T>`, `std::map<K,V>`, 중첩 컨테이너 |
+| **배열** | `std::vector<optimized_value>` (타입화된 값 배열) |
 | **시간** | `std::chrono::system_clock::time_point` |
 
 ### container 클래스
@@ -299,6 +304,150 @@ reader.join();
 
 ---
 
+## 소규모 객체 최적화
+
+### SOO (Small Object Optimization)
+
+컨테이너는 `std::variant` 기반 저장을 사용하여 원시 값을 힙 할당 대신 스택에 유지하며, 메모리 오버헤드를 줄이고 캐시 지역성을 향상합니다.
+
+```cpp
+auto container = std::make_shared<value_container>();
+
+// SOO는 기본적으로 활성화됨
+std::cout << "SOO 활성화: " << container->is_soo_enabled() << std::endl;
+
+// 벤치마크 비교를 위한 SOO 비활성화
+container->set_soo_enabled(false);
+
+// 할당 통계 확인
+auto [heap_allocs, stack_allocs] = container->memory_stats();
+std::cout << "힙 할당: " << heap_allocs << std::endl;
+std::cout << "스택 할당: " << stack_allocs << std::endl;
+
+// 총 메모리 발자국
+size_t footprint = container->memory_footprint();
+std::cout << "메모리 발자국: " << footprint << " 바이트" << std::endl;
+
+// 값별 메모리 추적
+optimized_value val("count", value_types::int_value);
+val.data = 42;
+std::cout << "스택 할당 여부: " << val.is_stack_allocated() << std::endl;
+```
+
+---
+
+## Result API 및 반복자
+
+### Result<T> 게터 API
+
+common_system의 `Result<T>` 패턴을 사용한 타입 안전 값 검색:
+
+```cpp
+auto container = std::make_shared<value_container>();
+container->set("name", std::string("Alice"));
+container->set("age", 30);
+
+// Result<T>를 사용한 타입 안전 가져오기
+auto name_result = container->get<std::string>("name");
+if (name_result.is_ok()) {
+    std::cout << "이름: " << name_result.value() << std::endl;
+}
+
+// 누락된 키에 대한 오류 처리
+auto email_result = container->get<std::string>("email");
+if (email_result.is_err()) {
+    std::cout << "오류: " << email_result.error().message << std::endl;
+    // 출력: "Error: Key not found: email"
+}
+
+// 타입 불일치에 대한 오류 처리
+auto wrong_type = container->get<int>("name");
+if (wrong_type.is_err()) {
+    std::cout << "오류: " << wrong_type.error().message << std::endl;
+    // 출력: "Error: Type mismatch for key: name"
+}
+```
+
+### 반복자 지원
+
+범위 기반 연산을 위한 표준 C++ 반복자 인터페이스:
+
+```cpp
+// 범위 기반 for 루프
+for (const auto& val : *container) {
+    std::cout << val.name << ": "
+              << variant_helpers::to_string(val.data, val.type) << std::endl;
+}
+
+// 표준 알고리즘
+std::cout << "크기: " << container->size() << std::endl;
+std::cout << "비어있음: " << container->empty() << std::endl;
+
+// 키 존재 여부 확인
+if (container->contains("a")) {
+    std::cout << "키 'a' 존재" << std::endl;
+}
+```
+
+### 대량 작업
+
+`std::span`을 통한 효율적인 대량 값 설정:
+
+```cpp
+std::vector<optimized_value> values;
+values.reserve(100);
+for (int i = 0; i < 100; ++i) {
+    optimized_value val;
+    val.name = "key_" + std::to_string(i);
+    val.type = value_types::int_value;
+    val.data = i;
+    values.push_back(val);
+}
+
+// 단일 대량 설정 연산
+container->set_all(values);
+```
+
+---
+
+## 고속 파서 최적화
+
+역직렬화 성능 최적화를 위한 컴파일 타임 파서 구성:
+
+```cpp
+#include <container/optimizations/fast_parser.h>
+
+// 고속 파서 구성
+container_module::parser_config config;
+config.use_fast_path = true;
+config.initial_capacity = 256;
+
+// SFINAE 기반 컨테이너 예약
+std::vector<int> vec;
+container_module::reserve_if_possible(vec, 1000);  // reserve() 호출
+
+std::list<int> lst;
+container_module::reserve_if_possible(lst, 1000);  // 무작동 (list에는 reserve 없음)
+```
+
+### 객체 풀
+
+고빈도 할당 패턴을 위한 고정 블록 메모리 풀:
+
+```cpp
+// 컨테이너 수준 풀 통계
+auto stats = value_container::get_pool_stats();
+std::cout << "풀 히트: " << stats.hits << std::endl;
+std::cout << "풀 미스: " << stats.misses << std::endl;
+std::cout << "사용 가능: " << stats.available << std::endl;
+std::cout << "히트율: " << (stats.hit_rate * 100) << "%" << std::endl;
+
+// 메모리 회수를 위한 풀 초기화
+value_container::clear_pool();
+```
+
+---
+
 ## C++20 코루틴 비동기 API
 
 Container System은 논블로킹 직렬화, 역직렬화 및 파일 작업을 위한 포괄적인 C++20 코루틴 기반 비동기 API를 제공합니다.
@@ -418,11 +567,20 @@ task<void> load_data() {
 대용량 컨테이너의 경우 메모리 급증을 방지하기 위해 청크 직렬화 사용:
 
 ```cpp
-// 청크로 직렬화
+// 청크로 네트워크에 직렬화
 task<void> stream_to_network(async_container& cont) {
     // 64KB 청크
     for (auto& chunk : cont.serialize_chunked(64 * 1024)) {
         co_await network_send_async(chunk);
+    }
+}
+
+// 스트리밍 역직렬화
+task<void> streaming_deserialize(std::span<const uint8_t> data) {
+    auto result = co_await async_container::deserialize_streaming(data, true);
+    if (result.is_ok()) {
+        auto container = result.value();
+        // 컨테이너 사용
     }
 }
 ```
@@ -444,6 +602,46 @@ auto future = executor.submit([]() {
 
 // 결과 가져오기
 auto result = future.get();
+
+// 풀에서 코루틴 실행
+task<int> async_work() {
+    co_return 42;
+}
+executor.spawn(async_work());
+```
+
+### Boost.Asio 통합
+
+Boost.Asio 이벤트 루프와의 통합 예시:
+
+```cpp
+#include <asio/awaitable.hpp>
+#include <asio/co_spawn.hpp>
+
+asio::awaitable<void> handle_client(tcp::socket socket) {
+    // 소켓에서 데이터 읽기
+    std::vector<uint8_t> buffer(1024);
+    auto bytes_read = co_await socket.async_read_some(
+        asio::buffer(buffer), asio::use_awaitable);
+
+    // 비동기 컨테이너 역직렬화
+    buffer.resize(bytes_read);
+    auto result = co_await async_container::deserialize_async(buffer);
+
+    if (result.is_ok()) {
+        auto container = result.value();
+
+        // 처리 및 응답
+        async_container response;
+        response.set("status", std::string("ok"));
+
+        auto serialized = co_await response.serialize_async();
+        if (serialized.is_ok()) {
+            co_await socket.async_write_some(
+                asio::buffer(serialized.value()), asio::use_awaitable);
+        }
+    }
+}
 ```
 
 ### 컴파일러 요구사항
@@ -607,8 +805,8 @@ order.set("total", 199.93);
 
 ---
 
-**최종 업데이트**: 2025-11-28
-**버전**: 0.1.0
+**최종 업데이트**: 2026-02-08
+**버전**: 0.1.1.0
 
 ---
 
