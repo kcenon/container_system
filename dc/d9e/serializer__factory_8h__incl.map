@@ -1,0 +1,16 @@
+<map id="core/serializers/serializer_factory.h" name="core/serializers/serializer_factory.h">
+<area shape="rect" id="Node000001" title="Factory for creating format&#45;specific serializers." alt="" coords="42,5,227,45"/>
+<area shape="rect" id="Node000002" href="$da/dd5/serializer__strategy_8h.html" title="Abstract base class for serialization strategies." alt="" coords="133,93,286,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="155,44,191,81,187,85,151,47"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="5,174,83,199"/>
+<area shape="poly" id="edge7_Node000001_Node000004" title=" " alt="" coords="126,47,60,163,55,160,122,44"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="107,174,173,199"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="201,121,161,165,157,162,197,117"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="186,121,82,171,79,166,184,116"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="197,174,256,199"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="214,118,224,160,219,161,209,119"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="281,174,343,199"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="226,117,287,163,284,167,223,121"/>
+<area shape="rect" id="Node000007" href="$d0/da0/result__integration_8h.html" title="Unified Result&lt;T&gt; integration header." alt="" coords="368,167,504,207"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="243,116,369,160,368,165,241,121"/>
+</map>

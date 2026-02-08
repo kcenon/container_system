@@ -1,0 +1,5 @@
+<map id="container_module::epoch_manager::~epoch_manager" name="container_module::epoch_manager::~epoch_manager">
+<area shape="rect" id="Node000001" title="Destructor &#45; clean up any remaining deferred deletions." alt="" coords="5,5,216,45"/>
+<area shape="rect" id="Node000002" href="$d4/d78/classcontainer__module_1_1epoch__manager.html#a828f8edbf654caf0ee203d109206ad5c" title="Force garbage collection of all epochs." alt="" coords="264,5,451,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="216,23,250,23,250,28,216,28"/>
+</map>

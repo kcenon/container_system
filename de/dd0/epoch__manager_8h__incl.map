@@ -1,0 +1,13 @@
+<map id="internal/epoch_manager.h" name="internal/epoch_manager.h">
+<area shape="rect" id="Node000001" title=" " alt="" coords="113,5,303,31"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,79,72,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="182,33,80,76,78,71,180,28"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="96,79,152,104"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="196,33,150,72,147,67,193,29"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="177,79,239,104"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="211,31,211,65,205,65,205,31"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="263,79,350,104"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="225,29,281,68,278,73,222,33"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="375,79,439,104"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="241,28,362,71,360,76,239,33"/>
+</map>

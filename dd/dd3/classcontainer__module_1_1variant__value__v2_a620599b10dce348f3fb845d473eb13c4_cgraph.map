@@ -1,0 +1,17 @@
+<map id="container_module::variant_value_v2::variant_value_v2" name="container_module::variant_value_v2::variant_value_v2">
+<area shape="rect" id="Node000001" title="Construct from value_types and raw data (legacy compatibility)" alt="" coords="5,132,213,172"/>
+<area shape="rect" id="Node000002" href="$dd/dd3/classcontainer__module_1_1variant__value__v2.html#ab177da145fdeb6f4470bad3aee22162a" title="Deserialize data portion based on type." alt="" coords="261,75,464,115"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="198,129,260,115,261,120,199,135"/>
+<area shape="rect" id="Node000006" href="$dd/dd3/classcontainer__module_1_1variant__value__v2.html#af0c797c36e1223cefddd2ab3b79675cb" title="Get the value_types enum (NOT variant::index()!)" alt="" coords="1005,139,1199,179"/>
+<area shape="poly" id="edge9_Node000001_Node000006" title=" " alt="" coords="213,150,992,155,992,161,213,155"/>
+<area shape="rect" id="Node000003" href="$db/de5/classcontainer__module_1_1thread__safe__container.html#a1b149737de6bbc72f55a764c1b2f8205" title="Deserialize from binary." alt="" coords="512,5,716,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="435,72,527,46,529,52,437,77"/>
+<area shape="rect" id="Node000004" href="$dd/dd3/classcontainer__module_1_1variant__value__v2.html#a631232b8539656035a90e5a0422ed75f" title="Deserialize from binary format (legacy compatible)" alt="" coords="764,75,957,115"/>
+<area shape="poly" id="edge7_Node000002_Node000004" title=" " alt="" coords="464,99,750,100,750,105,464,105"/>
+<area shape="poly" id="edge8_Node000002_Node000006" title=" " alt="" coords="464,101,992,147,991,152,464,106"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="687,43,776,68,775,73,685,48"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="764,90,478,90,478,84,764,85"/>
+<area shape="rect" id="Node000005" href="$dd/dd3/classcontainer__module_1_1variant__value__v2.html#ad9d4c1f70a7e0ae1076d26c717876df0" title="Get the name of this value (lock&#45;free, immutable)" alt="" coords="1005,75,1199,115"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="957,92,992,92,992,97,957,97"/>
+<area shape="poly" id="edge6_Node000004_Node000006" title=" " alt="" coords="938,112,1014,133,1012,138,936,117"/>
+</map>

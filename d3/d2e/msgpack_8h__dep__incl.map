@@ -1,0 +1,28 @@
+<map id="core/container/msgpack.h" name="core/container/msgpack.h">
+<area shape="rect" id="Node000001" title="MessagePack serialization format support." alt="" coords="1015,5,1206,31"/>
+<area shape="rect" id="Node000002" href="$d4/ddd/container_8h.html" title="Core container implementation." alt="" coords="997,79,1123,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1096,44,1070,80,1066,77,1092,41"/>
+<area shape="rect" id="Node000008" href="$d0/d19/msgpack__serializer_8cpp.html" title=" " alt="" coords="1787,152,1971,192"/>
+<area shape="poly" id="edge13_Node000001_Node000008" title=" " alt="" coords="1182,31,1787,150,1786,155,1181,36"/>
+<area shape="rect" id="Node000003" href="$d3/dda/container_8cpp.html" title=" " alt="" coords="5,159,147,185"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="983,96,831,101,626,110,393,127,159,155,121,162,120,157,158,149,393,122,625,105,830,95,983,91"/>
+<area shape="rect" id="Node000004" href="$da/d55/container__schema_8cpp.html" title="Implementation of container_schema class." alt="" coords="171,159,371,185"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="983,100,717,120,383,155,334,162,334,157,382,149,716,115,983,95"/>
+<area shape="rect" id="Node000005" href="$dd/db3/optimized__container_8h.html" title=" " alt="" coords="394,159,593,185"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="984,104,606,155,559,162,559,157,605,149,983,99"/>
+<area shape="rect" id="Node000006" href="$d8/db2/binary__serializer_8cpp.html" title=" " alt="" coords="617,152,783,192"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="995,109,784,155,783,150,994,104"/>
+<area shape="rect" id="Node000007" href="$d9/db6/json__serializer_8cpp.html" title=" " alt="" coords="808,152,960,192"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="1023,112,927,154,925,149,1021,107"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="1137,94,1419,113,1596,129,1775,149,1787,151,1786,156,1774,155,1596,134,1418,118,1137,99"/>
+<area shape="rect" id="Node000009" href="$d1/d44/xml__serializer_8cpp.html" title=" " alt="" coords="985,152,1135,192"/>
+<area shape="poly" id="edge8_Node000002_Node000009" title=" " alt="" coords="1063,118,1063,152,1057,152,1057,118"/>
+<area shape="rect" id="Node000010" href="$d3/d71/iterator__example_8cpp.html" title="Example demonstrating STL iterator support in value_container." alt="" coords="1160,159,1389,185"/>
+<area shape="poly" id="edge9_Node000002_Node000010" title=" " alt="" coords="1105,106,1244,157,1243,162,1103,111"/>
+<area shape="rect" id="Node000011" href="$df/dc2/messaging__integration_8h.html" title=" " alt="" coords="1413,152,1581,192"/>
+<area shape="poly" id="edge10_Node000002_Node000011" title=" " alt="" coords="1137,103,1402,149,1414,152,1413,157,1401,155,1137,108"/>
+<area shape="rect" id="Node000013" href="$d2/d60/async__container_8h.html" title="Async wrapper for value_container operations." alt="" coords="1606,152,1762,192"/>
+<area shape="poly" id="edge12_Node000002_Node000013" title=" " alt="" coords="1137,96,1344,117,1594,149,1606,151,1606,157,1593,155,1343,122,1137,102"/>
+<area shape="rect" id="Node000012" href="$dd/df1/messaging__integration_8cpp.html" title=" " alt="" coords="1413,240,1581,280"/>
+<area shape="poly" id="edge11_Node000011_Node000012" title=" " alt="" coords="1500,206,1500,240,1495,240,1495,206"/>
+</map>

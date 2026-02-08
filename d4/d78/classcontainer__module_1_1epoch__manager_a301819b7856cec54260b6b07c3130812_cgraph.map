@@ -1,0 +1,5 @@
+<map id="container_module::epoch_manager::in_critical_section" name="container_module::epoch_manager::in_critical_section">
+<area shape="rect" id="Node000001" title="Check if current thread is in critical section." alt="" coords="5,5,192,60"/>
+<area shape="rect" id="Node000002" href="$d4/d78/classcontainer__module_1_1epoch__manager.html#a58da47e76d4af194c346d2b44fd272b0" title="Get thread&#45;local epoch reference." alt="" coords="240,13,427,53"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="192,30,226,30,226,35,192,35"/>
+</map>

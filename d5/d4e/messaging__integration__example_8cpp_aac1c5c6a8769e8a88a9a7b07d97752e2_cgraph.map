@@ -1,0 +1,13 @@
+<map id="demonstrate_external_callbacks" name="demonstrate_external_callbacks">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,170,172,210"/>
+<area shape="rect" id="Node000002" href="$d2/d81/classcontainer__module_1_1integration_1_1messaging__integration.html#a0b16450471e0e14257ada681f03b7ecb" title="Container creation with messaging optimization." alt="" coords="221,5,439,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="106,168,154,119,185,92,219,69,228,64,230,69,221,74,188,97,157,123,109,172"/>
+<area shape="rect" id="Node000003" href="$d2/d81/classcontainer__module_1_1integration_1_1messaging__integration.html#ad3627fc65c75266ff32a7d83c58309b6" title=" " alt="" coords="221,84,439,139"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="150,167,232,141,233,146,152,172"/>
+<area shape="rect" id="Node000004" href="$d2/d81/classcontainer__module_1_1integration_1_1messaging__integration.html#a54228375958a077f66bcd0a4c0b01eac" title=" " alt="" coords="220,163,440,217"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="172,187,206,187,206,193,172,193"/>
+<area shape="rect" id="Node000005" href="$d2/d81/classcontainer__module_1_1integration_1_1messaging__integration.html#a0466cfb81c002ac19821026b30afc7f7" title="High&#45;performance serialization for messaging." alt="" coords="221,241,439,296"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="152,208,233,234,232,239,150,213"/>
+<area shape="rect" id="Node000006" href="$d2/d81/classcontainer__module_1_1integration_1_1messaging__integration.html#a70561d57c43f15801e305c5cbdc898c2" title=" " alt="" coords="221,320,439,375"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="110,209,158,256,188,282,221,305,233,312,230,316,219,310,185,286,154,260,106,212"/>
+</map>

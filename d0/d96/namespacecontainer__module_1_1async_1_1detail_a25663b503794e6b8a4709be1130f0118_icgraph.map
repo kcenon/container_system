@@ -1,0 +1,21 @@
+<map id="container_module::async::detail::make_async_awaitable" name="container_module::async::detail::make_async_awaitable">
+<area shape="rect" id="Node000001" title=" " alt="" coords="313,292,540,332"/>
+<area shape="rect" id="Node000002" href="$d2/d63/classcontainer__module_1_1async_1_1async__container.html#a589fe4c680d0dbc1919c9656f7f4bc97" title="Deserialize from byte array asynchronously." alt="" coords="5,5,265,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="412,280,391,230,359,171,317,110,292,83,264,60,243,48,246,43,267,55,295,79,321,107,364,168,396,228,416,278"/>
+<area shape="rect" id="Node000003" href="$d2/d63/classcontainer__module_1_1async_1_1async__container.html#a5563f265efd8060611453057ac869abe" title="Deserialize container progressively from chunks." alt="" coords="28,70,243,125"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="403,282,346,210,307,171,264,138,241,126,244,122,267,134,311,167,350,206,407,279"/>
+<area shape="rect" id="Node000004" href="$d2/d63/classcontainer__module_1_1async_1_1async__container.html#ac066ffc4498fd0d47896f49d14828179" title="Deserialize from string asynchronously." alt="" coords="28,149,243,203"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="384,286,328,252,264,218,233,206,234,201,266,214,331,247,386,282"/>
+<area shape="rect" id="Node000005" href="$d2/d63/classcontainer__module_1_1async_1_1async__container.html#a742d61f4d444c246fc25812660eb14c4" title="Load container from file asynchronously." alt="" coords="27,228,244,268"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="321,292,226,271,227,265,322,286"/>
+<area shape="rect" id="Node000006" href="$dc/d3a/namespacecontainer__module_1_1async.html#ac820f52e2758307cb6daf3c8d99e302b" title="Read file contents asynchronously." alt="" coords="43,292,228,332"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="300,315,228,315,228,309,300,309"/>
+<area shape="rect" id="Node000007" href="$d2/d63/classcontainer__module_1_1async_1_1async__container.html#a40ec44f61f394b634536739e4af91983" title="Save container to file asynchronously." alt="" coords="25,356,245,396"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="322,338,227,359,226,353,321,332"/>
+<area shape="rect" id="Node000008" href="$d2/d63/classcontainer__module_1_1async_1_1async__container.html#ad97f73a9435f62cd9bd19e412b63cc75" title="Serialize container to byte array asynchronously." alt="" coords="13,420,257,460"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="388,342,332,377,266,410,232,422,230,417,264,406,329,373,385,338"/>
+<area shape="rect" id="Node000009" href="$d2/d63/classcontainer__module_1_1async_1_1async__container.html#af80227fd1cb06f5a28ae24b5b81250d9" title="Serialize container to string asynchronously." alt="" coords="36,485,235,539"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="404,345,346,410,308,445,267,474,236,489,234,485,264,470,305,440,342,406,400,341"/>
+<area shape="rect" id="Node000010" href="$dc/d3a/namespacecontainer__module_1_1async.html#ac534684fba0e5d931f7438044bf5b4d9" title="Write data to file asynchronously." alt="" coords="43,564,228,604"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="415,346,393,393,361,449,319,505,294,531,267,553,229,572,227,567,264,548,291,527,315,502,357,446,388,390,410,344"/>
+</map>

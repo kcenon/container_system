@@ -1,0 +1,28 @@
+<map id="container_module::optimized_container::value_container" name="container_module::optimized_container::value_container">
+<area shape="rect" id="Node000001" title="Construct from a serialized data string. If parse_only_header==true, only parse the header part,..." alt="" coords="5,199,217,239"/>
+<area shape="rect" id="Node000002" href="$d9/dad/classcontainer__module_1_1value__container.html#aae51c06e58ddd8f44996c07f5cf4142e" title="Internal deserialize from string." alt="" coords="265,199,448,239"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="217,217,251,217,251,222,217,222"/>
+<area shape="rect" id="Node000003" href="$d9/dad/classcontainer__module_1_1value__container.html#a17826f3cac07988dcce03e62f03c798e" title=" " alt="" coords="503,5,685,60"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="372,197,423,140,457,107,494,77,515,64,518,69,498,81,461,111,427,143,376,201"/>
+<area shape="rect" id="Node000006" href="$d9/dad/classcontainer__module_1_1value__container.html#a40e1ea012f2f6562f76bb6414eacd322" title="Returns iterator to end of values." alt="" coords="747,78,929,118"/>
+<area shape="poly" id="edge6_Node000002_Node000006" title=" " alt="" coords="377,197,428,157,460,137,495,121,555,104,617,94,677,90,733,89,733,94,678,95,618,100,556,109,497,126,463,141,431,161,381,201"/>
+<area shape="rect" id="Node000007" href="$da/d48/classcontainer__module_1_1metrics__manager.html#adc8d9e289a738526a21347608ad93c04" title="Get the singleton metrics instance." alt="" coords="496,135,692,175"/>
+<area shape="poly" id="edge7_Node000002_Node000007" title=" " alt="" coords="431,197,506,176,507,181,432,202"/>
+<area shape="rect" id="Node000008" href="$d9/dad/classcontainer__module_1_1value__container.html#ae6e8db192169bc9209fe6727d1bd6a65" title="Reinitialize the entire container to defaults." alt="" coords="503,263,685,303"/>
+<area shape="poly" id="edge8_Node000002_Node000008" title=" " alt="" coords="432,237,507,257,506,262,431,242"/>
+<area shape="rect" id="Node000010" href="$da/d48/classcontainer__module_1_1metrics__manager.html#a58c3ac237c495aef1052f618df063119" title="Check if metrics collection is enabled." alt="" coords="740,353,936,393"/>
+<area shape="poly" id="edge10_Node000002_Node000010" title=" " alt="" coords="382,237,432,277,464,297,497,313,554,332,614,347,727,364,726,369,613,352,553,338,495,318,461,301,429,281,378,242"/>
+<area shape="rect" id="Node000011" href="$da/d48/classcontainer__module_1_1metrics__manager.html#a4a48c65dfeb635da6321106d4b0dc6c2" title="Create a scoped timer if metrics are enabled." alt="" coords="496,378,692,418"/>
+<area shape="poly" id="edge11_Node000002_Node000011" title=" " alt="" coords="375,238,426,296,460,328,497,357,520,370,518,375,495,362,457,332,422,300,371,241"/>
+<area shape="rect" id="Node000012" href="$d9/dad/classcontainer__module_1_1value__container.html#ac67f821c2e812722fd46526063911f4a" title=" " alt="" coords="503,199,685,239"/>
+<area shape="poly" id="edge13_Node000002_Node000012" title=" " alt="" coords="448,217,489,217,489,222,448,222"/>
+<area shape="rect" id="Node000004" href="$d1/d1a/namespacecontainer__module.html#a83ed4416891be1a3f3191bf92b50b3e9" title=" " alt="" coords="740,13,936,53"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="686,30,726,30,726,35,686,35"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="686,55,750,72,749,77,685,60"/>
+<area shape="rect" id="Node000005" href="$d1/d1a/namespacecontainer__module.html#ac03e62099dde8cbf072a3a4c635382bf" title="Compile&#45;time conversion from string to value_types." alt="" coords="984,13,1152,53"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="936,30,970,30,970,35,936,35"/>
+<area shape="rect" id="Node000009" href="$d9/dad/classcontainer__module_1_1value__container.html#a1e63cbe2c9c9b83d0fcdc7f0394c1203" title="Clear all stored child values." alt="" coords="747,263,929,303"/>
+<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="686,281,733,281,733,286,686,286"/>
+<area shape="poly" id="edge12_Node000011_Node000010" title=" " alt="" coords="692,385,726,382,727,387,692,390"/>
+<area shape="poly" id="edge14_Node000012_Node000006" title=" " alt="" coords="662,197,691,185,747,155,796,123,799,128,749,159,693,190,664,202"/>
+</map>
