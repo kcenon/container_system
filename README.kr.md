@@ -89,7 +89,7 @@ common_system (유일한 필수 생태계 의존성)
 
 | 의존성 | 버전 | 필수 | 설명 |
 |--------|------|------|------|
-| C++20 컴파일러 | GCC 10+ / Clang 10+ / Apple Clang 12+ / MSVC 2022+ | 예 | C++20 Concepts 지원 필요 |
+| C++20 컴파일러 | GCC 11+ / Clang 14+ / Apple Clang 14+ / MSVC 2022+ | 예 | C++20 Concepts 지원 필요 |
 | CMake | 3.20+ | 예 | 빌드 시스템 |
 | common_system | latest | 예 | C++20 Concepts 및 공통 인터페이스 |
 | vcpkg | latest | 선택 | 패키지 관리 (권장) |

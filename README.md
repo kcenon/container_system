@@ -138,7 +138,7 @@ common_system (ONLY required ecosystem dependency)
 
 | Dependency | Version | Required | Description |
 |------------|---------|----------|-------------|
-| C++20 Compiler | GCC 10+ / Clang 10+ / Apple Clang 12+ / MSVC 2022+ | Yes | C++20 Concepts support required |
+| C++20 Compiler | GCC 11+ / Clang 14+ / Apple Clang 14+ / MSVC 2022+ | Yes | C++20 Concepts support required |
 | CMake | 3.20+ | Yes | Build system |
 | common_system | latest | Yes | C++20 Concepts and common interfaces |
 | vcpkg | latest | Optional | Package management (recommended) |
@@ -218,7 +218,7 @@ cmake --build build
 ## Core Features
 
 ### Type-Safe Value System
-- **15 built-in types**: From null to nested containers
+- **16 built-in types**: From null to nested containers and typed arrays
 - **Compile-time checks**: Template metaprogramming ensures type safety
 - **Runtime validation**: Type checking during deserialization
 - **Zero overhead**: No runtime cost for type safety
@@ -335,7 +335,7 @@ This makes it ideal as a foundational data layer for the ecosystem.
 
 ## Value Types
 
-The container system supports 15 distinct value types:
+The container system supports 16 distinct value types (indices 0–15):
 
 | Category | Types | Size |
 |----------|-------|------|
