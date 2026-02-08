@@ -1,6 +1,6 @@
 # Container System Features
 
-**Last Updated**: 2025-11-15
+**Last Updated**: 2026-02-08
 
 ## Overview
 
@@ -45,7 +45,7 @@ This document provides comprehensive details about all features and capabilities
 
 ## Value Types
 
-The Container System supports 15 distinct value types covering all common data scenarios:
+The Container System supports 16 distinct value types covering all common data scenarios:
 
 ### Primitive Types
 
@@ -82,6 +82,7 @@ The Container System supports 15 distinct value types covering all common data s
 | `bytes_value` | 'd' | `std::vector<uint8_t>` | Variable | Raw byte array, binary data |
 | `container_value` | 'e' | `std::shared_ptr<value_container>` | Variable | Nested container for hierarchical data |
 | `string_value` | 'f' | `std::string` | Variable | UTF-8 encoded string |
+| `array_value` | '15' | `std::vector<optimized_value>` | Variable | Typed array of values |
 
 ### Value Type Usage Examples
 
@@ -308,6 +309,145 @@ for (int i = 0; i < 100; ++i) {
     bulk_values.push_back(value_factory::create_int32("val_" + std::to_string(i), i));
 }
 container->set_values(bulk_values);  // Single operation
+```
+
+### Small Object Optimization (SOO)
+
+The container uses `std::variant`-based storage to keep primitive values on the stack instead of heap-allocating them, reducing memory overhead and improving cache locality.
+
+```cpp
+auto container = std::make_shared<value_container>();
+
+// SOO is enabled by default
+std::cout << "SOO enabled: " << container->is_soo_enabled() << std::endl;
+
+// Disable SOO for benchmarking comparisons
+container->set_soo_enabled(false);
+
+// Check allocation statistics
+auto [heap_allocs, stack_allocs] = container->memory_stats();
+std::cout << "Heap allocations: " << heap_allocs << std::endl;
+std::cout << "Stack allocations: " << stack_allocs << std::endl;
+
+// Total memory footprint
+size_t footprint = container->memory_footprint();
+std::cout << "Memory footprint: " << footprint << " bytes" << std::endl;
+
+// Per-value memory tracking
+optimized_value val("count", value_types::int_value);
+val.data = 42;
+std::cout << "Value memory: " << val.memory_footprint() << " bytes" << std::endl;
+std::cout << "Stack allocated: " << val.is_stack_allocated() << std::endl;
+```
+
+### Result<T> Getter API
+
+Type-safe value retrieval using the `Result<T>` pattern from common_system:
+
+```cpp
+auto container = std::make_shared<value_container>();
+container->set("name", std::string("Alice"));
+container->set("age", 30);
+
+// Type-safe get with Result<T>
+auto name_result = container->get<std::string>("name");
+if (name_result.is_ok()) {
+    std::cout << "Name: " << name_result.value() << std::endl;
+}
+
+// Error handling for missing keys
+auto email_result = container->get<std::string>("email");
+if (email_result.is_err()) {
+    std::cout << "Error: " << email_result.error().message << std::endl;
+    // Output: "Error: Key not found: email"
+}
+
+// Error handling for type mismatches
+auto wrong_type = container->get<int>("name");
+if (wrong_type.is_err()) {
+    std::cout << "Error: " << wrong_type.error().message << std::endl;
+    // Output: "Error: Type mismatch for key: name"
+}
+```
+
+### Iterator Support
+
+Standard C++ iterator interface for range-based operations:
+
+```cpp
+auto container = std::make_shared<value_container>();
+container->set("a", 1);
+container->set("b", std::string("hello"));
+container->set("c", true);
+
+// Range-based for loop
+for (const auto& val : *container) {
+    std::cout << val.name << ": " << variant_helpers::to_string(val.data, val.type) << std::endl;
+}
+
+// Standard algorithms
+std::cout << "Size: " << container->size() << std::endl;
+std::cout << "Empty: " << container->empty() << std::endl;
+
+// Check key existence
+if (container->contains("a")) {
+    std::cout << "Key 'a' exists" << std::endl;
+}
+```
+
+### Bulk Operations
+
+Efficient bulk value setting via `std::span`:
+
+```cpp
+std::vector<optimized_value> values;
+values.reserve(100);
+for (int i = 0; i < 100; ++i) {
+    optimized_value val;
+    val.name = "key_" + std::to_string(i);
+    val.type = value_types::int_value;
+    val.data = i;
+    values.push_back(val);
+}
+
+// Single bulk set operation
+container->set_all(values);
+```
+
+### Fast Parser Optimization
+
+Compile-time parser configuration for optimized deserialization:
+
+```cpp
+#include <container/optimizations/fast_parser.h>
+
+// Fast parser configuration
+container_module::parser_config config;
+config.use_fast_path = true;
+config.initial_capacity = 256;
+
+// SFINAE-based container reservation
+std::vector<int> vec;
+container_module::reserve_if_possible(vec, 1000);  // Calls reserve()
+
+std::list<int> lst;
+container_module::reserve_if_possible(lst, 1000);  // No-op (list has no reserve)
+```
+
+### Object Pool
+
+Fixed-block memory pool for high-frequency allocation patterns:
+
+```cpp
+// Container-level pool statistics
+auto stats = value_container::get_pool_stats();
+std::cout << "Pool hits: " << stats.hits << std::endl;
+std::cout << "Pool misses: " << stats.misses << std::endl;
+std::cout << "Available: " << stats.available << std::endl;
+std::cout << "Hit rate: " << (stats.hit_rate * 100) << "%" << std::endl;
+
+// Clear pool to reclaim memory
+value_container::clear_pool();
 ```
 
 ## C++20 Coroutine Async API
@@ -774,5 +914,5 @@ if (!get_result) {
 
 ---
 
-**Last Updated**: 2025-11-15
-**Version**: 0.1.0.0
+**Last Updated**: 2026-02-08
+**Version**: 0.1.1.0

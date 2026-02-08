@@ -1,8 +1,8 @@
 # container_system API Reference
 
-> **Version**: 0.2.1.0
-> **Last Updated**: 2026-01-10
-> **Status**: C++20 Concepts integrated, migrating to variant_value_v2 (Phase 2 in progress)
+> **Version**: 0.3.0.0
+> **Last Updated**: 2026-02-08
+> **Status**: C++20 Concepts integrated, variant_value_v2 migration complete. Unified serialization API with Strategy pattern (Issue #313, #314).
 
 ## Table of Contents
 
@@ -1409,7 +1409,7 @@ int i = val_new.get<int>();
 
 ## Notes
 
-### Migration in Progress
+### Migration Status
 
 - **Phase 1**: ✅ Complete (2025-11-06)
   - variant_value_v2 implementation
@@ -1418,20 +1418,40 @@ int i = val_new.get<int>();
   - Integrated C++20 concepts for type validation
   - Replaces SFINAE-based constraints with clear error messages
   - Added 18 concepts in `core/concepts.h`
-- **Phase 2**: 🔄 In Progress
-  - Core container migration
+- **Phase 2**: ✅ Complete
+  - Core container migration to variant_value
   - Factory function implementation
-- **Phase 3-5**: ⏳ Pending
+  - Unified serialization API (Issue #286)
+- **Phase 3**: ✅ Complete
+  - Strategy pattern for serialization (Issue #313, #314)
+  - Binary, JSON, XML, MessagePack serializer implementations
+  - Schema-validated deserialization (Issue #249)
+- **Phase 4**: ✅ Complete
+  - Streaming serialization (Issue #268)
+  - Async coroutine support (Issue #269)
+  - STL iterator support
+  - Legacy API removal (`CONTAINER_LEGACY_API=OFF` by default)
+
+### Current Architecture
+
+The container system now uses a unified `value_container` class (alias: `message_buffer` since v2.0.0) with:
+- **16 value types** (indices 0–15, including `array_value`)
+- **Strategy pattern** for format-specific serialization (`serializer_strategy.h`)
+- **Result-based API** for error handling (`get_result()`, `set_result()`, etc.)
+- **Zero-copy deserialization** via `get(key, as_view)`
+- **Schema validation** via `deserialize_result(data, schema)`
+- **Thread-safe wrapper** for concurrent writes (`thread_safe_wrapper`)
 
 ### Recommendations
 
-- **New code**: Use variant_value_v2 (recommended)
-- **Existing code**: Gradual migration (see MIGRATION_GUIDE)
+- **New code**: Use `value_container` (or `message_buffer` alias) with Result-based APIs
+- **Existing code**: See [MIGRATION_GUIDE](advanced/VARIANT_VALUE_V2_MIGRATION_GUIDE.md) for upgrade path
 - **Type constraints**: Use C++20 concepts for compile-time validation
+- **Serialization**: Use `serialize(serialization_format)` unified API
 
 ---
 
 **Created**: 2025-11-21
-**Updated**: 2025-12-10
-**Version**: 0.2.1.0
+**Updated**: 2026-02-08
+**Version**: 0.3.0.0
 **Author**: kcenon@naver.com

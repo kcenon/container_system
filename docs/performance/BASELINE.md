@@ -172,7 +172,7 @@ ARM_NEON_SIMD=ON
 1. **Small Containers**: 10 values, realistic use
 2. **Medium Containers**: 100 values, typical apps
 3. **Large Containers**: 1000+ values, stress test
-4. **Mixed Types**: All 15 value types
+4. **Mixed Types**: All 16 value types
 
 ---
 

@@ -437,7 +437,7 @@ value (abstract base)
     └── container_value (nested container)
 ```
 
-**15 Supported Types:**
+**16 Supported Types (indices 0–15):**
 
 | Index | Type | C++ Type | Size | Code |
 |-------|------|----------|------|------|
@@ -456,6 +456,7 @@ value (abstract base)
 | 12 | bytes_value | std::vector<uint8_t> | Variable | "12" |
 | 13 | string_value | std::string | Variable | "13" |
 | 14 | container_value | std::shared_ptr | Variable | "14" |
+| 15 | array_value | std::vector<optimized_value> | Variable | "15" |
 
 **Type-Safe Variant:**
 ```cpp
@@ -578,7 +579,7 @@ class simd_processor {
 ┌───────────────────────────────────────────────────────────┐
 │                  container_system (Core)                  │
 │  • Type-safe containers                                   │
-│  • 15 value types                                         │
+│  • 16 value types                                         │
 │  • SIMD optimizations                                     │
 │  • Binary/JSON/XML serialization                          │
 └────┬──────────────┬──────────────┬────────────────┬───────┘
