@@ -190,4 +190,4 @@ auto user = User::from_variant(user_data);
 
 - [Container System API Reference](../API_REFERENCE.md)
 - [Value System Comparison](../VALUE_SYSTEM_COMPARISON_ANALYSIS.md)
-- [Ecosystem Integration Guide](../../../ECOSYSTEM_INTEGRATION.md)
+- [Ecosystem Integration Guide](../../../ECOSYSTEM.md)
