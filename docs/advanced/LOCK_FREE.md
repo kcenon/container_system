@@ -113,6 +113,10 @@ operations) for simplicity and safety.
 |--------|---------------|------------|-------------|
 | `rcu_value()` | N/A | O(1) | Default construct with `T()` |
 | `rcu_value(T initial)` | N/A | O(1) | Construct with initial value |
+| `rcu_value(const rcu_value&)` | Lock-free | O(1) | Copy construct (atomic load from source) |
+| `rcu_value(rcu_value&&)` | Lock-free | O(1) | Move construct (atomic load from source) |
+| `operator=(const rcu_value&)` | Lock-free | O(1) | Copy assign (atomic load + store) |
+| `operator=(rcu_value&&)` | Lock-free | O(1) | Move assign (atomic load + store) |
 | `read()` | Wait-free | O(1) | Get immutable snapshot |
 | `update(T)` | Lock-free | O(1) | Replace current value |
 | `compare_and_update(expected, T)` | Lock-free | O(1) | CAS update |
@@ -406,7 +410,7 @@ auto container = std::make_shared<thread_safe_container>();
 auto reader = container->create_lockfree_reader();
 
 // Lock-free reads from any thread (wait-free)
-auto val = reader->get<int>("counter");     // No locks!
+auto val = reader->get<int32_t>("counter");  // No locks!
 bool exists = reader->contains("counter");   // No locks!
 size_t n = reader->size();                   // No locks!
 
@@ -427,7 +431,7 @@ auto reader = container->create_auto_refresh_reader(
     std::chrono::milliseconds(100));
 
 // Lock-free reads, automatically updated every 100ms
-auto val = reader->get<int>("counter");
+auto val = reader->get<int32_t>("counter");
 
 // Stop auto-refresh (reads still work with last snapshot)
 reader->stop();
@@ -496,6 +500,11 @@ overhead or integration with raw-pointer lock-free algorithms.
 | `snapshot_reader` | No (uses `shared_mutex`) | Manual | Stale until refresh | Legacy compatibility |
 | `lockfree_container_reader` | Yes (wait-free) | Manual | Stale until refresh | High-performance reads |
 | `auto_refresh_reader` | Yes (wait-free) | Automatic | Bounded staleness | Hands-off high-performance |
+
+> **Note on legacy alias**: The type alias `lockfree_reader = snapshot_reader` exists
+> for backward compatibility. Despite the name, `lockfree_reader` is **not** lock-free -
+> it is `snapshot_reader`, which uses `shared_mutex`. For true lock-free reads, use
+> `lockfree_container_reader` or `auto_refresh_reader`.
 
 ---
 
