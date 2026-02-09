@@ -57,7 +57,7 @@ The block size is set at construction and cannot change:
 
 ```cpp
 // Minimum block size is enforced to sizeof(void*) for free list pointers
-fixed_block_pool(std::size_t block_size, std::size_t blocks_per_chunk = 1024)
+explicit fixed_block_pool(std::size_t block_size, std::size_t blocks_per_chunk = 1024)
     : block_size_(block_size < sizeof(void*) ? sizeof(void*) : block_size)
     , blocks_per_chunk_(blocks_per_chunk) {}
 ```
@@ -74,7 +74,15 @@ intrusive free list pointer.
 void* allocate() {
     std::lock_guard<std::mutex> lock(mutex_);
     if (!free_list_) {
-        allocate_chunk_unlocked();  // Grow pool
+        try {
+            allocate_chunk_unlocked();  // Grow pool
+        } catch (const std::bad_alloc&) {
+            throw;  // Propagate allocation failure
+        }
+        if (!free_list_) {
+            throw std::runtime_error(
+                "Memory pool chunk allocation failed to create free list");
+        }
     }
     void* p = free_list_;
     free_list_ = *reinterpret_cast<void**>(free_list_);  // Follow next pointer
@@ -89,6 +97,22 @@ void* allocate() {
 void deallocate(void* p) {
     if (!p) return;
     std::lock_guard<std::mutex> lock(mutex_);
+
+#ifndef NDEBUG
+    // Debug-mode validation: ensure pointer belongs to one of our chunks
+    bool found = false;
+    for (const auto& chunk : chunks_) {
+        std::uint8_t* chunk_start = chunk.get();
+        std::uint8_t* chunk_end = chunk_start + (block_size_ * blocks_per_chunk_);
+        if (reinterpret_cast<std::uint8_t*>(p) >= chunk_start &&
+            reinterpret_cast<std::uint8_t*>(p) < chunk_end) {
+            found = true;
+            break;
+        }
+    }
+    if (!found) return;  // Silently reject invalid pointers in debug mode
+#endif
+
     *reinterpret_cast<void**>(p) = free_list_;  // Point to current head
     free_list_ = p;                              // New head
     --allocated_count_;
@@ -96,7 +120,8 @@ void deallocate(void* p) {
 ```
 
 In debug builds (`NDEBUG` not defined), `deallocate` validates that the pointer
-belongs to one of the pool's chunks before adding it to the free list.
+belongs to one of the pool's chunks by iterating over all chunk address ranges.
+If the pointer is not found, it silently returns to prevent free list corruption.
 
 ### Growth / Expansion Policy
 
@@ -104,8 +129,9 @@ When `allocate()` is called and the free list is empty, a new chunk is allocated
 
 ```cpp
 void allocate_chunk_unlocked() {
-    auto chunk = std::make_unique<uint8_t[]>(block_size_ * blocks_per_chunk_);
-    uint8_t* base = chunk.get();
+    std::unique_ptr<std::uint8_t[]> chunk(
+        new std::uint8_t[block_size_ * blocks_per_chunk_]);
+    std::uint8_t* base = chunk.get();
     chunks_.push_back(std::move(chunk));
 
     // Build free list from new chunk
@@ -153,7 +179,8 @@ auto stats = pool.get_statistics();
 
 | Method | Thread Safety | Description |
 |--------|---------------|-------------|
-| `fixed_block_pool(block_size, blocks_per_chunk)` | N/A | Construct pool |
+| `explicit fixed_block_pool(block_size, blocks_per_chunk)` | N/A | Construct pool (implicit conversion prevented) |
+| `~fixed_block_pool()` | N/A | Destructor (defaulted; frees all chunks) |
 | `allocate()` | Mutex-protected | Allocate one block |
 | `deallocate(ptr)` | Mutex-protected | Return block to pool |
 | `block_size()` | Lock-free | Get block size |
@@ -237,10 +264,27 @@ When disabled, all allocations fall through to `::operator new`:
 
 ```cpp
 void* allocate(std::size_t size) noexcept {
+    if (size == 0) return nullptr;
+
 #if CONTAINER_USE_MEMORY_POOL
-    // ... pool allocation logic ...
+    try {
+        if (size <= pool_size_class::small_threshold) {
+            void* ptr = small_pool_.allocate();
+            stats_.pool_hits++;
+            stats_.small_pool_allocs++;
+            return ptr;
+        } else if (size <= pool_size_class::medium_threshold) {
+            void* ptr = medium_pool_.allocate();
+            stats_.pool_hits++;
+            stats_.medium_pool_allocs++;
+            return ptr;
+        }
+    } catch (...) {
+        // Pool allocation failed, fall through to heap
+    }
 #endif
-    // Fallback: heap allocation
+    // Large allocation or pool disabled: use heap
+    stats_.pool_misses++;
     return ::operator new(size, std::nothrow);
 }
 ```
@@ -340,6 +384,8 @@ struct pool_stats {
     size_t medium_pool_allocs{0};  // Medium pool (<=256 bytes) allocations
     size_t deallocations{0};       // Total deallocations
     size_t available{0};           // Free blocks available
+
+    [[nodiscard]] double hit_rate() const noexcept;  // hits / (hits + misses)
 };
 ```
 
@@ -512,9 +558,8 @@ Use the statistics API to monitor pool health:
 auto stats = value_container::get_pool_stats();
 
 // Check hit rate - should be >80% for effective pooling
-double hit_rate = (stats.hits + stats.misses > 0)
-    ? static_cast<double>(stats.hits) / (stats.hits + stats.misses)
-    : 0.0;
+// pool_stats provides a built-in hit_rate() method:
+double hit_rate = stats.hit_rate();  // hits / (hits + misses)
 
 // Check pool utilization
 auto small = pool_allocator::instance().get_small_pool_stats();
