@@ -238,7 +238,7 @@ Schemas reference the `value_types` enum for type checking:
 | `string_value` | `std::string` | UTF-8 string |
 | `bytes_value` | `std::vector<uint8_t>` | Binary data |
 | `container_value` | `shared_ptr<value_container>` | Nested container |
-| `array_value` | `std::vector<optimized_value>` | Array of values |
+| `array_value` | *(reserved — not yet in `value_variant`)* | Array of values (planned) |
 
 ### Validation Error Codes
 
