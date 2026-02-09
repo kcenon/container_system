@@ -1,12 +1,12 @@
 # C++20 Coroutine and Async Framework
 
-**Date**: 2025-02-09
+**Date**: 2026-02-09
 **Status**: Active
 
 ## Overview
 
 container_system includes a full C++20 coroutine framework at `internal/async/`
-that enables asynchronous and lazy container operations. The framework provides:
+that enables asynchronous container operations and lazy sequence generation. The framework provides:
 
 1. **`task<T>`** - Coroutine task type for async computations
 2. **`generator<T>`** - Lazy sequence generator for on-demand values
@@ -766,14 +766,20 @@ cmake -DCONTAINER_ENABLE_COROUTINES=ON ..
 cmake -DCONTAINER_ENABLE_COROUTINES=OFF ..
 ```
 
-### Minimum Compiler Versions
+### Compiler Version Requirements
 
-| Compiler | Minimum Version | Flag Required |
-|----------|----------------|---------------|
+| Compiler | Version Required | Flag Required |
+|----------|-----------------|---------------|
 | GCC | 11.0+ | `-fcoroutines` |
 | Clang | 14.0+ | None (built-in) |
 | MSVC | 19.28+ (VS 2019 16.8) | `/std:c++20` |
 | Apple Clang | 14.0+ | None (built-in) |
+
+> **Note**: Version requirements are enforced through compile-time feature detection
+> (`__cpp_impl_coroutine >= 201902L` or `_MSC_VER >= 1928`), not explicit CMake
+> version checks. If your compiler does not support C++20 coroutines, the
+> `CONTAINER_HAS_COROUTINES` macro will be set to `0` and all async APIs will be
+> unavailable.
 
 ### Known Compiler-Specific Issues
 
