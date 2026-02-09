@@ -148,7 +148,7 @@ Simply calling `delete` would cause use-after-free.
 Epoch 0          Epoch 1          Epoch 2
 +-----------+    +-----------+    +-----------+
 | Retire    |    | Retire    |    | Retire    |
-| List      |    | List      |    | Retire    |
+| List      |    | List      |    | List      |
 +-----------+    +-----------+    +-----------+
      ^                                  |
      |       2 epoch gap = safe         |
