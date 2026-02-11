@@ -154,8 +154,8 @@ TEST(SerializerFactoryTest, BinarySerializeWithValues) {
     ASSERT_NE(serializer, nullptr);
 
     value_container container;
-    container.add_value("name", std::string("test"));
-    container.add_value("count", static_cast<int32_t>(42));
+    container.set("name", std::string("test"));
+    container.set("count", static_cast<int32_t>(42));
 
     auto result = serializer->serialize(container);
     EXPECT_TRUE(result.is_ok());
@@ -167,8 +167,8 @@ TEST(SerializerFactoryTest, JsonSerializeWithValues) {
     ASSERT_NE(serializer, nullptr);
 
     value_container container;
-    container.add_value("name", std::string("test"));
-    container.add_value("count", static_cast<int32_t>(42));
+    container.set("name", std::string("test"));
+    container.set("count", static_cast<int32_t>(42));
 
     auto result = serializer->serialize(container);
     EXPECT_TRUE(result.is_ok());
