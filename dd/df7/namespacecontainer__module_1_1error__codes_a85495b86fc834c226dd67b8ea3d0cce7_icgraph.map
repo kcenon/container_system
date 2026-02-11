@@ -1,0 +1,13 @@
+<map id="container_module::error_codes::is_category" name="container_module::error_codes::is_category">
+<area shape="rect" id="Node000001" title="Check if error code is in a specific category." alt="" coords="264,133,443,173"/>
+<area shape="rect" id="Node000002" href="$dd/df7/namespacecontainer__module_1_1error__codes.html#abdf5f75d2e78485d4b5656201cf0cc68" title="Check if error is a resource error (4xx)" alt="" coords="17,5,204,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="316,127,270,92,215,60,186,48,189,43,217,55,272,88,319,122"/>
+<area shape="rect" id="Node000003" href="$dd/df7/namespacecontainer__module_1_1error__codes.html#ac508b2497fc73dea894baa7d7831ee5d" title="Check if error is a serialization error (2xx)" alt="" coords="5,69,216,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="263,132,186,112,188,107,264,127"/>
+<area shape="rect" id="Node000004" href="$dd/df7/namespacecontainer__module_1_1error__codes.html#a0999b0ad4b97d656a139936e9373fc03" title="Check if error is a thread safety error (5xx)" alt="" coords="21,133,200,173"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="250,156,200,156,200,151,250,151"/>
+<area shape="rect" id="Node000005" href="$dd/df7/namespacecontainer__module_1_1error__codes.html#a38261a0b69a3b894310f92a8d201015e" title="Check if error is a validation error (3xx)" alt="" coords="13,197,209,237"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="264,179,188,200,186,195,263,174"/>
+<area shape="rect" id="Node000006" href="$dd/df7/namespacecontainer__module_1_1error__codes.html#aceb34909029aa2e74fcf3eec52d5c457" title="Check if error is a value operation error (1xx)" alt="" coords="21,261,200,301"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="319,184,272,219,217,252,189,264,186,259,215,247,270,215,316,180"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="container_module::epoch_manager::enter_critical" name="container_module::epoch_manager::enter_critical">
+<area shape="rect" id="Node000001" title="Enter critical section (pin to current epoch)" alt="" coords="240,5,427,45"/>
+<area shape="rect" id="Node000002" href="$d0/d37/classcontainer__module_1_1epoch__guard.html#aa0c19c7ac9cf1212b0f8818b2f5c209d" title="Enter critical section." alt="" coords="5,5,192,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="227,28,192,28,192,23,227,23"/>
+</map>

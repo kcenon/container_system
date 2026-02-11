@@ -1,0 +1,10 @@
+<map id="container_module::variant_value_v2::serialize" name="container_module::variant_value_v2::serialize">
+<area shape="rect" id="Node000001" title="Serialize to binary format (legacy compatible)" alt="" coords="5,5,199,45"/>
+<area shape="rect" id="Node000002" href="$dd/dd3/classcontainer__module_1_1variant__value__v2.html#ac7e934be08be1d54d8ae7783d3f92547" title="Serialize data portion based on type." alt="" coords="247,5,440,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="199,32,233,32,233,37,199,37"/>
+<area shape="rect" id="Node000004" href="$dd/dd3/classcontainer__module_1_1variant__value__v2.html#af0c797c36e1223cefddd2ab3b79675cb" title="Get the value_types enum (NOT variant::index()!)" alt="" coords="247,69,440,109"/>
+<area shape="poly" id="edge4_Node000001_Node000004" title=" " alt="" coords="179,43,255,63,254,68,178,48"/>
+<area shape="poly" id="edge2_Node000002_Node000001" title=" " alt="" coords="246,19,212,19,212,14,246,14"/>
+<area shape="rect" id="Node000003" href="$dd/dd3/classcontainer__module_1_1variant__value__v2.html#a906d9d0b1c413463bdfe5d4291c76cbd" title="Apply visitor to contained value (const)" alt="" coords="488,5,681,45"/>
+<area shape="poly" id="edge3_Node000002_Node000003" title=" " alt="" coords="440,23,474,23,474,28,440,28"/>
+</map>

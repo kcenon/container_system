@@ -1,0 +1,11 @@
+<map id="container_module::policy::dynamic_storage_policy" name="container_module::policy::dynamic_storage_policy">
+<area shape="rect" id="Node000001" title="Default storage policy using variant&#45;based storage with vector backend." alt="" coords="5,628,213,948"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="42,485,177,565"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="112,566,112,611,107,611,107,566"/>
+<area shape="rect" id="Node000003" href="$d8/de4/structcontainer__module_1_1optimized__value.html" title="Optimized value storage with Small Object Optimization." alt="" coords="7,263,211,423"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="112,423,112,469,107,469,107,423"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="70,135,149,200"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="112,200,112,246,107,246,107,200"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="44,5,175,85"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="112,99,112,134,107,134,107,99"/>
+</map>

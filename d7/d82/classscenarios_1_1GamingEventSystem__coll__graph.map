@@ -1,0 +1,13 @@
+<map id="scenarios::GamingEventSystem" name="scenarios::GamingEventSystem">
+<area shape="rect" id="Node000001" title="Gaming Event System." alt="" coords="149,435,391,560"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,270,140,335"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="75,335,81,373,87,392,97,409,115,428,137,444,133,449,112,432,93,412,82,394,75,374,70,336"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="189,263,343,343"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="269,343,271,418,266,418,264,343"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="227,135,305,200"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="269,200,269,247,263,247,263,200"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="201,5,331,85"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="269,99,269,134,263,134,263,99"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="368,270,452,335"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="409,336,400,374,382,412,373,424,368,421,377,409,394,372,404,335"/>
+</map>

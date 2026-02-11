@@ -1,0 +1,5 @@
+<map id="container_module::detailed_metrics::avg_serialize_latency_ns" name="container_module::detailed_metrics::avg_serialize_latency_ns">
+<area shape="rect" id="Node000001" title="Calculate average serialize latency in nanoseconds." alt="" coords="5,5,205,60"/>
+<area shape="rect" id="Node000002" href="$dc/d55/structcontainer__module_1_1latency__histogram.html#a74f13432cf2949c1bf86be2b3052cbfb" title="Get average latency." alt="" coords="253,13,448,53"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="205,30,240,30,240,35,205,35"/>
+</map>

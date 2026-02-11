@@ -1,0 +1,5 @@
+<map id="container_module::latency_histogram::record" name="container_module::latency_histogram::record">
+<area shape="rect" id="Node000001" title="Record a latency sample." alt="" coords="247,5,441,45"/>
+<area shape="rect" id="Node000002" href="$de/da8/classcontainer__module_1_1scoped__timer.html#af8e6f3d4b1f758aa097e96f07d59dace" title=" " alt="" coords="5,5,199,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="233,28,199,28,199,23,233,23"/>
+</map>

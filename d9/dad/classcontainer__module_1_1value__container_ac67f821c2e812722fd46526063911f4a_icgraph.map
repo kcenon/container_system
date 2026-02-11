@@ -1,0 +1,13 @@
+<map id="container_module::value_container::parsing" name="container_module::value_container::parsing">
+<area shape="rect" id="Node000001" title=" " alt="" coords="496,101,679,141"/>
+<area shape="rect" id="Node000002" href="$d9/dad/classcontainer__module_1_1value__container.html#aae51c06e58ddd8f44996c07f5cf4142e" title="Internal deserialize from string." alt="" coords="265,101,448,141"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="483,124,448,124,448,119,483,119"/>
+<area shape="rect" id="Node000003" href="$d9/dad/classcontainer__module_1_1value__container.html#a7539bd21ce23370c37e025f52f67d58a" title="Internal deserialize from byte array." alt="" coords="20,5,203,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="302,98,216,60,182,48,184,43,218,55,305,93"/>
+<area shape="rect" id="Node000004" href="$d9/dad/classcontainer__module_1_1value__container.html#a161eb3fc0910f0af3d42d7d926a7fb97" title="Construct from a serialized data string. If parse_only_header==true, only parse the header part,..." alt="" coords="10,69,213,109"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="252,110,212,105,213,100,252,105"/>
+<area shape="rect" id="Node000005" href="$da/dab/classcontainer__module_1_1optimized__container.html#a161eb3fc0910f0af3d42d7d926a7fb97" title="Construct from a serialized data string. If parse_only_header==true, only parse the header part,..." alt="" coords="5,133,217,173"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="252,138,218,142,217,137,252,132"/>
+<area shape="rect" id="Node000006" href="$d9/dad/classcontainer__module_1_1value__container.html#a05ffd9fd90384cb244c1f9400bd4ecf7" title="Construct from a raw byte array. If parse_only_header==true, only parse the header part,..." alt="" coords="10,197,213,237"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="305,150,218,188,184,200,182,195,216,183,302,145"/>
+</map>

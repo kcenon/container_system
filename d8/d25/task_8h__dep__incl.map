@@ -1,0 +1,7 @@
+<map id="internal/async/task.h" name="internal/async/task.h">
+<area shape="rect" id="Node000001" title="C++20 coroutine task type for async operations." alt="" coords="95,5,253,31"/>
+<area shape="rect" id="Node000002" href="$d2/d60/async__container_8h.html" title="Async wrapper for value_container operations." alt="" coords="5,79,161,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="152,42,107,81,103,76,149,38"/>
+<area shape="rect" id="Node000003" href="$d0/d08/thread__pool__executor_8h.html" title="Thread pool executor integration for async operations." alt="" coords="186,79,346,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="200,38,246,76,242,81,196,42"/>
+</map>

@@ -1,0 +1,9 @@
+<map id="container_module::value_container::set_message_type" name="container_module::value_container::set_message_type">
+<area shape="rect" id="Node000001" title=" " alt="" coords="256,69,476,109"/>
+<area shape="rect" id="Node000002" href="$d9/dad/classcontainer__module_1_1value__container.html#ad8f3d989ea04894503acad6c0c8ee481" title="Construct with message type and a set of child units." alt="" coords="5,5,208,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="270,69,188,48,189,43,272,63"/>
+<area shape="rect" id="Node000003" href="$d9/dad/classcontainer__module_1_1value__container.html#a14588b9b5d6d107509cf5cec7a101bf5" title="Construct with full header info and child units." alt="" coords="5,69,208,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="242,92,208,92,208,87,242,87"/>
+<area shape="rect" id="Node000004" href="$d9/dad/classcontainer__module_1_1value__container.html#aae95c9ab91a68dbb496725b024a6f26f" title="Construct with target info and message type, plus child units." alt="" coords="5,133,208,173"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="272,115,189,136,188,131,270,110"/>
+</map>

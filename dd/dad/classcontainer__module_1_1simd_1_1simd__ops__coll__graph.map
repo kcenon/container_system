@@ -1,0 +1,5 @@
+<map id="container_module::simd::simd_ops&lt; Policy &gt;" name="container_module::simd::simd_ops&lt; Policy &gt;">
+<area shape="rect" id="Node000001" title="SIMD operations wrapper with compile&#45;time policy selection." alt="" coords="5,228,176,428"/>
+<area shape="rect" id="Node000002" href="$da/de7/structcontainer__module_1_1simd_1_1scalar__simd__policy.html" title="Scalar (non&#45;SIMD) implementation of operations." alt="" coords="5,5,176,165"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="93,166,93,212,88,212,88,166"/>
+</map>

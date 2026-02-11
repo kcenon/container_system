@@ -1,0 +1,5 @@
+<map id="container_module::latency_histogram::p95" name="container_module::latency_histogram::p95">
+<area shape="rect" id="Node000001" title="Get P95 latency." alt="" coords="5,5,200,45"/>
+<area shape="rect" id="Node000002" href="$dc/d55/structcontainer__module_1_1latency__histogram.html#a99204a5d49a3c407ee1e2950c5ce4836" title="Get a percentile value." alt="" coords="248,5,444,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="200,23,235,23,235,28,200,28"/>
+</map>

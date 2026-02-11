@@ -1,0 +1,7 @@
+<map id="container_module::internal::fixed_block_pool::get_statistics" name="container_module::internal::fixed_block_pool::get_statistics">
+<area shape="rect" id="Node000001" title="Get current pool statistics." alt="" coords="265,45,463,100"/>
+<area shape="rect" id="Node000002" href="$dc/d4b/classcontainer__module_1_1internal_1_1pool__allocator.html#a1c7575176c4adbd8e3c85e84f64585e4" title="Get statistics from the medium pool." alt="" coords="5,5,217,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="252,58,217,52,218,47,252,52"/>
+<area shape="rect" id="Node000003" href="$dc/d4b/classcontainer__module_1_1internal_1_1pool__allocator.html#ab3815a22d59ba6957d81e8dbc2b3c09e" title="Get statistics from the small pool." alt="" coords="13,84,210,139"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="252,92,211,99,210,94,252,87"/>
+</map>

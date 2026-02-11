@@ -1,0 +1,5 @@
+<map id="container_module::detailed_metrics::simd_utilization" name="container_module::detailed_metrics::simd_utilization">
+<area shape="rect" id="Node000001" title="Calculate SIMD utilization percentage." alt="" coords="5,5,205,45"/>
+<area shape="rect" id="Node000002" href="$dc/d3c/structcontainer__module_1_1simd__metrics.html#ae1a2f2f165093ad68d05714dc204e3b8" title="Calculate SIMD utilization percentage." alt="" coords="253,5,432,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="206,23,239,23,239,28,206,28"/>
+</map>

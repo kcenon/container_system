@@ -1,0 +1,38 @@
+<map id="AdvancedContainerExample::demonstrate_messaging_features" name="AdvancedContainerExample::demonstrate_messaging_features">
+<area shape="rect" id="Node000001" title="Demonstrates enhanced messaging features." alt="" coords="5,289,212,344"/>
+<area shape="rect" id="Node000002" href="$d0/dcd/classcontainer__module_1_1integration_1_1messaging__container__builder.html#a70981bba692bd185814812957472c6ec" title=" " alt="" coords="561,41,783,96"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="125,287,148,255,178,217,216,180,259,149,329,117,404,94,479,79,547,71,548,76,480,84,406,99,331,122,261,154,219,184,182,220,152,258,129,290"/>
+<area shape="rect" id="Node000008" href="$d0/dcd/classcontainer__module_1_1integration_1_1messaging__container__builder.html#ae2f2b773fb7248be85f92bd6265efab4" title=" " alt="" coords="541,121,803,161"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="133,287,187,238,222,213,259,193,325,170,394,154,463,144,527,138,528,143,464,149,395,159,327,175,261,198,224,217,190,242,136,291"/>
+<area shape="rect" id="Node000009" href="$d6/d71/classAdvancedContainerExample.html#a78efa0a41a4dd62ea14d74f5637b2b71" title="Demonstrates batch processing with messaging features." alt="" coords="260,239,493,279"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="212,292,269,280,270,285,213,297"/>
+<area shape="rect" id="Node000010" href="$d0/dcd/classcontainer__module_1_1integration_1_1messaging__container__builder.html#a56f2ae6cae82bd445e889788db53e2da" title=" " alt="" coords="561,185,783,240"/>
+<area shape="poly" id="edge17_Node000001_Node000010" title=" " alt="" coords="143,287,196,253,227,237,259,225,332,208,408,200,481,197,548,199,547,204,481,203,408,205,333,214,261,230,229,242,198,257,146,291"/>
+<area shape="rect" id="Node000011" href="$d0/dcd/classcontainer__module_1_1integration_1_1messaging__container__builder.html#a271381f5ca5e3e609eaf574e5a3bf684" title=" " alt="" coords="561,264,783,319"/>
+<area shape="poly" id="edge18_Node000001_Node000011" title=" " alt="" coords="212,309,547,294,547,300,212,315"/>
+<area shape="rect" id="Node000012" href="$d0/dcd/classcontainer__module_1_1integration_1_1messaging__container__builder.html#a2c82ff350d7cb1efb87bdc6128a95a5c" title=" " alt="" coords="561,343,783,397"/>
+<area shape="poly" id="edge20_Node000001_Node000012" title=" " alt="" coords="212,324,548,356,547,361,212,329"/>
+<area shape="rect" id="Node000013" href="$d0/dcd/classcontainer__module_1_1integration_1_1messaging__container__builder.html#a71aa40744bafcb49d34270698dbc4341" title=" " alt="" coords="561,421,783,476"/>
+<area shape="poly" id="edge21_Node000001_Node000013" title=" " alt="" coords="204,342,261,357,548,421,547,427,259,362,202,347"/>
+<area shape="rect" id="Node000014" href="$d2/d81/classcontainer__module_1_1integration_1_1messaging__integration.html#a19ce9bba06580d81ef555c61a6858419" title="Optimized deserialization for messaging." alt="" coords="267,456,486,511"/>
+<area shape="poly" id="edge16_Node000001_Node000014" title=" " alt="" coords="141,342,195,388,261,434,287,448,285,453,259,439,192,392,137,346"/>
+<area shape="rect" id="Node000015" href="$d2/d81/classcontainer__module_1_1integration_1_1messaging__integration.html#a0466cfb81c002ac19821026b30afc7f7" title="High&#45;performance serialization for messaging." alt="" coords="267,535,486,589"/>
+<area shape="poly" id="edge19_Node000001_Node000015" title=" " alt="" coords="125,343,147,383,177,431,216,479,262,521,268,526,265,530,258,525,212,483,173,434,142,385,121,346"/>
+<area shape="rect" id="Node000003" href="$d5/df9/classcontainer__module_1_1value.html#aef0c634b18712374d422801f269ff0e9" title="Serialize to binary format (legacy compatible)" alt="" coords="851,49,1033,89"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="783,66,837,66,837,71,783,71"/>
+<area shape="rect" id="Node000004" href="$d5/df9/classcontainer__module_1_1value.html#aa105a05c2bb9ce88d5bd54610aae7103" title="Serialize data portion based on type." alt="" coords="1081,49,1264,89"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="1033,75,1068,75,1068,80,1033,80"/>
+<area shape="rect" id="Node000007" href="$d5/df9/classcontainer__module_1_1value.html#a19a827e03777e6214b597f5c9e5e8b35" title="Get the value_types enum (NOT variant::index()!)" alt="" coords="1081,113,1264,153"/>
+<area shape="poly" id="edge7_Node000003_Node000007" title=" " alt="" coords="1016,86,1088,106,1086,112,1014,91"/>
+<area shape="poly" id="edge5_Node000004_Node000003" title=" " alt="" coords="1081,63,1047,62,1047,57,1081,57"/>
+<area shape="rect" id="Node000005" href="$d7/d23/structcontainer__module_1_1detail_1_1circular__ref__guard.html#a7109e68223164ea84e0fcc24b770c3bf" title=" " alt="" coords="1312,5,1496,60"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="1264,52,1298,46,1299,52,1265,57"/>
+<area shape="rect" id="Node000006" href="$d5/df9/classcontainer__module_1_1value.html#a8fd9176e2a29a65418b51dee4cb6a30d" title="Apply visitor to contained value (const)" alt="" coords="1313,85,1495,125"/>
+<area shape="poly" id="edge6_Node000004_Node000006" title=" " alt="" coords="1265,80,1299,86,1299,91,1264,86"/>
+<area shape="poly" id="edge10_Node000009_Node000002" title=" " alt="" coords="393,237,453,173,494,137,540,106,554,99,556,104,543,111,498,142,457,177,396,241"/>
+<area shape="poly" id="edge11_Node000009_Node000008" title=" " alt="" coords="409,237,469,203,540,170,563,162,565,167,542,175,471,208,411,242"/>
+<area shape="poly" id="edge12_Node000009_Node000010" title=" " alt="" coords="493,238,547,230,548,235,494,244"/>
+<area shape="poly" id="edge13_Node000009_Node000011" title=" " alt="" coords="494,269,548,275,547,281,493,275"/>
+<area shape="poly" id="edge14_Node000009_Node000012" title=" " alt="" coords="422,277,542,328,566,336,564,341,540,332,420,282"/>
+<area shape="poly" id="edge15_Node000009_Node000013" title=" " alt="" coords="396,278,457,342,498,377,543,408,554,413,551,418,540,412,494,381,453,346,392,281"/>
+</map>

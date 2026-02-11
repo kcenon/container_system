@@ -1,0 +1,5 @@
+<map id="container_module::epoch_manager::exit_critical" name="container_module::epoch_manager::exit_critical">
+<area shape="rect" id="Node000001" title="Exit critical section." alt="" coords="5,5,192,45"/>
+<area shape="rect" id="Node000002" href="$d4/d78/classcontainer__module_1_1epoch__manager.html#a58da47e76d4af194c346d2b44fd272b0" title="Get thread&#45;local epoch reference." alt="" coords="240,5,427,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="192,23,226,23,226,28,192,28"/>
+</map>

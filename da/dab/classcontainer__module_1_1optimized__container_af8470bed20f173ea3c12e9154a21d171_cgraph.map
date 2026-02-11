@@ -1,0 +1,14 @@
+<map id="container_module::optimized_container::get_value_fast" name="container_module::optimized_container::get_value_fast">
+<area shape="rect" id="Node000001" title="Fast value lookup using hash map (O(1))" alt="" coords="5,37,217,77"/>
+<area shape="rect" id="Node000002" href="$da/dab/classcontainer__module_1_1optimized__container.html#a15775a4cdd8bc5b83214531053b58178" title="Build hash map index for fast value lookup." alt="" coords="265,5,481,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="217,42,251,38,252,43,218,47"/>
+<area shape="rect" id="Node000003" href="$d9/dad/classcontainer__module_1_1value__container.html#afa472c8044735fb859a148533c2c2d21" title="Get a value by name." alt="" coords="282,69,465,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="218,68,269,74,268,79,217,73"/>
+<area shape="rect" id="Node000004" href="$da/d48/classcontainer__module_1_1metrics__manager.html#adc8d9e289a738526a21347608ad93c04" title="Get the singleton metrics instance." alt="" coords="529,12,725,52"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="462,67,524,52,525,58,463,72"/>
+<area shape="rect" id="Node000005" href="$da/d48/classcontainer__module_1_1metrics__manager.html#a58c3ac237c495aef1052f618df063119" title="Check if metrics collection is enabled." alt="" coords="773,99,969,139"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="465,92,760,109,760,115,465,97"/>
+<area shape="rect" id="Node000006" href="$da/d48/classcontainer__module_1_1metrics__manager.html#a4a48c65dfeb635da6321106d4b0dc6c2" title="Create a scoped timer if metrics are enabled." alt="" coords="529,127,725,167"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="463,107,525,121,524,126,462,112"/>
+<area shape="poly" id="edge6_Node000006_Node000005" title=" " alt="" coords="725,133,760,129,760,134,726,138"/>
+</map>

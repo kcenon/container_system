@@ -1,0 +1,10 @@
+<map id="scenarios::ContentManagementSystem::Document" name="scenarios::ContentManagementSystem::Document">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,399,227,479"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="77,135,155,200"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="115,201,109,263,109,336,113,382,107,382,104,336,104,263,109,200"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="215,267,393,332"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="157,194,246,255,243,260,154,198"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="51,5,181,85"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="119,99,119,134,113,134,113,99"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="262,334,184,391,181,387,259,330"/>
+</map>

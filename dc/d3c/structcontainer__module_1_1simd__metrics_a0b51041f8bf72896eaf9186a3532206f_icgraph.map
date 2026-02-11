@@ -1,0 +1,9 @@
+<map id="container_module::simd_metrics::reset" name="container_module::simd_metrics::reset">
+<area shape="rect" id="Node000001" title="Reset all SIMD metrics." alt="" coords="732,5,911,45"/>
+<area shape="rect" id="Node000002" href="$da/d44/structcontainer__module_1_1detailed__metrics.html#a314cb315475d09d833417efa0320576b" title="Reset all metrics." alt="" coords="484,5,684,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="718,28,684,28,684,23,718,23"/>
+<area shape="rect" id="Node000003" href="$da/d48/classcontainer__module_1_1metrics__manager.html#aa0c318074f8550297539d622181895a8" title="Reset all metrics." alt="" coords="240,5,436,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="470,28,436,28,436,23,470,23"/>
+<area shape="rect" id="Node000004" href="$d9/dad/classcontainer__module_1_1value__container.html#abfe751b2db2eef44324bd6669d1de59a" title="Reset all detailed metrics." alt="" coords="5,5,192,45"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="226,28,192,28,192,23,226,23"/>
+</map>

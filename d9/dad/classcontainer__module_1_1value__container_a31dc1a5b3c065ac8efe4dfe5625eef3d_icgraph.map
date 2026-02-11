@@ -1,0 +1,9 @@
+<map id="container_module::value_container::datas" name="container_module::value_container::datas">
+<area shape="rect" id="Node000001" title="Returns only the data portion&#39;s serialized string, if fully parsed." alt="" coords="493,37,676,77"/>
+<area shape="rect" id="Node000002" href="$d9/dad/classcontainer__module_1_1value__container.html#a5629503c3a96a5804f0613d7bd63a74c" title="Internal implementation for binary serialization." alt="" coords="256,37,445,77"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="480,60,446,60,446,55,480,55"/>
+<area shape="rect" id="Node000003" href="$d9/dad/classcontainer__module_1_1value__container.html#adda28e731359ee08f344277ee62c4b2a" title="Create a copy of this container. If containing_values == false, the returned container only has the h..." alt="" coords="15,5,198,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="242,46,198,40,198,35,243,40"/>
+<area shape="rect" id="Node000004" href="$d9/dad/classcontainer__module_1_1value__container.html#a611e8c57bc25142f572a7f82fd1829fa" title="Copy constructor from another value_container. If parse_only_header==true, only parse the header port..." alt="" coords="5,69,208,109"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="242,74,209,79,208,73,242,69"/>
+</map>

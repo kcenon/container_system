@@ -1,0 +1,5 @@
+<map id="container_module::auto_refresh_reader::stop" name="container_module::auto_refresh_reader::stop">
+<area shape="rect" id="Node000001" title="Stop the auto&#45;refresh thread." alt="" coords="229,13,405,53"/>
+<area shape="rect" id="Node000002" href="$d2/d5e/classcontainer__module_1_1auto__refresh__reader.html#a9a217b1b7ae689960b85e425d2abb1c9" title="Destructor &#45; stops the refresh thread." alt="" coords="5,5,181,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="215,35,182,35,182,30,215,30"/>
+</map>

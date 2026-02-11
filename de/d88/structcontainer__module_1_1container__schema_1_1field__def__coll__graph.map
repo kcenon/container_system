@@ -1,0 +1,16 @@
+<map id="container_module::container_schema::field_def" name="container_module::container_schema::field_def">
+<area shape="rect" id="Node000001" title="Field definition structure." alt="" coords="75,263,275,643"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="8,705,205,800"/>
+<area shape="poly" id="edge6_Node000006_Node000001" title=" " alt="" coords="134,643,123,690,118,689,129,642"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="57,135,135,200"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="107,200,120,246,115,247,102,201"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="31,5,161,85"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="99,99,99,134,93,134,93,99"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="69,1445,281,1525"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="193,1444,205,1414,215,1382,233,1281,243,1194,247,1118,246,1046,234,896,215,706,210,659,215,659,220,705,239,896,251,1046,252,1118,248,1195,238,1281,220,1383,210,1416,198,1446"/>
+<area shape="rect" id="Node000005" href="$da/db0/classcontainer__module_1_1container__schema.html" title="Schema definition for container validation." alt="" coords="5,863,205,1383"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="158,1382,167,1429,161,1430,153,1383"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="109,800,109,846,104,846,104,800"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="159,135,350,200"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="248,201,235,247,230,246,243,200"/>
+</map>

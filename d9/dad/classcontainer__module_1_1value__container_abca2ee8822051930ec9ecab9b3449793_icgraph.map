@@ -1,0 +1,7 @@
+<map id="container_module::value_container::set_unit" name="container_module::value_container::set_unit">
+<area shape="rect" id="Node000001" title="Set a single optimized_value, updating if key exists." alt="" coords="236,37,419,77"/>
+<area shape="rect" id="Node000002" href="$d9/dad/classcontainer__module_1_1value__container.html#a1834fbf579e02f1282e6c534bfeaabfc" title="Set multiple optimized_values, updating existing keys." alt="" coords="5,5,188,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="222,45,188,41,189,35,223,40"/>
+<area shape="rect" id="Node000003" href="$d9/dad/classcontainer__module_1_1value__container.html#a40ac2235903e393f9db5477a23541baa" title="Convenience method to set a typed value by key." alt="" coords="5,69,188,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="223,74,189,79,188,74,222,69"/>
+</map>

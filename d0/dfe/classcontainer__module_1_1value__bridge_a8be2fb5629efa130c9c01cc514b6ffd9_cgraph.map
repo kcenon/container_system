@@ -1,0 +1,9 @@
+<map id="container_module::value_bridge::create_legacy_numeric" name="container_module::value_bridge::create_legacy_numeric">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,62,188,117"/>
+<area shape="rect" id="Node000002" href="$dd/dd3/classcontainer__module_1_1variant__value__v2.html#a38606c558aca2e7b163af5c63e4dd0fe" title="Type&#45;safe getter with optional return." alt="" coords="236,5,429,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="188,62,244,46,246,52,189,67"/>
+<area shape="rect" id="Node000003" href="$dd/dd3/classcontainer__module_1_1variant__value__v2.html#ad9d4c1f70a7e0ae1076d26c717876df0" title="Get the name of this value (lock&#45;free, immutable)" alt="" coords="236,69,429,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="188,87,223,87,223,92,188,92"/>
+<area shape="rect" id="Node000004" href="$dd/dd3/classcontainer__module_1_1variant__value__v2.html#af0c797c36e1223cefddd2ab3b79675cb" title="Get the value_types enum (NOT variant::index()!)" alt="" coords="236,133,429,173"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="189,112,246,127,244,132,188,117"/>
+</map>

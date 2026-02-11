@@ -1,0 +1,47 @@
+<map id="container_module::value_container::from_msgpack_impl" name="container_module::value_container::from_msgpack_impl">
+<area shape="rect" id="Node000001" title="Internal implementation for MessagePack deserialization." alt="" coords="5,376,236,416"/>
+<area shape="rect" id="Node000002" href="$da/d48/classcontainer__module_1_1metrics__manager.html#adc8d9e289a738526a21347608ad93c04" title="Get the singleton metrics instance." alt="" coords="289,5,485,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="123,375,138,313,168,227,189,181,215,135,246,93,282,55,289,50,292,55,286,59,250,96,220,138,194,183,173,229,144,315,128,376"/>
+<area shape="rect" id="Node000003" href="$d9/dad/classcontainer__module_1_1value__container.html#ae6e8db192169bc9209fe6727d1bd6a65" title="Reinitialize the entire container to defaults." alt="" coords="296,69,479,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="126,375,145,323,177,255,222,182,251,149,282,119,290,114,293,118,286,123,254,152,227,185,181,257,150,325,131,377"/>
+<area shape="rect" id="Node000005" href="$da/d48/classcontainer__module_1_1metrics__manager.html#a58c3ac237c495aef1052f618df063119" title="Check if metrics collection is enabled." alt="" coords="544,161,740,201"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="134,374,158,342,192,303,235,265,283,234,327,219,389,206,530,188,531,193,390,211,329,224,285,238,238,269,196,307,162,346,138,377"/>
+<area shape="rect" id="Node000006" href="$da/d48/classcontainer__module_1_1metrics__manager.html#a4a48c65dfeb635da6321106d4b0dc6c2" title="Create a scoped timer if metrics are enabled." alt="" coords="289,133,485,173"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="131,374,154,336,188,287,232,235,282,190,304,177,306,182,286,194,236,239,193,290,159,339,135,377"/>
+<area shape="rect" id="Node000007" href="$d1/df5/classcontainer__module_1_1msgpack__decoder.html#aa9d2e6c00d80d360c092bb425a5b72b3" title="Peek the type of the next value without consuming it." alt="" coords="284,248,491,288"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="150,374,210,336,283,298,301,290,303,295,285,302,213,340,153,378"/>
+<area shape="rect" id="Node000008" href="$d1/df5/classcontainer__module_1_1msgpack__decoder.html#a327f4c994922c2191db43665beabf97b" title="Read binary data." alt="" coords="284,312,491,352"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="204,373,290,353,291,358,205,379"/>
+<area shape="rect" id="Node000011" href="$d1/df5/classcontainer__module_1_1msgpack__decoder.html#add8d7dd2100aba51794f73b238430ec1" title="Read boolean value." alt="" coords="284,683,491,723"/>
+<area shape="poly" id="edge11_Node000001_Node000011" title=" " alt="" coords="131,415,151,465,184,531,229,601,256,633,286,662,304,674,301,679,282,666,252,637,224,604,179,533,146,467,126,417"/>
+<area shape="rect" id="Node000012" href="$d1/df5/classcontainer__module_1_1msgpack__decoder.html#ae9c8c136e5536a72424bc89446a3a3ca" title="Read 64&#45;bit double." alt="" coords="284,568,491,608"/>
+<area shape="poly" id="edge12_Node000001_Node000012" title=" " alt="" coords="139,415,199,483,240,521,285,554,297,560,294,565,283,558,236,525,195,486,135,418"/>
+<area shape="rect" id="Node000014" href="$d1/df5/classcontainer__module_1_1msgpack__decoder.html#a5cc22e1e931dc61c060566b12c9ab28f" title="Read 32&#45;bit float." alt="" coords="539,625,745,665"/>
+<area shape="poly" id="edge16_Node000001_Node000014" title=" " alt="" coords="132,415,152,459,184,516,229,573,256,598,285,618,343,642,405,655,467,660,525,658,525,664,467,665,404,660,341,647,283,622,252,602,225,577,180,519,147,462,127,417"/>
+<area shape="rect" id="Node000015" href="$d1/df5/classcontainer__module_1_1msgpack__decoder.html#a9a8690813948b81241dc6d678bcb4611" title="Read signed integer." alt="" coords="284,504,491,544"/>
+<area shape="poly" id="edge17_Node000001_Node000015" title=" " alt="" coords="153,414,213,452,285,490,303,497,301,502,283,494,210,456,150,418"/>
+<area shape="rect" id="Node000016" href="$d1/df5/classcontainer__module_1_1msgpack__decoder.html#af7a93fb249820a522dd54b6bf83e6759" title="Read map header and return element count." alt="" coords="284,376,491,416"/>
+<area shape="poly" id="edge21_Node000001_Node000016" title=" " alt="" coords="236,393,270,393,270,399,236,399"/>
+<area shape="rect" id="Node000017" href="$d1/df5/classcontainer__module_1_1msgpack__decoder.html#a73e86844321c5ce557988426780af4fa" title="Read nil value." alt="" coords="284,747,491,787"/>
+<area shape="poly" id="edge24_Node000001_Node000017" title=" " alt="" coords="128,416,144,477,173,563,194,609,220,654,250,696,286,733,292,737,289,742,282,737,246,699,215,657,189,611,168,565,138,479,123,417"/>
+<area shape="rect" id="Node000018" href="$d1/df5/classcontainer__module_1_1msgpack__decoder.html#a570877c49e09eef9c1940590a6cbcbd5" title="Read string value." alt="" coords="284,440,491,480"/>
+<area shape="poly" id="edge25_Node000001_Node000018" title=" " alt="" coords="205,413,291,434,290,439,204,419"/>
+<area shape="rect" id="Node000004" href="$d9/dad/classcontainer__module_1_1value__container.html#a1e63cbe2c9c9b83d0fcdc7f0394c1203" title="Clear all stored child values." alt="" coords="551,69,733,109"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="479,87,537,87,537,92,479,92"/>
+<area shape="poly" id="edge6_Node000006_Node000005" title=" " alt="" coords="486,161,530,166,530,172,485,167"/>
+<area shape="rect" id="Node000009" href="$d1/df5/classcontainer__module_1_1msgpack__decoder.html#aa8d33c90ad31dc84797b248a918bd39d" title=" " alt="" coords="539,396,745,436"/>
+<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="454,349,492,361,572,389,570,394,490,367,453,355"/>
+<area shape="rect" id="Node000010" href="$d1/df5/classcontainer__module_1_1msgpack__decoder.html#a8cd5a2e9a2fcc00a4453d4f2bbafdc58" title=" " alt="" coords="793,453,1000,493"/>
+<area shape="poly" id="edge10_Node000008_Node000010" title=" " alt="" coords="491,321,550,321,615,325,682,336,746,355,782,372,816,395,869,441,866,445,812,399,780,377,744,360,681,341,615,331,550,326,491,327"/>
+<area shape="rect" id="Node000013" href="$d1/df5/classcontainer__module_1_1msgpack__decoder.html#a6e3a2f7d3452fb32680d4a87af18a2dd" title=" " alt="" coords="539,561,745,601"/>
+<area shape="poly" id="edge13_Node000012_Node000013" title=" " alt="" coords="491,583,525,582,525,587,491,588"/>
+<area shape="poly" id="edge14_Node000012_Node000014" title=" " alt="" coords="477,605,540,620,539,625,476,611"/>
+<area shape="poly" id="edge15_Node000014_Node000010" title=" " alt="" coords="720,623,744,611,780,586,814,558,868,502,872,506,818,561,784,590,747,616,722,628"/>
+<area shape="poly" id="edge18_Node000015_Node000009" title=" " alt="" coords="457,501,490,490,592,440,594,445,492,494,459,506"/>
+<area shape="poly" id="edge19_Node000015_Node000010" title=" " alt="" coords="491,511,779,482,780,488,491,516"/>
+<area shape="poly" id="edge20_Node000015_Node000013" title=" " alt="" coords="477,541,540,556,539,561,476,547"/>
+<area shape="poly" id="edge22_Node000016_Node000009" title=" " alt="" coords="491,401,525,404,525,409,491,407"/>
+<area shape="poly" id="edge23_Node000016_Node000010" title=" " alt="" coords="491,374,549,368,614,365,681,369,746,381,778,393,810,409,862,443,859,447,807,413,776,398,745,387,680,374,614,371,550,373,491,379"/>
+<area shape="poly" id="edge26_Node000018_Node000009" title=" " alt="" coords="490,440,525,434,526,439,491,445"/>
+<area shape="poly" id="edge27_Node000018_Node000010" title=" " alt="" coords="491,460,779,468,779,473,491,465"/>
+</map>

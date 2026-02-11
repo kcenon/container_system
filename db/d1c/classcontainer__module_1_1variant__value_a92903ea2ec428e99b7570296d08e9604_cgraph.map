@@ -1,0 +1,16 @@
+<map id="container_module::variant_value::to_json" name="container_module::variant_value::to_json">
+<area shape="rect" id="Node000001" title="Convert to JSON representation." alt="" coords="5,100,199,140"/>
+<area shape="rect" id="Node000002" href="$d1/daf/classutility__module_1_1formatter.html#a1833466f2e4df9a2dbab6204dbb95800" title=" " alt="" coords="488,8,675,48"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="123,97,176,56,210,36,246,21,304,9,363,3,421,4,474,8,474,13,421,9,363,9,304,14,247,26,212,41,179,61,126,102"/>
+<area shape="rect" id="Node000003" href="$db/d1c/classcontainer__module_1_1variant__value.html#a1ece7bda84be07c1a6e278ba2ed6498d" title="Get the name of this value." alt="" coords="247,36,440,76"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="178,97,254,77,255,82,179,102"/>
+<area shape="rect" id="Node000004" href="$d5/df9/classcontainer__module_1_1value.html#aeccd6ae8bca76a9b67b5ba66fcffff1e" title=" " alt="" coords="252,100,435,140"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="199,117,238,117,238,122,199,122"/>
+<area shape="rect" id="Node000006" href="$db/d1c/classcontainer__module_1_1variant__value.html#aa4b4a97e4f043f1408769c9679e6ea75" title="Get the current type index (corresponds to value_types enum)" alt="" coords="247,164,440,204"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="179,137,255,158,254,163,178,142"/>
+<area shape="rect" id="Node000007" href="$db/d1c/classcontainer__module_1_1variant__value.html#aa7ebc0938ad6811801ef580ac713e830" title="Apply a visitor to the contained value." alt="" coords="247,228,440,268"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="131,138,183,176,248,213,263,220,260,225,245,218,180,180,127,142"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="406,97,439,85,522,51,524,56,441,90,408,102"/>
+<area shape="rect" id="Node000005" href="$d5/df9/classcontainer__module_1_1value.html#aad6ea2fdcbb516d7a72f577de0b6102f" title=" " alt="" coords="490,100,673,140"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="435,117,476,117,476,122,435,122"/>
+</map>

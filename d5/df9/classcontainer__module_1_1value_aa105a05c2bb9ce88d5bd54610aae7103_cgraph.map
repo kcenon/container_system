@@ -1,0 +1,12 @@
+<map id="container_module::value::serialize_data" name="container_module::value::serialize_data">
+<area shape="rect" id="Node000001" title="Serialize data portion based on type." alt="" coords="5,85,188,125"/>
+<area shape="rect" id="Node000002" href="$d7/d23/structcontainer__module_1_1detail_1_1circular__ref__guard.html#a7109e68223164ea84e0fcc24b770c3bf" title=" " alt="" coords="236,5,420,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="161,82,226,62,228,67,162,87"/>
+<area shape="rect" id="Node000003" href="$d5/df9/classcontainer__module_1_1value.html#aef0c634b18712374d422801f269ff0e9" title="Serialize to binary format (legacy compatible)" alt="" coords="237,85,419,125"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="188,111,223,111,223,116,188,116"/>
+<area shape="rect" id="Node000005" href="$d5/df9/classcontainer__module_1_1value.html#a8fd9176e2a29a65418b51dee4cb6a30d" title="Apply visitor to contained value (const)" alt="" coords="237,149,419,189"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="170,122,243,142,241,148,169,127"/>
+<area shape="poly" id="edge3_Node000003_Node000001" title=" " alt="" coords="237,99,202,98,202,93,237,93"/>
+<area shape="rect" id="Node000004" href="$d5/df9/classcontainer__module_1_1value.html#a19a827e03777e6214b597f5c9e5e8b35" title="Get the value_types enum (NOT variant::index()!)" alt="" coords="468,85,651,125"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="420,102,454,102,454,107,420,107"/>
+</map>

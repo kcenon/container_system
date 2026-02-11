@@ -1,0 +1,5 @@
+<map id="container_module::simd::simd_support::has_avx512vl" name="container_module::simd::simd_support::has_avx512vl">
+<area shape="rect" id="Node000001" title=" " alt="" coords="272,5,488,45"/>
+<area shape="rect" id="Node000002" href="$d5/da4/classcontainer__module_1_1simd_1_1simd__support.html#a8a6487de7382ae18ad103944afd66afc" title="Get a string describing available SIMD features." alt="" coords="5,5,224,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="258,28,224,28,224,23,258,23"/>
+</map>

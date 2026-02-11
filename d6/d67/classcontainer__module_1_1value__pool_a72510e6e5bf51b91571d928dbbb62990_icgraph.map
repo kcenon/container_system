@@ -1,0 +1,13 @@
+<map id="container_module::value_pool::instance" name="container_module::value_pool::instance">
+<area shape="rect" id="Node000001" title="Get singleton instance of the pool." alt="" coords="247,149,429,189"/>
+<area shape="rect" id="Node000002" href="$dc/d9f/classcontainer__module_1_1core_1_1container__memory__pool.html#a3133cbf21b6d8fd31839d77ebfb99bf4" title=" " alt="" coords="8,5,196,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="299,142,252,109,197,75,172,62,175,58,200,70,254,104,302,138"/>
+<area shape="rect" id="Node000003" href="$d9/dad/classcontainer__module_1_1value__container.html#a731d3ee3187e090b172ebbe764a786ca" title="Clear memory pool (for testing/benchmarking)" alt="" coords="11,85,193,125"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="250,148,176,127,177,122,251,142"/>
+<area shape="rect" id="Node000004" href="$d9/dad/classcontainer__module_1_1value__container.html#a1410552c48c1aa9e170ad7470d13ac23" title="Get memory pool statistics." alt="" coords="5,149,199,189"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="233,171,199,171,199,166,233,166"/>
+<area shape="rect" id="Node000005" href="$dc/d9f/classcontainer__module_1_1core_1_1container__memory__pool.html#ae050641b1640642e3f1eb93e714898ba" title=" " alt="" coords="8,213,196,268"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="259,195,193,216,191,211,258,190"/>
+<area shape="rect" id="Node000006" href="$dc/d9f/classcontainer__module_1_1core_1_1container__memory__pool.html#a3462f1446a8a657f31138e716fd50971" title=" " alt="" coords="8,292,196,347"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="307,200,259,241,200,282,176,294,173,290,197,277,255,237,304,196"/>
+</map>

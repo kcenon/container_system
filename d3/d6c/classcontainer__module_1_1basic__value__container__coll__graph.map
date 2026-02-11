@@ -1,0 +1,18 @@
+<map id="container_module::basic_value_container&lt; StoragePolicy &gt;" name="container_module::basic_value_container&lt; StoragePolicy &gt;">
+<area shape="rect" id="Node000001" title="Policy&#45;based container template for unified value storage." alt="" coords="165,1033,409,1313"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,756,204,865"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="140,877,219,1032,214,1034,136,879"/>
+<area shape="rect" id="Node000003" href="$d8/dfa/classcontainer__module_1_1policy_1_1dynamic__storage__policy.html" title="Default storage policy using variant&#45;based storage with vector backend." alt="" coords="278,651,486,971"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="343,972,331,1018,325,1017,338,970"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="383,497,517,577"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="443,578,428,635,423,634,438,576"/>
+<area shape="rect" id="Node000005" href="$d8/de4/structcontainer__module_1_1optimized__value.html" title="Optimized value storage with Small Object Optimization." alt="" coords="313,263,517,423"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="432,422,443,480,437,481,427,423"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="223,135,301,200"/>
+<area shape="poly" id="edge8_Node000001_Node000006" title=" " alt="" coords="258,201,248,266,243,341,243,812,249,916,261,1017,256,1018,243,917,238,812,238,341,243,265,253,200"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="292,199,336,248,332,252,288,202"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="197,5,327,85"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="265,99,265,134,259,134,259,99"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="511,778,645,843"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="568,845,540,906,500,972,463,1017,423,1059,419,1056,459,1014,496,969,536,903,563,842"/>
+</map>

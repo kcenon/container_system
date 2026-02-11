@@ -1,0 +1,9 @@
+<map id="container_module::internal::fixed_block_pool::deallocate" name="container_module::internal::fixed_block_pool::deallocate">
+<area shape="rect" id="Node000001" title=" " alt="" coords="497,37,712,77"/>
+<area shape="rect" id="Node000002" href="$dc/d4b/classcontainer__module_1_1internal_1_1pool__allocator.html#ae624175a71c95e4f69ab6ab76b93fb12" title="Deallocate memory to the appropriate pool." alt="" coords="251,37,449,77"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="484,60,450,60,450,55,484,55"/>
+<area shape="rect" id="Node000003" href="$dd/daa/namespacecontainer__module_1_1internal.html#a529f6d9c0abdcb10389fb087a73797d1" title="Allocate and construct an object using pool allocation." alt="" coords="5,5,203,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="237,45,202,41,203,36,237,40"/>
+<area shape="rect" id="Node000004" href="$dd/daa/namespacecontainer__module_1_1internal.html#a367d230fc8b021ad6d6bb77987d4080e" title="Destroy and deallocate an object allocated with pool_allocate." alt="" coords="5,69,203,109"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="237,75,203,79,202,74,237,69"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="performance_comparison" name="performance_comparison">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,60,193,85"/>
+<area shape="rect" id="Node000002" href="$d2/d81/classcontainer__module_1_1integration_1_1messaging__integration.html#a0b16450471e0e14257ada681f03b7ecb" title="Container creation with messaging optimization." alt="" coords="241,5,460,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="179,57,227,50,228,55,180,63"/>
+<area shape="rect" id="Node000003" href="$d2/d81/classcontainer__module_1_1integration_1_1messaging__integration.html#a0466cfb81c002ac19821026b30afc7f7" title="High&#45;performance serialization for messaging." alt="" coords="241,84,460,139"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="183,83,228,90,227,95,182,88"/>
+</map>

@@ -1,0 +1,18 @@
+<map id="container_module::value_store::deserialize_binary" name="container_module::value_store::deserialize_binary">
+<area shape="rect" id="Node000001" title="Deserialize from binary format." alt="" coords="5,63,195,103"/>
+<area shape="rect" id="Node000002" href="$d5/df9/classcontainer__module_1_1value.html#a35f48f55cda09259dd6743889c224650" title="Deserialize from binary format (legacy compatible)" alt="" coords="243,63,425,103"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="195,80,229,80,229,85,195,85"/>
+<area shape="rect" id="Node000003" href="$d5/df9/classcontainer__module_1_1value.html#a2e4c2ec965ed2cb90bc1d50d77481f8f" title="Deserialize data portion based on type." alt="" coords="473,63,656,103"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="425,89,460,89,460,94,425,94"/>
+<area shape="rect" id="Node000005" href="$d5/df9/classcontainer__module_1_1value.html#a19a827e03777e6214b597f5c9e5e8b35" title="Get the value_types enum (NOT variant::index()!)" alt="" coords="715,5,897,45"/>
+<area shape="poly" id="edge9_Node000002_Node000005" title=" " alt="" coords="412,60,473,48,591,34,701,27,701,32,591,40,474,53,413,65"/>
+<area shape="rect" id="Node000007" href="$d5/df9/classcontainer__module_1_1value.html#afdcddac13e2b1a0afe97df4091c7ee38" title="Get the name of this value (lock&#45;free, immutable)" alt="" coords="473,127,656,167"/>
+<area shape="poly" id="edge8_Node000002_Node000007" title=" " alt="" coords="408,100,480,120,478,126,406,105"/>
+<area shape="poly" id="edge5_Node000003_Node000002" title=" " alt="" coords="473,77,439,76,439,71,473,71"/>
+<area shape="rect" id="Node000004" href="$db/de5/classcontainer__module_1_1thread__safe__container.html#a1b149737de6bbc72f55a764c1b2f8205" title="Deserialize from binary." alt="" coords="704,159,908,199"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="625,100,657,112,749,151,747,156,655,117,623,105"/>
+<area shape="poly" id="edge6_Node000003_Node000005" title=" " alt="" coords="649,60,707,46,709,51,650,65"/>
+<area shape="rect" id="Node000006" href="$d5/df9/classcontainer__module_1_1value.html#a2c9717a2aac485d5ef47028551874816" title="Default constructor &#45; creates null value." alt="" coords="715,69,897,109"/>
+<area shape="poly" id="edge7_Node000003_Node000006" title=" " alt="" coords="656,83,701,84,701,89,656,88"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="704,197,650,200,591,200,531,195,473,181,441,168,412,151,364,114,367,110,415,147,444,164,474,176,532,189,592,195,650,195,704,191"/>
+</map>

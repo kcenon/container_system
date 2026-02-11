@@ -1,0 +1,15 @@
+<map id="container_module::value::deserialize_data" name="container_module::value::deserialize_data">
+<area shape="rect" id="Node000001" title="Deserialize data portion based on type." alt="" coords="488,87,671,127"/>
+<area shape="rect" id="Node000002" href="$d5/df9/classcontainer__module_1_1value.html#a35f48f55cda09259dd6743889c224650" title="Deserialize from binary format (legacy compatible)" alt="" coords="257,55,440,95"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="474,104,431,97,431,92,475,98"/>
+<area shape="rect" id="Node000006" href="$d5/df9/classcontainer__module_1_1value.html#a9c0c056ba33752422aad6e6ab6336968" title="Construct from value_types and raw data (legacy compatibility)" alt="" coords="257,119,440,159"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="475,124,441,129,440,123,474,119"/>
+<area shape="poly" id="edge6_Node000002_Node000001" title=" " alt="" coords="454,78,497,84,497,89,453,83"/>
+<area shape="rect" id="Node000003" href="$d1/d1a/namespacecontainer__module.html#a25229d447c253f78c8dd3a8a0df6e1e9" title="Create a copy of a value with a new name." alt="" coords="16,5,199,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="243,56,198,47,200,41,244,51"/>
+<area shape="rect" id="Node000004" href="$db/de5/classcontainer__module_1_1thread__safe__container.html#a1b149737de6bbc72f55a764c1b2f8205" title="Deserialize from binary." alt="" coords="5,148,209,188"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="278,102,258,109,157,150,155,145,256,104,276,97"/>
+<area shape="rect" id="Node000005" href="$d0/dee/classcontainer__module_1_1value__store.html#ae9ab46b526a4897cc77d5886cd9e3138" title="Deserialize from binary format." alt="" coords="13,69,202,109"/>
+<area shape="poly" id="edge5_Node000002_Node000005" title=" " alt="" coords="244,84,202,86,202,81,243,78"/>
+<area shape="poly" id="edge4_Node000004_Node000001" title=" " alt="" coords="223,179,329,181,385,177,439,168,496,149,544,124,547,129,498,154,441,173,386,182,329,186,223,184"/>
+</map>

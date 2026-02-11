@@ -1,0 +1,7 @@
+<map id="container_module::value_bridge::create_legacy_string" name="container_module::value_bridge::create_legacy_string">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,30,188,85"/>
+<area shape="rect" id="Node000002" href="$dd/dd3/classcontainer__module_1_1variant__value__v2.html#a38606c558aca2e7b163af5c63e4dd0fe" title="Type&#45;safe getter with optional return." alt="" coords="236,5,429,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="188,42,222,38,223,43,189,48"/>
+<area shape="rect" id="Node000003" href="$dd/dd3/classcontainer__module_1_1variant__value__v2.html#ad9d4c1f70a7e0ae1076d26c717876df0" title="Get the name of this value (lock&#45;free, immutable)" alt="" coords="236,69,429,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="189,67,223,72,222,77,188,72"/>
+</map>

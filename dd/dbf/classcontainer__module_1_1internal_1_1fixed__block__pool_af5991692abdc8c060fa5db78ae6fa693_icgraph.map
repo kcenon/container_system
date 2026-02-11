@@ -1,0 +1,7 @@
+<map id="container_module::internal::fixed_block_pool::allocate" name="container_module::internal::fixed_block_pool::allocate">
+<area shape="rect" id="Node000001" title=" " alt="" coords="496,5,695,45"/>
+<area shape="rect" id="Node000002" href="$dc/d4b/classcontainer__module_1_1internal_1_1pool__allocator.html#ac57f0e6cec0da7786beba3acbf9ed31a" title="Allocate memory from the appropriate pool." alt="" coords="251,5,448,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="482,28,448,28,448,23,482,23"/>
+<area shape="rect" id="Node000003" href="$dd/daa/namespacecontainer__module_1_1internal.html#a529f6d9c0abdcb10389fb087a73797d1" title="Allocate and construct an object using pool allocation." alt="" coords="5,5,203,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="237,28,203,28,203,23,237,23"/>
+</map>

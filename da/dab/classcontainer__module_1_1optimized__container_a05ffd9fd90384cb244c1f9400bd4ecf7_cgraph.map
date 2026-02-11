@@ -1,0 +1,5 @@
+<map id="container_module::optimized_container::value_container" name="container_module::optimized_container::value_container">
+<area shape="rect" id="Node000001" title="Construct from a raw byte array. If parse_only_header==true, only parse the header part,..." alt="" coords="5,5,217,45"/>
+<area shape="rect" id="Node000002" href="$d9/dad/classcontainer__module_1_1value__container.html#abca2ee8822051930ec9ecab9b3449793" title="Set a single optimized_value, updating if key exists." alt="" coords="265,5,448,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="217,23,251,23,251,28,217,28"/>
+</map>

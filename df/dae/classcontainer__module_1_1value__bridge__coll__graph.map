@@ -1,0 +1,13 @@
+<map id="container_module::value_bridge" name="container_module::value_bridge">
+<area shape="rect" id="Node000001" title="Bridge for migrating between legacy value system and variant_value_v2." alt="" coords="75,573,274,1073"/>
+<area shape="rect" id="Node000002" href="$d1/dae/structcontainer__module_1_1value__bridge_1_1migration__stats.html" title="Migration statistics for monitoring." alt="" coords="5,391,187,511"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="111,510,121,557,116,558,106,512"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="7,263,185,328"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="99,328,99,374,93,374,93,328"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="57,135,135,200"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="99,200,99,246,93,246,93,200"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="31,5,161,85"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="99,99,99,134,93,134,93,99"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="211,418,295,483"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="249,484,234,558,228,556,244,483"/>
+</map>

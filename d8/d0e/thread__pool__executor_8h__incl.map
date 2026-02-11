@@ -1,0 +1,32 @@
+<map id="internal/async/thread_pool_executor.h" name="internal/async/thread_pool_executor.h">
+<area shape="rect" id="Node000001" title="Thread pool executor integration for async operations." alt="" coords="365,5,525,45"/>
+<area shape="rect" id="Node000002" href="$db/da4/task_8h.html" title="C++20 coroutine task type for async operations." alt="" coords="319,93,382,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="424,48,377,86,374,82,421,43"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,167,88,192"/>
+<area shape="poly" id="edge10_Node000001_Node000003" title=" " alt="" coords="382,48,240,96,84,163,82,158,238,91,381,43"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="113,167,199,192"/>
+<area shape="poly" id="edge11_Node000001_Node000004" title=" " alt="" coords="393,48,340,69,284,96,229,129,184,161,180,156,227,124,281,91,337,64,391,43"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="224,167,299,192"/>
+<area shape="poly" id="edge15_Node000001_Node000005" title=" " alt="" coords="388,48,346,68,309,95,287,124,272,155,267,152,282,121,305,91,344,63,385,43"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="499,167,591,192"/>
+<area shape="poly" id="edge17_Node000001_Node000007" title=" " alt="" coords="445,45,444,81,447,100,454,117,475,141,502,158,499,163,472,145,450,120,442,101,438,81,439,45"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="616,167,683,192"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="454,44,471,81,484,100,499,117,543,139,604,161,602,166,541,144,496,121,479,103,466,84,449,47"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="509,93,595,119"/>
+<area shape="poly" id="edge12_Node000001_Node000010" title=" " alt="" coords="473,43,526,83,523,87,470,48"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="620,93,681,119"/>
+<area shape="poly" id="edge13_Node000001_Node000011" title=" " alt="" coords="495,43,608,86,607,91,494,48"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="705,93,783,119"/>
+<area shape="poly" id="edge14_Node000001_Node000012" title=" " alt="" coords="518,43,693,89,691,94,516,48"/>
+<area shape="rect" id="Node000013" title=" " alt="" coords="807,93,871,119"/>
+<area shape="poly" id="edge16_Node000001_Node000013" title=" " alt="" coords="526,38,794,91,793,96,525,43"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="320,117,102,168,101,163,319,112"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="320,121,201,164,200,159,318,116"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="338,121,288,160,285,156,335,117"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="415,167,475,192"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="367,117,420,156,417,160,364,121"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="383,116,502,159,500,164,381,121"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="323,167,391,192"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="354,119,358,153,352,153,349,119"/>
+<area shape="poly" id="edge8_Node000002_Node000009" title=" " alt="" coords="383,112,603,164,602,169,382,117"/>
+</map>

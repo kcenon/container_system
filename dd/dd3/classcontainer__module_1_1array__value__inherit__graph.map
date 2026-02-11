@@ -1,0 +1,7 @@
+<map id="container_module::array_value" name="container_module::array_value">
+<area shape="rect" id="Node000001" title="A specialized value for storing arrays/lists of values." alt="" coords="13,787,186,1147"/>
+<area shape="rect" id="Node000002" href="$d5/df9/classcontainer__module_1_1value.html" title="The base class for all values stored in the container system." alt="" coords="5,133,193,739"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="102,752,102,786,97,786,97,752"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="25,5,174,85"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="102,99,102,133,97,133,97,99"/>
+</map>

@@ -1,0 +1,26 @@
+<map id="container_module::value_container::deserialize" name="container_module::value_container::deserialize">
+<area shape="rect" id="Node000001" title="Internal deserialize from string." alt="" coords="5,199,188,239"/>
+<area shape="rect" id="Node000002" href="$d9/dad/classcontainer__module_1_1value__container.html#a17826f3cac07988dcce03e62f03c798e" title=" " alt="" coords="243,5,425,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="112,197,163,140,197,107,234,77,255,64,258,69,238,81,201,111,167,143,116,201"/>
+<area shape="rect" id="Node000005" href="$d9/dad/classcontainer__module_1_1value__container.html#a40e1ea012f2f6562f76bb6414eacd322" title="Returns iterator to end of values." alt="" coords="487,78,669,118"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="117,197,168,157,200,137,235,121,295,104,357,94,417,90,473,89,473,94,418,95,358,100,296,109,237,126,203,141,171,161,121,201"/>
+<area shape="rect" id="Node000006" href="$da/d48/classcontainer__module_1_1metrics__manager.html#adc8d9e289a738526a21347608ad93c04" title="Get the singleton metrics instance." alt="" coords="236,135,432,175"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="171,197,246,176,247,181,172,202"/>
+<area shape="rect" id="Node000007" href="$d9/dad/classcontainer__module_1_1value__container.html#ae6e8db192169bc9209fe6727d1bd6a65" title="Reinitialize the entire container to defaults." alt="" coords="243,263,425,303"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="172,237,247,257,246,262,171,242"/>
+<area shape="rect" id="Node000009" href="$da/d48/classcontainer__module_1_1metrics__manager.html#a58c3ac237c495aef1052f618df063119" title="Check if metrics collection is enabled." alt="" coords="480,353,676,393"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="122,237,172,277,204,297,237,313,294,332,354,347,467,364,466,369,353,352,293,338,235,318,201,301,169,281,118,242"/>
+<area shape="rect" id="Node000010" href="$da/d48/classcontainer__module_1_1metrics__manager.html#a4a48c65dfeb635da6321106d4b0dc6c2" title="Create a scoped timer if metrics are enabled." alt="" coords="236,378,432,418"/>
+<area shape="poly" id="edge10_Node000001_Node000010" title=" " alt="" coords="115,238,166,296,200,328,237,357,260,370,258,375,235,362,197,332,162,300,111,241"/>
+<area shape="rect" id="Node000011" href="$d9/dad/classcontainer__module_1_1value__container.html#ac67f821c2e812722fd46526063911f4a" title=" " alt="" coords="243,199,425,239"/>
+<area shape="poly" id="edge12_Node000001_Node000011" title=" " alt="" coords="188,217,229,217,229,222,188,222"/>
+<area shape="rect" id="Node000003" href="$d1/d1a/namespacecontainer__module.html#a83ed4416891be1a3f3191bf92b50b3e9" title=" " alt="" coords="480,13,676,53"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="426,30,466,30,466,35,426,35"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="426,55,490,72,489,77,425,60"/>
+<area shape="rect" id="Node000004" href="$d1/d1a/namespacecontainer__module.html#ac03e62099dde8cbf072a3a4c635382bf" title="Compile&#45;time conversion from string to value_types." alt="" coords="724,13,892,53"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="676,30,710,30,710,35,676,35"/>
+<area shape="rect" id="Node000008" href="$d9/dad/classcontainer__module_1_1value__container.html#a1e63cbe2c9c9b83d0fcdc7f0394c1203" title="Clear all stored child values." alt="" coords="487,263,669,303"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="426,281,473,281,473,286,426,286"/>
+<area shape="poly" id="edge11_Node000010_Node000009" title=" " alt="" coords="432,385,466,382,467,387,432,390"/>
+<area shape="poly" id="edge13_Node000011_Node000005" title=" " alt="" coords="402,197,431,185,487,155,536,123,539,128,489,159,433,190,404,202"/>
+</map>

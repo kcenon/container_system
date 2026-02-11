@@ -1,0 +1,11 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="Node000000" title=" " alt="" coords="5,69,151,109"/>
+<area shape="rect" id="Node000001" href="$d7/d7c/classcontainer__module_1_1basic__value__container.html" title="Policy&#45;based container template for unified value storage." alt="" coords="199,5,451,45"/>
+<area shape="poly" id="edge7_Node000000_Node000001" title=" " alt="" coords="164,64,198,55,244,43,245,48,199,60,165,69"/>
+<area shape="rect" id="Node000002" href="$db/de5/classcontainer__module_1_1thread__safe__container.html" title="Thread&#45;safe container with lock optimization." alt="" coords="230,69,419,109"/>
+<area shape="poly" id="edge8_Node000000_Node000002" title=" " alt="" coords="165,87,230,87,230,92,165,92"/>
+<area shape="rect" id="Node000003" href="$d9/dad/classcontainer__module_1_1value__container.html" title="A high&#45;level container for messages, including source/target IDs, message type, and a list of values ..." alt="" coords="233,133,416,173"/>
+<area shape="poly" id="edge9_Node000000_Node000003" title=" " alt="" coords="165,110,199,119,245,131,244,136,198,124,164,115"/>
+<area shape="rect" id="Node000004" href="$da/dab/classcontainer__module_1_1optimized__container.html" title="Performance&#45;optimized value_container with zero&#45;copy operations." alt="" coords="499,133,711,173"/>
+<area shape="poly" id="edge10_Node000003_Node000004" title=" " alt="" coords="430,151,498,151,498,156,430,156"/>
+</map>

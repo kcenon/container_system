@@ -1,0 +1,50 @@
+<map id="container_module::value_container::to_msgpack_impl" name="container_module::value_container::to_msgpack_impl">
+<area shape="rect" id="Node000001" title="Internal implementation for MessagePack serialization." alt="" coords="5,381,219,421"/>
+<area shape="rect" id="Node000002" href="$d6/dd2/classcontainer__module_1_1msgpack__encoder.html#ae0327851d595ffd56a8648fb3ba48745" title="Get the encoded data and clear the buffer." alt="" coords="267,5,473,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="114,381,127,318,154,231,174,183,199,137,229,93,265,55,270,51,274,55,268,59,233,97,204,140,179,186,159,232,132,319,119,382"/>
+<area shape="rect" id="Node000003" href="$da/d48/classcontainer__module_1_1metrics__manager.html#adc8d9e289a738526a21347608ad93c04" title="Get the singleton metrics instance." alt="" coords="272,69,468,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="117,380,135,330,165,262,208,190,235,156,265,126,283,114,286,118,268,130,239,159,213,193,170,264,140,332,122,382"/>
+<area shape="rect" id="Node000004" href="$da/d48/classcontainer__module_1_1metrics__manager.html#a58c3ac237c495aef1052f618df063119" title="Check if metrics collection is enabled." alt="" coords="529,139,725,179"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="117,380,135,334,165,275,208,216,235,191,265,170,295,156,326,145,391,133,455,131,515,135,515,140,455,136,391,139,327,150,297,161,268,174,238,195,212,220,170,278,140,337,122,382"/>
+<area shape="rect" id="Node000005" href="$da/d48/classcontainer__module_1_1metrics__manager.html#a4a48c65dfeb635da6321106d4b0dc6c2" title="Create a scoped timer if metrics are enabled." alt="" coords="272,184,468,224"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="125,379,180,308,220,268,265,234,276,227,279,232,268,238,224,272,184,312,129,383"/>
+<area shape="rect" id="Node000006" href="$d6/dd2/classcontainer__module_1_1msgpack__encoder.html#ab5514373b23be2b8c58e5271c95791f4" title="Reserve buffer capacity." alt="" coords="267,248,473,288"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="141,379,197,342,265,304,296,291,298,296,268,309,200,347,144,383"/>
+<area shape="rect" id="Node000007" href="$d6/dd2/classcontainer__module_1_1msgpack__encoder.html#a127f40026269179ccfc4ed7ed61853c0" title="Write binary data." alt="" coords="523,215,730,255"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="182,379,266,355,371,330,416,318,472,298,496,285,520,271,553,257,555,262,523,276,499,289,474,302,418,323,372,335,267,360,183,384"/>
+<area shape="rect" id="Node000010" href="$d6/dd2/classcontainer__module_1_1msgpack__encoder.html#ae9fdccbbaf803986bcbf58ec3ce37e04" title="Write boolean value." alt="" coords="267,680,473,720"/>
+<area shape="poly" id="edge10_Node000001_Node000010" title=" " alt="" coords="122,420,141,468,171,532,214,600,240,632,268,659,286,672,283,676,265,663,236,635,210,603,167,535,136,471,117,422"/>
+<area shape="rect" id="Node000011" href="$d6/dd2/classcontainer__module_1_1msgpack__encoder.html#aabb68feaa06a9bac21e892a3d8832485" title="Write 64&#45;bit double." alt="" coords="523,687,730,727"/>
+<area shape="poly" id="edge11_Node000001_Node000011" title=" " alt="" coords="125,421,145,461,176,512,218,565,242,589,268,610,534,681,533,686,265,614,238,593,214,569,172,515,140,464,120,423"/>
+<area shape="rect" id="Node000013" href="$d6/dd2/classcontainer__module_1_1msgpack__encoder.html#a9a840b607f4027693fc04ee90f6b845b" title="Write 32&#45;bit float." alt="" coords="523,457,730,497"/>
+<area shape="poly" id="edge13_Node000001_Node000013" title=" " alt="" coords="219,414,510,458,509,463,218,420"/>
+<area shape="rect" id="Node000014" href="$d6/dd2/classcontainer__module_1_1msgpack__encoder.html#ace880a9f898a400170e13b43e772207a" title="Write signed integer with automatic size selection." alt="" coords="267,515,473,555"/>
+<area shape="poly" id="edge15_Node000001_Node000014" title=" " alt="" coords="144,419,200,456,268,494,298,507,296,512,265,498,197,460,141,424"/>
+<area shape="rect" id="Node000015" href="$d6/dd2/classcontainer__module_1_1msgpack__encoder.html#ad0decdf6d001ad124cc8005ac4981b1d" title="Write unsigned integer with automatic size selection." alt="" coords="523,572,730,612"/>
+<area shape="poly" id="edge30_Node000001_Node000015" title=" " alt="" coords="127,420,149,454,181,494,221,533,268,564,327,586,389,598,452,603,510,602,510,608,452,608,389,603,325,591,265,569,218,538,177,498,145,457,123,423"/>
+<area shape="rect" id="Node000016" href="$d6/dd2/classcontainer__module_1_1msgpack__encoder.html#afba7b803435d72da77a78f3e71146093" title="Write map header (key&#45;value pairs follow separately)" alt="" coords="521,393,732,433"/>
+<area shape="poly" id="edge23_Node000001_Node000016" title=" " alt="" coords="219,401,508,408,508,413,219,406"/>
+<area shape="rect" id="Node000017" href="$d6/dd2/classcontainer__module_1_1msgpack__encoder.html#a475a4769bc67904f1509ffcc889fdcdb" title="Write nil value." alt="" coords="267,744,473,784"/>
+<area shape="poly" id="edge26_Node000001_Node000017" title=" " alt="" coords="119,421,133,481,161,564,181,609,205,653,234,694,268,730,274,734,271,739,265,734,230,698,201,656,176,612,156,566,128,483,114,422"/>
+<area shape="rect" id="Node000018" href="$d6/dd2/classcontainer__module_1_1msgpack__encoder.html#a7802a650fc32c0430c7148bf0ccedc69" title="Write string value." alt="" coords="523,329,730,369"/>
+<area shape="poly" id="edge27_Node000001_Node000018" title=" " alt="" coords="219,388,509,358,510,364,219,393"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="468,184,514,176,515,181,469,189"/>
+<area shape="rect" id="Node000008" href="$d6/dd2/classcontainer__module_1_1msgpack__encoder.html#a6120016192d63b3fb20c0f5070999dab" title=" " alt="" coords="780,329,987,369"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="687,252,733,271,834,320,832,325,731,276,685,257"/>
+<area shape="rect" id="Node000009" href="$d6/dd2/classcontainer__module_1_1msgpack__encoder.html#a9da2f51e14612c47acd6650e8d3afb10" title=" " alt="" coords="780,425,987,465"/>
+<area shape="poly" id="edge9_Node000007_Node000009" title=" " alt="" coords="659,253,696,281,734,316,758,348,767,363,782,379,833,416,830,421,778,383,763,366,753,351,730,319,693,285,656,257"/>
+<area shape="rect" id="Node000012" href="$d6/dd2/classcontainer__module_1_1msgpack__encoder.html#a8de8b763a802d9929f2bd9588de270dc" title=" " alt="" coords="780,629,987,669"/>
+<area shape="poly" id="edge12_Node000011_Node000012" title=" " alt="" coords="716,684,779,670,780,675,717,689"/>
+<area shape="poly" id="edge14_Node000013_Node000009" title=" " alt="" coords="730,462,766,457,767,463,731,467"/>
+<area shape="poly" id="edge16_Node000014_Node000008" title=" " alt="" coords="380,513,444,404,484,349,503,328,520,315,558,300,597,291,638,288,679,290,756,303,822,322,820,327,755,308,678,295,638,293,598,296,559,305,523,320,506,332,488,352,448,407,384,516"/>
+<area shape="poly" id="edge17_Node000014_Node000009" title=" " alt="" coords="473,534,598,528,665,520,731,507,784,490,831,469,833,474,785,495,733,512,666,525,598,533,474,539"/>
+<area shape="poly" id="edge18_Node000014_Node000012" title=" " alt="" coords="398,553,453,590,487,607,522,621,583,637,647,646,766,652,766,657,646,651,582,642,521,627,485,612,450,594,395,557"/>
+<area shape="poly" id="edge19_Node000014_Node000015" title=" " alt="" coords="461,552,524,566,522,572,460,557"/>
+<area shape="poly" id="edge20_Node000015_Node000008" title=" " alt="" coords="659,570,695,542,730,508,745,483,753,460,761,437,778,412,801,391,826,374,829,378,804,395,782,415,766,439,758,462,750,485,734,511,699,546,662,574"/>
+<area shape="poly" id="edge21_Node000015_Node000009" title=" " alt="" coords="689,570,731,551,793,512,846,472,850,476,796,516,733,556,691,574"/>
+<area shape="poly" id="edge22_Node000015_Node000012" title=" " alt="" coords="717,609,780,624,779,629,716,615"/>
+<area shape="poly" id="edge24_Node000016_Node000008" title=" " alt="" coords="707,391,789,370,790,375,708,396"/>
+<area shape="poly" id="edge25_Node000016_Node000009" title=" " alt="" coords="732,424,767,428,766,433,732,429"/>
+<area shape="poly" id="edge28_Node000018_Node000008" title=" " alt="" coords="730,347,766,347,766,352,730,352"/>
+<area shape="poly" id="edge29_Node000018_Node000009" title=" " alt="" coords="698,367,733,379,827,417,825,422,731,384,696,372"/>
+</map>

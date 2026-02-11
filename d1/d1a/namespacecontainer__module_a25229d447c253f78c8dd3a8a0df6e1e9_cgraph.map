@@ -1,0 +1,28 @@
+<map id="container_module::clone_with_name" name="container_module::clone_with_name">
+<area shape="rect" id="Node000001" title="Create a copy of a value with a new name." alt="" coords="5,203,188,243"/>
+<area shape="rect" id="Node000002" href="$d5/df9/classcontainer__module_1_1value.html#a35f48f55cda09259dd6743889c224650" title="Deserialize from binary format (legacy compatible)" alt="" coords="236,120,419,160"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="152,200,257,162,259,167,154,205"/>
+<area shape="rect" id="Node000008" href="$d5/df9/classcontainer__module_1_1value.html#aef0c634b18712374d422801f269ff0e9" title="Serialize to binary format (legacy compatible)" alt="" coords="236,256,419,296"/>
+<area shape="poly" id="edge10_Node000001_Node000008" title=" " alt="" coords="184,240,228,250,227,255,183,245"/>
+<area shape="rect" id="Node000003" href="$d5/df9/classcontainer__module_1_1value.html#a2e4c2ec965ed2cb90bc1d50d77481f8f" title="Deserialize data portion based on type." alt="" coords="467,120,649,160"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="419,146,453,146,453,152,419,151"/>
+<area shape="rect" id="Node000005" href="$d5/df9/classcontainer__module_1_1value.html#a19a827e03777e6214b597f5c9e5e8b35" title="Get the value_types enum (NOT variant::index()!)" alt="" coords="708,187,891,227"/>
+<area shape="poly" id="edge9_Node000002_Node000005" title=" " alt="" coords="408,157,467,169,585,186,695,196,694,202,584,191,466,175,407,163"/>
+<area shape="rect" id="Node000007" href="$d5/df9/classcontainer__module_1_1value.html#afdcddac13e2b1a0afe97df4091c7ee38" title="Get the name of this value (lock&#45;free, immutable)" alt="" coords="467,5,649,45"/>
+<area shape="poly" id="edge8_Node000002_Node000007" title=" " alt="" coords="362,117,465,62,494,49,496,53,468,66,365,122"/>
+<area shape="poly" id="edge5_Node000003_Node000002" title=" " alt="" coords="466,134,432,134,432,128,466,129"/>
+<area shape="rect" id="Node000004" href="$db/de5/classcontainer__module_1_1thread__safe__container.html#a1b149737de6bbc72f55a764c1b2f8205" title="Deserialize from binary." alt="" coords="697,59,901,99"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="637,117,706,100,707,105,638,122"/>
+<area shape="poly" id="edge6_Node000003_Node000005" title=" " alt="" coords="632,157,714,180,712,186,630,163"/>
+<area shape="rect" id="Node000006" href="$d5/df9/classcontainer__module_1_1value.html#a2c9717a2aac485d5ef47028551874816" title="Default constructor &#45; creates null value." alt="" coords="708,123,891,163"/>
+<area shape="poly" id="edge7_Node000003_Node000006" title=" " alt="" coords="650,138,694,139,694,144,650,144"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="697,87,586,96,467,111,420,120,419,114,466,105,586,90,697,81"/>
+<area shape="poly" id="edge15_Node000008_Node000005" title=" " alt="" coords="419,260,694,219,695,225,420,265"/>
+<area shape="rect" id="Node000009" href="$d5/df9/classcontainer__module_1_1value.html#aa105a05c2bb9ce88d5bd54610aae7103" title="Serialize data portion based on type." alt="" coords="467,285,649,325"/>
+<area shape="poly" id="edge11_Node000008_Node000009" title=" " alt="" coords="417,293,453,298,453,304,416,299"/>
+<area shape="poly" id="edge13_Node000009_Node000008" title=" " alt="" coords="469,288,432,283,432,278,469,283"/>
+<area shape="rect" id="Node000010" href="$d7/d23/structcontainer__module_1_1detail_1_1circular__ref__guard.html#a7109e68223164ea84e0fcc24b770c3bf" title=" " alt="" coords="707,334,891,389"/>
+<area shape="poly" id="edge12_Node000009_Node000010" title=" " alt="" coords="645,323,695,334,693,340,644,328"/>
+<area shape="rect" id="Node000011" href="$d5/df9/classcontainer__module_1_1value.html#a8fd9176e2a29a65418b51dee4cb6a30d" title="Apply visitor to contained value (const)" alt="" coords="708,269,891,309"/>
+<area shape="poly" id="edge14_Node000009_Node000011" title=" " alt="" coords="649,297,694,294,694,299,650,302"/>
+</map>

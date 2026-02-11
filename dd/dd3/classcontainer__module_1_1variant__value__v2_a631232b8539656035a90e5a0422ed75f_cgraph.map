@@ -1,0 +1,14 @@
+<map id="container_module::variant_value_v2::deserialize" name="container_module::variant_value_v2::deserialize">
+<area shape="rect" id="Node000001" title="Deserialize from binary format (legacy compatible)" alt="" coords="5,33,199,73"/>
+<area shape="rect" id="Node000002" href="$dd/dd3/classcontainer__module_1_1variant__value__v2.html#ab177da145fdeb6f4470bad3aee22162a" title="Deserialize data portion based on type." alt="" coords="247,33,449,73"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="199,59,233,60,233,65,199,65"/>
+<area shape="rect" id="Node000004" href="$dd/dd3/classcontainer__module_1_1variant__value__v2.html#af0c797c36e1223cefddd2ab3b79675cb" title="Get the value_types enum (NOT variant::index()!)" alt="" coords="503,5,696,45"/>
+<area shape="poly" id="edge7_Node000001_Node000004" title=" " alt="" coords="178,31,246,19,372,12,489,15,489,20,372,17,247,24,179,36"/>
+<area shape="rect" id="Node000005" href="$dd/dd3/classcontainer__module_1_1variant__value__v2.html#ad9d4c1f70a7e0ae1076d26c717876df0" title="Get the name of this value (lock&#45;free, immutable)" alt="" coords="251,97,445,137"/>
+<area shape="poly" id="edge6_Node000001_Node000005" title=" " alt="" coords="180,71,258,91,257,96,179,76"/>
+<area shape="poly" id="edge4_Node000002_Node000001" title=" " alt="" coords="247,47,212,47,212,42,247,42"/>
+<area shape="rect" id="Node000003" href="$db/de5/classcontainer__module_1_1thread__safe__container.html#a1b149737de6bbc72f55a764c1b2f8205" title="Deserialize from binary." alt="" coords="497,127,701,167"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="416,71,450,83,541,119,539,124,448,88,414,76"/>
+<area shape="poly" id="edge5_Node000002_Node000004" title=" " alt="" coords="449,39,489,35,489,40,450,45"/>
+<area shape="poly" id="edge3_Node000003_Node000001" title=" " alt="" coords="498,166,440,170,376,171,310,166,246,152,214,139,183,122,133,84,136,80,186,117,216,134,247,147,311,160,376,166,439,165,497,160"/>
+</map>

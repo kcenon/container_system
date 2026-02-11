@@ -1,0 +1,8 @@
+<map id="container_module::async::executor_context_guard::executor_context_guard" name="container_module::async::executor_context_guard::executor_context_guard">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,69,192,124"/>
+<area shape="rect" id="Node000002" href="$df/dea/classcontainer__module_1_1async_1_1async__executor__context.html#a5311037c86a671837d38f8d25a5e5cff" title="Get the singleton instance." alt="" coords="240,29,427,84"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="192,78,226,72,227,78,192,83"/>
+<area shape="rect" id="Node000003" href="$df/dea/classcontainer__module_1_1async_1_1async__executor__context.html#a02b148a3f67bdd2efe09fbc7a605a746" title="Set the global executor." alt="" coords="240,108,427,163"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="192,109,227,115,226,120,192,115"/>
+<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="288,29,288,19,296,10,311,5,333,3,360,6,375,14,372,18,358,11,333,8,312,10,299,15,293,21,293,29"/>
+</map>

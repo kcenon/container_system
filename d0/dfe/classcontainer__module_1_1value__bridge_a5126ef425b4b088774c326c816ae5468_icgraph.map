@@ -1,0 +1,14 @@
+<map id="container_module::value_bridge::convert_array_value" name="container_module::value_bridge::convert_array_value">
+<area shape="rect" id="Node000001" title=" " alt="" coords="480,101,691,141"/>
+<area shape="rect" id="Node000002" href="$d0/dfe/classcontainer__module_1_1value__bridge.html#a113dbef30f730c6de738331b94282144" title="Convert legacy value to modern variant_value_v2." alt="" coords="249,101,432,141"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="466,133,432,133,432,127,467,128"/>
+<area shape="poly" id="edge2_Node000002_Node000001" title=" " alt="" coords="446,110,480,110,480,115,446,115"/>
+<area shape="rect" id="Node000003" href="$d0/dfe/classcontainer__module_1_1value__bridge.html#a3d0d3f7d7ce6524eed03254dd89239cf" title="Convert legacy value (shared_ptr) to modern." alt="" coords="12,5,195,45"/>
+<area shape="poly" id="edge3_Node000002_Node000003" title=" " alt="" coords="286,98,200,60,168,48,170,43,202,55,288,93"/>
+<area shape="rect" id="Node000004" href="$d0/dfe/classcontainer__module_1_1value__bridge.html#a1abee9f7421cca4901cade952dda1cc6" title="Convert vector of legacy values to modern." alt="" coords="5,69,201,109"/>
+<area shape="poly" id="edge4_Node000002_Node000004" title=" " alt="" coords="236,110,201,105,202,100,236,105"/>
+<area shape="rect" id="Node000005" href="$d0/dfe/classcontainer__module_1_1value__bridge.html#abd036dde0b63607ed5232a1e0054a953" title="Test round&#45;trip conversion (modern → legacy → modern)" alt="" coords="9,133,197,173"/>
+<area shape="poly" id="edge5_Node000002_Node000005" title=" " alt="" coords="236,138,198,143,197,138,236,133"/>
+<area shape="rect" id="Node000006" href="$d0/dfe/classcontainer__module_1_1value__bridge.html#a464c6d8ef3b9c8892bfd97f6521b38e3" title="Test round&#45;trip conversion (legacy → modern → legacy)" alt="" coords="9,197,197,237"/>
+<area shape="poly" id="edge6_Node000002_Node000006" title=" " alt="" coords="288,150,202,188,170,200,168,195,200,183,286,145"/>
+</map>

@@ -1,0 +1,17 @@
+<map id="container_module::metrics_manager::reset" name="container_module::metrics_manager::reset">
+<area shape="rect" id="Node000001" title="Reset all metrics." alt="" coords="5,101,201,141"/>
+<area shape="rect" id="Node000002" href="$da/d48/classcontainer__module_1_1metrics__manager.html#adc8d9e289a738526a21347608ad93c04" title="Get the singleton metrics instance." alt="" coords="251,69,447,109"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="201,106,237,101,238,106,202,111"/>
+<area shape="rect" id="Node000003" href="$da/d44/structcontainer__module_1_1detailed__metrics.html#a314cb315475d09d833417efa0320576b" title="Reset all metrics." alt="" coords="249,133,449,173"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="202,131,236,136,235,141,201,137"/>
+<area shape="rect" id="Node000004" href="$db/d77/structcontainer__module_1_1operation__counts.html#ab0de3ca3ccd0e9931f104db8484180ec" title="Reset all counters to zero." alt="" coords="497,5,707,45"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="427,131,448,119,463,104,471,88,479,71,496,55,505,49,508,54,499,59,484,75,476,90,467,107,451,123,430,136"/>
+<area shape="rect" id="Node000005" href="$db/d33/structcontainer__module_1_1timing__metrics.html#a744678f6fe27eca0d09cadf83d07edc2" title="Reset all timing metrics to zero." alt="" coords="507,69,697,109"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="428,131,509,110,510,115,430,136"/>
+<area shape="rect" id="Node000006" href="$dc/d55/structcontainer__module_1_1latency__histogram.html#a8e629727c4f1f7d0c888b869001103c6" title="Reset the histogram." alt="" coords="505,133,699,173"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="449,151,491,151,491,156,449,156"/>
+<area shape="rect" id="Node000007" href="$dc/d3c/structcontainer__module_1_1simd__metrics.html#a0b51041f8bf72896eaf9186a3532206f" title="Reset all SIMD metrics." alt="" coords="513,197,691,237"/>
+<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="430,171,510,191,509,197,428,176"/>
+<area shape="rect" id="Node000008" href="$dc/df2/structcontainer__module_1_1cache__metrics.html#aec9a508d5473e19816b45999ff9694c5" title="Reset all cache metrics." alt="" coords="509,261,695,301"/>
+<area shape="poly" id="edge7_Node000003_Node000008" title=" " alt="" coords="378,171,432,209,499,247,515,254,513,259,496,252,429,214,375,176"/>
+</map>

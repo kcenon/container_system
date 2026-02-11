@@ -1,0 +1,8 @@
+<map id="container_module::variant_value_v2::serialize" name="container_module::variant_value_v2::serialize">
+<area shape="rect" id="Node000001" title="Serialize to binary format (legacy compatible)" alt="" coords="247,69,440,109"/>
+<area shape="rect" id="Node000002" href="$d1/d1a/namespacecontainer__module.html#a367a883eb38c222ee73536e395f115a1" title="Create a copy of a variant_value_v2 with a new name." alt="" coords="11,5,193,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="254,68,177,48,179,43,255,63"/>
+<area shape="rect" id="Node000003" href="$dd/dd3/classcontainer__module_1_1variant__value__v2.html#ac7e934be08be1d54d8ae7783d3f92547" title="Serialize data portion based on type." alt="" coords="5,69,199,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="233,101,199,101,199,96,233,96"/>
+<area shape="poly" id="edge3_Node000003_Node000001" title=" " alt="" coords="212,78,247,78,247,83,212,83"/>
+</map>

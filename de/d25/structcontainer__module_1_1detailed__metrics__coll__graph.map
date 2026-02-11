@@ -1,0 +1,24 @@
+<map id="container_module::detailed_metrics" name="container_module::detailed_metrics">
+<area shape="rect" id="Node000001" title="Complete detailed metrics structure." alt="" coords="463,941,664,1101"/>
+<area shape="rect" id="Node000002" href="$db/d77/structcontainer__module_1_1operation__counts.html" title="Operation counter metrics for container operations." alt="" coords="5,331,207,491"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="113,490,124,568,145,659,160,705,179,750,202,793,229,833,277,881,332,922,391,954,448,980,446,985,389,959,330,926,273,885,225,836,197,796,174,752,155,707,140,660,119,569,108,491"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="583,5,754,71"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="583,42,486,46,380,54,285,71,248,82,222,97,199,118,180,143,149,199,129,258,117,315,112,314,124,257,145,196,175,140,196,115,219,93,246,78,284,65,379,49,486,40,583,37"/>
+<area shape="rect" id="Node000004" href="$db/d33/structcontainer__module_1_1timing__metrics.html" title="Timing metrics for container operations." alt="" coords="214,331,395,491"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="583,44,541,49,495,59,451,75,410,97,386,117,367,141,350,167,337,196,319,256,310,315,305,314,314,255,332,194,345,165,362,137,383,113,407,92,449,70,494,54,540,44,583,38"/>
+<area shape="rect" id="Node000005" href="$dc/d55/structcontainer__module_1_1latency__histogram.html" title="Approximate latency histogram using reservoir sampling." alt="" coords="470,535,657,835"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="643,73,600,133,581,169,566,207,557,263,553,341,556,518,551,518,548,341,552,263,561,206,576,167,596,130,639,70"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="679,207,896,287"/>
+<area shape="poly" id="edge8_Node000006_Node000003" title=" " alt="" coords="689,70,759,191,755,194,685,72"/>
+<area shape="rect" id="Node000008" href="$dc/d3c/structcontainer__module_1_1simd__metrics.html" title="SIMD utilization metrics." alt="" coords="770,595,941,775"/>
+<area shape="poly" id="edge11_Node000008_Node000003" title=" " alt="" coords="755,54,796,70,834,92,864,118,884,141,899,169,911,206,923,254,929,303,930,353,927,403,913,497,894,579,888,578,908,496,922,402,924,353,923,303,917,255,906,207,894,171,880,144,860,121,831,97,794,75,753,59"/>
+<area shape="rect" id="Node000009" href="$dc/df2/structcontainer__module_1_1cache__metrics.html" title="Cache efficiency metrics." alt="" coords="1011,311,1188,511"/>
+<area shape="poly" id="edge13_Node000009_Node000003" title=" " alt="" coords="755,38,848,48,900,59,952,75,1002,97,1047,125,1086,161,1116,206,1130,249,1131,294,1126,294,1124,250,1112,208,1082,164,1044,129,999,101,950,80,899,64,847,53,754,43"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="314,490,324,566,341,653,367,745,403,833,433,882,470,927,466,931,429,885,398,836,362,747,335,655,318,566,308,491"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="566,835,566,925,561,925,561,835"/>
+<area shape="poly" id="edge7_Node000005_Node000006" title=" " alt="" coords="770,288,650,521,645,518,765,286"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="349,214,503,279"/>
+<area shape="poly" id="edge9_Node000005_Node000007" title=" " alt="" coords="422,280,416,326,413,384,416,448,430,510,444,542,462,572,458,575,439,544,425,512,411,448,407,384,411,325,417,279"/>
+<area shape="poly" id="edge10_Node000001_Node000008" title=" " alt="" coords="813,776,768,849,712,919,679,949,675,945,708,916,764,846,808,773"/>
+<area shape="poly" id="edge12_Node000001_Node000009" title=" " alt="" coords="1088,511,1070,588,1044,673,1006,759,982,799,955,836,927,867,895,893,824,938,751,972,681,996,679,991,749,967,822,933,892,889,923,863,951,833,978,796,1001,756,1039,671,1065,587,1083,510"/>
+</map>

@@ -1,0 +1,26 @@
+<map id="core/container/variant_helpers.h" name="core/container/variant_helpers.h">
+<area shape="rect" id="Node000001" title="Helper functions for variant value manipulation." alt="" coords="482,5,647,45"/>
+<area shape="rect" id="Node000002" href="$d9/d49/types_8h.html" title="Core type definitions for container module." alt="" coords="419,93,489,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="539,48,483,87,480,83,536,43"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="597,240,655,265"/>
+<area shape="poly" id="edge11_Node000001_Node000005" title=" " alt="" coords="578,45,605,98,619,131,629,166,632,197,631,226,626,226,627,197,623,167,614,133,601,100,574,47"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="5,240,103,265"/>
+<area shape="poly" id="edge12_Node000001_Node000006" title=" " alt="" coords="482,30,389,39,282,61,227,79,174,103,125,132,81,169,71,181,65,196,58,227,53,226,60,194,67,179,77,165,122,128,172,98,225,74,281,56,389,34,482,25"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="714,93,775,119"/>
+<area shape="poly" id="edge13_Node000001_Node000011" title=" " alt="" coords="609,43,707,85,705,90,607,48"/>
+<area shape="rect" id="Node000003" href="$d1/d88/value__types_8h.html" title=" " alt="" coords="91,167,217,192"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="419,118,216,166,215,161,418,113"/>
+<area shape="poly" id="edge7_Node000002_Node000005" title=" " alt="" coords="491,110,548,128,577,144,603,165,620,195,627,226,622,227,615,197,599,168,574,148,546,133,489,115"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="241,167,309,192"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="426,121,318,164,316,159,424,116"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="333,167,396,192"/>
+<area shape="poly" id="edge8_Node000002_Node000008" title=" " alt="" coords="441,121,392,160,388,156,438,117"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="421,167,487,192"/>
+<area shape="poly" id="edge9_Node000002_Node000009" title=" " alt="" coords="457,119,457,153,451,153,451,119"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="511,167,589,192"/>
+<area shape="poly" id="edge10_Node000002_Node000010" title=" " alt="" coords="471,117,525,156,522,160,468,121"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="127,240,183,265"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="157,192,158,226,152,227,152,192"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="217,187,583,242,583,248,216,193"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="139,194,83,234,80,230,136,190"/>
+</map>

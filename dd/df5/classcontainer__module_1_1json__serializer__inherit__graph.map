@@ -1,0 +1,5 @@
+<map id="container_module::json_serializer" name="container_module::json_serializer">
+<area shape="rect" id="Node000001" title="JSON format serializer." alt="" coords="21,273,188,413"/>
+<area shape="rect" id="Node000002" href="$dd/d01/classcontainer__module_1_1serializer__strategy.html" title="Abstract base class for serialization strategies." alt="" coords="5,5,204,225"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="107,239,107,273,102,273,102,239"/>
+</map>

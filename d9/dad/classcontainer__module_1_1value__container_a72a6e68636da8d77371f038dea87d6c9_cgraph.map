@@ -1,0 +1,34 @@
+<map id="container_module::value_container::deserialize" name="container_module::value_container::deserialize">
+<area shape="rect" id="Node000001" title="Deserialize from string data with schema validation." alt="" coords="5,321,188,361"/>
+<area shape="rect" id="Node000002" href="$d9/dad/classcontainer__module_1_1value__container.html#aae51c06e58ddd8f44996c07f5cf4142e" title="Deserialize from string. If parse_only_header is true, child values are not fully parsed yet...." alt="" coords="249,231,431,271"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="151,318,271,274,272,279,153,323"/>
+<area shape="rect" id="Node000013" href="$da/db0/classcontainer__module_1_1container__schema.html#ae401afbe6da0135455b0f83b544e0753" title="Validate a container and collect all errors." alt="" coords="236,353,444,393"/>
+<area shape="poly" id="edge15_Node000001_Node000013" title=" " alt="" coords="189,350,223,355,222,360,188,355"/>
+<area shape="rect" id="Node000003" href="$d9/dad/classcontainer__module_1_1value__container.html#a17826f3cac07988dcce03e62f03c798e" title=" " alt="" coords="507,5,689,60"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="352,230,407,157,447,115,490,77,511,64,513,69,494,81,450,119,412,161,357,233"/>
+<area shape="rect" id="Node000006" href="$d9/dad/classcontainer__module_1_1value__container.html#a40e1ea012f2f6562f76bb6414eacd322" title="Returns iterator to end of values." alt="" coords="767,78,949,118"/>
+<area shape="poly" id="edge6_Node000002_Node000006" title=" " alt="" coords="356,229,411,173,449,144,491,121,557,101,625,89,692,85,753,86,753,91,692,90,626,95,558,106,493,126,452,148,415,177,360,233"/>
+<area shape="rect" id="Node000007" href="$da/d48/classcontainer__module_1_1metrics__manager.html#adc8d9e289a738526a21347608ad93c04" title="Get the singleton metrics instance." alt="" coords="500,135,696,175"/>
+<area shape="poly" id="edge7_Node000002_Node000007" title=" " alt="" coords="385,229,491,185,513,177,515,182,493,190,387,234"/>
+<area shape="rect" id="Node000008" href="$d9/dad/classcontainer__module_1_1value__container.html#ae6e8db192169bc9209fe6727d1bd6a65" title="Reinitialize the entire container to defaults." alt="" coords="507,263,689,303"/>
+<area shape="poly" id="edge8_Node000002_Node000008" title=" " alt="" coords="432,260,494,268,493,273,431,265"/>
+<area shape="rect" id="Node000010" href="$da/d48/classcontainer__module_1_1metrics__manager.html#a58c3ac237c495aef1052f618df063119" title="Check if metrics collection is enabled." alt="" coords="760,353,956,393"/>
+<area shape="poly" id="edge10_Node000002_Node000010" title=" " alt="" coords="382,269,434,292,493,313,624,342,747,360,746,365,623,347,491,318,432,297,380,274"/>
+<area shape="rect" id="Node000011" href="$da/d48/classcontainer__module_1_1metrics__manager.html#a4a48c65dfeb635da6321106d4b0dc6c2" title="Create a scoped timer if metrics are enabled." alt="" coords="500,378,696,418"/>
+<area shape="poly" id="edge11_Node000002_Node000011" title=" " alt="" coords="367,269,423,312,493,357,522,371,520,375,491,362,420,317,363,274"/>
+<area shape="rect" id="Node000012" href="$d9/dad/classcontainer__module_1_1value__container.html#ac67f821c2e812722fd46526063911f4a" title=" " alt="" coords="507,199,689,239"/>
+<area shape="poly" id="edge13_Node000002_Node000012" title=" " alt="" coords="431,237,493,230,494,235,432,243"/>
+<area shape="rect" id="Node000004" href="$d1/d1a/namespacecontainer__module.html#a83ed4416891be1a3f3191bf92b50b3e9" title="Convert a string&#45;based type indicator (e.g., &quot;4&quot;) to a value_types enum." alt="" coords="760,13,956,53"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="689,30,746,30,746,35,689,35"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="690,53,765,72,764,77,689,58"/>
+<area shape="rect" id="Node000005" href="$d1/d1a/namespacecontainer__module.html#ac03e62099dde8cbf072a3a4c635382bf" title="Compile&#45;time conversion from string to value_types." alt="" coords="1012,13,1180,53"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="956,30,998,30,998,35,956,35"/>
+<area shape="rect" id="Node000009" href="$d9/dad/classcontainer__module_1_1value__container.html#a1e63cbe2c9c9b83d0fcdc7f0394c1203" title="Clear all stored child values." alt="" coords="767,263,949,303"/>
+<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="689,281,753,281,753,286,689,286"/>
+<area shape="poly" id="edge12_Node000011_Node000010" title=" " alt="" coords="696,386,746,381,747,386,697,391"/>
+<area shape="poly" id="edge14_Node000012_Node000006" title=" " alt="" coords="672,197,703,185,762,155,814,123,817,128,765,160,705,190,674,202"/>
+<area shape="rect" id="Node000014" href="$dc/d80/structcontainer__module_1_1validation__error.html#aada72def6b1a0320f213848f7149b897" title="Create error for missing required field." alt="" coords="492,442,704,482"/>
+<area shape="poly" id="edge16_Node000013_Node000014" title=" " alt="" coords="393,390,493,427,516,435,514,440,491,433,391,395"/>
+<area shape="rect" id="Node000015" href="$dc/d80/structcontainer__module_1_1validation__error.html#a0067f6be22169ae3ded4374902457b2c" title=" " alt="" coords="752,442,964,482"/>
+<area shape="poly" id="edge17_Node000014_Node000015" title=" " alt="" coords="704,459,738,459,738,465,704,465"/>
+</map>

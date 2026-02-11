@@ -1,0 +1,11 @@
+<map id="container_module::variant_value::deserialize" name="container_module::variant_value::deserialize">
+<area shape="rect" id="Node000001" title="Deserialize from binary format." alt="" coords="5,69,199,109"/>
+<area shape="rect" id="Node000002" href="$d5/df9/classcontainer__module_1_1value.html#a07e9bedf8ff1769675e58b9de91fb3da" title=" " alt="" coords="252,5,435,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="178,67,254,46,255,51,179,72"/>
+<area shape="rect" id="Node000004" href="$db/d1c/classcontainer__module_1_1variant__value.html#a1ece7bda84be07c1a6e278ba2ed6498d" title="Get the name of this value." alt="" coords="247,69,440,109"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="199,87,233,87,233,92,199,92"/>
+<area shape="rect" id="Node000005" href="$db/d1c/classcontainer__module_1_1variant__value.html#a8b51f904fba29cb2d346fd18704f2993" title="Type&#45;safe setter." alt="" coords="247,133,440,173"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="179,107,255,127,254,132,178,112"/>
+<area shape="rect" id="Node000003" href="$d5/df9/classcontainer__module_1_1value.html#aad6ea2fdcbb516d7a72f577de0b6102f" title=" " alt="" coords="488,5,671,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="435,23,474,23,474,28,435,28"/>
+</map>
