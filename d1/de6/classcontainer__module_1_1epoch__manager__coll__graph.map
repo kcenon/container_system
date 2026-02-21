@@ -1,0 +1,15 @@
+<map id="container_module::epoch_manager" name="container_module::epoch_manager">
+<area shape="rect" id="Node000001" title="Epoch&#45;based memory reclamation for lock&#45;free data structures." alt="" coords="272,349,451,809"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,185,176,250"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="117,249,264,445,260,448,113,252"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="200,185,355,250"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="284,250,297,325,299,333,294,334,292,326,279,251"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="379,177,544,257"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="453,258,432,334,427,333,448,257"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="419,20,503,85"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="464,86,464,161,459,161,459,86"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="568,163,739,272"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="612,274,463,457,459,453,608,270"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="575,5,732,100"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="656,100,656,146,651,146,651,100"/>
+</map>

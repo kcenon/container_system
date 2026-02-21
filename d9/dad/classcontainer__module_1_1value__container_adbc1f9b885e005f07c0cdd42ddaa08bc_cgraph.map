@@ -1,0 +1,12 @@
+<map id="container_module::value_container::set_unit_impl" name="container_module::value_container::set_unit_impl">
+<area shape="rect" id="Node000001" title="Internal implementation for setting a single optimized_value." alt="" coords="5,92,192,132"/>
+<area shape="rect" id="Node000002" href="$da/d48/classcontainer__module_1_1metrics__manager.html#adc8d9e289a738526a21347608ad93c04" title="Get the singleton metrics instance." alt="" coords="248,5,444,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="156,89,274,48,276,53,158,94"/>
+<area shape="rect" id="Node000003" href="$da/d48/classcontainer__module_1_1metrics__manager.html#a58c3ac237c495aef1052f618df063119" title="Check if metrics collection is enabled." alt="" coords="500,124,696,164"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="192,102,316,98,385,100,452,105,518,118,517,123,452,111,384,105,316,103,192,107"/>
+<area shape="rect" id="Node000004" href="$d8/de4/structcontainer__module_1_1optimized__value.html#aca02dd49d6a72e61f1c2f0d069d1519e" title=" " alt="" coords="240,120,452,160"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="192,120,227,124,226,129,192,125"/>
+<area shape="rect" id="Node000005" href="$da/d48/classcontainer__module_1_1metrics__manager.html#a4a48c65dfeb635da6321106d4b0dc6c2" title="Create a scoped timer if metrics are enabled." alt="" coords="248,184,444,224"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="145,130,241,170,263,177,261,182,239,174,143,135"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="430,181,499,165,501,170,431,187"/>
+</map>

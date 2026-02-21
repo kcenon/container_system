@@ -1,0 +1,11 @@
+<map id="AdvancedContainerExample::run_all_demonstrations" name="AdvancedContainerExample::run_all_demonstrations">
+<area shape="rect" id="Node000001" title="Runs all demonstrations." alt="" coords="5,105,212,145"/>
+<area shape="rect" id="Node000002" href="$d6/d71/classAdvancedContainerExample.html#a958c02251422ee217d5495f7e102a7e5" title="Demonstrates basic container operations using new API." alt="" coords="260,5,491,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="149,103,259,55,282,47,284,52,261,60,151,108"/>
+<area shape="rect" id="Node000003" href="$d6/d71/classAdvancedContainerExample.html#a925c904212dd05fe85d5d3a1b5f42356" title="Demonstrates error handling scenarios." alt="" coords="268,69,483,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="212,109,254,103,255,108,212,114"/>
+<area shape="rect" id="Node000004" href="$d6/d71/classAdvancedContainerExample.html#a7c4289a3d4ae9f52e02276bca0019c0a" title="Demonstrates multi&#45;threaded producer&#45;consumer pattern." alt="" coords="269,134,481,189"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="212,137,256,143,255,148,212,142"/>
+<area shape="rect" id="Node000005" href="$d6/d71/classAdvancedContainerExample.html#a5ca04ef76b3ca404eb6763faa6571074" title="Demonstrates performance scenarios." alt="" coords="272,213,479,267"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="148,143,261,198,280,205,278,210,259,202,146,148"/>
+</map>

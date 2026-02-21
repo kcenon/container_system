@@ -1,0 +1,56 @@
+<map id="container_module::value::serialize" name="container_module::value::serialize">
+<area shape="rect" id="Node000001" title=" " alt="" coords="1205,549,1388,589"/>
+<area shape="rect" id="Node000002" href="$d0/dcd/classcontainer__module_1_1integration_1_1messaging__container__builder.html#a70981bba692bd185814812957472c6ec" title=" " alt="" coords="936,349,1157,403"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1257,543,1081,406,1085,401,1260,539"/>
+<area shape="rect" id="Node000020" href="$db/de5/classcontainer__module_1_1thread__safe__container.html#ac64100d40aeaac5989df88883fb7fe3b" title="Serialize container to binary." alt="" coords="952,517,1141,557"/>
+<area shape="poly" id="edge23_Node000001_Node000020" title=" " alt="" coords="1191,559,1141,552,1142,547,1192,553"/>
+<area shape="rect" id="Node000021" href="$db/d1c/classcontainer__module_1_1variant__value.html#a5c5afd0733f589cfd58ffdd6c17d1574" title="Serialize to binary format." alt="" coords="950,581,1143,621"/>
+<area shape="poly" id="edge24_Node000001_Node000021" title=" " alt="" coords="1192,585,1144,592,1143,586,1191,580"/>
+<area shape="rect" id="Node000022" href="$dd/dd3/classcontainer__module_1_1variant__value__v2.html#ac7e934be08be1d54d8ae7783d3f92547" title="Serialize data portion based on type." alt="" coords="950,733,1143,773"/>
+<area shape="poly" id="edge25_Node000001_Node000022" title=" " alt="" coords="1259,600,1076,735,1073,731,1256,595"/>
+<area shape="rect" id="Node000003" href="$d9/d1c/classscenarios_1_1ContentManagementSystem.html#aef3b7b96cf92379c055400a8378098b1" title=" " alt="" coords="633,5,888,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="1034,336,1017,274,988,199,968,161,945,123,918,89,886,59,868,48,871,43,890,55,922,86,949,120,973,158,992,197,1022,273,1039,335"/>
+<area shape="rect" id="Node000004" href="$d6/d71/classAdvancedContainerExample.html#a78efa0a41a4dd62ea14d74f5637b2b71" title="Demonstrates batch processing with messaging features." alt="" coords="644,69,877,109"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="1028,337,1006,289,975,233,935,178,886,130,854,112,857,107,890,126,939,174,980,230,1011,287,1033,335"/>
+<area shape="rect" id="Node000005" href="$d6/d71/classAdvancedContainerExample.html#a809c347379d7d3b0c6870db6266a09f8" title="Demonstrates enhanced messaging features." alt="" coords="371,119,577,174"/>
+<area shape="poly" id="edge11_Node000002_Node000005" title=" " alt="" coords="1025,338,1003,297,972,251,933,208,887,174,850,158,811,145,729,131,649,129,578,133,577,128,649,123,730,126,812,140,852,153,889,170,937,204,976,248,1008,294,1030,335"/>
+<area shape="rect" id="Node000008" href="$d5/d4e/messaging__integration__example_8cpp.html#ac5dd2ecaf0cf22081be447c9ddcf17a7" title=" " alt="" coords="673,184,848,224"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="1011,340,956,287,922,261,887,238,847,222,849,218,889,234,926,256,959,283,1015,336"/>
+<area shape="rect" id="Node000010" href="$d6/d71/classAdvancedContainerExample.html#a1f207a927af61cbca1745044efc6b130" title="Demonstrates external integration features." alt="" coords="371,270,577,325"/>
+<area shape="poly" id="edge9_Node000002_Node000010" title=" " alt="" coords="922,362,577,314,578,309,923,356"/>
+<area shape="rect" id="Node000011" href="$d6/d71/classAdvancedContainerExample.html#a7c4289a3d4ae9f52e02276bca0019c0a" title="Demonstrates multi&#45;threaded producer&#45;consumer pattern." alt="" coords="368,349,580,403"/>
+<area shape="poly" id="edge12_Node000002_Node000011" title=" " alt="" coords="922,379,580,379,580,373,922,373"/>
+<area shape="rect" id="Node000012" href="$d5/d4e/messaging__integration__example_8cpp.html#a9fa03b4d998ed7c123c77fb416cc4bc7" title=" " alt="" coords="663,248,858,288"/>
+<area shape="poly" id="edge14_Node000002_Node000012" title=" " alt="" coords="974,345,887,309,832,291,833,286,889,304,976,340"/>
+<area shape="rect" id="Node000013" href="$d9/d1c/classscenarios_1_1ContentManagementSystem.html#a6975d3a43b1e3d4046b4b4cb6bca535d" title=" " alt="" coords="646,413,875,453"/>
+<area shape="poly" id="edge16_Node000002_Node000013" title=" " alt="" coords="923,403,862,416,861,411,922,398"/>
+<area shape="rect" id="Node000014" href="$d5/d1c/classscenarios_1_1GamingEventSystem.html#a3403e62957e14344283e707976f4380b" title=" " alt="" coords="646,477,875,517"/>
+<area shape="poly" id="edge17_Node000002_Node000014" title=" " alt="" coords="994,413,944,442,889,468,854,480,852,475,887,463,942,437,991,408"/>
+<area shape="rect" id="Node000015" href="$d8/d6d/classscenarios_1_1FinancialTransactionSystem.html#a37cbcf1e27f0bcafcd915047004bd726" title=" " alt="" coords="649,541,873,581"/>
+<area shape="poly" id="edge18_Node000002_Node000015" title=" " alt="" coords="1018,416,962,476,927,506,889,532,863,544,861,539,887,527,924,502,959,472,1014,413"/>
+<area shape="rect" id="Node000016" href="$d5/d1c/classscenarios_1_1GamingEventSystem.html#a59259bf430f8d9addd2901141209351c" title=" " alt="" coords="644,605,877,645"/>
+<area shape="poly" id="edge19_Node000002_Node000016" title=" " alt="" coords="1012,415,975,458,938,507,925,532,918,554,909,575,890,595,870,607,867,603,886,591,905,572,913,552,920,530,934,504,971,455,1008,412"/>
+<area shape="rect" id="Node000017" href="$de/deb/classscenarios_1_1IoTDataCollectionSystem.html#ab3378a367ae308589f4081b80596d143" title=" " alt="" coords="657,669,865,709"/>
+<area shape="poly" id="edge20_Node000002_Node000017" title=" " alt="" coords="1008,415,972,457,938,507,929,529,924,549,921,587,915,623,906,641,890,659,867,675,864,671,886,655,901,638,910,621,916,586,919,548,924,527,934,504,967,454,1004,412"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="647,115,578,129,577,123,646,109"/>
+<area shape="rect" id="Node000006" href="$d6/d71/classAdvancedContainerExample.html#a168b0d067662dce9193f2fcef87dd352" title="Runs all demonstrations." alt="" coords="108,277,315,317"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="396,182,364,198,297,240,241,279,238,275,294,236,361,194,393,177"/>
+<area shape="rect" id="Node000007" href="$d8/d75/advanced__container__example_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,285,60,310"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="94,300,60,300,60,295,94,295"/>
+<area shape="rect" id="Node000009" href="$d5/d4e/messaging__integration__example_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="447,209,501,234"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="660,213,502,222,502,217,659,207"/>
+<area shape="poly" id="edge10_Node000010_Node000006" title=" " alt="" coords="357,300,315,300,315,295,357,295"/>
+<area shape="poly" id="edge13_Node000011_Node000006" title=" " alt="" coords="368,347,278,320,280,315,370,342"/>
+<area shape="poly" id="edge15_Node000012_Node000009" title=" " alt="" coords="650,253,501,228,502,223,650,247"/>
+<area shape="rect" id="Node000018" href="$de/deb/classscenarios_1_1IoTDataCollectionSystem.html#af1b110c2ff3ed8f9c0b7e480593c10db" title=" " alt="" coords="363,669,585,709"/>
+<area shape="poly" id="edge21_Node000017_Node000018" title=" " alt="" coords="643,692,586,692,586,687,643,687"/>
+<area shape="rect" id="Node000019" href="$d9/dd3/real__world__scenarios_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="184,677,239,702"/>
+<area shape="poly" id="edge22_Node000018_Node000019" title=" " alt="" coords="349,692,239,692,239,687,349,687"/>
+<area shape="rect" id="Node000023" href="$dd/dd3/classcontainer__module_1_1variant__value__v2.html#a9c363992dfbe99e3e1a19ae62e7fb98d" title="Serialize to binary format (legacy compatible)" alt="" coords="664,733,857,773"/>
+<area shape="poly" id="edge26_Node000022_Node000023" title=" " alt="" coords="936,765,858,765,858,759,936,759"/>
+<area shape="poly" id="edge28_Node000023_Node000022" title=" " alt="" coords="871,742,950,742,950,747,871,747"/>
+<area shape="rect" id="Node000024" href="$d1/d1a/namespacecontainer__module.html#a367a883eb38c222ee73536e395f115a1" title="Create a copy of a variant_value_v2 with a new name." alt="" coords="383,733,565,773"/>
+<area shape="poly" id="edge27_Node000023_Node000024" title=" " alt="" coords="650,756,566,756,566,751,650,751"/>
+<area shape="rect" id="Node000025" href="$d0/dfe/classcontainer__module_1_1value__bridge.html#abd036dde0b63607ed5232a1e0054a953" title="Test round&#45;trip conversion (modern → legacy → modern)" alt="" coords="380,797,568,837"/>
+<area shape="poly" id="edge29_Node000023_Node000025" title=" " alt="" coords="658,779,565,800,564,795,656,774"/>
+</map>

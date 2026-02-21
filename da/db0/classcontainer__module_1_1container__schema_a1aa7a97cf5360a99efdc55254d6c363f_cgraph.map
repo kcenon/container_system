@@ -1,0 +1,11 @@
+<map id="container_module::container_schema::validate_type" name="container_module::container_schema::validate_type">
+<area shape="rect" id="Node000001" title="Validate type constraint." alt="" coords="5,37,213,77"/>
+<area shape="rect" id="Node000002" href="$d5/df9/classcontainer__module_1_1value.html#a19a827e03777e6214b597f5c9e5e8b35" title="Get the value_types enum (NOT variant::index()!)" alt="" coords="276,5,459,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="213,42,262,36,263,41,214,47"/>
+<area shape="rect" id="Node000003" href="$dc/d80/structcontainer__module_1_1validation__error.html#a1c64d17e0b6eb961d6298fbe7aaf50d3" title="Create error for type mismatch." alt="" coords="261,69,473,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="214,68,248,72,247,77,213,73"/>
+<area shape="rect" id="Node000004" href="$d1/d1a/namespacecontainer__module.html#a6becf1d97f639bf83e64246fc1db9e06" title="Compile&#45;time conversion from value_types to string." alt="" coords="543,37,711,77"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="473,74,530,67,530,72,474,79"/>
+<area shape="rect" id="Node000005" href="$dc/d80/structcontainer__module_1_1validation__error.html#a0067f6be22169ae3ded4374902457b2c" title=" " alt="" coords="521,101,733,141"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="474,100,508,104,507,109,473,105"/>
+</map>

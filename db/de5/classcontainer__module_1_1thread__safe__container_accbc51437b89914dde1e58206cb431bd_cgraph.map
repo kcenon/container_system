@@ -1,0 +1,14 @@
+<map id="container_module::thread_safe_container::to_json" name="container_module::thread_safe_container::to_json">
+<area shape="rect" id="Node000001" title="Serialize container to JSON." alt="" coords="5,101,195,141"/>
+<area shape="rect" id="Node000002" href="$d5/df9/classcontainer__module_1_1value.html#a21ae319d680ef2b09ea74bd48979eaa5" title="Convert to JSON representation." alt="" coords="243,101,425,141"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="195,119,229,119,229,124,195,124"/>
+<area shape="poly" id="edge3_Node000002_Node000002" title=" " alt="" coords="291,102,289,92,295,82,311,77,334,75,361,78,375,85,373,90,359,83,334,80,312,82,299,87,294,93,296,100"/>
+<area shape="rect" id="Node000003" href="$d5/df9/classcontainer__module_1_1value.html#afdcddac13e2b1a0afe97df4091c7ee38" title="Get the name of this value (lock&#45;free, immutable)" alt="" coords="473,5,656,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="375,99,472,55,491,48,493,53,474,60,377,104"/>
+<area shape="rect" id="Node000004" href="$d5/df9/classcontainer__module_1_1value.html#a19a827e03777e6214b597f5c9e5e8b35" title="Get the value_types enum (NOT variant::index()!)" alt="" coords="473,69,656,109"/>
+<area shape="poly" id="edge4_Node000002_Node000004" title=" " alt="" coords="425,106,459,101,460,107,426,111"/>
+<area shape="rect" id="Node000005" href="$d5/df9/classcontainer__module_1_1value.html#a2c9717a2aac485d5ef47028551874816" title="Default constructor &#45; creates null value." alt="" coords="473,133,656,173"/>
+<area shape="poly" id="edge5_Node000002_Node000005" title=" " alt="" coords="426,131,460,136,459,141,425,137"/>
+<area shape="rect" id="Node000006" href="$d5/df9/classcontainer__module_1_1value.html#a8fd9176e2a29a65418b51dee4cb6a30d" title="Apply visitor to contained value (const)" alt="" coords="473,197,656,237"/>
+<area shape="poly" id="edge6_Node000002_Node000006" title=" " alt="" coords="377,139,474,183,493,190,491,195,472,188,375,144"/>
+</map>

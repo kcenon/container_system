@@ -1,0 +1,11 @@
+<map id="container_module::latency_histogram::get_percentile" name="container_module::latency_histogram::get_percentile">
+<area shape="rect" id="Node000001" title="Get a percentile value." alt="" coords="248,101,444,141"/>
+<area shape="rect" id="Node000002" href="$dc/d55/structcontainer__module_1_1latency__histogram.html#a866abaf24b1d1c05c9b9954eb130a989" title="Get P50 latency." alt="" coords="5,5,200,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="289,98,199,60,166,48,168,43,201,55,291,93"/>
+<area shape="rect" id="Node000003" href="$dc/d55/structcontainer__module_1_1latency__histogram.html#a6e6fa35e652f501abb8fec3808583715" title="Get P95 latency." alt="" coords="5,69,200,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="234,109,200,105,201,99,235,104"/>
+<area shape="rect" id="Node000004" href="$dc/d55/structcontainer__module_1_1latency__histogram.html#a0ca793ff9e93bcdc14e4c3305bfe7b22" title="Get P99 latency." alt="" coords="5,133,200,173"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="235,139,201,143,200,138,234,133"/>
+<area shape="rect" id="Node000005" href="$dc/d55/structcontainer__module_1_1latency__histogram.html#a2b05c6a10fc2ba92070b37f7a98ec958" title="Get P99.9 latency." alt="" coords="5,197,200,237"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="291,150,201,188,168,200,166,195,199,183,289,145"/>
+</map>

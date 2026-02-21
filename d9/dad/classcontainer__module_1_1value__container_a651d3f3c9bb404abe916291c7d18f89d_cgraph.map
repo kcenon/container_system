@@ -1,0 +1,14 @@
+<map id="container_module::value_container::set_all" name="container_module::value_container::set_all">
+<area shape="rect" id="Node000001" title="Set multiple optimized_values at once (unified API)" alt="" coords="5,92,188,132"/>
+<area shape="rect" id="Node000002" href="$d9/dad/classcontainer__module_1_1value__container.html#adbc1f9b885e005f07c0cdd42ddaa08bc" title="Internal implementation for setting a single optimized_value." alt="" coords="236,92,423,132"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="188,109,222,109,222,115,188,115"/>
+<area shape="rect" id="Node000003" href="$da/d48/classcontainer__module_1_1metrics__manager.html#adc8d9e289a738526a21347608ad93c04" title="Get the singleton metrics instance." alt="" coords="479,5,675,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="387,89,505,48,506,53,388,94"/>
+<area shape="rect" id="Node000004" href="$da/d48/classcontainer__module_1_1metrics__manager.html#a58c3ac237c495aef1052f618df063119" title="Check if metrics collection is enabled." alt="" coords="731,124,927,164"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="423,102,547,98,615,100,683,105,748,118,747,123,682,111,615,105,547,103,423,107"/>
+<area shape="rect" id="Node000005" href="$d8/de4/structcontainer__module_1_1optimized__value.html#aca02dd49d6a72e61f1c2f0d069d1519e" title=" " alt="" coords="471,120,683,160"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="423,120,457,124,457,129,423,125"/>
+<area shape="rect" id="Node000006" href="$da/d48/classcontainer__module_1_1metrics__manager.html#a4a48c65dfeb635da6321106d4b0dc6c2" title="Create a scoped timer if metrics are enabled." alt="" coords="479,184,675,224"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="375,130,472,170,494,177,492,182,470,174,373,135"/>
+<area shape="poly" id="edge6_Node000006_Node000004" title=" " alt="" coords="661,181,730,165,731,170,662,187"/>
+</map>

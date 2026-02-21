@@ -1,0 +1,7 @@
+<map id="container_module::optimized_container::value_container" name="container_module::optimized_container::value_container">
+<area shape="rect" id="Node000001" title="Default constructor: sets up a &quot;data_container&quot; type with version &quot;1.0.0.0&quot;." alt="" coords="5,37,217,77"/>
+<area shape="rect" id="Node000002" href="$da/d48/classcontainer__module_1_1metrics__manager.html#adc8d9e289a738526a21347608ad93c04" title="Get the singleton metrics instance." alt="" coords="265,5,461,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="217,41,251,37,252,42,218,47"/>
+<area shape="rect" id="Node000003" href="$da/d48/classcontainer__module_1_1metrics__manager.html#a58c3ac237c495aef1052f618df063119" title="Check if metrics collection is enabled." alt="" coords="265,69,461,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="218,68,252,73,251,78,217,73"/>
+</map>

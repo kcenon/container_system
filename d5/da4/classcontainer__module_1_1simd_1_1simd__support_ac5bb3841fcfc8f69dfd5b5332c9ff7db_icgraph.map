@@ -1,0 +1,7 @@
+<map id="container_module::simd::simd_support::has_avx512f" name="container_module::simd::simd_support::has_avx512f">
+<area shape="rect" id="Node000001" title=" " alt="" coords="272,49,481,89"/>
+<area shape="rect" id="Node000002" href="$d5/da4/classcontainer__module_1_1simd_1_1simd__support.html#a5de8d859a4fd95d129aecde47de714e8" title="Get the best available SIMD instruction set level." alt="" coords="23,5,206,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="258,55,206,48,206,43,259,50"/>
+<area shape="rect" id="Node000003" href="$d5/da4/classcontainer__module_1_1simd_1_1simd__support.html#a8a6487de7382ae18ad103944afd66afc" title="Get a string describing available SIMD features." alt="" coords="5,85,224,125"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="259,88,224,92,224,87,258,82"/>
+</map>

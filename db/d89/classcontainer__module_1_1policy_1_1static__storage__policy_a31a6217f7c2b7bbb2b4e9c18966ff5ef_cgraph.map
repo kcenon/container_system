@@ -1,0 +1,7 @@
+<map id="container_module::policy::static_storage_policy::set" name="container_module::policy::static_storage_policy::set">
+<area shape="rect" id="Node000001" title="Set a value by key (StoragePolicy interface)" alt="" coords="5,53,200,93"/>
+<area shape="rect" id="Node000002" href="$db/d89/classcontainer__module_1_1policy_1_1static__storage__policy.html#aa4ebc1dec5f2951e36cd776b95932321" title=" " alt="" coords="249,5,435,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="200,54,234,48,235,53,201,59"/>
+<area shape="rect" id="Node000003" href="$db/d89/classcontainer__module_1_1policy_1_1static__storage__policy.html#a4922fd14832a8c5fe5fe29211feace99" title="Runtime check if variant contains an allowed type." alt="" coords="248,84,436,139"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="201,86,235,91,234,97,200,91"/>
+</map>

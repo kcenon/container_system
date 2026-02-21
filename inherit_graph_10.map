@@ -1,0 +1,7 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="Node000000" href="$d4/d62/structcontainer__module_1_1async_1_1detail_1_1promise__base.html" title="Base promise type with common functionality." alt="" coords="5,41,191,81"/>
+<area shape="rect" id="Node000001" href="$d4/d9d/structcontainer__module_1_1async_1_1detail_1_1promise__type.html" title="Promise type for value&#45;returning tasks." alt="" coords="239,5,441,45"/>
+<area shape="poly" id="edge1_Node000000_Node000001" title=" " alt="" coords="204,43,238,38,239,43,205,48"/>
+<area shape="rect" id="Node000002" href="$d3/d49/structcontainer__module_1_1async_1_1detail_1_1promise__type_3_01void_01_4.html" title="Promise type for void&#45;returning tasks." alt="" coords="247,70,433,125"/>
+<area shape="poly" id="edge2_Node000000_Node000002" title=" " alt="" coords="205,75,248,81,247,86,204,80"/>
+</map>

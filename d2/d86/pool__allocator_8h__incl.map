@@ -1,0 +1,26 @@
+<map id="internal/pool_allocator.h" name="internal/pool_allocator.h">
+<area shape="rect" id="Node000001" title="Thread&#45;local memory pool allocator for value_container." alt="" coords="295,5,474,31"/>
+<area shape="rect" id="Node000002" href="$de/d5c/memory__pool_8h.html" title=" " alt="" coords="161,79,285,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="360,33,263,75,261,71,358,28"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,152,76,177"/>
+<area shape="poly" id="edge8_Node000001_Node000003" title=" " alt="" coords="307,33,230,52,151,81,103,111,64,144,61,140,100,107,149,76,229,46,306,28"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="310,79,377,104"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="380,32,359,68,355,65,376,30"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="401,79,451,104"/>
+<area shape="poly" id="edge10_Node000001_Node000010" title=" " alt="" coords="394,30,415,65,410,68,389,32"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="475,79,567,104"/>
+<area shape="poly" id="edge11_Node000001_Node000011" title=" " alt="" coords="408,28,488,70,485,75,405,33"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="591,79,651,104"/>
+<area shape="poly" id="edge12_Node000001_Node000012" title=" " alt="" coords="423,28,578,74,577,80,422,33"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="195,107,84,149,82,144,193,102"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="101,152,167,177"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="211,106,161,145,158,141,207,102"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="192,152,255,177"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="226,104,226,138,221,138,221,104"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="279,152,343,177"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="239,102,288,141,285,145,236,106"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="367,152,445,177"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="254,102,364,144,362,149,252,107"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="469,152,556,177"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="270,101,457,147,455,152,269,107"/>
+</map>
