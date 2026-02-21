@@ -687,6 +687,78 @@ TEST_F(PoolAllocatorTest, ConcurrentPoolAccess) {
 }
 
 // ============================================================================
+// Pool Allocator Edge Case Tests (Issue #376)
+// ============================================================================
+
+TEST_F(PoolAllocatorTest, AllocateZeroReturnsNullptr) {
+    auto& allocator = pool_allocator::instance();
+
+    void* ptr = allocator.allocate(0);
+    EXPECT_EQ(ptr, nullptr);
+}
+
+TEST_F(PoolAllocatorTest, GetSmallPoolStats) {
+    auto& allocator = pool_allocator::instance();
+
+    // Perform small allocations
+    void* ptr1 = allocator.allocate(32);
+    void* ptr2 = allocator.allocate(48);
+
+    auto small_stats = allocator.get_small_pool_stats();
+#if CONTAINER_USE_MEMORY_POOL
+    EXPECT_GE(small_stats.allocated_blocks, 2u);
+#endif
+
+    allocator.deallocate(ptr1, 32);
+    allocator.deallocate(ptr2, 48);
+}
+
+TEST_F(PoolAllocatorTest, GetMediumPoolStats) {
+    auto& allocator = pool_allocator::instance();
+
+    // Perform medium allocations
+    void* ptr1 = allocator.allocate(128);
+    void* ptr2 = allocator.allocate(200);
+
+    auto medium_stats = allocator.get_medium_pool_stats();
+#if CONTAINER_USE_MEMORY_POOL
+    EXPECT_GE(medium_stats.allocated_blocks, 2u);
+#endif
+
+    allocator.deallocate(ptr1, 128);
+    allocator.deallocate(ptr2, 200);
+}
+
+TEST_F(PoolAllocatorTest, PoolAllocateExceptionInConstructor) {
+    struct ThrowingType {
+        ThrowingType() { throw std::runtime_error("constructor failed"); }
+        ~ThrowingType() noexcept = default;
+    };
+
+    // pool_allocate should catch the exception and return nullptr
+    auto* ptr = pool_allocate<ThrowingType>();
+    EXPECT_EQ(ptr, nullptr);
+
+    // Verify no memory leak: stats should show deallocation occurred
+    auto stats = pool_allocator::instance().get_stats();
+    EXPECT_GE(stats.deallocations, 1u);
+}
+
+TEST_F(PoolAllocatorTest, DeallocateNullptrIsSafe) {
+    auto& allocator = pool_allocator::instance();
+
+    // Should not crash
+    allocator.deallocate(nullptr, 32);
+    allocator.deallocate(nullptr, 128);
+    allocator.deallocate(nullptr, 512);
+}
+
+TEST_F(PoolAllocatorTest, PoolDeallocateNullptrIsSafe) {
+    // Should not crash
+    pool_deallocate<int>(nullptr);
+}
+
+// ============================================================================
 // Main entry point
 // ============================================================================
 
