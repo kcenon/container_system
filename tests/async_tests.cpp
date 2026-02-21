@@ -935,6 +935,153 @@ TEST_F(AsyncStreamingTest, RoundTripChunkedSerialization) {
 }
 
 // =============================================================================
+// Generator Advanced Tests (Issue #376)
+// =============================================================================
+
+TEST_F(AsyncGeneratorTest, FromRangeWithVector) {
+    std::vector<int> vec = {10, 20, 30, 40, 50};
+    auto gen = from_range(vec);
+
+    std::vector<int> results;
+    for (auto value : gen) {
+        results.push_back(value);
+    }
+
+    EXPECT_EQ(results, (std::vector<int>{10, 20, 30, 40, 50}));
+}
+
+TEST_F(AsyncGeneratorTest, FromRangeWithArray) {
+    std::array<std::string, 3> arr = {"alpha", "beta", "gamma"};
+    auto gen = from_range(arr);
+
+    std::vector<std::string> results;
+    for (auto& value : gen) {
+        results.push_back(value);
+    }
+
+    EXPECT_EQ(results, (std::vector<std::string>{"alpha", "beta", "gamma"}));
+}
+
+TEST_F(AsyncGeneratorTest, FromRangeWithInitializerList) {
+    auto ints = std::vector<int>{1, 2, 3};
+    auto gen = from_range(ints);
+
+    int sum = 0;
+    for (auto val : gen) {
+        sum += val;
+    }
+
+    EXPECT_EQ(sum, 6);
+}
+
+TEST_F(AsyncGeneratorTest, OperatorBoolEmptyGenerator) {
+    generator<int> empty_gen;
+    EXPECT_FALSE(static_cast<bool>(empty_gen));
+    EXPECT_FALSE(empty_gen.valid());
+}
+
+TEST_F(AsyncGeneratorTest, OperatorBoolValidGenerator) {
+    auto range = [](int n) -> generator<int> {
+        for (int i = 0; i < n; ++i) {
+            co_yield i;
+        }
+    };
+
+    auto gen = range(3);
+    EXPECT_TRUE(static_cast<bool>(gen));
+    EXPECT_TRUE(gen.valid());
+}
+
+TEST_F(AsyncGeneratorTest, DefaultConstructorCreatesEmptyGenerator) {
+    generator<int> gen;
+    EXPECT_FALSE(gen.valid());
+    EXPECT_FALSE(static_cast<bool>(gen));
+}
+
+TEST_F(AsyncGeneratorTest, ReferenceTypeGenerator) {
+    int a = 10, b = 20, c = 30;
+
+    auto ref_gen = [&]() -> generator<int&> {
+        co_yield a;
+        co_yield b;
+        co_yield c;
+    };
+
+    auto gen = ref_gen();
+    std::vector<int*> ptrs;
+    for (int& val : gen) {
+        ptrs.push_back(&val);
+    }
+
+    ASSERT_EQ(ptrs.size(), 3u);
+    EXPECT_EQ(ptrs[0], &a);
+    EXPECT_EQ(ptrs[1], &b);
+    EXPECT_EQ(ptrs[2], &c);
+}
+
+TEST_F(AsyncGeneratorTest, MovePartiallyIteratedGenerator) {
+    auto range = [](int n) -> generator<int> {
+        for (int i = 0; i < n; ++i) {
+            co_yield i;
+        }
+    };
+
+    auto gen1 = range(5);
+    auto it = gen1.begin();
+    EXPECT_EQ(*it, 0);
+    ++it;
+    EXPECT_EQ(*it, 1);
+
+    // Move the partially-iterated generator
+    auto gen2 = std::move(gen1);
+    EXPECT_FALSE(gen1.valid());
+    EXPECT_TRUE(gen2.valid());
+}
+
+// =============================================================================
+// Task Additional Tests (Issue #376)
+// =============================================================================
+
+TEST_F(AsyncTaskTest, OperatorBoolEmptyTask) {
+    task<int> empty_task;
+    EXPECT_FALSE(static_cast<bool>(empty_task));
+    EXPECT_FALSE(empty_task.valid());
+}
+
+TEST_F(AsyncTaskTest, OperatorBoolValidTask) {
+    auto simple = []() -> task<int> { co_return 42; };
+    auto t = simple();
+    EXPECT_TRUE(static_cast<bool>(t));
+    EXPECT_TRUE(t.valid());
+}
+
+TEST_F(AsyncTaskTest, RvalueGetMovesResult) {
+    auto string_task = []() -> task<std::string> {
+        co_return "movable string";
+    };
+
+    auto t = string_task();
+    ASSERT_TRUE(t.done());
+
+    std::string result = std::move(t).get();
+    EXPECT_EQ(result, "movable string");
+}
+
+TEST_F(AsyncTaskTest, MakeExceptionalTaskVoid) {
+    auto ex = std::make_exception_ptr(std::logic_error("void error"));
+    auto t = make_exceptional_task<void>(ex);
+
+    EXPECT_TRUE(t.done());
+    EXPECT_THROW(t.get(), std::logic_error);
+}
+
+TEST_F(AsyncTaskTest, MakeReadyTaskMoveSemantic) {
+    auto t = make_ready_task(std::string("ready"));
+    ASSERT_TRUE(t.done());
+    EXPECT_EQ(t.get(), "ready");
+}
+
+// =============================================================================
 // Feature detection test
 // =============================================================================
 
