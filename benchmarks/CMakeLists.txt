@@ -20,6 +20,9 @@ if(benchmark_FOUND OR BENCHMARK_FOUND)
         serialization_bench.cpp
         value_operations_bench.cpp
         memory_efficiency_bench.cpp
+        epoch_manager_bench.cpp
+        rcu_value_bench.cpp
+        thread_scalability_bench.cpp
         main_bench.cpp
     )
 
