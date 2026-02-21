@@ -1536,6 +1536,233 @@ TEST_F(ZeroCopyTest, MultipleValuesIndexing) {
 }
 
 // ============================================================================
+// Direct value_view API Tests (Issue #375)
+// ============================================================================
+
+class ValueViewDirectTest : public ::testing::Test {
+protected:
+    void SetUp() override {}
+    void TearDown() override {}
+};
+
+TEST_F(ValueViewDirectTest, NameReturnsKeyName) {
+    const char* name = "my_key";
+    const char* val = "hello";
+    value_view view(name, 6, val, 5, value_types::string_value);
+    EXPECT_EQ(view.name(), "my_key");
+}
+
+TEST_F(ValueViewDirectTest, IsNullForNullType) {
+    const char* name = "null_key";
+    value_view view(name, 8, nullptr, 0, value_types::null_value);
+    EXPECT_TRUE(view.is_null());
+}
+
+TEST_F(ValueViewDirectTest, IsNullFalseForNonNullType) {
+    const char* name = "key";
+    const char* val = "42";
+    value_view view(name, 3, val, 2, value_types::int_value);
+    EXPECT_FALSE(view.is_null());
+}
+
+TEST_F(ValueViewDirectTest, DataAndSizeAccessors) {
+    const char* name = "key";
+    const char* val = "test_data";
+    value_view view(name, 3, val, 9, value_types::string_value);
+
+    EXPECT_EQ(view.data(), val);
+    EXPECT_EQ(view.size(), 9u);
+}
+
+TEST_F(ValueViewDirectTest, AsBoolTruePatterns) {
+    const char* name = "flag";
+
+    const char* val_t = "t";
+    value_view view_t(name, 4, val_t, 1, value_types::bool_value);
+    auto result_t = view_t.as<bool>();
+    ASSERT_TRUE(result_t.has_value());
+    EXPECT_TRUE(*result_t);
+
+    const char* val_T = "T";
+    value_view view_T(name, 4, val_T, 1, value_types::bool_value);
+    auto result_T = view_T.as<bool>();
+    ASSERT_TRUE(result_T.has_value());
+    EXPECT_TRUE(*result_T);
+
+    const char* val_1 = "1";
+    value_view view_1(name, 4, val_1, 1, value_types::bool_value);
+    auto result_1 = view_1.as<bool>();
+    ASSERT_TRUE(result_1.has_value());
+    EXPECT_TRUE(*result_1);
+}
+
+TEST_F(ValueViewDirectTest, AsBoolFalsePatterns) {
+    const char* name = "flag";
+
+    const char* val_f = "f";
+    value_view view_f(name, 4, val_f, 1, value_types::bool_value);
+    auto result_f = view_f.as<bool>();
+    ASSERT_TRUE(result_f.has_value());
+    EXPECT_FALSE(*result_f);
+
+    const char* val_0 = "0";
+    value_view view_0(name, 4, val_0, 1, value_types::bool_value);
+    auto result_0 = view_0.as<bool>();
+    ASSERT_TRUE(result_0.has_value());
+    EXPECT_FALSE(*result_0);
+}
+
+TEST_F(ValueViewDirectTest, AsBoolNulloptForNonBoolType) {
+    const char* name = "val";
+    const char* val = "t";
+    value_view view(name, 3, val, 1, value_types::string_value);
+    EXPECT_FALSE(view.as<bool>().has_value());
+}
+
+TEST_F(ValueViewDirectTest, AsBoolNulloptForEmptyData) {
+    const char* name = "val";
+    value_view view(name, 3, nullptr, 0, value_types::bool_value);
+    EXPECT_FALSE(view.as<bool>().has_value());
+}
+
+TEST_F(ValueViewDirectTest, AsDoubleFromDoubleType) {
+    const char* name = "pi";
+    const char* val = "3.14159";
+    value_view view(name, 2, val, 7, value_types::double_value);
+
+    auto result = view.as<double>();
+    ASSERT_TRUE(result.has_value());
+    EXPECT_NEAR(*result, 3.14159, 0.00001);
+}
+
+TEST_F(ValueViewDirectTest, AsDoubleFromFloatType) {
+    const char* name = "f";
+    const char* val = "2.5";
+    value_view view(name, 1, val, 3, value_types::float_value);
+
+    auto result = view.as<double>();
+    ASSERT_TRUE(result.has_value());
+    EXPECT_NEAR(*result, 2.5, 0.001);
+}
+
+TEST_F(ValueViewDirectTest, AsFloatFromFloatType) {
+    const char* name = "f";
+    const char* val = "1.5";
+    value_view view(name, 1, val, 3, value_types::float_value);
+
+    auto result = view.as<float>();
+    ASSERT_TRUE(result.has_value());
+    EXPECT_NEAR(*result, 1.5f, 0.001f);
+}
+
+TEST_F(ValueViewDirectTest, AsInt64FromIntType) {
+    const char* name = "big";
+    const char* val = "9876543210";
+    value_view view(name, 3, val, 10, value_types::llong_value);
+
+    auto result = view.as<int64_t>();
+    ASSERT_TRUE(result.has_value());
+    EXPECT_EQ(*result, 9876543210LL);
+}
+
+TEST_F(ValueViewDirectTest, AsUint32FromUintType) {
+    const char* name = "u";
+    const char* val = "42";
+    value_view view(name, 1, val, 2, value_types::uint_value);
+
+    auto result = view.as<uint32_t>();
+    ASSERT_TRUE(result.has_value());
+    EXPECT_EQ(*result, 42u);
+}
+
+TEST_F(ValueViewDirectTest, AsInt64FromShortType) {
+    const char* name = "s";
+    const char* val = "-100";
+    value_view view(name, 1, val, 4, value_types::short_value);
+
+    auto result = view.as<int64_t>();
+    ASSERT_TRUE(result.has_value());
+    EXPECT_EQ(*result, -100);
+}
+
+TEST_F(ValueViewDirectTest, TypeMismatchIntReturnsNullopt) {
+    const char* name = "s";
+    const char* val = "hello";
+    value_view view(name, 1, val, 5, value_types::string_value);
+
+    EXPECT_FALSE(view.as<int>().has_value());
+    EXPECT_FALSE(view.as<int64_t>().has_value());
+    EXPECT_FALSE(view.as<uint32_t>().has_value());
+}
+
+TEST_F(ValueViewDirectTest, TypeMismatchDoubleReturnsNullopt) {
+    const char* name = "s";
+    const char* val = "42";
+    value_view view(name, 1, val, 2, value_types::int_value);
+
+    EXPECT_FALSE(view.as<double>().has_value());
+    EXPECT_FALSE(view.as<float>().has_value());
+}
+
+TEST_F(ValueViewDirectTest, TypeMismatchStringReturnsNullopt) {
+    const char* name = "n";
+    const char* val = "42";
+    value_view view(name, 1, val, 2, value_types::int_value);
+
+    EXPECT_FALSE(view.as<std::string>().has_value());
+    EXPECT_FALSE(view.as<std::string_view>().has_value());
+}
+
+TEST_F(ValueViewDirectTest, AsStringViewFromStringType) {
+    const char* name = "k";
+    const char* val = "hello world";
+    value_view view(name, 1, val, 11, value_types::string_value);
+
+    auto result = view.as<std::string_view>();
+    ASSERT_TRUE(result.has_value());
+    EXPECT_EQ(*result, "hello world");
+}
+
+TEST_F(ValueViewDirectTest, AsStringViewFromBytesType) {
+    const char* name = "b";
+    const char* val = "raw bytes";
+    value_view view(name, 1, val, 9, value_types::bytes_value);
+
+    auto result = view.as<std::string_view>();
+    ASSERT_TRUE(result.has_value());
+    EXPECT_EQ(*result, "raw bytes");
+}
+
+TEST_F(ValueViewDirectTest, EmptyIntegralDataReturnsNullopt) {
+    const char* name = "e";
+    value_view view(name, 1, "", 0, value_types::int_value);
+
+    EXPECT_FALSE(view.as<int>().has_value());
+}
+
+TEST_F(ValueViewDirectTest, EmptyFloatingDataReturnsNullopt) {
+    const char* name = "e";
+    value_view view(name, 1, "", 0, value_types::double_value);
+
+    EXPECT_FALSE(view.as<double>().has_value());
+}
+
+TEST_F(ValueViewDirectTest, ValueIndexEntryDefaultConstruction) {
+    value_index_entry entry;
+    EXPECT_EQ(entry.value_offset, 0u);
+    EXPECT_EQ(entry.value_length, 0u);
+    EXPECT_EQ(entry.type, value_types::null_value);
+}
+
+TEST_F(ValueViewDirectTest, ValueIndexEntryParameterizedConstruction) {
+    value_index_entry entry("mykey", 100, 50, value_types::string_value);
+    EXPECT_EQ(entry.name, "mykey");
+    EXPECT_EQ(entry.value_offset, 100u);
+    EXPECT_EQ(entry.value_length, 50u);
+    EXPECT_EQ(entry.type, value_types::string_value);
+}
+
+// ============================================================================
 // Batch Operation Tests (Issue #229)
 // ============================================================================
 
