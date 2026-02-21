@@ -1192,6 +1192,287 @@ TEST_F(ContainerThreadSafetyTest, EpochManagerDeferredDeletion) {
 }
 
 // =============================================================================
+// Epoch Manager Extended Tests (Issue #375)
+// =============================================================================
+
+TEST_F(ContainerThreadSafetyTest, EpochManagerCurrentEpochIncrementsOnGC) {
+    epoch_manager& em = epoch_manager::instance();
+    uint64_t epoch_before = em.current_epoch();
+
+    em.try_gc();
+    EXPECT_EQ(em.current_epoch(), epoch_before + 1);
+
+    em.try_gc();
+    EXPECT_EQ(em.current_epoch(), epoch_before + 2);
+}
+
+TEST_F(ContainerThreadSafetyTest, EpochManagerGCCountIncrementsOnReclamation) {
+    epoch_manager& em = epoch_manager::instance();
+    size_t gc_before = em.gc_count();
+
+    // Defer some deletions
+    for (int i = 0; i < 5; ++i) {
+        em.defer_delete(new int(i), [](void* p) { delete static_cast<int*>(p); });
+    }
+
+    // Advance epochs enough to trigger reclamation
+    for (int i = 0; i < 3; ++i) {
+        em.try_gc();
+    }
+
+    // Force remaining cleanup
+    em.force_gc();
+
+    EXPECT_GT(em.gc_count(), gc_before);
+}
+
+TEST_F(ContainerThreadSafetyTest, EpochManagerReclaimedCountTracksObjects) {
+    epoch_manager& em = epoch_manager::instance();
+    size_t reclaimed_before = em.reclaimed_count();
+
+    constexpr int num_objects = 10;
+    for (int i = 0; i < num_objects; ++i) {
+        em.defer_delete(new int(i), [](void* p) { delete static_cast<int*>(p); });
+    }
+
+    // Advance past safety window
+    for (int i = 0; i < 3; ++i) {
+        em.try_gc();
+    }
+    em.force_gc();
+
+    EXPECT_GE(em.reclaimed_count() - reclaimed_before,
+              static_cast<size_t>(num_objects));
+}
+
+TEST_F(ContainerThreadSafetyTest, EpochManagerTypedDeferDelete) {
+    epoch_manager& em = epoch_manager::instance();
+
+    struct TestObject {
+        static std::atomic<int>& destroy_count() {
+            static std::atomic<int> count{0};
+            return count;
+        }
+        ~TestObject() { destroy_count().fetch_add(1); }
+    };
+
+    int initial_count = TestObject::destroy_count().load();
+
+    constexpr int num_objects = 5;
+    for (int i = 0; i < num_objects; ++i) {
+        em.defer_delete(new TestObject());
+    }
+
+    for (int i = 0; i < 3; ++i) {
+        em.try_gc();
+    }
+    em.force_gc();
+
+    EXPECT_GE(TestObject::destroy_count().load() - initial_count, num_objects);
+}
+
+TEST_F(ContainerThreadSafetyTest, EpochManagerDeferDeleteNullptrIgnored) {
+    epoch_manager& em = epoch_manager::instance();
+    size_t pending_before = em.pending_count();
+
+    em.defer_delete(nullptr, [](void*) {});
+
+    EXPECT_EQ(em.pending_count(), pending_before);
+}
+
+TEST_F(ContainerThreadSafetyTest, EpochManagerMultiThreadedReaderPlusGC) {
+    epoch_manager& em = epoch_manager::instance();
+
+    constexpr int num_readers = 4;
+    constexpr int reader_iterations = 5000;
+    std::atomic<int> errors{0};
+    std::atomic<bool> gc_done{false};
+    std::barrier sync_point(num_readers + 1);
+
+    std::vector<std::thread> threads;
+
+    // Reader threads: repeatedly enter/exit critical sections
+    for (int i = 0; i < num_readers; ++i) {
+        threads.emplace_back([&]() {
+            sync_point.arrive_and_wait();
+
+            for (int j = 0; j < reader_iterations; ++j) {
+                try {
+                    epoch_guard guard;
+                    // Simulate reading from a lock-free structure
+                    if (!em.in_critical_section()) {
+                        ++errors;
+                    }
+                } catch (...) {
+                    ++errors;
+                }
+
+                if (j % 100 == 0) {
+                    std::this_thread::yield();
+                }
+            }
+        });
+    }
+
+    // GC thread: defer deletions and run GC concurrently
+    threads.emplace_back([&]() {
+        sync_point.arrive_and_wait();
+
+        for (int j = 0; j < 100; ++j) {
+            int* ptr = new int(j);
+            em.defer_delete(ptr, [](void* p) { delete static_cast<int*>(p); });
+
+            if (j % 10 == 0) {
+                em.try_gc();
+            }
+
+            std::this_thread::yield();
+        }
+
+        gc_done.store(true);
+    });
+
+    for (auto& t : threads) {
+        t.join();
+    }
+
+    EXPECT_EQ(errors.load(), 0);
+    EXPECT_TRUE(gc_done.load());
+
+    // Clean up remaining deferred objects
+    em.force_gc();
+}
+
+// =============================================================================
+// RCU Value Extended Tests (Issue #375)
+// =============================================================================
+
+TEST_F(ContainerThreadSafetyTest, RcuValueDefaultConstructor) {
+    rcu_value<int> val;
+    auto snapshot = val.read();
+    ASSERT_NE(snapshot, nullptr);
+    EXPECT_EQ(*snapshot, 0);
+    EXPECT_EQ(val.update_count(), 0u);
+}
+
+TEST_F(ContainerThreadSafetyTest, RcuValueCopyConstructor) {
+    rcu_value<std::string> original{"hello"};
+    rcu_value<std::string> copy(original);
+
+    auto original_snap = original.read();
+    auto copy_snap = copy.read();
+
+    ASSERT_NE(original_snap, nullptr);
+    ASSERT_NE(copy_snap, nullptr);
+    EXPECT_EQ(*original_snap, *copy_snap);
+    EXPECT_EQ(*copy_snap, "hello");
+}
+
+TEST_F(ContainerThreadSafetyTest, RcuValueMoveConstructor) {
+    rcu_value<std::string> source{"world"};
+    rcu_value<std::string> moved(std::move(source));
+
+    auto moved_snap = moved.read();
+    ASSERT_NE(moved_snap, nullptr);
+    EXPECT_EQ(*moved_snap, "world");
+}
+
+TEST_F(ContainerThreadSafetyTest, RcuValueCopyAssignment) {
+    rcu_value<int> a{10};
+    rcu_value<int> b{20};
+
+    b = a;
+
+    auto snap_a = a.read();
+    auto snap_b = b.read();
+    ASSERT_NE(snap_a, nullptr);
+    ASSERT_NE(snap_b, nullptr);
+    EXPECT_EQ(*snap_a, 10);
+    EXPECT_EQ(*snap_b, 10);
+}
+
+TEST_F(ContainerThreadSafetyTest, RcuValueMoveAssignment) {
+    rcu_value<int> a{30};
+    rcu_value<int> b{40};
+
+    b = std::move(a);
+
+    auto snap_b = b.read();
+    ASSERT_NE(snap_b, nullptr);
+    EXPECT_EQ(*snap_b, 30);
+}
+
+TEST_F(ContainerThreadSafetyTest, RcuValueSelfAssignment) {
+    rcu_value<int> val{42};
+
+    val = val;
+
+    auto snap = val.read();
+    ASSERT_NE(snap, nullptr);
+    EXPECT_EQ(*snap, 42);
+}
+
+TEST_F(ContainerThreadSafetyTest, RcuValueHasValue) {
+    rcu_value<int> val{0};
+    EXPECT_TRUE(val.has_value());
+
+    rcu_value<std::string> str{"test"};
+    EXPECT_TRUE(str.has_value());
+}
+
+TEST_F(ContainerThreadSafetyTest, RcuValueHasValueAfterUpdate) {
+    rcu_value<int> val{0};
+    EXPECT_TRUE(val.has_value());
+
+    val.update(100);
+    EXPECT_TRUE(val.has_value());
+}
+
+TEST_F(ContainerThreadSafetyTest, RcuValueConcurrentCASContention) {
+    rcu_value<int> counter{0};
+
+    constexpr int num_threads = 8;
+    constexpr int increments_per_thread = 1000;
+    std::atomic<int> success_count{0};
+    std::atomic<int> retry_count{0};
+    std::barrier sync_point(num_threads);
+
+    std::vector<std::thread> threads;
+    for (int i = 0; i < num_threads; ++i) {
+        threads.emplace_back([&]() {
+            sync_point.arrive_and_wait();
+
+            for (int j = 0; j < increments_per_thread; ++j) {
+                bool done = false;
+                while (!done) {
+                    auto expected = counter.read();
+                    int new_val = *expected + 1;
+                    done = counter.compare_and_update(expected, new_val);
+                    if (!done) {
+                        retry_count.fetch_add(1);
+                    }
+                }
+                success_count.fetch_add(1);
+            }
+        });
+    }
+
+    for (auto& t : threads) {
+        t.join();
+    }
+
+    // All increments should have succeeded
+    EXPECT_EQ(success_count.load(), num_threads * increments_per_thread);
+    // Final value should equal total increments
+    EXPECT_EQ(*counter.read(), num_threads * increments_per_thread);
+    // Under contention, there should be some retries
+    EXPECT_GT(retry_count.load(), 0);
+    // Update count should match successful CAS operations
+    EXPECT_EQ(counter.update_count(),
+              static_cast<size_t>(num_threads * increments_per_thread));
+}
+
+// =============================================================================
 // Auto-Refresh Reader Tests (Issue #262)
 // =============================================================================
 
