@@ -71,7 +71,7 @@ set(TEST_SOURCES
 
 # Add async tests if coroutines are enabled
 if(CONTAINER_ENABLE_COROUTINES)
-    list(APPEND TEST_SOURCES async_tests.cpp)
+    list(APPEND TEST_SOURCES async_tests.cpp thread_pool_executor_tests.cpp)
     message(STATUS "Container: Async coroutine tests enabled")
 endif()
 
