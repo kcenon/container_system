@@ -41,7 +41,7 @@
 #include <memory>
 #include <stdexcept>
 
-namespace container_module::internal {
+namespace kcenon::container::internal {
 
 class fixed_block_pool {
 public:
@@ -174,5 +174,5 @@ private:
     std::size_t allocated_count_{0};  // Track number of currently allocated blocks
 };
 
-} // namespace container_module::internal
+} // namespace kcenon::container::internal
 

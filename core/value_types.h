@@ -36,7 +36,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <string>
 #include <string_view>
 
-namespace container_module
+namespace kcenon::container
 {
 	/**
 	 * @brief Enumeration of available value types in the container system.
@@ -110,4 +110,4 @@ namespace container_module
 	value_types convert_value_type(const std::string& target);
 	std::string convert_value_type(const value_types& target);
 
-} // namespace container_module
+} // namespace kcenon::container

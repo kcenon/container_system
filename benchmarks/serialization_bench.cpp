@@ -37,7 +37,7 @@
 #include "core/container.h"
 #include "tests/test_compat.h"
 
-using namespace container_module;
+using namespace kcenon::container;
 
 static void BM_Serialize_Small(benchmark::State& state) {
     auto c = std::make_shared<value_container>();

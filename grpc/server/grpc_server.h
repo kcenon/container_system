@@ -54,7 +54,7 @@ class Server;
 class ServerBuilder;
 }
 
-namespace container_grpc {
+namespace kcenon::container_grpc {
 
 /**
  * @brief Configuration for gRPC server
@@ -71,8 +71,8 @@ struct server_config {
  * @brief Callback type for processing containers
  */
 using container_processor = std::function<
-    std::shared_ptr<container_module::value_container>(
-        std::shared_ptr<container_module::value_container>)>;
+    std::shared_ptr<kcenon::container::value_container>(
+        std::shared_ptr<kcenon::container::value_container>)>;
 
 /**
  * @class grpc_server
@@ -83,7 +83,7 @@ using container_processor = std::function<
  *
  * Example usage:
  * @code
- *   container_grpc::grpc_server server("0.0.0.0:50051");
+ *   kcenon::container_grpc::grpc_server server("0.0.0.0:50051");
  *
  *   // Set custom processor (optional)
  *   server.set_processor([](auto container) {
@@ -175,4 +175,4 @@ private:
     std::unique_ptr<impl> impl_;
 };
 
-} // namespace container_grpc
+} // namespace kcenon::container_grpc

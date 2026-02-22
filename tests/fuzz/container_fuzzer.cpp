@@ -19,7 +19,7 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
         // bit 0: parse_header_only
         bool parse_header_only = (Data[0] & 1) == 0;
         
-        container_module::value_container container(input_data, parse_header_only);
+        kcenon::container::value_container container(input_data, parse_header_only);
 
         // Exercise read methods to ensure internal state is consistent
         [[maybe_unused]] auto src = container.source_id();

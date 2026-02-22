@@ -44,7 +44,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "value.h"
 #include "core/concepts.h"
 
-namespace container_module
+namespace kcenon::container
 {
     // Forward declarations
     class lockfree_container_reader;
@@ -832,4 +832,4 @@ namespace container_module
         return std::make_shared<auto_refresh_reader>(shared_from_this(), refresh_interval);
     }
 
-} // namespace container_module
+} // namespace kcenon::container

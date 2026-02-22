@@ -35,7 +35,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <stdexcept>
 
-namespace container_grpc {
+namespace kcenon::container_grpc {
 
 container_service_impl::container_service_impl() = default;
 
@@ -288,4 +288,4 @@ grpc::Status container_service_impl::GetStreamStatus(
     return grpc::Status::OK;
 }
 
-} // namespace container_grpc
+} // namespace kcenon::container_grpc

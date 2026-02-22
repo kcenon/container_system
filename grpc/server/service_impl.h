@@ -44,7 +44,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <atomic>
 #include <mutex>
 
-namespace container_grpc {
+namespace kcenon::container_grpc {
 
 /**
  * @class container_service_impl
@@ -137,4 +137,4 @@ private:
     std::atomic<int64_t> messages_received_{0};
 };
 
-} // namespace container_grpc
+} // namespace kcenon::container_grpc

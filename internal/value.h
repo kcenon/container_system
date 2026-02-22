@@ -21,7 +21,7 @@ All rights reserved.
 #include <type_traits>
 #include <concepts>
 
-namespace container_module
+namespace kcenon::container
 {
     // Forward declarations
     class thread_safe_container;
@@ -355,4 +355,4 @@ namespace container_module
     template<typename T>
     inline constexpr bool is_variant_type_v2_v = is_variant_type_v2<T>::value;
 
-} // namespace container_module
+} // namespace kcenon::container

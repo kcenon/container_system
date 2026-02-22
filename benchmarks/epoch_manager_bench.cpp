@@ -42,7 +42,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <vector>
 #include <atomic>
 
-using namespace container_module;
+using namespace kcenon::container;
 
 static void BM_EpochEnterExit(benchmark::State& state)
 {

@@ -50,8 +50,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <iostream>
 #include <algorithm>
 
-using namespace container_module;
-using namespace container_module::testing;
+using namespace kcenon::container;
+using namespace kcenon::container::testing;
 
 class SerializationPerformanceTest : public ContainerSystemFixture
 {

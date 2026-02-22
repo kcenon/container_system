@@ -12,7 +12,7 @@
 #include <utility>
 #include <concepts>
 
-namespace container_module::core {
+namespace kcenon::container::core {
 
 /**
  * @brief Lightweight container enforcing trivially copyable payloads.
@@ -32,7 +32,7 @@ namespace container_module::core {
  *
  * @see Issue #320, #328 for the rename rationale
  */
-template<container_module::concepts::TriviallyCopyable TValue>
+template<kcenon::container::concepts::TriviallyCopyable TValue>
 class simd_batch {
 
 public:
@@ -70,7 +70,7 @@ private:
  * @brief Deprecated alias for simd_batch
  * @deprecated Use simd_batch instead. This alias will be removed in the next major version.
  */
-template<container_module::concepts::TriviallyCopyable TValue>
+template<kcenon::container::concepts::TriviallyCopyable TValue>
 using typed_container [[deprecated("Use simd_batch instead. See Issue #328.")]] = simd_batch<TValue>;
 
-} // namespace container_module::core
+} // namespace kcenon::container::core

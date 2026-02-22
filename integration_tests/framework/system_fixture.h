@@ -40,7 +40,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <vector>
 #include <chrono>
 
-namespace container_module
+namespace kcenon::container
 {
 namespace testing
 {
@@ -218,4 +218,4 @@ protected:
 };
 
 } // namespace testing
-} // namespace container_module
+} // namespace kcenon::container

@@ -49,7 +49,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <vector>
 #include <cstdint>
 
-namespace container_module
+namespace kcenon::container
 {
 	// Forward declaration of main container class
 	class value_container;
@@ -90,4 +90,12 @@ namespace container_module
 	/// @brief Shared pointer to message_buffer (preferred name)
 	using message_buffer_ptr = std::shared_ptr<message_buffer>;
 
-} // namespace container_module
+} // namespace kcenon::container
+
+// =======================================================================
+// Backward-Compatibility Namespace Alias (Issue #380, Phase 1)
+// Temporary alias for one release cycle to ease migration.
+// Downstream code using `container_module::` will continue to compile.
+// Remove after all downstream systems have migrated to kcenon::container.
+// =======================================================================
+namespace container_module = kcenon::container;

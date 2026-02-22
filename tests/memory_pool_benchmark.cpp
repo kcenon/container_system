@@ -48,7 +48,7 @@
 #include <algorithm>
 #include <cstring>
 
-using namespace container_module::internal;
+using namespace kcenon::container::internal;
 
 // ============================================================================
 // Basic Allocation Benchmarks

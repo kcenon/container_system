@@ -49,7 +49,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <string_view>
 #include <cstdio>
 
-namespace container_module
+namespace kcenon::container
 {
 	/**
 	 * @brief Helper functions for variant value manipulation
@@ -240,4 +240,4 @@ namespace container_module
 		}
 	} // namespace variant_helpers
 
-} // namespace container_module
+} // namespace kcenon::container

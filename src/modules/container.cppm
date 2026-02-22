@@ -14,7 +14,7 @@
  * @code
  * import kcenon.container;
  *
- * using namespace container_module;
+ * using namespace kcenon::container;
  *
  * value_container container;
  * container.set("name", std::string("value"));
@@ -64,7 +64,7 @@ export import kcenon.common;
 // Exported Container Module Types
 // =============================================================================
 
-export namespace container_module {
+export namespace kcenon::container {
 
 // =============================================================================
 // Value Types Enumeration
@@ -599,4 +599,4 @@ struct module_version {
     static constexpr const char* module_name = "kcenon.container";
 };
 
-} // namespace container_module
+} // namespace kcenon::container

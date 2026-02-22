@@ -47,7 +47,7 @@
 #include "integration/messaging_integration.h"
 #endif
 
-using namespace container_module;
+using namespace kcenon::container;
 
 class PerformanceTest : public ::testing::Test {
 protected:

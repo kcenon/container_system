@@ -48,7 +48,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // Unified Result<T> integration (Issue #335)
 #include "../container/result_integration.h"
 
-namespace container_module
+namespace kcenon::container
 {
 	// Forward declaration
 	class value_container;
@@ -119,4 +119,4 @@ namespace container_module
 		serializer_strategy& operator=(serializer_strategy&&) = default;
 	};
 
-} // namespace container_module
+} // namespace kcenon::container

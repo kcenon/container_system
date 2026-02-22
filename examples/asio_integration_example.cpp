@@ -67,7 +67,7 @@
 #include "internal/async/async.h"
 #endif
 
-using namespace container_module;
+using namespace kcenon::container;
 
 /**
  * @brief Helper to print section headers
@@ -339,7 +339,7 @@ void demonstrate_message_queue() {
 
 #if CONTAINER_HAS_COROUTINES && (defined(HAS_STANDALONE_ASIO) || defined(HAS_BOOST_ASIO))
 
-using namespace container_module::async;
+using namespace kcenon::container::async;
 
 /**
  * @brief Demonstrate mixing container coroutines with Asio

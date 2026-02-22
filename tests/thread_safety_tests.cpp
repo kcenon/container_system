@@ -20,7 +20,7 @@ All rights reserved.
 #include <algorithm>
 #include <random>
 
-using namespace container_module;
+using namespace kcenon::container;
 using namespace std::chrono_literals;
 
 class ContainerThreadSafetyTest : public ::testing::Test {

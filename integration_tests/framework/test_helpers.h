@@ -44,7 +44,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <cstdlib>
 #include <algorithm>
 
-namespace container_module
+namespace kcenon::container
 {
 namespace testing
 {
@@ -432,4 +432,4 @@ public:
 };
 
 } // namespace testing
-} // namespace container_module
+} // namespace kcenon::container

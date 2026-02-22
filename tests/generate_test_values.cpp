@@ -32,7 +32,7 @@
 #include <memory>
 #include <vector>
 
-using namespace container_module;
+using namespace kcenon::container;
 
 int main() {
     std::cout << "Generating individual value test files..." << std::endl;

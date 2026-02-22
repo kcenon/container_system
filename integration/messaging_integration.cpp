@@ -34,7 +34,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <sstream>
 #include <iomanip>
 
-namespace container_module::integration {
+namespace kcenon::container::integration {
 
 #ifdef HAS_PERFORMANCE_METRICS
 messaging_integration::metrics messaging_integration::metrics_;
@@ -274,4 +274,4 @@ void container_performance_monitor::set_result_size(size_t size) {
 }
 #endif // HAS_PERFORMANCE_METRICS
 
-} // namespace container_module::integration
+} // namespace kcenon::container::integration

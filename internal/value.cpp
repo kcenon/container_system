@@ -13,7 +13,7 @@ All rights reserved.
 #include <stdexcept>
 #include <set>
 
-namespace container_module
+namespace kcenon::container
 {
     namespace detail {
         // Thread-local set for detecting circular references during serialization
@@ -335,7 +335,7 @@ namespace container_module
                         result.insert(result.end(), elem_data.begin(), elem_data.end());
                     } else {
                         // Null element: serialize as null_value with empty name
-                        container_module::value null_elem("");
+                        kcenon::container::value null_elem("");
                         auto null_data = null_elem.serialize();
                         result.insert(result.end(), null_data.begin(), null_data.end());
                     }
@@ -590,7 +590,7 @@ namespace container_module
         }
 
         // Create result with name
-        container_module::value result(name);
+        kcenon::container::value result(name);
 
         // Deserialize data based on type
         if (!deserialize_data(result, type, data, offset)) {
@@ -613,4 +613,4 @@ namespace container_module
         return data_ < other.data_;
     }
 
-} // namespace container_module
+} // namespace kcenon::container

@@ -50,7 +50,7 @@
 #include <type_traits>
 #include <utility>
 
-namespace container_module::internal {
+namespace kcenon::container::internal {
 
 /**
  * @brief Size class thresholds for pool allocation
@@ -263,4 +263,4 @@ inline constexpr int get_size_class(std::size_t size) noexcept {
     return 2;
 }
 
-} // namespace container_module::internal
+} // namespace kcenon::container::internal

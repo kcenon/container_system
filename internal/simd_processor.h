@@ -80,7 +80,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     #include <arm_neon.h>
 #endif
 
-namespace container_module
+namespace kcenon::container
 {
 namespace simd
 {
@@ -340,4 +340,4 @@ namespace simd
     #endif
 
 } // namespace simd
-} // namespace container_module
+} // namespace kcenon::container

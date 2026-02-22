@@ -49,7 +49,7 @@
 #include <random>
 #include <chrono>
 
-using namespace container_module::internal;
+using namespace kcenon::container::internal;
 
 // Test fixture for memory pool tests
 class MemoryPoolTest : public ::testing::Test {
@@ -537,7 +537,7 @@ TEST_F(MemoryPoolTest, ManyBlocksPerChunk) {
 #include <internal/pool_allocator.h>
 #include <core/container.h>
 
-using namespace container_module::internal;
+using namespace kcenon::container::internal;
 
 class PoolAllocatorTest : public ::testing::Test {
 protected:
@@ -637,7 +637,7 @@ TEST_F(PoolAllocatorTest, HitRateCalculation) {
 }
 
 TEST_F(PoolAllocatorTest, ContainerPoolStats) {
-    using namespace container_module;
+    using namespace kcenon::container;
 
     // Clear any previous stats
     value_container::clear_pool();

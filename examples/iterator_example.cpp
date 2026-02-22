@@ -42,7 +42,7 @@
 #include <iostream>
 #include <numeric>
 
-using namespace container_module;
+using namespace kcenon::container;
 
 void demonstrate_range_based_for()
 {

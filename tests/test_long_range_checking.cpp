@@ -20,7 +20,7 @@ All rights reserved.
 #include <limits>
 #include <cstdint>
 
-using namespace container_module;
+using namespace kcenon::container;
 
 // ============================================================================
 // Test Fixture

@@ -28,7 +28,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #pragma once
-namespace container_module {
+namespace kcenon::container {
 template<typename Container>
 inline void reserve_if_possible(Container& c, size_t size) {
     if constexpr (requires { c.reserve(size); }) {

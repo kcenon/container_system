@@ -35,7 +35,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "utilities/core/convert_string.h"
 #include "utilities/core/formatter.h"
 
-namespace container_module
+namespace kcenon::container
 {
 
 namespace
@@ -162,4 +162,4 @@ std::string binary_serializer::serialize_to_string(const value_container& contai
 }
 #endif
 
-} // namespace container_module
+} // namespace kcenon::container
