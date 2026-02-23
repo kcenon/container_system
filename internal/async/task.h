@@ -48,7 +48,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * }
  * @endcode
  *
- * @see container_module::async::task
+ * @see kcenon::container::async::task
  */
 
 #pragma once
@@ -61,7 +61,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <variant>
 #include <atomic>
 
-namespace container_module::async
+namespace kcenon::container::async
 {
     /**
      * @brief Forward declaration of task
@@ -449,4 +449,4 @@ namespace container_module::async
         co_return;
     }
 
-} // namespace container_module::async
+} // namespace kcenon::container::async

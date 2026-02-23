@@ -39,12 +39,12 @@
  * #include <container.h>
  *
  * // Create a message buffer (preferred name for serializable containers)
- * container_module::message_buffer msg;
+ * kcenon::container::message_buffer msg;
  * msg.set("name", "Alice");
  * msg.set("age", 30);
  *
  * // value_container is still supported (legacy name)
- * container_module::value_container container;  // Same as message_buffer
+ * kcenon::container::value_container container;  // Same as message_buffer
  * @endcode
  *
  * @note Since v2.0.0, `message_buffer` is the preferred name for `value_container`.

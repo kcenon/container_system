@@ -38,7 +38,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <functional>
 #include <mutex>
 
-namespace container_module
+namespace kcenon::container
 {
     /**
      * @brief Epoch-based memory reclamation for lock-free data structures
@@ -347,4 +347,4 @@ namespace container_module
         epoch_guard& operator=(epoch_guard&&) = delete;
     };
 
-} // namespace container_module
+} // namespace kcenon::container

@@ -51,7 +51,7 @@
 
 namespace {
 
-using namespace container_module;
+using namespace kcenon::container;
 
 /**
  * @brief Verifies that fast_parser.h includes resolve correctly

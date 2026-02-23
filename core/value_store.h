@@ -43,7 +43,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <atomic>
 #include <unordered_map>
 
-namespace container_module {
+namespace kcenon::container {
 
 /**
  * @brief Domain-agnostic value storage
@@ -203,4 +203,4 @@ private:
     mutable std::atomic<size_t> write_count_{0};
 };
 
-} // namespace container_module
+} // namespace kcenon::container

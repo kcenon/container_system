@@ -51,7 +51,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * }
  * @endcode
  *
- * @see container_module::async::async_container
+ * @see kcenon::container::async::async_container
  */
 
 #pragma once
@@ -72,7 +72,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <thread>
 #include <vector>
 
-namespace container_module::async
+namespace kcenon::container::async
 {
     /**
      * @brief Progress callback type for async file operations
@@ -622,7 +622,7 @@ namespace container_module::async
     inline task<kcenon::common::VoidResult>
         async_container::load_async(std::string_view path, progress_callback callback)
     {
-        using namespace container_module;
+        using namespace kcenon::container;
         auto container = container_;
         std::string path_str(path);
         auto result = co_await detail::make_async_awaitable(
@@ -631,9 +631,9 @@ namespace container_module::async
                 if (!file) {
                     return kcenon::common::VoidResult(
                         kcenon::common::error_info{
-                            container_module::error_codes::file_not_found,
-                            container_module::error_codes::make_message(
-                                container_module::error_codes::file_not_found, path_str),
+                            kcenon::container::error_codes::file_not_found,
+                            kcenon::container::error_codes::make_message(
+                                kcenon::container::error_codes::file_not_found, path_str),
                             "container_system"});
                 }
 
@@ -641,9 +641,9 @@ namespace container_module::async
                 if (size < 0) {
                     return kcenon::common::VoidResult(
                         kcenon::common::error_info{
-                            container_module::error_codes::file_read_error,
-                            container_module::error_codes::make_message(
-                                container_module::error_codes::file_read_error, path_str),
+                            kcenon::container::error_codes::file_read_error,
+                            kcenon::container::error_codes::make_message(
+                                kcenon::container::error_codes::file_read_error, path_str),
                             "container_system"});
                 }
                 file.seekg(0, std::ios::beg);
@@ -660,9 +660,9 @@ namespace container_module::async
                     if (!file) {
                         return kcenon::common::VoidResult(
                             kcenon::common::error_info{
-                                container_module::error_codes::file_read_error,
-                                container_module::error_codes::make_message(
-                                    container_module::error_codes::file_read_error, path_str),
+                                kcenon::container::error_codes::file_read_error,
+                                kcenon::container::error_codes::make_message(
+                                    kcenon::container::error_codes::file_read_error, path_str),
                                 "container_system"});
                     }
                     bytes_read += to_read;
@@ -697,9 +697,9 @@ namespace container_module::async
                 if (!file) {
                     return kcenon::common::VoidResult(
                         kcenon::common::error_info{
-                            container_module::error_codes::file_write_error,
-                            container_module::error_codes::make_message(
-                                container_module::error_codes::file_write_error, path_str),
+                            kcenon::container::error_codes::file_write_error,
+                            kcenon::container::error_codes::make_message(
+                                kcenon::container::error_codes::file_write_error, path_str),
                             "container_system"});
                 }
 
@@ -714,9 +714,9 @@ namespace container_module::async
                     if (!file) {
                         return kcenon::common::VoidResult(
                             kcenon::common::error_info{
-                                container_module::error_codes::file_write_error,
-                                container_module::error_codes::make_message(
-                                    container_module::error_codes::file_write_error, path_str),
+                                kcenon::container::error_codes::file_write_error,
+                                kcenon::container::error_codes::make_message(
+                                    kcenon::container::error_codes::file_write_error, path_str),
                                 "container_system"});
                     }
                     bytes_written += to_write;
@@ -740,9 +740,9 @@ namespace container_module::async
                 if (!file) {
                     return kcenon::common::Result<std::vector<uint8_t>>(
                         kcenon::common::error_info{
-                            container_module::error_codes::file_not_found,
-                            container_module::error_codes::make_message(
-                                container_module::error_codes::file_not_found, path_str),
+                            kcenon::container::error_codes::file_not_found,
+                            kcenon::container::error_codes::make_message(
+                                kcenon::container::error_codes::file_not_found, path_str),
                             "container_system"});
                 }
 
@@ -750,9 +750,9 @@ namespace container_module::async
                 if (size < 0) {
                     return kcenon::common::Result<std::vector<uint8_t>>(
                         kcenon::common::error_info{
-                            container_module::error_codes::file_read_error,
-                            container_module::error_codes::make_message(
-                                container_module::error_codes::file_read_error, path_str),
+                            kcenon::container::error_codes::file_read_error,
+                            kcenon::container::error_codes::make_message(
+                                kcenon::container::error_codes::file_read_error, path_str),
                             "container_system"});
                 }
                 file.seekg(0, std::ios::beg);
@@ -769,9 +769,9 @@ namespace container_module::async
                     if (!file) {
                         return kcenon::common::Result<std::vector<uint8_t>>(
                             kcenon::common::error_info{
-                                container_module::error_codes::file_read_error,
-                                container_module::error_codes::make_message(
-                                    container_module::error_codes::file_read_error, path_str),
+                                kcenon::container::error_codes::file_read_error,
+                                kcenon::container::error_codes::make_message(
+                                    kcenon::container::error_codes::file_read_error, path_str),
                                 "container_system"});
                     }
                     bytes_read += to_read;
@@ -798,9 +798,9 @@ namespace container_module::async
                 if (!file) {
                     return kcenon::common::VoidResult(
                         kcenon::common::error_info{
-                            container_module::error_codes::file_write_error,
-                            container_module::error_codes::make_message(
-                                container_module::error_codes::file_write_error, path_str),
+                            kcenon::container::error_codes::file_write_error,
+                            kcenon::container::error_codes::make_message(
+                                kcenon::container::error_codes::file_write_error, path_str),
                             "container_system"});
                 }
 
@@ -815,9 +815,9 @@ namespace container_module::async
                     if (!file) {
                         return kcenon::common::VoidResult(
                             kcenon::common::error_info{
-                                container_module::error_codes::file_write_error,
-                                container_module::error_codes::make_message(
-                                    container_module::error_codes::file_write_error, path_str),
+                                kcenon::container::error_codes::file_write_error,
+                                kcenon::container::error_codes::make_message(
+                                    kcenon::container::error_codes::file_write_error, path_str),
                                 "container_system"});
                     }
                     bytes_written += to_write;
@@ -870,9 +870,9 @@ namespace container_module::async
             // Return an error indicating more data is needed
             co_return kcenon::common::Result<std::shared_ptr<value_container>>(
                 kcenon::common::error_info{
-                    container_module::error_codes::deserialization_failed,
-                    container_module::error_codes::make_message(
-                        container_module::error_codes::deserialization_failed,
+                    kcenon::container::error_codes::deserialization_failed,
+                    kcenon::container::error_codes::make_message(
+                        kcenon::container::error_codes::deserialization_failed,
                         "streaming requires complete data (is_final=true)"),
                     "container_system"});
         }
@@ -1151,4 +1151,4 @@ namespace container_module::async
 
 #endif
 
-} // namespace container_module::async
+} // namespace kcenon::container::async

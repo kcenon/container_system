@@ -51,8 +51,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <limits>
 #include <stdexcept>
 
-using namespace container_module;
-using namespace container_module::testing;
+using namespace kcenon::container;
+using namespace kcenon::container::testing;
 
 class ErrorHandlingTest : public ContainerSystemFixture
 {

@@ -50,7 +50,7 @@
 #include <cmath>
 #include <limits>
 
-using namespace container_module::simd;
+using namespace kcenon::container::simd;
 
 // ============================================================================
 // Scalar Policy Tests (Baseline)

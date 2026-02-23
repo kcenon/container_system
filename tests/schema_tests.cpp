@@ -47,7 +47,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "test_compat.h"
 #include <core/container/schema.h>
 
-using namespace container_module;
+using namespace kcenon::container;
 
 // ============================================================================
 // Test Fixture

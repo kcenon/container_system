@@ -42,7 +42,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <core/serializers/serializer_strategy.h>
 #include <container.h>
 
-using namespace container_module;
+using namespace kcenon::container;
 
 // =============================================================================
 // serialization_format enum tests

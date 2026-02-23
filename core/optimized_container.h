@@ -11,7 +11,7 @@ All rights reserved.
 #include <string_view>
 #include <unordered_map>
 
-namespace container_module {
+namespace kcenon::container {
 
 /**
  * @class optimized_container
@@ -283,4 +283,4 @@ private:
     std::unordered_map<std::string, std::vector<std::shared_ptr<value>>> value_index_;
 };
 
-} // namespace container_module
+} // namespace kcenon::container

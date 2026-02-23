@@ -53,7 +53,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <fstream>
 #include <unordered_set>
 
-namespace container_module
+namespace kcenon::container
 {
 	// Use integer constants instead of string_view to ensure cross-platform compatibility
 	// with fmt library formatting. Linux fmt has issues with string_view arguments.
@@ -1588,7 +1588,7 @@ void value_container::clear_validation_errors() noexcept
 		}
 
 		// Convert internal format enum to serializer format enum
-		auto serializer_fmt = static_cast<container_module::serialization_format>(
+		auto serializer_fmt = static_cast<kcenon::container::serialization_format>(
 			static_cast<int>(fmt));
 
 		// Use serializer factory to create appropriate serializer
@@ -2264,4 +2264,4 @@ void value_container::clear_validation_errors() noexcept
 			target_variable = std::string(target_value.substr(start, end - start + 1));
 		}
 	}
-} // namespace container_module
+} // namespace kcenon::container

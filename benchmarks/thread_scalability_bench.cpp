@@ -44,7 +44,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <string>
 #include <vector>
 
-using namespace container_module;
+using namespace kcenon::container;
 
 // =============================================================================
 // Container creation scaling

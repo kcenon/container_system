@@ -48,7 +48,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <functional>
 #include <optional>
 
-namespace container_grpc {
+namespace kcenon::container_grpc {
 
 /**
  * @brief Configuration for gRPC client
@@ -77,7 +77,7 @@ struct client_result {
  * @brief Callback type for streaming responses
  */
 using stream_callback = std::function<void(
-    std::shared_ptr<container_module::value_container>)>;
+    std::shared_ptr<kcenon::container::value_container>)>;
 
 /**
  * @class grpc_client
@@ -88,9 +88,9 @@ using stream_callback = std::function<void(
  *
  * Example usage:
  * @code
- *   container_grpc::grpc_client client("localhost:50051");
+ *   kcenon::container_grpc::grpc_client client("localhost:50051");
  *
- *   auto container = std::make_shared<container_module::value_container>();
+ *   auto container = std::make_shared<kcenon::container::value_container>();
  *   container->set_message_type("request");
  *   container->add_value("count", 42);
  *
@@ -158,16 +158,16 @@ public:
      * @param container Container to send
      * @return Result containing response container or error
      */
-    client_result<std::shared_ptr<container_module::value_container>>
-    send(std::shared_ptr<container_module::value_container> container);
+    client_result<std::shared_ptr<kcenon::container::value_container>>
+    send(std::shared_ptr<kcenon::container::value_container> container);
 
     /**
      * @brief Process a container (simple unary call)
      * @param container Container to process
      * @return Result containing processed container or error
      */
-    client_result<std::shared_ptr<container_module::value_container>>
-    process(std::shared_ptr<container_module::value_container> container);
+    client_result<std::shared_ptr<kcenon::container::value_container>>
+    process(std::shared_ptr<kcenon::container::value_container> container);
 
     // =========================================================================
     // Streaming Operations
@@ -180,7 +180,7 @@ public:
      * @return true if streaming started successfully
      */
     bool stream(
-        std::shared_ptr<container_module::value_container> request,
+        std::shared_ptr<kcenon::container::value_container> request,
         stream_callback callback);
 
     /**
@@ -188,9 +188,9 @@ public:
      * @param containers Containers to send
      * @return Result containing batch response
      */
-    client_result<std::vector<std::shared_ptr<container_module::value_container>>>
+    client_result<std::vector<std::shared_ptr<kcenon::container::value_container>>>
     send_batch(
-        const std::vector<std::shared_ptr<container_module::value_container>>& containers);
+        const std::vector<std::shared_ptr<kcenon::container::value_container>>& containers);
 
     // =========================================================================
     // Status and Health
@@ -213,4 +213,4 @@ private:
     std::unique_ptr<impl> impl_;
 };
 
-} // namespace container_grpc
+} // namespace kcenon::container_grpc

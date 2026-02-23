@@ -45,7 +45,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <memory>
 
-namespace container_module
+namespace kcenon::container
 {
 
 	/**
@@ -88,4 +88,4 @@ namespace container_module
 		serializer_factory() = delete;
 	};
 
-} // namespace container_module
+} // namespace kcenon::container

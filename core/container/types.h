@@ -54,7 +54,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <cstdint>
 #include <memory>
 
-namespace container_module
+namespace kcenon::container
 {
 	// Forward declaration
 	class value_container;
@@ -154,4 +154,4 @@ namespace container_module
 		}
 	};
 
-} // namespace container_module
+} // namespace kcenon::container

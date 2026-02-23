@@ -50,8 +50,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <memory>
 #include <thread>
 
-using namespace container_grpc;
-using namespace container_module;
+using namespace kcenon::container_grpc;
+using namespace kcenon::container;
 
 /**
  * Test fixture for gRPC service integration tests

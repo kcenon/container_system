@@ -47,7 +47,7 @@
 #include <sstream>
 #include <cstring>
 
-using namespace container_module;
+using namespace kcenon::container;
 
 // Helper function to generate random string
 std::string generate_random_string(size_t length) {

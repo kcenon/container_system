@@ -103,7 +103,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     #include <arm_neon.h>
 #endif
 
-namespace container_module::simd {
+namespace kcenon::container::simd {
 
 /**
  * @brief Concept for SIMD policy classes.
@@ -712,4 +712,4 @@ static_assert(SimdPolicy<avx512_simd_policy>, "avx512_simd_policy must satisfy S
 static_assert(SimdPolicy<neon_simd_policy>, "neon_simd_policy must satisfy SimdPolicy");
 #endif
 
-} // namespace container_module::simd
+} // namespace kcenon::container::simd

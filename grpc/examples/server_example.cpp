@@ -72,11 +72,11 @@ void signal_handler(int signal) {
  * - Create a response container
  * - Add processed values to response
  */
-std::shared_ptr<container_module::value_container> echo_processor(
-    std::shared_ptr<container_module::value_container> request) {
+std::shared_ptr<kcenon::container::value_container> echo_processor(
+    std::shared_ptr<kcenon::container::value_container> request) {
 
     // Create response container
-    auto response = std::make_shared<container_module::value_container>();
+    auto response = std::make_shared<kcenon::container::value_container>();
 
     // Swap source and target for response
     response->set_source(request->target_id(), request->target_sub_id());
@@ -86,7 +86,7 @@ std::shared_ptr<container_module::value_container> echo_processor(
     // Echo back all values with "echo_" prefix
     auto values = request->get_variant_values();
     for (const auto& val : values) {
-        container_module::optimized_value echo_val;
+        kcenon::container::optimized_value echo_val;
         echo_val.name = "echo_" + val.name;
         echo_val.type = val.type;
         echo_val.data = val.data;
@@ -133,12 +133,12 @@ int main(int argc, char* argv[]) {
     std::cout << "Starting server on " << address << "..." << std::endl;
 
     // Create server with configuration
-    container_grpc::server_config config;
+    kcenon::container_grpc::server_config config;
     config.address = address;
     config.max_receive_message_size = 64 * 1024 * 1024;  // 64MB
     config.max_send_message_size = 64 * 1024 * 1024;     // 64MB
 
-    container_grpc::grpc_server server(config);
+    kcenon::container_grpc::grpc_server server(config);
 
     // Set custom processor
     server.set_processor(echo_processor);

@@ -52,7 +52,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * }
  * @endcode
  *
- * @see container_module::value_container
+ * @see kcenon::container::value_container
  * @since 2.0.0
  */
 
@@ -79,7 +79,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define SCHEMA_HAS_COMMON_RESULT CONTAINER_HAS_RESULT
 #endif
 
-namespace container_module
+namespace kcenon::container
 {
 	// Forward declarations
 	class value_container;
@@ -621,4 +621,4 @@ namespace container_module
 		std::vector<field_def> fields_;  ///< Field definitions
 	};
 
-} // namespace container_module
+} // namespace kcenon::container

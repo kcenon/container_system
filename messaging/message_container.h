@@ -40,7 +40,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <string_view>
 #include <vector>
 
-namespace container_module {
+namespace kcenon::container {
 
 /**
  * @brief Messaging-specific container
@@ -242,4 +242,4 @@ private:
     value_store payload_;
 };
 
-} // namespace container_module
+} // namespace kcenon::container

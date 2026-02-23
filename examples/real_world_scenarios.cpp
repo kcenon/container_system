@@ -44,7 +44,7 @@
 
 #include "container.h"
 
-using namespace container_module;
+using namespace kcenon::container;
 
 /**
  * @brief Real-world scenarios demonstrating practical usage of the container system

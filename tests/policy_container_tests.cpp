@@ -48,8 +48,8 @@
 #include <chrono>
 #include <random>
 
-using namespace container_module;
-using namespace container_module::policy;
+using namespace kcenon::container;
+using namespace kcenon::container::policy;
 
 // ============================================================================
 // Basic Container Tests (Dynamic Storage)

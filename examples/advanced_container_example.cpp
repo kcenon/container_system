@@ -41,7 +41,7 @@
 
 #include "container.h"
 
-using namespace container_module;
+using namespace kcenon::container;
 
 /**
  * @brief Advanced Container System Example

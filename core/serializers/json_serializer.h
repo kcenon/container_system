@@ -42,7 +42,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "serializer_strategy.h"
 
-namespace container_module
+namespace kcenon::container
 {
 
 	/**
@@ -99,4 +99,4 @@ namespace container_module
 		}
 	};
 
-} // namespace container_module
+} // namespace kcenon::container

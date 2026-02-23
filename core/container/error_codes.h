@@ -32,7 +32,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 /**
  * @file core/container/error_codes.h
- * @brief Standardized error codes for container_module Result<T> pattern
+ * @brief Standardized error codes for kcenon::container Result<T> pattern
  *
  * This header defines comprehensive error codes organized by category:
  * - Value operations (1xx): key_not_found, type_mismatch, etc.
@@ -41,7 +41,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * - Resource (4xx): memory_allocation_failed, file errors, etc.
  * - Thread safety (5xx): lock_acquisition_failed, concurrent_modification
  *
- * @see container_module::value_container
+ * @see kcenon::container::value_container
  * @since 2.0.0
  */
 
@@ -50,7 +50,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <string_view>
 #include <string>
 
-namespace container_module
+namespace kcenon::container
 {
 	/**
 	 * @brief Standardized error codes for container operations
@@ -327,4 +327,4 @@ namespace container_module
 
 	} // namespace error_codes
 
-} // namespace container_module
+} // namespace kcenon::container

@@ -11,7 +11,7 @@
 #include <thread>
 #include "container.h"
 
-using namespace container_module;
+using namespace kcenon::container;
 
 class performance_benchmark {
 public:

@@ -35,7 +35,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "../container/variant_helpers.h"
 #include "utilities/core/formatter.h"
 
-namespace container_module
+namespace kcenon::container
 {
 
 #if CONTAINER_HAS_RESULT
@@ -136,4 +136,4 @@ std::string json_serializer::serialize_to_string(const value_container& containe
 }
 #endif
 
-} // namespace container_module
+} // namespace kcenon::container

@@ -12,7 +12,7 @@
 #include <mutex>
 #include "container.h"
 
-using namespace container_module;
+using namespace kcenon::container;
 
 int main() {
     std::cout << "=== Container System - Thread Safety Example ===" << std::endl;

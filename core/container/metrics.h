@@ -32,7 +32,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 /**
  * @file core/container/metrics.h
- * @brief Detailed observability metrics for container_module
+ * @brief Detailed observability metrics for kcenon::container
  *
  * This header defines comprehensive metrics structures for monitoring
  * container operations, including:
@@ -41,7 +41,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * - Latency histograms (P50, P95, P99, P999)
  * - SIMD and cache efficiency metrics
  *
- * @see container_module::value_container
+ * @see kcenon::container::value_container
  * @since 2.1.0
  */
 
@@ -55,7 +55,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <algorithm>
 #include <mutex>
 
-namespace container_module
+namespace kcenon::container
 {
 	/**
 	 * @brief Operation counter metrics for container operations
@@ -692,4 +692,4 @@ namespace container_module
 		static inline std::atomic<bool> enabled_{false};
 	};
 
-} // namespace container_module
+} // namespace kcenon::container

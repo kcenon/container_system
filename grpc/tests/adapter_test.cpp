@@ -34,7 +34,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * @file adapter_test.cpp
  * @brief Unit tests for container_adapter conversion layer
  *
- * Tests verify bidirectional conversion between container_module types
+ * Tests verify bidirectional conversion between kcenon::container types
  * and gRPC proto messages with data integrity preservation.
  */
 
@@ -51,8 +51,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <string>
 #include <vector>
 
-using namespace container_grpc;
-using namespace container_module;
+using namespace kcenon::container_grpc;
+using namespace kcenon::container;
 
 /**
  * Test fixture for container adapter tests

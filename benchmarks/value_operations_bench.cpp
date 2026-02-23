@@ -36,7 +36,7 @@
 #include <benchmark/benchmark.h>
 #include "core/container.h"
 
-using namespace container_module;
+using namespace kcenon::container;
 
 static void BM_Value_CreateString(benchmark::State& state) {
     for (auto _ : state) {

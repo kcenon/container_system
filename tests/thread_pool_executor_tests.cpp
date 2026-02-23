@@ -41,7 +41,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <chrono>
 #include <stdexcept>
 
-using namespace container_module::async;
+using namespace kcenon::container::async;
 using namespace std::chrono_literals;
 
 class ThreadPoolExecutorTest : public ::testing::Test {

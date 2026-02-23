@@ -21,7 +21,7 @@ All rights reserved.
 #include <filesystem>
 #include <fstream>
 
-using namespace container_module::async;
+using namespace kcenon::container::async;
 using namespace std::chrono_literals;
 
 class AsyncTaskTest : public ::testing::Test {
@@ -309,7 +309,7 @@ TEST_F(AsyncGeneratorTest, TakeGenerator) {
 class AsyncContainerTest : public ::testing::Test {
 protected:
     void SetUp() override {
-        container_ = std::make_shared<container_module::value_container>();
+        container_ = std::make_shared<kcenon::container::value_container>();
         container_->set("string_key", std::string("hello"));
         container_->set("int_key", static_cast<int64_t>(42));
         container_->set("double_key", 3.14);
@@ -319,7 +319,7 @@ protected:
         container_.reset();
     }
 
-    std::shared_ptr<container_module::value_container> container_;
+    std::shared_ptr<kcenon::container::value_container> container_;
 };
 
 TEST_F(AsyncContainerTest, SerializeAsyncReturnsValidData) {
@@ -363,7 +363,7 @@ TEST_F(AsyncContainerTest, SerializeStringAsyncReturnsValidData) {
 
 TEST_F(AsyncContainerTest, DeserializeAsyncRestoresData) {
     // First serialize using unified API
-    auto serialize_result = container_->serialize(container_module::value_container::serialization_format::binary);
+    auto serialize_result = container_->serialize(kcenon::container::value_container::serialization_format::binary);
     ASSERT_TRUE(serialize_result.is_ok());
     auto serialized = serialize_result.value();
     EXPECT_FALSE(serialized.empty());
@@ -401,7 +401,7 @@ TEST_F(AsyncContainerTest, DeserializeAsyncRestoresData) {
 
 TEST_F(AsyncContainerTest, DeserializeStringAsyncRestoresData) {
     // First serialize using unified API
-    auto serialize_result = container_->serialize_string(container_module::value_container::serialization_format::binary);
+    auto serialize_result = container_->serialize_string(kcenon::container::value_container::serialization_format::binary);
     ASSERT_TRUE(serialize_result.is_ok());
     auto serialized = serialize_result.value();
     EXPECT_FALSE(serialized.empty());
@@ -511,7 +511,7 @@ protected:
 };
 
 TEST_F(AsyncFileIOTest, SaveAndLoadAsync) {
-    auto container = std::make_shared<container_module::value_container>();
+    auto container = std::make_shared<kcenon::container::value_container>();
     container->set("test_key", std::string("test_value"));
     container->set("int_key", static_cast<int64_t>(12345));
 
@@ -576,7 +576,7 @@ TEST_F(AsyncFileIOTest, LoadAsyncFileNotFound) {
     auto result = load_task.get();
 #if CONTAINER_HAS_COMMON_RESULT
     EXPECT_FALSE(result.is_ok());
-    EXPECT_EQ(result.error().code, container_module::error_codes::file_not_found);
+    EXPECT_EQ(result.error().code, kcenon::container::error_codes::file_not_found);
 #else
     EXPECT_FALSE(result);
 #endif
@@ -637,7 +637,7 @@ TEST_F(AsyncFileIOTest, WriteFileAsync) {
 }
 
 TEST_F(AsyncFileIOTest, ProgressCallbackCalled) {
-    auto container = std::make_shared<container_module::value_container>();
+    auto container = std::make_shared<kcenon::container::value_container>();
     // Create container with some data
     for (int i = 0; i < 100; ++i) {
         container->set("key_" + std::to_string(i),
@@ -676,7 +676,7 @@ TEST_F(AsyncFileIOTest, ProgressCallbackCalled) {
 }
 
 TEST_F(AsyncFileIOTest, RoundTripLargeFile) {
-    auto container = std::make_shared<container_module::value_container>();
+    auto container = std::make_shared<kcenon::container::value_container>();
     // Create container with substantial data
     // Note: Using smaller data size (10KB total) to avoid stack overflow in
     // std::regex under AddressSanitizer (regex uses backtracking which is
@@ -732,7 +732,7 @@ TEST_F(AsyncFileIOTest, RoundTripLargeFile) {
 class AsyncStreamingTest : public ::testing::Test {
 protected:
     void SetUp() override {
-        container_ = std::make_shared<container_module::value_container>();
+        container_ = std::make_shared<kcenon::container::value_container>();
         // Add some test data
         for (int i = 0; i < 100; ++i) {
             container_->set("key_" + std::to_string(i),
@@ -744,7 +744,7 @@ protected:
         container_.reset();
     }
 
-    std::shared_ptr<container_module::value_container> container_;
+    std::shared_ptr<kcenon::container::value_container> container_;
 };
 
 TEST_F(AsyncStreamingTest, SerializeChunkedBasic) {
@@ -768,7 +768,7 @@ TEST_F(AsyncStreamingTest, SerializeChunkedBasic) {
     EXPECT_FALSE(full_data.empty());
 
     // Verify the full data can be deserialized
-    auto restored = std::make_shared<container_module::value_container>(full_data, false);
+    auto restored = std::make_shared<kcenon::container::value_container>(full_data, false);
     EXPECT_TRUE(restored->contains("key_0"));
     EXPECT_TRUE(restored->contains("key_99"));
 }
@@ -794,7 +794,7 @@ TEST_F(AsyncStreamingTest, SerializeChunkedSmallChunks) {
     EXPECT_GT(chunk_count, 1u);
 
     // Verify data integrity
-    auto restored = std::make_shared<container_module::value_container>(full_data, false);
+    auto restored = std::make_shared<kcenon::container::value_container>(full_data, false);
     auto val = restored->get_value("key_50");
     ASSERT_TRUE(val.has_value());
     auto* str_ptr = std::get_if<std::string>(&val->data);
@@ -821,12 +821,12 @@ TEST_F(AsyncStreamingTest, SerializeChunkedLargeChunks) {
     EXPECT_EQ(chunk_count, 1u);
 
     // Verify data integrity
-    auto restored = std::make_shared<container_module::value_container>(full_data, false);
+    auto restored = std::make_shared<kcenon::container::value_container>(full_data, false);
     EXPECT_TRUE(restored->contains("key_0"));
 }
 
 TEST_F(AsyncStreamingTest, SerializeChunkedEmptyContainer) {
-    auto empty_container = std::make_shared<container_module::value_container>();
+    auto empty_container = std::make_shared<kcenon::container::value_container>();
     async_container async_cont(empty_container);
 
     auto gen = async_cont.serialize_chunked();
@@ -843,7 +843,7 @@ TEST_F(AsyncStreamingTest, SerializeChunkedEmptyContainer) {
 
 TEST_F(AsyncStreamingTest, DeserializeStreamingComplete) {
     // First serialize the container using unified API
-    auto serialize_result = container_->serialize(container_module::value_container::serialization_format::binary);
+    auto serialize_result = container_->serialize(kcenon::container::value_container::serialization_format::binary);
     ASSERT_TRUE(serialize_result.is_ok());
     auto serialized = serialize_result.value();
     EXPECT_FALSE(serialized.empty());
@@ -876,7 +876,7 @@ TEST_F(AsyncStreamingTest, DeserializeStreamingComplete) {
 
 TEST_F(AsyncStreamingTest, DeserializeStreamingIncomplete) {
     // First serialize the container using unified API
-    auto serialize_result = container_->serialize(container_module::value_container::serialization_format::binary);
+    auto serialize_result = container_->serialize(kcenon::container::value_container::serialization_format::binary);
     ASSERT_TRUE(serialize_result.is_ok());
     auto serialized = serialize_result.value();
     EXPECT_FALSE(serialized.empty());
@@ -893,7 +893,7 @@ TEST_F(AsyncStreamingTest, DeserializeStreamingIncomplete) {
 #if CONTAINER_HAS_COMMON_RESULT
     // Should return error because is_final=false
     EXPECT_FALSE(result.is_ok());
-    EXPECT_EQ(result.error().code, container_module::error_codes::deserialization_failed);
+    EXPECT_EQ(result.error().code, kcenon::container::error_codes::deserialization_failed);
 #else
     // Should return nullptr
     EXPECT_EQ(result, nullptr);
@@ -1093,7 +1093,7 @@ TEST(AsyncFeatureTest, CoroutinesSupportDetected) {
 
 // Placeholder test when coroutines are not available
 TEST(AsyncFeatureTest, CoroutinesNotAvailable) {
-    EXPECT_FALSE(container_module::async::has_coroutine_support);
+    EXPECT_FALSE(kcenon::container::async::has_coroutine_support);
 }
 
 #endif // CONTAINER_HAS_COROUTINES

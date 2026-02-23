@@ -71,7 +71,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <span>
 #include <type_traits>
 
-namespace container_module {
+namespace kcenon::container {
 
 /**
  * @class basic_value_container
@@ -633,4 +633,4 @@ static_assert(policy::StoragePolicy<policy::dynamic_storage_policy>,
 static_assert(policy::StoragePolicy<policy::indexed_storage_policy>,
     "indexed_storage_policy must satisfy StoragePolicy concept");
 
-} // namespace container_module
+} // namespace kcenon::container

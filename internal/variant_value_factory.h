@@ -17,7 +17,7 @@ All rights reserved.
 #include <type_traits>
 #include <concepts>
 
-namespace container_module
+namespace kcenon::container
 {
     // ============================================================================
     // Modern Factory API (Recommended)
@@ -422,4 +422,4 @@ namespace container_module
         }
     }
 
-} // namespace container_module
+} // namespace kcenon::container
