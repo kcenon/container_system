@@ -43,7 +43,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <atomic>
 #include <string>
 
-using namespace container_module;
+using namespace kcenon::container;
 
 static void BM_RcuValueReadSingleThread(benchmark::State& state)
 {

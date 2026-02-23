@@ -41,7 +41,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <algorithm>
 #include <cmath>
 
-namespace container_module
+namespace kcenon::container
 {
 	// =========================================================================
 	// Field Definition API
@@ -599,4 +599,4 @@ namespace container_module
 		return true;
 	}
 
-} // namespace container_module
+} // namespace kcenon::container

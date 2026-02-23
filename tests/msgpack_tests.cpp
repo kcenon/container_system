@@ -45,7 +45,7 @@
 #include <cstdint>
 #include <string>
 
-using namespace container_module;
+using namespace kcenon::container;
 
 // ============================================================================
 // MessagePack Encoder Tests

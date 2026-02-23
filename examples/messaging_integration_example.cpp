@@ -47,7 +47,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // Include the container system
 #include "container.h"
 
-using namespace container_module;
+using namespace kcenon::container;
 
 void demonstrate_basic_usage() {
     std::cout << "\n=== Basic Container Usage ===\n";

@@ -32,7 +32,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 /**
  * @file error_codes_tests.cpp
- * @brief Unit tests for container_module error codes and message mapping
+ * @brief Unit tests for kcenon::container error codes and message mapping
  *
  * Tests cover:
  * - Error code value verification
@@ -45,8 +45,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <gtest/gtest.h>
 #include <core/container/error_codes.h>
 
-using namespace container_module;
-using namespace container_module::error_codes;
+using namespace kcenon::container;
+using namespace kcenon::container::error_codes;
 
 // ============================================================================
 // Error Code Value Tests

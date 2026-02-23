@@ -50,7 +50,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * }
  * @endcode
  *
- * @see container_module::async::generator
+ * @see kcenon::container::async::generator
  */
 
 #pragma once
@@ -62,7 +62,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <type_traits>
 #include <memory>
 
-namespace container_module::async
+namespace kcenon::container::async
 {
     /**
      * @brief Forward declaration of generator
@@ -402,4 +402,4 @@ namespace container_module::async
         }
     }
 
-} // namespace container_module::async
+} // namespace kcenon::container::async

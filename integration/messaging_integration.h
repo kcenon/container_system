@@ -48,7 +48,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <unordered_map>
 #endif
 
-namespace container_module::integration {
+namespace kcenon::container::integration {
 
 /**
  * @brief Container integration manager for messaging systems
@@ -209,12 +209,12 @@ messaging_container_builder& messaging_container_builder::set(const std::string&
     return *this;
 }
 
-} // namespace container_module::integration
+} // namespace kcenon::container::integration
 
 // Convenience macros for performance monitoring
 #ifdef HAS_PERFORMANCE_METRICS
 #define CONTAINER_PERF_MONITOR(name) \
-    container_module::integration::container_performance_monitor _monitor(name)
+    kcenon::container::integration::container_performance_monitor _monitor(name)
 
 #define CONTAINER_PERF_SET_SIZE(size) \
     _monitor.set_container_size(size)

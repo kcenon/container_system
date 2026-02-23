@@ -62,7 +62,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <stdexcept>
 #include <optional>
 
-namespace container_module
+namespace kcenon::container
 {
 	/**
 	 * @brief MessagePack format type codes
@@ -985,7 +985,7 @@ namespace container_module
 		size_t offset_;
 	};
 
-} // namespace container_module
+} // namespace kcenon::container
 
 // Restore Windows macros
 #ifdef _WIN32

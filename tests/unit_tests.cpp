@@ -48,7 +48,7 @@
 #include <chrono>
 #include <barrier>
 
-using namespace container_module;
+using namespace kcenon::container;
 
 // Test fixture for value tests
 class ValueTest : public ::testing::Test {

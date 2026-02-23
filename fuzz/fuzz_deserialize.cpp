@@ -12,7 +12,7 @@
 
 #include "internal/value.h"
 
-using namespace container_module;
+using namespace kcenon::container;
 
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
     // Create input vector from fuzzer data

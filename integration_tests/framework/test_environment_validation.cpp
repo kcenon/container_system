@@ -45,7 +45,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <iostream>
 #include <cstdlib>
 
-using namespace container_module::testing;
+using namespace kcenon::container::testing;
 
 /**
  * @brief Test fixture for environment validation

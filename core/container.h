@@ -41,7 +41,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * #include <container.h>
  * @endcode
  *
- * @see container_module::value_container
+ * @see kcenon::container::value_container
  */
 
 #pragma once
@@ -75,7 +75,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <optional>
 #include <span>
 
-namespace container_module
+namespace kcenon::container
 {
 	// =======================================================================
 	// Unified Getter API Types (Issue #309)
@@ -1195,7 +1195,7 @@ namespace container_module
 	 *
 	 * @code
 	 * // Recommended usage:
-	 * container_module::message_buffer msg;
+	 * kcenon::container::message_buffer msg;
 	 * msg.set("name", "John");
 	 * auto bytes = msg.serialize(serialization_format::json);
 	 * @endcode
@@ -1205,4 +1205,4 @@ namespace container_module
 	 */
 	using message_buffer = value_container;
 
-} // namespace container_module
+} // namespace kcenon::container

@@ -48,7 +48,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <algorithm>
 #include <limits>
 
-namespace container_module
+namespace kcenon::container
 {
 namespace testing
 {
@@ -295,4 +295,4 @@ private:
 };
 
 } // namespace testing
-} // namespace container_module
+} // namespace kcenon::container

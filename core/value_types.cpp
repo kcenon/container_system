@@ -32,7 +32,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "value_types.h"
 
-namespace container_module
+namespace kcenon::container
 {
 	value_types convert_value_type(const std::string& target)
 	{
@@ -45,4 +45,4 @@ namespace container_module
 		// Use the constexpr function and convert to std::string
 		return std::string(get_string_from_type(target));
 	}
-} // namespace container_module
+} // namespace kcenon::container

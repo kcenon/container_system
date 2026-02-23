@@ -48,7 +48,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #endif
 #endif
 
-namespace container_module {
+namespace kcenon::container {
 
 // ============================================================================
 // Constructors
@@ -262,4 +262,4 @@ std::unique_ptr<message_container> message_container::deserialize_binary(const s
     return container;
 }
 
-} // namespace container_module
+} // namespace kcenon::container

@@ -36,7 +36,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "xml_serializer.h"
 #include "msgpack_serializer.h"
 
-namespace container_module
+namespace kcenon::container
 {
 
 std::unique_ptr<serializer_strategy>
@@ -80,4 +80,4 @@ bool serializer_factory::is_supported(serialization_format fmt) noexcept
 	}
 }
 
-} // namespace container_module
+} // namespace kcenon::container

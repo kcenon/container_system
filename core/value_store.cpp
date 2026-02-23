@@ -34,7 +34,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <stdexcept>
 #include <cstring>
 
-namespace container_module {
+namespace kcenon::container {
 
 void value_store::add(const std::string& key, value val) {
     // Always acquire lock to eliminate TOCTOU vulnerability (see #190)
@@ -255,4 +255,4 @@ void value_store::reset_statistics() {
     write_count_.store(0, std::memory_order_relaxed);
 }
 
-} // namespace container_module
+} // namespace kcenon::container

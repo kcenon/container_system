@@ -64,7 +64,7 @@ void print_usage(const char* program_name) {
               << "  " << program_name << " --target localhost:50051\n";
 }
 
-void print_container(const std::shared_ptr<container_module::value_container>& container,
+void print_container(const std::shared_ptr<kcenon::container::value_container>& container,
                      const std::string& label) {
     std::cout << "\n--- " << label << " ---" << std::endl;
     std::cout << "  Source: " << container->source_id();
@@ -85,16 +85,16 @@ void print_container(const std::shared_ptr<container_module::value_container>& c
     auto values = container->get_variant_values();
     for (const auto& val : values) {
         std::cout << "    - " << val.name << ": ";
-        std::cout << container_module::variant_helpers::to_string(val.data, val.type);
+        std::cout << kcenon::container::variant_helpers::to_string(val.data, val.type);
         std::cout << std::endl;
     }
 }
 
-bool demo_simple_request(container_grpc::grpc_client& client) {
+bool demo_simple_request(kcenon::container_grpc::grpc_client& client) {
     std::cout << "\n=== Demo 1: Simple Request ===" << std::endl;
 
     // Create a request container
-    auto request = std::make_shared<container_module::value_container>();
+    auto request = std::make_shared<kcenon::container::value_container>();
     request->set_source("client_example", "demo1");
     request->set_target("server", "processor");
     request->set_message_type("simple_request");
@@ -118,14 +118,14 @@ bool demo_simple_request(container_grpc::grpc_client& client) {
     return true;
 }
 
-bool demo_batch_request(container_grpc::grpc_client& client) {
+bool demo_batch_request(kcenon::container_grpc::grpc_client& client) {
     std::cout << "\n=== Demo 2: Batch Request ===" << std::endl;
 
     // Create multiple containers for batch processing
-    std::vector<std::shared_ptr<container_module::value_container>> batch;
+    std::vector<std::shared_ptr<kcenon::container::value_container>> batch;
 
     for (int i = 0; i < 3; ++i) {
-        auto container = std::make_shared<container_module::value_container>();
+        auto container = std::make_shared<kcenon::container::value_container>();
         container->set_source("client_example", "demo2");
         container->set_target("server", "batch_processor");
         container->set_message_type("batch_item");
@@ -150,7 +150,7 @@ bool demo_batch_request(container_grpc::grpc_client& client) {
     return true;
 }
 
-bool demo_health_check(container_grpc::grpc_client& client) {
+bool demo_health_check(kcenon::container_grpc::grpc_client& client) {
     std::cout << "\n=== Demo 3: Health Check ===" << std::endl;
 
     if (client.ping()) {
@@ -170,11 +170,11 @@ bool demo_health_check(container_grpc::grpc_client& client) {
     return true;
 }
 
-bool demo_streaming(container_grpc::grpc_client& client) {
+bool demo_streaming(kcenon::container_grpc::grpc_client& client) {
     std::cout << "\n=== Demo 4: Streaming ===" << std::endl;
 
     // Create subscription request
-    auto request = std::make_shared<container_module::value_container>();
+    auto request = std::make_shared<kcenon::container::value_container>();
     request->set_source("client_example", "demo4");
     request->set_target("server", "streamer");
     request->set_message_type("subscribe");
@@ -185,13 +185,13 @@ bool demo_streaming(container_grpc::grpc_client& client) {
 
     // Start streaming with callback
     bool started = client.stream(request,
-        [&received_count](std::shared_ptr<container_module::value_container> container) {
+        [&received_count](std::shared_ptr<kcenon::container::value_container> container) {
             ++received_count;
             std::cout << "  Received stream item #" << received_count << std::endl;
             auto values = container->get_variant_values();
             for (const auto& val : values) {
                 std::cout << "    " << val.name << ": "
-                          << container_module::variant_helpers::to_string(val.data, val.type)
+                          << kcenon::container::variant_helpers::to_string(val.data, val.type)
                           << std::endl;
             }
         });
@@ -226,13 +226,13 @@ int main(int argc, char* argv[]) {
     std::cout << "Connecting to " << target << "..." << std::endl;
 
     // Create client with configuration
-    container_grpc::client_config config;
+    kcenon::container_grpc::client_config config;
     config.target_address = target;
     config.timeout = std::chrono::milliseconds(30000);  // 30 second timeout
     config.max_retries = 3;
     config.client_id = "example_client";
 
-    container_grpc::grpc_client client(config);
+    kcenon::container_grpc::grpc_client client(config);
 
     // Check connection
     if (!client.is_connected()) {

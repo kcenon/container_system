@@ -38,15 +38,15 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * @code
  * #include <internal/async/async.h>
  *
- * using namespace container_module::async;
+ * using namespace kcenon::container::async;
  *
  * task<int> compute() {
  *     co_return 42;
  * }
  * @endcode
  *
- * @see container_module::async::task
- * @see container_module::async::generator
+ * @see kcenon::container::async::task
+ * @see kcenon::container::async::generator
  */
 
 #pragma once
@@ -68,25 +68,25 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "thread_pool_executor.h"
 #include "async_container.h"
 
-namespace container_module::async
+namespace kcenon::container::async
 {
     /**
      * @brief Check if coroutines are available at compile time
      */
     inline constexpr bool has_coroutine_support = true;
 
-} // namespace container_module::async
+} // namespace kcenon::container::async
 
 #else
 
 // Fallback when coroutines are not available
-namespace container_module::async
+namespace kcenon::container::async
 {
     /**
      * @brief Check if coroutines are available at compile time
      */
     inline constexpr bool has_coroutine_support = false;
 
-} // namespace container_module::async
+} // namespace kcenon::container::async
 
 #endif // CONTAINER_HAS_COROUTINES

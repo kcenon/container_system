@@ -41,7 +41,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     #endif
 #endif
 
-namespace container_module
+namespace kcenon::container
 {
 namespace simd
 {
@@ -709,4 +709,4 @@ namespace simd
     }
 
 } // namespace simd
-} // namespace container_module
+} // namespace kcenon::container

@@ -36,7 +36,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <memory>
 #include <type_traits>
 
-namespace container_module
+namespace kcenon::container
 {
     /**
      * @brief Lock-free value wrapper using Read-Copy-Update (RCU) pattern
@@ -210,4 +210,4 @@ namespace container_module
         std::atomic<size_t> update_count_{0};
     };
 
-} // namespace container_module
+} // namespace kcenon::container

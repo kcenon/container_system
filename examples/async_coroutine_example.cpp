@@ -52,7 +52,7 @@
 #include "internal/async/async.h"
 #endif
 
-using namespace container_module;
+using namespace kcenon::container;
 
 /**
  * @brief Helper to print section headers
@@ -79,7 +79,7 @@ void print_error(const std::string& message) {
 
 #if CONTAINER_HAS_COROUTINES
 
-using namespace container_module::async;
+using namespace kcenon::container::async;
 
 /**
  * @brief Demonstrate basic async serialization

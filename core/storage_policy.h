@@ -59,7 +59,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <algorithm>
 #include <cstddef>
 
-namespace container_module::policy {
+namespace kcenon::container::policy {
 
 /**
  * @concept StoragePolicy
@@ -681,4 +681,4 @@ static_assert(StoragePolicy<indexed_storage_policy>,
 // Note: static_storage_policy concept check requires specific type instantiation
 // Example: static_assert(StoragePolicy<static_storage_policy<int, double, std::string>>);
 
-} // namespace container_module::policy
+} // namespace kcenon::container::policy

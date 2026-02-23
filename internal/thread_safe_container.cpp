@@ -35,7 +35,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <algorithm>
 #include <cstring>
 
-namespace container_module
+namespace kcenon::container
 {
     using namespace utility_module;
 
@@ -387,4 +387,4 @@ namespace container_module
         snapshot_ = new_snapshot;
     }
 
-} // namespace container_module
+} // namespace kcenon::container

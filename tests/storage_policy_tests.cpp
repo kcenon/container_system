@@ -45,8 +45,8 @@
 #include <string>
 #include <algorithm>
 
-using namespace container_module;
-using namespace container_module::policy;
+using namespace kcenon::container;
+using namespace kcenon::container::policy;
 
 // ============================================================================
 // Concept Verification Tests

@@ -19,7 +19,7 @@ All rights reserved.
 #pragma warning(disable: 4996)
 #endif
 
-using namespace container_module;
+using namespace kcenon::container;
 
 // ============================================================================
 // Modern factory API tests (factory::make, factory::make_null)

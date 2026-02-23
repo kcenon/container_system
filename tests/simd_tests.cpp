@@ -46,7 +46,7 @@
 #include <cmath>
 #include <limits>
 
-using namespace container_module::simd;
+using namespace kcenon::container::simd;
 
 class SIMDSupportTest : public ::testing::Test {
 protected:
@@ -56,8 +56,8 @@ protected:
 
 class SIMDOperationsTest : public ::testing::Test {
 protected:
-    std::vector<container_module::ValueVariant> float_values;
-    std::vector<container_module::ValueVariant> double_values;
+    std::vector<kcenon::container::ValueVariant> float_values;
+    std::vector<kcenon::container::ValueVariant> double_values;
     std::mt19937 rng{42};
 
     void SetUp() override {
@@ -157,13 +157,13 @@ TEST_F(SIMDOperationsTest, SumFloatsBasic) {
 }
 
 TEST_F(SIMDOperationsTest, SumFloatsEmpty) {
-    std::vector<container_module::ValueVariant> empty;
+    std::vector<kcenon::container::ValueVariant> empty;
     float sum = simd_processor::sum_floats(empty);
     EXPECT_FLOAT_EQ(sum, 0.0F);
 }
 
 TEST_F(SIMDOperationsTest, SumFloatsLargeDataset) {
-    std::vector<container_module::ValueVariant> large_data;
+    std::vector<kcenon::container::ValueVariant> large_data;
     large_data.reserve(10000);
 
     for (int i = 0; i < 10000; ++i) {
@@ -176,7 +176,7 @@ TEST_F(SIMDOperationsTest, SumFloatsLargeDataset) {
 
 TEST_F(SIMDOperationsTest, SumFloatsMixedTypes) {
     // Test with mixed types (only floats should be summed)
-    std::vector<container_module::ValueVariant> mixed;
+    std::vector<kcenon::container::ValueVariant> mixed;
     mixed.push_back(1.0F);
     mixed.push_back(std::string("ignore"));
     mixed.push_back(2.0F);
@@ -204,19 +204,19 @@ TEST_F(SIMDOperationsTest, MaxFloatBasic) {
 }
 
 TEST_F(SIMDOperationsTest, MinFloatEmpty) {
-    std::vector<container_module::ValueVariant> empty;
+    std::vector<kcenon::container::ValueVariant> empty;
     auto min_val = simd_processor::min_float(empty);
     EXPECT_FALSE(min_val.has_value());
 }
 
 TEST_F(SIMDOperationsTest, MaxFloatEmpty) {
-    std::vector<container_module::ValueVariant> empty;
+    std::vector<kcenon::container::ValueVariant> empty;
     auto max_val = simd_processor::max_float(empty);
     EXPECT_FALSE(max_val.has_value());
 }
 
 TEST_F(SIMDOperationsTest, MinFloatWithNegatives) {
-    std::vector<container_module::ValueVariant> data;
+    std::vector<kcenon::container::ValueVariant> data;
     data.push_back(-100.0F);
     data.push_back(50.0F);
     data.push_back(-200.0F);
@@ -228,7 +228,7 @@ TEST_F(SIMDOperationsTest, MinFloatWithNegatives) {
 }
 
 TEST_F(SIMDOperationsTest, MaxFloatWithNegatives) {
-    std::vector<container_module::ValueVariant> data;
+    std::vector<kcenon::container::ValueVariant> data;
     data.push_back(-100.0F);
     data.push_back(50.0F);
     data.push_back(-200.0F);
@@ -240,7 +240,7 @@ TEST_F(SIMDOperationsTest, MaxFloatWithNegatives) {
 }
 
 TEST_F(SIMDOperationsTest, MinMaxFloatLargeDataset) {
-    std::vector<container_module::ValueVariant> large_data;
+    std::vector<kcenon::container::ValueVariant> large_data;
     large_data.reserve(10000);
 
     std::uniform_real_distribution<float> dist(-1000.0F, 1000.0F);
@@ -276,7 +276,7 @@ TEST_F(SIMDOperationsTest, SumDoublesBasic) {
 }
 
 TEST_F(SIMDOperationsTest, SumDoublesEmpty) {
-    std::vector<container_module::ValueVariant> empty;
+    std::vector<kcenon::container::ValueVariant> empty;
     double sum = simd_processor::sum_doubles(empty);
     EXPECT_DOUBLE_EQ(sum, 0.0);
 }
@@ -297,7 +297,7 @@ TEST_F(SIMDOperationsTest, FindEqualFloatsNotFound) {
 }
 
 TEST_F(SIMDOperationsTest, FindEqualFloatsMultipleMatches) {
-    std::vector<container_module::ValueVariant> data;
+    std::vector<kcenon::container::ValueVariant> data;
     data.push_back(1.0F);
     data.push_back(2.0F);
     data.push_back(1.0F);
@@ -343,7 +343,7 @@ TEST_F(SIMDOperationsTest, FastCompareNotEqual) {
 // ============================================================================
 
 TEST_F(SIMDOperationsTest, SingleElementSum) {
-    std::vector<container_module::ValueVariant> single;
+    std::vector<kcenon::container::ValueVariant> single;
     single.push_back(42.0F);
 
     float sum = simd_processor::sum_floats(single);
@@ -351,7 +351,7 @@ TEST_F(SIMDOperationsTest, SingleElementSum) {
 }
 
 TEST_F(SIMDOperationsTest, SingleElementMinMax) {
-    std::vector<container_module::ValueVariant> single;
+    std::vector<kcenon::container::ValueVariant> single;
     single.push_back(42.0F);
 
     auto min_val = simd_processor::min_float(single);
@@ -365,7 +365,7 @@ TEST_F(SIMDOperationsTest, SingleElementMinMax) {
 
 TEST_F(SIMDOperationsTest, NonAlignedSizeSum) {
     // Test with size that doesn't align to SIMD width
-    std::vector<container_module::ValueVariant> data;
+    std::vector<kcenon::container::ValueVariant> data;
     for (int i = 1; i <= 17; ++i) {  // 17 elements (not aligned to 4, 8, or 16)
         data.push_back(static_cast<float>(i));
     }

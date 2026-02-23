@@ -34,7 +34,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "../container.h"
 #include "../container/msgpack.h"
 
-namespace container_module
+namespace kcenon::container
 {
 
 #if CONTAINER_HAS_RESULT
@@ -237,4 +237,4 @@ msgpack_serializer::serialize(const value_container& container) const noexcept
 }
 #endif
 
-} // namespace container_module
+} // namespace kcenon::container

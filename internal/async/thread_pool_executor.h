@@ -46,7 +46,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * auto result = co_await cont.serialize_async();
  * @endcode
  *
- * @see container_module::async::executor_awaitable
+ * @see kcenon::container::async::executor_awaitable
  * @see kcenon::common::interfaces::IExecutor
  */
 
@@ -69,7 +69,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <kcenon/common/interfaces/thread_pool_interface.h>
 #endif
 
-namespace container_module::async
+namespace kcenon::container::async
 {
     /**
      * @brief Executor type for async operations
@@ -330,4 +330,4 @@ namespace container_module::async
         executor_ptr previous_;
     };
 
-} // namespace container_module::async
+} // namespace kcenon::container::async

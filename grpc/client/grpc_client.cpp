@@ -36,7 +36,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <grpcpp/grpcpp.h>
 
-namespace container_grpc {
+namespace kcenon::container_grpc {
 
 // =============================================================================
 // Implementation Class
@@ -81,9 +81,9 @@ public:
         return timeout_;
     }
 
-    client_result<std::shared_ptr<container_module::value_container>>
-    send(std::shared_ptr<container_module::value_container> container) {
-        client_result<std::shared_ptr<container_module::value_container>> result;
+    client_result<std::shared_ptr<kcenon::container::value_container>>
+    send(std::shared_ptr<kcenon::container::value_container> container) {
+        client_result<std::shared_ptr<kcenon::container::value_container>> result;
 
         if (!container) {
             result.error_message = "Container is null";
@@ -120,9 +120,9 @@ public:
         }
     }
 
-    client_result<std::shared_ptr<container_module::value_container>>
-    process(std::shared_ptr<container_module::value_container> container) {
-        client_result<std::shared_ptr<container_module::value_container>> result;
+    client_result<std::shared_ptr<kcenon::container::value_container>>
+    process(std::shared_ptr<kcenon::container::value_container> container) {
+        client_result<std::shared_ptr<kcenon::container::value_container>> result;
 
         if (!container) {
             result.error_message = "Container is null";
@@ -153,7 +153,7 @@ public:
     }
 
     bool stream(
-        std::shared_ptr<container_module::value_container> request,
+        std::shared_ptr<kcenon::container::value_container> request,
         stream_callback callback) {
 
         if (!request || !callback) {
@@ -183,11 +183,11 @@ public:
         }
     }
 
-    client_result<std::vector<std::shared_ptr<container_module::value_container>>>
+    client_result<std::vector<std::shared_ptr<kcenon::container::value_container>>>
     send_batch(
-        const std::vector<std::shared_ptr<container_module::value_container>>& containers) {
+        const std::vector<std::shared_ptr<kcenon::container::value_container>>& containers) {
 
-        client_result<std::vector<std::shared_ptr<container_module::value_container>>> result;
+        client_result<std::vector<std::shared_ptr<kcenon::container::value_container>>> result;
 
         try {
             grpc::ClientContext context;
@@ -310,25 +310,25 @@ std::chrono::milliseconds grpc_client::timeout() const noexcept {
     return impl_->timeout();
 }
 
-client_result<std::shared_ptr<container_module::value_container>>
-grpc_client::send(std::shared_ptr<container_module::value_container> container) {
+client_result<std::shared_ptr<kcenon::container::value_container>>
+grpc_client::send(std::shared_ptr<kcenon::container::value_container> container) {
     return impl_->send(std::move(container));
 }
 
-client_result<std::shared_ptr<container_module::value_container>>
-grpc_client::process(std::shared_ptr<container_module::value_container> container) {
+client_result<std::shared_ptr<kcenon::container::value_container>>
+grpc_client::process(std::shared_ptr<kcenon::container::value_container> container) {
     return impl_->process(std::move(container));
 }
 
 bool grpc_client::stream(
-    std::shared_ptr<container_module::value_container> request,
+    std::shared_ptr<kcenon::container::value_container> request,
     stream_callback callback) {
     return impl_->stream(std::move(request), std::move(callback));
 }
 
-client_result<std::vector<std::shared_ptr<container_module::value_container>>>
+client_result<std::vector<std::shared_ptr<kcenon::container::value_container>>>
 grpc_client::send_batch(
-    const std::vector<std::shared_ptr<container_module::value_container>>& containers) {
+    const std::vector<std::shared_ptr<kcenon::container::value_container>>& containers) {
     return impl_->send_batch(containers);
 }
 
@@ -340,4 +340,4 @@ bool grpc_client::ping() {
     return impl_->ping();
 }
 
-} // namespace container_grpc
+} // namespace kcenon::container_grpc

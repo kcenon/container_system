@@ -35,7 +35,7 @@ All rights reserved.
 #include <variant>
 #include <cstdint>
 
-namespace container_module {
+namespace kcenon::container {
 
 // Forward declarations
 class thread_safe_container;
@@ -242,4 +242,4 @@ concept ContainerValue =
     std::same_as<std::decay_t<T>, std::shared_ptr<thread_safe_container>>;
 
 } // namespace concepts
-} // namespace container_module
+} // namespace kcenon::container

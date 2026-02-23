@@ -64,7 +64,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <optional>
 #include <type_traits>
 
-namespace container_module
+namespace kcenon::container
 {
 
 /**
@@ -321,4 +321,4 @@ struct value_index_entry
     {}
 };
 
-} // namespace container_module
+} // namespace kcenon::container

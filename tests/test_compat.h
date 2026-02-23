@@ -22,7 +22,7 @@
 #include <limits>
 #include <cstdint>
 
-namespace container_module {
+namespace kcenon::container {
 namespace test_compat {
 
 // Factory functions that return shared_ptr for legacy API compatibility
@@ -312,47 +312,47 @@ inline std::string ov_name(const std::optional<optimized_value>& ov) {
 }
 
 } // namespace test_compat
-} // namespace container_module
+} // namespace kcenon::container
 
 // Pull test_compat functions into global scope for test convenience
-using container_module::test_compat::make_int_value;
-using container_module::test_compat::make_bool_value;
-using container_module::test_compat::make_string_value;
-using container_module::test_compat::make_llong_value;
-using container_module::test_compat::make_long_value;
-using container_module::test_compat::make_ulong_value;
-using container_module::test_compat::make_bytes_value;
-using container_module::test_compat::make_double_value;
-using container_module::test_compat::make_float_value;
-using container_module::test_compat::make_short_value;
-using container_module::test_compat::make_ushort_value;
-using container_module::test_compat::make_uint_value;
-using container_module::test_compat::make_ullong_value;
+using kcenon::container::test_compat::make_int_value;
+using kcenon::container::test_compat::make_bool_value;
+using kcenon::container::test_compat::make_string_value;
+using kcenon::container::test_compat::make_llong_value;
+using kcenon::container::test_compat::make_long_value;
+using kcenon::container::test_compat::make_ulong_value;
+using kcenon::container::test_compat::make_bytes_value;
+using kcenon::container::test_compat::make_double_value;
+using kcenon::container::test_compat::make_float_value;
+using kcenon::container::test_compat::make_short_value;
+using kcenon::container::test_compat::make_ushort_value;
+using kcenon::container::test_compat::make_uint_value;
+using kcenon::container::test_compat::make_ullong_value;
 
 // Pull helper functions into global scope
-using container_module::test_compat::is_boolean;
-using container_module::test_compat::is_numeric;
-using container_module::test_compat::is_string;
-using container_module::test_compat::is_container;
-using container_module::test_compat::is_bytes;
-using container_module::test_compat::to_boolean;
-using container_module::test_compat::to_int;
-using container_module::test_compat::to_long;
-using container_module::test_compat::to_llong;
-using container_module::test_compat::to_ulong;
-using container_module::test_compat::to_ullong;
-using container_module::test_compat::to_double;
-using container_module::test_compat::to_bytes;
-using container_module::test_compat::value_size;
-using container_module::test_compat::ov_to_string;
-using container_module::test_compat::ov_to_int;
-using container_module::test_compat::ov_to_boolean;
-using container_module::test_compat::ov_to_llong;
-using container_module::test_compat::ov_to_double;
-using container_module::test_compat::ov_is_null;
-using container_module::test_compat::ov_is_bytes;
-using container_module::test_compat::ov_is_container;
-using container_module::test_compat::ov_data;
-using container_module::test_compat::ov_name;
-using container_module::test_compat::is_int32_range;
-using container_module::test_compat::is_uint32_range;
+using kcenon::container::test_compat::is_boolean;
+using kcenon::container::test_compat::is_numeric;
+using kcenon::container::test_compat::is_string;
+using kcenon::container::test_compat::is_container;
+using kcenon::container::test_compat::is_bytes;
+using kcenon::container::test_compat::to_boolean;
+using kcenon::container::test_compat::to_int;
+using kcenon::container::test_compat::to_long;
+using kcenon::container::test_compat::to_llong;
+using kcenon::container::test_compat::to_ulong;
+using kcenon::container::test_compat::to_ullong;
+using kcenon::container::test_compat::to_double;
+using kcenon::container::test_compat::to_bytes;
+using kcenon::container::test_compat::value_size;
+using kcenon::container::test_compat::ov_to_string;
+using kcenon::container::test_compat::ov_to_int;
+using kcenon::container::test_compat::ov_to_boolean;
+using kcenon::container::test_compat::ov_to_llong;
+using kcenon::container::test_compat::ov_to_double;
+using kcenon::container::test_compat::ov_is_null;
+using kcenon::container::test_compat::ov_is_bytes;
+using kcenon::container::test_compat::ov_is_container;
+using kcenon::container::test_compat::ov_data;
+using kcenon::container::test_compat::ov_name;
+using kcenon::container::test_compat::is_int32_range;
+using kcenon::container::test_compat::is_uint32_range;

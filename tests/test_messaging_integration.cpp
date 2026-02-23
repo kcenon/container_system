@@ -41,7 +41,7 @@
 
 #include "core/container.h"
 
-using namespace container_module;
+using namespace kcenon::container;
 
 class MessagingIntegrationTest : public ::testing::Test {
 protected:

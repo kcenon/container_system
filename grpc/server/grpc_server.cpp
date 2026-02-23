@@ -38,7 +38,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <chrono>
 
-namespace container_grpc {
+namespace kcenon::container_grpc {
 
 // =============================================================================
 // Implementation Class
@@ -179,4 +179,4 @@ size_t grpc_server::error_count() const noexcept {
     return impl_->error_count();
 }
 
-} // namespace container_grpc
+} // namespace kcenon::container_grpc
