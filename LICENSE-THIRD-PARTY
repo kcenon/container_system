@@ -1,0 +1,23 @@
+# Third-Party License Compliance
+
+This file documents third-party dependencies and their license compatibility
+with the project's BSD-3-Clause license.
+
+## fmt (Optional — fmt-support feature)
+
+| Item               | Value                                          |
+|--------------------|--------------------------------------------- --|
+| Component          | {fmt} formatting library                       |
+| License            | MIT                                            |
+| Minimum Version    | 10.0.0                                         |
+| Usage              | String formatting (fallback for std::format)   |
+| Linking            | Header-only or shared                          |
+| BSD-3 Compatible   | Yes                                            |
+
+## All Dependencies (License Summary)
+
+| Dependency        | License        | Type     | BSD-3 Compatible |
+|-------------------|----------------|----------|------------------|
+| fmt               | MIT            | Optional | Yes              |
+| GTest/GMock       | BSD-3-Clause   | Testing  | Yes              |
+| Google Benchmark  | Apache-2.0     | Testing  | Yes              |
