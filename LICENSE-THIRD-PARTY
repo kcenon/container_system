@@ -14,10 +14,34 @@ with the project's BSD-3-Clause license.
 | Linking            | Header-only or shared                          |
 | BSD-3 Compatible   | Yes                                            |
 
+## gRPC (Version Override)
+
+| Item               | Value                                          |
+|--------------------|------------------------------------------------|
+| Component          | gRPC remote procedure call framework           |
+| License            | Apache-2.0                                     |
+| Pinned Version     | 1.51.1                                         |
+| Usage              | Version override for reproducible builds       |
+| Linking            | Shared                                         |
+| BSD-3 Compatible   | Yes                                            |
+
+## Protocol Buffers (Version Override)
+
+| Item               | Value                                          |
+|--------------------|------------------------------------------------|
+| Component          | Google Protocol Buffers                        |
+| License            | BSD-3-Clause                                   |
+| Pinned Version     | 3.21.12                                        |
+| Usage              | Version override for reproducible builds       |
+| Linking            | Shared                                         |
+| BSD-3 Compatible   | Yes                                            |
+
 ## All Dependencies (License Summary)
 
 | Dependency        | License        | Type     | BSD-3 Compatible |
 |-------------------|----------------|----------|------------------|
 | fmt               | MIT            | Optional | Yes              |
+| gRPC              | Apache-2.0     | Override | Yes              |
+| Protocol Buffers  | BSD-3-Clause   | Override | Yes              |
 | GTest/GMock       | BSD-3-Clause   | Testing  | Yes              |
 | Google Benchmark  | Apache-2.0     | Testing  | Yes              |
