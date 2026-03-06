@@ -10,6 +10,11 @@
   "dependencies": [
     "kcenon-common-system"
   ],
+  "overrides": [
+    { "name": "fmt", "version": "10.2.1" },
+    { "name": "gtest", "version": "1.14.0" },
+    { "name": "benchmark", "version": "1.8.3" }
+  ],
   "features": {
     "testing": {
       "description": "Build unit tests and benchmarks",
