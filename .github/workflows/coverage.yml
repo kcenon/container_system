@@ -79,7 +79,7 @@ jobs:
         genhtml coverage_filtered.info --output-directory coverage_html --ignore-errors source --ignore-errors inconsistent --ignore-errors category || true
 
     - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v4
+      uses: codecov/codecov-action@v5
       with:
         files: ./build/coverage_filtered.info
         flags: unittests
