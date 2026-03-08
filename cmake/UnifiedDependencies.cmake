@@ -30,8 +30,20 @@ include(FetchContent)
 option(UNIFIED_ALLOW_FETCHCONTENT "Allow FetchContent fallback for dependencies" ON)
 
 # GitHub repository URLs for FetchContent
+# IMPORTANT: Set UNIFIED_COMMON_SYSTEM_GIT_TAG to a specific release tag (e.g., "v0.1.0")
+# for reproducible builds. Using "main" is a moving target and breaks SOUP traceability.
+# See: https://github.com/kcenon/common_system/issues/402
 set(UNIFIED_COMMON_SYSTEM_GIT_URL "https://github.com/kcenon/common_system.git" CACHE STRING "Git URL for common_system")
-set(UNIFIED_COMMON_SYSTEM_GIT_TAG "main" CACHE STRING "Git tag/branch for common_system")
+set(UNIFIED_COMMON_SYSTEM_GIT_TAG "v0.1.0" CACHE STRING "Git tag/branch for common_system (use a release tag, not 'main')")
+
+if("${UNIFIED_COMMON_SYSTEM_GIT_TAG}" STREQUAL "main")
+    message(WARNING
+        "UNIFIED_COMMON_SYSTEM_GIT_TAG is set to 'main', which is a moving target.\n"
+        "This breaks build reproducibility and SOUP version traceability (IEC 62304 §8.1.2).\n"
+        "Set UNIFIED_COMMON_SYSTEM_GIT_TAG to a specific release tag, e.g.:\n"
+        "  cmake -DUNIFIED_COMMON_SYSTEM_GIT_TAG=v0.1.0 ..."
+    )
+endif()
 
 #[[
 unified_find_dependency(<name> [REQUIRED])
