@@ -204,7 +204,7 @@ jobs:
 
     - name: Upload coverage HTML report
       if: matrix.build_type == 'Debug' && runner.os == 'Linux' && steps.coverage_check.outputs.coverage_exists == 'true'
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: coverage-html-${{ matrix.os }}-${{ matrix.build_type }}
         path: build/coverage_html/
@@ -212,7 +212,7 @@ jobs:
 
     - name: Upload test results
       if: always()
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: test-results-${{ matrix.os }}-${{ matrix.build_type }}
         path: |
@@ -291,7 +291,7 @@ jobs:
         exit 0
 
     - name: Upload performance results
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: performance-baseline-results
         path: build/Testing/
