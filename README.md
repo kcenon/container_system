@@ -126,6 +126,10 @@ common_system (ONLY required ecosystem dependency)
 | Circular dependency risk | None | Only depends downward |
 | Isolated build | ✅ | Can build with only common_system |
 
+> **Optional module boundary**: The repository also contains an isolated `grpc/`
+> subproject that is not built by the root `CMakeLists.txt`. It is a separately
+> scoped deliverable with its own gRPC/protobuf dependency path.
+
 **Why this matters:**
 - Faster compilation times
 - Easier testing and debugging
@@ -142,6 +146,21 @@ common_system (ONLY required ecosystem dependency)
 | CMake | 3.20+ | Yes | Build system |
 | common_system | latest | Yes | C++20 Concepts and common interfaces |
 | vcpkg | latest | Optional | Package management (recommended) |
+
+#### Optional Module Deliverables
+
+| Module | Built by Root Project | Dependencies | Scope |
+|--------|-----------------------|--------------|-------|
+| `grpc/` | No | `protobuf` 3.21.12, `gRPC` 1.51.1, system threads | Isolated integration module built with `cmake -S grpc -B build-grpc` |
+
+SBOM artifacts treat `grpc/` as a module-scoped optional deliverable. The root
+package dependency inventory covers `vcpkg.json`, and the SBOM report adds a
+separate section for the isolated gRPC build path when that module is relevant.
+
+```bash
+cmake -S grpc -B build-grpc
+cmake --build build-grpc
+```
 
 ### Installation
 
