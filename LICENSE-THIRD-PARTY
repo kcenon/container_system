@@ -3,7 +3,16 @@
 This file documents third-party dependencies and their license compatibility
 with the project's BSD-3-Clause license.
 
-## fmt (Optional — fmt-support feature)
+## Default Build
+
+The default root package has no required third-party library dependencies.
+`container_system` links internal ecosystem code (`common_system`) and
+system-provided threading support, but third-party libraries are introduced
+only by optional features, isolated module builds, or test tooling.
+
+## Optional Feature Dependencies
+
+## fmt (`fmt-support` feature)
 
 | Item               | Value                                          |
 |--------------------|--------------------------------------------- --|
@@ -14,34 +23,60 @@ with the project's BSD-3-Clause license.
 | Linking            | Header-only or shared                          |
 | BSD-3 Compatible   | Yes                                            |
 
-## gRPC (Version Override)
+## Optional Module Deliverables
+
+## gRPC (`grpc/` isolated subproject)
 
 | Item               | Value                                          |
 |--------------------|------------------------------------------------|
 | Component          | gRPC remote procedure call framework           |
 | License            | Apache-2.0                                     |
 | Pinned Version     | 1.51.1                                         |
-| Usage              | Version override for reproducible builds       |
+| Usage              | Transport/runtime dependency for the isolated `grpc/` deliverable |
 | Linking            | Shared                                         |
 | BSD-3 Compatible   | Yes                                            |
 
-## Protocol Buffers (Version Override)
+## Protocol Buffers (`grpc/` isolated subproject)
 
 | Item               | Value                                          |
 |--------------------|------------------------------------------------|
 | Component          | Google Protocol Buffers                        |
 | License            | BSD-3-Clause                                   |
 | Pinned Version     | 3.21.12                                        |
-| Usage              | Version override for reproducible builds       |
+| Usage              | Serialization and code generation for the isolated `grpc/` deliverable |
 | Linking            | Shared                                         |
 | BSD-3 Compatible   | Yes                                            |
 
-## All Dependencies (License Summary)
+## Development and Test Dependencies
+
+## Google Test / GMock (`testing` feature)
+
+| Item               | Value                                          |
+|--------------------|------------------------------------------------|
+| Component          | Google Test / GMock                            |
+| License            | BSD-3-Clause                                   |
+| Pinned Version     | 1.14.0                                         |
+| Usage              | Unit and integration tests                     |
+| Linking            | Static or shared                               |
+| BSD-3 Compatible   | Yes                                            |
+
+## Google Benchmark (`testing` feature)
+
+| Item               | Value                                          |
+|--------------------|------------------------------------------------|
+| Component          | Google Benchmark                               |
+| License            | Apache-2.0                                     |
+| Pinned Version     | 1.8.3                                          |
+| Usage              | Performance benchmarking                       |
+| Linking            | Static or shared                               |
+| BSD-3 Compatible   | Yes                                            |
+
+## Dependency Summary
 
 | Dependency        | License        | Type     | BSD-3 Compatible |
 |-------------------|----------------|----------|------------------|
 | fmt               | MIT            | Optional | Yes              |
-| gRPC              | Apache-2.0     | Override | Yes              |
-| Protocol Buffers  | BSD-3-Clause   | Override | Yes              |
+| gRPC              | Apache-2.0     | Optional module | Yes              |
+| Protocol Buffers  | BSD-3-Clause   | Optional module | Yes              |
 | GTest/GMock       | BSD-3-Clause   | Testing  | Yes              |
 | Google Benchmark  | Apache-2.0     | Testing  | Yes              |
