@@ -128,7 +128,7 @@ jobs:
 
     - name: Upload benchmark results
       if: steps.check_benchmarks.outputs.benchmarks_enabled == 'true'
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: benchmark-results-${{ matrix.os }}
         path: build/bin/benchmark_results_${{ matrix.os }}.json
