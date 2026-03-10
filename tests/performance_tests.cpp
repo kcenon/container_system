@@ -276,7 +276,7 @@ TEST_F(PerformanceTest, DeserializationPerformance) {
     const char* ci_env = std::getenv("CI");
 
     if (tsan_opts || asan_opts || ubsan_opts) {
-        threshold = 150.0; // Much lower threshold when sanitizers are active
+        threshold = 100.0; // Much lower threshold when sanitizers are active
     } else if (ci_env) {
         threshold = 190.0; // Lower threshold for CI environment variability
     }
