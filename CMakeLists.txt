@@ -222,6 +222,41 @@ if(BUILD_WITH_COMMON_SYSTEM)
         $<BUILD_INTERFACE:${common_system_INCLUDE_DIR}>
     )
     target_compile_definitions(container_system PUBLIC KCENON_HAS_COMMON_SYSTEM=1)
+
+    if(NOT TARGET kcenon::common_system)
+        add_library(kcenon::common_system INTERFACE IMPORTED GLOBAL)
+
+        if(TARGET common_system)
+            get_target_property(_container_common_include_dirs common_system INTERFACE_INCLUDE_DIRECTORIES)
+            get_target_property(_container_common_compile_defs common_system INTERFACE_COMPILE_DEFINITIONS)
+            get_target_property(_container_common_compile_features common_system INTERFACE_COMPILE_FEATURES)
+            get_target_property(_container_common_link_libraries common_system INTERFACE_LINK_LIBRARIES)
+
+            if(_container_common_include_dirs)
+                set_property(TARGET kcenon::common_system PROPERTY
+                    INTERFACE_INCLUDE_DIRECTORIES "${_container_common_include_dirs}")
+            endif()
+            if(_container_common_compile_defs)
+                set_property(TARGET kcenon::common_system PROPERTY
+                    INTERFACE_COMPILE_DEFINITIONS "${_container_common_compile_defs}")
+            endif()
+            if(_container_common_compile_features)
+                set_property(TARGET kcenon::common_system PROPERTY
+                    INTERFACE_COMPILE_FEATURES "${_container_common_compile_features}")
+            endif()
+            if(_container_common_link_libraries)
+                set_property(TARGET kcenon::common_system PROPERTY
+                    INTERFACE_LINK_LIBRARIES "${_container_common_link_libraries}")
+            endif()
+        else()
+            set_property(TARGET kcenon::common_system PROPERTY
+                INTERFACE_INCLUDE_DIRECTORIES "${common_system_INCLUDE_DIR}")
+            set_property(TARGET kcenon::common_system PROPERTY
+                INTERFACE_COMPILE_DEFINITIONS "KCENON_WITH_COMMON_SYSTEM=1")
+            set_property(TARGET kcenon::common_system PROPERTY
+                INTERFACE_COMPILE_FEATURES "cxx_std_20")
+        endif()
+    endif()
 endif()
 
 # Create aliases for consistent naming and messaging system compatibility
@@ -230,6 +265,7 @@ add_library(MessagingSystem::container ALIAS container_system)  # For messaging 
 
 # Set target properties
 set_target_properties(container_system PROPERTIES
+    EXPORT_NAME container
     POSITION_INDEPENDENT_CODE ON
     CXX_STANDARD 20
     CXX_STANDARD_REQUIRED ON
@@ -305,6 +341,7 @@ endif()
 # Link libraries
 target_link_libraries(container_system PUBLIC
     Threads::Threads
+    kcenon::common_system
 )
 
 # C++20 std::format is required (no fmt library fallback)
@@ -514,6 +551,9 @@ endif()
 ##################################################
 
 include(GNUInstallDirs)
+include(CMakePackageConfigHelpers)
+
+set(CONTAINER_SYSTEM_CMAKE_INSTALL_DIR "${CMAKE_INSTALL_LIBDIR}/cmake/ContainerSystem")
 
 # =============================================================================
 # Canonical Include Path Configuration
@@ -532,6 +572,14 @@ install(FILES
     COMPONENT Development
 )
 
+install(TARGETS container_system
+    EXPORT ContainerSystemTargets
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+)
+
 install(DIRECTORY
     ${CMAKE_CURRENT_SOURCE_DIR}/core
     ${CMAKE_CURRENT_SOURCE_DIR}/internal
@@ -541,6 +589,36 @@ install(DIRECTORY
     FILES_MATCHING
     PATTERN "*.h"
     PATTERN "*.hpp"
+)
+
+install(EXPORT ContainerSystemTargets
+    FILE ContainerSystemTargets.cmake
+    NAMESPACE ContainerSystem::
+    DESTINATION ${CONTAINER_SYSTEM_CMAKE_INSTALL_DIR}
+)
+
+configure_package_config_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/ContainerSystemConfig.cmake.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/ContainerSystemConfig.cmake"
+    INSTALL_DESTINATION ${CONTAINER_SYSTEM_CMAKE_INSTALL_DIR}
+    PATH_VARS CMAKE_INSTALL_INCLUDEDIR
+)
+
+write_basic_package_version_file(
+    "${CMAKE_CURRENT_BINARY_DIR}/ContainerSystemConfigVersion.cmake"
+    VERSION ${PROJECT_VERSION}
+    COMPATIBILITY AnyNewerVersion
+)
+
+install(FILES
+    "${CMAKE_CURRENT_BINARY_DIR}/ContainerSystemConfig.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/ContainerSystemConfigVersion.cmake"
+    DESTINATION ${CONTAINER_SYSTEM_CMAKE_INSTALL_DIR}
+)
+
+export(EXPORT ContainerSystemTargets
+    FILE "${CMAKE_CURRENT_BINARY_DIR}/ContainerSystemTargets.cmake"
+    NAMESPACE ContainerSystem::
 )
 
 ##################################################
