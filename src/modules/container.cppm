@@ -71,25 +71,26 @@ export namespace kcenon::container {
 // =============================================================================
 
 /**
+ * @enum value_types
  * @brief Enumeration of available value types in the container system.
  */
 enum class value_types {
-    null_value,
-    bool_value,
-    short_value,
-    ushort_value,
-    int_value,
-    uint_value,
-    long_value,
-    ulong_value,
-    llong_value,
-    ullong_value,
-    float_value,
-    double_value,
-    string_value,
-    bytes_value,
-    container_value,
-    array_value
+    null_value,         ///< Represents an empty or null value.
+    bool_value,         ///< Boolean true/false value.
+    short_value,        ///< Signed short integer.
+    ushort_value,       ///< Unsigned short integer.
+    int_value,          ///< Signed integer.
+    uint_value,         ///< Unsigned integer.
+    long_value,         ///< Signed long integer.
+    ulong_value,        ///< Unsigned long integer.
+    llong_value,        ///< Signed long long integer.
+    ullong_value,       ///< Unsigned long long integer.
+    float_value,        ///< Single-precision floating point.
+    double_value,       ///< Double-precision floating point.
+    string_value,       ///< UTF-8 string value.
+    bytes_value,        ///< Raw byte array.
+    container_value,    ///< Nested value_container (key-value map).
+    array_value         ///< Array of values.
 };
 
 // Compile-time type mapping
@@ -113,7 +114,9 @@ constexpr std::array<std::pair<std::string_view, value_types>, 16> type_map{{
 }};
 
 /**
- * @brief Compile-time conversion from string to value_types
+ * @brief Compile-time conversion from string to value_types.
+ * @param str The string representation of the type (e.g., "0" for null).
+ * @return The corresponding value_types enum value, or null_value if not found.
  */
 constexpr value_types get_type_from_string(std::string_view str) noexcept {
     for (const auto& [key, type] : type_map) {
@@ -123,7 +126,9 @@ constexpr value_types get_type_from_string(std::string_view str) noexcept {
 }
 
 /**
- * @brief Compile-time conversion from value_types to string
+ * @brief Compile-time conversion from value_types to string.
+ * @param type The value_types enum value to convert.
+ * @return The string representation (e.g., "0" for null), or "0" if not found.
  */
 constexpr std::string_view get_string_from_type(value_types type) noexcept {
     for (const auto& [key, val] : type_map) {
@@ -134,6 +139,8 @@ constexpr std::string_view get_string_from_type(value_types type) noexcept {
 
 /**
  * @brief Convert a string-based type indicator to a value_types enum.
+ * @param target The string to convert (e.g., "0" for null).
+ * @return The corresponding value_types enum value, or null_value if not found.
  */
 inline value_types convert_value_type(const std::string& target) {
     for (const auto& [key, type] : type_map) {
@@ -144,6 +151,8 @@ inline value_types convert_value_type(const std::string& target) {
 
 /**
  * @brief Convert a value_types enum to its associated string indicator.
+ * @param target The value_types enum to convert.
+ * @return The string representation of the type.
  */
 inline std::string convert_value_type(const value_types& target) {
     return std::string(get_string_from_type(target));
@@ -193,25 +202,36 @@ using value_variant = std::variant<
 // =============================================================================
 
 /**
- * @brief Optimized value storage with Small Object Optimization
+ * @struct optimized_value
+ * @brief Optimized value storage with Small Object Optimization.
  */
 struct optimized_value {
-    std::string name;
-    value_types type;
-    value_variant data;
+    std::string name;       ///< Name identifier for this value.
+    value_types type;       ///< The data type of this value.
+    value_variant data;     ///< The actual stored data using variant-based SOO.
 
+    /// @brief Construct a default null value.
     optimized_value()
         : name("")
         , type(value_types::null_value)
         , data(std::monostate{})
     {}
 
+    /**
+     * @brief Construct a named value with the given type (data defaults to monostate).
+     * @param n The name of this value.
+     * @param t The value type.
+     */
     optimized_value(const std::string& n, value_types t)
         : name(n)
         , type(t)
         , data(std::monostate{})
     {}
 
+    /**
+     * @brief Calculate the approximate memory footprint of this value.
+     * @return The estimated total memory usage in bytes.
+     */
     size_t memory_footprint() const {
         size_t base = sizeof(optimized_value);
         base += name.capacity();
@@ -223,6 +243,10 @@ struct optimized_value {
         return base;
     }
 
+    /**
+     * @brief Check whether this value's data is stored on the stack (not heap-allocated).
+     * @return true if the value type uses stack-based storage, false otherwise.
+     */
     bool is_stack_allocated() const {
         return type != value_types::string_value &&
                type != value_types::bytes_value &&
@@ -235,15 +259,24 @@ struct optimized_value {
 // =============================================================================
 
 /**
- * @brief Pool statistics structure
+ * @struct pool_stats
+ * @brief Statistics for object pool usage tracking.
  */
 struct pool_stats {
-    size_t hits{0};
-    size_t misses{0};
-    size_t available{0};
-    double hit_rate{0.0};
+    size_t hits{0};         ///< Number of successful pool retrievals (cache hits).
+    size_t misses{0};       ///< Number of pool misses requiring new allocation.
+    size_t available{0};    ///< Current number of available objects in the pool.
+    double hit_rate{0.0};   ///< Computed hit rate as hits / (hits + misses).
 
+    /// @brief Default constructor with zero-initialized statistics.
     pool_stats() = default;
+
+    /**
+     * @brief Construct pool stats with the given counters.
+     * @param h Number of cache hits.
+     * @param m Number of cache misses.
+     * @param a Number of available objects.
+     */
     pool_stats(size_t h, size_t m, size_t a)
         : hits(h), misses(m), available(a)
         , hit_rate(h + m > 0 ? static_cast<double>(h) / (h + m) : 0.0)
@@ -257,7 +290,9 @@ struct pool_stats {
 namespace variant_helpers {
 
 /**
- * @brief Escape a string for JSON output per RFC 8259
+ * @brief Escape a string for JSON output per RFC 8259.
+ * @param input The raw string to escape.
+ * @return A JSON-safe escaped string.
  */
 inline std::string json_escape(std::string_view input) {
     std::string result;
@@ -303,7 +338,9 @@ inline std::string json_escape(std::string_view input) {
 }
 
 /**
- * @brief Encode a string for XML output per XML 1.0 specification
+ * @brief Encode a string for XML output per XML 1.0 specification.
+ * @param input The raw string to encode.
+ * @return An XML-safe encoded string.
  */
 inline std::string xml_encode(std::string_view input) {
     std::string result;
