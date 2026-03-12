@@ -28,15 +28,34 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #pragma once
+
+/**
+ * @file fast_parser.h
+ * @brief Fast-path parsing utilities and configuration for the container system.
+ */
+
 namespace kcenon::container {
+
+/**
+ * @brief Reserve capacity on a container if the reserve() method is available.
+ * @tparam Container A container type that may or may not support reserve().
+ * @param c The container to reserve capacity on.
+ * @param size The number of elements to reserve space for.
+ */
 template<typename Container>
 inline void reserve_if_possible(Container& c, size_t size) {
     if constexpr (requires { c.reserve(size); }) {
         c.reserve(size);
     }
 }
+
+/**
+ * @struct parser_config
+ * @brief Configuration parameters for the fast parser.
+ */
 struct parser_config {
-    bool use_fast_path{true};
-    size_t initial_capacity{256};
+    bool use_fast_path{true};       ///< Whether to use the optimized fast parsing path.
+    size_t initial_capacity{256};   ///< Initial buffer capacity in bytes.
 };
-} // namespace
+
+} // namespace kcenon::container
