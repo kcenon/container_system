@@ -55,7 +55,7 @@ After calling `unified_find_dependency()`, the following variables are set:
 |--------|---------|-------------|
 | `UNIFIED_ALLOW_FETCHCONTENT` | ON | Enable automatic download via FetchContent |
 | `UNIFIED_COMMON_SYSTEM_GIT_URL` | GitHub URL | Git URL for common_system |
-| `UNIFIED_COMMON_SYSTEM_GIT_TAG` | main | Git tag/branch for common_system |
+| `UNIFIED_COMMON_SYSTEM_GIT_TAG` | v0.1.0 | Git tag/branch for common_system |
 
 ### Examples
 
@@ -95,7 +95,7 @@ endif()
 
 # For FetchContent:
 set(UNIFIED_NEW_DEPENDENCY_GIT_URL "https://github.com/org/new_dependency.git" CACHE STRING "")
-set(UNIFIED_NEW_DEPENDENCY_GIT_TAG "main" CACHE STRING "")
+set(UNIFIED_NEW_DEPENDENCY_GIT_TAG "v1.0.0" CACHE STRING "")  # Use a release tag
 ```
 
 ## Other Modules
