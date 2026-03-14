@@ -150,7 +150,7 @@ include(FetchContent)
 FetchContent_Declare(
     container_system
     GIT_REPOSITORY https://github.com/kcenon/container_system.git
-    GIT_TAG main
+    GIT_TAG v0.1.0  # Pin to a specific release tag; do NOT use main
 )
 FetchContent_MakeAvailable(container_system)
 target_link_libraries(your_target PRIVATE ContainerSystem::container)

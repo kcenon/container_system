@@ -465,7 +465,7 @@ include(FetchContent)
 FetchContent_Declare(
     container_system
     GIT_REPOSITORY https://github.com/kcenon/container_system.git
-    GIT_TAG main
+    GIT_TAG v0.1.0  # Pin to a specific release tag; do NOT use main
 )
 FetchContent_MakeAvailable(container_system)
 
@@ -491,7 +491,7 @@ include(FetchContent)
 FetchContent_Declare(
     container_system
     GIT_REPOSITORY https://github.com/kcenon/container_system.git
-    GIT_TAG main
+    GIT_TAG v0.1.0  # Pin to a specific release tag; do NOT use main
 )
 
 # common_system will be fetched automatically via UnifiedDependencies.cmake
