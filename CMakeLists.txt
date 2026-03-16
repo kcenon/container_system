@@ -553,7 +553,7 @@ endif()
 include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
 
-set(CONTAINER_SYSTEM_CMAKE_INSTALL_DIR "${CMAKE_INSTALL_LIBDIR}/cmake/ContainerSystem")
+set(CONTAINER_SYSTEM_CMAKE_INSTALL_DIR "${CMAKE_INSTALL_LIBDIR}/cmake/container_system")
 
 # =============================================================================
 # Canonical Include Path Configuration
@@ -573,7 +573,7 @@ install(FILES
 )
 
 install(TARGETS container_system
-    EXPORT ContainerSystemTargets
+    EXPORT container_system-targets
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
@@ -591,33 +591,33 @@ install(DIRECTORY
     PATTERN "*.hpp"
 )
 
-install(EXPORT ContainerSystemTargets
-    FILE ContainerSystemTargets.cmake
+install(EXPORT container_system-targets
+    FILE container_system-targets.cmake
     NAMESPACE ContainerSystem::
     DESTINATION ${CONTAINER_SYSTEM_CMAKE_INSTALL_DIR}
 )
 
 configure_package_config_file(
-    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/ContainerSystemConfig.cmake.in"
-    "${CMAKE_CURRENT_BINARY_DIR}/ContainerSystemConfig.cmake"
+    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/container_system-config.cmake.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/container_system-config.cmake"
     INSTALL_DESTINATION ${CONTAINER_SYSTEM_CMAKE_INSTALL_DIR}
     PATH_VARS CMAKE_INSTALL_INCLUDEDIR
 )
 
 write_basic_package_version_file(
-    "${CMAKE_CURRENT_BINARY_DIR}/ContainerSystemConfigVersion.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/container_system-config-version.cmake"
     VERSION ${PROJECT_VERSION}
     COMPATIBILITY AnyNewerVersion
 )
 
 install(FILES
-    "${CMAKE_CURRENT_BINARY_DIR}/ContainerSystemConfig.cmake"
-    "${CMAKE_CURRENT_BINARY_DIR}/ContainerSystemConfigVersion.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/container_system-config.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/container_system-config-version.cmake"
     DESTINATION ${CONTAINER_SYSTEM_CMAKE_INSTALL_DIR}
 )
 
-export(EXPORT ContainerSystemTargets
-    FILE "${CMAKE_CURRENT_BINARY_DIR}/ContainerSystemTargets.cmake"
+export(EXPORT container_system-targets
+    FILE "${CMAKE_CURRENT_BINARY_DIR}/container_system-targets.cmake"
     NAMESPACE ContainerSystem::
 )
 

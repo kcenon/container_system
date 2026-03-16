@@ -102,7 +102,7 @@ set(UNIFIED_NEW_DEPENDENCY_GIT_TAG "v1.0.0" CACHE STRING "")  # Use a release ta
 
 | Module | Description |
 |--------|-------------|
-| `ContainerSystemConfig.cmake.in` | Package configuration template for find_package() |
+| `container_system-config.cmake.in` | Package configuration template for find_package() |
 | `Version.cmake` | Version information and semantic versioning utilities |
 | `toolchain-arm64-linux.cmake` | Cross-compilation toolchain for ARM64 Linux |
 
