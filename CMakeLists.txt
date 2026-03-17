@@ -260,7 +260,8 @@ if(BUILD_WITH_COMMON_SYSTEM)
 endif()
 
 # Create aliases for consistent naming and messaging system compatibility
-add_library(ContainerSystem::container ALIAS container_system)
+add_library(container_system::container ALIAS container_system)
+add_library(ContainerSystem::container ALIAS container_system)  # Backward compatibility
 add_library(MessagingSystem::container ALIAS container_system)  # For messaging system compatibility
 
 # Set target properties
@@ -593,7 +594,7 @@ install(DIRECTORY
 
 install(EXPORT container_system-targets
     FILE container_system-targets.cmake
-    NAMESPACE ContainerSystem::
+    NAMESPACE container_system::
     DESTINATION ${CONTAINER_SYSTEM_CMAKE_INSTALL_DIR}
 )
 
@@ -618,7 +619,7 @@ install(FILES
 
 export(EXPORT container_system-targets
     FILE "${CMAKE_CURRENT_BINARY_DIR}/container_system-targets.cmake"
-    NAMESPACE ContainerSystem::
+    NAMESPACE container_system::
 )
 
 ##################################################
