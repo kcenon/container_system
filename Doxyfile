@@ -1,4 +1,6 @@
 PROJECT_NAME           = "Container System"
+PROJECT_NUMBER         = "0.1.0"
+PROJECT_BRIEF          = "High-performance C++20 type-safe container framework with SIMD-accelerated serialization"
 OUTPUT_DIRECTORY       = documents
 CREATE_SUBDIRS         = YES
 ALLOW_UNICODE_NAMES    = NO
