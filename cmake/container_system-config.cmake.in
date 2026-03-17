@@ -22,7 +22,15 @@ set(container_system_FOUND TRUE)
 # Provide information about the package
 set(container_system_VERSION @PROJECT_VERSION@)
 set(container_system_INCLUDE_DIRS "@PACKAGE_CMAKE_INSTALL_INCLUDEDIR@")
-set(container_system_LIBRARIES ContainerSystem::container)
+set(container_system_LIBRARIES container_system::container)
+
+# Backward compatibility aliases (ContainerSystem:: → container_system::)
+if(NOT TARGET ContainerSystem::container)
+    add_library(ContainerSystem::container INTERFACE IMPORTED)
+    set_target_properties(ContainerSystem::container PROPERTIES
+        INTERFACE_LINK_LIBRARIES container_system::container
+    )
+endif()
 
 # Legacy variables for backward compatibility
 set(ContainerSystem_FOUND TRUE)
