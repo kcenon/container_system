@@ -29,15 +29,6 @@
         }
       ]
     },
-    "fmt-support": {
-      "description": "Use fmt library for formatting (fallback for compilers without std::format)",
-      "dependencies": [
-        {
-          "name": "fmt",
-          "version>=": "10.0.0"
-        }
-      ]
-    },
     "samples": {
       "description": "Build sample applications",
       "dependencies": []
