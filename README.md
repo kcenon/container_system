@@ -339,6 +339,43 @@ This makes it ideal as a foundational data layer for the ecosystem.
 
 🏗️ **[Architecture Guide →](docs/ARCHITECTURE.md)**
 
+## C++20 Module Support
+
+Container System provides C++20 module support as an alternative to the header-based interface.
+
+### Requirements for Modules
+
+- **CMake 3.28+**
+- **Clang 16+, GCC 14+, or MSVC 2022 17.4+**
+- **common_system** with module support
+
+### Building with Modules
+
+```bash
+cmake -B build -DCONTAINER_BUILD_MODULES=ON
+cmake --build build
+```
+
+### Using Modules
+
+```cpp
+import kcenon.container;
+
+int main() {
+    // Use container components directly
+    auto container = kcenon::container::value_container();
+    container.set("key", "value");
+}
+```
+
+### Module Structure
+
+| Module | Contents |
+|--------|----------|
+| `kcenon.container` | Complete container framework (values, serialization, type system) |
+
+> **Note**: C++20 modules are experimental. The header-based interface remains the primary API.
+
 ## Documentation
 
 ### Getting Started
