@@ -284,6 +284,8 @@ PREDEFINED             = HAS_MESSAGING_FEATURES \
 EXPAND_AS_DEFINED      =
 SKIP_FUNCTION_MACROS   = YES
 
+ALIASES                = "thread_safety=@par Thread Safety:^^" \
+                         "performance=@par Performance:^^"
 TAGFILES               =
 GENERATE_TAGFILE       =
 ALLEXTERNALS           = NO
