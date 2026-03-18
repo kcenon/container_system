@@ -23,6 +23,7 @@ INLINE_INHERITED_MEMB  = NO
 FULL_PATH_NAMES        = YES
 SHORT_NAMES            = NO
 JAVADOC_AUTOBRIEF      = NO
+QT_AUTOBRIEF           = NO
 MULTILINE_CPP_IS_BRIEF = YES
 INHERIT_DOCS           = YES
 SEPARATE_MEMBER_PAGES  = NO
@@ -46,7 +47,7 @@ INLINE_SIMPLE_STRUCTS  = NO
 TYPEDEF_HIDES_STRUCT   = NO
 LOOKUP_CACHE_SIZE      = 0
 NUM_PROC_THREADS       = 1
-TIMESTAMP              = YES
+TIMESTAMP              = NO
 EXTRACT_ALL            = YES
 EXTRACT_PRIVATE        = YES
 EXTRACT_STATIC         = YES
@@ -89,6 +90,7 @@ WARN_IF_UNDOCUMENTED   = YES
 WARN_IF_DOC_ERROR      = YES
 WARN_NO_PARAMDOC       = YES
 WARN_AS_ERROR          = NO
+WARN_IF_INCOMPLETE_DOC = YES
 WARN_FORMAT            = "$file:$line: $text"
 WARN_LOGFILE           =
 INPUT                  = ./core \
@@ -96,8 +98,7 @@ INPUT                  = ./core \
                          ./internal \
                          ./integration \
                          ./examples \
-                         ./utilities \
-                         ./mainpage.dox
+                         ./utilities
 
 INPUT_ENCODING         = UTF-8
 FILE_PATTERNS          = *.c \
@@ -108,7 +109,8 @@ FILE_PATTERNS          = *.c \
                          *.hh \
                          *.hpp \
                          *.tpp \
-                         *.cppm
+                         *.cppm \
+                         *.md
 
 RECURSIVE              = YES
 EXCLUDE                = build \
@@ -120,6 +122,8 @@ EXCLUDE_SYMLINKS       = NO
 EXCLUDE_PATTERNS       = */build/* \
                          */vcpkg/* \
                          */.git/* \
+                         */_deps/* \
+                         */node_modules/* \
                          */.*
 
 EXCLUDE_SYMBOLS        =
@@ -160,6 +164,9 @@ HTML_EXTRA_FILES       =
 HTML_COLORSTYLE_HUE    = 220
 HTML_COLORSTYLE_SAT    = 100
 HTML_COLORSTYLE_GAMMA  = 80
+HTML_COLORSTYLE        = AUTO_LIGHT
+HTML_CODE_FOLDING      = YES
+FULL_SIDEBAR           = NO
 HTML_TIMESTAMP         = NO
 HTML_DYNAMIC_MENUS     = YES
 HTML_DYNAMIC_SECTIONS  = NO
