@@ -75,6 +75,18 @@ messaging_system, network_system, database_system
 
 ## Quick Start
 
+### Installation via vcpkg
+
+```bash
+vcpkg install kcenon-container-system
+```
+
+In your `CMakeLists.txt`:
+```cmake
+find_package(container_system CONFIG REQUIRED)
+target_link_libraries(your_target PRIVATE kcenon::container_system)
+```
+
 ### Basic Usage Example
 
 ```cpp

@@ -32,6 +32,16 @@
 /**
  * @file fast_parser.h
  * @brief Fast-path parsing utilities and configuration for the container system.
+ *
+ * @code
+ * // Configure the fast parser and reserve container capacity
+ * kcenon::container::parser_config config;
+ * config.use_fast_path = true;
+ * config.initial_capacity = 1024;
+ *
+ * std::vector<int> data;
+ * kcenon::container::reserve_if_possible(data, config.initial_capacity);
+ * @endcode
  */
 
 namespace kcenon::container {
