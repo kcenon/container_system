@@ -279,6 +279,7 @@ set_target_properties(container_system PROPERTIES
 
 # Public include directories (for consumers of this library)
 target_include_directories(container_system PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
     $<INSTALL_INTERFACE:include>
 )
@@ -560,10 +561,12 @@ set(CONTAINER_SYSTEM_CMAKE_INSTALL_DIR "${CMAKE_INSTALL_LIBDIR}/cmake/container_
 # Canonical Include Path Configuration
 # =============================================================================
 # The canonical include path for container_system is:
-#     #include <container.h>
+#     #include <kcenon/container/container.h>   (preferred)
+#     #include <container.h>                    (legacy, via forwarding headers)
 #
 # The following directories are installed:
-#   - core/      (core container implementation)
+#   - include/kcenon/container/  (canonical public headers)
+#   - core/      (forwarding headers for backward compatibility)
 #   - internal/  (internal implementation details)
 #   - integration/ (integration adapters)
 # =============================================================================
@@ -581,6 +584,17 @@ install(TARGETS container_system
     INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
 
+# Canonical public headers (kcenon ecosystem convention)
+install(DIRECTORY
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/kcenon
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+    COMPONENT Development
+    FILES_MATCHING
+    PATTERN "*.h"
+    PATTERN "*.hpp"
+)
+
+# Backward-compatible forwarding headers and internal implementation
 install(DIRECTORY
     ${CMAKE_CURRENT_SOURCE_DIR}/core
     ${CMAKE_CURRENT_SOURCE_DIR}/internal
@@ -669,6 +683,7 @@ if(CONTAINER_BUILD_MODULES)
 
         # Include directories for module target
         target_include_directories(container_system_modules PUBLIC
+            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
             $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
             $<INSTALL_INTERFACE:include>
         )
