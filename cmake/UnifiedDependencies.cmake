@@ -34,7 +34,7 @@ option(UNIFIED_ALLOW_FETCHCONTENT "Allow FetchContent fallback for dependencies"
 # for reproducible builds. Using "main" is a moving target and breaks SOUP traceability.
 # See: https://github.com/kcenon/common_system/issues/402
 set(UNIFIED_COMMON_SYSTEM_GIT_URL "https://github.com/kcenon/common_system.git" CACHE STRING "Git URL for common_system")
-set(UNIFIED_COMMON_SYSTEM_GIT_TAG "v0.1.0" CACHE STRING "Git tag/branch for common_system (use a release tag, not 'main')")
+set(UNIFIED_COMMON_SYSTEM_GIT_TAG "e5adfa9" CACHE STRING "Git tag/branch for common_system (use a release tag or commit hash, not 'main')")
 
 if("${UNIFIED_COMMON_SYSTEM_GIT_TAG}" STREQUAL "main")
     message(WARNING
