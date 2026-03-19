@@ -566,9 +566,11 @@ set(CONTAINER_SYSTEM_CMAKE_INSTALL_DIR "${CMAKE_INSTALL_LIBDIR}/cmake/container_
 #
 # The following directories are installed:
 #   - include/kcenon/container/  (canonical public headers)
+#   - include/container/         (forwarding headers for #include <container/...> paths)
 #   - core/      (forwarding headers for backward compatibility)
 #   - internal/  (internal implementation details)
 #   - integration/ (integration adapters)
+#   - messaging/ (domain-specific messaging container)
 # =============================================================================
 install(FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/container.h
@@ -594,11 +596,22 @@ install(DIRECTORY
     PATTERN "*.hpp"
 )
 
+# Forwarding headers under include/container/ (for #include <container/...> paths)
+install(DIRECTORY
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/container
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+    COMPONENT Development
+    FILES_MATCHING
+    PATTERN "*.h"
+    PATTERN "*.hpp"
+)
+
 # Backward-compatible forwarding headers and internal implementation
 install(DIRECTORY
     ${CMAKE_CURRENT_SOURCE_DIR}/core
     ${CMAKE_CURRENT_SOURCE_DIR}/internal
     ${CMAKE_CURRENT_SOURCE_DIR}/integration
+    ${CMAKE_CURRENT_SOURCE_DIR}/messaging
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
     COMPONENT Development
     FILES_MATCHING
