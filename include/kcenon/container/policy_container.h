@@ -610,6 +610,14 @@ using policy_container = basic_value_container<policy::dynamic_storage_policy>;
 using fast_policy_container = basic_value_container<policy::indexed_storage_policy>;
 
 /**
+ * @brief Recommended container for new code
+ *
+ * Uses indexed storage policy for O(1) average lookup time.
+ * Prefer this alias for new code unless insertion order must be preserved.
+ */
+using recommended_container = basic_value_container<policy::indexed_storage_policy>;
+
+/**
  * @brief Type-restricted container template
  *
  * Provides compile-time type safety by restricting allowed value types.
