@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Add `recommended_container` alias using `indexed_storage_policy` for O(1) key lookups ([#446](https://github.com/kcenon/container_system/issues/446))
+
+### Fixed
+
+- Enable pointer range validation in release builds for `fixed_block_pool` ([#447](https://github.com/kcenon/container_system/issues/447))
+
 ## [0.1.0] - 2026-03-13
 
 ### Added

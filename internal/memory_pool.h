@@ -76,9 +76,9 @@ public:
         if (!p) return;
         std::lock_guard<std::mutex> lock(mutex_);
 
-#ifndef NDEBUG
-        // Debug-mode validation: ensure pointer appears to be from our pool
-        // This is a simple sanity check, not a complete validation
+        // Validate pointer belongs to one of our pool chunks.
+        // This lightweight range check runs in all build modes to
+        // prevent free-list corruption from invalid deallocations.
         bool found = false;
         for (const auto& chunk : chunks_) {
             std::uint8_t* chunk_start = chunk.get();
@@ -90,12 +90,8 @@ public:
             }
         }
         if (!found) {
-            // Pointer does not belong to any of our chunks
-            // In debug mode, we could log a warning or assert
-            // For now, we'll just return to avoid corruption
             return;
         }
-#endif
 
         *reinterpret_cast<void**>(p) = free_list_;
         free_list_ = p;
