@@ -88,8 +88,8 @@ endif()
 # Find required packages
 find_package(Threads REQUIRED)
 
-# Note: This project requires C++20 std::format (GCC 13+, Clang 14+, MSVC 19.29+)
-message(STATUS "Using C++20 std::format for string formatting")
+# Note: Uses C++20 std::format when available, with ostringstream fallback
+message(STATUS "Using C++20 std::format if available, with ostringstream fallback")
 
 ##################################################
 # Source Files Configuration
@@ -346,8 +346,8 @@ target_link_libraries(container_system PUBLIC
     kcenon::common_system
 )
 
-# C++20 std::format is required (no fmt library fallback)
-message(STATUS "Container: Using std::format (C++20)")
+# C++20 std::format with ostringstream fallback for incomplete implementations
+message(STATUS "Container: Using std::format (C++20) with ostringstream fallback")
 
 ##################################################
 # Platform-Specific Configuration
@@ -741,7 +741,7 @@ endif()
 
 message(STATUS "Container library configured:")
 message(STATUS "  Module Directory: ${CMAKE_CURRENT_SOURCE_DIR}/container")
-message(STATUS "  Dependencies: utilities, std::format (C++20)")
+message(STATUS "  Dependencies: utilities, std::format (C++20, fallback available)")
 message(STATUS "  Features:")
 message(STATUS "    - Thread-safe operations: ON")
 message(STATUS "    - Variant-based types: ON")
