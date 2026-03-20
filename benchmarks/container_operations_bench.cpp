@@ -59,7 +59,7 @@ static void BM_Container_GetValue(benchmark::State& state) {
     auto c = std::make_shared<value_container>();
     c->set("key", std::string("test_value"));
     for (auto _ : state) {
-        auto val = c->get_value("key");
+        auto val = c->get("key");
         benchmark::DoNotOptimize(val);
     }
 }

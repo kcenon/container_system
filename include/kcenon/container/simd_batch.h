@@ -66,11 +66,4 @@ private:
     std::vector<TValue> values_;
 };
 
-/**
- * @brief Deprecated alias for simd_batch
- * @deprecated Use simd_batch instead. This alias will be removed in the next major version.
- */
-template<kcenon::container::concepts::TriviallyCopyable TValue>
-using typed_container [[deprecated("Use simd_batch instead. See Issue #328.")]] = simd_batch<TValue>;
-
 } // namespace kcenon::container::core

@@ -217,16 +217,16 @@ TEST_F(ContainerTest, ContainerValueManagement) {
     container->set(key3, true);
 
     // Retrieve values
-    auto val1 = container->get_value("key1");
-    auto val2 = container->get_value("key2");
-    auto val3 = container->get_value("key3");
+    auto val1 = container->get("key1");
+    auto val2 = container->get("key2");
+    auto val3 = container->get("key3");
 
     EXPECT_EQ(ov_to_string(val1), "value1");
     EXPECT_EQ(ov_to_int(val2), 100);
     EXPECT_TRUE(ov_to_boolean(val3));
 
     // Test non-existent key
-    auto val4 = container->get_value("non_existent");
+    auto val4 = container->get("non_existent");
     EXPECT_TRUE(ov_is_null(val4));
 }
 
@@ -255,8 +255,8 @@ TEST_F(ContainerTest, ContainerSerialization) {
     EXPECT_EQ(new_container->target_id(), "tgt");
     EXPECT_EQ(new_container->message_type(), "test");
 
-    EXPECT_EQ(ov_to_string(new_container->get_value("str")), "hello");
-    EXPECT_EQ(ov_to_int(new_container->get_value("num")), 42);
+    EXPECT_EQ(ov_to_string(new_container->get("str")), "hello");
+    EXPECT_EQ(ov_to_int(new_container->get("num")), 42);
 }
 
 TEST_F(ContainerTest, NestedContainerSupport) {
@@ -275,13 +275,13 @@ TEST_F(ContainerTest, NestedContainerSupport) {
     container->set(child_key, nested_data);
 
     // Retrieve nested container data
-    auto child_val = container->get_value("child");
+    auto child_val = container->get("child");
     EXPECT_TRUE(child_val.has_value());
 
     // Parse nested container - parse_only_header=false to parse values too
     auto child_container = std::make_unique<value_container>(ov_to_string(child_val), false);
     EXPECT_EQ(child_container->message_type(), "nested_msg");
-    EXPECT_EQ(ov_to_string(child_container->get_value("nested_key")), "nested_value");
+    EXPECT_EQ(ov_to_string(child_container->get("nested_key")), "nested_value");
 }
 
 TEST_F(ContainerTest, ContainerHeaderSwap) {
@@ -308,7 +308,7 @@ TEST_F(ContainerTest, DISABLED_MultipleValuesWithSameName) {
     container->set(key, val3);
 
     // Get first value with name (current API behavior)
-    auto item = container->get_value("item");
+    auto item = container->get("item");
     EXPECT_TRUE(item.has_value());
 }
 
@@ -322,12 +322,12 @@ TEST_F(ContainerTest, ContainerCopy) {
     // Deep copy
     auto copy = container->copy(true);
     EXPECT_EQ(copy->message_type(), "original");
-    EXPECT_EQ(ov_to_string(copy->get_value("key")), "value");
+    EXPECT_EQ(ov_to_string(copy->get("key")), "value");
 
     // Shallow copy (header only)
     auto shallow = container->copy(false);
     EXPECT_EQ(shallow->message_type(), "original");
-    auto shallow_val = shallow->get_value("key");
+    auto shallow_val = shallow->get("key");
     EXPECT_TRUE(ov_is_null(shallow_val)); // No values in shallow copy
 }
 
@@ -345,7 +345,7 @@ TEST_F(ContainerTest, LargeDataHandling) {
     std::string serialized = container->serialize_string(value_container::serialization_format::binary).value();
     auto restored = std::make_unique<value_container>(serialized, false);
 
-    EXPECT_EQ(ov_to_string(restored->get_value("large")), large_data);
+    EXPECT_EQ(ov_to_string(restored->get("large")), large_data);
 }
 
 // ============================================================================
@@ -372,7 +372,7 @@ TEST(ThreadSafetyTest, ConcurrentReads) {
     for (int t = 0; t < num_threads; ++t) {
         threads.emplace_back([&container, &success_count]() {
             for (int i = 0; i < 100; ++i) {
-                auto val = container->get_value("key" + std::to_string(i));
+                auto val = container->get("key" + std::to_string(i));
                 if (ov_to_int(val) == i) {
                     success_count++;
                 }
@@ -567,19 +567,19 @@ TEST(EdgeCaseTest, DISABLED_SpecialCharacters) {
     auto restored = std::make_unique<value_container>(serialized);
 
     // Verify values preserved
-    auto underscore_val = restored->get_value("key_with_underscores");
+    auto underscore_val = restored->get("key_with_underscores");
     EXPECT_FALSE(ov_is_null(underscore_val));
     if (!ov_is_null(underscore_val)) {
         EXPECT_EQ(ov_to_string(underscore_val), "value1");
     }
 
-    auto camel_val = restored->get_value("keyWithCamelCase");
+    auto camel_val = restored->get("keyWithCamelCase");
     EXPECT_FALSE(ov_is_null(camel_val));
     if (!ov_is_null(camel_val)) {
         EXPECT_EQ(ov_to_string(camel_val), "value2");
     }
 
-    auto numeric_val = restored->get_value("key123");
+    auto numeric_val = restored->get("key123");
     EXPECT_FALSE(ov_is_null(numeric_val));
     if (!ov_is_null(numeric_val)) {
         EXPECT_EQ(ov_to_string(numeric_val), "value3");
@@ -1222,10 +1222,10 @@ TEST_F(UnifiedSetterAPITest, SetSingleValue) {
     EXPECT_TRUE(container->contains("key4"));
     EXPECT_FALSE(container->contains("nonexistent"));
 
-    auto val1 = container->get_value("key1");
-    auto val2 = container->get_value("key2");
-    auto val3 = container->get_value("key3");
-    auto val4 = container->get_value("key4");
+    auto val1 = container->get("key1");
+    auto val2 = container->get("key2");
+    auto val3 = container->get("key3");
+    auto val4 = container->get("key4");
 
     ASSERT_TRUE(val1.has_value());
     ASSERT_TRUE(val2.has_value());
@@ -1251,12 +1251,12 @@ TEST_F(UnifiedSetterAPITest, SetMethodChaining) {
 
 TEST_F(UnifiedSetterAPITest, SetOverwritesExistingValue) {
     container->set("key", std::string("original"));
-    auto val1 = container->get_value("key");
+    auto val1 = container->get("key");
     ASSERT_TRUE(val1.has_value());
     EXPECT_EQ(std::get<std::string>(val1->data), "original");
 
     container->set("key", std::string("updated"));
-    auto val2 = container->get_value("key");
+    auto val2 = container->get("key");
     ASSERT_TRUE(val2.has_value());
     EXPECT_EQ(std::get<std::string>(val2->data), "updated");
 
@@ -1272,7 +1272,7 @@ TEST_F(UnifiedSetterAPITest, SetOptimizedValue) {
     container->set(ov);
 
     EXPECT_TRUE(container->contains("test_key"));
-    auto val = container->get_value("test_key");
+    auto val = container->get("test_key");
     ASSERT_TRUE(val.has_value());
     EXPECT_EQ(std::get<std::string>(val->data), "test_value");
 }
@@ -1417,7 +1417,7 @@ TEST_F(ZeroCopyTest, GetViewReturnsValueInZeroCopyMode) {
     ASSERT_TRUE(restored->is_zero_copy_mode());
 
     // Get view for string value
-    auto view = restored->get_view("greeting");
+    auto view = restored->get("greeting", as_view);
     ASSERT_TRUE(view.has_value());
     EXPECT_EQ(view->as_string_view(), "Hello World");
     EXPECT_EQ(view->type(), value_types::string_value);
@@ -1434,7 +1434,7 @@ TEST_F(ZeroCopyTest, GetViewReturnsNulloptForMissingKey) {
     ASSERT_TRUE(restored->is_zero_copy_mode());
 
     // Get view for non-existent key
-    auto view = restored->get_view("nonexistent");
+    auto view = restored->get("nonexistent", as_view);
     EXPECT_FALSE(view.has_value());
 }
 
@@ -1449,8 +1449,8 @@ TEST_F(ZeroCopyTest, GetViewReturnsNulloptWhenNotInZeroCopyMode) {
 
     ASSERT_FALSE(restored->is_zero_copy_mode());
 
-    // get_view should return nullopt when not in zero-copy mode
-    auto view = restored->get_view("key");
+    // get(key, as_view) should return nullopt when not in zero-copy mode
+    auto view = restored->get("key", as_view);
     EXPECT_FALSE(view.has_value());
 }
 
@@ -1461,7 +1461,7 @@ TEST_F(ZeroCopyTest, ValueViewAsStringReturnsOwnedCopy) {
     std::string serialized = original->serialize_string(value_container::serialization_format::binary).value();
     auto restored = std::make_shared<value_container>(serialized, true);
 
-    auto view = restored->get_view("text");
+    auto view = restored->get("text", as_view);
     ASSERT_TRUE(view.has_value());
 
     // as_string() should return a copy
@@ -1478,14 +1478,14 @@ TEST_F(ZeroCopyTest, ValueViewNumericParsing) {
     auto restored = std::make_shared<value_container>(serialized, true);
 
     // Integer value
-    auto int_view = restored->get_view("int_val");
+    auto int_view = restored->get("int_val", as_view);
     ASSERT_TRUE(int_view.has_value());
     auto int_opt = int_view->as<int>();
     ASSERT_TRUE(int_opt.has_value());
     EXPECT_EQ(*int_opt, 12345);
 
     // Float value
-    auto float_view = restored->get_view("float_val");
+    auto float_view = restored->get("float_val", as_view);
     ASSERT_TRUE(float_view.has_value());
     auto float_opt = float_view->as<float>();
     ASSERT_TRUE(float_opt.has_value());
@@ -1504,7 +1504,7 @@ TEST_F(ZeroCopyTest, EnsureIndexBuiltDoesNotCrash) {
     restored->ensure_index_built();
 
     // Should still work after explicit build
-    auto view = restored->get_view("key1");
+    auto view = restored->get("key1", as_view);
     EXPECT_TRUE(view.has_value());
 }
 
@@ -1519,19 +1519,19 @@ TEST_F(ZeroCopyTest, MultipleValuesIndexing) {
     auto restored = std::make_shared<value_container>(serialized, true);
 
     // All values should be accessible
-    auto v1 = restored->get_view("first");
+    auto v1 = restored->get("first", as_view);
     ASSERT_TRUE(v1.has_value());
     EXPECT_EQ(v1->as_string_view(), "one");
 
-    auto v2 = restored->get_view("second");
+    auto v2 = restored->get("second", as_view);
     ASSERT_TRUE(v2.has_value());
     EXPECT_EQ(v2->as_string_view(), "two");
 
-    auto v3 = restored->get_view("third");
+    auto v3 = restored->get("third", as_view);
     ASSERT_TRUE(v3.has_value());
     EXPECT_EQ(v3->as_string_view(), "three");
 
-    auto v4 = restored->get_view("fourth");
+    auto v4 = restored->get("fourth", as_view);
     ASSERT_TRUE(v4.has_value());
 }
 
@@ -1805,15 +1805,15 @@ TEST_F(BatchOperationTest, BulkInsertMoveSemantics) {
 
     EXPECT_EQ(container->size(), 3);
 
-    auto name_val = container->get_value("name");
+    auto name_val = container->get("name");
     ASSERT_TRUE(name_val.has_value());
     EXPECT_EQ(std::get<std::string>(name_val->data), "Alice");
 
-    auto age_val = container->get_value("age");
+    auto age_val = container->get("age");
     ASSERT_TRUE(age_val.has_value());
     EXPECT_EQ(std::get<int>(age_val->data), 30);
 
-    auto score_val = container->get_value("score");
+    auto score_val = container->get("score");
     ASSERT_TRUE(score_val.has_value());
     EXPECT_DOUBLE_EQ(std::get<double>(score_val->data), 95.5);
 }
@@ -1854,7 +1854,7 @@ TEST_F(BatchOperationTest, GetBatchBasic) {
     container->set("city", std::string("Seattle"));
 
     std::vector<std::string_view> keys = {"name", "age", "missing_key"};
-    auto results = container->get_batch(std::span<const std::string_view>(keys));
+    auto results = container->get(std::span<const std::string_view>(keys));
 
     ASSERT_EQ(results.size(), 3);
     EXPECT_TRUE(results[0].has_value());
@@ -1870,7 +1870,7 @@ TEST_F(BatchOperationTest, GetBatchMap) {
     container->set("c", 3);
 
     std::vector<std::string_view> keys = {"a", "c", "nonexistent"};
-    auto result_map = container->get_batch_map(std::span<const std::string_view>(keys));
+    auto result_map = container->get_as_map(std::span<const std::string_view>(keys));
 
     EXPECT_EQ(result_map.size(), 2);
     EXPECT_EQ(std::get<int>(result_map["a"].data), 1);
@@ -1926,7 +1926,7 @@ TEST_F(BatchOperationTest, UpdateIfSuccess) {
     bool updated = container->update_if("counter", value_variant{10}, value_variant{20});
 
     EXPECT_TRUE(updated);
-    auto val = container->get_value("counter");
+    auto val = container->get("counter");
     ASSERT_TRUE(val.has_value());
     EXPECT_EQ(std::get<int>(val->data), 20);
 }
@@ -1937,7 +1937,7 @@ TEST_F(BatchOperationTest, UpdateIfFailureMismatch) {
     bool updated = container->update_if("counter", value_variant{99}, value_variant{20});
 
     EXPECT_FALSE(updated);
-    auto val = container->get_value("counter");
+    auto val = container->get("counter");
     ASSERT_TRUE(val.has_value());
     EXPECT_EQ(std::get<int>(val->data), 10);  // Value unchanged
 }
@@ -1970,9 +1970,9 @@ TEST_F(BatchOperationTest, UpdateBatchIf) {
     EXPECT_TRUE(results[2]);   // c updated
     EXPECT_FALSE(results[3]);  // d not found
 
-    EXPECT_EQ(std::get<int>(container->get_value("a")->data), 10);
-    EXPECT_EQ(std::get<int>(container->get_value("b")->data), 2);  // unchanged
-    EXPECT_EQ(std::get<int>(container->get_value("c")->data), 30);
+    EXPECT_EQ(std::get<int>(container->get("a")->data), 10);
+    EXPECT_EQ(std::get<int>(container->get("b")->data), 2);  // unchanged
+    EXPECT_EQ(std::get<int>(container->get("c")->data), 30);
 }
 
 TEST_F(BatchOperationTest, BatchOperationsPreserveOrder) {
@@ -1982,7 +1982,7 @@ TEST_F(BatchOperationTest, BatchOperationsPreserveOrder) {
     container->set("m", 3);
 
     std::vector<std::string_view> keys = {"m", "z", "a", "x"};
-    auto results = container->get_batch(std::span<const std::string_view>(keys));
+    auto results = container->get(std::span<const std::string_view>(keys));
 
     ASSERT_EQ(results.size(), 4);
     EXPECT_TRUE(results[0].has_value());
@@ -1999,7 +1999,7 @@ TEST_F(BatchOperationTest, BatchOperationsWithDuplicateKeys) {
 
     // get_batch with duplicate keys
     std::vector<std::string_view> keys = {"key", "key", "key"};
-    auto results = container->get_batch(std::span<const std::string_view>(keys));
+    auto results = container->get(std::span<const std::string_view>(keys));
 
     ASSERT_EQ(results.size(), 3);
     for (const auto& r : results) {
@@ -2389,8 +2389,8 @@ TEST_F(MetricsTest, OperationCountersIncrement) {
     // Perform operations
     container->set("key1", 42);
     container->set("key2", "hello");
-    container->get_value("key1");
-    container->get_value("key2");
+    container->get("key1");
+    container->get("key2");
     container->serialize_string(value_container::serialization_format::binary).value();
 
     auto metrics = value_container::get_detailed_metrics();

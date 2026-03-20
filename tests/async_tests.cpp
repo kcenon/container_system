@@ -383,13 +383,13 @@ TEST_F(AsyncContainerTest, DeserializeAsyncRestoresData) {
     EXPECT_NE(restored, nullptr);
 
     // Verify data integrity
-    auto string_val = restored->get_value("string_key");
+    auto string_val = restored->get("string_key");
     ASSERT_TRUE(string_val.has_value());
     auto* str_ptr = std::get_if<std::string>(&string_val->data);
     ASSERT_NE(str_ptr, nullptr);
     EXPECT_EQ(*str_ptr, "hello");
 
-    auto int_val = restored->get_value("int_key");
+    auto int_val = restored->get("int_key");
     ASSERT_TRUE(int_val.has_value());
     auto* int_ptr = std::get_if<int64_t>(&int_val->data);
     ASSERT_NE(int_ptr, nullptr);
@@ -485,7 +485,7 @@ TEST_F(AsyncContainerTest, RoundTripSerializationAsync) {
     EXPECT_NE(restored, nullptr);
 
     // Verify all values survived round-trip
-    auto string_val = restored->get_value("string_key");
+    auto string_val = restored->get("string_key");
     ASSERT_TRUE(string_val.has_value());
     auto* str_ptr = std::get_if<std::string>(&string_val->data);
     ASSERT_NE(str_ptr, nullptr);
@@ -795,7 +795,7 @@ TEST_F(AsyncStreamingTest, SerializeChunkedSmallChunks) {
 
     // Verify data integrity
     auto restored = std::make_shared<kcenon::container::value_container>(full_data, false);
-    auto val = restored->get_value("key_50");
+    auto val = restored->get("key_50");
     ASSERT_TRUE(val.has_value());
     auto* str_ptr = std::get_if<std::string>(&val->data);
     ASSERT_NE(str_ptr, nullptr);
@@ -863,7 +863,7 @@ TEST_F(AsyncStreamingTest, DeserializeStreamingComplete) {
     EXPECT_NE(restored, nullptr);
 
     // Verify data integrity
-    auto val = restored->get_value("key_0");
+    auto val = restored->get("key_0");
     ASSERT_TRUE(val.has_value());
     auto* str_ptr = std::get_if<std::string>(&val->data);
     ASSERT_NE(str_ptr, nullptr);

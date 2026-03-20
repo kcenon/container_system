@@ -172,7 +172,7 @@ namespace kcenon::container
 		// Check each field definition
 		for (const auto& field : fields_)
 		{
-			auto value_opt = container.get_value(field.name);
+			auto value_opt = container.get(field.name);
 
 			if (!value_opt.has_value())
 			{

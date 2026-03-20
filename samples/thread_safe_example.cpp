@@ -56,7 +56,7 @@ int main() {
                 switch (operation_type) {
                     case 0: { // Read operation
                         std::lock_guard<std::mutex> lock(container_mutex);
-                        if (auto counter_val = container->get_value("counter")) {
+                        if (auto counter_val = container->get("counter")) {
                             if (auto* val = std::get_if<int32_t>(&counter_val->data)) {
                                 volatile int read_val = *val;
                                 (void)read_val;
@@ -66,7 +66,7 @@ int main() {
                     }
                     case 1: { // Write operation (increment counter)
                         std::lock_guard<std::mutex> lock(container_mutex);
-                        if (auto current = container->get_value("counter")) {
+                        if (auto current = container->get("counter")) {
                             if (auto* val = std::get_if<int32_t>(&current->data)) {
                                 container->set("counter", static_cast<int32_t>(*val + 1));
                                 global_counter.fetch_add(1, std::memory_order_relaxed);
@@ -83,7 +83,7 @@ int main() {
                     }
                     case 3: { // Update total operations
                         std::lock_guard<std::mutex> lock(container_mutex);
-                        if (auto total_ops = container->get_value("total_operations")) {
+                        if (auto total_ops = container->get("total_operations")) {
                             if (auto* val = std::get_if<int32_t>(&total_ops->data)) {
                                 container->set("total_operations", static_cast<int32_t>(*val + 1));
                             }
@@ -115,12 +115,12 @@ int main() {
 
     {
         std::lock_guard<std::mutex> lock(container_mutex);
-        if (auto final_counter = container->get_value("counter")) {
+        if (auto final_counter = container->get("counter")) {
             if (auto* val = std::get_if<int32_t>(&final_counter->data)) {
                 std::cout << "Final counter value: " << *val << std::endl;
             }
         }
-        if (auto total_ops = container->get_value("total_operations")) {
+        if (auto total_ops = container->get("total_operations")) {
             if (auto* val = std::get_if<int32_t>(&total_ops->data)) {
                 std::cout << "Total operations recorded: " << *val << std::endl;
             }
@@ -167,7 +167,7 @@ int main() {
     auto restored_container = std::make_shared<value_container>(serialized);
     std::cout << "Container restored successfully" << std::endl;
 
-    if (auto restored_counter = restored_container->get_value("counter")) {
+    if (auto restored_counter = restored_container->get("counter")) {
         if (auto* val = std::get_if<int32_t>(&restored_counter->data)) {
             std::cout << "Restored counter value: " << *val << std::endl;
         }

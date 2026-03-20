@@ -307,7 +307,7 @@ void demonstrate_message_queue() {
 
         if (!data.empty()) {
             auto container = std::make_shared<value_container>(data, false);
-            auto seq = container->get_value("seq");
+            auto seq = container->get("seq");
             if (seq && std::holds_alternative<int32_t>(seq->data)) {
                 std::cout << "  Consumed message " << std::get<int32_t>(seq->data) << std::endl;
             }

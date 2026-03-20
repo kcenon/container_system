@@ -730,7 +730,7 @@ TEST_F(SchemaTest, DeserializeWithSchema_ValidData) {
 	EXPECT_TRUE(result.is_ok());
 	EXPECT_TRUE(target->get_validation_errors().empty());
 
-	auto name_opt = target->get_value("name");
+	auto name_opt = target->get("name");
 	EXPECT_TRUE(name_opt.has_value());
 }
 

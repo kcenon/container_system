@@ -56,7 +56,7 @@ private:
         start = std::chrono::high_resolution_clock::now();
         for (int i = 0; i < iterations; ++i) {
             std::string key = "key_" + std::to_string(i);
-            auto value = container->get_value(key);
+            auto value = container->get(key);
             volatile bool exists = value.has_value();
             (void)exists;
         }

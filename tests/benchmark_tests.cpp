@@ -226,7 +226,7 @@ static void BM_ContainerGetValue(benchmark::State& state) {
     std::string lookup_key = "key" + std::to_string(state.range(0) / 2);
     
     for (auto _ : state) {
-        auto val = container->get_value(lookup_key);
+        auto val = container->get(lookup_key);
         benchmark::DoNotOptimize(val);
     }
 }
@@ -500,7 +500,7 @@ static void BM_NestedContainer_Create(benchmark::State& state) {
             current->add(std::make_shared<value>("child", value_types::container_value, nested_data));
             
             if (i < depth - 1) {
-                auto child_val = current->get_value("child");
+                auto child_val = current->get("child");
                 current = new value_container(child_val->data());
             }
         }

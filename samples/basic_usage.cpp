@@ -31,31 +31,31 @@ int main() {
     // 2. Reading values from container
     std::cout << "\n2. Reading Values:" << std::endl;
 
-    if (auto user_id = container->get_value("user_id")) {
+    if (auto user_id = container->get("user_id")) {
         if (auto* str = std::get_if<std::string>(&user_id->data)) {
             std::cout << "User ID: " << *str << std::endl;
         }
     }
 
-    if (auto username = container->get_value("username")) {
+    if (auto username = container->get("username")) {
         if (auto* str = std::get_if<std::string>(&username->data)) {
             std::cout << "Username: " << *str << std::endl;
         }
     }
 
-    if (auto age = container->get_value("age")) {
+    if (auto age = container->get("age")) {
         if (auto* val = std::get_if<int32_t>(&age->data)) {
             std::cout << "Age: " << *val << std::endl;
         }
     }
 
-    if (auto is_active = container->get_value("is_active")) {
+    if (auto is_active = container->get("is_active")) {
         if (auto* val = std::get_if<bool>(&is_active->data)) {
             std::cout << "Is Active: " << (*val ? "Yes" : "No") << std::endl;
         }
     }
 
-    if (auto balance = container->get_value("balance")) {
+    if (auto balance = container->get("balance")) {
         if (auto* val = std::get_if<double>(&balance->data)) {
             std::cout << "Balance: $" << *val << std::endl;
         }
@@ -81,13 +81,13 @@ int main() {
     auto restored_container = std::make_shared<value_container>(serialized);
     std::cout << "Restored container message type: " << restored_container->message_type() << std::endl;
 
-    if (auto restored_username = restored_container->get_value("username")) {
+    if (auto restored_username = restored_container->get("username")) {
         if (auto* str = std::get_if<std::string>(&restored_username->data)) {
             std::cout << "Restored username: " << *str << std::endl;
         }
     }
 
-    if (auto restored_balance = restored_container->get_value("balance")) {
+    if (auto restored_balance = restored_container->get("balance")) {
         if (auto* val = std::get_if<double>(&restored_balance->data)) {
             std::cout << "Restored balance: $" << *val << std::endl;
         }

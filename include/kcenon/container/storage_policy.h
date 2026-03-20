@@ -292,7 +292,7 @@ private:
  * - Frequent key-based lookups
  * - Scenarios where lookup performance is critical
  *
- * @note This corresponds to optimized_container behavior.
+ * @note This provides O(1) indexed lookup behavior (replaces the removed optimized_container).
  */
 class indexed_storage_policy {
 public:

@@ -230,11 +230,11 @@ TEST_F(GrpcServiceTest, ProcessContainerWithValues) {
     ASSERT_NE(result.value, nullptr);
 
     // Verify values are preserved
-    auto count = result.value->get_variant_value("count");
+    auto count = result.value->get("count");
     ASSERT_TRUE(count.has_value());
     EXPECT_EQ(std::get<int>(count->data), 42);
 
-    auto name = result.value->get_variant_value("name");
+    auto name = result.value->get("name");
     ASSERT_TRUE(name.has_value());
     EXPECT_EQ(std::get<std::string>(name->data), "test_name");
 }
@@ -261,11 +261,11 @@ TEST_F(GrpcServiceTest, ProcessWithCustomProcessor) {
     EXPECT_TRUE(result.success);
     ASSERT_NE(result.value, nullptr);
 
-    auto processed = result.value->get_variant_value("processed");
+    auto processed = result.value->get("processed");
     ASSERT_TRUE(processed.has_value());
     EXPECT_TRUE(std::get<bool>(processed->data));
 
-    auto timestamp = result.value->get_variant_value("timestamp");
+    auto timestamp = result.value->get("timestamp");
     EXPECT_TRUE(timestamp.has_value());
 }
 
@@ -397,7 +397,7 @@ TEST_F(GrpcServiceTest, ProcessLargeContainer) {
     ASSERT_NE(result.value, nullptr);
 
     // Verify some values
-    auto int_50 = result.value->get_variant_value("int_50");
+    auto int_50 = result.value->get("int_50");
     ASSERT_TRUE(int_50.has_value());
     EXPECT_EQ(std::get<int>(int_50->data), 50);
 }
@@ -421,7 +421,7 @@ TEST_F(GrpcServiceTest, ProcessContainerWithBinaryData) {
     EXPECT_TRUE(result.success);
     ASSERT_NE(result.value, nullptr);
 
-    auto restored = result.value->get_variant_value("binary");
+    auto restored = result.value->get("binary");
     ASSERT_TRUE(restored.has_value());
     EXPECT_EQ(std::get<std::vector<uint8_t>>(restored->data).size(),
               binary_data.size());
@@ -448,7 +448,7 @@ TEST_F(GrpcServiceTest, ProcessNestedContainers) {
     EXPECT_TRUE(result.success);
     ASSERT_NE(result.value, nullptr);
 
-    auto nested = result.value->get_variant_value("nested");
+    auto nested = result.value->get("nested");
     ASSERT_TRUE(nested.has_value());
 
     auto nested_container =
@@ -456,7 +456,7 @@ TEST_F(GrpcServiceTest, ProcessNestedContainers) {
     ASSERT_NE(nested_container, nullptr);
     EXPECT_EQ(nested_container->message_type(), "inner");
 
-    auto inner_val = nested_container->get_variant_value("inner_val");
+    auto inner_val = nested_container->get("inner_val");
     ASSERT_TRUE(inner_val.has_value());
     EXPECT_EQ(std::get<int>(inner_val->data), 999);
 }
