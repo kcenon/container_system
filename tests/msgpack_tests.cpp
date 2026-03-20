@@ -313,19 +313,19 @@ TEST_F(ContainerMsgpackTest, ContainerWithValuesRoundTrip) {
     auto result = restored->deserialize(std::span<const uint8_t>(data), value_container::serialization_format::msgpack);
     ASSERT_TRUE(result.is_ok());
 
-    auto name = restored->get_value("name");
+    auto name = restored->get("name");
     ASSERT_TRUE(name.has_value());
     EXPECT_EQ(std::get<std::string>(name->data), "Alice");
 
-    auto age = restored->get_value("age");
+    auto age = restored->get("age");
     ASSERT_TRUE(age.has_value());
     EXPECT_EQ(std::get<int>(age->data), 30);
 
-    auto score = restored->get_value("score");
+    auto score = restored->get("score");
     ASSERT_TRUE(score.has_value());
     EXPECT_DOUBLE_EQ(std::get<double>(score->data), 95.5);
 
-    auto active = restored->get_value("active");
+    auto active = restored->get("active");
     ASSERT_TRUE(active.has_value());
     EXPECT_TRUE(std::get<bool>(active->data));
 }
@@ -339,7 +339,7 @@ TEST_F(ContainerMsgpackTest, ContainerWithBinaryData) {
     auto result = restored->deserialize(std::span<const uint8_t>(msgpack_data), value_container::serialization_format::msgpack);
     ASSERT_TRUE(result.is_ok());
 
-    auto data = restored->get_value("data");
+    auto data = restored->get("data");
     ASSERT_TRUE(data.has_value());
     EXPECT_EQ(std::get<std::vector<uint8_t>>(data->data), binary);
 }
@@ -369,7 +369,7 @@ TEST_F(ContainerMsgpackTest, FromMsgpackMethod) {
     auto result = new_container->deserialize(std::span<const uint8_t>(data), value_container::serialization_format::msgpack);
     EXPECT_TRUE(result.is_ok());
 
-    auto key = new_container->get_value("key");
+    auto key = new_container->get("key");
     ASSERT_TRUE(key.has_value());
     EXPECT_EQ(std::get<std::string>(key->data), "value");
 }
@@ -528,7 +528,7 @@ TEST_F(MsgpackPerformanceTest, RoundTripPreservesData) {
 
     // Verify all values are preserved
     for (int i = 0; i < 100; ++i) {
-        auto value = restored->get_value("key" + std::to_string(i));
+        auto value = restored->get("key" + std::to_string(i));
         ASSERT_TRUE(value.has_value()) << "Missing key" << i;
         EXPECT_EQ(std::get<int>(value->data), i * 100) << "Mismatch at key" << i;
     }

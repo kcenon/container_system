@@ -74,9 +74,9 @@ TEST_F(MessagingIntegrationTest, BuilderPatternBasicConstruction) {
     EXPECT_EQ(container->message_type(), "test_message");
 
     // Check that values were added
-    EXPECT_TRUE(container->get_variant_value("test_key").has_value());
-    EXPECT_TRUE(container->get_variant_value("numeric_key").has_value());
-    EXPECT_TRUE(container->get_variant_value("boolean_key").has_value());
+    EXPECT_TRUE(container->get("test_key").has_value());
+    EXPECT_TRUE(container->get("numeric_key").has_value());
+    EXPECT_TRUE(container->get("boolean_key").has_value());
 }
 
 TEST_F(MessagingIntegrationTest, BuilderPatternComplexTypes) {
@@ -94,12 +94,12 @@ TEST_F(MessagingIntegrationTest, BuilderPatternComplexTypes) {
 
     ASSERT_NE(container, nullptr);
     // Check that values were added
-    EXPECT_TRUE(container->get_variant_value("nested_data").has_value());
-    EXPECT_TRUE(container->get_variant_value("pi_value").has_value());
-    EXPECT_TRUE(container->get_variant_value("large_number").has_value());
+    EXPECT_TRUE(container->get("nested_data").has_value());
+    EXPECT_TRUE(container->get("pi_value").has_value());
+    EXPECT_TRUE(container->get("large_number").has_value());
 
     // Verify nested container data exists
-    auto nested_value = container->get_variant_value("nested_data");
+    auto nested_value = container->get("nested_data");
     ASSERT_TRUE(nested_value.has_value());
     EXPECT_EQ(nested_value->type, value_types::bytes_value);  // Nested containers are stored as bytes
 }
@@ -170,10 +170,10 @@ TEST_F(MessagingIntegrationTest, SerializationIntegration) {
     EXPECT_EQ(deserialized->message_type(), "serialization_message");
 
     // Check that deserialized values exist
-    EXPECT_TRUE(deserialized->get_variant_value("string_data").has_value());
-    EXPECT_TRUE(deserialized->get_variant_value("int_data").has_value());
-    EXPECT_TRUE(deserialized->get_variant_value("double_data").has_value());
-    EXPECT_TRUE(deserialized->get_variant_value("bool_data").has_value());
+    EXPECT_TRUE(deserialized->get("string_data").has_value());
+    EXPECT_TRUE(deserialized->get("int_data").has_value());
+    EXPECT_TRUE(deserialized->get("double_data").has_value());
+    EXPECT_TRUE(deserialized->get("bool_data").has_value());
 }
 
 #ifdef HAS_PERFORMANCE_METRICS
@@ -264,7 +264,7 @@ TEST_F(MessagingIntegrationTest, ThreadSafetyStress) {
                         .set("thread_id", t)
                         .build();
 
-                    if (container && container->get_variant_value("iteration").has_value()) {
+                    if (container && container->get("iteration").has_value()) {
                         success_count++;
                     }
                 } catch (const std::exception&) {
@@ -327,7 +327,7 @@ TEST_F(MessagingIntegrationTest, LargeDataHandling) {
     auto deserialized = integration::messaging_integration::deserialize_from_messaging(serialized);
     ASSERT_NE(deserialized, nullptr);
 
-    auto string_value = deserialized->get_variant_value("large_string");
+    auto string_value = deserialized->get("large_string");
     ASSERT_TRUE(string_value.has_value());
     auto str = std::get_if<std::string>(&string_value->data);
     ASSERT_NE(str, nullptr);

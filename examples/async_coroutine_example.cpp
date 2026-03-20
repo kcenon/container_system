@@ -124,7 +124,7 @@ task<void> demonstrate_async_serialization() {
 
             // Verify data
             auto restored = deser_result.value();
-            auto name_val = restored->get_value("name");
+            auto name_val = restored->get("name");
             if (name_val && std::holds_alternative<std::string>(name_val->data)) {
                 std::cout << "Verified: name = " <<
                     std::get<std::string>(name_val->data) << std::endl;
@@ -203,7 +203,7 @@ task<void> demonstrate_async_file_io() {
 
             // Verify data
             auto loaded_container = loaded_cont.get_container();
-            auto val = loaded_container->get_value("key_50");
+            auto val = loaded_container->get("key_50");
             if (val && std::holds_alternative<std::string>(val->data)) {
                 std::cout << "Verified: key_50 = " <<
                     std::get<std::string>(val->data) << std::endl;

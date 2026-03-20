@@ -162,7 +162,7 @@ TEST_F(ValueOperationsTest, DoubleValuePrecision)
 
     // Allow for precision loss during serialization/deserialization
     // Use 1e-6 tolerance (about 6-7 significant digits)
-    double restored_value = ov_to_double(restored->get_value("pi"));
+    double restored_value = ov_to_double(restored->get("pi"));
     EXPECT_NEAR(restored_value, precise_value, 1e-6)
         << "Expected: " << precise_value << ", Got: " << restored_value;
 }
@@ -191,7 +191,7 @@ TEST_F(ValueOperationsTest, LongLongValues)
 
     container->set("large", large_value);
     auto restored = RoundTripSerialize();
-    EXPECT_EQ(ov_to_llong(restored->get_value("large")), large_value);
+    EXPECT_EQ(ov_to_llong(restored->get("large")), large_value);
 }
 
 /**
@@ -221,7 +221,7 @@ TEST_F(ValueOperationsTest, SpecialStringCharacters)
     container->set("special", special);
     auto restored = RoundTripSerialize();
 
-    auto restored_val = restored->get_value("special");
+    auto restored_val = restored->get("special");
     // Note: Some special characters may be encoded/decoded differently
     EXPECT_FALSE(ov_is_null(restored_val));
 }
@@ -237,9 +237,9 @@ TEST_F(ValueOperationsTest, EmptyAndWhitespaceStrings)
 
     auto restored = RoundTripSerialize();
 
-    EXPECT_FALSE(ov_is_null(restored->get_value("empty")));
-    EXPECT_FALSE(ov_is_null(restored->get_value("whitespace")));
-    EXPECT_FALSE(ov_is_null(restored->get_value("mixed")));
+    EXPECT_FALSE(ov_is_null(restored->get("empty")));
+    EXPECT_FALSE(ov_is_null(restored->get("whitespace")));
+    EXPECT_FALSE(ov_is_null(restored->get("mixed")));
 }
 
 int main(int argc, char** argv)

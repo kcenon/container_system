@@ -83,7 +83,7 @@ namespace kcenon::container_grpc {
  *
  *   // Convert proto to native container (after receiving)
  *   auto restored = container_adapter::from_grpc(proto);
- *   auto count = restored->get_value("count");
+ *   auto count = restored->get("count");
  * @endcode
  */
 class container_adapter {

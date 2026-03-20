@@ -36,7 +36,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * This header provides the `basic_value_container` template that uses storage
  * policies for customizable storage behavior. This unifies the previously
- * separate container variants (value_container, optimized_container).
+ * separate container variants.
  *
  * @code
  * // Default container (dynamic storage)

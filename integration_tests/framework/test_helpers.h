@@ -102,7 +102,7 @@ public:
     static bool ValueExists(std::shared_ptr<value_container> container,
                            const std::string& key)
     {
-        auto val = container->get_value(key);
+        auto val = container->get(key);
         return !ov_is_null(val);
     }
 

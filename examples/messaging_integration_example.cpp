@@ -88,19 +88,19 @@ void demonstrate_value_access() {
     container->set("is_urgent", true);
 
     // Access values using get_value and std::get_if
-    if (auto val = container->get_value("request_id")) {
+    if (auto val = container->get("request_id")) {
         if (auto* v = std::get_if<int32_t>(&val->data)) {
             std::cout << "Request ID: " << *v << "\n";
         }
     }
 
-    if (auto val = container->get_value("payload")) {
+    if (auto val = container->get("payload")) {
         if (auto* v = std::get_if<std::string>(&val->data)) {
             std::cout << "Payload: " << *v << "\n";
         }
     }
 
-    if (auto val = container->get_value("is_urgent")) {
+    if (auto val = container->get("is_urgent")) {
         if (auto* v = std::get_if<bool>(&val->data)) {
             std::cout << "Is Urgent: " << (*v ? "yes" : "no") << "\n";
         }
@@ -139,13 +139,13 @@ void demonstrate_serialization_roundtrip() {
     // Verify values
     bool all_match = true;
 
-    if (auto val = restored->get_value("int_val")) {
+    if (auto val = restored->get("int_val")) {
         if (auto* v = std::get_if<int32_t>(&val->data)) {
             if (*v != 42) all_match = false;
         }
     }
 
-    if (auto val = restored->get_value("string_val")) {
+    if (auto val = restored->get("string_val")) {
         if (auto* v = std::get_if<std::string>(&val->data)) {
             if (*v != "Hello, World!") all_match = false;
         }

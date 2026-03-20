@@ -239,7 +239,7 @@ static void BM_CacheLocality(benchmark::State& state)
 		int sum = 0;
 		for (size_t i = 0; i < num_values; ++i)
 		{
-			auto val = container->get_value("val" + std::to_string(i));
+			auto val = container->get("val" + std::to_string(i));
 			if (!ov_is_null(val))
 			{
 				sum += ov_to_int(val);
