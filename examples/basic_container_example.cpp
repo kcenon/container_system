@@ -128,14 +128,14 @@ void demonstrate_serialization() {
     std::cout << "  Target: " << new_container->target_id() << "/" << new_container->target_sub_id() << std::endl;
     std::cout << "  Type: " << new_container->message_type() << std::endl;
 
-    // Verify specific values using new get_value API
-    if (auto message_value = new_container->get_value("message")) {
+    // Verify specific values using get() API
+    if (auto message_value = new_container->get("message")) {
         if (auto* str = std::get_if<std::string>(&message_value->data)) {
             std::cout << "  Message: " << *str << std::endl;
         }
     }
 
-    if (auto count_value = new_container->get_value("count")) {
+    if (auto count_value = new_container->get("count")) {
         if (auto* val = std::get_if<int32_t>(&count_value->data)) {
             std::cout << "  Count: " << *val << std::endl;
         }
@@ -159,25 +159,25 @@ void demonstrate_value_access() {
     // Access values by key using new API
     std::cout << "\nAccessing values by key:" << std::endl;
 
-    if (auto product_name = container->get_value("product_name")) {
+    if (auto product_name = container->get("product_name")) {
         if (auto* str = std::get_if<std::string>(&product_name->data)) {
             std::cout << "  Product: " << *str << std::endl;
         }
     }
 
-    if (auto price = container->get_value("price")) {
+    if (auto price = container->get("price")) {
         if (auto* val = std::get_if<double>(&price->data)) {
             std::cout << "  Price: $" << *val << std::endl;
         }
     }
 
-    if (auto quantity = container->get_value("quantity")) {
+    if (auto quantity = container->get("quantity")) {
         if (auto* val = std::get_if<int32_t>(&quantity->data)) {
             std::cout << "  Quantity: " << *val << std::endl;
         }
     }
 
-    if (auto in_stock = container->get_value("in_stock")) {
+    if (auto in_stock = container->get("in_stock")) {
         if (auto* val = std::get_if<bool>(&in_stock->data)) {
             std::cout << "  In Stock: " << (*val ? "yes" : "no") << std::endl;
         }
@@ -285,7 +285,7 @@ int main() {
         std::cout << "  - Basic container creation and configuration" << std::endl;
         std::cout << "  - All supported value types using set_value() API" << std::endl;
         std::cout << "  - Serialization and deserialization" << std::endl;
-        std::cout << "  - Value access patterns using get_value() API" << std::endl;
+        std::cout << "  - Value access patterns using get() API" << std::endl;
         std::cout << "  - Container iteration" << std::endl;
         std::cout << "  - Basic performance characteristics" << std::endl;
 

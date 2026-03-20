@@ -65,7 +65,7 @@ TEST_F(ErrorHandlingTest, NonExistentValueRetrieval)
 {
     AddStringValue("exists", "value");
 
-    auto missing = container->get_value("does_not_exist");
+    auto missing = container->get("does_not_exist");
     EXPECT_TRUE(ov_is_null(missing));
     EXPECT_TRUE(!missing.has_value() || missing->type == value_types::null_value);
 }
@@ -77,11 +77,11 @@ TEST_F(ErrorHandlingTest, EmptyKeyOperations)
 {
     AddStringValue("", "empty_key_value");
 
-    auto val = container->get_value("");
+    auto val = container->get("");
     // Behavior may vary - either null or returns the value
     // Just verify it doesn't crash
     EXPECT_NO_THROW({
-        auto result = container->get_value("");
+        auto result = container->get("");
     });
 }
 
@@ -92,7 +92,7 @@ TEST_F(ErrorHandlingTest, NullValueConversions)
 {
     container->set("null", std::monostate{});
 
-    auto retrieved = container->get_value("null");
+    auto retrieved = container->get("null");
     EXPECT_TRUE(ov_is_null(retrieved));
 
     // With variant-based storage, null value conversions return defaults
@@ -109,7 +109,7 @@ TEST_F(ErrorHandlingTest, StringToNumericConversionFailures)
 {
     AddStringValue("not_a_number", "abc123xyz");
 
-    auto val = container->get_value("not_a_number");
+    auto val = container->get("not_a_number");
     EXPECT_FALSE(ov_is_null(val));
 
     // Should handle conversion gracefully (return 0 or default)
@@ -191,9 +191,9 @@ TEST_F(ErrorHandlingTest, NumericBoundaryValues)
 
     auto restored = RoundTripSerialize();
 
-    EXPECT_EQ(ov_to_int(restored->get_value("max_int")),
+    EXPECT_EQ(ov_to_int(restored->get("max_int")),
               std::numeric_limits<int>::max());
-    EXPECT_EQ(ov_to_int(restored->get_value("min_int")),
+    EXPECT_EQ(ov_to_int(restored->get("min_int")),
               std::numeric_limits<int>::min());
 }
 
@@ -251,11 +251,11 @@ TEST_F(ErrorHandlingTest, ZeroLengthBytesValue)
     std::vector<uint8_t> empty_bytes;
     AddBytesValue("empty_bytes", empty_bytes);
 
-    auto val = container->get_value("empty_bytes");
+    auto val = container->get("empty_bytes");
     EXPECT_FALSE(ov_is_null(val));
 
     auto restored = RoundTripSerialize();
-    auto restored_bytes = restored->get_value("empty_bytes");
+    auto restored_bytes = restored->get("empty_bytes");
     EXPECT_FALSE(ov_is_null(restored_bytes));
 }
 

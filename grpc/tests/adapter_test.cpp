@@ -121,8 +121,8 @@ TEST_F(ContainerAdapterTest, ConvertBoolValue) {
 
     ASSERT_NE(restored, nullptr);
 
-    auto val_true = restored->get_variant_value("bool_true");
-    auto val_false = restored->get_variant_value("bool_false");
+    auto val_true = restored->get("bool_true");
+    auto val_false = restored->get("bool_false");
 
     ASSERT_TRUE(val_true.has_value());
     ASSERT_TRUE(val_false.has_value());
@@ -145,15 +145,15 @@ TEST_F(ContainerAdapterTest, ConvertIntegerTypes) {
 
     ASSERT_NE(restored, nullptr);
 
-    auto short_v = restored->get_variant_value("short_val");
+    auto short_v = restored->get("short_val");
     ASSERT_TRUE(short_v.has_value());
     EXPECT_EQ(std::get<short>(short_v->data), 32767);
 
-    auto int_v = restored->get_variant_value("int_val");
+    auto int_v = restored->get("int_val");
     ASSERT_TRUE(int_v.has_value());
     EXPECT_EQ(std::get<int>(int_v->data), 2147483647);
 
-    auto llong_v = restored->get_variant_value("llong_val");
+    auto llong_v = restored->get("llong_val");
     ASSERT_TRUE(llong_v.has_value());
     EXPECT_EQ(std::get<long long>(llong_v->data), 9223372036854775807LL);
 }
@@ -167,11 +167,11 @@ TEST_F(ContainerAdapterTest, ConvertFloatingPointTypes) {
 
     ASSERT_NE(restored, nullptr);
 
-    auto float_v = restored->get_variant_value("float_val");
+    auto float_v = restored->get("float_val");
     ASSERT_TRUE(float_v.has_value());
     EXPECT_NEAR(std::get<float>(float_v->data), 3.14159f, 0.00001f);
 
-    auto double_v = restored->get_variant_value("double_val");
+    auto double_v = restored->get("double_val");
     ASSERT_TRUE(double_v.has_value());
     EXPECT_NEAR(std::get<double>(double_v->data), 3.141592653589793, 0.0000000001);
 }
@@ -185,7 +185,7 @@ TEST_F(ContainerAdapterTest, ConvertStringValue) {
 
     ASSERT_NE(restored, nullptr);
 
-    auto str_v = restored->get_variant_value("string_val");
+    auto str_v = restored->get("string_val");
     ASSERT_TRUE(str_v.has_value());
     EXPECT_EQ(std::get<std::string>(str_v->data), test_string);
 }
@@ -198,7 +198,7 @@ TEST_F(ContainerAdapterTest, ConvertEmptyString) {
 
     ASSERT_NE(restored, nullptr);
 
-    auto str_v = restored->get_variant_value("empty_string");
+    auto str_v = restored->get("empty_string");
     ASSERT_TRUE(str_v.has_value());
     EXPECT_EQ(std::get<std::string>(str_v->data), "");
 }
@@ -212,7 +212,7 @@ TEST_F(ContainerAdapterTest, ConvertBytesValue) {
 
     ASSERT_NE(restored, nullptr);
 
-    auto bytes_v = restored->get_variant_value("bytes_val");
+    auto bytes_v = restored->get("bytes_val");
     ASSERT_TRUE(bytes_v.has_value());
     EXPECT_EQ(std::get<std::vector<uint8_t>>(bytes_v->data), test_bytes);
 }
@@ -225,7 +225,7 @@ TEST_F(ContainerAdapterTest, ConvertNullValue) {
 
     ASSERT_NE(restored, nullptr);
 
-    auto null_v = restored->get_variant_value("null_val");
+    auto null_v = restored->get("null_val");
     ASSERT_TRUE(null_v.has_value());
     EXPECT_EQ(null_v->type, value_types::null_value);
 }
@@ -247,7 +247,7 @@ TEST_F(ContainerAdapterTest, ConvertNestedContainer) {
 
     ASSERT_NE(restored, nullptr);
 
-    auto nested_v = restored->get_variant_value("nested_container");
+    auto nested_v = restored->get("nested_container");
     ASSERT_TRUE(nested_v.has_value());
     ASSERT_EQ(nested_v->type, value_types::container_value);
 
@@ -256,7 +256,7 @@ TEST_F(ContainerAdapterTest, ConvertNestedContainer) {
     ASSERT_NE(restored_nested, nullptr);
     EXPECT_EQ(restored_nested->message_type(), "nested_type");
 
-    auto nested_int = restored_nested->get_variant_value("nested_int");
+    auto nested_int = restored_nested->get("nested_int");
     ASSERT_TRUE(nested_int.has_value());
     EXPECT_EQ(std::get<int>(nested_int->data), 42);
 }
@@ -285,22 +285,22 @@ TEST_F(ContainerAdapterTest, ConvertDeeplyNestedContainer) {
     ASSERT_NE(restored, nullptr);
 
     // Navigate through nested structure
-    auto l1 = restored->get_variant_value("root_child");
+    auto l1 = restored->get("root_child");
     ASSERT_TRUE(l1.has_value());
     auto l1_container = std::get<std::shared_ptr<value_container>>(l1->data);
     ASSERT_NE(l1_container, nullptr);
 
-    auto l2 = l1_container->get_variant_value("child");
+    auto l2 = l1_container->get("child");
     ASSERT_TRUE(l2.has_value());
     auto l2_container = std::get<std::shared_ptr<value_container>>(l2->data);
     ASSERT_NE(l2_container, nullptr);
 
-    auto l3 = l2_container->get_variant_value("child");
+    auto l3 = l2_container->get("child");
     ASSERT_TRUE(l3.has_value());
     auto l3_container = std::get<std::shared_ptr<value_container>>(l3->data);
     ASSERT_NE(l3_container, nullptr);
 
-    auto depth = l3_container->get_variant_value("depth");
+    auto depth = l3_container->get("depth");
     ASSERT_TRUE(depth.has_value());
     EXPECT_EQ(std::get<int>(depth->data), 3);
 }
@@ -318,12 +318,12 @@ TEST_F(ContainerAdapterTest, ConvertSpecialFloatValues) {
 
     ASSERT_NE(restored, nullptr);
 
-    auto inf_v = restored->get_variant_value("infinity");
+    auto inf_v = restored->get("infinity");
     ASSERT_TRUE(inf_v.has_value());
     EXPECT_TRUE(std::isinf(std::get<double>(inf_v->data)));
     EXPECT_GT(std::get<double>(inf_v->data), 0);
 
-    auto neg_inf_v = restored->get_variant_value("neg_infinity");
+    auto neg_inf_v = restored->get("neg_infinity");
     ASSERT_TRUE(neg_inf_v.has_value());
     EXPECT_TRUE(std::isinf(std::get<double>(neg_inf_v->data)));
     EXPECT_LT(std::get<double>(neg_inf_v->data), 0);
@@ -343,7 +343,7 @@ TEST_F(ContainerAdapterTest, ConvertLargeBinaryData) {
 
     ASSERT_NE(restored, nullptr);
 
-    auto bytes_v = restored->get_variant_value("large_bytes");
+    auto bytes_v = restored->get("large_bytes");
     ASSERT_TRUE(bytes_v.has_value());
     EXPECT_EQ(std::get<std::vector<uint8_t>>(bytes_v->data).size(),
               large_data.size());
@@ -359,7 +359,7 @@ TEST_F(ContainerAdapterTest, ConvertUnicodeString) {
 
     ASSERT_NE(restored, nullptr);
 
-    auto str_v = restored->get_variant_value("unicode");
+    auto str_v = restored->get("unicode");
     ASSERT_TRUE(str_v.has_value());
     EXPECT_EQ(std::get<std::string>(str_v->data), unicode_str);
 }
@@ -375,7 +375,7 @@ TEST_F(ContainerAdapterTest, ConvertMultipleValuesPreservesOrder) {
     ASSERT_NE(restored, nullptr);
 
     for (int i = 0; i < 10; ++i) {
-        auto val = restored->get_variant_value("value_" + std::to_string(i));
+        auto val = restored->get("value_" + std::to_string(i));
         ASSERT_TRUE(val.has_value()) << "Missing value_" << i;
         EXPECT_EQ(std::get<int>(val->data), i * 10);
     }

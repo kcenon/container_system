@@ -332,29 +332,6 @@ namespace kcenon::container
 		value_container& bulk_insert(std::span<const optimized_value> values,
 									 size_t reserve_hint = 0);
 
-		/**
-		 * @brief Get multiple values at once (single lock acquisition)
-		 * @param keys Span of keys to retrieve
-		 * @return Vector of optional values in same order as keys
-		 * @exception_safety No-throw guarantee
-		 * @note Returns nullopt for keys not found
-		 * @deprecated Use get(keys) instead
-		 */
-		[[deprecated("Use get(keys) instead")]]
-		[[nodiscard]] std::vector<std::optional<optimized_value>> get_batch(
-			std::span<const std::string_view> keys) const noexcept;
-
-		/**
-		 * @brief Get multiple values as a map
-		 * @param keys Span of keys to retrieve
-		 * @return Map of found key-value pairs
-		 * @exception_safety Strong guarantee
-		 * @note Only includes keys that were found
-		 * @deprecated Use get_as_map(keys) instead
-		 */
-		[[deprecated("Use get_as_map(keys) instead")]]
-		[[nodiscard]] std::unordered_map<std::string, optimized_value> get_batch_map(
-			std::span<const std::string_view> keys) const;
 
 		/**
 		 * @brief Check multiple keys existence at once
@@ -437,16 +414,6 @@ namespace kcenon::container
 		// Zero-Copy Deserialization API (Issue #226)
 		// =======================================================================
 
-		/**
-		 * @brief Get a zero-copy view of a value by key
-		 * @param key Value name/key to search for
-		 * @return Optional containing value_view if found and zero-copy mode is enabled
-		 * @note Returns nullopt if not in zero-copy mode or key not found
-		 * @exception_safety No-throw guarantee
-		 * @deprecated Use get(key, as_view) instead
-		 */
-		[[deprecated("Use get(key, as_view) instead")]]
-		[[nodiscard]] std::optional<value_view> get_view(std::string_view key) const noexcept;
 
 		/**
 		 * @brief Check if container is in zero-copy mode
@@ -456,7 +423,7 @@ namespace kcenon::container
 
 		/**
 		 * @brief Force building the value index for lazy parsing
-		 * @note Called automatically on first get_view() call
+		 * @note Called automatically on first get(key, as_view) call
 		 */
 		void ensure_index_built() const;
 
@@ -539,18 +506,6 @@ namespace kcenon::container
 		[[nodiscard]] kcenon::common::VoidResult save_packet_result(const std::string& file_path) noexcept;
 #endif
 
-		// =======================================================================
-		// Deprecated Getter Methods (Issue #309 - Use unified get() instead)
-		// =======================================================================
-
-		/**
-		 * @brief Get a value as optimized_value (alias for get_value)
-		 * @param key Value name/key to search for
-		 * @return Optional containing the optimized_value if found
-		 * @deprecated Use get(key) instead
-		 */
-		[[deprecated("Use get(key) instead")]]
-		std::optional<optimized_value> get_variant_value(const std::string& key) const noexcept;
 
 		/**
 		 * @brief Get all values as optimized_value vector
@@ -572,15 +527,6 @@ namespace kcenon::container
 
 		// =======================================================================
 
-		/**
-		 * @brief Get a value by name
-		 * @param name Value name/key to search for
-		 * @return Optional containing the optimized_value if found, nullopt otherwise
-		 * @exception_safety No-throw guarantee
-		 * @deprecated Use get(key) instead
-		 */
-		[[deprecated("Use get(key) instead")]]
-		std::optional<optimized_value> get_value(const std::string& name) const noexcept;
 
 		/**
 		 * @brief Reinitialize the entire container to defaults.
@@ -1081,7 +1027,7 @@ namespace kcenon::container
 		// Shared pointer to original serialized data for zero-copy access
 		// This enables lazy parsing: parse values only when accessed
 		std::shared_ptr<const std::string> raw_data_ptr_;
-		// Lazy-loaded value index (built on first access via get_view)
+		// Lazy-loaded value index (built on first access via get(key, as_view))
 		mutable std::optional<std::vector<value_index_entry>> value_index_;
 		// Flag indicating if the index has been built
 		mutable bool index_built_{false};

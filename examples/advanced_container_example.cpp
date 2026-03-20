@@ -109,13 +109,13 @@ public:
         std::cout << "  Type: " << container->message_type() << std::endl;
 
         // Demonstrate value access using get_value
-        if (auto username_value = container->get_value("username")) {
+        if (auto username_value = container->get("username")) {
             if (auto* str = std::get_if<std::string>(&username_value->data)) {
                 std::cout << "  Username: " << *str << std::endl;
             }
         }
 
-        if (auto balance_value = container->get_value("account_balance")) {
+        if (auto balance_value = container->get("account_balance")) {
             if (auto* val = std::get_if<double>(&balance_value->data)) {
                 std::cout << "  Balance: $" << std::fixed << std::setprecision(2) << *val << std::endl;
             }
@@ -272,7 +272,7 @@ public:
         std::string large_serialized = large_container->serialize_string(value_container::serialization_format::binary).value();
         auto large_deserialized = std::make_shared<value_container>(large_serialized);
 
-        if (auto recovered_value = large_deserialized->get_value("large_data")) {
+        if (auto recovered_value = large_deserialized->get("large_data")) {
             if (auto* str = std::get_if<std::string>(&recovered_value->data)) {
                 if (*str == large_string) {
                     std::cout << "  - Large data handling works (" << large_string.size() << " bytes)" << std::endl;

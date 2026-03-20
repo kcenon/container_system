@@ -44,7 +44,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * auto container = std::make_shared<value_container>(large_data, true);
  *
  * // Zero-copy access (no allocation)
- * if (auto view = container->get_view("large_text")) {
+ * if (auto view = container->get("large_text", as_view)) {
  *     std::string_view text = view->as_string_view();
  *     // Use text without copying...
  *

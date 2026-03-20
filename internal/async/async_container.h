@@ -356,7 +356,7 @@ namespace kcenon::container::async
         template<typename T>
         [[nodiscard]] std::optional<T> get(std::string_view key) const
         {
-            auto val = container_->get_value(std::string(key));
+            auto val = container_->get(key);
             if (!val) {
                 return std::nullopt;
             }

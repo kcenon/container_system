@@ -218,7 +218,7 @@ inline bool is_uint32_range(uint64_t val) {
     return val <= static_cast<uint64_t>(std::numeric_limits<uint32_t>::max());
 }
 
-// Helper functions for optimized_value (from container->get_value())
+// Helper functions for optimized_value (from container->get())
 inline std::string ov_to_string(const std::optional<optimized_value>& ov) {
     if (!ov) return "";
     if (std::holds_alternative<std::string>(ov->data)) {
