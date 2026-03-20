@@ -462,10 +462,10 @@ TEST(ValueConstructorTest, NestedArrays) {
 }
 
 TEST(ValueConstructorTest, NumericBoundaries) {
-    auto max_int16 = value("max_short", INT16_MAX);
-    auto min_int16 = value("min_short", INT16_MIN);
-    auto max_uint32 = value("max_uint", UINT32_MAX);
-    auto max_int64 = value("max_long", INT64_MAX);
+    auto max_int16 = value("max_short", int16_t{INT16_MAX});
+    auto min_int16 = value("min_short", int16_t{INT16_MIN});
+    auto max_uint32 = value("max_uint", uint32_t{UINT32_MAX});
+    auto max_int64 = value("max_long", int64_t{INT64_MAX});
 
     EXPECT_EQ(max_int16.get<int16_t>().value(), INT16_MAX);
     EXPECT_EQ(min_int16.get<int16_t>().value(), INT16_MIN);
