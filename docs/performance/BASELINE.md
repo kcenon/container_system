@@ -238,14 +238,14 @@ This system serves as the model for RAII implementation across all other systems
 
 # Performance Baseline
 
-**Last Updated**: 2026-03-19 08:06:03 UTC
+**Last Updated**: 2026-03-20 10:02:58 UTC
 **Commit**: N/A
 
 ## System Information
 
 - **Host**: runnervm46oaq
 - **CPUs**: 4
-- **CPU MHz**: 3492
+- **CPU MHz**: 3218
 - **Build Type**: Release
 
 ## Summary
