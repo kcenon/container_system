@@ -102,7 +102,7 @@ vcpkg install kcenon-container-system
 In your `CMakeLists.txt`:
 ```cmake
 find_package(container_system CONFIG REQUIRED)
-target_link_libraries(your_target PRIVATE kcenon::container_system)
+target_link_libraries(your_target PRIVATE container_system::container)
 ```
 
 ### Basic Usage Example
