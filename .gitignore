@@ -46,6 +46,7 @@ compile_commands.json
 !CMakeLists.txt
 !cmake/*.cmake
 !cmake/*.cmake.in
+!vcpkg-ports/**/*.cmake
 
 # Test results
 Testing/
