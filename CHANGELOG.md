@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Add `recommended_container` alias using `indexed_storage_policy` for O(1) key lookups ([#446](https://github.com/kcenon/container_system/issues/446))
+- Add vcpkg port validation workflow for cross-platform install and consumer-test verification ([#458](https://github.com/kcenon/container_system/issues/458))
 
 ### Fixed
 
