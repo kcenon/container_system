@@ -1,0 +1,295 @@
+name: Validate vcpkg Port
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'CMakeLists.txt'
+      - 'cmake/**'
+      - 'vcpkg.json'
+      - 'vcpkg-configuration.json'
+      - 'vcpkg-ports/**'
+      - 'core/**'
+      - 'include/**'
+  pull_request:
+    paths:
+      - 'CMakeLists.txt'
+      - 'cmake/**'
+      - 'vcpkg.json'
+      - 'vcpkg-configuration.json'
+      - 'vcpkg-ports/**'
+      - 'core/**'
+      - 'include/**'
+  workflow_dispatch:
+
+jobs:
+  validate-port:
+    name: ${{ matrix.os }} / ${{ matrix.compiler }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-24.04
+            compiler: gcc
+            triplet: x64-linux
+          - os: windows-2022
+            compiler: msvc
+            triplet: x64-windows
+          - os: macos-14
+            compiler: clang
+            triplet: arm64-osx
+
+    steps:
+    - name: Checkout container_system
+      uses: actions/checkout@v6
+
+    - name: Checkout common_system
+      uses: actions/checkout@v6
+      with:
+        repository: kcenon/common_system
+        path: common_system
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Install dependencies (Ubuntu)
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y cmake ninja-build g++-13 pkg-config
+
+    - name: Install dependencies (macOS)
+      if: runner.os == 'macOS'
+      run: brew install ninja
+
+    - name: Set up compiler (GCC 13)
+      if: matrix.compiler == 'gcc'
+      run: |
+        echo "CC=gcc-13" >> $GITHUB_ENV
+        echo "CXX=g++-13" >> $GITHUB_ENV
+
+    - name: Set up compiler (Clang - macOS)
+      if: matrix.compiler == 'clang' && runner.os == 'macOS'
+      run: |
+        echo "CC=clang" >> $GITHUB_ENV
+        echo "CXX=clang++" >> $GITHUB_ENV
+
+    - name: Set up compiler (MSVC)
+      if: matrix.compiler == 'msvc'
+      uses: ilammy/msvc-dev-cmd@v1
+
+    # ------------------------------------------------------------------
+    # Build and install common_system (required dependency)
+    # ------------------------------------------------------------------
+
+    - name: Build and install common_system (Unix)
+      if: runner.os != 'Windows'
+      run: |
+        cd common_system
+        cmake -B build -S . -G Ninja \
+          -DCMAKE_BUILD_TYPE=Release \
+          -DUSE_UNIT_TEST=OFF
+        cmake --build build --config Release --parallel
+        cmake --install build --prefix ${{ github.workspace }}/common_system_install
+        cd ..
+        mv common_system common_system_src
+
+    - name: Build and install common_system (Windows)
+      if: runner.os == 'Windows'
+      shell: pwsh
+      run: |
+        cd common_system
+        cmake -B build -S . -DCMAKE_BUILD_TYPE=Release -DUSE_UNIT_TEST=OFF
+        cmake --build build --config Release --parallel
+        cmake --install build --prefix "$env:GITHUB_WORKSPACE/common_system_install"
+        cd ..
+        Rename-Item common_system common_system_src
+
+    # ------------------------------------------------------------------
+    # Configure, build, and install container_system
+    # ------------------------------------------------------------------
+
+    - name: Configure container_system (Unix)
+      if: runner.os != 'Windows'
+      run: |
+        cmake -B build -G Ninja \
+          -DCMAKE_BUILD_TYPE=Release \
+          -DBUILD_WITH_COMMON_SYSTEM=ON \
+          -DBUILD_TESTS=OFF \
+          -DCONTAINER_BUILD_INTEGRATION_TESTS=OFF \
+          -DCONTAINER_BUILD_BENCHMARKS=OFF \
+          -DBUILD_DOCUMENTATION=OFF \
+          -DBUILD_CONTAINER_SAMPLES=OFF \
+          -DBUILD_CONTAINER_EXAMPLES=OFF \
+          -DFETCHCONTENT_FULLY_DISCONNECTED=ON \
+          -DCOMMON_SYSTEM_ROOT=${{ github.workspace }}/common_system_install \
+          -DCMAKE_PREFIX_PATH=${{ github.workspace }}/common_system_install \
+          -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/container_system_install
+
+    - name: Configure container_system (Windows)
+      if: runner.os == 'Windows'
+      shell: pwsh
+      run: |
+        cmake -B build -G Ninja `
+          -DCMAKE_BUILD_TYPE=Release `
+          -DBUILD_WITH_COMMON_SYSTEM=ON `
+          -DBUILD_TESTS=OFF `
+          -DCONTAINER_BUILD_INTEGRATION_TESTS=OFF `
+          -DCONTAINER_BUILD_BENCHMARKS=OFF `
+          -DBUILD_DOCUMENTATION=OFF `
+          -DBUILD_CONTAINER_SAMPLES=OFF `
+          -DBUILD_CONTAINER_EXAMPLES=OFF `
+          -DFETCHCONTENT_FULLY_DISCONNECTED=ON `
+          -DCOMMON_SYSTEM_ROOT="$env:GITHUB_WORKSPACE/common_system_install" `
+          -DCMAKE_PREFIX_PATH="$env:GITHUB_WORKSPACE/common_system_install" `
+          -DCMAKE_INSTALL_PREFIX="$env:GITHUB_WORKSPACE/container_system_install"
+
+    - name: Build container_system
+      run: cmake --build build --config Release --parallel
+
+    - name: Install container_system
+      run: cmake --install build --config Release
+
+    # ------------------------------------------------------------------
+    # Verify installation artifacts
+    # ------------------------------------------------------------------
+
+    - name: Verify install artifacts (Unix)
+      if: runner.os != 'Windows'
+      run: |
+        INSTALL_DIR="${{ github.workspace }}/container_system_install"
+
+        echo "Checking CMake config files..."
+        test -f "$INSTALL_DIR/lib/cmake/container_system/container_system-config.cmake" \
+          || { echo "ERROR: container_system-config.cmake not found"; exit 1; }
+        test -f "$INSTALL_DIR/lib/cmake/container_system/container_system-targets.cmake" \
+          || { echo "ERROR: container_system-targets.cmake not found"; exit 1; }
+        echo "CMake config: OK"
+
+        echo "Checking headers..."
+        test -d "$INSTALL_DIR/include" \
+          || { echo "ERROR: include directory not found"; exit 1; }
+        test -f "$INSTALL_DIR/include/kcenon/container/container.h" \
+          || { echo "ERROR: kcenon/container/container.h not found"; exit 1; }
+        echo "Headers: OK"
+
+        echo "Checking library..."
+        ls "$INSTALL_DIR/lib/"libcontainer_system* > /dev/null 2>&1 \
+          || { echo "ERROR: library file not found in $INSTALL_DIR/lib"; exit 1; }
+        echo "Library: OK"
+
+        echo "All installation artifacts verified."
+
+    - name: Verify install artifacts (Windows)
+      if: runner.os == 'Windows'
+      shell: pwsh
+      run: |
+        $installDir = "$env:GITHUB_WORKSPACE/container_system_install"
+
+        Write-Host "Checking CMake config files..."
+        if (-not (Test-Path "$installDir/lib/cmake/container_system/container_system-config.cmake")) {
+            Write-Error "container_system-config.cmake not found"
+            exit 1
+        }
+        if (-not (Test-Path "$installDir/lib/cmake/container_system/container_system-targets.cmake")) {
+            Write-Error "container_system-targets.cmake not found"
+            exit 1
+        }
+        Write-Host "CMake config: OK"
+
+        Write-Host "Checking headers..."
+        if (-not (Test-Path "$installDir/include/kcenon/container/container.h")) {
+            Write-Error "kcenon/container/container.h not found"
+            exit 1
+        }
+        Write-Host "Headers: OK"
+
+        Write-Host "Checking library..."
+        $libFile = Get-ChildItem -Path "$installDir/lib" -Filter "container_system*" -ErrorAction SilentlyContinue
+        if (-not $libFile) {
+            Write-Error "Library file not found in $installDir/lib"
+            exit 1
+        }
+        Write-Host "Library: $($libFile.FullName)"
+
+        Write-Host "All installation artifacts verified."
+
+    # ------------------------------------------------------------------
+    # Consumer test: find_package + build + link
+    # ------------------------------------------------------------------
+
+    - name: Consumer test (Unix)
+      if: runner.os != 'Windows'
+      run: |
+        mkdir -p /tmp/consumer-test && cd /tmp/consumer-test
+
+        cat > CMakeLists.txt << 'EOF'
+        cmake_minimum_required(VERSION 3.20)
+        project(consumer_test LANGUAGES CXX)
+        set(CMAKE_CXX_STANDARD 20)
+        set(CMAKE_CXX_STANDARD_REQUIRED ON)
+        find_package(container_system CONFIG REQUIRED)
+        add_executable(test_app test_app.cpp)
+        target_link_libraries(test_app PRIVATE container_system::container)
+        EOF
+
+        cat > test_app.cpp << 'EOF'
+        #include <kcenon/container/container.h>
+        #include <iostream>
+        int main() {
+            std::cout << "container_system consumer test passed" << std::endl;
+            return 0;
+        }
+        EOF
+
+        cmake -B build \
+          -DCMAKE_PREFIX_PATH="${{ github.workspace }}/container_system_install;${{ github.workspace }}/common_system_install" \
+          -DCMAKE_BUILD_TYPE=Release
+        cmake --build build --config Release
+        echo "Consumer test build succeeded."
+
+    - name: Consumer test (Windows)
+      if: runner.os == 'Windows'
+      shell: pwsh
+      run: |
+        New-Item -ItemType Directory -Force -Path "$env:TEMP\consumer-test" | Out-Null
+        Set-Location "$env:TEMP\consumer-test"
+
+        @"
+        cmake_minimum_required(VERSION 3.20)
+        project(consumer_test LANGUAGES CXX)
+        set(CMAKE_CXX_STANDARD 20)
+        set(CMAKE_CXX_STANDARD_REQUIRED ON)
+        find_package(container_system CONFIG REQUIRED)
+        add_executable(test_app test_app.cpp)
+        target_link_libraries(test_app PRIVATE container_system::container)
+        "@ | Set-Content CMakeLists.txt
+
+        @"
+        #include <kcenon/container/container.h>
+        #include <iostream>
+        int main() {
+            std::cout << "container_system consumer test passed" << std::endl;
+            return 0;
+        }
+        "@ | Set-Content test_app.cpp
+
+        cmake -B build `
+          -DCMAKE_PREFIX_PATH="$env:GITHUB_WORKSPACE/container_system_install;$env:GITHUB_WORKSPACE/common_system_install" `
+          -DCMAKE_BUILD_TYPE=Release
+        cmake --build build --config Release
+        Write-Host "Consumer test build succeeded."
+
+    # ------------------------------------------------------------------
+    # Upload logs on failure
+    # ------------------------------------------------------------------
+
+    - name: Upload logs on failure
+      if: failure()
+      uses: actions/upload-artifact@v7
+      with:
+        name: vcpkg-port-${{ matrix.triplet }}-logs
+        path: |
+          build/CMakeFiles/*.log
+        retention-days: 7
