@@ -10,7 +10,7 @@ jobs:
   build:
     name: ${{ matrix.os }} / ${{ matrix.compiler }}
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 30
+    timeout-minutes: 45
 
     strategy:
       fail-fast: false
@@ -18,12 +18,16 @@ jobs:
         include:
           - os: ubuntu-24.04
             compiler: gcc
+            triplet: x64-linux
           - os: ubuntu-24.04
             compiler: clang
+            triplet: x64-linux
           - os: macos-14
             compiler: clang
+            triplet: arm64-osx
           - os: windows-2022
             compiler: msvc
+            triplet: x64-windows
 
     steps:
     - name: Checkout code
@@ -43,12 +47,12 @@ jobs:
       run: |
         sudo apt-get update
         # Ubuntu 24.04 has GCC 14 by default with C++20 <format> support
-        sudo apt-get install -y cmake ninja-build clang libgtest-dev libgmock-dev
+        sudo apt-get install -y cmake ninja-build clang
 
     - name: Install dependencies (macOS)
       if: runner.os == 'macOS'
       run: |
-        brew install ninja googletest
+        brew install ninja
 
     - name: Set up compiler (GCC)
       if: matrix.compiler == 'gcc'
@@ -74,19 +78,52 @@ jobs:
       if: matrix.compiler == 'msvc'
       uses: ilammy/msvc-dev-cmd@v1
 
-    - name: Configure CMake (Unix)
-      if: runner.os != 'Windows'
+    - name: Check architecture (Linux)
+      if: runner.os == 'Linux'
       run: |
-        # Build CMake argument array
+        if [ "$(uname -m)" = "aarch64" ]; then
+          echo "VCPKG_FORCE_SYSTEM_BINARIES=arm" >> $GITHUB_ENV
+        fi
+
+    - name: Setup vcpkg
+      uses: kcenon/common_system/.github/actions/setup-vcpkg@main
+      with:
+        extra-cache-key: 'container-system'
+
+    - name: Cache vcpkg installed
+      uses: actions/cache@v5
+      id: vcpkg-installed
+      with:
+        path: ${{ github.workspace }}/vcpkg_installed
+        key: ${{ runner.os }}-${{ matrix.compiler }}-vcpkg-installed-${{ matrix.triplet }}-${{ hashFiles('vcpkg.json', 'vcpkg-configuration.json') }}
+        restore-keys: |
+          ${{ runner.os }}-${{ matrix.compiler }}-vcpkg-installed-${{ matrix.triplet }}-
+
+    - name: Install dependencies with vcpkg (Unix)
+      if: runner.os != 'Windows' && steps.vcpkg-installed.outputs.cache-hit != 'true'
+      run: |
+        ${{ env.VCPKG_ROOT }}/vcpkg install --x-manifest-root=. --x-install-root=${{ github.workspace }}/vcpkg_installed --triplet ${{ matrix.triplet }}
+
+    - name: Install dependencies with vcpkg (Windows)
+      if: runner.os == 'Windows' && steps.vcpkg-installed.outputs.cache-hit != 'true'
+      shell: pwsh
+      run: |
+        ${{ env.VCPKG_ROOT }}\vcpkg install --x-manifest-root=. --x-install-root=${{ github.workspace }}\vcpkg_installed --triplet ${{ matrix.triplet }}
+
+    - name: Build application (vcpkg - Unix)
+      if: runner.os != 'Windows'
+      id: build_vcpkg_unix
+      continue-on-error: true
+      run: |
         CMAKE_FLAGS=(
           -DCMAKE_BUILD_TYPE=Debug
           -DBUILD_WITH_COMMON_SYSTEM=ON
           -DBUILD_TESTS=ON
           -DBUILD_CONTAINER_SAMPLES=ON
           -DBUILD_CONTAINER_EXAMPLES=ON
+          -DCMAKE_TOOLCHAIN_FILE="${{ env.CMAKE_TOOLCHAIN_FILE }}"
         )
 
-        # Add compiler flags from environment if set
         if [ -n "$CXXFLAGS" ]; then
           CMAKE_FLAGS+=(-DCMAKE_CXX_FLAGS="$CXXFLAGS")
         fi
@@ -95,26 +132,27 @@ jobs:
         fi
 
         cmake -B build -G Ninja "${CMAKE_FLAGS[@]}"
+        cmake --build build --config Debug --parallel
 
-    - name: Configure CMake (Windows)
+    - name: Build application (vcpkg - Windows)
       if: runner.os == 'Windows'
+      id: build_vcpkg_windows
+      continue-on-error: true
       run: |
         cmake -B build -G Ninja `
           -DCMAKE_BUILD_TYPE=Debug `
           -DBUILD_WITH_COMMON_SYSTEM=ON `
           -DBUILD_TESTS=ON `
           -DBUILD_CONTAINER_SAMPLES=ON `
-          -DBUILD_CONTAINER_EXAMPLES=ON
+          -DBUILD_CONTAINER_EXAMPLES=ON `
+          -DCMAKE_TOOLCHAIN_FILE="${{ env.CMAKE_TOOLCHAIN_FILE }}"
+        cmake --build build --config Debug --parallel
 
-    - name: Build
-      run: cmake --build build --config Debug --parallel
-
-    - name: Test (Unix)
-      if: runner.os != 'Windows'
+    - name: Test (vcpkg - Unix)
+      if: runner.os != 'Windows' && steps.build_vcpkg_unix.outcome == 'success'
       timeout-minutes: 10
       run: |
         cd build
-        # Run core tests only - simpler and more reliable than ctest
         for test in bin/unit_tests bin/test_messaging_integration; do
           if [ -f "$test" ]; then
             echo "Running $(basename $test)..."
@@ -122,13 +160,78 @@ jobs:
           fi
         done
 
-    - name: Test (Windows)
-      if: runner.os == 'Windows'
+    - name: Test (vcpkg - Windows)
+      if: runner.os == 'Windows' && steps.build_vcpkg_windows.outcome == 'success'
       timeout-minutes: 10
       shell: pwsh
       run: |
         cd build
-        # Run core tests only - simpler and more reliable
+        $tests = @("bin\unit_tests.exe", "bin\test_messaging_integration.exe")
+        foreach ($test in $tests) {
+          if (Test-Path $test) {
+            Write-Host "Running $(Split-Path $test -Leaf)..."
+            & $test
+            if ($LASTEXITCODE -ne 0) {
+              Write-Host "Test failed but continuing..."
+            }
+          }
+        }
+
+    - name: Build application (fallback - Unix)
+      if: runner.os != 'Windows' && steps.build_vcpkg_unix.outcome != 'success'
+      run: |
+        echo "vcpkg build failed. Falling back to FetchContent..."
+        rm -rf build
+        CMAKE_FLAGS=(
+          -DCMAKE_BUILD_TYPE=Debug
+          -DBUILD_WITH_COMMON_SYSTEM=ON
+          -DBUILD_TESTS=ON
+          -DBUILD_CONTAINER_SAMPLES=ON
+          -DBUILD_CONTAINER_EXAMPLES=ON
+        )
+
+        if [ -n "$CXXFLAGS" ]; then
+          CMAKE_FLAGS+=(-DCMAKE_CXX_FLAGS="$CXXFLAGS")
+        fi
+        if [ -n "$CFLAGS" ]; then
+          CMAKE_FLAGS+=(-DCMAKE_C_FLAGS="$CFLAGS")
+        fi
+
+        cmake -B build -G Ninja "${CMAKE_FLAGS[@]}"
+        cmake --build build --config Debug --parallel
+
+    - name: Build application (fallback - Windows)
+      if: runner.os == 'Windows' && steps.build_vcpkg_windows.outcome != 'success'
+      shell: pwsh
+      run: |
+        Write-Host "vcpkg build failed. Falling back to FetchContent..."
+        if (Test-Path build) { Remove-Item -Recurse -Force build }
+        cmake -B build -G Ninja `
+          -DCMAKE_BUILD_TYPE=Debug `
+          -DBUILD_WITH_COMMON_SYSTEM=ON `
+          -DBUILD_TESTS=ON `
+          -DBUILD_CONTAINER_SAMPLES=ON `
+          -DBUILD_CONTAINER_EXAMPLES=ON
+        cmake --build build --config Debug --parallel
+
+    - name: Test (fallback - Unix)
+      if: runner.os != 'Windows' && steps.build_vcpkg_unix.outcome != 'success'
+      timeout-minutes: 10
+      run: |
+        cd build
+        for test in bin/unit_tests bin/test_messaging_integration; do
+          if [ -f "$test" ]; then
+            echo "Running $(basename $test)..."
+            $test || echo "Test failed but continuing..."
+          fi
+        done
+
+    - name: Test (fallback - Windows)
+      if: runner.os == 'Windows' && steps.build_vcpkg_windows.outcome != 'success'
+      timeout-minutes: 10
+      shell: pwsh
+      run: |
+        cd build
         $tests = @("bin\unit_tests.exe", "bin\test_messaging_integration.exe")
         foreach ($test in $tests) {
           if (Test-Path $test) {
