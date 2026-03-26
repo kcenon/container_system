@@ -195,7 +195,7 @@ jobs:
 
     - name: Upload coverage to Codecov (Debug only)
       if: matrix.build_type == 'Debug' && runner.os == 'Linux' && steps.coverage_check.outputs.coverage_exists == 'true'
-      uses: codecov/codecov-action@v5
+      uses: codecov/codecov-action@v6
       with:
         files: build/coverage_filtered.info
         flags: integration-tests
