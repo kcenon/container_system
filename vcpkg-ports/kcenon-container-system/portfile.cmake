@@ -26,8 +26,8 @@ vcpkg_cmake_configure(
 vcpkg_cmake_install()
 
 vcpkg_cmake_config_fixup(
-    PACKAGE_NAME container_system
-    CONFIG_PATH lib/cmake/container_system
+    PACKAGE_NAME ContainerSystem
+    CONFIG_PATH lib/cmake/ContainerSystem
 )
 
 # Remove example/sample executables and empty bin directories
