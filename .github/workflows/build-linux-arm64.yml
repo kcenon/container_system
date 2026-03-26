@@ -16,7 +16,7 @@ jobs:
   build-arm64:
     name: Build Linux ARM64
     runs-on: ubuntu-24.04
-    timeout-minutes: 30
+    timeout-minutes: 45
 
     steps:
       - name: Checkout code
@@ -33,17 +33,22 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install cross-compilation tools
+        timeout-minutes: 10
         run: |
-          sudo apt-get update
-          # Ubuntu 24.04 has GCC 14 by default with C++20 <format> support
-          sudo apt-get install -y \
-            gcc-aarch64-linux-gnu \
-            g++-aarch64-linux-gnu \
-            binutils-aarch64-linux-gnu \
-            qemu-user-static \
-            qemu-user \
-            libc6-arm64-cross \
-            libstdc++-14-dev-arm64-cross
+          for attempt in 1 2 3; do
+            echo "Attempt $attempt: installing cross-compilation tools..."
+            sudo apt-get update -y && \
+            sudo apt-get install -y \
+              gcc-aarch64-linux-gnu \
+              g++-aarch64-linux-gnu \
+              binutils-aarch64-linux-gnu \
+              qemu-user-static \
+              qemu-user \
+              libc6-arm64-cross \
+              libstdc++-14-dev-arm64-cross && break
+            echo "Attempt $attempt failed, retrying in 10 seconds..."
+            sleep 10
+          done
 
       - name: Install ARM64 GTest
         run: |
