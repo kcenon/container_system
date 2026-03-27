@@ -1,0 +1,5 @@
+<map id="kcenon::container::auto_refresh_reader::stop" name="kcenon::container::auto_refresh_reader::stop">
+<area shape="rect" id="Node000001" title="Stop the auto&#45;refresh thread." alt="" coords="225,13,415,53"/>
+<area shape="rect" id="Node000002" href="$d2/dad/classkcenon_1_1container_1_1auto__refresh__reader.html#ad55588f11be7272a25fb925ddcdfe800" title="Destructor &#45; stops the refresh thread." alt="" coords="5,5,177,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="211,35,178,35,178,30,211,30"/>
+</map>

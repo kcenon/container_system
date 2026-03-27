@@ -1,0 +1,21 @@
+<map id="core/serializers/xml_serializer.cpp" name="core/serializers/xml_serializer.cpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="361,5,511,45"/>
+<area shape="rect" id="Node000002" href="$dd/d7d/xml__serializer_8h.html" title=" " alt="" coords="97,101,223,126"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="376,48,211,99,209,94,375,43"/>
+<area shape="rect" id="Node000004" href="$d4/ddd/container_8h.html" title=" " alt="" coords="289,101,396,126"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="417,48,367,93,364,89,413,44"/>
+<area shape="rect" id="Node000006" href="$db/d48/variant__helpers_8h.html" title=" " alt="" coords="430,93,575,133"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="453,44,482,81,477,84,449,47"/>
+<area shape="rect" id="Node000008" href="$de/d52/formatter_8h.html" title=" " alt="" coords="618,101,798,126"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="496,43,660,94,658,99,495,48"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,181,211,221"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="155,128,129,171,124,168,151,125"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="235,181,432,221"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="344,126,340,167,334,167,339,126"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="457,181,655,221"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="517,132,539,168,535,171,512,135"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="679,189,737,214"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="711,126,711,174,705,174,705,126"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="761,189,836,214"/>
+<area shape="poly" id="edge9_Node000008_Node000010" title=" " alt="" coords="722,124,778,177,774,181,718,128"/>
+</map>

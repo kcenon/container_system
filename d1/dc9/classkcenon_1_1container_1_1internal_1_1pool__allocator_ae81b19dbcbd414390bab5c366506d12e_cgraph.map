@@ -1,0 +1,7 @@
+<map id="kcenon::container::internal::pool_allocator::allocate" name="kcenon::container::internal::pool_allocator::allocate">
+<area shape="rect" id="Node000001" title="Allocate memory from the appropriate pool." alt="" coords="5,13,177,67"/>
+<area shape="rect" id="Node000002" href="$dc/de3/classkcenon_1_1container_1_1internal_1_1fixed__block__pool.html#a7bc8db28b803a7f77a7d7bc0faad4e77" title=" " alt="" coords="225,13,379,67"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="178,37,212,37,212,43,178,43"/>
+<area shape="rect" id="Node000003" href="$dc/de3/classkcenon_1_1container_1_1internal_1_1fixed__block__pool.html#a33f3e87727707845a0fd006156bca06b" title=" " alt="" coords="427,5,589,75"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="379,37,413,37,413,43,379,43"/>
+</map>

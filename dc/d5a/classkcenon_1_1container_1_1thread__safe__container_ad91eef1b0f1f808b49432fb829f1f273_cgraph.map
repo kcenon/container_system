@@ -1,0 +1,14 @@
+<map id="kcenon::container::thread_safe_container::serialize" name="kcenon::container::thread_safe_container::serialize">
+<area shape="rect" id="Node000001" title="Serialize container to binary." alt="" coords="5,41,172,96"/>
+<area shape="rect" id="Node000002" href="$df/d02/classkcenon_1_1container_1_1value.html#af291c72391c68b519082868058b6d595" title="Serialize to binary format (legacy compatible)" alt="" coords="220,49,367,89"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="172,66,206,66,206,71,172,71"/>
+<area shape="rect" id="Node000003" href="$df/d02/classkcenon_1_1container_1_1value.html#a976ad3011c1440800dd26b7399a640e3" title="Serialize data portion based on type." alt="" coords="415,49,572,89"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="367,75,401,75,401,80,367,80"/>
+<area shape="rect" id="Node000006" href="$df/d02/classkcenon_1_1container_1_1value.html#a2ed86e2c68e087e69641b7e3503fb5a3" title="Get the value_types enum (NOT variant::index()!)" alt="" coords="420,113,567,153"/>
+<area shape="poly" id="edge6_Node000002_Node000006" title=" " alt="" coords="357,86,418,106,417,111,356,91"/>
+<area shape="poly" id="edge4_Node000003_Node000002" title=" " alt="" coords="414,63,381,62,381,57,414,57"/>
+<area shape="rect" id="Node000004" href="$df/d8f/structkcenon_1_1container_1_1detail_1_1circular__ref__guard.html#aa80391fd6f670fc92209e1aae6c9cbc9" title=" " alt="" coords="620,5,767,60"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="572,52,606,46,607,51,573,57"/>
+<area shape="rect" id="Node000005" href="$df/d02/classkcenon_1_1container_1_1value.html#ada03cd91ae3bf13e87fe5aac13862555" title="Apply visitor to contained value (const)" alt="" coords="620,85,767,125"/>
+<area shape="poly" id="edge5_Node000003_Node000005" title=" " alt="" coords="573,80,607,86,606,92,572,85"/>
+</map>

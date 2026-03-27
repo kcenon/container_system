@@ -1,0 +1,15 @@
+<map id="internal/async/generator.h" name="internal/async/generator.h">
+<area shape="rect" id="Node000001" title="C++20 coroutine generator for lazy sequence generation." alt="" coords="207,5,399,31"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,79,88,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="262,33,102,78,100,72,261,28"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="113,79,199,104"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="280,33,193,75,191,70,278,28"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="223,79,294,104"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="298,32,275,68,271,66,293,30"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="318,79,378,104"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="312,30,336,66,331,69,308,32"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="402,79,494,104"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="327,28,413,70,411,75,325,33"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="519,79,596,104"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="344,28,506,73,505,78,343,33"/>
+</map>

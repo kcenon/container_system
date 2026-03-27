@@ -1,0 +1,7 @@
+<map id="kcenon::container::simd::simd_support::has_sse42" name="kcenon::container::simd::simd_support::has_sse42">
+<area shape="rect" id="Node000001" title=" " alt="" coords="212,45,371,100"/>
+<area shape="rect" id="Node000002" href="$db/d5e/classkcenon_1_1container_1_1simd_1_1simd__support.html#a96b71d334579658251c280ca5ad2a8c2" title="Get the best available SIMD instruction set level." alt="" coords="5,5,164,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="198,57,164,51,165,45,199,52"/>
+<area shape="rect" id="Node000003" href="$db/d5e/classkcenon_1_1container_1_1simd_1_1simd__support.html#aa8ce6d34afdee87ae4537f3394f047c1" title="Get a string describing available SIMD features." alt="" coords="5,84,164,139"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="199,93,165,99,164,94,198,87"/>
+</map>

@@ -1,0 +1,9 @@
+<map id="kcenon::container::internal::pool_deallocate" name="kcenon::container::internal::pool_deallocate">
+<area shape="rect" id="Node000001" title="Destroy and deallocate an object allocated with pool_allocate." alt="" coords="5,53,188,93"/>
+<area shape="rect" id="Node000002" href="$d1/dc9/classkcenon_1_1container_1_1internal_1_1pool__allocator.html#ab13967a105de7117186968cf35b2ab26" title="Deallocate memory to the appropriate pool." alt="" coords="236,5,408,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="188,54,222,48,223,53,189,59"/>
+<area shape="rect" id="Node000004" href="$d1/dc9/classkcenon_1_1container_1_1internal_1_1pool__allocator.html#a286495726f594c6629e638b7cda497f1" title="Get the singleton instance." alt="" coords="236,84,408,139"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="189,86,223,92,222,97,188,91"/>
+<area shape="rect" id="Node000003" href="$dc/de3/classkcenon_1_1container_1_1internal_1_1fixed__block__pool.html#ae30bb8b14c326c133095b8e66389a0fc" title=" " alt="" coords="456,5,609,60"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="409,30,442,30,442,35,409,35"/>
+</map>

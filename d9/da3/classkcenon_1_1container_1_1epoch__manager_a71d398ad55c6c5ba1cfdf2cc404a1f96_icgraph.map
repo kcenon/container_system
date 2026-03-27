@@ -1,0 +1,8 @@
+<map id="kcenon::container::epoch_manager::instance" name="kcenon::container::epoch_manager::instance">
+<area shape="rect" id="Node000001" title="Get the singleton instance." alt="" coords="260,37,449,77"/>
+<area shape="poly" id="edge2_Node000001_Node000001" title=" " alt="" coords="396,26,382,19,355,16,331,18,317,23,311,29,314,36,309,38,306,28,314,18,330,13,355,11,383,14,399,21"/>
+<area shape="rect" id="Node000002" href="$df/de9/classkcenon_1_1container_1_1epoch__guard.html#ace0d944b96ab30f8a667de3641897d29" title="Enter critical section." alt="" coords="11,5,207,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="246,46,206,41,207,35,247,41"/>
+<area shape="rect" id="Node000003" href="$df/de9/classkcenon_1_1container_1_1epoch__guard.html#a15b67a27a20e5f5bbcb6daec3ab05cfd" title="Exit critical section." alt="" coords="5,69,212,109"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="247,74,212,79,212,73,246,69"/>
+</map>

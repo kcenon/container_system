@@ -1,0 +1,5 @@
+<map id="kcenon::container::epoch_manager::force_gc" name="kcenon::container::epoch_manager::force_gc">
+<area shape="rect" id="Node000001" title="Force garbage collection of all epochs." alt="" coords="237,13,427,53"/>
+<area shape="rect" id="Node000002" href="$d9/da3/classkcenon_1_1container_1_1epoch__manager.html#aa5928d3f0ea4efc09d13b532fd079e71" title="Destructor &#45; clean up any remaining deferred deletions." alt="" coords="5,5,189,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="224,35,190,35,190,30,224,30"/>
+</map>

@@ -1,0 +1,9 @@
+<map id="kcenon::container::internal::fixed_block_pool::allocate_chunk_unlocked" name="kcenon::container::internal::fixed_block_pool::allocate_chunk_unlocked">
+<area shape="rect" id="Node000001" title=" " alt="" coords="641,5,804,75"/>
+<area shape="rect" id="Node000002" href="$dc/de3/classkcenon_1_1container_1_1internal_1_1fixed__block__pool.html#a7bc8db28b803a7f77a7d7bc0faad4e77" title=" " alt="" coords="440,13,593,67"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="627,43,594,43,594,37,627,37"/>
+<area shape="rect" id="Node000003" href="$d1/dc9/classkcenon_1_1container_1_1internal_1_1pool__allocator.html#ae81b19dbcbd414390bab5c366506d12e" title="Allocate memory from the appropriate pool." alt="" coords="220,13,392,67"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="426,43,392,43,392,37,426,37"/>
+<area shape="rect" id="Node000004" href="$dd/da8/namespacekcenon_1_1container_1_1internal.html#abebb3c37d4faed2c5003ff0d4175eaa6" title="Allocate and construct an object using pool allocation." alt="" coords="5,20,172,60"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="206,43,172,43,172,37,206,37"/>
+</map>

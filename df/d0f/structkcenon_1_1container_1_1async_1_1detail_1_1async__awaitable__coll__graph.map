@@ -1,0 +1,9 @@
+<map id="kcenon::container::async::detail::async_awaitable&lt; T &gt;" name="kcenon::container::async::detail::async_awaitable&lt; T &gt;">
+<area shape="rect" id="Node000001" title="Awaitable that runs work in a separate thread." alt="" coords="19,448,167,683"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,291,180,385"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="95,385,95,432,90,432,90,385"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="18,133,167,199"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="95,212,95,290,90,290,90,212"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="81,5,104,71"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="95,71,95,117,90,117,90,71"/>
+</map>

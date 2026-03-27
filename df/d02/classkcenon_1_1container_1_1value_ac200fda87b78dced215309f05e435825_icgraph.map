@@ -1,0 +1,13 @@
+<map id="kcenon::container::value::deserialize" name="kcenon::container::value::deserialize">
+<area shape="rect" id="Node000001" title="Deserialize from binary format (legacy compatible)" alt="" coords="636,116,783,156"/>
+<area shape="rect" id="Node000002" href="$d6/d89/namespacekcenon_1_1container.html#affa21db254b73403074d3cacb29be54e" title="Create a copy of a value with a new name." alt="" coords="431,5,578,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="668,110,587,60,561,48,563,43,589,55,671,106"/>
+<area shape="rect" id="Node000003" href="$dc/d5a/classkcenon_1_1container_1_1thread__safe__container.html#a97f73aceba6779ffda6d1475911f19ed" title="Deserialize from binary." alt="" coords="421,70,588,125"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="622,122,588,116,589,110,623,117"/>
+<area shape="rect" id="Node000004" href="$df/d02/classkcenon_1_1container_1_1value.html#a26b8169ed46f1294680171a28b0d60e4" title="Deserialize data portion based on type." alt="" coords="200,155,373,195"/>
+<area shape="poly" id="edge6_Node000001_Node000004" title=" " alt="" coords="622,154,374,177,373,172,622,149"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="415,132,345,157,343,152,413,127"/>
+<area shape="poly" id="edge4_Node000004_Node000001" title=" " alt="" coords="387,155,636,133,636,138,387,160"/>
+<area shape="rect" id="Node000005" href="$df/d02/classkcenon_1_1container_1_1value.html#a31bed15f2c2992f56f7d605b865e738d" title="Construct from value_types and raw data (legacy compatibility)" alt="" coords="5,155,152,195"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="186,177,153,177,153,172,186,172"/>
+</map>

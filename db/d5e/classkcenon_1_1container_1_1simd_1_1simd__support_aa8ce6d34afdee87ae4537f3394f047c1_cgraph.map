@@ -1,0 +1,21 @@
+<map id="kcenon::container::simd::simd_support::get_simd_info" name="kcenon::container::simd::simd_support::get_simd_info">
+<area shape="rect" id="Node000001" title="Get a string describing available SIMD features." alt="" coords="5,320,164,375"/>
+<area shape="rect" id="Node000002" href="$db/d5e/classkcenon_1_1container_1_1simd_1_1simd__support.html#ac083306c4b22c70325cfc11cee99fead" title="Get the optimal SIMD width for current platform." alt="" coords="212,5,371,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="89,319,104,268,128,202,163,132,185,99,210,70,213,67,217,71,214,73,189,103,167,135,133,204,109,270,95,321"/>
+<area shape="rect" id="Node000003" href="$db/d5e/classkcenon_1_1container_1_1simd_1_1simd__support.html#a2b6f4b44f58f531b51599a373f66b22f" title=" " alt="" coords="212,84,371,139"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="95,319,139,236,171,190,210,148,214,145,218,149,214,152,176,193,144,239,100,321"/>
+<area shape="rect" id="Node000004" href="$db/d5e/classkcenon_1_1container_1_1simd_1_1simd__support.html#a7df7aeee3cbd7a787d56c5ae6dc577f3" title=" " alt="" coords="212,163,371,217"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="109,318,154,273,210,227,217,222,220,226,214,231,158,277,112,322"/>
+<area shape="rect" id="Node000005" href="$db/d5e/classkcenon_1_1container_1_1simd_1_1simd__support.html#a6e746607ca19ad001708fd95845918b7" title=" " alt="" coords="212,241,371,296"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="156,317,205,298,207,303,158,322"/>
+<area shape="rect" id="Node000006" href="$db/d5e/classkcenon_1_1container_1_1simd_1_1simd__support.html#a9d91f7ddb8febe6422f0d07d12d87f00" title=" " alt="" coords="212,320,371,375"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="164,345,198,345,198,350,164,350"/>
+<area shape="rect" id="Node000007" href="$db/d5e/classkcenon_1_1container_1_1simd_1_1simd__support.html#a3dfbecf90932866d35237d75ddd95500" title=" " alt="" coords="212,399,371,453"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="158,372,207,391,205,396,156,377"/>
+<area shape="rect" id="Node000008" href="$db/d5e/classkcenon_1_1container_1_1simd_1_1simd__support.html#a9c4bf9f9cb445ae563fd5cf81cfcb596" title=" " alt="" coords="212,477,371,532"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="113,373,158,417,214,463,221,468,218,472,210,467,155,421,109,377"/>
+<area shape="rect" id="Node000009" href="$db/d5e/classkcenon_1_1container_1_1simd_1_1simd__support.html#abcb682cf76f504c42ede19a88300b4da" title=" " alt="" coords="212,556,371,611"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="100,374,144,455,176,500,214,541,219,546,216,550,210,545,172,504,139,457,96,376"/>
+<area shape="rect" id="Node000010" href="$db/d5e/classkcenon_1_1container_1_1simd_1_1simd__support.html#aacb36815c36cfc2144a2d65ea7cfe09e" title=" " alt="" coords="212,635,371,689"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="95,374,109,425,133,490,168,559,189,591,214,620,218,624,214,628,210,624,185,594,163,561,128,492,104,427,90,376"/>
+</map>

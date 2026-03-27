@@ -1,0 +1,15 @@
+<map id="examples/messaging_integration_example.cpp" name="examples/messaging_integration_example.cpp">
+<area shape="rect" id="Node000001" title="Example demonstrating messaging integration features." alt="" coords="179,5,370,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,93,85,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="221,48,93,91,91,86,219,43"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="110,93,173,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="244,48,174,89,171,84,241,43"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="197,93,264,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="266,47,246,83,242,80,262,44"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="288,93,352,119"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="288,44,309,80,304,83,283,47"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="376,93,451,119"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="309,43,382,84,380,89,307,48"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="475,93,570,119"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="335,43,474,87,473,92,333,48"/>
+</map>
