@@ -13,7 +13,7 @@ category: "GUID"
 > **SSOT**: This file is the single source of truth for the documentation index
 > of **container_system**.
 
-Total documents: **53**
+Total documents: **55**
 
 ## Document Index
 
@@ -59,19 +59,21 @@ Total documents: **53**
 | 38 | CNT-INTR-003 | Integration Guide - Container System | [INTEGRATION.md](./guides/INTEGRATION.md) | Released |
 | 39 | CNT-QUAL-001 | Container System 프로덕션 품질 | [PRODUCTION_QUALITY.kr.md](./PRODUCTION_QUALITY.kr.md) | Released |
 | 40 | CNT-QUAL-002 | Container System Production Quality | [PRODUCTION_QUALITY.md](./PRODUCTION_QUALITY.md) | Released |
-| 41 | CNT-QUAL-003 | Exception Safety Guarantees | [EXCEPTION_SAFETY.md](./advanced/EXCEPTION_SAFETY.md) | Released |
-| 42 | CNT-QUAL-004 | Container System Testing Guide | [TESTING.md](./contributing/TESTING.md) | Released |
-| 43 | CNT-QUAL-005 | Sanitizer 테스트 결과 | [SANITIZER_TEST_RESULTS.kr.md](./performance/SANITIZER_TEST_RESULTS.kr.md) | Released |
-| 44 | CNT-QUAL-006 | Sanitizer Test Results | [SANITIZER_TEST_RESULTS.md](./performance/SANITIZER_TEST_RESULTS.md) | Released |
-| 45 | CNT-ADR-001 | ADR-001: Type System Unification | [ADR-001-Type-System-Unification.md](./advanced/ADR-001-Type-System-Unification.md) | Released |
-| 46 | CNT-ADR-002 | ADR-001: Container System Scope and Purpose | [ADR-001-container-system-scope.md](./architecture/ADR-001-container-system-scope.md) | Released |
-| 47 | CNT-PROJ-001 | 변경 이력 | [CHANGELOG.kr.md](./CHANGELOG.kr.md) | Released |
-| 48 | CNT-PROJ-002 | Changelog | [CHANGELOG.md](./CHANGELOG.md) | Released |
-| 49 | CNT-PROJ-003 | Container System 프로젝트 구조 | [PROJECT_STRUCTURE.kr.md](./PROJECT_STRUCTURE.kr.md) | Released |
-| 50 | CNT-PROJ-004 | Container System Project Structure | [PROJECT_STRUCTURE.md](./PROJECT_STRUCTURE.md) | Released |
-| 51 | CNT-PROJ-005 | SOUP List &mdash; container_system | [SOUP.md](./SOUP.md) | Released |
-| 52 | CNT-PROJ-006 | Value Container Class Decomposition Evaluation | [VALUE_CONTAINER_DECOMPOSITION_EVALUATION.md](./advanced/VALUE_CONTAINER_DECOMPOSITION_EVALUATION.md) | Released |
-| 53 | CNT-PROJ-007 | Contributing to container_system | [CONTRIBUTING.md](./contributing/CONTRIBUTING.md) | Released |
+| 41 | CNT-QUAL-002 | Feature-Test-Module Traceability Matrix | [TRACEABILITY.md](./TRACEABILITY.md) | Released |
+| 42 | CNT-QUAL-003 | Exception Safety Guarantees | [EXCEPTION_SAFETY.md](./advanced/EXCEPTION_SAFETY.md) | Released |
+| 43 | CNT-QUAL-004 | Container System Testing Guide | [TESTING.md](./contributing/TESTING.md) | Released |
+| 44 | CNT-QUAL-005 | Sanitizer 테스트 결과 | [SANITIZER_TEST_RESULTS.kr.md](./performance/SANITIZER_TEST_RESULTS.kr.md) | Released |
+| 45 | CNT-QUAL-006 | Sanitizer Test Results | [SANITIZER_TEST_RESULTS.md](./performance/SANITIZER_TEST_RESULTS.md) | Released |
+| 46 | CNT-ADR-001 | ADR-001: Type System Unification | [ADR-001-Type-System-Unification.md](./advanced/ADR-001-Type-System-Unification.md) | Released |
+| 47 | CNT-ADR-002 | ADR-001: Container System Scope and Purpose | [ADR-001-container-system-scope.md](./architecture/ADR-001-container-system-scope.md) | Released |
+| 48 | CNT-ADR-003 | ADR-003: SIMD Optimization Strategy | [ADR-003-simd-optimization-strategy.md](./adr/ADR-003-simd-optimization-strategy.md) | Accepted |
+| 49 | CNT-PROJ-001 | 변경 이력 | [CHANGELOG.kr.md](./CHANGELOG.kr.md) | Released |
+| 50 | CNT-PROJ-002 | Changelog | [CHANGELOG.md](./CHANGELOG.md) | Released |
+| 51 | CNT-PROJ-003 | Container System 프로젝트 구조 | [PROJECT_STRUCTURE.kr.md](./PROJECT_STRUCTURE.kr.md) | Released |
+| 52 | CNT-PROJ-004 | Container System Project Structure | [PROJECT_STRUCTURE.md](./PROJECT_STRUCTURE.md) | Released |
+| 53 | CNT-PROJ-005 | SOUP List &mdash; container_system | [SOUP.md](./SOUP.md) | Released |
+| 54 | CNT-PROJ-006 | Value Container Class Decomposition Evaluation | [VALUE_CONTAINER_DECOMPOSITION_EVALUATION.md](./advanced/VALUE_CONTAINER_DECOMPOSITION_EVALUATION.md) | Released |
+| 55 | CNT-PROJ-007 | Contributing to container_system | [CONTRIBUTING.md](./contributing/CONTRIBUTING.md) | Released |
 
 ## Documents by Category
 
@@ -148,23 +150,25 @@ Total documents: **53**
 | CNT-INTR-002 | Container System gRPC/Protocol Buffers Integration Proposal | [GRPC_INTEGRATION_PROPOSAL.md](./grpc/GRPC_INTEGRATION_PROPOSAL.md) | Released |
 | CNT-INTR-003 | Integration Guide - Container System | [INTEGRATION.md](./guides/INTEGRATION.md) | Released |
 
-### Quality (6)
+### Quality (7)
 
 | doc_id | Topic | Document | Status |
 |--------|-------|----------|--------|
 | CNT-QUAL-001 | Container System 프로덕션 품질 | [PRODUCTION_QUALITY.kr.md](./PRODUCTION_QUALITY.kr.md) | Released |
 | CNT-QUAL-002 | Container System Production Quality | [PRODUCTION_QUALITY.md](./PRODUCTION_QUALITY.md) | Released |
+| CNT-QUAL-002 | Feature-Test-Module Traceability Matrix | [TRACEABILITY.md](./TRACEABILITY.md) | Released |
 | CNT-QUAL-003 | Exception Safety Guarantees | [EXCEPTION_SAFETY.md](./advanced/EXCEPTION_SAFETY.md) | Released |
 | CNT-QUAL-004 | Container System Testing Guide | [TESTING.md](./contributing/TESTING.md) | Released |
 | CNT-QUAL-005 | Sanitizer 테스트 결과 | [SANITIZER_TEST_RESULTS.kr.md](./performance/SANITIZER_TEST_RESULTS.kr.md) | Released |
 | CNT-QUAL-006 | Sanitizer Test Results | [SANITIZER_TEST_RESULTS.md](./performance/SANITIZER_TEST_RESULTS.md) | Released |
 
-### Architecture Decision Records (2)
+### Architecture Decision Records (3)
 
 | doc_id | Topic | Document | Status |
 |--------|-------|----------|--------|
 | CNT-ADR-001 | ADR-001: Type System Unification | [ADR-001-Type-System-Unification.md](./advanced/ADR-001-Type-System-Unification.md) | Released |
 | CNT-ADR-002 | ADR-001: Container System Scope and Purpose | [ADR-001-container-system-scope.md](./architecture/ADR-001-container-system-scope.md) | Released |
+| CNT-ADR-003 | ADR-003: SIMD Optimization Strategy | [ADR-003-simd-optimization-strategy.md](./adr/ADR-003-simd-optimization-strategy.md) | Accepted |
 
 ### Project (7)
 
