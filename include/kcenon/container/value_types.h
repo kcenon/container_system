@@ -2,6 +2,16 @@
 // Copyright (c) 2021, 🍀☀🌕🌥 🌊
 // See the LICENSE file in the project root for full license information.
 
+/**
+ * @file value_types.h
+ * @brief Enumeration of the 16 supported value types in the container system.
+ *
+ * Defines value_types enum and compile-time type name mapping used by
+ * value_store, serializers, and container schema validation.
+ *
+ * @see value_store.h For the storage that uses these types
+ */
+
 #pragma once
 
 #include <array>
