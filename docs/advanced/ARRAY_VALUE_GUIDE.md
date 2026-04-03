@@ -1,3 +1,13 @@
+---
+doc_id: "CNT-GUID-004"
+doc_title: "ArrayValue Implementation Guide"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "container_system"
+category: "GUID"
+---
+
 # ArrayValue Implementation Guide
 
 ## Table of Contents

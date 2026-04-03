@@ -1,3 +1,13 @@
+---
+doc_id: "CNT-GUID-005"
+doc_title: "Visitor Pattern with variant_value_v2"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "container_system"
+category: "GUID"
+---
+
 # Visitor Pattern with variant_value_v2
 
 **Date**: 2025-11-09

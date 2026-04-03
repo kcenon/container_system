@@ -1,3 +1,13 @@
+---
+doc_id: "CNT-GUID-006"
+doc_title: "Container System - Frequently Asked Questions"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "container_system"
+category: "GUID"
+---
+
 # Container System - Frequently Asked Questions
 
 > **Version:** 0.1.0

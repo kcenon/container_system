@@ -1,3 +1,13 @@
+---
+doc_id: "CNT-ARCH-005"
+doc_title: "Lock-Free Data Structures"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "container_system"
+category: "ARCH"
+---
+
 # Lock-Free Data Structures
 
 **Date**: 2025-02-09

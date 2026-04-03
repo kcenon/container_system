@@ -1,3 +1,13 @@
+---
+doc_id: "CNT-ARCH-001"
+doc_title: "아키텍처 문서 - Container System"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "container_system"
+category: "ARCH"
+---
+
 # 아키텍처 문서 - Container System
 
 > **버전:** 0.1.0.0

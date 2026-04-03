@@ -1,3 +1,13 @@
+---
+doc_id: "CNT-ADR-002"
+doc_title: "ADR-001: Container System Scope and Purpose"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "container_system"
+category: "ADR"
+---
+
 # ADR-001: Container System Scope and Purpose
 
 **Status**: Accepted

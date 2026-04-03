@@ -1,3 +1,13 @@
+---
+doc_id: "CNT-GUID-008"
+doc_title: "Quick Start Guide"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "container_system"
+category: "GUID"
+---
+
 # Quick Start Guide
 
 Get started with container_system in 5 minutes.

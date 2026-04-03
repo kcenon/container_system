@@ -1,3 +1,13 @@
+---
+doc_id: "CNT-INTR-003"
+doc_title: "Integration Guide - Container System"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "container_system"
+category: "INTR"
+---
+
 # Integration Guide - Container System
 
 > **Language:** **English** | [한국어](INTEGRATION.kr.md)

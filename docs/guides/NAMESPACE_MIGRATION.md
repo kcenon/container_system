@@ -1,3 +1,13 @@
+---
+doc_id: "CNT-MIGR-004"
+doc_title: "Namespace Migration Guide"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "container_system"
+category: "MIGR"
+---
+
 # Namespace Migration Guide
 
 > **Language:** **English** | [한국어](NAMESPACE_MIGRATION.kr.md)

@@ -1,3 +1,13 @@
+---
+doc_id: "CNT-PROJ-004"
+doc_title: "Container System Project Structure"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "container_system"
+category: "PROJ"
+---
+
 # Container System Project Structure
 
 **Last Updated**: 2025-12-10

@@ -1,3 +1,13 @@
+---
+doc_id: "CNT-FEAT-001"
+doc_title: "Container System - 상세 기능"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "container_system"
+category: "FEAT"
+---
+
 # Container System - 상세 기능
 
 **언어:** [English](README.md) | **한국어**
