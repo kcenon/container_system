@@ -1,3 +1,13 @@
+---
+doc_id: "CNT-PERF-003"
+doc_title: "Memory Pool and Allocator Architecture"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "container_system"
+category: "PERF"
+---
+
 # Memory Pool and Allocator Architecture
 
 **Date**: 2025-02-09

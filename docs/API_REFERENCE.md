@@ -1,3 +1,13 @@
+---
+doc_id: "CNT-API-002"
+doc_title: "container_system API Reference"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "container_system"
+category: "API"
+---
+
 # container_system API Reference
 
 > **Version**: 0.3.0.0

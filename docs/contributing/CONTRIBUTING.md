@@ -1,3 +1,13 @@
+---
+doc_id: "CNT-PROJ-007"
+doc_title: "Contributing to container_system"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "container_system"
+category: "PROJ"
+---
+
 <!-- BSD 3-Clause License
      Copyright (c) 2025, kcenon
      See the LICENSE file in the project root for full license information. -->

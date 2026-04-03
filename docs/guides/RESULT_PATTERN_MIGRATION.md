@@ -1,3 +1,13 @@
+---
+doc_id: "CNT-MIGR-006"
+doc_title: "Result Pattern Migration Guide"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "container_system"
+category: "MIGR"
+---
+
 # Result Pattern Migration Guide
 
 This guide helps you migrate from the traditional exception/bool-based APIs to the new Result-returning APIs in container_system.

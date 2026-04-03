@@ -1,3 +1,13 @@
+---
+doc_id: "CNT-PERF-009"
+doc_title: "📊 Container System - Performance Benchmarks & Analysis"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "container_system"
+category: "PERF"
+---
+
 # 📊 Container System - Performance Benchmarks & Analysis
 
 **Language**: **English** | [한국어](PERFORMANCE.kr.md)

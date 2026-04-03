@@ -1,3 +1,13 @@
+---
+doc_id: "CNT-INTR-001"
+doc_title: "Container System gRPC/Protocol Buffers 통합 제안서"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "container_system"
+category: "INTR"
+---
+
 # Container System gRPC/Protocol Buffers 통합 제안서
 
 > **Language:** [English](GRPC_INTEGRATION_PROPOSAL.md) | **한국어**

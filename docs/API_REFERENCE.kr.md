@@ -1,3 +1,13 @@
+---
+doc_id: "CNT-API-001"
+doc_title: "container_system API 레퍼런스"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "container_system"
+category: "API"
+---
+
 # container_system API 레퍼런스
 
 > **버전**: 0.2.1

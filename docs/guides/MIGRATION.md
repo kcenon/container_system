@@ -1,3 +1,13 @@
+---
+doc_id: "CNT-MIGR-002"
+doc_title: "Migration Guide - Container System"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "container_system"
+category: "MIGR"
+---
+
 # Migration Guide - Container System
 
 > **Language:** **English** | [한국어](MIGRATION.kr.md)

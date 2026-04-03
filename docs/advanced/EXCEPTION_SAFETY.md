@@ -1,3 +1,13 @@
+---
+doc_id: "CNT-QUAL-003"
+doc_title: "Exception Safety Guarantees"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "container_system"
+category: "QUAL"
+---
+
 # Exception Safety Guarantees
 
 **Date**: 2025-11-09

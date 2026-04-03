@@ -1,3 +1,13 @@
+---
+doc_id: "CNT-QUAL-005"
+doc_title: "Sanitizer 테스트 결과"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "container_system"
+category: "QUAL"
+---
+
 # Sanitizer 테스트 결과
 
 > **Language:** [English](SANITIZER_TEST_RESULTS.md) | **한국어**

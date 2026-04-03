@@ -1,3 +1,13 @@
+---
+doc_id: "CNT-GUID-001"
+doc_title: "C++20 Coroutine and Async Framework"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "container_system"
+category: "GUID"
+---
+
 # C++20 Coroutine and Async Framework
 
 **Date**: 2026-02-09
