@@ -3,6 +3,16 @@
 // High-level SIMD-friendly batch container for trivially copyable types.
 // Renamed from typed_container.h for clarity (Issue #328).
 
+/**
+ * @file simd_batch.h
+ * @brief SIMD-friendly batch container for trivially copyable payloads.
+ *
+ * Enforces deterministic layout for SIMD-optimized serialization paths.
+ * Renamed from typed_container.h (Issue #328).
+ *
+ * @see simd_processor For the SIMD acceleration backend
+ */
+
 #pragma once
 
 #include "concepts.h"
