@@ -10,6 +10,8 @@ category: "ARCH"
 
 # Structure Documentation - Container System
 
+> **SSOT**: This document is the single source of truth for **Structure Documentation - Container System**.
+
 > **Version:** 0.1.0.0
 > **Last Updated:** 2025-10-22
 > **Language:** **English** | [한국어](STRUCTURE.kr.md)

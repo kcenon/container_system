@@ -10,6 +10,8 @@ category: "MIGR"
 
 # 네임스페이스 마이그레이션 가이드
 
+> **SSOT**: This document is the single source of truth for **네임스페이스 마이그레이션 가이드**.
+
 > **Language:** [English](NAMESPACE_MIGRATION.md) | **한국어**
 
 ## 개요

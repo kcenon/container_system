@@ -10,6 +10,8 @@ category: "PERF"
 
 # Container System - Performance Baseline Metrics
 
+> **SSOT**: This document is the single source of truth for **Container System - Performance Baseline Metrics**.
+
 **언어 (Language)**: [English](BASELINE.md) | **한국어**
 
 **Version**: 0.1.0.0

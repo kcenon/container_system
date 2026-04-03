@@ -10,6 +10,8 @@ category: "ADR"
 
 # ADR-001: Type System Unification
 
+> **SSOT**: This document is the single source of truth for **ADR-001: Type System Unification**.
+
 **Date**: 2025-11-08
 **Status**: Accepted
 **Deciders**: Lead Architect, Senior Developers

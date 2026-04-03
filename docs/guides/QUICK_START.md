@@ -10,6 +10,8 @@ category: "GUID"
 
 # Quick Start Guide
 
+> **SSOT**: This document is the single source of truth for **Quick Start Guide**.
+
 Get started with container_system in 5 minutes.
 
 ## Prerequisites

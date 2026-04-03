@@ -10,6 +10,8 @@ category: "GUID"
 
 # Container System Integration Guide
 
+> **SSOT**: This document is the single source of truth for **Container System Integration Guide**.
+
 ## Overview
 
 This directory contains integration guides for using container_system with other KCENON systems.

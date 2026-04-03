@@ -10,6 +10,8 @@ category: "GUID"
 
 # ArrayValue Implementation Guide
 
+> **SSOT**: This document is the single source of truth for **ArrayValue Implementation Guide**.
+
 ## Table of Contents
 
 - [Overview](#overview)

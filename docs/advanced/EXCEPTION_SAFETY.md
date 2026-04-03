@@ -10,6 +10,8 @@ category: "QUAL"
 
 # Exception Safety Guarantees
 
+> **SSOT**: This document is the single source of truth for **Exception Safety Guarantees**.
+
 **Date**: 2025-11-09
 **Status**: Active
 

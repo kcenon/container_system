@@ -10,6 +10,8 @@ category: "ARCH"
 
 # value_store Design Document
 
+> **SSOT**: This document is the single source of truth for **value_store Design Document**.
+
 **Date**: 2025-11-09
 **Status**: Phase 1 Completed (Interface Definition)
 **Sprint**: Sprint 3 - Domain Separation

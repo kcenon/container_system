@@ -10,6 +10,8 @@ category: "FEAT"
 
 # Container System Features
 
+> **SSOT**: This document is the single source of truth for **Container System Features**.
+
 **Last Updated**: 2026-02-08
 
 ## Overview

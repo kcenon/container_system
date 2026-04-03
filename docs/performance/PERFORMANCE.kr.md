@@ -10,6 +10,8 @@ category: "PERF"
 
 # Container System - Performance Benchmarks & Analysis
 
+> **SSOT**: This document is the single source of truth for **Container System - Performance Benchmarks & Analysis**.
+
 **언어 (Language)**: [English](PERFORMANCE.md) | **한국어**
 
 ## 주요 요약

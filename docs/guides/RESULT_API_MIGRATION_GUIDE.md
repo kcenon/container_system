@@ -10,6 +10,8 @@ category: "MIGR"
 
 # Result API Migration Guide
 
+> **SSOT**: This document is the single source of truth for **Result API Migration Guide**.
+
 > **Status**: Ready for Production
 > **Version**: 0.2.0.0
 > **Last Updated**: 2025-01-11

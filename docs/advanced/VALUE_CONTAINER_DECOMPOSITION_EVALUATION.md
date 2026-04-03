@@ -10,6 +10,8 @@ category: "PROJ"
 
 # Value Container Class Decomposition Evaluation
 
+> **SSOT**: This document is the single source of truth for **Value Container Class Decomposition Evaluation**.
+
 **Issue**: #287
 **Date**: 2026-01-16
 **Author**: GitHub Actions (Automated)

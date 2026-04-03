@@ -10,6 +10,8 @@ category: "MIGR"
 
 # variant_value_v2 Migration Guide
 
+> **SSOT**: This document is the single source of truth for **variant_value_v2 Migration Guide**.
+
 > **Status**: Ready for Production
 > **Version**: 0.2.0.0
 > **Last Updated**: 2025-11-08
