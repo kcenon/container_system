@@ -4,54 +4,99 @@
 [![Static Analysis](https://github.com/kcenon/container_system/actions/workflows/static-analysis.yml/badge.svg)](https://github.com/kcenon/container_system/actions/workflows/static-analysis.yml)
 [![Security Scan](https://github.com/kcenon/container_system/actions/workflows/dependency-security-scan.yml/badge.svg)](https://github.com/kcenon/container_system/actions/workflows/dependency-security-scan.yml)
 [![Documentation](https://github.com/kcenon/container_system/actions/workflows/build-Doxygen.yaml/badge.svg)](https://github.com/kcenon/container_system/actions/workflows/build-Doxygen.yaml)
+[![License](https://img.shields.io/github/license/kcenon/container_system)](https://github.com/kcenon/container_system/blob/main/LICENSE)
 
 # Container System
 
 > **Language:** [English](README.md) | **한국어**
 
+메시징 시스템과 범용 애플리케이션을 위한 고성능 C++20 타입 안전 컨테이너 프레임워크입니다.
+
 ## 목차
 
 - [개요](#개요)
+- [주요 기능](#주요-기능)
+- [요구사항](#요구사항)
 - [빠른 시작](#빠른-시작)
-- [핵심 기능](#핵심-기능)
-- [성능 하이라이트](#성능-하이라이트)
-- [아키텍처 개요](#아키텍처-개요)
-- [문서](#문서)
-- [값 타입](#값-타입)
+- [설치](#설치)
+- [아키텍처](#아키텍처)
+- [핵심 개념](#핵심-개념)
+- [API 개요](#api-개요)
+- [예제](#예제)
+- [성능](#성능)
 - [생태계 통합](#생태계-통합)
-- [빌드](#빌드)
-- [플랫폼 지원](#플랫폼-지원)
-- [스레드 안전성](#스레드-안전성)
-- [오류 처리](#오류-처리)
 - [기여하기](#기여하기)
 - [라이선스](#라이선스)
 
+---
+
 ## 개요
 
-Container System은 메시징 시스템과 범용 애플리케이션을 위한 포괄적인 데이터 관리를 위해 설계된 고성능 C++20 타입 안전 컨테이너 프레임워크입니다. SIMD 최적화와 원활한 생태계 통합을 특징으로 하는 모듈식 인터페이스 기반 아키텍처로 구축되었습니다.
+Container System은 SIMD 최적화와 원활한 생태계 통합을 특징으로 하는 모듈식 인터페이스 기반 아키텍처로 구축된 고성능 직렬화 가능 데이터 컨테이너 라이브러리입니다.
 
-**주요 특징**:
-- **타입 안전성**: 컴파일 타임 검사를 포함한 강력한 타입 시스템
-- **고성능**: SIMD 가속 연산 (초당 1.8M 직렬화, 초당 25M SIMD 연산)
-- **충분한 테스트**: 완벽한 RAII 점수 (20/20), 데이터 레이스 제로, 포괄적인 테스팅
-- **크로스 플랫폼**: Linux, macOS, Windows 네이티브 지원 및 최적화된 빌드 스크립트
-- **다중 포맷**: Binary, JSON, XML 직렬화 및 자동 포맷 감지
+**핵심 가치**:
+- **타입 안전성**: 컴파일 타임 검사를 갖춘 강력한 타입 값 시스템
+- **고성능**: SIMD 가속 연산 (초당 1.8M 직렬화, 25M SIMD ops/sec)
+- **철저한 테스트**: 완벽한 RAII 점수 (20/20), 데이터 레이스 제로
+- **크로스 플랫폼**: Linux, macOS, Windows 네이티브 지원
+- **다중 포맷**: Binary, JSON, XML 직렬화 (자동 포맷 감지)
 
 ### 미션
 
-전 세계 개발자들에게 고성능 데이터 직렬화를 **접근 가능**하고, **타입 안전**하며, **효율적**으로 만듭니다.
+고성능 데이터 직렬화를 전 세계 개발자에게 **접근 가능하고**, **타입 안전하며**, **효율적으로** 만드는 것입니다.
+
+---
+
+## 주요 기능
+
+| 기능 | 설명 | 상태 |
+|------|------|------|
+| **타입 안전 값 시스템** | 16개 내장 타입, 컴파일 타임 검사 | 안정 |
+| **Binary 직렬화** | 초당 1.8M ops, ~10% 오버헤드 | 안정 |
+| **JSON 직렬화** | 초당 950K ops, 사람이 읽기 가능 | 안정 |
+| **XML 직렬화** | 초당 720K ops, 스키마 검증 | 안정 |
+| **SIMD 가속** | ARM NEON / x86 AVX2 자동 감지 | 안정 |
+| **스레드 안전 컨테이너** | RCU 기반 lock-free 읽기 | 안정 |
+| **메모리 풀** | 소형 할당 최적화 | 안정 |
+| **빌더 패턴** | 메시지 컨테이너 빌더 | 안정 |
+| **자동 포맷 감지** | 직렬화 포맷 자동 식별 | 안정 |
+| **코루틴 비동기** | C++20 코루틴 지원 | 안정 |
+| **C++20 모듈** | 헤더 기반 인터페이스 대안 | 실험적 |
+
+---
+
+## 요구사항
+
+### 컴파일러 매트릭스
+
+| 컴파일러 | 최소 버전 | 비고 |
+|----------|----------|------|
+| GCC | 11+ | C++20 Concepts 필수 |
+| Clang | 14+ | C++20 Concepts 필수 |
+| Apple Clang | 14+ | macOS 지원 |
+| MSVC | 2022+ | C++20 Concepts 필수 |
+
+### 빌드 도구 및 의존성
+
+| 의존성 | 버전 | 필수 | 설명 |
+|--------|------|------|------|
+| CMake | 3.20+ | 예 | 빌드 시스템 |
+| [common_system](https://github.com/kcenon/common_system) | latest | 예 | C++20 Concepts 및 공통 인터페이스 |
+| vcpkg | latest | 아니오 | 패키지 관리 (권장) |
+
+> container_system은 생태계에서 가장 깔끔한 **최소 의존성 아키텍처**를 갖추고 있습니다 - common_system만 필수입니다.
+
+---
 
 ## 빠른 시작
 
-### 기본 사용 예제
-
 ```cpp
-#include <container/container.h>  // 표준 include 경로
+#include <container/container.h>
 
 using namespace container_module;
 
 int main() {
-    // 빌더 패턴을 사용한 컨테이너 생성
+    // 빌더 패턴으로 컨테이너 생성
     auto container = messaging_container_builder()
         .source("trading_engine", "session_001")
         .target("risk_monitor", "main")
@@ -76,444 +121,210 @@ int main() {
 }
 ```
 
-### 의존성
+---
 
-container_system은 **최소 의존성 아키텍처**를 가지고 있습니다 - 생태계에서 가장 깔끔합니다:
+## 설치
+
+### vcpkg를 통한 설치
+
+```bash
+vcpkg install kcenon-container-system
+```
+
+`CMakeLists.txt`에서:
+```cmake
+find_package(container_system CONFIG REQUIRED)
+target_link_libraries(your_target PRIVATE container_system::container)
+```
+
+### 소스에서 빌드
+
+```bash
+# container_system 클론
+git clone https://github.com/kcenon/container_system.git
+cd container_system
+
+# 빌드 (common_system은 자동으로 가져옴)
+./scripts/build.sh           # Linux/macOS
+scripts\build.bat            # Windows (CMD)
+```
+
+### 로컬 개발 (common_system과 함께)
+
+```bash
+# 두 리포지토리를 나란히 클론
+git clone https://github.com/kcenon/common_system.git
+git clone https://github.com/kcenon/container_system.git
+
+cd container_system
+# CMake가 ../common_system을 자동 감지
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+cmake --build build -j$(nproc)
+```
+
+### 의존성 해결 우선순위
+
+1. **캐시 변수**: `COMMON_SYSTEM_ROOT` (CMake 옵션)
+2. **환경 변수**: `$COMMON_SYSTEM_ROOT`
+3. **형제 디렉토리**: `../common_system` (로컬 개발)
+4. **하위 디렉토리**: `./common_system` (CI/CD)
+5. **FetchContent**: GitHub에서 자동 다운로드 (기본값)
+
+---
+
+## 아키텍처
+
+### 모듈 구조
+
+```
+include/kcenon/container/
+  core/             - value_types (16 타입), value_store, container_schema
+  core/serializers/ - binary, json, xml, msgpack 직렬화기 + serializer_factory
+  internal/         - value, variant_value_factory, memory_pool, pool_allocator,
+                      thread_safe_container, simd_processor, rcu_value, epoch_manager
+  internal/async/   - C++20 코루틴 지원 (task, generator, async_container)
+  messaging/        - message_container (도메인 특화)
+  integration/      - messaging_integration
+  utilities/        - 문자열 변환, 핵심 유틸리티
+```
+
+### 의존성 구조
 
 ```
 container_system
-       │
-       ▼
+       |
+       v
 common_system (유일한 필수 생태계 의존성)
 ```
 
-| 측면 | 상태 | 비고 |
-|--------|--------|-------|
-| 필수 생태계 의존성 | 1 | common_system만 |
-| 선택적 생태계 의존성 | 0 | 조건부 컴파일 불필요 |
-| 순환 의존성 위험 | 없음 | 아래 방향으로만 의존 |
-| 격리 빌드 | ✅ | common_system만으로 빌드 가능 |
+---
 
-**이것이 중요한 이유:**
-- 더 빠른 컴파일 시간
-- 더 쉬운 테스트 및 디버깅
-- 명확한 아키텍처 경계
-- 다른 모듈과의 결합도 감소
+## 핵심 개념
 
-📖 **[최소 의존성 아키텍처 →](docs/ARCHITECTURE_KO.md#최소-의존성-아키텍처)**
+### 값 타입 (Value Types)
 
-### 요구사항
+16개의 내장 타입을 지원합니다: null, bool, short/ushort, int/uint, long/ulong, llong/ullong, float, double, string, bytes, container, array.
 
-| 의존성 | 버전 | 필수 | 설명 |
-|--------|------|------|------|
-| C++20 컴파일러 | GCC 11+ / Clang 14+ / Apple Clang 14+ / MSVC 2022+ | 예 | C++20 Concepts 지원 필요 |
-| CMake | 3.20+ | 예 | 빌드 시스템 |
-| common_system | latest | 예 | C++20 Concepts 및 공통 인터페이스 |
-| vcpkg | latest | 선택 | 패키지 관리 (권장) |
+컴파일 타임 `constexpr` 타입 매핑으로 타입 안전성을 보장합니다.
 
-### 설치
+### 직렬화 전략 (Serializer Strategy)
 
-#### 1단계: 의존성 복제
+Strategy 패턴으로 구현되며, `serializer_factory`가 런타임에 binary/json/xml/msgpack을 해석합니다:
 
-```bash
-# common_system 복제 (필수)
-git clone https://github.com/kcenon/common_system.git
+```cpp
+// 자동 포맷 감지
+auto container = std::make_shared<value_container>(data);
 
-# container_system 복제
-git clone https://github.com/kcenon/container_system.git
+// 명시적 포맷 지정
+auto json = container->serialize(serialization_format::json);
 ```
-
-#### 2단계: 의존성 설치 및 빌드
-
-```bash
-cd container_system
-
-# 의존성 설치 (크로스 플랫폼)
-./scripts/dependency.sh      # Linux/macOS
-# 또는
-scripts\dependency.bat       # Windows (CMD)
-.\scripts\dependency.ps1     # Windows (PowerShell)
-
-# 프로젝트 빌드
-./scripts/build.sh           # Linux/macOS
-# 또는
-scripts\build.bat            # Windows (CMD)
-.\scripts\build.ps1          # Windows (PowerShell)
-
-# 예제 실행
-./build/examples/basic_container_example
-```
-
-## 핵심 기능
-
-### 타입 안전 값 시스템
-- **15가지 내장 타입**: null부터 중첩 컨테이너까지
-- **컴파일 타임 검사**: 템플릿 메타프로그래밍으로 타입 안전성 보장
-- **런타임 검증**: 역직렬화 시 타입 검사
-- **제로 오버헤드**: 타입 안전성에 대한 런타임 비용 없음
-
-### 고성능 직렬화
-- **바이너리 포맷**: 초당 1.8M 연산, ~10% 오버헤드
-- **JSON 포맷**: 초당 950K 연산, 사람이 읽을 수 있음
-- **XML 포맷**: 초당 720K 연산, 스키마 검증 포함
-- **자동 감지**: 자동 포맷 식별
-
-### SIMD 가속
-- **ARM NEON**: Apple Silicon (M1/M2/M3)에서 3.2배 속도 향상
-- **x86 AVX2**: Intel/AMD 프로세서에서 2.5배 속도 향상
-- **자동 감지**: 플랫폼별 최적화 선택
-- **25M ops/sec**: 숫자 배열 처리 처리량
 
 ### 스레드 안전성
-- **락프리 읽기**: 동기화 없이 동시 읽기 연산
-- **스레드 안전 래퍼**: 쓰기를 위한 선택적 `thread_safe_container`
-- **선형 확장**: 8 스레드로 7.5배 처리량
-- **데이터 레이스 제로**: ThreadSanitizer 검증 완료
 
-### 프로덕션 품질
-- **완벽한 RAII**: 20/20 점수 (A+ 등급), 생태계 내 최고
-- **메모리 누수 제로**: AddressSanitizer 클린
-- **데이터 레이스 제로**: ThreadSanitizer 검증 완료
-- **123개 이상 테스트**: 포괄적인 테스트 커버리지
-- **85% 이상 커버리지**: 지속적인 모니터링과 함께 라인 커버리지
+- **lock-free 읽기**: `rcu_value`, `epoch_manager`를 사용한 동시 읽기
+- **스레드 안전 래퍼**: `thread_safe_container`로 쓰기 동기화
+- **선형 스케일링**: 8 스레드에서 7.5x 처리량
 
-📚 **[전체 기능 →](docs/FEATURES.md)**
+### 빌더 패턴
 
-## 성능 하이라이트
+`messaging_container_builder`로 메시지 컨테이너를 플루언트하게 구성합니다.
 
-*Apple M1 (8코어, ARM NEON), macOS 26.1, 릴리스 빌드 벤치마크*
+### 메모리 풀
 
-| 연산 | 처리량 | 비고 |
-|-----------|-----------|-------|
-| **컨테이너 생성** | 2M/초 | 헤더가 있는 빈 컨테이너 |
-| **값 추가** | 4.5M/초 | SIMD를 사용한 숫자 값 |
-| **바이너리 직렬화** | 1.8M/초 | 1KB 컨테이너, ~10% 오버헤드 |
-| **JSON 직렬화** | 950K/초 | 프리티 프린트 활성화 |
-| **SIMD 연산** | 25M/초 | ARM NEON 가속 |
-| **이동 연산** | 4.2M/초 | 제로 카피 시맨틱 |
+소형 객체 할당을 위한 커스텀 `pool_allocator`로 할당 성능을 최적화합니다.
 
-**플랫폼 비교**:
+---
 
-| 플랫폼 | 아키텍처 | 바이너리 직렬화 | SIMD 속도 향상 |
-|----------|-------------|-------------|--------------|
-| Apple M1 | ARM64 | 1.8M/초 | 3.2배 (NEON) |
-| Intel i7-12700K | x64 | 1.6M/초 | 2.5배 (AVX2) |
-| AMD Ryzen 9 | x64 | 1.55M/초 | 2.3배 (AVX2) |
+## API 개요
 
-⚡ **[전체 벤치마크 →](docs/BENCHMARKS.md)**
+| API | 헤더 | 설명 |
+|-----|------|------|
+| `value_container` | `container.h` | 핵심 직렬화 가능 컨테이너 |
+| `message_buffer` | `container.h` | v2.0.0부터 권장 이름 |
+| `messaging_container_builder` | `messaging/message_container.h` | 빌더 패턴 생성 |
+| `thread_safe_container` | `internal/thread_safe_container.h` | 스레드 안전 래퍼 |
+| `simd_processor` | `internal/simd_processor.h` | SIMD 가속 처리 |
+| `serializer_factory` | `core/serializers/serializer_factory.h` | 직렬화 포맷 팩토리 |
+| `memory_pool` | `internal/memory_pool.h` | 커스텀 메모리 할당 |
 
-## 아키텍처 개요
+---
 
-```
-                    ┌─────────────────┐
-                    │ utilities_module│
-                    │   (Foundation)  │
-                    └────────┬────────┘
-                             │
-         ┌───────────────────┼───────────────────┐
-         │                   │                   │
-         ▼                   ▼                   ▼
-┌────────────────┐  ┌────────────────┐  ┌────────────────┐
-│ container_system│  │messaging_system│  │ network_system │
-│  (이 프로젝트)   │◄─│   (소비자)      │◄─│  (전송)        │
-└────────────────┘  └────────────────┘  └────────────────┘
-         │
-         └──────────────────────┐
-                                ▼
-                    ┌────────────────────┐
-                    │  database_system   │
-                    │     (저장소)        │
-                    └────────────────────┘
-```
+## 예제
 
-**통합 이점**:
-- **타입 안전 메시징**: 런타임 오류 방지
-- **성능 최적화**: 높은 처리량을 위한 SIMD 가속
-- **범용 직렬화**: 다양한 요구를 위한 Binary, JSON, XML
-- **통합 데이터 모델**: 생태계 전체에서 일관된 구조
+| 예제 | 난이도 | 설명 |
+|------|--------|------|
+| [basic_container_example](examples/basic_container_example) | 초급 | 기본 컨테이너 사용 |
+| [messaging_example](examples/messaging_example) | 중급 | 메시징 시스템 통합 |
+| [simd_batch_example](examples/simd_batch_example) | 고급 | SIMD 배치 처리 |
 
-🏗️ **[아키텍처 가이드 →](docs/ARCHITECTURE.md)**
+---
 
-## 문서
+## 성능
 
-### 시작하기
-- 📖 [빠른 시작 가이드](docs/guides/QUICK_START.md)
-- 🔍 [문제 해결](docs/guides/TROUBLESHOOTING.md)
-- 📋 [FAQ](docs/guides/FAQ.md) - 자주 묻는 질문
+**플랫폼**: Apple M1 @ 3.2GHz, 16GB RAM
 
-### 핵심 문서
-- 📚 [기능](docs/FEATURES.md) - 전체 기능 문서
-- ⚡ [벤치마크](docs/BENCHMARKS.md) - 성능 분석
-- 📦 [프로젝트 구조](docs/PROJECT_STRUCTURE.md) - 코드 구성
-- 🏆 [프로덕션 품질](docs/PRODUCTION_QUALITY.md) - 품질 메트릭
+| 메트릭 | 값 | 비고 |
+|--------|------|------|
+| **Binary 직렬화** | 1.8M ops/s | ~10% 오버헤드 |
+| **JSON 직렬화** | 950K ops/s | 사람이 읽기 가능 |
+| **XML 직렬화** | 720K ops/s | 스키마 검증 |
+| **SIMD 처리** | 25M ops/s | 숫자 배열 |
+| **SIMD 가속** | 3.2x | Apple Silicon (NEON) |
+| **스레드 스케일링** | 7.5x | 8 스레드 |
 
-### 기술 가이드
-- 🏛️ [아키텍처](docs/ARCHITECTURE.md) - 시스템 설계 및 패턴
-- 📘 [API 레퍼런스](docs/API_REFERENCE.md) - 전체 API 문서
-- 🚀 [성능](docs/performance/PERFORMANCE.md) - SIMD 최적화 가이드
-- 🔗 [통합](docs/guides/INTEGRATION.md) - 생태계 통합
+### 품질 메트릭
 
-### 개발
-- 🔄 [마이그레이션](docs/guides/MIGRATION.md) - messaging_system에서 마이그레이션
-- 🧪 [테스팅](docs/contributing/TESTING.md) - 테스트 가이드라인
+- RAII 점수: 20/20 (A+ 등급, 생태계 최고)
+- AddressSanitizer: 메모리 누수 제로
+- ThreadSanitizer: 데이터 레이스 제로
+- 123+ 테스트, 85%+ 커버리지
 
-**언어 지원**: 대부분의 문서는 영어와 한국어(`*_KO.md`)로 제공됩니다.
-
-## 값 타입
-
-컨테이너 시스템은 15가지 고유한 값 타입을 지원합니다:
-
-| 카테고리 | 타입 | 크기 |
-|----------|-------|------|
-| **기본 타입** | null, bool, char | 0-1 바이트 |
-| **정수** | int8, uint8, int16, uint16, int32, uint32, int64, uint64 | 1-8 바이트 |
-| **부동소수점** | float, double | 4-8 바이트 |
-| **복합 타입** | bytes, container, string | 가변 |
-
-**예제**:
-```cpp
-using namespace container_module;
-
-// 팩토리를 사용한 값 생성
-auto int_val = value_factory::create_int64("id", 12345);
-auto str_val = value_factory::create_string("name", "홍길동");
-auto dbl_val = value_factory::create_double("balance", 1500.75);
-auto bool_val = value_factory::create_bool("active", true);
-
-// 컨테이너에 추가
-container->add_value(int_val);
-container->add_value(str_val);
-container->add_value(dbl_val);
-container->add_value(bool_val);
-```
-
-📚 **[값 타입 상세 →](docs/FEATURES.md#value-types)**
+---
 
 ## 생태계 통합
 
-### 메시징 시스템과의 통합
-```cpp
-#include <messaging_system/messaging_client.h>
+### 의존성 계층
 
-auto client = std::make_shared<messaging_client>("client_01");
-
-auto message = messaging_container_builder()
-    .source("client_01", "session_123")
-    .target("server", "main")
-    .message_type("request")
-    .add_value("action", "query")
-    .build();
-
-client->send_container(message);
+```
+common_system (Tier 0) [필수]
+container_system (Tier 1) <-- 이 프로젝트
+  -> 사용처: network_system, database_system, pacs_system
 ```
 
-### 네트워크 시스템과의 통합
-```cpp
-#include <network_system/tcp_client.h>
+### 통합 프로젝트
 
-auto tcp_client = network_system::TcpClient::create("localhost", 8080);
+| 프로젝트 | container_system 역할 |
+|----------|----------------------|
+| [common_system](https://github.com/kcenon/common_system) | 필수 의존성 |
+| [network_system](https://github.com/kcenon/network_system) | 데이터 교환 포맷 |
+| [database_system](https://github.com/kcenon/database_system) | 데이터 직렬화 |
+| [pacs_system](https://github.com/kcenon/pacs_system) | DICOM 직렬화 |
 
-// 직렬화 및 전송
-std::string data = container->serialize();
-tcp_client->send(data);
+### 플랫폼 지원
 
-// 수신 및 역직렬화
-auto received = tcp_client->receive();
-auto restored = std::make_shared<value_container>(received);
-```
+| 플랫폼 | 컴파일러 | 상태 |
+|--------|----------|------|
+| **Linux** | GCC 11+, Clang 14+ | 완전 지원 |
+| **macOS** | Apple Clang 14+ | 완전 지원 |
+| **Windows** | MSVC 2022+ | 완전 지원 |
 
-### 데이터베이스 시스템과의 통합
-```cpp
-#include <database_system/database_manager.h>
-
-database_manager db;
-db.connect("host=localhost dbname=app");
-
-// BLOB로 저장
-std::string data = container->serialize();
-db.insert_query("INSERT INTO messages (data) VALUES (?)", data);
-```
-
-🌐 **[통합 가이드 →](docs/INTEGRATION.md)**
-
-## 빌드
-
-### 기본 빌드
-
-```bash
-# 구성
-cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
-
-# 빌드
-cmake --build build -j$(nproc)
-
-# 테스트 실행
-cd build && ctest
-```
-
-### 빌드 옵션
-
-| 옵션 | 설명 | 기본값 |
-|--------|-------------|---------|
-| `ENABLE_MESSAGING_FEATURES` | 메시징 최적화 | ON |
-| `ENABLE_PERFORMANCE_METRICS` | 성능 모니터링 | OFF |
-| `ENABLE_SIMD` | SIMD 최적화 | ON |
-| `BUILD_CONTAINER_EXAMPLES` | 예제 빌드 | ON |
-| `BUILD_TESTING` | 테스트 빌드 | ON |
-
-### CMake 통합
-
-```cmake
-# 하위 디렉터리로 추가
-add_subdirectory(container_system)
-target_link_libraries(your_target PRIVATE ContainerSystem::container)
-
-# 또는 FetchContent 사용
-include(FetchContent)
-FetchContent_Declare(
-    container_system
-    GIT_REPOSITORY https://github.com/kcenon/container_system.git
-    GIT_TAG v0.1.0  # Pin to a specific release tag; do NOT use main
-)
-FetchContent_MakeAvailable(container_system)
-```
-
-🔧 **[빌드 가이드 →](docs/guides/BUILD_GUIDE.md)**
-
-## 플랫폼 지원
-
-| 플랫폼 | 아키텍처 | 컴파일러 | SIMD | 상태 |
-|----------|-------------|----------|------|--------|
-| **Linux** | x86_64, ARM64 | GCC 9+, Clang 10+ | AVX2, NEON | ✅ |
-| **macOS** | x86_64, ARM64 (Apple Silicon) | Apple Clang, Clang | AVX2, NEON | ✅ |
-| **Windows** | x86, x64 | MSVC 2019+, Clang | AVX2 | ✅ |
-
-**네이티브 빌드 스크립트**:
-- Linux/macOS: `scripts/dependency.sh`, `scripts/build.sh`
-- Windows: `scripts/dependency.bat`, `scripts/build.bat`, `scripts/dependency.ps1`, `scripts/build.ps1`
-
-## 스레드 안전성
-
-### 동시 읽기 연산
-
-**보장**: 동기화 없이 스레드 안전
-
-```cpp
-// 여러 스레드가 안전하게 읽기 가능
-std::vector<std::thread> readers;
-for (int i = 0; i < 8; ++i) {
-    readers.emplace_back([&container]() {
-        auto value = container->get_value("price");
-        // 안전한 동시 읽기
-    });
-}
-```
-
-**성능**: 8 스레드로 7.5배 속도 향상 (선형 확장)
-
-### 동시 쓰기 연산
-
-**사용**: 동기화된 쓰기를 위한 `thread_safe_container`
-
-```cpp
-#include <container/internal/thread_safe_container.h>
-
-auto safe_container = std::make_shared<thread_safe_container>(container);
-
-std::vector<std::thread> workers;
-for (int i = 0; i < 4; ++i) {
-    workers.emplace_back([&safe_container, i]() {
-        safe_container->set_value("thread_" + std::to_string(i),
-                                 int32_value,
-                                 std::to_string(i));
-    });
-}
-```
-
-**검증**: 데이터 레이스 제로 (ThreadSanitizer 검증 완료)
-
-## 오류 처리
-
-### 하이브리드 어댑터 패턴
-
-- **내부 연산**: 성능을 위한 C++ 예외
-- **외부 API**: 타입 안전성을 위한 Result&lt;T&gt;
-
-```cpp
-#include <container/integration/common_result_adapter.h>
-using namespace container::adapters;
-
-// Result<T>를 사용한 직렬화
-auto result = serialization_result_adapter::serialize(*container);
-if (!result) {
-    std::cerr << "오류: " << result.error().message << "\n";
-    return -1;
-}
-auto data = result.value();
-
-// Result<T>를 사용한 컨테이너 연산
-auto get_result = container_result_adapter::get_value<double>(container, "price");
-if (!get_result) {
-    std::cerr << "오류: " << get_result.error().message << "\n";
-}
-```
-
-**오류 코드**: -400 ~ -499 (common_system에 중앙화)
-
-## Include 경로
-
-### 표준 Include 경로
-
-container_system의 표준 include 경로는 다음과 같습니다:
-
-```cpp
-#include <container/container.h>
-```
-
-### 사용 가능한 헤더
-
-| 헤더 | 용도 |
-|--------|---------|
-| `<container/container.h>` | 메인 진입점 - 모든 핵심 기능 포함 |
-| `<container/core/container.h>` | 핵심 컨테이너 구현 |
-| `<container/core/value_types.h>` | 값 타입 정의 |
-| `<container/internal/thread_safe_container.h>` | 스레드 안전 컨테이너 래퍼 |
-| `<container/integration/common_result_adapter.h>` | Result 기반 오류 처리 어댑터 |
+---
 
 ## 기여하기
 
 기여를 환영합니다! 자세한 내용은 [기여 가이드](docs/contributing/CONTRIBUTING.md)를 참조하세요.
 
-### 개발 설정
-
-1. 저장소 포크
-2. 기능 브랜치 생성 (`git checkout -b feature/amazing-feature`)
-3. 변경사항 커밋 (`git commit -m 'Add amazing feature'`)
-4. 브랜치에 푸시 (`git push origin feature/amazing-feature`)
+1. 리포지토리 포크
+2. 기능 브랜치 생성
+3. 테스트와 함께 변경 사항 작성
+4. 로컬에서 테스트 실행
 5. Pull Request 열기
 
-### 코드 스타일
-
-- 현대적인 C++ 모범 사례 따르기
-- RAII 및 스마트 포인터 사용
-- 포맷 유지 (clang-format 제공)
-- 포괄적인 테스트 작성
-
-## 지원 및 기여
-
-- 💬 [GitHub Discussions](https://github.com/kcenon/container_system/discussions)
-- 🐛 [이슈 트래커](https://github.com/kcenon/container_system/issues)
-- 🤝 [기여 가이드](docs/contributing/CONTRIBUTING.md)
-- 📧 이메일: kcenon@naver.com
+---
 
 ## 라이선스
 
-이 프로젝트는 BSD 3-Clause License에 따라 라이선스가 부여됩니다 - 자세한 내용은 [LICENSE](LICENSE) 파일을 참조하세요.
-
-## 감사의 말
-
-- 현대적인 직렬화 프레임워크 및 고성능 컴퓨팅 사례에서 영감을 받음
-- kcenon@naver.com이 유지 관리
+이 프로젝트는 BSD 3-Clause 라이선스에 따라 배포됩니다 - 자세한 내용은 [LICENSE](LICENSE) 파일을 참조하세요.
 
 ---
 
