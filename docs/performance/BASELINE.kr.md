@@ -1,3 +1,13 @@
+---
+doc_id: "CNT-PERF-005"
+doc_title: "Container System - Performance Baseline Metrics"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "container_system"
+category: "PERF"
+---
+
 # Container System - Performance Baseline Metrics
 
 **언어 (Language)**: [English](BASELINE.md) | **한국어**

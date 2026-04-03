@@ -1,3 +1,13 @@
+---
+doc_id: "CNT-PERF-004"
+doc_title: "Automated Performance Tracking System"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "container_system"
+category: "PERF"
+---
+
 # Automated Performance Tracking System
 
 > **System Status**: ⚙️ Ready for Installation

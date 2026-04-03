@@ -1,3 +1,13 @@
+---
+doc_id: "CNT-QUAL-004"
+doc_title: "Container System Testing Guide"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "container_system"
+category: "QUAL"
+---
+
 # Container System Testing Guide
 
 > **Last Updated**: 2025-11-07

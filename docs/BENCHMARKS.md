@@ -1,3 +1,13 @@
+---
+doc_id: "CNT-PERF-002"
+doc_title: "Container System Performance Benchmarks"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "container_system"
+category: "PERF"
+---
+
 # Container System Performance Benchmarks
 
 **Last Updated**: 2025-11-15

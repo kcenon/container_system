@@ -1,3 +1,13 @@
+---
+doc_id: "CNT-GUID-009"
+doc_title: "Container System – Troubleshooting Guide"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "container_system"
+category: "GUID"
+---
+
 # Container System – Troubleshooting Guide
 
 This guide consolidates the most common issues reported while using the Container System and explains how to interpret `Result<T>` failures.

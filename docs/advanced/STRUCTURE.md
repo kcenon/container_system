@@ -1,3 +1,13 @@
+---
+doc_id: "CNT-ARCH-006"
+doc_title: "Structure Documentation - Container System"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "container_system"
+category: "ARCH"
+---
+
 # Structure Documentation - Container System
 
 > **Version:** 0.1.0.0

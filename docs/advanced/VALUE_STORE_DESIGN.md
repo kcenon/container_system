@@ -1,3 +1,13 @@
+---
+doc_id: "CNT-ARCH-007"
+doc_title: "value_store Design Document"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "container_system"
+category: "ARCH"
+---
+
 # value_store Design Document
 
 **Date**: 2025-11-09

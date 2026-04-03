@@ -1,3 +1,13 @@
+---
+doc_id: "CNT-ARCH-003"
+doc_title: "Domain Separation Guide"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "container_system"
+category: "ARCH"
+---
+
 # Domain Separation Guide
 
 **Date**: 2025-11-09

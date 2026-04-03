@@ -1,3 +1,13 @@
+---
+doc_id: "CNT-GUID-007"
+doc_title: "빠른 시작 가이드"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "container_system"
+category: "GUID"
+---
+
 # 빠른 시작 가이드
 
 5분 만에 container_system을 시작하세요.

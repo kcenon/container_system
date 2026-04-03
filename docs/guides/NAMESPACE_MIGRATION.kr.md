@@ -1,3 +1,13 @@
+---
+doc_id: "CNT-MIGR-003"
+doc_title: "네임스페이스 마이그레이션 가이드"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "container_system"
+category: "MIGR"
+---
+
 # 네임스페이스 마이그레이션 가이드
 
 > **Language:** [English](NAMESPACE_MIGRATION.md) | **한국어**

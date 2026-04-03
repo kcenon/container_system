@@ -1,3 +1,13 @@
+---
+doc_id: "CNT-MIGR-005"
+doc_title: "Result API Migration Guide"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "container_system"
+category: "MIGR"
+---
+
 # Result API Migration Guide
 
 > **Status**: Ready for Production

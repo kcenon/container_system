@@ -1,3 +1,13 @@
+---
+doc_id: "CNT-GUID-003"
+doc_title: "Serialization, Schema, and Policy Framework"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "container_system"
+category: "GUID"
+---
+
 # Serialization, Schema, and Policy Framework
 
 **Date**: 2026-02-09
