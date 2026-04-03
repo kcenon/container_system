@@ -10,6 +10,8 @@ category: "GUID"
 
 # C++20 Coroutine and Async Framework
 
+> **SSOT**: This document is the single source of truth for **C++20 Coroutine and Async Framework**.
+
 **Date**: 2026-02-09
 **Status**: Active
 

@@ -10,6 +10,8 @@ category: "ARCH"
 
 # Lock-Free Data Structures
 
+> **SSOT**: This document is the single source of truth for **Lock-Free Data Structures**.
+
 **Date**: 2025-02-09
 **Status**: Active
 

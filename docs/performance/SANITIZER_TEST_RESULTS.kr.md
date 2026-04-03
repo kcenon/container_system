@@ -10,6 +10,8 @@ category: "QUAL"
 
 # Sanitizer 테스트 결과
 
+> **SSOT**: This document is the single source of truth for **Sanitizer 테스트 결과**.
+
 > **Language:** [English](SANITIZER_TEST_RESULTS.md) | **한국어**
 
 ## 요약

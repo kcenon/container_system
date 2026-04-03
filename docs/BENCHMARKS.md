@@ -10,6 +10,8 @@ category: "PERF"
 
 # Container System Performance Benchmarks
 
+> **SSOT**: This document is the single source of truth for **Container System Performance Benchmarks**.
+
 **Last Updated**: 2025-11-15
 **Platform**: Apple M1 (8 cores, ARM NEON), macOS 26.1, Apple Clang 17.0
 **Build**: Release mode with `-O3` optimization

@@ -10,6 +10,8 @@ category: "PROJ"
 
 # Container System Project Structure
 
+> **SSOT**: This document is the single source of truth for **Container System Project Structure**.
+
 **Last Updated**: 2025-12-10
 
 ## Overview

@@ -10,6 +10,8 @@ category: "QUAL"
 
 # Container System Testing Guide
 
+> **SSOT**: This document is the single source of truth for **Container System Testing Guide**.
+
 > **Last Updated**: 2025-11-07
 > **Maintainer**: Container System Development Team
 

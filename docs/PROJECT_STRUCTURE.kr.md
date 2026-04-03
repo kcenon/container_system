@@ -10,6 +10,8 @@ category: "PROJ"
 
 # Container System 프로젝트 구조
 
+> **SSOT**: This document is the single source of truth for **Container System 프로젝트 구조**.
+
 **언어:** [English](PROJECT_STRUCTURE.md) | **한국어**
 
 **최종 업데이트**: 2025-12-10
