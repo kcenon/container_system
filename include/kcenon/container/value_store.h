@@ -2,6 +2,16 @@
 // Copyright (c) 2021, 🍀☀🌕🌥 🌊
 // See the LICENSE file in the project root for full license information.
 
+/**
+ * @file value_store.h
+ * @brief Domain-agnostic key-value storage with type-safe accessors.
+ *
+ * Provides thread-safe named value storage used as the primary data
+ * container throughout the ecosystem.
+ *
+ * @see value_types For supported data types
+ */
+
 #pragma once
 
 #include "internal/value.h"
