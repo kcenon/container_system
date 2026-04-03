@@ -10,6 +10,8 @@ category: "ARCH"
 
 # Domain Separation Guide
 
+> **SSOT**: This document is the single source of truth for **Domain Separation Guide**.
+
 **Date**: 2025-11-09
 **Status**: Phase 3 Implementation Complete
 

@@ -10,6 +10,8 @@ category: "ADR"
 
 # ADR-001: Container System Scope and Purpose
 
+> **SSOT**: This document is the single source of truth for **ADR-001: Container System Scope and Purpose**.
+
 **Status**: Accepted
 **Date**: 2026-01-31
 **Authors**: @kcenon

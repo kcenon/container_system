@@ -10,6 +10,8 @@ category: "API"
 
 # container_system API 레퍼런스
 
+> **SSOT**: This document is the single source of truth for **container_system API 레퍼런스**.
+
 > **버전**: 0.2.1
 > **최종 업데이트**: 2026-01-10
 > **상태**: C++20 Concepts 통합 완료, variant_value_v2로 마이그레이션 중 (Phase 2 진행 중)

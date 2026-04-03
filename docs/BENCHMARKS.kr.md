@@ -10,6 +10,8 @@ category: "PERF"
 
 # Container System 성능 벤치마크
 
+> **SSOT**: This document is the single source of truth for **Container System 성능 벤치마크**.
+
 **언어:** [English](BENCHMARKS.md) | **한국어**
 
 **최종 업데이트**: 2025-11-28

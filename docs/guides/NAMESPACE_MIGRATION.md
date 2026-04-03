@@ -10,6 +10,8 @@ category: "MIGR"
 
 # Namespace Migration Guide
 
+> **SSOT**: This document is the single source of truth for **Namespace Migration Guide**.
+
 > **Language:** **English** | [한국어](NAMESPACE_MIGRATION.kr.md)
 
 ## Overview

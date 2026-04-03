@@ -10,6 +10,8 @@ category: "GUID"
 
 # 빠른 시작 가이드
 
+> **SSOT**: This document is the single source of truth for **빠른 시작 가이드**.
+
 5분 만에 container_system을 시작하세요.
 
 ## 사전 요구사항

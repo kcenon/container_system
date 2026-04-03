@@ -10,6 +10,8 @@ category: "PERF"
 
 # Automated Performance Tracking System
 
+> **SSOT**: This document is the single source of truth for **Automated Performance Tracking System**.
+
 > **System Status**: ⚙️ Ready for Installation
 > **Last Updated**: 2025-11-07
 

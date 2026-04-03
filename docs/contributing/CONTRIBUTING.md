@@ -14,6 +14,8 @@ category: "PROJ"
 
 # Contributing to container_system
 
+> **SSOT**: This document is the single source of truth for **Contributing to container_system**.
+
 Thank you for your interest in contributing to the container_system library! This document provides guidelines and instructions for contributing code, documentation, and improvements.
 
 ## Table of Contents

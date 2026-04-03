@@ -10,6 +10,8 @@ category: "INTR"
 
 # Container System gRPC/Protocol Buffers Integration Proposal
 
+> **SSOT**: This document is the single source of truth for **Container System gRPC/Protocol Buffers Integration Proposal**.
+
 > **Language:** **English** | [한국어](GRPC_INTEGRATION_PROPOSAL.kr.md)
 
 ## Table of Contents

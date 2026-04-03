@@ -10,6 +10,8 @@ category: "GUID"
 
 # Visitor Pattern with variant_value_v2
 
+> **SSOT**: This document is the single source of truth for **Visitor Pattern with variant_value_v2**.
+
 **Date**: 2025-11-09
 **Status**: Active
 

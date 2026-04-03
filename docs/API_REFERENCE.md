@@ -10,6 +10,8 @@ category: "API"
 
 # container_system API Reference
 
+> **SSOT**: This document is the single source of truth for **container_system API Reference**.
+
 > **Version**: 0.3.0.0
 > **Last Updated**: 2026-02-08
 > **Status**: C++20 Concepts integrated, variant_value_v2 migration complete. Unified serialization API with Strategy pattern (Issue #313, #314).

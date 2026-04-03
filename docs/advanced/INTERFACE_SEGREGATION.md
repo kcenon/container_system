@@ -10,6 +10,8 @@ category: "ARCH"
 
 # Interface Segregation in container_system
 
+> **SSOT**: This document is the single source of truth for **Interface Segregation in container_system**.
+
 **Date**: 2025-11-09
 **Status**: Active
 **Related**: VISITOR_PATTERN_GUIDE.md, EXCEPTION_SAFETY.md

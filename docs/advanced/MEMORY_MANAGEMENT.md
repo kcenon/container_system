@@ -10,6 +10,8 @@ category: "PERF"
 
 # Memory Pool and Allocator Architecture
 
+> **SSOT**: This document is the single source of truth for **Memory Pool and Allocator Architecture**.
+
 **Date**: 2025-02-09
 **Status**: Active
 

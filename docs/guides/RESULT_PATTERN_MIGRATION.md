@@ -10,6 +10,8 @@ category: "MIGR"
 
 # Result Pattern Migration Guide
 
+> **SSOT**: This document is the single source of truth for **Result Pattern Migration Guide**.
+
 This guide helps you migrate from the traditional exception/bool-based APIs to the new Result-returning APIs in container_system.
 
 ## Overview

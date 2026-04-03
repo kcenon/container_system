@@ -10,6 +10,8 @@ category: "QUAL"
 
 # Container System Production Quality
 
+> **SSOT**: This document is the single source of truth for **Container System Production Quality**.
+
 **Last Updated**: 2025-11-15
 **Status**: Under Development
 

@@ -10,6 +10,8 @@ category: "GUID"
 
 # Serialization, Schema, and Policy Framework
 
+> **SSOT**: This document is the single source of truth for **Serialization, Schema, and Policy Framework**.
+
 **Date**: 2026-02-09
 **Status**: Active
 
