@@ -35,6 +35,19 @@ category: "ARCH"
 
 ---
 
+## Overview
+
+> **Cross-reference**:
+> [API Reference](./API_REFERENCE.md) — Container, serializer, and builder APIs
+> [Benchmarks](./BENCHMARKS.md) — Serialization performance and SIMD benchmarks
+> [Async Guide](./ASYNC_GUIDE.md) — C++20 coroutine async container usage
+
+> **Ecosystem reference**:
+> [common_system API](https://github.com/kcenon/common_system/blob/main/docs/API_REFERENCE.md) — Result&lt;T&gt; error handling used throughout
+> [common_system Architecture](https://github.com/kcenon/common_system/blob/main/docs/ARCHITECTURE.md) — Foundation layer providing shared interfaces
+
+---
+
 ## Design Philosophy
 
 The Container System is designed around three fundamental principles:
@@ -1261,6 +1274,32 @@ $ ./build/bin/test_long_range_checking
 - Implementation: `container_system/values/numeric_value.{h,tpp}`
 - Tests: `container_system/tests/test_long_range_checking.cpp`
 - Progress: `LONG_TYPE_POLICY_IMPLEMENTATION_PROGRESS.md`
+
+---
+
+## Ecosystem Dependencies
+
+container_system sits at **Tier 1** in the kcenon ecosystem, providing data serialization.
+
+```mermaid
+graph TD
+    A[common_system] --> B[thread_system]
+    A --> C[container_system]
+    B --> D[logger_system]
+    B --> E[monitoring_system]
+    D --> F[database_system]
+    E --> F
+    F --> G[network_system]
+    G --> H[pacs_system]
+
+    style C fill:#f9f,stroke:#333,stroke-width:3px
+```
+
+> **Ecosystem reference**:
+> [common_system](https://github.com/kcenon/common_system) — Tier 0: Result&lt;T&gt; error handling
+> [network_system](https://github.com/kcenon/network_system) — Tier 4: Network payload serialization (consumer)
+> [database_system](https://github.com/kcenon/database_system) — Tier 3: Database record serialization (consumer)
+> [pacs_system](https://github.com/kcenon/pacs_system) — Tier 5: DICOM data serialization (consumer)
 
 ---
 
