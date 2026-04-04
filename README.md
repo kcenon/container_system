@@ -451,6 +451,28 @@ container->add_value(bool_val);
 
 ## Ecosystem Integration
 
+### Ecosystem Dependency Map
+
+```mermaid
+graph TD
+    A[common_system] --> B[thread_system]
+    A --> C[container_system]
+    B --> D[logger_system]
+    B --> E[monitoring_system]
+    D --> F[database_system]
+    E --> F
+    F --> G[network_system]
+    G --> H[pacs_system]
+
+    style C fill:#f9f,stroke:#333,stroke-width:3px
+```
+
+> **Ecosystem reference**:
+> [common_system](https://github.com/kcenon/common_system) — Tier 0: Result&lt;T&gt; error handling used throughout
+> [network_system](https://github.com/kcenon/network_system) — Tier 4: Network transport (consumer)
+> [database_system](https://github.com/kcenon/database_system) — Tier 3: Database records (consumer)
+> [pacs_system](https://github.com/kcenon/pacs_system) — Tier 5: DICOM serialization (consumer)
+
 ### With Messaging System
 ```cpp
 #include <messaging_system/messaging_client.h>
