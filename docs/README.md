@@ -59,7 +59,7 @@ Total documents: **55**
 | 38 | CNT-INTR-003 | Integration Guide - Container System | [INTEGRATION.md](./guides/INTEGRATION.md) | Released |
 | 39 | CNT-QUAL-001 | Container System 프로덕션 품질 | [PRODUCTION_QUALITY.kr.md](./PRODUCTION_QUALITY.kr.md) | Released |
 | 40 | CNT-QUAL-002 | Container System Production Quality | [PRODUCTION_QUALITY.md](./PRODUCTION_QUALITY.md) | Released |
-| 41 | CNT-QUAL-002 | Feature-Test-Module Traceability Matrix | [TRACEABILITY.md](./TRACEABILITY.md) | Released |
+| 41 | CNT-QUAL-007 | Feature-Test-Module Traceability Matrix | [TRACEABILITY.md](./TRACEABILITY.md) | Released |
 | 42 | CNT-QUAL-003 | Exception Safety Guarantees | [EXCEPTION_SAFETY.md](./advanced/EXCEPTION_SAFETY.md) | Released |
 | 43 | CNT-QUAL-004 | Container System Testing Guide | [TESTING.md](./contributing/TESTING.md) | Released |
 | 44 | CNT-QUAL-005 | Sanitizer 테스트 결과 | [SANITIZER_TEST_RESULTS.kr.md](./performance/SANITIZER_TEST_RESULTS.kr.md) | Released |
@@ -156,7 +156,7 @@ Total documents: **55**
 |--------|-------|----------|--------|
 | CNT-QUAL-001 | Container System 프로덕션 품질 | [PRODUCTION_QUALITY.kr.md](./PRODUCTION_QUALITY.kr.md) | Released |
 | CNT-QUAL-002 | Container System Production Quality | [PRODUCTION_QUALITY.md](./PRODUCTION_QUALITY.md) | Released |
-| CNT-QUAL-002 | Feature-Test-Module Traceability Matrix | [TRACEABILITY.md](./TRACEABILITY.md) | Released |
+| CNT-QUAL-007 | Feature-Test-Module Traceability Matrix | [TRACEABILITY.md](./TRACEABILITY.md) | Released |
 | CNT-QUAL-003 | Exception Safety Guarantees | [EXCEPTION_SAFETY.md](./advanced/EXCEPTION_SAFETY.md) | Released |
 | CNT-QUAL-004 | Container System Testing Guide | [TESTING.md](./contributing/TESTING.md) | Released |
 | CNT-QUAL-005 | Sanitizer 테스트 결과 | [SANITIZER_TEST_RESULTS.kr.md](./performance/SANITIZER_TEST_RESULTS.kr.md) | Released |
