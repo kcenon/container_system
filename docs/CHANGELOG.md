@@ -460,6 +460,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Comprehensive documentation unification across ecosystem
 - CHANGELOG.md and MIGRATION.md for better version tracking
 
+### Documentation
+- **Modernize Doxygen with doxygen-awesome-css** (#492): Apply ecosystem-standard theme and mainpage
+  - Vendor doxygen-awesome-css theme (dark mode toggle, code copy, responsive sidebar)
+  - Add custom header.html and branding CSS for consistent kcenon styling
+  - Update Doxyfile: HTML_COLORSTYLE=LIGHT, HTML_HEADER, theme stylesheets/scripts
+  - Fix CREATE_SUBDIRS=NO for CI compatibility
+  - Refactor mainpage.dox to 8-section ecosystem standard template
+  - Add architecture diagram, module overview, performance benchmarks, and example index
+
 ---
 
 ## [1.0.0] - 2025-10-21

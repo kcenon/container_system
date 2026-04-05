@@ -1,74 +1,35 @@
-/** \mainpage Container System Documentation
+/**
+@mainpage Container System
 
-The Container System is a comprehensive, modern C++20 type-safe container framework designed to democratize structured data management. By providing intuitive abstractions and robust implementations, it empowers developers of all skill levels to build high-performance, thread-safe applications with efficient data serialization and messaging capabilities.
+@tableofcontents
 
-\section mission Mission & Vision
+@section overview System Overview
 
-This project addresses the fundamental challenge faced by developers worldwide: **making structured data management accessible, safe, and efficient**. Our mission is to provide a comprehensive solution that:
+Container System is a high-performance, type-safe C++20 container framework with
+SIMD-accelerated serialization. It provides intuitive abstractions for structured
+data management, enabling developers to build thread-safe applications with
+efficient binary, JSON, XML, and MessagePack serialization.
 
-- **Eliminates data complexity** through intuitive, type-safe abstractions
-- **Ensures thread safety** by design, preventing common concurrency bugs
-- **Maximizes performance** through SIMD optimizations and modern C++ features
-- **Promotes code reusability** across different platforms and messaging systems
-- **Accelerates development** by providing ready-to-use container components
+As a Tier 1 library in the kcenon ecosystem, Container System builds on
+common_system and serves as the data exchange format for network_system,
+database_system, and pacs_system.
 
-\section advantages Core Advantages
+@section features Key Features
 
-\subsection performance 🚀 Performance Excellence
-- **Zero-overhead abstractions**: Modern C++ design ensures minimal runtime cost
-- **SIMD optimizations**: ARM NEON and x86 AVX support for numeric operations
-- **Memory efficiency**: Variant storage with minimal allocations
-- **Scalable architecture**: Linear performance scaling with container size
+| Category | Feature | Description |
+|----------|---------|-------------|
+| **Types** | 16 Value Types | null, bool, char, int8--uint64, float, double, string, bytes, container, array |
+| **Serialization** | Multi-Format | Binary, JSON, XML, and MessagePack via strategy pattern |
+| **Performance** | SIMD Acceleration | ARM NEON and x86 AVX2 auto-detected at build time |
+| **Concurrency** | Thread Safety | `thread_safe_container` with RCU-based lock-free reads |
+| **Memory** | Memory Pool | Custom `pool_allocator` for small-object allocation |
+| **Async** | Coroutines | C++20 `task<T>`, `generator<T>`, `async_container` |
+| **Builder** | Fluent API | `messaging_container_builder` with method chaining |
 
-\subsection reliability 🛡️ Production-Grade Reliability
-- **Type-safe by design**: All value types guarantee compile-time safety
-- **Thread-safe operations**: Lock-free and mutex-based concurrent access patterns
-- **Comprehensive serialization**: Binary, JSON, and XML formats
-- **Extensive testing**: 95%+ test coverage across multiple platforms and compilers
+@subsection value_type_table Value Type Reference
 
-\subsection productivity 🔧 Developer Productivity
-- **Intuitive API design**: Clean, self-documenting interfaces reduce learning curve
-- **Builder pattern**: Fluent API for container construction
-- **Rich documentation**: Comprehensive Doxygen documentation with examples
-- **Flexible integration**: Works standalone or as part of messaging systems
-\section main_components Main Components
-
-\subsection container_core Container Core Foundation (container_module)
-The foundational layer providing:
-- **value_container class**: Core container functionality with header management
-- **value types**: Type-safe value system (bool, int, long, float, double, string, bytes, container)
-- **value_factory**: Convenient creation utilities for all value types
-- **Serialization support**: Binary, JSON, and XML serialization/deserialization
-- See namespace \ref container_module for complete details
-
-\subsection value_system Value Type System (value_types)
-Comprehensive type-safe value management:
-- **Primitive types**: bool_value, char_value, int8_value through uint64_value
-- **Floating point**: float_value, double_value with SIMD acceleration
-- **Complex types**: string_value, bytes_value, container_value for structured data
-- **Type safety**: Compile-time type checking and runtime validation
-
-\subsection internal_features Internal Features (internal)
-Advanced internal capabilities:
-- **thread_safe_container**: Thread-safe wrapper for concurrent access
-- **Performance monitoring**: Real-time operation analytics and metrics
-- **Memory management**: Efficient allocation and RAII principles
-- **SIMD operations**: Optimized numeric processing for supported platforms
-
-\subsection messaging_integration Messaging Integration (integration)
-Enhanced messaging system capabilities:
-- **messaging_container_builder**: Fluent API for messaging-optimized containers
-- **External callbacks**: Integration hooks for external systems
-- **Performance metrics**: Real-time monitoring and analytics
-- **Dual compatibility**: Works with both standalone and messaging system contexts
-- See namespace \ref integration for advanced features
-
-\section value_types Value Type System
-
-The container system supports 15 different value types, each optimized for specific use cases:
-
-| Type | Code | Description | Size Range |
-|------|------|-------------|------------|
+| Type | Code | Description | Size |
+|------|------|-------------|------|
 | `null_value` | '0' | Null/empty value | 0 bytes |
 | `bool_value` | '1' | Boolean true/false | 1 byte |
 | `char_value` | '2' | Single character | 1 byte |
@@ -86,39 +47,107 @@ The container system supports 15 different value types, each optimized for speci
 | `container_value` | 'e' | Nested container | Variable |
 | `string_value` | 'f' | UTF-8 string | Variable |
 
-\section performance_characteristics Performance Characteristics
+@section architecture Architecture Diagram
 
-\subsection benchmarks 📈 Performance Benchmarks
-- **Container creation**: 5M containers/second for empty containers
-- **Value addition**: 15M string values/second
-- **Binary serialization**: 2M containers/second (1KB containers)
-- **JSON serialization**: 800K containers/second (1KB containers)
-- **SIMD operations**: 25M numeric operations/second
+The framework is organized into layers. Higher layers depend on lower layers,
+but never the reverse.
 
-\subsection memory_usage 💾 Memory Efficiency
-- **Empty container**: ~128 bytes baseline
-- **String value**: ~64 bytes + string length
-- **Numeric value**: ~48 bytes per value
-- **Serialized overhead**: ~10% for binary, ~40% for JSON
-- **Memory safety**: Zero leaks with RAII and smart pointers
-\section quick_start Quick Start Guide
+@dot
+digraph architecture {
+    rankdir=TB;
+    node [shape=box, style="filled,rounded", fontname="Helvetica", fontsize=11];
+    edge [color="#555555"];
 
-\subsection five_minute 🚀 5-Minute Setup
+    subgraph cluster_core {
+        label="Core";
+        style="dashed";
+        color="#1a73e8";
+        fontcolor="#1a73e8";
+        ValueTypes  [label="value_types (16 types)", fillcolor="#e8f0fe"];
+        Schema      [label="container_schema", fillcolor="#e8f0fe"];
+        ValueContainer [label="value_container / message_buffer", fillcolor="#e8f0fe"];
+    }
 
-\code{.cpp}
+    subgraph cluster_serializers {
+        label="Serializers";
+        style="dashed";
+        color="#34a853";
+        fontcolor="#34a853";
+        Binary   [label="Binary Serializer", fillcolor="#e6f4ea"];
+        JSON     [label="JSON Serializer", fillcolor="#e6f4ea"];
+        XML      [label="XML Serializer", fillcolor="#e6f4ea"];
+        MsgPack  [label="MessagePack Serializer", fillcolor="#e6f4ea"];
+        Factory  [label="serializer_factory", fillcolor="#e6f4ea"];
+    }
+
+    subgraph cluster_internal {
+        label="Internal";
+        style="dashed";
+        color="#ea8600";
+        fontcolor="#ea8600";
+        SIMD       [label="simd_processor (NEON/AVX2)", fillcolor="#fef7e0"];
+        RCU        [label="rcu_value / epoch_manager", fillcolor="#fef7e0"];
+        MemPool    [label="memory_pool / pool_allocator", fillcolor="#fef7e0"];
+        ThreadSafe [label="thread_safe_container", fillcolor="#fef7e0"];
+    }
+
+    subgraph cluster_async {
+        label="Async";
+        style="dashed";
+        color="#9334e6";
+        fontcolor="#9334e6";
+        Task       [label="task<T>", fillcolor="#f3e8fd"];
+        Generator  [label="generator<T>", fillcolor="#f3e8fd"];
+        AsyncCont  [label="async_container", fillcolor="#f3e8fd"];
+    }
+
+    subgraph cluster_messaging {
+        label="Messaging";
+        style="dashed";
+        color="#d93025";
+        fontcolor="#d93025";
+        MsgContainer [label="message_container", fillcolor="#fce8e6"];
+        Builder      [label="messaging_container_builder", fillcolor="#fce8e6"];
+        Integration  [label="messaging_integration", fillcolor="#fce8e6"];
+    }
+
+    ValueContainer -> ValueTypes;
+    ValueContainer -> Schema;
+    Factory -> Binary;
+    Factory -> JSON;
+    Factory -> XML;
+    Factory -> MsgPack;
+    ValueContainer -> Factory;
+    ThreadSafe -> ValueContainer;
+    ThreadSafe -> RCU;
+    SIMD -> ValueTypes;
+    MemPool -> ValueContainer;
+    AsyncCont -> Task;
+    AsyncCont -> Generator;
+    AsyncCont -> ThreadSafe;
+    Builder -> ValueContainer;
+    MsgContainer -> ValueContainer;
+    Integration -> Builder;
+    Integration -> MsgContainer;
+}
+@enddot
+
+@section quickstart Quick Start
+
+A minimal example creating a container, adding values, and serializing:
+
+@code{.cpp}
 #include <container/container.h>
 using namespace container_module;
 
 int main() {
-    // 1. Create a new container
+    // Create a container and set header information
     auto container = std::make_shared<value_container>();
-
-    // 2. Set header information
     container->set_source("client_01", "session_123");
     container->set_target("server", "main_handler");
     container->set_message_type("user_data");
 
-    // 3. Add values using the value_factory
+    // Add typed values via value_factory
     auto values = std::vector<std::shared_ptr<value>>{
         value_factory::create("user_id", int64_value, "12345"),
         value_factory::create("username", string_value, "john_doe"),
@@ -126,25 +155,23 @@ int main() {
         value_factory::create("active", bool_value, "true")
     };
 
-    // 4. Set values and serialize
     container->set_values(values);
     std::string serialized = container->serialize();
 
-    // 5. Deserialize and access
+    // Deserialize and access values
     auto restored = std::make_shared<value_container>(serialized);
     auto username = restored->get_value("username");
 
     return 0;
 }
-\endcode
+@endcode
 
-\subsection builder_pattern Enhanced Builder Pattern
+Builder pattern with method chaining:
 
-\code{.cpp}
+@code{.cpp}
 #include <container/integration/messaging_integration.h>
 using namespace container_module::integration;
 
-// Modern builder pattern with method chaining
 auto container = messaging_container_builder()
     .source("client_01", "session_123")
     .target("server", "main_handler")
@@ -155,151 +182,98 @@ auto container = messaging_container_builder()
     .add_value("active", true)
     .optimize_for_speed()
     .build();
-\endcode
+@endcode
 
-\section usage_examples Usage Examples
+@section installation Installation
 
-The library includes comprehensive sample code demonstrating:
-- **Basic container operations**: Creation, value management, serialization
-- **Thread-safe operations**: Concurrent access patterns and synchronization
-- **Messaging integration**: Enhanced features for messaging systems
-- **Performance optimization**: SIMD operations and memory efficiency
-- **Real-world scenarios**: IoT, Finance, Gaming, and CMS applications
-- **Error handling patterns**: Robust error management and validation
+@subsection install_fetchcontent CMake FetchContent (Recommended)
 
-\section use_cases Real-World Applications
-
-\subsection applications 🎯 Ideal Use Cases
-- **Messaging systems**: High-performance inter-service communication
-- **IoT platforms**: Sensor data collection and real-time processing
-- **Financial systems**: Transaction data management with type safety
-- **Gaming engines**: Player state and event data serialization
-- **Content management**: Structured content storage and retrieval
-- **API development**: Request/response data containers
-
-\section quality_assurance Quality Assurance
-
-\subsection testing ✅ Comprehensive Testing
-- **150+ unit tests**: All major components thoroughly tested
-- **Platform coverage**: Automated CI/CD across Windows, Linux
-- **Performance benchmarks**: Continuous performance monitoring
-- **Memory safety**: Valgrind and AddressSanitizer integration
-- **Integration tests**: Real-world scenario testing
-
-\subsection standards 🏆 Industry Standards
-- **Code quality**: Clean reports from static analysis tools
-- **Documentation**: 90%+ API coverage with examples
-- **Thread safety**: Comprehensive concurrent access testing
-- **Performance**: Optimized for both throughput and memory efficiency
-\section integration Integration & Installation
-
-\subsection build 🛠️ Build Instructions
-
-\code{.bash}
-# Clone and build
-git clone https://github.com/kcenon/container_system.git
-cd container_system
-
-# One-command setup
-./dependency.sh && ./build.sh  # Linux/macOS
-./dependency.bat && ./build.bat # Windows
-
-# Verify installation
-./build/examples/basic_container_example
-\endcode
-
-\subsection cmake_integration CMake Integration
-
-\code{.cmake}
-# Using FetchContent
+@code{.cmake}
 include(FetchContent)
-FetchContent_Declare(container_system
+FetchContent_Declare(
+    container_system
     GIT_REPOSITORY https://github.com/kcenon/container_system.git
-    GIT_TAG v0.1.0
+    GIT_TAG        v0.1.0
 )
 FetchContent_MakeAvailable(container_system)
+
 target_link_libraries(your_target PRIVATE ContainerSystem::container)
-\endcode
+@endcode
 
-\subsection standalone_usage Standalone Usage
-\code{.cmake}
+@subsection install_vcpkg vcpkg
+
+@code{.bash}
+vcpkg install kcenon-container-system
+@endcode
+
+@code{.cmake}
 find_package(ContainerSystem REQUIRED)
-target_link_libraries(your_target ContainerSystem::container)
-\endcode
+target_link_libraries(your_target PRIVATE ContainerSystem::container)
+@endcode
 
-\subsection messaging_integration Messaging System Integration
-\code{.cmake}
-find_package(ContainerSystem REQUIRED)
-target_link_libraries(your_target MessagingSystem::container)
-\endcode
+@subsection install_manual Manual Build
 
-\section platform_support Platform Support
+@code{.bash}
+git clone https://github.com/kcenon/container_system.git
+cd container_system
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+cmake --build build
+@endcode
 
-The Container System provides full cross-platform support:
+@section modules Module Overview
 
-\subsection supported_platforms Supported Platforms
+| Module | Directory | Key Headers | Description |
+|--------|-----------|-------------|-------------|
+| **Core** | `core/` | value_container.h, value_types.h, value_factory.h | Container foundation, 16 value types, factory utilities |
+| **Serializers** | `core/serializers/` | binary_serializer.h, json_serializer.h, xml_serializer.h, msgpack_serializer.h | Multi-format serialization via strategy pattern |
+| **Internal** | `internal/` | thread_safe_container.h, simd_processor.h, rcu_value.h, memory_pool.h | Thread safety, SIMD acceleration, RCU reads, memory pooling |
+| **Async** | `internal/async/` | task.h, generator.h, async_container.h | C++20 coroutine support for asynchronous container operations |
+| **Messaging** | `messaging/` | message_container.h | Domain-specific messaging container |
+| **Integration** | `integration/` | messaging_integration.h, messaging_container_builder.h | Builder pattern and messaging system hooks |
+| **Utilities** | `utilities/` | string_conversion.h | String conversion and core utility functions |
 
-| Platform | Architecture | Compiler | SIMD Support |
-|----------|-------------|-----------|--------------|
-| **Linux** | x86_64, ARM64 | GCC 9+, Clang 10+ | SSE4.2, AVX2, NEON |
-| **Windows** | x86, x64 | MSVC 2019+, MinGW | SSE4.2, AVX2 |
+@subsection perf_benchmarks Performance Benchmarks
 
-\section container_modules Core Modules
+| Operation | Throughput | Notes |
+|-----------|-----------|-------|
+| Container creation | 5M containers/sec | Empty containers |
+| Value addition | 15M string values/sec | Single-threaded |
+| Binary serialization | 2M containers/sec | 1 KB containers |
+| JSON serialization | 800K containers/sec | 1 KB containers |
+| SIMD numeric ops | 25M operations/sec | ARM NEON / x86 AVX2 |
 
-Each namespace encapsulates a logical set of components:
+| Metric | Size |
+|--------|------|
+| Empty container | ~128 bytes baseline |
+| String value | ~64 bytes + string length |
+| Numeric value | ~48 bytes per value |
+| Binary overhead | ~10% |
+| JSON overhead | ~40% |
 
-\namespace container_module
-\brief Core container foundation of the container system library.
+@section examples Examples
 
-The container_module namespace provides fundamental container primitives
-including the base container class, value types, factories, and serialization utilities.
-It serves as the foundation for all container-related functionality in the library.
+| Example | Source | Description |
+|---------|--------|-------------|
+| Basic Container | @ref basic_container_example.cpp | Container creation, value management, and serialization |
+| Advanced Container | @ref advanced_container_example.cpp | Advanced operations, nested containers, and type conversions |
+| Messaging Integration | @ref messaging_integration_example.cpp | Builder pattern and messaging system integration |
+| Async Coroutine | @ref async_coroutine_example.cpp | C++20 coroutines with task\<T\> and generator\<T\> |
+| Iterator | @ref iterator_example.cpp | Range-based iteration over container values |
+| ASIO Integration | @ref asio_integration_example.cpp | Boost.Asio network integration patterns |
+| Real-World Scenarios | @ref real_world_scenarios.cpp | IoT, finance, gaming, and CMS application patterns |
 
-Key classes:
-- value_container: Foundation for all container operations with header management
-- value: Abstract base for all value types
-- value_factory: Convenient creation utilities for all supported types
-- Serialization support: Binary, JSON, and XML formats
+@section related Related Systems
 
-\namespace integration
-\brief Enhanced messaging integration features.
+Container System is a Tier 1 data serialization layer in the kcenon ecosystem.
+It depends on common_system and is consumed by higher-tier systems:
 
-The integration namespace provides advanced features for messaging system
-integration, including builder patterns, performance monitoring, and external
-system callbacks.
-
-Key classes:
-- messaging_container_builder: Fluent API for container construction
-- Performance monitoring: Real-time metrics and analytics
-- External integration: Callback hooks for external systems
-
-\section license License
-
-This project is licensed under the BSD 3-Clause License, ensuring:
-- **Commercial use**: Free for commercial and proprietary applications
-- **Modification**: Freedom to modify and adapt the code
-- **Distribution**: Redistribution rights with proper attribution
-- **Patent protection**: Limited patent grant for safe usage
-
-\section support Community & Support
-
-\subsection getting_help 🤝 Getting Help
-- **GitHub Issues**: Bug reports and feature requests
-- **GitHub Discussions**: Questions and community interaction
-- **Documentation**: Comprehensive guides and API reference
-- **Sample Code**: Real-world usage examples and patterns
-
-\subsection contributing 🌟 Contributing
-We welcome contributions! See CONTRIBUTING.md for:
-- Development setup and workflow
-- Coding standards and best practices
-- Testing guidelines and requirements
-- Review process and quality criteria
-
----
-
-**Container System: Making structured data management accessible, safe, and efficient for developers worldwide.**
-
-For the most up-to-date information and source code, visit: https://github.com/kcenon/container_system
+| System | Tier | Relationship | Repository |
+|--------|------|--------------|------------|
+| common_system | 0 | Foundation (Result\<T\>, IExecutor) | https://github.com/kcenon/common_system |
+| thread_system | 1 | Peer (IExecutor, IJob) | https://github.com/kcenon/thread_system |
+| logger_system | 2 | Consumer (logging integration) | https://github.com/kcenon/logger_system |
+| network_system | 4 | Consumer (data exchange format) | https://github.com/kcenon/network_system |
+| database_system | 3 | Consumer (data persistence) | https://github.com/kcenon/database_system |
+| pacs_system | 5 | Consumer (full ecosystem) | https://github.com/kcenon/pacs_system |
 
 */
