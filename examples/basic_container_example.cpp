@@ -2,6 +2,25 @@
 // Copyright (c) 2021-2025, 🍀☀🌕🌥 🌊
 // See the LICENSE file in the project root for full license information.
 
+/**
+ * @file basic_container_example.cpp
+ * @brief Basic container creation, value types, and serialization
+ * @example basic_container_example.cpp
+ *
+ * Demonstrates fundamental usage of the container system:
+ * - Creating containers with source/target metadata
+ * - Adding different types of values using the set() API
+ * - Serialization and deserialization with binary format
+ * - Value access patterns using get() and std::get_if
+ * - Container iteration with range-based for loops
+ * - Basic performance characteristics
+ *
+ * @par Category
+ * Basic
+ *
+ * @see kcenon::container::value_container
+ */
+
 #include <iostream>
 #include <memory>
 #include <vector>
@@ -11,16 +30,6 @@
 #include "container.h"
 
 using namespace kcenon::container;
-
-/**
- * @brief Basic Container System Example
- *
- * This example demonstrates fundamental usage of the container system:
- * - Creating containers
- * - Adding different types of values using set_value() API
- * - Serialization and deserialization
- * - Basic error handling
- */
 
 void demonstrate_basic_usage() {
     std::cout << "=== Basic Container Usage ===" << std::endl;
