@@ -2,6 +2,24 @@
 // Copyright (c) 2021-2025, 🍀☀🌕🌥 🌊
 // See the LICENSE file in the project root for full license information.
 
+/**
+ * @file advanced_container_example.cpp
+ * @brief Multi-threaded container operations and performance scenarios
+ * @example advanced_container_example.cpp
+ *
+ * Demonstrates comprehensive usage of the container system including:
+ * - Multi-threaded producer-consumer patterns with shared queues
+ * - Complex data structures and large-value handling
+ * - Performance monitoring with high-frequency and large-message scenarios
+ * - Error handling for edge cases (empty containers, large data)
+ * - Serialization/deserialization throughput measurement
+ *
+ * @par Category
+ * Advanced
+ *
+ * @see kcenon::container::value_container
+ */
+
 #include <iostream>
 #include <memory>
 #include <vector>
@@ -17,17 +35,6 @@
 #include "container.h"
 
 using namespace kcenon::container;
-
-/**
- * @brief Advanced Container System Example
- *
- * Demonstrates comprehensive usage of the container system including:
- * - Multi-threaded producer-consumer patterns
- * - Complex data structures
- * - Performance monitoring
- * - Error handling
- * - Serialization/deserialization
- */
 class AdvancedContainerExample {
 private:
     std::atomic<bool> running_{true};

@@ -4,12 +4,19 @@
 
 /**
  * @file iterator_example.cpp
- * @brief Example demonstrating STL iterator support in value_container
+ * @brief STL-compatible iterator support for value_container
+ * @example iterator_example.cpp
  *
- * This example shows how to use the iterator interface added in Sprint 4:
- * - Range-based for loops
- * - STL algorithms (find_if, count_if, for_each)
- * - Iterator properties (begin/end, size, empty)
+ * Demonstrates the STL iterator interface on value_container:
+ * - Range-based for loop syntax over container values
+ * - STL algorithms: std::find_if, std::count_if, std::for_each
+ * - Iterator properties: begin/end, cbegin/cend, size, empty
+ *
+ * @par Category
+ * Basic
+ *
+ * @see kcenon::container::value_container::iterator
+ * @see kcenon::container::value_container::const_iterator
  */
 
 #include "core/container.h"

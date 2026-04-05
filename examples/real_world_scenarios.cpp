@@ -2,6 +2,26 @@
 // Copyright (c) 2021-2025, 🍀☀🌕🌥 🌊
 // See the LICENSE file in the project root for full license information.
 
+/**
+ * @file real_world_scenarios.cpp
+ * @brief Practical application scenarios: IoT, finance, gaming, and CMS
+ * @example real_world_scenarios.cpp
+ *
+ * Demonstrates container_system usage in real-world application domains:
+ * 1. **IoT Data Collection** -- multi-device sensor aggregation and batch processing
+ * 2. **Financial Transaction Processing** -- fraud detection with risk scoring
+ * 3. **Gaming Event System** -- real-time event queues with leaderboard tracking
+ * 4. **Content Management** -- document processing with search index generation
+ *
+ * All scenarios use the variant-based API (set/get) with multi-threaded
+ * producer-consumer patterns and binary serialization.
+ *
+ * @par Category
+ * Real-World
+ *
+ * @see kcenon::container::value_container
+ */
+
 #include <iostream>
 #include <memory>
 #include <vector>
@@ -20,18 +40,6 @@
 #include "container.h"
 
 using namespace kcenon::container;
-
-/**
- * @brief Real-world scenarios demonstrating practical usage of the container system
- *
- * This example shows how the container system can be used in actual applications:
- * 1. IoT Data Collection System
- * 2. Financial Transaction Processing
- * 3. Gaming Event System
- * 4. Content Management System
- *
- * All examples use the variant-based API (set_value/get_value).
- */
 
 namespace scenarios {
 

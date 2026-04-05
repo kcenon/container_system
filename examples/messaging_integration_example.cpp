@@ -4,10 +4,22 @@
 
 /**
  * @file messaging_integration_example.cpp
- * @brief Example demonstrating messaging integration features
+ * @brief Messaging system integration, round-trip serialization, and memory efficiency
+ * @example messaging_integration_example.cpp
  *
- * This example shows how to use the container system with
- * messaging-specific optimizations using the variant-based API.
+ * Demonstrates the container system in messaging contexts:
+ * - Basic container creation with source/target routing metadata
+ * - Value access patterns using get() and std::get_if
+ * - Full serialization round-trip with data verification
+ * - Messaging system compatibility (value_container / message_buffer aliases)
+ * - Performance comparison of set()/serialize workflows
+ * - Memory efficiency monitoring with memory_stats() and memory_footprint()
+ *
+ * @par Category
+ * Integration
+ *
+ * @see kcenon::container::value_container
+ * @see kcenon::container::message_buffer
  */
 
 #include <iostream>

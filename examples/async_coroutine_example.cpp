@@ -4,13 +4,24 @@
 
 /**
  * @file async_coroutine_example.cpp
- * @brief Example demonstrating C++20 coroutine-based async API
+ * @brief C++20 coroutine-based async serialization, file I/O, and streaming
+ * @example async_coroutine_example.cpp
  *
- * This example shows how to use the async container API with:
- * - Basic async serialization and deserialization
- * - Async file I/O operations
- * - Streaming with generators
- * - Integration with thread pool executors
+ * Demonstrates the C++20 coroutine-based async container API:
+ * - Basic async serialization and deserialization with task<T>
+ * - Async file I/O operations (save/load with progress callbacks)
+ * - Chunked streaming with generator<T> for large containers
+ * - Executor context integration for thread pool dispatch
+ *
+ * @par Category
+ * Advanced
+ *
+ * @note Requires C++20 coroutine support (GCC 11+, Clang 14+, MSVC 2022+)
+ *       and CONTAINER_ENABLE_COROUTINES=ON.
+ *
+ * @see kcenon::container::async::async_container
+ * @see kcenon::container::async::task
+ * @see kcenon::container::async::generator
  */
 
 #include <iostream>
