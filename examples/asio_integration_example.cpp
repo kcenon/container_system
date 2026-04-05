@@ -4,14 +4,23 @@
 
 /**
  * @file asio_integration_example.cpp
- * @brief Example demonstrating integration with Boost.Asio / standalone Asio
+ * @brief Asio integration patterns: strands, timers, thread pools, and message queues
+ * @example asio_integration_example.cpp
  *
- * This example shows how to use container_system's async API alongside
- * Asio's async I/O facilities. The pattern demonstrated here can be
- * adapted for network applications using Asio.
+ * Demonstrates integration of container_system with Boost.Asio / standalone Asio:
+ * - Strand-based thread-safe container processing
+ * - Timer-scheduled serialization with async_wait
+ * - Concurrent processing using io_context thread pools and work guards
+ * - Producer-consumer message queue pattern with Asio
+ * - Hybrid approach combining container coroutines with Asio execution
  *
- * @note This example requires Asio (standalone or Boost.Asio).
- *       It is conditionally compiled based on availability.
+ * @par Category
+ * Integration
+ *
+ * @note Requires Asio (standalone or Boost.Asio). Conditionally compiled.
+ *
+ * @see kcenon::container::value_container
+ * @see kcenon::container::async::async_container
  */
 
 #include <iostream>
