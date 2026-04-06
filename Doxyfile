@@ -99,7 +99,7 @@ INPUT                  = ./core \
                          ./integration \
                          ./examples \
                          ./utilities \
-                         ./mainpage.dox
+                         ./docs/mainpage.dox
 
 INPUT_ENCODING         = UTF-8
 FILE_PATTERNS          = *.c \
@@ -303,8 +303,6 @@ DIA_PATH               =
 HIDE_UNDOC_RELATIONS   = YES
 HAVE_DOT               = YES
 DOT_NUM_THREADS        = 0
-DOT_FONTNAME           = Helvetica
-DOT_FONTSIZE           = 10
 DOT_FONTPATH           =
 CLASS_GRAPH            = YES
 COLLABORATION_GRAPH    = YES
