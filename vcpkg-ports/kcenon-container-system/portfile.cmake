@@ -9,25 +9,35 @@ vcpkg_from_github(
     HEAD_REF main
 )
 
+# Map vcpkg.json features to CMake options.
+# A feature listed multiple times sets several CMake variables at once.
+# vcpkg_check_features emits -DXXX=ON when the feature is selected and
+# -DXXX=OFF otherwise, so all five flags below default to OFF for a
+# minimal install (typical vcpkg consumer use case).
+vcpkg_check_features(
+    OUT_FEATURE_OPTIONS FEATURE_OPTIONS
+    FEATURES
+        testing  BUILD_TESTS
+        testing  CONTAINER_BUILD_INTEGRATION_TESTS
+        testing  CONTAINER_BUILD_BENCHMARKS
+        samples  BUILD_CONTAINER_SAMPLES
+        docs     BUILD_DOCUMENTATION
+)
+
 vcpkg_cmake_configure(
     SOURCE_PATH "${SOURCE_PATH}"
     OPTIONS
+        ${FEATURE_OPTIONS}
         -DBUILD_WITH_COMMON_SYSTEM=ON
         -DCOMMON_SYSTEM_ROOT=${CURRENT_INSTALLED_DIR}
-        -DBUILD_TESTS=OFF
-        -DCONTAINER_BUILD_INTEGRATION_TESTS=OFF
-        -DCONTAINER_BUILD_BENCHMARKS=OFF
-        -DBUILD_DOCUMENTATION=OFF
-        -DBUILD_CONTAINER_SAMPLES=OFF
-        -DBUILD_CONTAINER_EXAMPLES=OFF
         -DFETCHCONTENT_FULLY_DISCONNECTED=ON
 )
 
 vcpkg_cmake_install()
 
 vcpkg_cmake_config_fixup(
-    PACKAGE_NAME ContainerSystem
-    CONFIG_PATH lib/cmake/ContainerSystem
+    PACKAGE_NAME container_system
+    CONFIG_PATH lib/cmake/container_system
 )
 
 # Remove example/sample executables and empty bin directories

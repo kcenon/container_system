@@ -1,7 +1,7 @@
 {
   "name": "kcenon-container-system",
   "version-semver": "0.1.0",
-  "port-version": 4,
+  "port-version": 5,
   "description": "Advanced C++20 Container System with Thread-Safe Operations and Messaging Integration",
   "homepage": "https://github.com/kcenon/container_system",
   "license": "BSD-3-Clause",
@@ -16,5 +16,27 @@
       "name": "vcpkg-cmake-config",
       "host": true
     }
-  ]
+  ],
+  "features": {
+    "testing": {
+      "description": "Build unit tests, integration tests, and benchmarks",
+      "dependencies": [
+        {
+          "name": "gtest",
+          "features": [
+            "gmock"
+          ]
+        },
+        "benchmark"
+      ]
+    },
+    "samples": {
+      "description": "Build sample applications",
+      "dependencies": []
+    },
+    "docs": {
+      "description": "Build Doxygen documentation",
+      "dependencies": []
+    }
+  }
 }
