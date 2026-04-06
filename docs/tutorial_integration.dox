@@ -1,0 +1,190 @@
+/**
+@page tutorial_integration Tutorial: Integration Patterns
+
+@tableofcontents
+
+Container System is the data exchange format for the kcenon ecosystem. This
+tutorial shows how to integrate it with the surrounding tiers: network_system,
+database_system, and the messaging layer.
+
+@section tut_int_overview Where Container System Fits
+
+```
+common_system  (Tier 0)  --> shared types, Result<T>, IExecutor
+container_system (Tier 1)  --> serializable typed containers (this project)
+network_system   (Tier 4)  --> wire transport
+database_system  (Tier 3)  --> persistence
+pacs_system      (Tier 5)  --> domain composition
+```
+
+A `value_container` flows from a producer (often built via
+`messaging_container_builder`), is serialized to bytes, transported by
+network_system, optionally persisted by database_system, and finally
+deserialized by the consumer.
+
+@section tut_int_network Integration with network_system
+
+network_system transports raw bytes; Container System turns those bytes into
+typed records. Wrap your serialization on the send side and your deserialization
+on the receive side.
+
+@code{.cpp}
+#include <container/container.h>
+#include <container/integration/messaging_integration.h>
+// network_system is a peer dependency in your build
+#include <kcenon/network/messaging_session.h>
+
+using namespace container_module;
+using namespace container_module::integration;
+
+void send_user_event(kcenon::network::messaging_session& session,
+                     int64_t user_id,
+                     const std::string& action) {
+    auto container = messaging_container_builder()
+        .source("auth_svc", session.id())
+        .target("audit_svc", "events")
+        .message_type("user.event")
+        .add_value("user_id", user_id)
+        .add_value("action",  action)
+        .add_value("ts_ns",   static_cast<int64_t>(now_ns()))
+        .build();
+
+    std::string wire = container->serialize();
+    session.async_write(wire);    // network_system handles framing/transport
+}
+
+void on_message(const std::string& wire) {
+    auto incoming = std::make_shared<value_container>(wire);
+    if (incoming->message_type() != "user.event") return;
+
+    auto user_id = incoming->get_value("user_id")->to_long();
+    auto action  = incoming->get_value("action")->to_string();
+    handle_user_event(user_id, action);
+}
+@endcode
+
+Practical tips:
+
+- Keep `message_type` stable. Consumers route on it.
+- Put routing metadata in the header (`set_source` / `set_target`) and business
+  data in the body. The header is cheap to inspect without full deserialization.
+- Reuse `messaging_container_builder` instances when emitting many similar
+  messages in a hot loop.
+
+@section tut_int_database Integration with database_system
+
+Persisting a container is a matter of serializing once and storing the resulting
+blob alongside any indexable header fields. database_system can store the wire
+form directly.
+
+@code{.cpp}
+#include <container/container.h>
+#include <kcenon/database/connection.h>
+
+using namespace container_module;
+
+void persist_message(kcenon::database::connection& db,
+                     const std::shared_ptr<value_container>& msg) {
+    std::string wire = msg->serialize();
+
+    auto stmt = db.prepare(
+        "INSERT INTO messages (source, target, message_type, ts_ns, payload) "
+        "VALUES (?, ?, ?, ?, ?)"
+    );
+
+    stmt.bind(1, msg->source_id());
+    stmt.bind(2, msg->target_id());
+    stmt.bind(3, msg->message_type());
+    stmt.bind(4, msg->get_value("ts_ns")->to_long());
+    stmt.bind_blob(5, wire);
+    stmt.execute();
+}
+
+std::shared_ptr<value_container> load_message(kcenon::database::connection& db,
+                                              std::int64_t row_id) {
+    auto stmt = db.prepare("SELECT payload FROM messages WHERE id = ?");
+    stmt.bind(1, row_id);
+    auto row = stmt.fetch_one();
+    return std::make_shared<value_container>(row.get_blob("payload"));
+}
+@endcode
+
+Practical tips:
+
+- Index header fields, not the blob. The wire format is compact but not
+  designed for SQL-side filtering.
+- Store the format version (or library version) in a side column if you expect
+  long retention windows.
+- Pair persistence with a clear retention policy. Container payloads are typed
+  and self-describing, but they still cost storage.
+
+@section tut_int_messaging Messaging Integration
+
+The `messaging` and `integration` subsystems give you a higher-level workflow
+for request/response and event-style messaging. The builder is the entry point.
+
+@code{.cpp}
+#include <container/integration/messaging_integration.h>
+#include <container/messaging/message_container.h>
+
+using namespace container_module::integration;
+using namespace container_module::messaging;
+
+auto request = messaging_container_builder()
+    .source("frontend", "web_01")
+    .target("orders",   "primary")
+    .message_type("order.create")
+    .add_value("customer_id", static_cast<int64_t>(99001))
+    .add_value("sku",         std::string("SKU-1234"))
+    .add_value("qty",         static_cast<int32_t>(2))
+    .add_value("currency",    std::string("USD"))
+    .add_value("amount",      149.50)
+    .build();
+
+// Hand the container to the messaging integration layer to dispatch it.
+messaging_integration::send(request);
+@endcode
+
+A typical responder pattern:
+
+@code{.cpp}
+void on_order_create(const std::shared_ptr<value_container>& req) {
+    auto cid = req->get_value("customer_id")->to_long();
+    auto sku = req->get_value("sku")->to_string();
+    auto qty = req->get_value("qty")->to_int();
+
+    auto order_id = create_order(cid, sku, qty);
+
+    auto resp = messaging_container_builder()
+        .source(req->target_id(), req->target_sub_id())
+        .target(req->source_id(), req->source_sub_id())
+        .message_type("order.create.ack")
+        .add_value("order_id", order_id)
+        .add_value("status",   std::string("ok"))
+        .build();
+
+    messaging_integration::send(resp);
+}
+@endcode
+
+@section tut_int_best_practices Best Practices
+
+- **Validate at boundaries** — check `message_type` and required fields right
+  after deserialization, then convert to your domain types.
+- **Treat the wire as opaque** — never hand-edit bytes; always go through the
+  serializer.
+- **Pin types** — when you cross language boundaries, prefer fixed-width
+  integer types and explicit scaling for currency.
+- **Reuse builders** — `messaging_container_builder` is cheap to construct but
+  reusing it in tight loops avoids repeated header setup.
+- **Log header, not body** — the header is small, structured, and safe to
+  emit; the body may contain sensitive data.
+
+@section tut_int_next Next Steps
+
+- @ref tutorial_serialization for the wire format details that make these
+  pipelines work.
+- @ref faq for the most common integration questions.
+- @ref troubleshooting if a producer and consumer disagree on the payload.
+
+*/

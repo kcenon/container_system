@@ -1,0 +1,174 @@
+/**
+@page tutorial_containers Tutorial: Container Basics
+
+@tableofcontents
+
+This tutorial walks you through the fundamentals of using the Container System.
+You will learn how to choose the right value type for your data, build containers
+using the fluent builder API, and iterate over their contents.
+
+@section tut_cont_intro Introduction
+
+`value_container` (also exposed as `message_buffer` since v2.0.0) is the primary
+abstraction in Container System. It is a type-safe, serializable, header+body
+structure that can hold any combination of the 16 supported value types,
+including nested containers and arrays.
+
+A typical workflow looks like this:
+
+1. Create a container.
+2. Set the routing header (source, target, message type).
+3. Add typed values via `value_factory` or the builder API.
+4. Serialize, transmit, and deserialize on the receiving side.
+
+@section tut_cont_value_types Value Type Selection Guide
+
+Container System defines 16 value types. Choosing the right type matters because
+it controls:
+
+- **Wire size** — smaller types produce smaller serialized payloads.
+- **Range and precision** — pick a type that comfortably fits your domain values.
+- **SIMD applicability** — fixed-width numeric types benefit from SIMD batches.
+- **Cross-language portability** — fixed-width integers map cleanly to other languages.
+
+The table below summarizes when to pick each type.
+
+| Value Type        | Code | Use it for                                                                  | Avoid when                                            |
+|-------------------|------|-----------------------------------------------------------------------------|-------------------------------------------------------|
+| `null_value`      | '0'  | Optional fields, sentinel placeholders                                      | You need a real value                                 |
+| `bool_value`      | '1'  | Flags, on/off switches                                                      | Tri-state values (use `int8_value` or `null_value`)   |
+| `char_value`      | '2'  | Single ASCII character codes                                                | Multi-byte text (use `string_value`)                  |
+| `int8_value`      | '3'  | Small signed counters, status codes                                         | Values >127 or <-128                                  |
+| `uint8_value`     | '4'  | Bytes, small unsigned counters                                              | Negative numbers                                      |
+| `int16_value`     | '5'  | Mid-range counts, signed IDs                                                | Values outside [-32k, 32k]                            |
+| `uint16_value`    | '6'  | Port numbers, small unsigned IDs                                            | Negative numbers                                      |
+| `int32_value`     | '7'  | General-purpose integers, signed IDs                                        | Values exceeding ±2.1B                                |
+| `uint32_value`    | '8'  | Unix timestamps (seconds), unsigned IDs                                     | Negative numbers, values exceeding 4.2B               |
+| `int64_value`     | '9'  | Large signed IDs, balances, nanosecond timestamps                           | Floating-point fractions                              |
+| `uint64_value`    | 'a'  | Hash values, large counters, monotonic IDs                                  | Negative numbers                                      |
+| `float_value`     | 'b'  | Game coordinates, sensor readings (low precision OK)                        | Financial calculations                                |
+| `double_value`    | 'c'  | Money, scientific data, high-precision math                                 | Bit-exact representation needed (use integer cents)   |
+| `bytes_value`     | 'd'  | Binary blobs, encrypted payloads, image data                                | Human-readable text                                   |
+| `container_value` | 'e'  | Nested structured records                                                   | Flat scalar collections (use `array` or repeat keys)  |
+| `string_value`    | 'f'  | UTF-8 text, names, descriptions                                             | Fixed-width binary                                    |
+
+@subsection tut_cont_type_examples Type Selection Examples
+
+- A user account record: `int64_value` for `user_id`, `string_value` for `username`,
+  `double_value` for `balance`, `bool_value` for `active`.
+- A sensor reading: `uint32_value` for `timestamp`, `float_value` for `temperature`,
+  `uint16_value` for `device_id`.
+- A network packet: `bytes_value` for `payload`, `uint32_value` for `crc`,
+  `uint16_value` for `length`.
+
+@section tut_cont_builder Container Builder
+
+The fluent `messaging_container_builder` API is the most ergonomic way to
+construct containers. It accepts native C++ types and selects the matching
+`value_types` automatically.
+
+@code{.cpp}
+#include <container/integration/messaging_integration.h>
+using namespace container_module::integration;
+
+auto container = messaging_container_builder()
+    .source("client_01", "session_123")
+    .target("server", "main_handler")
+    .message_type("user_data")
+    .add_value("user_id", static_cast<int64_t>(12345))
+    .add_value("username", std::string("john_doe"))
+    .add_value("balance", 1500.75)            // -> double_value
+    .add_value("active", true)                // -> bool_value
+    .optimize_for_speed()
+    .build();
+
+std::string serialized = container->serialize();
+@endcode
+
+@subsection tut_cont_builder_factory Factory-Based Construction
+
+If you need explicit control over each value type (for example, when bridging from
+another type system), use `value_factory` directly.
+
+@code{.cpp}
+#include <container/container.h>
+using namespace container_module;
+
+auto container = std::make_shared<value_container>();
+container->set_source("client_01", "session_123");
+container->set_target("server", "main_handler");
+container->set_message_type("user_data");
+
+std::vector<std::shared_ptr<value>> values{
+    value_factory::create("user_id",  int64_value,  "12345"),
+    value_factory::create("username", string_value, "john_doe"),
+    value_factory::create("balance",  double_value, "1500.75"),
+    value_factory::create("active",   bool_value,   "true")
+};
+
+container->set_values(values);
+std::string serialized = container->serialize();
+@endcode
+
+@section tut_cont_iteration Iteration Patterns
+
+@subsection tut_cont_iter_lookup Direct Lookup
+
+The most common pattern is keyed lookup of a known field.
+
+@code{.cpp}
+auto restored = std::make_shared<value_container>(serialized);
+
+if (auto username = restored->get_value("username"); username) {
+    std::string name = username->to_string();
+    // use name...
+}
+@endcode
+
+@subsection tut_cont_iter_range Range-Based Iteration
+
+`value_container` supports range iteration over its top-level values, so you can
+walk the entire body without knowing the keys in advance.
+
+@code{.cpp}
+for (const auto& v : *restored) {
+    switch (v->type()) {
+        case int64_value:
+            std::cout << v->name() << " = " << v->to_long() << '\n';
+            break;
+        case string_value:
+            std::cout << v->name() << " = " << v->to_string() << '\n';
+            break;
+        case double_value:
+            std::cout << v->name() << " = " << v->to_double() << '\n';
+            break;
+        default:
+            std::cout << v->name() << " (type " << static_cast<int>(v->type()) << ")\n";
+    }
+}
+@endcode
+
+@subsection tut_cont_iter_nested Nested Container Traversal
+
+Nested containers form a tree. Recursion is the natural way to walk it.
+
+@code{.cpp}
+void walk(const std::shared_ptr<value_container>& c, int depth = 0) {
+    std::string indent(depth * 2, ' ');
+    for (const auto& v : *c) {
+        std::cout << indent << v->name() << '\n';
+        if (v->type() == container_value) {
+            walk(v->to_container(), depth + 1);
+        }
+    }
+}
+@endcode
+
+@section tut_cont_next Next Steps
+
+- @ref tutorial_serialization to learn about wire formats and SIMD acceleration.
+- @ref tutorial_integration for connecting Container System to network and database layers.
+- @ref faq for quick answers to common questions.
+- @ref troubleshooting if something is not working as expected.
+
+*/

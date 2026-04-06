@@ -1,0 +1,167 @@
+/**
+@page tutorial_serialization Tutorial: Serialization and SIMD
+
+@tableofcontents
+
+This tutorial explains how Container System serializes data, how SIMD acceleration
+fits into the pipeline, and how to keep payloads compatible across platforms.
+
+@section tut_ser_overview Serialization Overview
+
+Container System uses a strategy-pattern serializer registry. Four formats ship
+out of the box:
+
+| Format       | Strategy class       | Payload     | Typical use case                                    |
+|--------------|----------------------|-------------|-----------------------------------------------------|
+| Binary       | `binary_serializer`  | Compact     | Default. Fastest. Internal RPC, persistence.        |
+| JSON         | `json_serializer`    | Human text  | Web APIs, debugging, config exchange.               |
+| XML          | `xml_serializer`     | Human text  | Legacy interop and document-style payloads.         |
+| MessagePack  | `msgpack_serializer` | Compact bin | Polyglot interop with MessagePack-aware systems.    |
+
+The format is resolved at runtime through `serializer_factory`. The default
+binary format is used when you call `value_container::serialize()` with no
+arguments.
+
+@section tut_ser_binary Binary Format
+
+The binary format is the canonical wire format. It is:
+
+- **Compact** — typically ~10% overhead versus the raw payload.
+- **Type-tagged** — each value carries its `value_types` code, so deserialization
+  is unambiguous.
+- **Streamable** — header and body are written sequentially; no random access
+  required.
+- **Endian-stable** — multi-byte integers are encoded in a fixed byte order so
+  payloads round-trip across architectures.
+- **Versioned** — the header carries a format version field that lets future
+  releases evolve the layout without breaking older readers.
+
+@subsection tut_ser_binary_example Binary Round Trip
+
+@code{.cpp}
+#include <container/container.h>
+using namespace container_module;
+
+auto out = std::make_shared<value_container>();
+out->set_source("svc_a", "shard_01");
+out->set_target("svc_b", "queue_main");
+out->set_message_type("metric.report");
+out->set_values({
+    value_factory::create("ts",   uint64_value, "1717000000000"),
+    value_factory::create("cpu",  double_value, "0.732"),
+    value_factory::create("mem",  uint64_value, "1073741824"),
+});
+
+std::string wire = out->serialize();              // binary by default
+
+// On the receiver side:
+auto in = std::make_shared<value_container>(wire);
+double cpu = in->get_value("cpu")->to_double();
+@endcode
+
+@subsection tut_ser_format_select Selecting a Different Format
+
+You can serialize the same container to JSON, XML, or MessagePack via the
+serializer factory.
+
+@code{.cpp}
+#include <container/core/serializers/serializer_factory.h>
+using namespace container_module;
+
+auto json_strategy = serializer_factory::create("json");
+std::string json   = json_strategy->serialize(*out);
+
+auto msgpack_strategy = serializer_factory::create("msgpack");
+std::string mp        = msgpack_strategy->serialize(*out);
+@endcode
+
+The deserialization side works the same way: pick the right strategy and call
+`deserialize`.
+
+@section tut_ser_simd SIMD Acceleration
+
+Container System includes a `simd_processor` that batches numeric work over
+arrays of fixed-width values. The implementation is selected at build time and
+again at run time:
+
+- **Apple Silicon / ARM64** — ARM NEON intrinsics. ~3.2x speedup on typical
+  numeric batches.
+- **x86_64** — AVX2 intrinsics, with SSE2 fallback when AVX2 is unavailable.
+- **Other / unknown** — A scalar fallback path that produces bit-identical
+  results.
+
+You do not need to opt in. Operations such as bulk numeric serialization,
+checksum computation, and array-of-numeric scans automatically dispatch to the
+SIMD path when the data layout is suitable.
+
+@subsection tut_ser_simd_example Letting SIMD Kick In
+
+The SIMD path activates for batched homogeneous numeric data. Prefer adding
+many same-typed values rather than a mixed bag of types when you want to feed
+the accelerator.
+
+@code{.cpp}
+#include <container/integration/messaging_integration.h>
+using namespace container_module::integration;
+
+messaging_container_builder builder;
+builder.source("ingest", "node_07")
+       .target("aggregator", "stage_1")
+       .message_type("samples.batch");
+
+for (uint32_t i = 0; i < 1024; ++i) {
+    builder.add_value("v" + std::to_string(i), static_cast<double>(i) * 0.5);
+}
+
+auto container = builder.optimize_for_speed().build();
+std::string wire = container->serialize();
+@endcode
+
+When `optimize_for_speed()` is selected, the binary serializer prefers tight
+packed layouts that match SIMD lane widths.
+
+@section tut_ser_compat Cross-Platform Compatibility
+
+The binary format is portable across the supported platforms:
+
+- **Endianness** — fixed little-endian on the wire. Big-endian hosts swap on
+  read/write.
+- **Type widths** — fixed-width integer types (`int8_value`..`uint64_value`)
+  guarantee identical widths everywhere; do not rely on `long`/`long long`
+  ambiguity.
+- **Float layout** — IEEE 754 binary32/binary64. NaN payloads are preserved but
+  non-canonical NaN bit patterns should not be used as semantic data.
+- **String encoding** — UTF-8. Validate inputs before storing if you cannot
+  guarantee UTF-8 from the source.
+- **SIMD parity** — the SIMD and scalar paths produce bit-identical output, so
+  a payload produced on Apple Silicon round-trips losslessly on x86_64 Linux.
+
+@subsection tut_ser_compat_versioning Format Versioning
+
+The header includes a format version field. New releases keep the existing
+format version readable by older clients (additive changes only) until a major
+version bump. When a breaking change is required, the format version is
+incremented and the changelog calls it out explicitly.
+
+A defensive deserialization helper:
+
+@code{.cpp}
+auto try_load(const std::string& wire) -> std::shared_ptr<value_container> {
+    try {
+        return std::make_shared<value_container>(wire);
+    } catch (const std::exception& e) {
+        // Log e.what() and either request a re-send or fall back to a
+        // compatibility shim.
+        return nullptr;
+    }
+}
+@endcode
+
+@section tut_ser_next Next Steps
+
+- @ref tutorial_integration for end-to-end pipelines that move serialized
+  payloads through network and database systems.
+- @ref faq for binary format and SIMD trade-off questions.
+- @ref troubleshooting if you hit a serialization mismatch.
+
+*/

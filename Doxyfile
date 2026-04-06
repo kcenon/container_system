@@ -99,7 +99,12 @@ INPUT                  = ./core \
                          ./integration \
                          ./examples \
                          ./utilities \
-                         ./docs/mainpage.dox
+                         ./docs/mainpage.dox \
+                         ./docs/tutorial_containers.dox \
+                         ./docs/tutorial_serialization.dox \
+                         ./docs/tutorial_integration.dox \
+                         ./docs/faq.dox \
+                         ./docs/troubleshooting.dox
 
 INPUT_ENCODING         = UTF-8
 FILE_PATTERNS          = *.c \
@@ -111,7 +116,8 @@ FILE_PATTERNS          = *.c \
                          *.hpp \
                          *.tpp \
                          *.cppm \
-                         *.md
+                         *.md \
+                         *.dox
 
 RECURSIVE              = YES
 EXCLUDE                = build \
