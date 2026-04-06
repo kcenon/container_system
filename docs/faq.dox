@@ -1,0 +1,158 @@
+/**
+@page faq Frequently Asked Questions
+
+@tableofcontents
+
+This page answers the questions that come up most often when integrating
+Container System into a new project.
+
+@section faq_value_type Which value type should I use for my data?
+
+Pick the smallest type that fits your range without ambiguity. The general rules:
+
+- **Identifiers** — `int64_value` or `uint64_value`. They round-trip across
+  languages and never overflow at realistic scale.
+- **Counters / sizes** — `uint32_value` for byte counts and small populations,
+  `uint64_value` for memory addresses, monotonic counters, and hashes.
+- **Money / currency** — store as integer minor units (cents) in `int64_value`
+  whenever possible. Use `double_value` only when rounding tolerance is
+  acceptable.
+- **Sensor and graphics data** — `float_value` is fine and halves the wire
+  size relative to `double_value`.
+- **Flags** — `bool_value`. Use `null_value` when "unknown" is meaningful.
+- **Text** — `string_value`. UTF-8 only.
+- **Binary blobs** — `bytes_value`. Anything from compressed payloads to image
+  thumbnails.
+- **Structured records** — `container_value` for nested records; repeated keys
+  or `array` for collections.
+
+See @ref tutorial_containers for the full table and worked examples.
+
+@section faq_simd What are the SIMD requirements and what happens on fallback?
+
+SIMD is opportunistic. The build detects ARM NEON on AArch64 and AVX2 on x86_64
+and links the matching kernels. At run time the dispatcher checks CPUID (or the
+ARM equivalent) and chooses the best available path.
+
+If neither NEON nor AVX2 is available, a portable scalar implementation runs
+instead. The scalar path produces bit-identical results, so payloads are
+interchangeable. The only difference is throughput: numeric batch operations
+are typically 3x faster on Apple Silicon and 2--4x faster on AVX2 hosts than
+on the scalar fallback.
+
+@section faq_thread_safety What are the thread safety guarantees?
+
+`value_container` is not internally synchronized. Concurrent writers from
+multiple threads will race.
+
+For multi-reader / single-writer or multi-reader / multi-writer workloads, use
+`thread_safe_container`. Reads use an RCU-based path (`rcu_value`,
+`epoch_manager`) so they are lock-free in the steady state, while writes are
+serialized by an internal mutex. This is the recommended pattern when many
+threads observe a slowly-changing record.
+
+If your access pattern is purely "build once, share many", construct the
+container on a single thread, freeze it (do not mutate it again), and share the
+`std::shared_ptr` across consumers. That is safe without any extra wrapping.
+
+@section faq_max_size What is the maximum container size?
+
+There is no hard size cap built into the format. In practice you are limited by:
+
+- **Available memory** — the container holds its values in memory.
+- **`std::string` capacity** — the binary serializer returns a `std::string`,
+  which on common platforms supports payloads up to several gigabytes.
+- **Network MTUs and database row size limits** — your transport will usually
+  cap practical sizes well below the format limits.
+
+For very large payloads (tens of megabytes and up), prefer chunking your data
+into multiple smaller messages or storing the bulk content out of band (for
+example, in object storage) and referencing it from the container.
+
+@section faq_nested Can I nest containers?
+
+Yes. `container_value` holds a nested `value_container`, so containers form a
+tree of arbitrary depth. Recursion is the natural traversal pattern; see
+@ref tutorial_containers for an example.
+
+A few caveats:
+
+- Each level of nesting adds a small constant overhead.
+- Avoid deep recursion on untrusted input. Validate the maximum depth of
+  incoming payloads if they cross a trust boundary.
+- Prefer flat layouts when the nesting does not carry semantic meaning. They
+  serialize and traverse faster.
+
+@section faq_performance What kind of performance can I expect?
+
+Indicative numbers from the project benchmarks (see the Performance Benchmarks
+section on @ref index "the main page"):
+
+| Operation              | Throughput            | Notes                          |
+|------------------------|-----------------------|--------------------------------|
+| Container creation     | ~5M/sec               | Empty containers               |
+| String value addition  | ~15M/sec              | Single-threaded                |
+| Binary serialization   | ~2M/sec               | 1 KB containers                |
+| JSON serialization     | ~800K/sec             | 1 KB containers                |
+| SIMD numeric ops       | ~25M ops/sec          | NEON / AVX2                    |
+
+Memory profile:
+
+- Empty container: ~128 bytes baseline.
+- String value: ~64 bytes plus the string contents.
+- Numeric value: ~48 bytes.
+- Binary serialization overhead: ~10%.
+- JSON serialization overhead: ~40%.
+
+Numbers vary by CPU, allocator, and compiler. Run the project benchmarks on
+your target hardware for a definitive view.
+
+@section faq_format_compat Is the binary format compatible across platforms and versions?
+
+Yes. The wire format is little-endian, uses fixed-width integer encodings, and
+carries a format version field in the header. Within a major version, new
+releases stay readable by older clients (additive changes only). Across a
+breaking release, the format version is incremented and the changelog calls
+out the migration path explicitly.
+
+@section faq_custom_types Can I define custom value types?
+
+Not in the same sense as the 16 built-in types. The type tag is a fixed enum
+because it controls the wire format. To carry custom data:
+
+- **Wrap it in `bytes_value`** with an out-of-band schema (for example,
+  Protobuf or FlatBuffers) — useful for opaque payloads.
+- **Wrap it in `string_value`** for textual encodings (JSON, base64).
+- **Decompose it into nested containers** when the fields are independently
+  useful and you want them to remain queryable.
+
+If you find yourself reaching for a brand new primitive type often, open an
+issue describing the use case so it can be evaluated for inclusion.
+
+@section faq_memory_pool Does Container System use memory pooling?
+
+Yes. The `memory_pool` and `pool_allocator` components provide a small-object
+allocator that reduces allocation traffic for the common case of containers
+with many short-lived values. It is enabled by default and controlled by the
+`CONTAINER_USE_MEMORY_POOL` CMake option.
+
+Disable it only if you are integrating with an external allocator that already
+optimizes for small allocations, or if you are profiling and need to attribute
+allocations to a specific upstream allocator.
+
+@section faq_messaging How does Container System integrate with the messaging layer?
+
+The `messaging_container_builder` and `messaging_integration` components in
+the `integration/` directory provide the bridge. The builder gives you a
+fluent construction API, and the integration layer hands the resulting
+container to whichever transport you have configured. See
+@ref tutorial_integration for end-to-end examples.
+
+@section faq_more More Resources
+
+- @ref tutorial_containers for value type and builder basics.
+- @ref tutorial_serialization for wire format and SIMD details.
+- @ref tutorial_integration for combining with network and database layers.
+- @ref troubleshooting if something is misbehaving.
+
+*/

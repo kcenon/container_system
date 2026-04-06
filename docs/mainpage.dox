@@ -262,6 +262,19 @@ cmake --build build
 | ASIO Integration | @ref asio_integration_example.cpp | Boost.Asio network integration patterns |
 | Real-World Scenarios | @ref real_world_scenarios.cpp | IoT, finance, gaming, and CMS application patterns |
 
+@section learning Learning Resources
+
+New to Container System? Start with the tutorials below and keep the FAQ and
+troubleshooting guide handy as you build.
+
+| Resource | What you will learn |
+|----------|---------------------|
+| @ref tutorial_containers | Value type selection, builder API, iteration patterns |
+| @ref tutorial_serialization | Binary format internals, SIMD acceleration, cross-platform compatibility |
+| @ref tutorial_integration | Wiring Container System into network_system, database_system, and the messaging layer |
+| @ref faq | Quick answers to the questions external developers ask most often |
+| @ref troubleshooting | Symptoms, causes, and fixes for common issues |
+
 @section related Related Systems
 
 Container System is a Tier 1 data serialization layer in the kcenon ecosystem.

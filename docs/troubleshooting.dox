@@ -1,0 +1,163 @@
+/**
+@page troubleshooting Troubleshooting Guide
+
+@tableofcontents
+
+This page collects the issues most frequently reported by users of Container
+System and the recommended fixes. For each issue you will find a short list of
+symptoms, the typical root cause, and the steps to resolve it.
+
+@section trbl_serialization_mismatch 1. Serialization Format Mismatch
+
+@par Symptoms
+- Deserialization throws or returns an empty container.
+- A field reads back with the wrong type or a corrupted value.
+- The first few bytes of the payload do not match the expected magic.
+
+@par Likely Cause
+The producer and consumer are using different serializers. This commonly
+happens when one side calls `value_container::serialize()` (binary) while the
+other side hands the bytes to `serializer_factory::create("json")`.
+
+@par Resolution
+- Verify both sides use the same format. The default is binary; if you opted
+  into JSON, XML, or MessagePack on the producer, use the same factory key on
+  the consumer.
+- Confirm the format version matches. If the producer is on a newer release,
+  upgrade the consumer or downgrade the producer to a compatible version.
+- For mixed-version environments, add a small "format probe" message at the
+  start of the session that records the producer's library version.
+
+@code{.cpp}
+auto strategy = container_module::serializer_factory::create("msgpack");
+auto restored = strategy->deserialize(wire);
+@endcode
+
+@section trbl_simd_unavailable 2. SIMD Acceleration Not Available
+
+@par Symptoms
+- Numeric workloads run at the speed of the scalar fallback.
+- Logs report "SIMD path: scalar" (when SIMD logging is enabled).
+- Benchmarks show no improvement on hosts that should support AVX2 or NEON.
+
+@par Likely Cause
+- The build was configured for a generic target that disabled SIMD intrinsics.
+- The CPU genuinely does not support AVX2 (older x86_64) or you are running
+  inside a virtualization layer that masks AVX2.
+- The container is full of mixed types, so the SIMD batch path cannot fire.
+
+@par Resolution
+- Rebuild with the matching architecture flags (`-march=native` for local
+  builds, the project's CI presets for production builds).
+- Confirm the host's capabilities (`sysctl -a | grep machdep.cpu.features` on
+  macOS, `lscpu` on Linux). If AVX2 is missing, the scalar fallback is the
+  only option and is producing correct results.
+- For hot loops, group same-typed numeric values together so the SIMD batch
+  path can engage. See the `optimize_for_speed()` builder hint in
+  @ref tutorial_serialization.
+
+@section trbl_thread_safety 3. Thread Safety Violations
+
+@par Symptoms
+- Intermittent crashes under load.
+- Use-after-free reports from a sanitizer.
+- Values reading back as garbage.
+- Tests pass on a single thread but fail under TSAN.
+
+@par Likely Cause
+A bare `value_container` is being mutated from more than one thread, or being
+mutated on one thread while another reads it.
+
+@par Resolution
+- Wrap the container in `thread_safe_container` for multi-writer access. Reads
+  go through the RCU path; writes are serialized internally.
+- For "build once, share many" patterns, finish construction on one thread,
+  then publish the `std::shared_ptr<value_container>` and stop mutating it.
+- Run the test suite under TSAN (`--preset tsan`) to confirm the fix.
+
+@code{.cpp}
+#include <container/internal/thread_safe_container.h>
+using namespace container_module;
+
+thread_safe_container safe;
+safe.set("user_id",  static_cast<int64_t>(99));
+safe.set("username", std::string("alice"));
+
+// readers (multiple threads, lock-free)
+auto snapshot = safe.snapshot();
+@endcode
+
+@section trbl_memory_large 4. Memory Issues With Large Containers
+
+@par Symptoms
+- High resident memory when many containers are alive at once.
+- Allocator thrash showing up as `malloc`/`free` time in profiles.
+- Out-of-memory errors when handling oversized payloads.
+
+@par Likely Cause
+- The container memory pool is disabled, or is undersized for your workload.
+- A single container is genuinely too large for in-memory processing.
+- Many small containers are being allocated and freed in a tight loop without
+  reuse.
+
+@par Resolution
+- Confirm `CONTAINER_USE_MEMORY_POOL=ON` (the default). If you turned it off,
+  consider re-enabling it.
+- For oversized payloads, chunk the data into multiple smaller containers and
+  store the bulk content out of band (for example, in object storage), then
+  reference it from the container.
+- Reuse `messaging_container_builder` instances and `value_container` shells
+  in hot loops instead of constructing fresh ones each iteration.
+- Profile with `heaptrack` (Linux) or `Instruments` (macOS) to identify the
+  exact allocation site before tuning.
+
+@section trbl_conversion_errors 5. Type Conversion Errors
+
+@par Symptoms
+- `to_int()` / `to_double()` / `to_string()` throws or returns an unexpected
+  value.
+- Numeric fields silently truncate.
+- A field stored as a string fails to parse on the consumer.
+
+@par Likely Cause
+- The producer chose a value type that does not match the receiver's
+  expectation (for example, `string_value` containing `"true"` versus
+  `bool_value`).
+- Numeric values exceed the range of the receiver's chosen type
+  (`int32_value` consumer reading data that was produced as `int64_value`).
+- A field is missing entirely on the wire and the receiver dereferences a
+  null lookup.
+
+@par Resolution
+- Always check the type tag before converting:
+
+@code{.cpp}
+auto v = container->get_value("count");
+if (!v) {
+    // missing field
+} else if (v->type() == int64_value) {
+    auto count = v->to_long();
+} else if (v->type() == int32_value) {
+    auto count = v->to_int();
+} else {
+    // unexpected wire type, log and reject
+}
+@endcode
+
+- Standardize on a single canonical type per field across producers and
+  consumers. Document it in your service contract.
+- For optional fields, use `null_value` rather than omitting the field
+  entirely. It makes the schema explicit on both sides.
+- When in doubt, prefer the wider type (`int64_value`, `double_value`,
+  `string_value`) and narrow it on the consumer after a range check.
+
+@section trbl_more More Help
+
+- @ref faq for quick answers.
+- @ref tutorial_containers, @ref tutorial_serialization, and
+  @ref tutorial_integration for the long-form guides.
+- File a new issue at https://github.com/kcenon/container_system/issues if you
+  hit something not listed here. Include the format you are using, the
+  producer and consumer versions, and a minimal payload.
+
+*/
