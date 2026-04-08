@@ -26,7 +26,6 @@ int main()
 	// 1. Basic batch operations with integers
 	std::cout << "\n1. Integer batch:" << std::endl;
 	core::simd_batch<int32_t> int_batch;
-	int_batch.reserve(1000);
 
 	for (int32_t i = 0; i < 100; ++i)
 	{
@@ -34,7 +33,6 @@ int main()
 	}
 
 	std::cout << "   Size: " << int_batch.size() << std::endl;
-	std::cout << "   Empty: " << (int_batch.empty() ? "yes" : "no") << std::endl;
 
 	const auto& values = int_batch.values();
 	std::cout << "   First 5: ";
@@ -57,7 +55,6 @@ int main()
 	// 3. Performance measurement
 	std::cout << "\n3. Batch insert performance:" << std::endl;
 	core::simd_batch<int64_t> perf_batch;
-	perf_batch.reserve(100000);
 
 	auto start = std::chrono::high_resolution_clock::now();
 	for (int64_t i = 0; i < 100000; ++i)
@@ -72,8 +69,7 @@ int main()
 
 	// 4. Clear and reuse
 	perf_batch.clear();
-	std::cout << "\n4. After clear: size=" << perf_batch.size()
-			  << ", empty=" << (perf_batch.empty() ? "yes" : "no") << std::endl;
+	std::cout << "\n4. After clear: size=" << perf_batch.size() << std::endl;
 
 	std::cout << "\nDone." << std::endl;
 	return 0;

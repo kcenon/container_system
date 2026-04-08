@@ -41,8 +41,11 @@ int main()
 	auto binary = serializer_factory::create(serialization_format::binary);
 	if (binary)
 	{
-		auto data = binary->serialize(container);
-		std::cout << "   Size: " << data.size() << " bytes" << std::endl;
+		auto result = binary->serialize(container);
+		if (result.is_ok())
+		{
+			std::cout << "   Size: " << result.value().size() << " bytes" << std::endl;
+		}
 		std::cout << "   Format: " << binary->name() << std::endl;
 	}
 
@@ -51,9 +54,14 @@ int main()
 	auto json = serializer_factory::create(serialization_format::json);
 	if (json)
 	{
-		auto str = json->serialize_to_string(container);
-		std::cout << "   Size: " << str.size() << " bytes" << std::endl;
-		std::cout << "   Preview: " << str.substr(0, 80) << "..." << std::endl;
+		auto result = json->serialize(container);
+		if (result.is_ok())
+		{
+			auto& data = result.value();
+			std::string str(data.begin(), data.end());
+			std::cout << "   Size: " << str.size() << " bytes" << std::endl;
+			std::cout << "   Preview: " << str.substr(0, 80) << "..." << std::endl;
+		}
 	}
 
 	// Format support check
