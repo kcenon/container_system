@@ -6,7 +6,7 @@
 /// @example schema_validation_example.cpp
 /// @brief Demonstrates container schema validation with constraints.
 ///
-/// Shows defining required/optional fields, range/length/pattern
+/// Shows defining required/optional fields with types, range/length
 /// validators, and validating containers against schemas.
 ///
 /// @see kcenon::container::container_schema
@@ -24,15 +24,14 @@ int main()
 {
 	std::cout << "=== Schema Validation Example ===" << std::endl;
 
-	// 1. Define a schema
+	// 1. Define a schema with typed fields
 	std::cout << "\n1. Defining schema:" << std::endl;
-	container_schema schema;
-	schema.require("username")
-		.length(3, 20);
-	schema.require("email");
-	schema.require("age")
-		.range(0, 150);
-	schema.optional("nickname");
+	auto schema = container_schema()
+		.require("username", value_types::string_value)
+		.require("age", value_types::int_value)
+		.range("age", 0, 150)
+		.length("username", 3, 20)
+		.optional("nickname", value_types::string_value);
 
 	std::cout << "   Fields: " << schema.field_count() << std::endl;
 	std::cout << "   'username' required: " << (schema.is_required("username") ? "yes" : "no")
@@ -43,18 +42,16 @@ int main()
 	// 2. Validate a valid container
 	std::cout << "\n2. Validating valid container:" << std::endl;
 	value_container valid;
-	valid.add("username", "alice");
-	valid.add("email", "alice@example.com");
-	valid.add("age", static_cast<int64_t>(25));
+	valid.set("username", std::string("alice"));
+	valid.set("age", static_cast<int64_t>(25));
 
 	auto result = schema.validate(valid);
 	std::cout << "   Valid: " << (result ? "yes" : "no") << std::endl;
 
 	// 3. Validate an invalid container (missing required field)
-	std::cout << "\n3. Validating invalid container (missing email):" << std::endl;
+	std::cout << "\n3. Validating invalid container (missing age):" << std::endl;
 	value_container invalid;
-	invalid.add("username", "bob");
-	invalid.add("age", static_cast<int64_t>(30));
+	invalid.set("username", std::string("bob"));
 
 	auto errors = schema.validate_all(invalid);
 	std::cout << "   Errors: " << errors.size() << std::endl;

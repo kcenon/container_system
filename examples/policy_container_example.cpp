@@ -28,9 +28,9 @@ int main()
 	std::cout << "\n1. Dynamic storage policy:" << std::endl;
 	basic_value_container<policy::dynamic_storage_policy> dynamic_container;
 
-	dynamic_container.add("name", "Alice");
-	dynamic_container.add("score", 95.5);
-	dynamic_container.add("level", static_cast<int64_t>(42));
+	dynamic_container.set("name", "Alice");
+	dynamic_container.set("score", 95.5);
+	dynamic_container.set("level", static_cast<int64_t>(42));
 
 	std::cout << "   Added 3 fields to dynamic container" << std::endl;
 	std::cout << "   Size: " << dynamic_container.size() << std::endl;
@@ -39,8 +39,8 @@ int main()
 	std::cout << "\n2. Indexed storage policy:" << std::endl;
 	basic_value_container<policy::indexed_storage_policy> indexed_container;
 
-	indexed_container.add("id", static_cast<int64_t>(1001));
-	indexed_container.add("status", "active");
+	indexed_container.set("id", static_cast<int64_t>(1001));
+	indexed_container.set("status", "active");
 
 	std::cout << "   Added 2 fields to indexed container" << std::endl;
 	std::cout << "   Size: " << indexed_container.size() << std::endl;

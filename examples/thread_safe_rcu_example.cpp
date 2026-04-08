@@ -30,8 +30,8 @@ int main()
 	value_container shared_container;
 	std::mutex container_mutex;
 
-	shared_container.add("counter", static_cast<int64_t>(0));
-	shared_container.add("status", "initializing");
+	shared_container.set("counter", static_cast<int64_t>(0));
+	shared_container.set("status", std::string("initializing"));
 
 	// 1. Concurrent writes
 	std::cout << "\n1. Concurrent writes (5 threads):" << std::endl;
@@ -47,7 +47,7 @@ int main()
 				{
 					std::lock_guard<std::mutex> lock(container_mutex);
 					std::string key = "thread_" + std::to_string(i) + "_item_" + std::to_string(j);
-					shared_container.add(key, "value_" + std::to_string(j));
+					shared_container.set(key, std::string("value_" + std::to_string(j)));
 					write_count.fetch_add(1);
 				}
 			});

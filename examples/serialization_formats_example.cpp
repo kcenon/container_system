@@ -28,10 +28,10 @@ int main()
 
 	// Create a container with sample data
 	value_container container;
-	container.add("name", "Alice");
-	container.add("age", static_cast<int64_t>(30));
-	container.add("score", 95.5);
-	container.add("active", true);
+	container.set("name", "Alice");
+	container.set("age", static_cast<int64_t>(30));
+	container.set("score", 95.5);
+	container.set("active", true);
 
 	std::cout << "\n1. Original container:" << std::endl;
 	std::cout << "   Fields: name, age, score, active" << std::endl;
