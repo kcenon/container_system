@@ -10,6 +10,13 @@ set(EXAMPLE_PROGRAMS
     messaging_integration_example
     advanced_container_example
     real_world_scenarios
+    serialization_formats_example
+    schema_validation_example
+    simd_batch_example
+    policy_container_example
+    value_store_example
+    error_handling_example
+    thread_safe_rcu_example
 )
 
 # Add async coroutine example if coroutines are enabled
