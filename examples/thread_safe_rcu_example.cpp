@@ -85,12 +85,12 @@ int main()
 
 	// 3. Container copy for snapshot
 	std::cout << "\n3. Snapshot (copy-on-read):" << std::endl;
-	value_container snapshot;
+	std::shared_ptr<value_container> snapshot;
 	{
 		std::lock_guard<std::mutex> lock(container_mutex);
-		snapshot = shared_container;
+		snapshot = shared_container.copy(true);
 	}
-	std::cout << "   Snapshot size: " << snapshot.size() << std::endl;
+	std::cout << "   Snapshot size: " << snapshot->size() << std::endl;
 	std::cout << "   Original size: " << shared_container.size() << std::endl;
 
 	std::cout << "\nDone." << std::endl;
