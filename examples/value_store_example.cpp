@@ -4,10 +4,10 @@
 
 /// @file value_store_example.cpp
 /// @example value_store_example.cpp
-/// @brief Demonstrates thread-safe value_store with statistics.
+/// @brief Demonstrates thread-safe value_store with typed values.
 ///
-/// Shows CRUD operations, thread-safe access, serialization,
-/// and read/write statistics tracking.
+/// Shows CRUD operations with properly typed values,
+/// thread-safe access, and read/write statistics.
 ///
 /// @see kcenon::container::value_store
 
@@ -24,40 +24,33 @@ int main()
 
 	value_store store;
 
-	// 1. Add values
+	// 1. Add typed values
 	std::cout << "\n1. Adding values:" << std::endl;
-	store.add("config.host", "localhost");
-	store.add("config.port", "8080");
-	store.add("config.debug", "true");
+	store.add("host", value("host", std::string("localhost")));
+	store.add("port", value("port", static_cast<int32_t>(8080)));
+	store.add("debug", value("debug", true));
 	std::cout << "   Size: " << store.size() << std::endl;
 
 	// 2. Get values
 	std::cout << "\n2. Reading values:" << std::endl;
-	auto host = store.get("config.host");
-	std::cout << "   config.host: " << host << std::endl;
+	auto host = store.get("host");
+	if (host.has_value())
+	{
+		std::cout << "   host found: yes" << std::endl;
+	}
 
 	// 3. Check existence
 	std::cout << "\n3. Contains check:" << std::endl;
-	std::cout << "   'config.host': " << (store.contains("config.host") ? "yes" : "no")
-			  << std::endl;
-	std::cout << "   'config.missing': " << (store.contains("config.missing") ? "yes" : "no")
-			  << std::endl;
+	std::cout << "   'host': " << (store.contains("host") ? "yes" : "no") << std::endl;
+	std::cout << "   'missing': " << (store.contains("missing") ? "yes" : "no") << std::endl;
 
 	// 4. Remove
-	std::cout << "\n4. Remove 'config.debug':" << std::endl;
-	store.remove("config.debug");
+	std::cout << "\n4. Remove 'debug':" << std::endl;
+	store.remove("debug");
 	std::cout << "   Size after remove: " << store.size() << std::endl;
 
-	// 5. Serialization
-	std::cout << "\n5. Serialization:" << std::endl;
-	auto json_str = store.serialize();
-	std::cout << "   JSON: " << json_str.substr(0, 60) << "..." << std::endl;
-
-	auto binary_data = store.serialize_binary();
-	std::cout << "   Binary: " << binary_data.size() << " bytes" << std::endl;
-
-	// 6. Statistics
-	std::cout << "\n6. Access statistics:" << std::endl;
+	// 5. Statistics
+	std::cout << "\n5. Access statistics:" << std::endl;
 	std::cout << "   Read count: " << store.get_read_count() << std::endl;
 	std::cout << "   Write count: " << store.get_write_count() << std::endl;
 
@@ -65,9 +58,9 @@ int main()
 	std::cout << "   After reset - reads: " << store.get_read_count()
 			  << ", writes: " << store.get_write_count() << std::endl;
 
-	// 7. Clear
+	// 6. Clear
 	store.clear();
-	std::cout << "\n7. After clear: empty=" << (store.empty() ? "yes" : "no") << std::endl;
+	std::cout << "\n6. After clear: empty=" << (store.empty() ? "yes" : "no") << std::endl;
 
 	std::cout << "\nDone." << std::endl;
 	return 0;
