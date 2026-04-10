@@ -260,13 +260,14 @@ if(BUILD_WITH_COMMON_SYSTEM)
 endif()
 
 # Create aliases for consistent naming and messaging system compatibility
-add_library(container_system::container ALIAS container_system)
+add_library(container_system::container_system ALIAS container_system)  # Canonical <package>::<package>
+add_library(container_system::container ALIAS container_system)  # Backward compatibility
 add_library(ContainerSystem::container ALIAS container_system)  # Backward compatibility
 add_library(MessagingSystem::container ALIAS container_system)  # For messaging system compatibility
 
 # Set target properties
 set_target_properties(container_system PROPERTIES
-    EXPORT_NAME container
+    EXPORT_NAME container_system
     POSITION_INDEPENDENT_CODE ON
     CXX_STANDARD 20
     CXX_STANDARD_REQUIRED ON
