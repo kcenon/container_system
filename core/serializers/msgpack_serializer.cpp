@@ -94,8 +94,25 @@ namespace
 			break;
 
 		case value_types::array_value:
-			// Array values are stored as containers
-			encoder.write_nil();
+			{
+				auto arr = std::get<std::shared_ptr<array_values>>(unit.data);
+				if (arr && !arr->items.empty())
+				{
+					encoder.write_array_header(static_cast<uint32_t>(arr->items.size()));
+					for (const auto& item : arr->items)
+					{
+						// Create a temporary optimized_value to reuse write_value_to_encoder
+						optimized_value temp;
+						temp.data = item;
+						temp.type = static_cast<value_types>(item.index());
+						write_value_to_encoder(encoder, temp);
+					}
+				}
+				else
+				{
+					encoder.write_array_header(0);
+				}
+			}
 			break;
 
 		default:

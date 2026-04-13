@@ -1349,8 +1349,67 @@ void value_container::clear_validation_errors() noexcept
 							{
 								return false;
 							}
-							val.type = value_types::bytes_value;
-							val.data = *b;
+							// Probe: try to decode as a nested container first.
+							// Nested containers are serialized as msgpack binary
+							// containing a msgpack-encoded map with "header"/"values" keys.
+							auto nested = std::make_shared<value_container>();
+							if (b->size() >= 2 && nested->from_msgpack_impl(*b))
+							{
+								val.type = value_types::container_value;
+								val.data = nested;
+							}
+							else
+							{
+								val.type = value_types::bytes_value;
+								val.data = *b;
+							}
+						}
+						break;
+
+					case msgpack_type::array:
+						{
+							auto arr_size = decoder.read_array_header();
+							if (!arr_size)
+							{
+								return false;
+							}
+							auto arr = std::make_shared<array_values>();
+							arr->items.reserve(*arr_size);
+							for (size_t ai = 0; ai < *arr_size; ++ai)
+							{
+								auto elem_type = decoder.peek_type();
+								value_variant elem_data = std::monostate{};
+								switch (elem_type)
+								{
+								case msgpack_type::nil:
+									decoder.read_nil();
+									break;
+								case msgpack_type::boolean:
+									if (auto bv = decoder.read_bool()) elem_data = *bv;
+									break;
+								case msgpack_type::positive_int:
+								case msgpack_type::negative_int:
+									if (auto nv = decoder.read_int()) elem_data = static_cast<long long>(*nv);
+									break;
+								case msgpack_type::float32:
+									if (auto fv = decoder.read_float()) elem_data = *fv;
+									break;
+								case msgpack_type::float64:
+									if (auto dv = decoder.read_double()) elem_data = *dv;
+									break;
+								case msgpack_type::str:
+									if (auto sv = decoder.read_string()) elem_data = *sv;
+									break;
+								case msgpack_type::bin:
+									if (auto bv = decoder.read_binary()) elem_data = *bv;
+									break;
+								default:
+									break;
+								}
+								arr->items.push_back(std::move(elem_data));
+							}
+							val.type = value_types::array_value;
+							val.data = arr;
 						}
 						break;
 
@@ -2094,9 +2153,19 @@ void value_container::clear_validation_errors() noexcept
 			break;
 		}
 		case value_types::container_value:
-			// TODO: Handle nested containers
-			ov.data = std::monostate{};
+		{
+			// Deserialize nested container from its string representation
+			auto nested = std::make_shared<value_container>();
+			if (!dataStr.empty() && nested->deserialize(dataStr, false))
+			{
+				ov.data = nested;
+			}
+			else
+			{
+				ov.data = std::monostate{};
+			}
 			break;
+		}
 		default:
 			ov.data = std::monostate{};
 			break;
