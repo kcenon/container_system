@@ -1,0 +1,178 @@
+# Container System Document Bundles — load a bundle to get all context for a feature.
+# All file paths relative to docs/. Use line ranges to avoid loading full documents.
+# Pattern adapted from steamliner/docs/.index/bundles.yaml
+_meta: {schema: "1.0.0", generated: "2026-04-12"}
+
+# ============================================================================
+# Quickstart bundle — first-time user onboarding
+# ============================================================================
+quickstart:
+  name: "Quickstart (first-time user)"
+  desc: "Install, create your first container, serialize, use async patterns"
+  files:
+    - {file: README.md, note: "Documentation registry landing"}
+    - {file: GETTING_STARTED.md, note: "End-to-end walkthrough"}
+    - {file: API_QUICK_REFERENCE.md, note: "Cheatsheet"}
+
+# ============================================================================
+# API bundles
+# ============================================================================
+api-core:
+  name: "Core API Reference"
+  desc: "Full public API surface with concepts, types, methods, and metrics"
+  files:
+    - {file: API_REFERENCE.md, lines: "31-47",   note: "Namespace"}
+    - {file: API_REFERENCE.md, lines: "48-376",  note: "C++20 Concepts"}
+    - {file: API_REFERENCE.md, lines: "377-480", note: "variant_value_v2"}
+    - {file: API_REFERENCE.md, lines: "481-556", note: "Container class"}
+    - {file: API_REFERENCE.md, lines: "557-700", note: "Metrics"}
+    - {file: API_QUICK_REFERENCE.md, note: "Cheatsheet cross-reference"}
+
+cpp-concepts:
+  name: "C++20 Concepts Catalog"
+  desc: "Type constraints, value types, callback, serialization, and container concepts"
+  files:
+    - {file: API_REFERENCE.md, lines: "48-59",   note: "Concepts overview"}
+    - {file: API_REFERENCE.md, lines: "60-148",  note: "Type constraint concepts"}
+    - {file: API_REFERENCE.md, lines: "149-228", note: "Value type concepts"}
+    - {file: API_REFERENCE.md, lines: "229-315", note: "Callback concepts"}
+    - {file: API_REFERENCE.md, lines: "316-339", note: "Serialization concepts"}
+    - {file: API_REFERENCE.md, lines: "340-351", note: "Container concepts"}
+    - {file: API_REFERENCE.md, lines: "352-376", note: "Summary table"}
+    - {file: FEATURES.md, lines: "190-222",     note: "Concepts feature description"}
+
+variant-types:
+  name: "Variant Value Types"
+  desc: "variant_value_v2 creation, access, storage, and methods"
+  files:
+    - {file: API_REFERENCE.md, lines: "377-480", note: "variant_value_v2"}
+    - {file: GETTING_STARTED.md, lines: "104-148", note: "Value types walkthrough"}
+    - {file: FEATURES.md, lines: "58-127",        note: "Value types catalog"}
+
+value-types:
+  name: "Primitive and Complex Value Types"
+  desc: "All 16 value types: primitive, integer, float, bytes, container"
+  files:
+    - {file: FEATURES.md, lines: "58-127",         note: "Value types catalog"}
+    - {file: API_QUICK_REFERENCE.md, lines: "38-67", note: "16 types quick list"}
+    - {file: PROJECT_STRUCTURE.md, lines: "326-363", note: "Value implementation files"}
+
+# ============================================================================
+# Feature bundles
+# ============================================================================
+serialization:
+  name: "Serialization Framework"
+  desc: "Binary, JSON, XML, MessagePack serializers, strategy pattern, factory"
+  files:
+    - {file: SERIALIZATION_SCHEMA_POLICY_GUIDE.md, lines: "44-204",  note: "Serialization framework"}
+    - {file: API_QUICK_REFERENCE.md, lines: "130-183", note: "Quick reference"}
+    - {file: API_REFERENCE.md,        note: "Serialization concepts section"}
+    - {file: PROJECT_STRUCTURE.md, lines: "415-452", note: "Serialization modules"}
+    - {file: BENCHMARKS.md, lines: "92-224",         note: "Serializer benchmarks"}
+
+schema-validation:
+  name: "Schema Validation System"
+  desc: "Schema definition, validation errors, custom validators, introspection"
+  files:
+    - {file: SERIALIZATION_SCHEMA_POLICY_GUIDE.md, lines: "205-387", note: "Schema validation"}
+    - {file: API_QUICK_REFERENCE.md, lines: "184-207", note: "Schema quick reference"}
+
+policy-framework:
+  name: "Policy Container Framework"
+  desc: "StoragePolicy concept, storage policies, type aliases, thread safety"
+  files:
+    - {file: SERIALIZATION_SCHEMA_POLICY_GUIDE.md, lines: "388-781", note: "Policy framework"}
+
+async-coroutines:
+  name: "C++20 Async and Coroutines"
+  desc: "task<T>, generator<T>, async_container, thread pool executor"
+  files:
+    - {file: ASYNC_GUIDE.md, lines: "40-80",    note: "C++20 coroutine primer"}
+    - {file: ASYNC_GUIDE.md, lines: "81-211",   note: "task<T>"}
+    - {file: ASYNC_GUIDE.md, lines: "212-336",  note: "generator<T>"}
+    - {file: ASYNC_GUIDE.md, lines: "337-510",  note: "async_container"}
+    - {file: ASYNC_GUIDE.md, lines: "511-827",  note: "Thread pool executor"}
+    - {file: API_QUICK_REFERENCE.md, lines: "208-233", note: "Async patterns cheatsheet"}
+    - {file: GETTING_STARTED.md, lines: "201-268", note: "Async walkthrough"}
+
+thread-safety:
+  name: "Thread Safety"
+  desc: "Thread-safe container, concurrent operations, sanitizer validation"
+  files:
+    - {file: FEATURES.md, lines: "30-43",             note: "Thread safety feature"}
+    - {file: API_QUICK_REFERENCE.md, lines: "260-274", note: "Thread safety quick ref"}
+    - {file: PROJECT_STRUCTURE.md, lines: "375-393",  note: "thread_safe_container.h"}
+    - {file: PRODUCTION_QUALITY.md, lines: "381-435", note: "Thread safety guarantees"}
+    - {file: PRODUCTION_QUALITY.md, lines: "110-144", note: "TSan validation"}
+
+simd-performance:
+  name: "SIMD Acceleration"
+  desc: "ARM NEON, x86 AVX2, vectorization, scalar comparison"
+  files:
+    - {file: FEATURES.md, lines: "44-50",        note: "SIMD feature"}
+    - {file: FEATURES.md, lines: "223-229",      note: "SIMD optimizations"}
+    - {file: PROJECT_STRUCTURE.md, lines: "394-414", note: "simd_processor.h"}
+    - {file: BENCHMARKS.md, lines: "225-253",   note: "SIMD benchmarks"}
+
+performance:
+  name: "Performance & Benchmarks"
+  desc: "Core ops, serializer comparison, SIMD, thread safety, memory"
+  files:
+    - {file: BENCHMARKS.md, note: "Full benchmark report"}
+
+messaging-integration:
+  name: "Messaging Integration"
+  desc: "Message buffer, builder pattern, network serializer, database adapter"
+  files:
+    - {file: FEATURES.md, lines: "128-181",           note: "Enhanced features"}
+    - {file: API_QUICK_REFERENCE.md, lines: "234-259", note: "Message buffer"}
+    - {file: PROJECT_STRUCTURE.md, lines: "453-495",  note: "Integration modules"}
+    - {file: GETTING_STARTED.md, lines: "269-313",    note: "Messaging walkthrough"}
+
+# ============================================================================
+# Architecture / project bundles
+# ============================================================================
+architecture:
+  name: "Architecture Overview"
+  desc: "Layered architecture, dependency tiers, design philosophy, integration"
+  files:
+    - {file: ARCHITECTURE.md, lines: "38-50",    note: "Overview"}
+    - {file: ARCHITECTURE.md, lines: "51-86",    note: "Design philosophy"}
+    - {file: ARCHITECTURE.md, lines: "87-253",   note: "Minimal dependency architecture"}
+    - {file: ARCHITECTURE.md, lines: "254-300",  note: "Core principles"}
+    - {file: ARCHITECTURE.md, lines: "301-355",  note: "Layered architecture"}
+    - {file: PROJECT_STRUCTURE.md, lines: "21-182", note: "Directory tree"}
+
+project-layout:
+  name: "Project Layout"
+  desc: "Directory tree, modules, test organization"
+  files:
+    - {file: PROJECT_STRUCTURE.md, note: "Full structure"}
+
+# ============================================================================
+# Quality / process bundles
+# ============================================================================
+quality-assurance:
+  name: "Quality Assurance"
+  desc: "CI/CD, sanitizers, RAII, thread safety, coverage, static analysis"
+  files:
+    - {file: PRODUCTION_QUALITY.md, lines: "22-33",    note: "Executive summary"}
+    - {file: PRODUCTION_QUALITY.md, lines: "34-107",   note: "CI/CD infrastructure"}
+    - {file: PRODUCTION_QUALITY.md, lines: "108-229",  note: "Sanitizer results (TSan/ASan/UBSan/MSan)"}
+    - {file: PRODUCTION_QUALITY.md, lines: "230-380",  note: "RAII compliance"}
+    - {file: PRODUCTION_QUALITY.md, lines: "381-435",  note: "Thread safety"}
+    - {file: PRODUCTION_QUALITY.md, lines: "436-520",  note: "Code quality metrics"}
+    - {file: PRODUCTION_QUALITY.md, lines: "521-820",  note: "Cross-platform builds"}
+
+changelog:
+  name: "Changelog"
+  desc: "Version history, breaking changes, additions, fixes"
+  files:
+    - {file: CHANGELOG.md, note: "Full history"}
+
+compliance:
+  name: "Compliance (SOUP / Traceability)"
+  desc: "Software of unknown provenance, traceability matrix"
+  files:
+    - {file: SOUP.md, note: "SOUP list"}
+    - {file: TRACEABILITY.md, note: "Traceability matrix"}

@@ -1,0 +1,244 @@
+# Container System Document Manifest — read this FIRST, then load only needed sections.
+# Pattern adapted from steamliner/docs/.index/ (4-file indexing system).
+_meta: {schema: "1.0.0", generated: "2026-04-12", docs: 22, project: "container_system"}
+
+# ============================================================================
+# Core documents — load these first for any substantive query
+# ============================================================================
+core:
+  - id: CON-DOC-IDX
+    file: README.md
+    title: "Documentation Registry"
+    keywords: [index, navigation, registry, overview]
+    lines: 187
+
+  - id: CON-ARCH-001
+    file: ARCHITECTURE.md
+    title: "Architecture Documentation"
+    keywords: [architecture, layered, dependency-tier, modularity, design-philosophy, type-safety]
+    lines: 1322
+    sections:
+      - {h: "Overview", l: 38, e: 50}
+      - {h: "Design Philosophy", l: 51, e: 86}
+      - {h: "Minimal Dependency Architecture", l: 87, e: 253}
+      - {h: "Core Principles", l: 254, e: 300}
+      - {h: "System Architecture (Layered)", l: 301, e: 355}
+      - {h: "Data Flow Architecture", l: 356, e: 1322}
+
+  - id: CON-ARCH-KR
+    file: ARCHITECTURE.kr.md
+    title: "아키텍처 문서 (한국어)"
+    keywords: [architecture, korean]
+    lines: 519
+    mirrors: CON-ARCH-001
+
+  - id: CON-API-001
+    file: API_REFERENCE.md
+    title: "API Reference"
+    keywords: [api, concepts, variant_value, container, metrics, value-types, namespace]
+    lines: 1469
+    sections:
+      - {h: "Namespace (container_module)", l: 31, e: 47}
+      - {h: "C++20 Concepts", l: 48, e: 376}
+      - {h: "variant_value_v2", l: 377, e: 480}
+      - {h: "Container", l: 481, e: 556}
+      - {h: "Metrics", l: 557, e: 1469}
+
+  - id: CON-API-KR
+    file: API_REFERENCE.kr.md
+    title: "API 참조 (한국어)"
+    keywords: [api, korean]
+    lines: 1057
+    mirrors: CON-API-001
+
+  - id: CON-API-QR
+    file: API_QUICK_REFERENCE.md
+    title: "API Quick Reference"
+    keywords: [api, quick, cheatsheet, recipes, namespace, value-types]
+    lines: 302
+    sections:
+      - {h: "Header and Namespace", l: 8, e: 19}
+      - {h: "Container Creation", l: 20, e: 37}
+      - {h: "Value Types (16 types)", l: 38, e: 67}
+      - {h: "Value Operations", l: 68, e: 129}
+      - {h: "Serialization", l: 130, e: 183}
+      - {h: "Schema Validation", l: 184, e: 207}
+      - {h: "Async Coroutine Patterns", l: 208, e: 233}
+      - {h: "Message Buffer", l: 234, e: 259}
+      - {h: "Thread Safety", l: 260, e: 274}
+      - {h: "Quick Recipes", l: 275, e: 302}
+
+  - id: CON-FEAT-001
+    file: FEATURES.md
+    title: "Features"
+    keywords: [features, value-types, type-safety, thread-safety, simd, serialization, modern-cpp, concepts]
+    lines: 930
+    sections:
+      - {h: "Core Capabilities", l: 21, e: 57}
+      - {h: "Value Types", l: 58, e: 127}
+      - {h: "Enhanced Features (Messaging/Builder/Metrics)", l: 128, e: 181}
+      - {h: "Technology Stack (Modern C++/Concepts/SIMD)", l: 182, e: 930}
+
+  - id: CON-FEAT-KR
+    file: FEATURES.kr.md
+    title: "기능 소개 (한국어)"
+    keywords: [features, korean]
+    lines: 825
+    mirrors: CON-FEAT-001
+
+  - id: CON-PROJ-001
+    file: PROJECT_STRUCTURE.md
+    title: "Project Structure"
+    keywords: [structure, directory, modules, core, values, advanced, serialization, integration, tests]
+    lines: 718
+    sections:
+      - {h: "Directory Tree", l: 21, e: 182}
+      - {h: "Core Module Files", l: 183, e: 325}
+      - {h: "Value Implementation Files", l: 326, e: 363}
+      - {h: "Advanced Features", l: 364, e: 414}
+      - {h: "Serialization Modules", l: 415, e: 452}
+      - {h: "Integration Modules", l: 453, e: 495}
+      - {h: "Test Organization", l: 496, e: 718}
+
+  - id: CON-PROJ-KR
+    file: PROJECT_STRUCTURE.kr.md
+    title: "프로젝트 구조 (한국어)"
+    keywords: [structure, korean]
+    lines: 617
+    mirrors: CON-PROJ-001
+
+  - id: CON-CHG-001
+    file: CHANGELOG.md
+    title: "Changelog"
+    keywords: [changelog, versions, breaking, added, changed, fixed, deprecated]
+    lines: 600
+    sections:
+      - {h: "Unreleased", l: 24, e: 98}
+      - {h: "1.0.0 (2025-10-21)", l: 474, e: 499}
+      - {h: "0.9.0 (2025-09-15)", l: 500, e: 600}
+
+  - id: CON-CHG-KR
+    file: CHANGELOG.kr.md
+    title: "변경 이력 (한국어)"
+    keywords: [changelog, korean]
+    lines: 534
+    mirrors: CON-CHG-001
+
+# ============================================================================
+# Guides — topic-specific deep-dive documents
+# ============================================================================
+guides:
+  - id: CON-GUIDE-START
+    file: GETTING_STARTED.md
+    title: "Getting Started"
+    keywords: [getting-started, tutorial, first-steps, prerequisites, installation, examples]
+    lines: 313
+    sections:
+      - {h: "Prerequisites", l: 6, e: 20}
+      - {h: "Installation (CMake/Clone/Submodule)", l: 21, e: 64}
+      - {h: "Your First Container", l: 65, e: 103}
+      - {h: "Value Types", l: 104, e: 148}
+      - {h: "Serialization", l: 149, e: 200}
+      - {h: "Async Coroutines", l: 201, e: 268}
+      - {h: "Messaging Integration", l: 269, e: 313}
+
+  - id: CON-GUIDE-ASYNC
+    file: ASYNC_GUIDE.md
+    title: "C++20 Coroutine and Async Framework"
+    keywords: [async, coroutine, task, generator, async-container, thread-pool, executor, cpp20]
+    lines: 827
+    sections:
+      - {h: "C++20 Coroutine Primer", l: 40, e: 80}
+      - {h: "task<T> — Async Computation", l: 81, e: 211}
+      - {h: "generator<T> — Lazy Sequences", l: 212, e: 336}
+      - {h: "async_container — Async Container Wrapper", l: 337, e: 510}
+      - {h: "Thread Pool Executor", l: 511, e: 827}
+
+  - id: CON-GUIDE-SER
+    file: SERIALIZATION_SCHEMA_POLICY_GUIDE.md
+    title: "Serialization, Schema, and Policy Framework"
+    keywords: [serialization, schema, policy, validation, msgpack, json, xml, binary, strategy-pattern]
+    lines: 781
+    sections:
+      - {h: "Serialization Framework", l: 44, e: 204}
+      - {h: "Schema Validation System", l: 205, e: 387}
+      - {h: "Policy Container Framework", l: 388, e: 781}
+
+# ============================================================================
+# Quality / Performance / Process documents
+# ============================================================================
+quality:
+  - id: CON-QUAL-001
+    file: PRODUCTION_QUALITY.md
+    title: "Production Quality Report"
+    keywords: [quality, ci, sanitizers, tsan, asan, ubsan, msan, raii, thread-safety, coverage, static-analysis]
+    lines: 820
+    sections:
+      - {h: "Executive Summary", l: 22, e: 33}
+      - {h: "CI/CD Infrastructure", l: 34, e: 107}
+      - {h: "Sanitizer Test Results", l: 108, e: 229}
+      - {h: "RAII Compliance Analysis", l: 230, e: 380}
+      - {h: "Thread Safety Guarantees", l: 381, e: 435}
+      - {h: "Code Quality Metrics", l: 436, e: 520}
+      - {h: "Cross-Platform Build Verification", l: 521, e: 820}
+
+  - id: CON-QUAL-KR
+    file: PRODUCTION_QUALITY.kr.md
+    title: "프로덕션 품질 보고서 (한국어)"
+    keywords: [quality, korean]
+    lines: 412
+    mirrors: CON-QUAL-001
+
+  - id: CON-PERF-001
+    file: BENCHMARKS.md
+    title: "Performance Benchmarks"
+    keywords: [benchmarks, performance, simd, neon, avx2, msgpack, protobuf, json, comparison]
+    lines: 436
+    sections:
+      - {h: "Quick Reference", l: 25, e: 47}
+      - {h: "Core Operation Benchmarks", l: 48, e: 132}
+      - {h: "Industry Standard Comparisons", l: 133, e: 224}
+      - {h: "SIMD Acceleration Benchmarks", l: 225, e: 253}
+      - {h: "Thread Safety Performance", l: 254, e: 277}
+      - {h: "Memory Performance", l: 278, e: 436}
+
+  - id: CON-PERF-KR
+    file: BENCHMARKS.kr.md
+    title: "성능 벤치마크 (한국어)"
+    keywords: [benchmarks, korean]
+    lines: 227
+    mirrors: CON-PERF-001
+
+# ============================================================================
+# Reference / Ecosystem documents
+# ============================================================================
+reference:
+  - id: CON-REF-SOUP
+    file: SOUP.md
+    title: "Software of Unknown Provenance"
+    keywords: [soup, third-party, dependencies, licenses, provenance, medical-compliance]
+    lines: 140
+
+  - id: CON-REF-TRACE
+    file: TRACEABILITY.md
+    title: "Traceability Matrix"
+    keywords: [traceability, requirements, tests, coverage]
+    lines: 112
+
+  - id: CON-REF-ECO
+    file: ECOSYSTEM.md
+    title: "Ecosystem Overview"
+    keywords: [ecosystem, integrations, related-systems]
+    lines: 26
+
+# ============================================================================
+# Load patterns — common query strategies
+# ============================================================================
+load_patterns:
+  quick_start: [CON-DOC-IDX, CON-GUIDE-START, CON-API-QR]
+  api_deep: [CON-API-001, CON-FEAT-001]
+  architecture_review: [CON-ARCH-001, CON-PROJ-001, CON-FEAT-001]
+  async_work: [CON-GUIDE-ASYNC, CON-API-001]
+  serialization_work: [CON-GUIDE-SER, CON-API-001]
+  quality_audit: [CON-QUAL-001, CON-PERF-001]
+  korean_audience: "append *.kr.md mirrors of requested English docs"

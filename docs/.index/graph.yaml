@@ -1,0 +1,82 @@
+# Container System Change Impact Graph — when X changes, review Y.
+# Pattern adapted from steamliner/docs/.index/graph.yaml
+_meta: {schema: "1.0.0", generated: "2026-04-12"}
+
+# ============================================================================
+# Document-level cascade (source -> targets to review when source changes)
+# ============================================================================
+cascade:
+  CON-ARCH-001:
+    targets:
+      - {doc: CON-API-001, why: "Architectural changes affect public API surface"}
+      - {doc: CON-PROJ-001, why: "Directory layout mirrors architectural layers"}
+      - {doc: CON-FEAT-001, why: "Feature catalog references architecture sections"}
+      - {doc: CON-QUAL-001, why: "Thread safety claims depend on architecture"}
+
+  CON-API-001:
+    targets:
+      - {doc: CON-API-QR, why: "Quick reference must match full API"}
+      - {doc: CON-API-KR, why: "Korean mirror stays in sync"}
+      - {doc: CON-FEAT-001, why: "Feature examples reference API classes"}
+      - {doc: CON-GUIDE-START, why: "Getting Started examples use API"}
+      - {doc: CON-CHG-001, why: "API additions/removals listed in changelog"}
+
+  CON-FEAT-001:
+    targets:
+      - {doc: CON-FEAT-KR, why: "Korean mirror"}
+      - {doc: CON-API-001, why: "Features are implemented via API"}
+      - {doc: CON-DOC-IDX, why: "Registry lists feature categories"}
+
+  CON-GUIDE-ASYNC:
+    targets:
+      - {doc: CON-API-001, why: "task<T>/generator<T>/async_container are part of public API"}
+      - {doc: CON-GUIDE-START, why: "Getting Started has async examples"}
+      - {doc: CON-API-QR, why: "Quick Reference lists async patterns"}
+
+  CON-GUIDE-SER:
+    targets:
+      - {doc: CON-API-001, why: "Serialization strategies are public API"}
+      - {doc: CON-PERF-001, why: "Benchmarks compare serializer formats"}
+      - {doc: CON-API-QR, why: "Quick Reference lists serialization formats"}
+
+  CON-PROJ-001:
+    targets:
+      - {doc: CON-PROJ-KR, why: "Korean mirror"}
+      - {doc: CON-ARCH-001, why: "Structural changes affect architectural layering"}
+      - {doc: CON-API-001, why: "Header paths may change"}
+
+  CON-QUAL-001:
+    targets:
+      - {doc: CON-QUAL-KR, why: "Korean mirror"}
+      - {doc: CON-CHG-001, why: "Quality improvements noted in changelog"}
+      - {doc: CON-ARCH-001, why: "Thread safety architecture depends on quality results"}
+
+  CON-PERF-001:
+    targets:
+      - {doc: CON-PERF-KR, why: "Korean mirror"}
+      - {doc: CON-FEAT-001, why: "Performance claims in features section"}
+      - {doc: CON-CHG-001, why: "Performance improvements noted in changelog"}
+
+  CON-CHG-001:
+    targets:
+      - {doc: CON-CHG-KR, why: "Korean mirror"}
+      - {doc: CON-DOC-IDX, why: "Registry may reference latest version"}
+
+# ============================================================================
+# Korean mirror pairs — bidirectional sync
+# ============================================================================
+korean_pairs:
+  - {en: CON-ARCH-001, kr: CON-ARCH-KR}
+  - {en: CON-API-001,  kr: CON-API-KR}
+  - {en: CON-FEAT-001, kr: CON-FEAT-KR}
+  - {en: CON-PROJ-001, kr: CON-PROJ-KR}
+  - {en: CON-CHG-001,  kr: CON-CHG-KR}
+  - {en: CON-QUAL-001, kr: CON-QUAL-KR}
+  - {en: CON-PERF-001, kr: CON-PERF-KR}
+
+# ============================================================================
+# Cross-system dependencies (container_system depends on common_system)
+# ============================================================================
+external_deps:
+  - {source: common_system, target: CON-ARCH-001, why: "container_system depends only on common_system (tier 0)"}
+  - {source: common_system, target: CON-PROJ-001, why: "build depends on common_system"}

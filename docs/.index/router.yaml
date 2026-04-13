@@ -1,0 +1,109 @@
+# Container System Query Router — match query to minimum document set.
+# Pattern adapted from steamliner/docs/.index/router.yaml
+_meta: {schema: "1.0.0", generated: "2026-04-12"}
+
+# ============================================================================
+# Identifier routes (exact pattern -> document + section)
+# ============================================================================
+id_routes:
+  # C++ concept / class identifier lookup
+  CPP_CONCEPT:
+    pattern: "container_module::{Name}"
+    type: symbol
+    file: API_REFERENCE.md
+    sections:
+      - {name: "Type Constraint Concepts", l: 60, e: 148}
+      - {name: "Value Type Concepts", l: 149, e: 228}
+      - {name: "Callback Concepts", l: 229, e: 315}
+      - {name: "Serialization Concepts", l: 316, e: 339}
+      - {name: "Container Concepts", l: 340, e: 351}
+      - {name: "Concepts Summary Table", l: 352, e: 376}
+
+  VARIANT:
+    pattern: "variant_value_v2|variant_value"
+    file: API_REFERENCE.md
+    section: {l: 377, e: 480}
+    also: [FEATURES.md, GETTING_STARTED.md]
+
+  CONTAINER_CLASS:
+    pattern: "container|value_container"
+    file: API_REFERENCE.md
+    section: {l: 481, e: 556}
+    also: [FEATURES.md, PROJECT_STRUCTURE.md]
+
+  METRICS:
+    pattern: "Metrics|metrics_structures"
+    file: API_REFERENCE.md
+    section: {l: 557, e: 700}
+
+  # Async / coroutine identifiers
+  TASK:
+    pattern: "task<T>|task_promise"
+    file: ASYNC_GUIDE.md
+    section: {l: 81, e: 211}
+
+  GENERATOR:
+    pattern: "generator<T>"
+    file: ASYNC_GUIDE.md
+    section: {l: 212, e: 336}
+
+  ASYNC_CONTAINER:
+    pattern: "async_container"
+    file: ASYNC_GUIDE.md
+    section: {l: 337, e: 510}
+
+  # Serialization identifiers
+  SERIALIZER:
+    pattern: "serializer_strategy|serializer_factory|{Format}_serializer"
+    file: SERIALIZATION_SCHEMA_POLICY_GUIDE.md
+    section: {l: 44, e: 204}
+    also: [API_QUICK_REFERENCE.md]
+
+  SCHEMA:
+    pattern: "schema|validation_error|validator"
+    file: SERIALIZATION_SCHEMA_POLICY_GUIDE.md
+    section: {l: 205, e: 387}
+
+  POLICY:
+    pattern: "StoragePolicy|policy_container"
+    file: SERIALIZATION_SCHEMA_POLICY_GUIDE.md
+    section: {l: 388, e: 781}
+
+# ============================================================================
+# Intent routes (keyword -> bundle for topic-based queries)
+# ============================================================================
+intent_routes:
+  - {keywords: [getting started, 시작하기, tutorial, first, hello, install, 설치], bundle: quickstart}
+  - {keywords: [api, reference, method, class, namespace, 레퍼런스], bundle: api-core}
+  - {keywords: [concepts, c++20, type constraint, template, constraint, 개념], bundle: cpp-concepts}
+  - {keywords: [variant, variant_value, 변형], bundle: variant-types}
+  - {keywords: [value type, primitive, integer, float, bytes, 값 타입], bundle: value-types}
+  - {keywords: [serialization, serialize, binary, json, xml, msgpack, messagepack, 직렬화], bundle: serialization}
+  - {keywords: [schema, validation, validator, 스키마, 검증], bundle: schema-validation}
+  - {keywords: [policy, storage policy, 정책], bundle: policy-framework}
+  - {keywords: [async, coroutine, task, generator, await, co_await, 비동기], bundle: async-coroutines}
+  - {keywords: [thread safety, concurrent, mutex, atomic, 동시성, 스레드], bundle: thread-safety}
+  - {keywords: [simd, neon, avx2, sse, vectorization, 벡터화], bundle: simd-performance}
+  - {keywords: [performance, benchmark, throughput, latency, 성능, 벤치마크], bundle: performance}
+  - {keywords: [architecture, design, layered, dependency, 아키텍처, 설계], bundle: architecture}
+  - {keywords: [messaging, message buffer, builder, 메시징], bundle: messaging-integration}
+  - {keywords: [sanitizer, tsan, asan, ubsan, msan, raii, quality, 품질, 새니타이저], bundle: quality-assurance}
+  - {keywords: [changelog, version, release, breaking, 변경, 릴리스], bundle: changelog}
+  - {keywords: [project structure, directory, layout, 구조], bundle: project-layout}
+  - {keywords: [soup, third party, license, 소프트웨어, 라이선스], bundle: compliance}
+
+# ============================================================================
+# Fallback — when no route matches
+# ============================================================================
+fallback:
+  primary: CON-DOC-IDX
+  secondary: [CON-API-QR, CON-FEAT-001]
+  note: "Start at the Documentation Registry, then scan the API Quick Reference and Features."
+
+# ============================================================================
+# Always skip — low signal per token
+# ============================================================================
+skip:
+  - ECOSYSTEM.md  # only 26 lines, cross-system pointers
+  - SOUP.md       # compliance-only, not useful for dev queries
+  - TRACEABILITY.md  # internal QA matrix
