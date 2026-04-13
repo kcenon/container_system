@@ -27,28 +27,14 @@ namespace kcenon::container
     class thread_safe_container;
     class value;
 
-    /**
-     * @brief Platform-specific type handling for long long
-     *
-     * Type equivalence across platforms:
-     * - macOS/Linux: int64_t == long long (always)
-     * - MSVC 2015+ (_MSC_VER >= 1900): int64_t == long long (typedef)
-     * - MSVC 2013- (_MSC_VER < 1900): int64_t == __int64 (distinct from long long)
-     *
-     * We use std::monostate as placeholder when types are identical
-     * to avoid variant duplicate type compilation errors.
-     */
-#if defined(_MSC_VER) && _MSC_VER < 1900
-    // Old MSVC (2013 and earlier): int64_t is __int64, long long is separate
-    using llong_placeholder_t = long long;
-    using ullong_placeholder_t = unsigned long long;
-    constexpr bool has_separate_llong = true;
-#else
-    // Modern platforms (macOS, Linux, MSVC 2015+): int64_t is long long
-    using llong_placeholder_t = std::monostate;
-    using ullong_placeholder_t = std::monostate;
-    constexpr bool has_separate_llong = false;
-#endif
+    // Note: Positions 6-9 in ValueVariant use unaliased C++ fundamental types
+    // (long, unsigned long, long long, unsigned long long) instead of
+    // int64_t/uint64_t. This avoids duplicate-type issues in std::variant
+    // because int64_t is a typedef for long long on most platforms, which
+    // would conflict with a separate long long entry. Using the unaliased
+    // types ensures they are always distinct in the C++ type system:
+    // - LP64 (macOS/Linux): long=64bit, long long=64bit (distinct types)
+    // - LLP64 (Windows): long=32bit, long long=64bit (distinct types)
 
     /**
      * @brief Recursive array type for variant
@@ -90,10 +76,10 @@ namespace kcenon::container
         uint16_t,                               // 3: ushort_value
         int32_t,                                // 4: int_value
         uint32_t,                               // 5: uint_value
-        int64_t,                                // 6: long_value
-        uint64_t,                               // 7: ulong_value
-        llong_placeholder_t,                    // 8: llong_value (monostate on macOS/Linux)
-        ullong_placeholder_t,                   // 9: ullong_value (monostate on macOS/Linux)
+        long,                                   // 6: long_value (unaliased fundamental type)
+        unsigned long,                          // 7: ulong_value (unaliased fundamental type)
+        long long,                              // 8: llong_value (always distinct from long)
+        unsigned long long,                     // 9: ullong_value (always distinct from unsigned long)
         float,                                  // 10: float_value
         double,                                 // 11: double_value
         std::string,                            // 12: string_value

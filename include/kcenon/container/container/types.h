@@ -38,6 +38,9 @@ namespace kcenon::container
 	 * on the stack rather than heap-allocated, significantly reducing memory
 	 * overhead and improving cache locality.
 	 */
+	// Forward declaration for array type
+	struct array_values;
+
 	using value_variant = std::variant<
 		std::monostate,                          // null_value (0 bytes)
 		bool,                                    // bool_value (1 byte)
@@ -53,8 +56,20 @@ namespace kcenon::container
 		double,                                  // double_value (8 bytes)
 		std::string,                             // string_value (dynamic)
 		std::vector<uint8_t>,                    // bytes_value (dynamic)
-		std::shared_ptr<value_container>         // container_value (pointer only)
+		std::shared_ptr<value_container>,        // container_value (pointer only)
+		std::shared_ptr<array_values>            // array_value (dynamic)
 	>;
+
+	/**
+	 * @brief Array storage for value_variant (position 15 = array_value)
+	 *
+	 * Uses shared_ptr indirection to keep value_variant size manageable
+	 * and allow recursive/heterogeneous array contents.
+	 */
+	struct array_values
+	{
+		std::vector<value_variant> items;
+	};
 
 	/**
 	 * @brief Optimized value storage with Small Object Optimization

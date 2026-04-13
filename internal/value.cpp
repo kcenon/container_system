@@ -137,18 +137,10 @@ namespace kcenon::container
 
     value_types value::type() const {
         std::shared_lock lock(mutex_);
-        size_t idx = data_.index();
-
         // Direct mapping: variant index == value_types enum value
-        // Handle platform-specific llong/ullong
-        if constexpr (!has_separate_llong) {
-            // On macOS/Linux, llong_value (8) and ullong_value (9) are monostate
-            // These should never be created directly, map to long_value instead
-            if (idx == 8) return value_types::long_value;   // llong → long
-            if (idx == 9) return value_types::ulong_value;  // ullong → ulong
-        }
-
-        return static_cast<value_types>(idx);
+        // Positions 6-9 now use unaliased fundamental types (long, unsigned long,
+        // long long, unsigned long long) so direct index cast is always correct.
+        return static_cast<value_types>(data_.index());
     }
 
     std::string value::to_string() const {
