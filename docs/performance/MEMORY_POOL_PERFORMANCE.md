@@ -3,7 +3,7 @@ doc_id: "CNT-PERF-007"
 doc_title: "Memory Pool Performance Results"
 doc_version: "1.0.0"
 doc_date: "2026-04-04"
-doc_status: "Released"
+doc_status: "Draft"
 project: "container_system"
 category: "PERF"
 ---

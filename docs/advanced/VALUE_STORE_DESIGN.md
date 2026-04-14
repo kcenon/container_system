@@ -280,6 +280,6 @@ consumer.join();
 
 ## References
 
-- [IMPROVEMENT_PLAN.md](../IMPROVEMENT_PLAN.md) - Sprint 3 roadmap
-- [ADR-001-Type-System-Unification.md](../docs/ADR-001-Type-System-Unification.md) - Type system decision
-- [VARIANT_VALUE_V2_MIGRATION_GUIDE.md](../docs/VARIANT_VALUE_V2_MIGRATION_GUIDE.md) - Migration guide
+<!-- TODO: IMPROVEMENT_PLAN.md is no longer present in the repo; link removed pending replacement. -->
+- [ADR-001-Type-System-Unification.md](./ADR-001-Type-System-Unification.md) - Type system decision
+- [VARIANT_VALUE_V2_MIGRATION_GUIDE.md](./VARIANT_VALUE_V2_MIGRATION_GUIDE.md) - Migration guide

@@ -1,6 +1,8 @@
 # Contributing to Container System
 
-Thank you for considering contributing to Container System\! This document provides guidelines and instructions for contributors.
+> **Canonical SSOT**: The authoritative contributing guide for this project is [docs/contributing/CONTRIBUTING.md](docs/contributing/CONTRIBUTING.md) (`doc_id: CNT-PROJ-007`). This file provides a short-form summary; consult the canonical document for current guidelines.
+
+Thank you for considering contributing to Container System! This document provides guidelines and instructions for contributors.
 
 ## Table of Contents
 

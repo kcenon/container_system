@@ -139,7 +139,6 @@ container_system/
 │   ├── MIGRATION.md                # Migration guide
 │   ├── INTEGRATION.md              # Integration guide
 │   ├── 📁 guides/                  # User guides
-│   │   ├── BUILD_GUIDE.md
 │   │   ├── QUICK_START.md
 │   │   ├── BEST_PRACTICES.md
 │   │   ├── TROUBLESHOOTING.md
@@ -710,9 +709,11 @@ namespace container_module {
 - [BENCHMARKS.md](BENCHMARKS.md) - Performance benchmarks
 - [PRODUCTION_QUALITY.md](PRODUCTION_QUALITY.md) - Quality metrics
 - [ARCHITECTURE.md](ARCHITECTURE.md) - Architecture guide
-- [BUILD_GUIDE.md](guides/BUILD_GUIDE.md) - Detailed build instructions
+- [QUICK_START.md](guides/QUICK_START.md) - Detailed build instructions
 
 ---
 
-**Last Updated**: 2025-12-10
-**Version**: 0.1.1.0
+**Last Updated**: 2026-04-14
+**Version**: 0.1.0 (aligned with `vcpkg.json` / `CMakeLists.txt`)
+
+**See also**: [ECOSYSTEM.md](ECOSYSTEM.md) for cross-project layout.

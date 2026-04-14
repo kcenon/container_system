@@ -13,7 +13,7 @@ For full details see [API_REFERENCE.md](API_REFERENCE.md) and the Doxygen-genera
 using namespace kcenon::container;
 ```
 
-`message_buffer` is the preferred alias for `value_container` since v2.0.0.
+`message_buffer` is the preferred alias for `value_container` (introduced in the v0.1 baseline; see `CLAUDE.md` Architecture notes).
 
 ---
 

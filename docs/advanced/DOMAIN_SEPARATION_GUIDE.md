@@ -252,10 +252,10 @@ container_system_messaging/      # Messaging extension
 
 ## References
 
-- [IMPROVEMENT_PLAN.md](../IMPROVEMENT_PLAN.md) - Sprint 3: Domain Separation
-- [value_store.h](../core/value_store.h) - Value store interface
-- [message_container.h](../messaging/message_container.h) - Message container interface
-- [SYSTEM_ANALYSIS_SUMMARY.md](../../SYSTEM_ANALYSIS_SUMMARY.md) - Overall system analysis
+<!-- TODO: IMPROVEMENT_PLAN.md is no longer present in the repo; link removed pending replacement. -->
+- [value_store.h](../../include/kcenon/container/value_store.h) - Value store interface
+- [message_container.h](../../messaging/message_container.h) - Message container interface
+<!-- TODO: SYSTEM_ANALYSIS_SUMMARY.md is no longer present in the repo; link removed pending replacement. -->
 
 ## Questions?
 

@@ -10,7 +10,9 @@ category: "ADR"
 
 # ADR-001: Type System Unification
 
-> **SSOT**: This document is the single source of truth for **ADR-001: Type System Unification**.
+> **SSOT**: This document is the single source of truth for **ADR-001: Type System Unification** (`doc_id: CNT-ADR-001`).
+>
+> **See also**: [ADR-002: Container System Scope and Purpose](../architecture/ADR-001-container-system-scope.md) (`doc_id: CNT-ADR-002`) — the scope ADR shares the `ADR-001-` filename prefix for historical reasons but is catalogued as CNT-ADR-002.
 
 **Date**: 2025-11-08
 **Status**: Accepted
@@ -214,8 +216,8 @@ auto v2 = value_migrator::from_polymorphic(*old_value);
 
 ## References
 
-- [IMPROVEMENT_PLAN.md](../IMPROVEMENT_PLAN.md) - Full improvement roadmap
-- [SYSTEM_ANALYSIS_SUMMARY.md](../../SYSTEM_ANALYSIS_SUMMARY.md) - System-wide analysis
+<!-- TODO: IMPROVEMENT_PLAN.md is no longer present in the repo; link removed pending replacement. -->
+<!-- TODO: SYSTEM_ANALYSIS_SUMMARY.md is no longer present in the repo; link removed pending replacement. -->
 - [C++ Core Guidelines - Variants](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#SS-var) - Best practices for std::variant usage
 
 ---

@@ -2,6 +2,8 @@
 
 **container_system** provides type-safe containers and SIMD serialization for the kcenon ecosystem.
 
+> **See also**: [ARCHITECTURE.md](ARCHITECTURE.md) for internal architecture, [PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md) for code layout, [integration/README.md](integration/README.md) for integration patterns.
+
 ## Dependencies
 | System | Relationship |
 |--------|-------------|

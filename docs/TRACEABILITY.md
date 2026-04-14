@@ -11,6 +11,8 @@ category: "QUAL"
 # Traceability Matrix
 
 > **SSOT**: This document is the single source of truth for **Container System Feature-Test-Module Traceability**.
+>
+> **See also**: [PRODUCTION_QUALITY.md](PRODUCTION_QUALITY.md) for the quality programme that consumes this matrix, and [contributing/CONTRIBUTING.md](contributing/CONTRIBUTING.md) for the workflow that updates it.
 
 ## Feature -> Test -> Module Mapping
 

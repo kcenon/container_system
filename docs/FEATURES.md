@@ -12,7 +12,9 @@ category: "FEAT"
 
 > **SSOT**: This document is the single source of truth for **Container System Features**.
 
-**Last Updated**: 2026-02-08
+**Last Updated**: 2026-04-14
+
+> **Language:** **English** | [한국어](FEATURES.kr.md)
 
 ## Overview
 

@@ -36,7 +36,7 @@ The Container System is a high-performance C++20 type-safe container framework d
 - **High Performance**: SIMD-accelerated operations (1.8M serializations/sec, 25M SIMD ops/sec)
 - **Well-Tested**: Perfect RAII score (20/20), zero data races, comprehensive testing
 - **Cross-Platform**: Native support for Linux, macOS, Windows with optimized build scripts
-- **Multiple Formats**: Binary, JSON, XML serialization with automatic format detection
+- **Multiple Formats**: Binary, JSON, XML, MessagePack serialization with automatic format detection
 
 ### Mission
 
@@ -181,7 +181,7 @@ common_system (ONLY required ecosystem dependency)
 
 | Module | Built by Root Project | Dependencies | Scope |
 |--------|-----------------------|--------------|-------|
-| `grpc/` | No | `protobuf` 3.21.12, `gRPC` 1.51.1, system threads | Isolated integration module built with `cmake -S grpc -B build-grpc` |
+| `grpc/` | No | `protobuf` 4.25.1, `gRPC` 1.60.0, system threads | Isolated integration module built with `cmake -S grpc -B build-grpc` |
 
 SBOM artifacts treat `grpc/` as a module-scoped optional deliverable. The root
 package dependency inventory covers `vcpkg.json`, and the SBOM report adds a
@@ -417,7 +417,7 @@ int main() {
 - 🔄 [Migration](docs/guides/MIGRATION.md) - Migration from messaging_system
 - 🧪 [Testing](docs/contributing/TESTING.md) - Testing guidelines
 
-**Language Support**: Most documents available in English and Korean (`*_KO.md`)
+**Language Support**: Most documents available in English and Korean (`*.kr.md`)
 
 ## Value Types
 
@@ -516,7 +516,7 @@ std::string data = container->serialize();
 db.insert_query("INSERT INTO messages (data) VALUES (?)", data);
 ```
 
-🌐 **[Integration Guide →](docs/INTEGRATION.md)**
+🌐 **[Integration Guide →](docs/guides/INTEGRATION.md)**
 
 ## Building
 
@@ -600,15 +600,15 @@ FetchContent_Declare(container_system ...)
 FetchContent_MakeAvailable(container_system)
 ```
 
-🔧 **[Build Guide →](docs/guides/BUILD_GUIDE.md)**
+🔧 **[Build Guide →](docs/guides/QUICK_START.md)**
 
 ## Platform Support
 
 | Platform | Architecture | Compiler | SIMD | Status |
 |----------|-------------|----------|------|--------|
-| **Linux** | x86_64, ARM64 | GCC 9+, Clang 10+ | AVX2, NEON | ✅ |
-| **macOS** | x86_64, ARM64 (Apple Silicon) | Apple Clang, Clang | AVX2, NEON | ✅ |
-| **Windows** | x86, x64 | MSVC 2019+, Clang | AVX2 | ✅ |
+| **Linux** | x86_64, ARM64 | GCC 11+, Clang 14+ | AVX2, NEON | ✅ |
+| **macOS** | x86_64, ARM64 (Apple Silicon) | Apple Clang 14+, Clang 14+ | AVX2, NEON | ✅ |
+| **Windows** | x86, x64 | MSVC 2022+, Clang 14+ | AVX2 | ✅ |
 
 **Native Build Scripts**:
 - Linux/macOS: `scripts/dependency.sh`, `scripts/build.sh`
@@ -725,7 +725,7 @@ We welcome contributions! Please see our [Contributing Guide](docs/contributing/
 
 - 💬 [GitHub Discussions](https://github.com/kcenon/container_system/discussions)
 - 🐛 [Issue Tracker](https://github.com/kcenon/container_system/issues)
-- 🤝 [Contributing Guide](docs/CONTRIBUTING.md)
+- 🤝 [Contributing Guide](docs/contributing/CONTRIBUTING.md)
 - 📧 Email: kcenon@naver.com
 
 ## License

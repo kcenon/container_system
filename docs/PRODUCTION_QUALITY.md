@@ -12,7 +12,7 @@ category: "QUAL"
 
 > **SSOT**: This document is the single source of truth for **Container System Production Quality**.
 
-**Last Updated**: 2025-11-15
+**Last Updated**: 2026-04-14
 **Status**: Under Development
 
 ## Overview
@@ -77,7 +77,7 @@ The Container System achieves **high quality standards** with:
 - **cppcheck**: Portability, performance, style
 
 **Check Categories**:
-- Modernization (C++11/14/17)
+- Modernization (historical: C++11/14/17; current target: C++20)
 - Performance optimization opportunities
 - Code style consistency
 - Portability issues
@@ -681,10 +681,10 @@ python scripts/compare_benchmarks.py \
 - [PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md) - Code organization
 - [ARCHITECTURE.md](ARCHITECTURE.md) - Architecture guide
 - [API_REFERENCE.md](API_REFERENCE.md) - API documentation
-- [USER_GUIDE.md](USER_GUIDE.md) - Usage guide
-- [PERFORMANCE.md](PERFORMANCE.md) - SIMD optimization guide
-- [MIGRATION.md](MIGRATION.md) - Migration guide
-- [INTEGRATION.md](INTEGRATION.md) - Integration guide
+- [PERFORMANCE.md](performance/PERFORMANCE.md) - SIMD optimization guide
+- [MIGRATION.md](guides/MIGRATION.md) - Migration guide
+- [INTEGRATION.md](guides/INTEGRATION.md) - Integration guide
+- [TRACEABILITY.md](TRACEABILITY.md) - Feature-test-module traceability matrix
 
 **Language Support**:
 - English (primary)

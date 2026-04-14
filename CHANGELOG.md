@@ -1,5 +1,7 @@
 # Changelog
 
+> **Note**: The [docs/CHANGELOG.md](docs/CHANGELOG.md) file carries the registry `doc_id: CNT-PROJ-002` (SSOT tag), but this root-level `CHANGELOG.md` remains the file normally consumed by downstream tooling (GitHub releases, vcpkg ports, crates). Entries should be mirrored between both files until the SSOT is consolidated. See also [docs/README.md](docs/README.md) for the registry.
+
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
