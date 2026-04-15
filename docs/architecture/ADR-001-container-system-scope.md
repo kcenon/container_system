@@ -1,16 +1,18 @@
 ---
 doc_id: "CNT-ADR-002"
-doc_title: "ADR-001: Container System Scope and Purpose"
-doc_version: "1.0.0"
-doc_date: "2026-04-04"
+doc_title: "ADR-002: Container System Scope and Purpose"
+doc_version: "1.0.1"
+doc_date: "2026-04-14"
 doc_status: "Released"
 project: "container_system"
 category: "ADR"
 ---
 
-# ADR-001: Container System Scope and Purpose
+# ADR-002: Container System Scope and Purpose
 
-> **SSOT**: This document is the single source of truth for **ADR-001: Container System Scope and Purpose**.
+> **SSOT**: This document is the single source of truth for the container_system **Scope and Purpose** decision (also surfaced in [SCOPE.md](../../SCOPE.md) at the repo root, which now defers to this ADR).
+>
+> **Note on numbering**: Historical filename is `ADR-001-container-system-scope.md`, but the repository's canonical ADR index assigns this record the ID `CNT-ADR-002`. For the Type-System ADR (CNT-ADR-001), see [ADR-001-Type-System-Unification.md](../advanced/ADR-001-Type-System-Unification.md).
 
 **Status**: Accepted
 **Date**: 2026-01-31

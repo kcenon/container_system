@@ -61,8 +61,8 @@ Utility to run all samples or a specific sample:
 ## Building the Samples
 
 ### Prerequisites
-- C++20 compatible compiler (GCC 10+, Clang 12+, MSVC 2019+)
-- CMake 3.16 or later
+- C++20 compatible compiler (GCC 11+, Clang 14+, MSVC 2022+)
+- CMake 3.20 or later
 - Container System library
 
 ### Build Instructions

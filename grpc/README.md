@@ -300,8 +300,8 @@ cd build
 
 ## Dependencies
 
-- **gRPC**: >= 1.50.0
-- **Protobuf**: >= 3.21.0
+- **gRPC**: 1.60.0 (pinned via `vcpkg.json`)
+- **Protobuf**: 4.25.1 (pinned via `vcpkg.json`)
 - **C++ Standard**: C++20
 - **GTest**: For testing (optional)
 

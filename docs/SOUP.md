@@ -51,8 +51,8 @@ module deliverables that are not built by the root `CMakeLists.txt`.
 | ID | Name | Manufacturer | Version | License | Usage | Safety Class | Known Anomalies |
 |----|------|-------------|---------|---------|-------|-------------|-----------------|
 | SOUP-002 | [fmt](https://github.com/fmtlib/fmt) | Victor Zverovich | 10.0.0+ | MIT | String formatting fallback for compilers without `std::format` (`fmt-support` feature) | A | None |
-| SOUP-003 | [gRPC](https://grpc.io/) | Google / CNCF | 1.51.1 | Apache-2.0 | RPC transport and generated service bindings for the isolated `grpc/` integration module | B | None |
-| SOUP-004 | [Protocol Buffers](https://protobuf.dev/) | Google | 3.21.12 | BSD-3-Clause | Message serialization and code generation for the isolated `grpc/` integration module | B | None |
+| SOUP-003 | [gRPC](https://grpc.io/) | Google / CNCF | 1.60.0 | Apache-2.0 | RPC transport and generated service bindings for the isolated `grpc/` integration module | B | None |
+| SOUP-004 | [Protocol Buffers](https://protobuf.dev/) | Google | 4.25.1 | BSD-3-Clause | Message serialization and code generation for the isolated `grpc/` integration module | B | None |
 
 ---
 
@@ -60,8 +60,8 @@ module deliverables that are not built by the root `CMakeLists.txt`.
 
 | ID | Name | Manufacturer | Version | License | Usage | Qualification |
 |----|------|-------------|---------|---------|-------|--------------|
-| SOUP-T01 | [Google Test](https://github.com/google/googletest) | Google | 1.14.0 | BSD-3-Clause | Unit testing framework (includes GMock) | Required |
-| SOUP-T02 | [Google Benchmark](https://github.com/google/benchmark) | Google | 1.8.3 | Apache-2.0 | Performance benchmarking framework | Not required |
+| SOUP-T01 | [Google Test](https://github.com/google/googletest) | Google | 1.17.0 | BSD-3-Clause | Unit testing framework (includes GMock) | Required |
+| SOUP-T02 | [Google Benchmark](https://github.com/google/benchmark) | Google | 1.9.5 | Apache-2.0 | Performance benchmarking framework | Not required |
 | SOUP-T03 | [Doxygen](https://www.doxygen.nl/) | Dimitri van Heesch | Latest | GPL-2.0 | API documentation generation (build tool only) | Not required |
 
 ---
@@ -85,10 +85,10 @@ version constraints:
 ```json
 {
   "overrides": [
-    { "name": "grpc", "version": "1.51.1" },
-    { "name": "protobuf", "version": "3.21.12" },
-    { "name": "gtest", "version": "1.14.0" },
-    { "name": "benchmark", "version": "1.8.3" }
+    { "name": "grpc", "version": "1.60.0" },
+    { "name": "protobuf", "version": "4.25.1" },
+    { "name": "gtest", "version": "1.17.0" },
+    { "name": "benchmark", "version": "1.9.5" }
   ],
   "features": {
     "fmt-support": {

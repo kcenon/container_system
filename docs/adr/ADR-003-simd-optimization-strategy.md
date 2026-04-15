@@ -11,6 +11,8 @@ category: "ADR"
 # ADR-003: SIMD Optimization Strategy
 
 > **SSOT**: This document is the single source of truth for **ADR-003: SIMD Optimization Strategy**.
+>
+> **See also**: [ARCHITECTURE.md](../ARCHITECTURE.md) for the SIMD integration context, [performance/PERFORMANCE.md](../performance/PERFORMANCE.md) for measured SIMD speedups.
 
 | Field | Value |
 |-------|-------|

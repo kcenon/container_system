@@ -13,8 +13,10 @@ category: "ARCH"
 > **SSOT**: This document is the single source of truth for **Architecture Documentation - Container System**.
 
 > **Version:** 0.1.0.0
-> **Last Updated:** 2025-10-22
+> **Last Updated:** 2026-04-14
 > **Language:** **English** | [한국어](ARCHITECTURE.kr.md)
+
+> **See also**: [ECOSYSTEM.md](ECOSYSTEM.md) for cross-project integration map, [PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md) for code organization.
 
 ---
 

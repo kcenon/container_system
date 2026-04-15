@@ -1,5 +1,7 @@
 # container_system Scope
 
+> **Canonical SSOT**: The authoritative scope-and-purpose record for this project is [docs/architecture/ADR-001-container-system-scope.md](docs/architecture/ADR-001-container-system-scope.md) (`doc_id: CNT-ADR-002`). This file provides a quick-reference summary and defers to that ADR for the canonical statement.
+
 ## Purpose
 
 This repository provides container-specific optimizations for common_system, with a focus on high-performance data serialization and parsing.
