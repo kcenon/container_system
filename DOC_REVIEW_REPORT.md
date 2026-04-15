@@ -126,3 +126,53 @@
 - **Out of scope (noted only)**: Doxyfile `.dox` fragments (`mainpage.dox`, `troubleshooting.dox`, `tutorial_*.dox`, `faq.dox`) were not scanned as Markdown. Generated HTML (`docs/html/`, `docs/doxygen-awesome-css/`) intentionally excluded.
 
 - **Mode compliance**: No source `.md` file was modified during this review. Only `/Volumes/T5 EVO/Sources/container_system/DOC_REVIEW_REPORT.md` was written.
+
+---
+
+## Post-Fix Re-Validation (2026-04-15)
+
+**Fix commit**: `b9e369b` — `docs: fix 19 broken links, 9 version mismatches, 8 xrefs, 4 SSOT deferrals`
+**Branch**: `feature/docs-fix-2026-04-15`
+**Re-run scope**: Phase 1 only (anchors + intra/inter-file links)
+**Files scanned**: 79 markdown files (excluding `build/`, `scripts/build/`, `.git/`)
+**Methodology**: Ran identical Phase 1 validator against both pre-fix (`b9e369b^`) and post-fix (`b9e369b`) trees; cross-referenced the two issue sets to isolate true regressions vs. pre-existing pre-existing problems.
+
+### Before / After Summary
+
+| Metric                                     | Pre-Fix (`b9e369b^`) | Post-Fix (`b9e369b`) | Delta |
+|--------------------------------------------|----------------------|----------------------|-------|
+| Total Phase 1 issues                       | 79                   | 64                   | -15   |
+| Broken file references                     | 72                   | 57                   | -15   |
+| Missing intra-file anchors                 | 7                    | 7                    | 0     |
+| Missing inter-file anchors                 | 0                    | 0                    | 0     |
+| Prior **Must-Fix** items resolved          | —                    | 15 / 16              | 94%   |
+| Prior **Must-Fix** items residual          | —                    | 1                    | —     |
+| True regressions (new issues from fix)     | —                    | 0                    | 0     |
+| Self-references in `DOC_REVIEW_REPORT.md`  | —                    | 7 (excluded)         | —     |
+
+Note: The post-fix scan finds 64 issues, of which 7 are self-references inside `DOC_REVIEW_REPORT.md` itself (the report text cites previously-broken paths verbatim). Excluding those, the effective post-fix issue count is 57.
+
+### Residual List (Prior Must-Fix still failing)
+
+| # | File:Line | Target | Notes |
+|---|-----------|--------|-------|
+| 1 | `docs/PROJECT_STRUCTURE.kr.md:608` | `guides/BUILD_GUIDE.md` | Korean variant of item #6 in the original Must-Fix list. The fix commit message explicitly deferred Korean `.kr.md` files ("Korean .kr.md files and CHANGELOG.kr.md version tags are left untouched per task scope"). English sibling `docs/PROJECT_STRUCTURE.md:713` was fixed. |
+
+### Regression List
+
+**None.** Set-difference of post-fix issues minus pre-fix issues (after excluding `DOC_REVIEW_REPORT.md` self-references) yields zero entries. The fix commit introduced no new broken links, no new missing anchors, and no new path-depth errors. File list changes (one new file scanned: `DOC_REVIEW_REPORT.md`) contributed only the 7 self-references, all of which are documentation of the prior issues, not active links to navigate.
+
+### Key Observations
+
+1. **Net reduction of 15 broken file references** — all 11 canonical path-depth errors flagged in the original Must-Fix list were resolved. Additional "collateral" fixes swept up 4 adjacent broken references in `docs/PRODUCTION_QUALITY.md`, `docs/BENCHMARKS.md`, and `docs/advanced/DOMAIN_SEPARATION_GUIDE.md` (header references and code-path references near the Must-Fix lines).
+2. **56 pre-existing broken references remain** — these were present in `b9e369b^` but were not on the original Phase 1 Must-Fix list (they were either missed in the first scan or correctly classified as Should-Fix / Nice-to-Have scope). They are **not regressions** — the fix commit did not create or alter them.
+3. **7 intra-file anchors remain missing** — unchanged from pre-fix (`docs/API_REFERENCE.md:23`, `docs/API_REFERENCE.kr.md:23`, `docs/guides/INTEGRATION.md:29–32`, `docs/grpc/GRPC_INTEGRATION_PROPOSAL.md:43`). These are outside the original Phase 1 Must-Fix list.
+
+### Verdict
+
+**PARTIAL-PASS**
+
+- All 11 canonical broken-link Must-Fix items (English variants) resolved.
+- 1 Must-Fix residual (`docs/PROJECT_STRUCTURE.kr.md:608`) — explicitly deferred by the fix commit's documented scope. Acceptable per the commit message's stated boundary.
+- Zero true regressions introduced.
+- 56 pre-existing Should-Fix / unlisted broken references remain across the repository; these are documentation-quality issues orthogonal to the Must-Fix set and did not shift as a result of the fix.
