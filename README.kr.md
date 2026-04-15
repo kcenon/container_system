@@ -240,7 +240,7 @@ auto json = container->serialize(serialization_format::json);
 | API | 헤더 | 설명 |
 |-----|------|------|
 | `value_container` | `container.h` | 핵심 직렬화 가능 컨테이너 |
-| `message_buffer` | `container.h` | v2.0.0부터 권장 이름 |
+| `message_buffer` | `container.h` | `value_container`의 권장 별칭 (v0.1 기준선에서 도입; 자세한 내용은 `CLAUDE.md` 참조) |
 | `messaging_container_builder` | `messaging/message_container.h` | 빌더 패턴 생성 |
 | `thread_safe_container` | `internal/thread_safe_container.h` | 스레드 안전 래퍼 |
 | `simd_processor` | `internal/simd_processor.h` | SIMD 가속 처리 |

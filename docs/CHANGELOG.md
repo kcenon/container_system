@@ -80,6 +80,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Windows `windef.h` defines `TRUE` and `FALSE` as macros which conflict with MessagePack format constants
   - Macros are temporarily undefined during msgpack.h parsing and restored at end of file
   - Fixes compilation errors like `error C2059: syntax error: 'constant'` on MSVC
+- **Korean Documentation Parity** (#514): Apply Korean `.kr.md` parity with the mechanical fixes from [#513](https://github.com/kcenon/container_system/pull/513)
+  - Remove fabricated `v2.0.0` version claim from `README.kr.md` `message_buffer` row
+  - Drop non-existent `BUILD_GUIDE.md` references in `docs/PROJECT_STRUCTURE.kr.md` (tree entry and broken link)
+  - Align `docs/API_REFERENCE.kr.md` header version to `0.1.0` matching `vcpkg.json` and `CMakeLists.txt`
 
 ### Deprecated
 - **Legacy void/bool API Methods** (#241): Mark legacy methods as deprecated in favor of Result-returning APIs
