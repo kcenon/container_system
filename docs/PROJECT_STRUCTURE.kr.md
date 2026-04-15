@@ -141,7 +141,6 @@ container_system/
 │   ├── MIGRATION.md
 │   ├── INTEGRATION.md
 │   ├── 📁 guides/
-│   │   ├── BUILD_GUIDE.md
 │   │   ├── QUICK_START.md
 │   │   ├── BEST_PRACTICES.md
 │   │   ├── TROUBLESHOOTING.md
@@ -605,7 +604,7 @@ cmake --build build --config Release
 - [BENCHMARKS.md](BENCHMARKS.md) / [BENCHMARKS.kr.md](BENCHMARKS.kr.md) - 성능 벤치마크
 - [PRODUCTION_QUALITY.md](PRODUCTION_QUALITY.md) / [PRODUCTION_QUALITY.kr.md](PRODUCTION_QUALITY.kr.md) - 품질 메트릭
 - [ARCHITECTURE.md](ARCHITECTURE.md) - 아키텍처 가이드
-- [BUILD_GUIDE.md](guides/BUILD_GUIDE.md) - 상세 빌드 지침
+- [QUICK_START.md](guides/QUICK_START.md) - 상세 빌드 지침
 
 ---
 

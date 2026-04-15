@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Enable pointer range validation in release builds for `fixed_block_pool` ([#447](https://github.com/kcenon/container_system/issues/447))
 - Correct vcpkg port `PACKAGE_NAME` and `CONFIG_PATH` from `ContainerSystem` to `container_system` so `vcpkg_cmake_config_fixup` matches the actual install layout (`lib/cmake/container_system`) ([#501](https://github.com/kcenon/container_system/issues/501))
+- Apply Korean documentation parity with the mechanical fixes from [#513](https://github.com/kcenon/container_system/pull/513): remove fabricated `v2.0.0` version claim in `README.kr.md`, drop non-existent `BUILD_GUIDE.md` references in `docs/PROJECT_STRUCTURE.kr.md`, and align `docs/API_REFERENCE.kr.md` version to `0.1.0` matching `vcpkg.json` and `CMakeLists.txt` ([#514](https://github.com/kcenon/container_system/issues/514))
 
 ## [0.1.0] - 2026-03-13
 
