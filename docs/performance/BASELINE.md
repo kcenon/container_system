@@ -250,14 +250,14 @@ This system serves as the model for RAII implementation across all other systems
 
 # Performance Baseline
 
-**Last Updated**: 2026-04-13 02:42:08 UTC
+**Last Updated**: 2026-04-16 06:37:57 UTC
 **Commit**: N/A
 
 ## System Information
 
-- **Host**: runnervm35a4x
+- **Host**: runnervmeorf1
 - **CPUs**: 4
-- **CPU MHz**: 3280
+- **CPU MHz**: 3277
 - **Build Type**: Release
 
 ## Summary
