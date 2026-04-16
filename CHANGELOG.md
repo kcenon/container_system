@@ -9,11 +9,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-04-16
+
 ### Added
 
 - Add `recommended_container` alias using `indexed_storage_policy` for O(1) key lookups ([#446](https://github.com/kcenon/container_system/issues/446))
 - Add vcpkg port validation workflow for cross-platform install and consumer-test verification ([#458](https://github.com/kcenon/container_system/issues/458))
 - Add `testing`, `samples`, and `docs` features to vcpkg port manifest, mapped to CMake options via `vcpkg_check_features` ([#501](https://github.com/kcenon/container_system/issues/501))
+- Add Result\<T\>-based deserialization for `value_store` (`deserialize_result`, `deserialize_binary_result`) ([#517](https://github.com/kcenon/container_system/issues/517))
+
+### Changed
+
+- Remove vestigial `is_variant_mode()` and `enable_variant_mode()` no-op methods ([#516](https://github.com/kcenon/container_system/issues/516))
+- Remove unused `CONTAINER_LEGACY_API` CMake option — legacy API was fully removed in prior releases ([#516](https://github.com/kcenon/container_system/issues/516))
+- Remove unused `POLICY_CONTAINER_HAS_COMMON_RESULT` compatibility macro ([#516](https://github.com/kcenon/container_system/issues/516))
 
 ### Fixed
 

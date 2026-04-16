@@ -12,7 +12,7 @@ category: "API"
 
 > **SSOT**: This document is the single source of truth for **container_system API 레퍼런스**.
 
-> **버전**: 0.1.0 (`vcpkg.json` 및 `CMakeLists.txt`와 일치)
+> **버전**: 1.0.0 (`vcpkg.json` 및 `CMakeLists.txt`와 일치)
 > **최종 업데이트**: 2026-04-14
 > **상태**: C++20 Concepts 통합 완료, variant_value_v2 마이그레이션 완료. Strategy 패턴을 적용한 통합 직렬화 API (이슈 #313, #314).
 

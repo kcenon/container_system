@@ -12,7 +12,7 @@ category: "API"
 
 > **SSOT**: This document is the single source of truth for **container_system API Reference**.
 
-> **Version**: 0.1.0 (aligned with `vcpkg.json` and `CMakeLists.txt`)
+> **Version**: 1.0.0 (aligned with `vcpkg.json` and `CMakeLists.txt`)
 > **Last Updated**: 2026-04-14
 > **Status**: C++20 Concepts integrated, variant_value_v2 migration complete. Unified serialization API with Strategy pattern (Issue #313, #314).
 

@@ -1,8 +1,8 @@
 ---
 doc_id: "CNT-PROJ-002"
 doc_title: "Changelog"
-doc_version: "1.0.0"
-doc_date: "2026-04-04"
+doc_version: "1.0.1"
+doc_date: "2026-04-16"
 doc_status: "Released"
 project: "container_system"
 category: "PROJ"
