@@ -1,0 +1,17 @@
+var searchData=
+[
+  ['read_5fcount_0',['read_count',['../structkcenon_1_1container_1_1thread__safe__container_1_1Statistics.html#aef67b485a230890f03062aac22e6132e',1,'kcenon::container::thread_safe_container::Statistics']]],
+  ['read_5fcount_5f_1',['read_count_',['../classkcenon_1_1container_1_1thread__safe__container.html#aa7b388098b2e7f1dd8ae6f17192f42c9',1,'kcenon::container::thread_safe_container::read_count_'],['../classkcenon_1_1container_1_1value.html#ae909bff92413c57e42a8326a3385df09',1,'kcenon::container::value::read_count_']]],
+  ['reader_5f_2',['reader_',['../classkcenon_1_1container_1_1auto__refresh__reader.html#ae58de2c224a279cfa10eb312bf2660ad',1,'kcenon::container::auto_refresh_reader']]],
+  ['readings_5fcollected_5f_3',['readings_collected_',['../classscenarios_1_1IoTDataCollectionSystem.html#aee944ea58cbccfefc31f761912cecd02',1,'scenarios::IoTDataCollectionSystem']]],
+  ['ready_5f_4',['ready_',['../structkcenon_1_1container_1_1async_1_1detail_1_1async__state.html#a98100d5a30712c13319df30b990d44e5',1,'kcenon::container::async::detail::async_state::ready_'],['../structkcenon_1_1container_1_1async_1_1detail_1_1executor__state.html#a65c7597c46aeb8900161cfbc805ac140',1,'kcenon::container::async::detail::executor_state::ready_']]],
+  ['reclaimed_5fcount_5f_5',['reclaimed_count_',['../classkcenon_1_1container_1_1epoch__manager.html#a540190057ff418893eaaf6810d992e91',1,'kcenon::container::epoch_manager']]],
+  ['refresh_5fcount_5f_6',['refresh_count_',['../classkcenon_1_1container_1_1lockfree__container__reader.html#aa992cbcdcd9db7d03499db56728da782',1,'kcenon::container::lockfree_container_reader']]],
+  ['refresh_5finterval_5f_7',['refresh_interval_',['../classkcenon_1_1container_1_1auto__refresh__reader.html#a95f036da6c97594bd16b6c09bdc79daf',1,'kcenon::container::auto_refresh_reader']]],
+  ['refresh_5fthread_5f_8',['refresh_thread_',['../classkcenon_1_1container_1_1auto__refresh__reader.html#a510dd243dc0d42be8df7df89ccfb8572',1,'kcenon::container::auto_refresh_reader']]],
+  ['result_5f_9',['result_',['../structkcenon_1_1container_1_1async_1_1detail_1_1async__state.html#a22d85267debc87cb8ecd82513a4743bf',1,'kcenon::container::async::detail::async_state::result_'],['../structkcenon_1_1container_1_1async_1_1detail_1_1promise__type.html#a758d6fea83872bc0796fe65782fb0406',1,'kcenon::container::async::detail::promise_type::result_'],['../structkcenon_1_1container_1_1async_1_1detail_1_1executor__state.html#ac730aaf7e2aac798d05b3a75276ee328',1,'kcenon::container::async::detail::executor_state::result_']]],
+  ['result_5fsize_5f_10',['result_size_',['../classkcenon_1_1container_1_1integration_1_1container__performance__monitor.html#a66fe91946988fba446412d4e3f139d33',1,'kcenon::container::integration::container_performance_monitor']]],
+  ['retire_5fmutex_5f_11',['retire_mutex_',['../classkcenon_1_1container_1_1epoch__manager.html#a155401ee8e4c4ae6a8e9f1d06e728e90',1,'kcenon::container::epoch_manager']]],
+  ['retired_5f_12',['retired_',['../classkcenon_1_1container_1_1epoch__manager.html#a0ead8b69a057223a74ec51a30027e129',1,'kcenon::container::epoch_manager']]],
+  ['running_5f_13',['running_',['../classkcenon_1_1container_1_1auto__refresh__reader.html#a2e41ee1fcce6e662a522790144fb7c49',1,'kcenon::container::auto_refresh_reader::running_'],['../classAdvancedContainerExample.html#a43832c8ab438ac26e34a62588d153a56',1,'AdvancedContainerExample::running_']]]
+];

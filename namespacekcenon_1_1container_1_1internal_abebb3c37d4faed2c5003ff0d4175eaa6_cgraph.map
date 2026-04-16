@@ -1,0 +1,15 @@
+<map id="kcenon::container::internal::pool_allocate" name="kcenon::container::internal::pool_allocate">
+<area shape="rect" id="Node000001" title="Allocate and construct an object using pool allocation." alt="" coords="5,99,172,139"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1container_1_1internal_1_1pool__allocator.html#ae81b19dbcbd414390bab5c366506d12e" title="Allocate memory from the appropriate pool." alt="" coords="220,13,392,67"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="144,96,216,70,218,75,146,101"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1container_1_1internal_1_1pool__allocator.html#ab13967a105de7117186968cf35b2ab26" title="Deallocate memory to the appropriate pool." alt="" coords="220,91,392,146"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="172,116,206,116,206,121,172,121"/>
+<area shape="rect" id="Node000007" href="$classkcenon_1_1container_1_1internal_1_1pool__allocator.html#a286495726f594c6629e638b7cda497f1" title="Get the singleton instance." alt="" coords="220,170,392,225"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="146,136,218,163,216,168,144,141"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1container_1_1internal_1_1fixed__block__pool.html#a7bc8db28b803a7f77a7d7bc0faad4e77" title=" " alt="" coords="440,13,593,67"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="393,37,426,37,426,43,393,43"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1container_1_1internal_1_1fixed__block__pool.html#a33f3e87727707845a0fd006156bca06b" title=" " alt="" coords="641,5,804,75"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="594,37,627,37,627,43,594,43"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1container_1_1internal_1_1fixed__block__pool.html#ae30bb8b14c326c133095b8e66389a0fc" title=" " alt="" coords="440,91,593,146"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="393,116,426,116,426,121,393,121"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="kcenon::container::same_type" name="kcenon::container::same_type">
+<area shape="rect" id="Node000001" title="Check if two values have the same type." alt="" coords="5,5,152,45"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1container_1_1value.html#a2ed86e2c68e087e69641b7e3503fb5a3" title="Get the value_types enum (NOT variant::index()!)" alt="" coords="200,5,347,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="152,23,186,23,186,28,152,28"/>
+</map>

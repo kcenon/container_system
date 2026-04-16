@@ -1,0 +1,11 @@
+<map id="scenarios::ContentManagementSystem::count_words" name="scenarios::ContentManagementSystem::count_words">
+<area shape="rect" id="Node000001" title=" " alt="" coords="968,5,1197,45"/>
+<area shape="rect" id="Node000002" href="$classscenarios_1_1ContentManagementSystem.html#aef3b7b96cf92379c055400a8378098b1" title=" " alt="" coords="665,5,920,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="954,28,920,28,920,23,954,23"/>
+<area shape="rect" id="Node000003" href="$classscenarios_1_1ContentManagementSystem.html#a6975d3a43b1e3d4046b4b4cb6bca535d" title=" " alt="" coords="388,5,617,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="652,28,618,28,618,23,652,23"/>
+<area shape="rect" id="Node000004" href="$classscenarios_1_1ContentManagementSystem.html#ac381fb4cf74f4df16cb0b900fa6e6a2d" title=" " alt="" coords="108,5,340,45"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="374,28,340,28,340,23,374,23"/>
+<area shape="rect" id="Node000005" href="$real__world__scenarios_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,13,60,38"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="94,28,60,28,60,23,94,23"/>
+</map>

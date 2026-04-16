@@ -1,0 +1,11 @@
+<map id="examples/schema_validation_example.cpp" name="examples/schema_validation_example.cpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="198,5,411,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,101,100,126"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="250,48,100,99,98,94,249,43"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="124,93,323,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="289,47,253,85,249,81,285,44"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="346,101,426,126"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="325,44,367,89,364,92,321,47"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="450,101,509,126"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="344,43,445,92,443,97,342,48"/>
+</map>

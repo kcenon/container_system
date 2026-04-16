@@ -1,0 +1,9 @@
+<map id="scenarios::GamingEventSystem::simulate_gaming_scenario" name="scenarios::GamingEventSystem::simulate_gaming_scenario">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,37,235,77"/>
+<area shape="rect" id="Node000002" href="$classscenarios_1_1GamingEventSystem.html#a6ca25899e45597bb3011f1085c1b0166" title=" " alt="" coords="283,5,512,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="235,41,269,37,269,43,235,47"/>
+<area shape="rect" id="Node000003" href="$classscenarios_1_1GamingEventSystem.html#a3403e62957e14344283e707976f4380b" title=" " alt="" coords="283,69,512,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="235,68,269,72,269,77,235,73"/>
+<area shape="rect" id="Node000004" href="$classscenarios_1_1GamingEventSystem.html#a59259bf430f8d9addd2901141209351c" title=" " alt="" coords="560,69,793,109"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="512,87,546,87,546,92,512,92"/>
+</map>

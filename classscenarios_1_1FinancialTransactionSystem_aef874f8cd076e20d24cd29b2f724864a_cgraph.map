@@ -1,0 +1,5 @@
+<map id="scenarios::FinancialTransactionSystem::simulate_financial_scenario" name="scenarios::FinancialTransactionSystem::simulate_financial_scenario">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,229,60"/>
+<area shape="rect" id="Node000002" href="$classscenarios_1_1FinancialTransactionSystem.html#a37cbcf1e27f0bcafcd915047004bd726" title=" " alt="" coords="277,13,501,53"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="229,30,264,30,264,35,229,35"/>
+</map>
