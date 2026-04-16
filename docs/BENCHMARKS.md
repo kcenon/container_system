@@ -12,7 +12,7 @@ category: "PERF"
 
 > **SSOT**: This document is the single source of truth for **Container System Performance Benchmarks**.
 
-**Last Updated**: 2025-11-15
+**Last Updated**: 2026-04-14
 **Platform**: Apple M1 (8 cores, ARM NEON), macOS 26.1, Apple Clang 17.0
 **Build**: Release mode with `-O3` optimization
 
@@ -418,8 +418,8 @@ This document provides comprehensive performance benchmarks for the Container Sy
 ## Continuous Performance Monitoring
 
 For live, auto-updated performance metrics, see:
-- [BASELINE.md](../BASELINE.md) - Latest baseline measurements
-- [MEMORY_POOL_PERFORMANCE.md](MEMORY_POOL_PERFORMANCE.md) - Memory pool benchmarks
+- [BASELINE.md](performance/BASELINE.md) - Latest baseline measurements
+- [MEMORY_POOL_PERFORMANCE.md](performance/MEMORY_POOL_PERFORMANCE.md) - Memory pool benchmarks
 - [performance/BASELINE.md](performance/BASELINE.md) - Detailed performance data
 
 ## See Also
@@ -431,6 +431,6 @@ For live, auto-updated performance metrics, see:
 
 ---
 
-**Last Updated**: 2025-11-15
+**Last Updated**: 2026-04-14
 **Version**: 0.1.0.0
 **Next Update**: Scheduled for next release

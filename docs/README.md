@@ -13,7 +13,7 @@ category: "GUID"
 > **SSOT**: This file is the single source of truth for the documentation index
 > of **container_system**.
 
-Total documents: **55**
+Total documents: **72** (55 docs/** entries + 17 root/subdir entries; see also [Root-Level Documents](#root-level-documents) and [Subdirectory READMEs](#subdirectory-readmes) below).
 
 ## Document Index
 
@@ -71,9 +71,43 @@ Total documents: **55**
 | 50 | CNT-PROJ-002 | Changelog | [CHANGELOG.md](./CHANGELOG.md) | Released |
 | 51 | CNT-PROJ-003 | Container System 프로젝트 구조 | [PROJECT_STRUCTURE.kr.md](./PROJECT_STRUCTURE.kr.md) | Released |
 | 52 | CNT-PROJ-004 | Container System Project Structure | [PROJECT_STRUCTURE.md](./PROJECT_STRUCTURE.md) | Released |
-| 53 | CNT-PROJ-005 | SOUP List &mdash; container_system | [SOUP.md](./SOUP.md) | Released |
+| 53 | CNT-PROJ-005 | SOUP List — container_system | [SOUP.md](./SOUP.md) | Released |
 | 54 | CNT-PROJ-006 | Value Container Class Decomposition Evaluation | [VALUE_CONTAINER_DECOMPOSITION_EVALUATION.md](./advanced/VALUE_CONTAINER_DECOMPOSITION_EVALUATION.md) | Released |
 | 55 | CNT-PROJ-007 | Contributing to container_system | [CONTRIBUTING.md](./contributing/CONTRIBUTING.md) | Released |
+| 56 | CNT-GUID-011 | Getting Started Guide | [GETTING_STARTED.md](./GETTING_STARTED.md) | Released |
+| 57 | CNT-API-003 | container_system API Quick Reference | [API_QUICK_REFERENCE.md](./API_QUICK_REFERENCE.md) | Released |
+| 58 | CNT-ARCH-008 | Ecosystem Integration Map | [ECOSYSTEM.md](./ECOSYSTEM.md) | Released |
+
+## Root-Level Documents
+
+The following project-level documents live at the repository root and are referenced by tooling and contributors outside the `docs/` tree. They are authoritative for their respective topics.
+
+| # | doc_id | Topic | Authority Document | Status |
+|---|--------|-------|-------------------|--------|
+| R1 | CNT-ROOT-001 | Container System README (English) | [README.md](../README.md) | Released |
+| R2 | CNT-ROOT-002 | Container System README (Korean) | [README.kr.md](../README.kr.md) | Released |
+| R3 | CNT-ROOT-003 | Root Changelog (primary consumer entry point) | [CHANGELOG.md](../CHANGELOG.md) | Released |
+| R4 | CNT-ROOT-004 | Contributing (defers to [docs/contributing/CONTRIBUTING.md](./contributing/CONTRIBUTING.md)) | [CONTRIBUTING.md](../CONTRIBUTING.md) | Released |
+| R5 | CNT-ROOT-005 | Code of Conduct | [CODE_OF_CONDUCT.md](../CODE_OF_CONDUCT.md) | Released |
+| R6 | CNT-ROOT-006 | Security Policy | [SECURITY.md](../SECURITY.md) | Released |
+| R7 | CNT-ROOT-007 | Container System Scope (defers to [architecture/ADR-001-container-system-scope.md](./architecture/ADR-001-container-system-scope.md)) | [SCOPE.md](../SCOPE.md) | Released |
+| R8 | CNT-ROOT-008 | Claude Code Project Brief | [CLAUDE.md](../CLAUDE.md) | Released |
+
+## Subdirectory READMEs
+
+Per-subdirectory README files documenting components outside the `docs/` tree.
+
+| # | doc_id | Topic | Authority Document | Status |
+|---|--------|-------|-------------------|--------|
+| S1 | CNT-SUB-001 | Samples overview | [samples/README.md](../samples/README.md) | Released |
+| S2 | CNT-SUB-002 | Examples overview | [examples/README.md](../examples/README.md) | Released |
+| S3 | CNT-SUB-003 | Benchmarks overview | [benchmarks/README.md](../benchmarks/README.md) | Released |
+| S4 | CNT-SUB-004 | gRPC integration module | [grpc/README.md](../grpc/README.md) | Released |
+| S5 | CNT-SUB-005 | CMake helpers | [cmake/README.md](../cmake/README.md) | Released |
+| S6 | CNT-SUB-006 | Integration tests | [integration_tests/README.md](../integration_tests/README.md) | Released |
+| S7 | CNT-SUB-007 | GitHub workflows template | [.github-workflows-template/README.md](../.github-workflows-template/README.md) | Released |
+| S8 | CNT-SUB-008 | Integration guide (docs) | [docs/integration/README.md](./integration/README.md) | Released |
+| S9 | CNT-SUB-009 | Documentation registry (this file) | [docs/README.md](./README.md) | Released |
 
 ## Documents by Category
 
@@ -178,7 +212,7 @@ Total documents: **55**
 | CNT-PROJ-002 | Changelog | [CHANGELOG.md](./CHANGELOG.md) | Released |
 | CNT-PROJ-003 | Container System 프로젝트 구조 | [PROJECT_STRUCTURE.kr.md](./PROJECT_STRUCTURE.kr.md) | Released |
 | CNT-PROJ-004 | Container System Project Structure | [PROJECT_STRUCTURE.md](./PROJECT_STRUCTURE.md) | Released |
-| CNT-PROJ-005 | SOUP List &mdash; container_system | [SOUP.md](./SOUP.md) | Released |
+| CNT-PROJ-005 | SOUP List — container_system | [SOUP.md](./SOUP.md) | Released |
 | CNT-PROJ-006 | Value Container Class Decomposition Evaluation | [VALUE_CONTAINER_DECOMPOSITION_EVALUATION.md](./advanced/VALUE_CONTAINER_DECOMPOSITION_EVALUATION.md) | Released |
 | CNT-PROJ-007 | Contributing to container_system | [CONTRIBUTING.md](./contributing/CONTRIBUTING.md) | Released |
 

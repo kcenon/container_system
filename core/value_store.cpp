@@ -227,4 +227,115 @@ void value_store::reset_statistics() {
     write_count_.store(0, std::memory_order_relaxed);
 }
 
+#if CONTAINER_HAS_COMMON_RESULT
+kcenon::common::Result<std::unique_ptr<value_store>>
+value_store::deserialize_result(std::string_view /*json_data*/) noexcept {
+    return kcenon::common::Result<std::unique_ptr<value_store>>(
+        kcenon::common::error_info{
+            error_codes::deserialization_failed,
+            "value_store::deserialize_result() requires JSON parser - use deserialize_binary_result() instead",
+            "container_system"});
+}
+
+kcenon::common::Result<std::unique_ptr<value_store>>
+value_store::deserialize_binary_result(const std::vector<uint8_t>& binary_data) noexcept {
+    try {
+        auto store = std::make_unique<value_store>();
+
+        if (binary_data.size() < 1 + sizeof(uint32_t)) {
+            return kcenon::common::Result<std::unique_ptr<value_store>>(
+                kcenon::common::error_info{
+                    error_codes::corrupted_data,
+                    "value_store::deserialize_binary_result() - invalid data: too small",
+                    "container_system"});
+        }
+
+        size_t offset = 0;
+
+        uint8_t version = binary_data[offset++];
+        if (version != 1) {
+            return kcenon::common::Result<std::unique_ptr<value_store>>(
+                kcenon::common::error_info{
+                    error_codes::version_mismatch,
+                    "value_store::deserialize_binary_result() - unsupported version: "
+                        + std::to_string(version),
+                    "container_system"});
+        }
+
+        uint32_t count;
+        std::memcpy(&count, binary_data.data() + offset, sizeof(count));
+        offset += sizeof(count);
+
+        for (uint32_t i = 0; i < count; ++i) {
+            if (offset + sizeof(uint32_t) > binary_data.size()) {
+                return kcenon::common::Result<std::unique_ptr<value_store>>(
+                    kcenon::common::error_info{
+                        error_codes::corrupted_data,
+                        "value_store::deserialize_binary_result() - truncated data at entry "
+                            + std::to_string(i),
+                        "container_system"});
+            }
+
+            uint32_t key_len;
+            std::memcpy(&key_len, binary_data.data() + offset, sizeof(key_len));
+            offset += sizeof(key_len);
+
+            if (offset + key_len + sizeof(uint32_t) > binary_data.size()) {
+                return kcenon::common::Result<std::unique_ptr<value_store>>(
+                    kcenon::common::error_info{
+                        error_codes::corrupted_data,
+                        "value_store::deserialize_binary_result() - truncated key data",
+                        "container_system"});
+            }
+
+            std::string key(binary_data.begin() + offset,
+                           binary_data.begin() + offset + key_len);
+            offset += key_len;
+
+            uint32_t value_len;
+            std::memcpy(&value_len, binary_data.data() + offset, sizeof(value_len));
+            offset += sizeof(value_len);
+
+            if (offset + value_len > binary_data.size()) {
+                return kcenon::common::Result<std::unique_ptr<value_store>>(
+                    kcenon::common::error_info{
+                        error_codes::corrupted_data,
+                        "value_store::deserialize_binary_result() - truncated value data",
+                        "container_system"});
+            }
+
+            std::vector<uint8_t> value_data(binary_data.begin() + offset,
+                                            binary_data.begin() + offset + value_len);
+            offset += value_len;
+
+            auto value_opt = value::deserialize(value_data);
+            if (value_opt) {
+                store->values_[key] = std::move(*value_opt);
+            } else {
+                return kcenon::common::Result<std::unique_ptr<value_store>>(
+                    kcenon::common::error_info{
+                        error_codes::value_parse_failed,
+                        "value_store::deserialize_binary_result() - failed to deserialize value for key: "
+                            + key,
+                        "container_system"});
+            }
+        }
+
+        return kcenon::common::ok(std::move(store));
+    } catch (const std::bad_alloc&) {
+        return kcenon::common::Result<std::unique_ptr<value_store>>(
+            kcenon::common::error_info{
+                error_codes::memory_allocation_failed,
+                "value_store::deserialize_binary_result() - memory allocation failed",
+                "container_system"});
+    } catch (const std::exception& e) {
+        return kcenon::common::Result<std::unique_ptr<value_store>>(
+            kcenon::common::error_info{
+                error_codes::deserialization_failed,
+                std::string("value_store::deserialize_binary_result() - unexpected error: ") + e.what(),
+                "container_system"});
+    }
+}
+#endif
+
 } // namespace kcenon::container

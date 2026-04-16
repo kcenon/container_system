@@ -201,5 +201,5 @@ auto user = User::from_variant(user_data);
 ## Additional Resources
 
 - [Container System API Reference](../API_REFERENCE.md)
-- [Value System Comparison](../VALUE_SYSTEM_COMPARISON_ANALYSIS.md)
-- [Ecosystem Integration Guide](../../../ECOSYSTEM.md)
+<!-- TODO: VALUE_SYSTEM_COMPARISON_ANALYSIS.md is no longer present in the repo; link removed pending replacement. -->
+- [Ecosystem Integration Guide](../ECOSYSTEM.md)

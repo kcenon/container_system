@@ -528,9 +528,6 @@ public:
     std::optional<optimized_value> get_variant_value(const std::string& key) const noexcept;
     std::vector<optimized_value> get_variant_values() const;
 
-    bool is_variant_mode() const noexcept { return true; }
-    void enable_variant_mode(bool enable = true) { (void)enable; }
-
     void remove(std::string_view target_name, bool update_immediately = false);
     void initialize();
 

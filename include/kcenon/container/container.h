@@ -485,18 +485,6 @@ namespace kcenon::container
 		 */
 		std::vector<optimized_value> get_variant_values() const;
 
-		/**
-		 * @brief Check if container is in variant mode
-		 * @return Always true - container uses variant-based storage
-		 */
-		bool is_variant_mode() const noexcept { return true; }
-
-		/**
-		 * @brief Enable variant mode (no-op, always enabled)
-		 * @param enable Ignored parameter for API compatibility
-		 */
-		void enable_variant_mode(bool enable = true) { (void)enable; }
-
 		// =======================================================================
 
 
@@ -948,7 +936,7 @@ namespace kcenon::container
 		/**
 		 * @brief Internal implementation for setting a single optimized_value
 		 * @param val The optimized_value to set
-		 * @note Used by both deprecated and new API methods
+		 * @note Used by public API methods
 		 */
 		void set_unit_impl(const optimized_value& val);
 

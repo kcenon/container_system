@@ -510,7 +510,7 @@ std::cout << "Memory: " << diag.memory_usage << " bytes\n";
 - [Quick Start](QUICK_START.md) - 5-minute guide
 - [Best Practices](BEST_PRACTICES.md) - Production patterns
 - [Architecture](../ARCHITECTURE.md) - System design
-- [Integration](../INTEGRATION.md) - Integration guides
+- [Integration](INTEGRATION.md) - Integration guides
 
 **Examples:**
 - `examples/basic/` - Basic usage

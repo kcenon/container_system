@@ -24,6 +24,7 @@
 - [Platform Support](#platform-support)
 - [Thread Safety](#thread-safety)
 - [Error Handling](#error-handling)
+- [API Stability](#api-stability)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -36,7 +37,7 @@ The Container System is a high-performance C++20 type-safe container framework d
 - **High Performance**: SIMD-accelerated operations (1.8M serializations/sec, 25M SIMD ops/sec)
 - **Well-Tested**: Perfect RAII score (20/20), zero data races, comprehensive testing
 - **Cross-Platform**: Native support for Linux, macOS, Windows with optimized build scripts
-- **Multiple Formats**: Binary, JSON, XML serialization with automatic format detection
+- **Multiple Formats**: Binary, JSON, XML, MessagePack serialization with automatic format detection
 
 ### Mission
 
@@ -181,7 +182,7 @@ common_system (ONLY required ecosystem dependency)
 
 | Module | Built by Root Project | Dependencies | Scope |
 |--------|-----------------------|--------------|-------|
-| `grpc/` | No | `protobuf` 3.21.12, `gRPC` 1.51.1, system threads | Isolated integration module built with `cmake -S grpc -B build-grpc` |
+| `grpc/` | No | `protobuf` 4.25.1, `gRPC` 1.60.0, system threads | Isolated integration module built with `cmake -S grpc -B build-grpc` |
 
 SBOM artifacts treat `grpc/` as a module-scoped optional deliverable. The root
 package dependency inventory covers `vcpkg.json`, and the SBOM report adds a
@@ -417,7 +418,7 @@ int main() {
 - 🔄 [Migration](docs/guides/MIGRATION.md) - Migration from messaging_system
 - 🧪 [Testing](docs/contributing/TESTING.md) - Testing guidelines
 
-**Language Support**: Most documents available in English and Korean (`*_KO.md`)
+**Language Support**: Most documents available in English and Korean (`*.kr.md`)
 
 ## Value Types
 
@@ -516,7 +517,7 @@ std::string data = container->serialize();
 db.insert_query("INSERT INTO messages (data) VALUES (?)", data);
 ```
 
-🌐 **[Integration Guide →](docs/INTEGRATION.md)**
+🌐 **[Integration Guide →](docs/guides/INTEGRATION.md)**
 
 ## Building
 
@@ -600,15 +601,15 @@ FetchContent_Declare(container_system ...)
 FetchContent_MakeAvailable(container_system)
 ```
 
-🔧 **[Build Guide →](docs/guides/BUILD_GUIDE.md)**
+🔧 **[Build Guide →](docs/guides/QUICK_START.md)**
 
 ## Platform Support
 
 | Platform | Architecture | Compiler | SIMD | Status |
 |----------|-------------|----------|------|--------|
-| **Linux** | x86_64, ARM64 | GCC 9+, Clang 10+ | AVX2, NEON | ✅ |
-| **macOS** | x86_64, ARM64 (Apple Silicon) | Apple Clang, Clang | AVX2, NEON | ✅ |
-| **Windows** | x86, x64 | MSVC 2019+, Clang | AVX2 | ✅ |
+| **Linux** | x86_64, ARM64 | GCC 11+, Clang 14+ | AVX2, NEON | ✅ |
+| **macOS** | x86_64, ARM64 (Apple Silicon) | Apple Clang 14+, Clang 14+ | AVX2, NEON | ✅ |
+| **Windows** | x86, x64 | MSVC 2022+, Clang 14+ | AVX2 | ✅ |
 
 **Native Build Scripts**:
 - Linux/macOS: `scripts/dependency.sh`, `scripts/build.sh`
@@ -682,6 +683,43 @@ if (!get_result) {
 
 **Error Codes**: -400 to -499 (centralized in common_system)
 
+## API Stability
+
+Starting with **v1.0.0**, container_system provides the following API guarantees:
+
+### Stable Public API
+
+All types and functions in `include/kcenon/container/` are part of the stable public API:
+
+| Component | Header | Stability |
+|-----------|--------|-----------|
+| `value_container` / `message_buffer` | `container.h` | **Stable** |
+| Value types (`optimized_value`, `value_variant`) | `value_types.h` | **Stable** |
+| Serializer strategy + factory | `serializers/*.h` | **Stable** |
+| Result-based API (`*_result` methods) | `container/result_integration.h` | **Stable** |
+| Error codes | `container/error_codes.h` | **Stable** |
+| Schema validation | `container/schema.h` | **Stable** |
+| Policy containers | `policy_container.h`, `storage_policy.h` | **Stable** |
+
+### Internal API
+
+Headers under `internal/` (e.g., `memory_pool.h`, `simd_processor.h`, `thread_safe_container.h`) are implementation details and may change without notice between minor versions.
+
+### Deprecation Policy
+
+- Deprecated features are marked with `[[deprecated]]` and documented in `CHANGELOG.md`
+- Deprecated features remain available for at least **one minor version** before removal
+- Migration guides are provided in `docs/guides/` for all breaking changes
+
+### Versioning
+
+This project follows [Semantic Versioning](https://semver.org/):
+- **Patch** (1.0.x): Bug fixes, no API changes
+- **Minor** (1.x.0): New features, backward-compatible
+- **Major** (x.0.0): Breaking API changes (with migration guide)
+
+For migration from 0.x, see [docs/guides/MIGRATION.md](docs/guides/MIGRATION.md).
+
 ## Include Paths
 
 ### Canonical Include Path
@@ -725,7 +763,7 @@ We welcome contributions! Please see our [Contributing Guide](docs/contributing/
 
 - 💬 [GitHub Discussions](https://github.com/kcenon/container_system/discussions)
 - 🐛 [Issue Tracker](https://github.com/kcenon/container_system/issues)
-- 🤝 [Contributing Guide](docs/CONTRIBUTING.md)
+- 🤝 [Contributing Guide](docs/contributing/CONTRIBUTING.md)
 - 📧 Email: kcenon@naver.com
 
 ## License

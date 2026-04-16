@@ -14,7 +14,7 @@ category: "MIGR"
 
 > **Status**: Ready for Production
 > **Version**: 0.2.0.0
-> **Last Updated**: 2025-01-11
+> **Last Updated**: 2026-04-14
 >
 > **IMPORTANT**: As of this version, the void/bool returning methods are **DEPRECATED**
 > and will be removed in the next major version. Please migrate to Result-returning APIs.

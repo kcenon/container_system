@@ -15,6 +15,8 @@
 #pragma once
 
 #include "internal/value.h"
+#include "container/result_integration.h"
+#include "container/error_codes.h"
 
 #include <memory>
 #include <vector>
@@ -145,6 +147,30 @@ public:
      * @throws std::runtime_error if deserialization fails
      */
     static std::unique_ptr<value_store> deserialize_binary(const std::vector<uint8_t>& binary_data);
+
+#if CONTAINER_HAS_COMMON_RESULT
+    // =========================================================================
+    // Result-based Deserialization (no-throw alternatives)
+    // =========================================================================
+
+    /**
+     * @brief Deserialize from JSON string with Result return type
+     * @param json_data JSON string
+     * @return Result containing value_store or error info
+     * @exception_safety No-throw guarantee
+     */
+    [[nodiscard]] static kcenon::common::Result<std::unique_ptr<value_store>>
+        deserialize_result(std::string_view json_data) noexcept;
+
+    /**
+     * @brief Deserialize from binary format with Result return type
+     * @param binary_data Binary data
+     * @return Result containing value_store or error info
+     * @exception_safety No-throw guarantee
+     */
+    [[nodiscard]] static kcenon::common::Result<std::unique_ptr<value_store>>
+        deserialize_binary_result(const std::vector<uint8_t>& binary_data) noexcept;
+#endif
 
     // =========================================================================
     // Statistics (Optional)
