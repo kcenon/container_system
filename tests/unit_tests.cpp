@@ -755,6 +755,52 @@ TEST_F(ValueStoreSerializationTest, LargeValuesSerialization) {
     EXPECT_EQ(bytes_opt->size(), 10000u);
 }
 
+#if CONTAINER_HAS_COMMON_RESULT
+// ============================================================================
+// value_store Result-based Deserialization Tests (Issue #517)
+// ============================================================================
+
+TEST_F(ValueStoreSerializationTest, BinaryDeserializeResultRoundTrip) {
+    value_store store;
+    store.add("integer", value("integer", int32_t(42)));
+    store.add("text", value("text", std::string("hello world")));
+    store.add("flag", value("flag", true));
+
+    auto binary = store.serialize_binary();
+    auto result = value_store::deserialize_binary_result(binary);
+    ASSERT_TRUE(result.is_ok());
+
+    auto& restored = result.value();
+    ASSERT_NE(restored, nullptr);
+    EXPECT_EQ(restored->size(), 3u);
+    EXPECT_TRUE(restored->contains("integer"));
+    EXPECT_TRUE(restored->contains("text"));
+    EXPECT_TRUE(restored->contains("flag"));
+}
+
+TEST_F(ValueStoreSerializationTest, BinaryDeserializeResultInvalidData) {
+    // Empty data
+    std::vector<uint8_t> empty_data;
+    auto result1 = value_store::deserialize_binary_result(empty_data);
+    EXPECT_TRUE(result1.is_err());
+
+    // Too small (only version byte)
+    std::vector<uint8_t> too_small = {1};
+    auto result2 = value_store::deserialize_binary_result(too_small);
+    EXPECT_TRUE(result2.is_err());
+
+    // Invalid version
+    std::vector<uint8_t> bad_version = {99, 0, 0, 0, 0};
+    auto result3 = value_store::deserialize_binary_result(bad_version);
+    EXPECT_TRUE(result3.is_err());
+}
+
+TEST_F(ValueStoreSerializationTest, JSONDeserializeResultNotImplemented) {
+    auto result = value_store::deserialize_result("{}");
+    EXPECT_TRUE(result.is_err());
+}
+#endif
+
 // ============================================================================
 // JSON Escaping Tests (Issue #186)
 // ============================================================================
