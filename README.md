@@ -24,6 +24,7 @@
 - [Platform Support](#platform-support)
 - [Thread Safety](#thread-safety)
 - [Error Handling](#error-handling)
+- [API Stability](#api-stability)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -681,6 +682,43 @@ if (!get_result) {
 ```
 
 **Error Codes**: -400 to -499 (centralized in common_system)
+
+## API Stability
+
+Starting with **v1.0.0**, container_system provides the following API guarantees:
+
+### Stable Public API
+
+All types and functions in `include/kcenon/container/` are part of the stable public API:
+
+| Component | Header | Stability |
+|-----------|--------|-----------|
+| `value_container` / `message_buffer` | `container.h` | **Stable** |
+| Value types (`optimized_value`, `value_variant`) | `value_types.h` | **Stable** |
+| Serializer strategy + factory | `serializers/*.h` | **Stable** |
+| Result-based API (`*_result` methods) | `container/result_integration.h` | **Stable** |
+| Error codes | `container/error_codes.h` | **Stable** |
+| Schema validation | `container/schema.h` | **Stable** |
+| Policy containers | `policy_container.h`, `storage_policy.h` | **Stable** |
+
+### Internal API
+
+Headers under `internal/` (e.g., `memory_pool.h`, `simd_processor.h`, `thread_safe_container.h`) are implementation details and may change without notice between minor versions.
+
+### Deprecation Policy
+
+- Deprecated features are marked with `[[deprecated]]` and documented in `CHANGELOG.md`
+- Deprecated features remain available for at least **one minor version** before removal
+- Migration guides are provided in `docs/guides/` for all breaking changes
+
+### Versioning
+
+This project follows [Semantic Versioning](https://semver.org/):
+- **Patch** (1.0.x): Bug fixes, no API changes
+- **Minor** (1.x.0): New features, backward-compatible
+- **Major** (x.0.0): Breaking API changes (with migration guide)
+
+For migration from 0.x, see [docs/guides/MIGRATION.md](docs/guides/MIGRATION.md).
 
 ## Include Paths
 
