@@ -47,7 +47,6 @@ Key CMake options:
 - `CONTAINER_BUILD_BENCHMARKS` (OFF) — Benchmarks
 - `CONTAINER_USE_MEMORY_POOL` (ON) — Memory pool for small allocations
 - `CONTAINER_ENABLE_COROUTINES` (ON) — C++20 coroutine async API
-- `CONTAINER_LEGACY_API` (OFF) — Deprecated legacy API
 
 Presets: `default`, `debug`, `release`, `core-debug`, `core-release`, `asan`, `tsan`, `ubsan`, `ci`, `vcpkg`
 
