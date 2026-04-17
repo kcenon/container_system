@@ -36,7 +36,7 @@
 
 ### Phase 2 — Factual Errors / Version Mismatches
 
-13. `README.md:184` — gRPC/protobuf versions **`protobuf 3.21.12, gRPC 1.51.1`** conflict with `CLAUDE.md:83` which declares `gRPC 1.60.0 + protobuf 4.25.1`. `SOUP.md:55, 89` states protobuf `3.21.12`. `grpc/README.md:304` states `Protobuf >= 3.21.0`. Single source of truth is missing — three different versions. (Phase 2)
+13. `README.md:184` — gRPC/protobuf versions **`protobuf 3.21.12, gRPC 1.51.1`** conflict with `CLAUDE.md:83` which declares `gRPC 1.60.0 + protobuf 4.25.1`. `SOUP.md:55, 89` states protobuf `3.21.12`. `grpc/README.md:304` states `Protobuf >= 3.21.0`. Single source of truth is missing — three different versions. (Phase 2) — **RESOLVED**: `vcpkg.json` established as single source of truth (`gRPC 1.60.0`, `protobuf 4.25.1`). `LICENSE-THIRD-PARTY` aligned and `.github/workflows/docs-verify.yml` added to prevent drift (#524).
 14. `README.md:609` — Linux row: `GCC 9+, Clang 10+` contradicts `README.md:175` and `:738` which require `GCC 11+ / Clang 14+`. Self-contradiction inside same file. (Phase 2)
 15. `README.md:611` — Windows row: `MSVC 2019+` contradicts line `175` requiring `MSVC 2022+`. (Phase 2)
 16. `samples/README.md:64` — `C++20 compatible compiler (GCC 10+, Clang 12+, MSVC 2019+)` — toolchain floors lower than the official C++20/Concepts requirements in `README.md`. Project actually needs GCC 11+, Clang 14+, MSVC 2022+. (Phase 2)
