@@ -67,6 +67,7 @@ set(TEST_SOURCES
     policy_container_tests.cpp
     fast_parser_integration_tests.cpp
     serializer_factory_tests.cpp
+    iterator_tests.cpp
 )
 
 # Add async tests if coroutines are enabled
