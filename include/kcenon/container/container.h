@@ -46,6 +46,13 @@
 #include <unordered_map>
 #include <optional>
 #include <span>
+#include <iterator>
+
+#if defined(__has_include)
+#  if __has_include(<concepts>)
+#    include <concepts>
+#  endif
+#endif
 
 namespace kcenon::container
 {
@@ -857,7 +864,16 @@ namespace kcenon::container
 	 * @name STL Iterator Support
 	 * @brief Provides Standard Library-compatible iteration over container values
 	 *
-	 * Enables range-based for loops and STL algorithm usage:
+	 * Satisfies the STL iterator requirements so that range-based for loops,
+	 * standard algorithms, and iterator-based utilities (`std::distance`,
+	 * `std::advance`, `std::reverse`, ...) work directly on `value_container`.
+	 *
+	 * The iterator delegates to the underlying `std::vector<optimized_value>`
+	 * iterator. That alias satisfies `std::contiguous_iterator` (and therefore
+	 * `std::random_access_iterator`, `std::bidirectional_iterator`, and
+	 * `std::forward_iterator`) per [vector.iterators]. The public type aliases
+	 * below expose this as a standard container interface.
+	 *
 	 * @code
 	 *   value_container container;
 	 *   for (const auto& val : container) {
@@ -866,39 +882,86 @@ namespace kcenon::container
 	 *
 	 *   auto it = std::find_if(container.begin(), container.end(),
 	 *       [](const auto& v) { return v.type == value_types::int_value; });
+	 *
+	 *   // Bidirectional traversal:
+	 *   for (auto rit = container.rbegin(); rit != container.rend(); ++rit) {
+	 *       // Process values in reverse
+	 *   }
 	 * @endcode
 	 * @{
 	 */
 
-	/** @brief Iterator type for non-const traversal */
+	/** @brief Standard container type aliases (see [container.reqmts]) */
+	using value_type      = optimized_value;
+	using reference       = optimized_value&;
+	using const_reference = const optimized_value&;
+	using pointer         = optimized_value*;
+	using const_pointer   = const optimized_value*;
+	using size_type       = std::vector<optimized_value>::size_type;
+	using difference_type = std::vector<optimized_value>::difference_type;
+
+	/** @brief Iterator type for non-const traversal (contiguous iterator) */
 	using iterator = std::vector<optimized_value>::iterator;
 
-	/** @brief Iterator type for const traversal */
+	/** @brief Iterator type for const traversal (contiguous iterator) */
 	using const_iterator = std::vector<optimized_value>::const_iterator;
 
+	/** @brief Reverse iterator for bidirectional traversal */
+	using reverse_iterator = std::vector<optimized_value>::reverse_iterator;
+
+	/** @brief Const reverse iterator for bidirectional traversal */
+	using const_reverse_iterator =
+		std::vector<optimized_value>::const_reverse_iterator;
+
 	/** @brief Returns iterator to beginning of values */
-	iterator begin() { return optimized_units_.begin(); }
+	iterator begin() noexcept { return optimized_units_.begin(); }
 
 	/** @brief Returns iterator to end of values */
-	iterator end() { return optimized_units_.end(); }
+	iterator end() noexcept { return optimized_units_.end(); }
 
 	/** @brief Returns const iterator to beginning of values */
-	const_iterator begin() const { return optimized_units_.begin(); }
+	const_iterator begin() const noexcept { return optimized_units_.begin(); }
 
 	/** @brief Returns const iterator to end of values */
-	const_iterator end() const { return optimized_units_.end(); }
+	const_iterator end() const noexcept { return optimized_units_.end(); }
 
 	/** @brief Returns const iterator to beginning of values */
-	const_iterator cbegin() const { return optimized_units_.cbegin(); }
+	const_iterator cbegin() const noexcept { return optimized_units_.cbegin(); }
 
 	/** @brief Returns const iterator to end of values */
-	const_iterator cend() const { return optimized_units_.cend(); }
+	const_iterator cend() const noexcept { return optimized_units_.cend(); }
+
+	/** @brief Returns reverse iterator to last value */
+	reverse_iterator rbegin() noexcept { return optimized_units_.rbegin(); }
+
+	/** @brief Returns reverse iterator past the first value */
+	reverse_iterator rend() noexcept { return optimized_units_.rend(); }
+
+	/** @brief Returns const reverse iterator to last value */
+	const_reverse_iterator rbegin() const noexcept {
+		return optimized_units_.rbegin();
+	}
+
+	/** @brief Returns const reverse iterator past the first value */
+	const_reverse_iterator rend() const noexcept {
+		return optimized_units_.rend();
+	}
+
+	/** @brief Returns const reverse iterator to last value */
+	const_reverse_iterator crbegin() const noexcept {
+		return optimized_units_.crbegin();
+	}
+
+	/** @brief Returns const reverse iterator past the first value */
+	const_reverse_iterator crend() const noexcept {
+		return optimized_units_.crend();
+	}
 
 	/** @brief Returns number of values in container */
-	size_t size() const { return optimized_units_.size(); }
+	size_type size() const noexcept { return optimized_units_.size(); }
 
 	/** @brief Returns whether container is empty */
-	bool empty() const { return optimized_units_.empty(); }
+	bool empty() const noexcept { return optimized_units_.empty(); }
 
 	/** @} */
 
@@ -1110,5 +1173,22 @@ namespace kcenon::container
 	 * @since 2.0.0
 	 */
 	using message_buffer = value_container;
+
+	// =======================================================================
+	// Compile-time iterator conformance checks (Issue #526)
+	// =======================================================================
+
+#if defined(__cpp_lib_concepts) && __cpp_lib_concepts >= 202002L
+	static_assert(std::forward_iterator<value_container::iterator>,
+		"value_container::iterator must satisfy std::forward_iterator");
+	static_assert(std::forward_iterator<value_container::const_iterator>,
+		"value_container::const_iterator must satisfy std::forward_iterator");
+	static_assert(std::bidirectional_iterator<value_container::iterator>,
+		"value_container::iterator must satisfy std::bidirectional_iterator");
+	static_assert(
+		std::bidirectional_iterator<value_container::const_iterator>,
+		"value_container::const_iterator must satisfy "
+		"std::bidirectional_iterator");
+#endif
 
 } // namespace kcenon::container
