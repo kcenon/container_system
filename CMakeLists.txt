@@ -135,6 +135,7 @@ set(INTERNAL_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/internal/variant_value_factory.h
     ${CMAKE_CURRENT_SOURCE_DIR}/internal/memory_pool.h
     ${CMAKE_CURRENT_SOURCE_DIR}/internal/pool_allocator.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/internal/pool_allocator_adapter.h
     ${CMAKE_CURRENT_SOURCE_DIR}/internal/thread_safe_container.h
     ${CMAKE_CURRENT_SOURCE_DIR}/internal/thread_safe_container.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/internal/simd_processor.h
