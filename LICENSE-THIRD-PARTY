@@ -31,7 +31,7 @@ only by optional features, isolated module builds, or test tooling.
 |--------------------|------------------------------------------------|
 | Component          | gRPC remote procedure call framework           |
 | License            | Apache-2.0                                     |
-| Pinned Version     | 1.51.1                                         |
+| Pinned Version     | 1.60.0                                         |
 | Usage              | Transport/runtime dependency for the isolated `grpc/` deliverable |
 | Linking            | Shared                                         |
 | BSD-3 Compatible   | Yes                                            |
@@ -42,7 +42,7 @@ only by optional features, isolated module builds, or test tooling.
 |--------------------|------------------------------------------------|
 | Component          | Google Protocol Buffers                        |
 | License            | BSD-3-Clause                                   |
-| Pinned Version     | 3.21.12                                        |
+| Pinned Version     | 4.25.1                                         |
 | Usage              | Serialization and code generation for the isolated `grpc/` deliverable |
 | Linking            | Shared                                         |
 | BSD-3 Compatible   | Yes                                            |
