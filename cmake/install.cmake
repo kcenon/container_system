@@ -1,10 +1,7 @@
 # install.cmake - install rules, export set, package config generation
 #
 # Installs the container_system library, public headers, forwarding headers,
-# and CMake package configuration files. The behaviour mirrors the legacy
-# top-level CMakeLists.txt exactly — no destinations, components, or pattern
-# filters were changed by this refactor (issue #535). Issue #536 will revisit
-# the install layout.
+# and CMake package configuration files.
 
 include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
@@ -19,12 +16,8 @@ set(CONTAINER_SYSTEM_CMAKE_INSTALL_DIR "${CMAKE_INSTALL_LIBDIR}/cmake/container_
 #     #include <container.h>                    (legacy, via forwarding headers)
 #
 # The following directories are installed:
-#   - include/kcenon/container/  (canonical public headers)
-#   - include/container/         (forwarding headers for #include <container/...> paths)
-#   - core/      (forwarding headers for backward compatibility)
-#   - internal/  (internal implementation details)
-#   - integration/ (integration adapters)
-#   - messaging/ (domain-specific messaging container)
+#   - include/kcenon/container/  (canonical public headers, kcenon ecosystem convention)
+#   - include/container/         (deprecated forwarding headers; see DEPRECATION note below)
 # =============================================================================
 install(FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/container.h
@@ -40,7 +33,7 @@ install(TARGETS container_system
     INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
 
-# Canonical public headers (kcenon ecosystem convention)
+# Canonical public headers (kcenon ecosystem convention).
 install(DIRECTORY
     ${CMAKE_CURRENT_SOURCE_DIR}/include/kcenon
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
@@ -50,7 +43,10 @@ install(DIRECTORY
     PATTERN "*.hpp"
 )
 
-# Forwarding headers under include/container/ (for #include <container/...> paths)
+# Deprecated forwarding headers under include/container/ (for #include <container/...>
+# paths). Carries a #pragma message deprecation notice (issue #534, PR #539). This
+# install rule will be dropped together with the directory itself in v1.2.0.
+# TODO(v1.2.0): remove the include/container/ install rule and the directory.
 install(DIRECTORY
     ${CMAKE_CURRENT_SOURCE_DIR}/include/container
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
@@ -59,12 +55,6 @@ install(DIRECTORY
     PATTERN "*.h"
     PATTERN "*.hpp"
 )
-
-# Backward-compatible forwarding headers were previously installed from root-level
-# core/, internal/, integration/, messaging/ directories. Those directories were
-# removed in the source migration (issue #533); the corresponding install rule was
-# dropped because the directories no longer exist. Issue #536 will revisit the full
-# install layout.
 
 install(EXPORT container_system-targets
     FILE container_system-targets.cmake

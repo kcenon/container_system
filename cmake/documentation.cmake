@@ -4,9 +4,9 @@
 # convenience `docs` alias. Invocation is gated on Doxygen being installed
 # locally; absence is non-fatal.
 #
-# NOTE: The full Doxyfile/install layout review for documentation belongs to
-# issue #536. This module only relocates the existing logic from the
-# top-level CMakeLists.txt — it does not change any Doxygen settings.
+# Input list mirrors the canonical layout used by the standalone Doxyfile:
+# public headers live under include/kcenon/container/ and implementations
+# under src/. Free-form documentation pages live under docs/*.dox.
 
 # Find Doxygen for documentation generation
 find_package(Doxygen)
@@ -25,17 +25,22 @@ if(DOXYGEN_FOUND)
     set(DOXYGEN_CLASS_GRAPH YES)
     set(DOXYGEN_COLLABORATION_GRAPH YES)
 
-    # Input files and directories
-    # Note: legacy core/, internal/, integration/ paths were removed in the source
-    # migration (issue #533). Public headers now live under include/kcenon/container/
-    # and sources under src/. Issue #536 will revisit the full Doxyfile layout.
+    # Input files and directories.
+    # Restrict to the canonical source roots so generated docs do not pick up
+    # build artifacts or unrelated repo metadata. The standalone Doxyfile uses
+    # the same set of inputs.
     set(DOXYGEN_INPUT
-        ${CMAKE_CURRENT_SOURCE_DIR}
         ${CMAKE_CURRENT_SOURCE_DIR}/include/kcenon/container
         ${CMAKE_CURRENT_SOURCE_DIR}/src
         ${CMAKE_CURRENT_SOURCE_DIR}/examples
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities
         ${CMAKE_CURRENT_SOURCE_DIR}/README.md
-        ${CMAKE_CURRENT_SOURCE_DIR}/mainpage.dox
+        ${CMAKE_CURRENT_SOURCE_DIR}/docs/mainpage.dox
+        ${CMAKE_CURRENT_SOURCE_DIR}/docs/tutorial_containers.dox
+        ${CMAKE_CURRENT_SOURCE_DIR}/docs/tutorial_serialization.dox
+        ${CMAKE_CURRENT_SOURCE_DIR}/docs/tutorial_integration.dox
+        ${CMAKE_CURRENT_SOURCE_DIR}/docs/faq.dox
+        ${CMAKE_CURRENT_SOURCE_DIR}/docs/troubleshooting.dox
     )
 
     # Exclude patterns

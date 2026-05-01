@@ -66,6 +66,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - All tests now pass with `CONTAINER_NO_LEGACY_API` defined
   - Updated tests that relied on deprecated duplicate-key behavior
 
+- **Doxygen Input Paths and Install Rules Cleanup** (#536): Align Doxygen and `install(DIRECTORY ...)` rules with the canonical post-migration layout
+  - Doxyfile `INPUT` retains the canonical roots (`include/kcenon/container/`, `src/`, `examples/`, `utilities/`) and explicit `docs/*.dox` pages; stale layout-disclaimer comment removed
+  - Doxyfile `INCLUDE_PATH` repointed from removed legacy roots (`core/`, `values/`, `internal/`, `integration/`) to `include/`, `include/kcenon/container/`, and `src/`
+  - `cmake/documentation.cmake` `DOXYGEN_INPUT` repointed: removed source-root catch-all, removed non-existent root `mainpage.dox` reference, added explicit `docs/*.dox` pages, added `utilities/`
+  - `cmake/install.cmake` documentation block tightened to reflect actual install layout (canonical `include/kcenon/container/` + deprecated `include/container/`)
+  - Recorded `v1.2.0` removal milestone for the deprecated `include/container/` install rule alongside the directory itself
+  - Final sub-issue of EPIC #531 (directory layout normalization)
+
 ### Added
 - **Legacy API Deprecation Timeline** (#284): Document clear deprecation timeline in `legacy_api.h`
   - **v2.x**: Deprecated methods available by default with warnings
