@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Repoint Doxygen `INPUT`/`INCLUDE_PATH` and `cmake/documentation.cmake` `DOXYGEN_INPUT` to the canonical `include/kcenon/container/` + `src/` layout. Stale legacy references to `core/`, `internal/`, `integration/`, `values/` were removed; root-level `mainpage.dox` was repointed to the actual `docs/mainpage.dox` and the remaining tutorial/FAQ `.dox` pages were added explicitly. ([#536](https://github.com/kcenon/container_system/issues/536))
+- Tidy `cmake/install.cmake` documentation block to reflect the post-migration install layout (`include/kcenon/container/` canonical + `include/container/` deprecated). The deprecated forwarding tree's removal milestone (v1.2.0) is now recorded as a TODO marker next to its install rule. ([#536](https://github.com/kcenon/container_system/issues/536))
+
 ### Deprecated
 
 - Legacy forwarding header `include/container/optimizations/fast_parser.h` is deprecated; downstream consumers should include `<kcenon/container/optimizations/fast_parser.h>` instead. The legacy header now emits a build-time `#pragma message` warning. Scheduled for removal in the next minor release after v1.1.0. ([#534](https://github.com/kcenon/container_system/issues/534))

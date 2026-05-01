@@ -93,9 +93,10 @@ WARN_AS_ERROR          = NO
 WARN_IF_INCOMPLETE_DOC = YES
 WARN_FORMAT            = "$file:$line: $text"
 WARN_LOGFILE           =
-# Legacy ./core, ./internal, ./integration paths were removed in the source migration
-# (issue #533). Public headers now live under include/kcenon/container/ and sources
-# under src/. Issue #536 will revisit the full Doxyfile layout.
+# Public headers live under include/kcenon/container/, implementations under src/.
+# Examples and utility helpers are documented for reference. Free-form prose
+# pages are loaded individually as ./docs/*.dox to avoid pulling in unrelated
+# Markdown from the docs/ tree.
 INPUT                  = ./include/kcenon/container \
                          ./src \
                          ./examples \
@@ -284,10 +285,9 @@ MACRO_EXPANSION        = YES
 EXPAND_ONLY_PREDEF     = NO
 SEARCH_INCLUDES        = YES
 INCLUDE_PATH           = . \
-                         core \
-                         values \
-                         internal \
-                         integration
+                         include \
+                         include/kcenon/container \
+                         src
 INCLUDE_FILE_PATTERNS  = *.h \
                          *.hpp
 PREDEFINED             = HAS_MESSAGING_FEATURES \
