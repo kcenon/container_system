@@ -19,7 +19,7 @@
 
 #include <gtest/gtest.h>
 
-#include <internal/pool_allocator_adapter.h>
+#include <kcenon/container/internal/pool_allocator_adapter.h>
 
 #include <atomic>
 #include <list>

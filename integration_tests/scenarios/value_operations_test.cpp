@@ -19,7 +19,7 @@
 #include <gtest/gtest.h>
 #include "framework/system_fixture.h"
 #include "framework/test_helpers.h"
-#include <core/container.h>
+#include <kcenon/container/container.h>
 #include <limits>
 
 using namespace kcenon::container;

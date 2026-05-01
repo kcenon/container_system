@@ -28,12 +28,12 @@
 #pragma once
 
 #include "storage_policy.h"
-#include "container/types.h"
-#include "container/error_codes.h"
+#include "types.h"
+#include "error_codes.h"
 #include "value_types.h"
 
 // Unified Result<T> integration (Issue #335)
-#include "container/result_integration.h"
+#include "result_integration.h"
 
 #include <memory>
 #include <mutex>

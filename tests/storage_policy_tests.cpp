@@ -15,7 +15,7 @@
  */
 
 #include <gtest/gtest.h>
-#include "core/storage_policy.h"
+#include <kcenon/container/storage_policy.h>
 
 #include <string>
 #include <algorithm>

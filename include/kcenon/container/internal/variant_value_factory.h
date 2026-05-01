@@ -8,8 +8,8 @@ All rights reserved.
 #pragma once
 
 #include "value.h"
-#include "core/value_types.h"
-#include "core/concepts.h"
+#include "../value_types.h"
+#include "../concepts.h"
 #include <string>
 #include <string_view>
 #include <vector>

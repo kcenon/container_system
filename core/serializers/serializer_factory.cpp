@@ -2,11 +2,11 @@
 // Copyright (c) 2021, 🍀☀🌕🌥 🌊
 // See the LICENSE file in the project root for full license information.
 
-#include "serializer_factory.h"
-#include "binary_serializer.h"
-#include "json_serializer.h"
-#include "xml_serializer.h"
-#include "msgpack_serializer.h"
+#include <kcenon/container/serializers/serializer_factory.h>
+#include <kcenon/container/serializers/binary_serializer.h>
+#include <kcenon/container/serializers/json_serializer.h>
+#include <kcenon/container/serializers/xml_serializer.h>
+#include <kcenon/container/serializers/msgpack_serializer.h>
 
 namespace kcenon::container
 {

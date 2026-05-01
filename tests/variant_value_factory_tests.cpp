@@ -4,7 +4,7 @@ BSD 3-Clause License
 Copyright (c) 2024, All rights reserved.
 *****************************************************************************/
 
-#include "internal/variant_value_factory.h"
+#include <kcenon/container/internal/variant_value_factory.h>
 #include <gtest/gtest.h>
 #include <string>
 #include <vector>

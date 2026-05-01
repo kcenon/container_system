@@ -14,7 +14,7 @@
 #include <chrono>
 #include <condition_variable>
 #include "value.h"
-#include "core/concepts.h"
+#include "../concepts.h"
 
 namespace kcenon::container
 {

@@ -13,7 +13,7 @@
  * layer to convert between native containers and protobuf messages.
  */
 
-#include "core/container.h"
+#include <kcenon/container/container.h>
 
 #include <memory>
 #include <string>

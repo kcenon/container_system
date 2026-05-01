@@ -580,7 +580,7 @@ TEST(EdgeCaseTest, MaximumValues) {
 // value_store Serialization Tests
 // ============================================================================
 
-#include "core/value_store.h"
+#include <kcenon/container/value_store.h>
 
 class ValueStoreSerializationTest : public ::testing::Test {
 protected:
@@ -2056,7 +2056,7 @@ TEST_F(BatchOperationTest, MethodChaining) {
 // Schema Validation Tests (Issue #228)
 // ============================================================================
 
-#include "core/container/schema.h"
+#include <kcenon/container/schema.h>
 
 class SchemaValidationTest : public ::testing::Test {
 protected:

@@ -2,9 +2,9 @@
 // Copyright (c) 2021, 🍀☀🌕🌥 🌊
 // See the LICENSE file in the project root for full license information.
 
-#include "msgpack_serializer.h"
-#include "../container.h"
-#include "../container/msgpack.h"
+#include <kcenon/container/serializers/msgpack_serializer.h>
+#include <kcenon/container/container.h>
+#include <kcenon/container/msgpack.h>
 
 namespace kcenon::container
 {

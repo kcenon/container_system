@@ -2,9 +2,9 @@
 // Copyright (c) 2021, 🍀☀🌕🌥 🌊
 // See the LICENSE file in the project root for full license information.
 
-#include "xml_serializer.h"
-#include "../container.h"
-#include "../container/variant_helpers.h"
+#include <kcenon/container/serializers/xml_serializer.h>
+#include <kcenon/container/container.h>
+#include <kcenon/container/variant_helpers.h>
 #include "utilities/core/formatter.h"
 
 namespace kcenon::container

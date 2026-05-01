@@ -2,7 +2,7 @@
 // Copyright (c) 2021, 🍀☀🌕🌥 🌊
 // See the LICENSE file in the project root for full license information.
 
-#include "messaging_integration.h"
+#include <kcenon/container/integration/messaging_integration.h>
 #include <sstream>
 #include <iomanip>
 

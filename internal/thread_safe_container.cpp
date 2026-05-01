@@ -2,7 +2,7 @@
 // Copyright (c) 2024, 🍀☀🌕🌥 🌊
 // See the LICENSE file in the project root for full license information.
 
-#include "thread_safe_container.h"
+#include <kcenon/container/internal/thread_safe_container.h>
 #include "utilities/core/formatter.h"
 #include <algorithm>
 #include <cstring>

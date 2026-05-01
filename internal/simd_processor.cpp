@@ -2,7 +2,7 @@
 // Copyright (c) 2024, 🍀☀🌕🌥 🌊
 // See the LICENSE file in the project root for full license information.
 
-#include "simd_processor.h"
+#include <kcenon/container/internal/simd_processor.h>
 #include <algorithm>
 #include <cmath>
 #include <limits>

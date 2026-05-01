@@ -15,7 +15,7 @@
 #include "adapters/container_adapter.h"
 #include "adapters/value_mapper.h"
 #include "container_service.pb.h"
-#include "core/container.h"
+#include <kcenon/container/container.h>
 
 #include <cmath>
 #include <limits>

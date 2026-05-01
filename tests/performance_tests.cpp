@@ -15,11 +15,11 @@
 #include <iomanip>
 #include <cstdlib>
 
-#include "core/container.h"
+#include <kcenon/container/container.h>
 #include "test_compat.h"
 
 #ifdef HAS_MESSAGING_FEATURES
-#include "integration/messaging_integration.h"
+#include <kcenon/container/integration/messaging_integration.h>
 #endif
 
 using namespace kcenon::container;

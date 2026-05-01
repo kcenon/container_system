@@ -8,7 +8,7 @@
  *
  * Include this header to use async features:
  * @code
- * #include <internal/async/async.h>
+ * #include <kcenon/container/internal/async/async.h>
  *
  * using namespace kcenon::container::async;
  *

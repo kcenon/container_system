@@ -13,7 +13,7 @@
 
 #include "container.h"
 
-#include <kcenon/container/container/schema.h>
+#include <kcenon/container/schema.h>
 
 #include <iostream>
 #include <string>
