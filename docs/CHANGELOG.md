@@ -86,6 +86,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Align `docs/API_REFERENCE.kr.md` header version to `0.1.0` matching `vcpkg.json` and `CMakeLists.txt`
 
 ### Deprecated
+- **Legacy `include/container/` Forwarding Headers** (#534): Mark legacy forwarding headers as deprecated and document the removal target
+  - Deprecate `include/container/optimizations/fast_parser.h` — include `<kcenon/container/optimizations/fast_parser.h>` instead
+  - Mechanism: pure `#include` forwarder, so `[[deprecated]]` attribute cannot attach; uses `#pragma message` (portable across GCC, Clang, MSVC) to emit a build-time warning when consumers include the legacy path
+  - **Removal target**: scheduled for removal in the next minor release after v1.1.0
+  - In-repo legacy use migrated: `tests/fast_parser_integration_tests.cpp` now includes the canonical `<kcenon/container/...>` path
+  - Part of #531 (EPIC: directory layout normalization)
+
 - **Legacy void/bool API Methods** (#241): Mark legacy methods as deprecated in favor of Result-returning APIs
   - Deprecate `serialize()` in favor of `serialize_result()`
   - Deprecate `serialize_array()` in favor of `serialize_array_result()`
