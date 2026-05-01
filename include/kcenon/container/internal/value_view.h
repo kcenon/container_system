@@ -28,7 +28,7 @@
 
 #pragma once
 
-#include "core/value_types.h"
+#include "../value_types.h"
 
 #include <string>
 #include <string_view>

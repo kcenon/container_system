@@ -7,8 +7,8 @@
  * @brief Implementation of container_schema class
  */
 
-#include "container/schema.h"
-#include "container.h"
+#include <kcenon/container/schema.h>
+#include <kcenon/container/container.h>
 
 #include <algorithm>
 #include <cmath>

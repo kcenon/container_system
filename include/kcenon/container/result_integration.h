@@ -17,7 +17,7 @@
  * @note Include this header instead of manually checking for Result<T> availability.
  *
  * @code
- * #include "core/container/result_integration.h"
+ * #include <kcenon/container/result_integration.h>
  *
  * #if CONTAINER_HAS_RESULT
  * kcenon::common::Result<int> get_value() { ... }

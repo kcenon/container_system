@@ -17,7 +17,7 @@
 
 #include <gtest/gtest.h>
 #include "test_compat.h"
-#include <core/container/schema.h>
+#include <kcenon/container/schema.h>
 
 using namespace kcenon::container;
 

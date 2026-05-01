@@ -1,7 +1,7 @@
 #include <cstdint>
 #include <vector>
 #include <string>
-#include "core/container.h"
+#include <kcenon/container/container.h>
 
 // Fuzzer entry point
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {

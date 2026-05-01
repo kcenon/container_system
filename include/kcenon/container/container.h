@@ -21,13 +21,13 @@
 // =============================================================================
 // Sub-headers (modular include structure)
 // =============================================================================
-#include "container/fwd.h"
-#include "container/types.h"
-#include "container/variant_helpers.h"
-#include "container/error_codes.h"
-#include "container/schema.h"
-#include "container/metrics.h"
-#include "container/msgpack.h"
+#include "fwd.h"
+#include "types.h"
+#include "variant_helpers.h"
+#include "error_codes.h"
+#include "schema.h"
+#include "metrics.h"
+#include "msgpack.h"
 
 #include "value_types.h"
 #include "simd_batch.h"  // Renamed from typed_container.h (Issue #328)
@@ -35,7 +35,7 @@
 #include "internal/value_view.h"
 
 // Unified Result<T> integration (Issue #335)
-#include "container/result_integration.h"
+#include "result_integration.h"
 
 #include <memory>
 #include <vector>

@@ -15,7 +15,7 @@
 
 #pragma once
 
-#include "../value_types.h"
+#include "value_types.h"
 
 // Note: When included from container.h, these paths resolve correctly
 // via the container -> . symlink in project root

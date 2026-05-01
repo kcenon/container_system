@@ -4,8 +4,8 @@
 
 #pragma once
 
-#include "core/value_store.h"
-#include "internal/value.h"
+#include "../value_store.h"
+#include "../internal/value.h"
 
 #include <memory>
 #include <string>

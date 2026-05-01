@@ -2,19 +2,19 @@
 // Copyright (c) 2021, 🍀☀🌕🌥 🌊
 // See the LICENSE file in the project root for full license information.
 
-#include "container.h"
+#include <kcenon/container/container.h>
 
 #include "utilities/core/formatter.h"
 #include "utilities/core/convert_string.h"
 
-#include "value_types.h"
-#include "internal/value.h"
-#include "internal/pool_allocator.h"
-#include "serializers/serializer_factory.h"
-#include "serializers/binary_serializer.h"
-#include "serializers/json_serializer.h"
-#include "serializers/xml_serializer.h"
-#include "serializers/msgpack_serializer.h"
+#include <kcenon/container/value_types.h>
+#include <kcenon/container/internal/value.h>
+#include <kcenon/container/internal/pool_allocator.h>
+#include <kcenon/container/serializers/serializer_factory.h>
+#include <kcenon/container/serializers/binary_serializer.h>
+#include <kcenon/container/serializers/json_serializer.h>
+#include <kcenon/container/serializers/xml_serializer.h>
+#include <kcenon/container/serializers/msgpack_serializer.h>
 // Legacy value includes removed - using variant-based storage only
 
 #include <fcntl.h>

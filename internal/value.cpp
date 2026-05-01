@@ -5,8 +5,8 @@ Copyright (c) 2024, 🍀☀🌕🌥 🌊
 All rights reserved.
 *****************************************************************************/
 
-#include "value.h"
-#include "thread_safe_container.h"
+#include <kcenon/container/internal/value.h>
+#include <kcenon/container/internal/thread_safe_container.h>
 #include <sstream>
 #include <iomanip>
 #include <cstring>

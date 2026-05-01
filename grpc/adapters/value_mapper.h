@@ -13,7 +13,7 @@
  * conversions and provides utilities for type introspection.
  */
 
-#include "core/value_types.h"
+#include <kcenon/container/value_types.h>
 
 #include <cstdint>
 #include <type_traits>

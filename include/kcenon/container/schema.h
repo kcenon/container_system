@@ -32,7 +32,7 @@
 
 #include "types.h"
 #include "error_codes.h"
-#include "../value_types.h"
+#include "value_types.h"
 
 #include <string>
 #include <string_view>

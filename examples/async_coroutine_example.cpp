@@ -35,7 +35,7 @@
 #include "container.h"
 
 #if CONTAINER_HAS_COROUTINES
-#include "internal/async/async.h"
+#include <kcenon/container/internal/async/async.h>
 #endif
 
 using namespace kcenon::container;

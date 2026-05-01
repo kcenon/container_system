@@ -7,8 +7,8 @@ All rights reserved.
 
 #pragma once
 
-#include "core/value_types.h"
-#include "core/concepts.h"
+#include "../value_types.h"
+#include "../concepts.h"
 #include <variant>
 #include <string>
 #include <string_view>

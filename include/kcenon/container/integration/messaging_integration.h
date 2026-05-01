@@ -6,9 +6,9 @@
 
 // Internal implementation file - suppress deprecation warnings
 #define CONTAINER_INTERNAL_INCLUDE
-#include "core/container.h"
+#include "../container.h"
 #undef CONTAINER_INTERNAL_INCLUDE
-#include "core/concepts.h"
+#include "../concepts.h"
 #include <functional>
 #include <memory>
 #include <concepts>
