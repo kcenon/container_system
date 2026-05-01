@@ -102,28 +102,28 @@ set(MAIN_HEADER
 # Core files (public API)
 set(CORE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/include/kcenon/container/container.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/core/container.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/core/container.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/include/kcenon/container/fwd.h
     ${CMAKE_CURRENT_SOURCE_DIR}/include/kcenon/container/types.h
     ${CMAKE_CURRENT_SOURCE_DIR}/include/kcenon/container/variant_helpers.h
     ${CMAKE_CURRENT_SOURCE_DIR}/include/kcenon/container/schema.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/core/container_schema.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/core/container_schema.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/include/kcenon/container/value_types.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/core/value_types.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/core/value_types.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/include/kcenon/container/value_store.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/core/value_store.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/core/value_store.cpp
     # Serializer strategy pattern (Issue #310, #313, #314)
     ${CMAKE_CURRENT_SOURCE_DIR}/include/kcenon/container/serializers/serializer_strategy.h
     ${CMAKE_CURRENT_SOURCE_DIR}/include/kcenon/container/serializers/serializer_factory.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/core/serializers/serializer_factory.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/core/serializers/serializer_factory.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/include/kcenon/container/serializers/binary_serializer.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/core/serializers/binary_serializer.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/core/serializers/binary_serializer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/include/kcenon/container/serializers/json_serializer.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/core/serializers/json_serializer.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/core/serializers/json_serializer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/include/kcenon/container/serializers/xml_serializer.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/core/serializers/xml_serializer.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/core/serializers/xml_serializer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/include/kcenon/container/serializers/msgpack_serializer.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/core/serializers/msgpack_serializer.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/core/serializers/msgpack_serializer.cpp
 )
 
 # Legacy value files removed - using variant-based storage only
@@ -131,15 +131,15 @@ set(CORE_FILES
 # Internal implementation files
 set(INTERNAL_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/include/kcenon/container/internal/value.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/internal/value.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/internal/value.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/include/kcenon/container/internal/variant_value_factory.h
     ${CMAKE_CURRENT_SOURCE_DIR}/include/kcenon/container/internal/memory_pool.h
     ${CMAKE_CURRENT_SOURCE_DIR}/include/kcenon/container/internal/pool_allocator.h
     ${CMAKE_CURRENT_SOURCE_DIR}/include/kcenon/container/internal/pool_allocator_adapter.h
     ${CMAKE_CURRENT_SOURCE_DIR}/include/kcenon/container/internal/thread_safe_container.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/internal/thread_safe_container.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/internal/thread_safe_container.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/include/kcenon/container/internal/simd_processor.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/internal/simd_processor.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/internal/simd_processor.cpp
 )
 
 # Async coroutine files (C++20)
@@ -159,7 +159,7 @@ set(INTEGRATION_FILES)
 if(ENABLE_MESSAGING_FEATURES OR ENABLE_EXTERNAL_INTEGRATION OR ENABLE_PERFORMANCE_METRICS)
     list(APPEND INTEGRATION_FILES
          ${CMAKE_CURRENT_SOURCE_DIR}/include/kcenon/container/integration/messaging_integration.h
-         ${CMAKE_CURRENT_SOURCE_DIR}/integration/messaging_integration.cpp
+         ${CMAKE_CURRENT_SOURCE_DIR}/src/integration/messaging_integration.cpp
     )
     message(STATUS "Container: Integration modules included")
 endif()
@@ -167,7 +167,7 @@ endif()
 # Messaging files (domain-specific)
 set(MESSAGING_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/include/kcenon/container/messaging/message_container.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/messaging/message_container.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/messaging/message_container.cpp
 )
 
 # Combine all files
@@ -482,12 +482,13 @@ if(DOXYGEN_FOUND)
     set(DOXYGEN_COLLABORATION_GRAPH YES)
 
     # Input files and directories
+    # Note: legacy core/, internal/, integration/ paths were removed in the source
+    # migration (issue #533). Public headers now live under include/kcenon/container/
+    # and sources under src/. Issue #536 will revisit the full Doxyfile layout.
     set(DOXYGEN_INPUT
         ${CMAKE_CURRENT_SOURCE_DIR}
-        ${CMAKE_CURRENT_SOURCE_DIR}/core
-        ${CMAKE_CURRENT_SOURCE_DIR}/values
-        ${CMAKE_CURRENT_SOURCE_DIR}/internal
-        ${CMAKE_CURRENT_SOURCE_DIR}/integration
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/kcenon/container
+        ${CMAKE_CURRENT_SOURCE_DIR}/src
         ${CMAKE_CURRENT_SOURCE_DIR}/examples
         ${CMAKE_CURRENT_SOURCE_DIR}/README.md
         ${CMAKE_CURRENT_SOURCE_DIR}/mainpage.dox
@@ -597,18 +598,11 @@ install(DIRECTORY
     PATTERN "*.hpp"
 )
 
-# Backward-compatible forwarding headers and internal implementation
-install(DIRECTORY
-    ${CMAKE_CURRENT_SOURCE_DIR}/core
-    ${CMAKE_CURRENT_SOURCE_DIR}/internal
-    ${CMAKE_CURRENT_SOURCE_DIR}/integration
-    ${CMAKE_CURRENT_SOURCE_DIR}/messaging
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-    COMPONENT Development
-    FILES_MATCHING
-    PATTERN "*.h"
-    PATTERN "*.hpp"
-)
+# Backward-compatible forwarding headers were previously installed from root-level
+# core/, internal/, integration/, messaging/ directories. Those directories were
+# removed in the source migration (issue #533); the corresponding install rule was
+# dropped because the directories no longer exist. Issue #536 will revisit the full
+# install layout.
 
 install(EXPORT container_system-targets
     FILE container_system-targets.cmake

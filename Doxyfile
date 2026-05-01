@@ -93,10 +93,11 @@ WARN_AS_ERROR          = NO
 WARN_IF_INCOMPLETE_DOC = YES
 WARN_FORMAT            = "$file:$line: $text"
 WARN_LOGFILE           =
-INPUT                  = ./core \
-                         ./values \
-                         ./internal \
-                         ./integration \
+# Legacy ./core, ./internal, ./integration paths were removed in the source migration
+# (issue #533). Public headers now live under include/kcenon/container/ and sources
+# under src/. Issue #536 will revisit the full Doxyfile layout.
+INPUT                  = ./include/kcenon/container \
+                         ./src \
                          ./examples \
                          ./utilities \
                          ./docs/mainpage.dox \
