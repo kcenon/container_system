@@ -5,10 +5,94 @@ on:
     types: [published]
 
 jobs:
+  # The reusable workflow this job calls performs SHA512 computation AND
+  # verify-against-actual-archive in a single hardened step. See
+  # kcenon/common_system PR #676 (Closes kcenon/common_system#675, part of
+  # EPIC kcenon/common_system#674). It re-downloads the release tarball
+  # via `curl -fsSL --retry 3 -o <file>` (file-based, never piped) and
+  # exits 1 on mismatch BEFORE any portfile commit, which is the exact
+  # acceptance criterion of #542.
+  #
+  # Pinning to the hardened merge commit (rather than @main) ensures the
+  # SHA verification step cannot silently regress if the reusable workflow
+  # is later modified. Bump this ref deliberately when accepting future
+  # upstream changes.
   sync:
-    uses: kcenon/common_system/.github/workflows/sync-vcpkg-registry.yml@main
+    uses: kcenon/common_system/.github/workflows/sync-vcpkg-registry.yml@c90d4b828d3063989a850a785c7a60753c2b35ea
     with:
       port-name: kcenon-container-system
       version: ${{ github.event.release.tag_name }}
     secrets:
       REGISTRY_PAT: ${{ secrets.VCPKG_REGISTRY_PAT }}
+
+  # Defense-in-depth: independent SHA512 verification step that runs in
+  # parallel with the reusable workflow above. If the reusable workflow's
+  # internal verification is ever bypassed or regresses, this job still
+  # catches a mismatch between the published GitHub archive bytes and the
+  # SHA written to vcpkg-registry/ports/kcenon-container-system/portfile.cmake.
+  #
+  # On mismatch this job exits 1 with a clear annotation that names both
+  # the registry SHA and the archive SHA. The job is purely additive: a
+  # successful release passes both jobs; a regression in either one fails
+  # the release before consumers see a stale SHA.
+  verify-sha512-against-archive:
+    name: Verify portfile SHA512 against published archive
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs: sync
+    steps:
+      - name: Verify SHA512 against actual GitHub archive
+        env:
+          TAG_NAME: ${{ github.event.release.tag_name }}
+          REPO: kcenon/container_system
+        run: |
+          # Re-fetch the release archive AFTER sync has committed the new
+          # SHA to the registry, recompute SHA512 from the actual bytes, and
+          # compare against what the registry portfile now declares.
+          # Closes #542 / part of kcenon/common_system#674.
+          set -euo pipefail
+          VERSION="${TAG_NAME#v}"
+          TAG="v${VERSION}"
+          ARCHIVE_URL="https://github.com/${REPO}/archive/refs/tags/${TAG}.tar.gz"
+          VERIFY_FILE="$(mktemp)"
+
+          echo "Re-fetching ${ARCHIVE_URL} for independent verification..."
+          # File-based download (NOT piped). curl -fsSL fails on HTTP 4xx/5xx
+          # so a 404 cannot silently produce the empty-input SHA-512 constant
+          # cf83e1357eefb8bdfcb5993d18e3262e8a8e0e8b7... (see kcenon
+          # auto-memory: curl_sha512_empty_input).
+          if ! curl -fsSL --retry 3 --retry-delay 2 -o "${VERIFY_FILE}" "${ARCHIVE_URL}"; then
+            echo "::error::Failed to download release archive for verification: ${ARCHIVE_URL}"
+            rm -f "${VERIFY_FILE}"
+            exit 1
+          fi
+
+          ACTUAL_SHA=$(sha512sum "${VERIFY_FILE}" | awk '{print $1}')
+          rm -f "${VERIFY_FILE}"
+
+          # Pull the SHA the registry now declares for this port.
+          REGISTRY_PORTFILE_URL="https://raw.githubusercontent.com/kcenon/vcpkg-registry/main/ports/kcenon-container-system/portfile.cmake"
+          PORTFILE_TMP="$(mktemp)"
+          if ! curl -fsSL --retry 3 --retry-delay 2 -o "${PORTFILE_TMP}" "${REGISTRY_PORTFILE_URL}"; then
+            echo "::error::Failed to download registry portfile: ${REGISTRY_PORTFILE_URL}"
+            rm -f "${PORTFILE_TMP}"
+            exit 1
+          fi
+          REGISTRY_SHA=$(grep -oE 'SHA512[[:space:]]+[0-9a-f]{128}' "${PORTFILE_TMP}" | awk '{print $2}' | head -1)
+          rm -f "${PORTFILE_TMP}"
+
+          if [[ -z "${REGISTRY_SHA}" ]]; then
+            echo "::error::Could not extract SHA512 from registry portfile"
+            exit 1
+          fi
+
+          if [[ "${REGISTRY_SHA}" != "${ACTUAL_SHA}" ]]; then
+            echo "::error::SHA512 mismatch detected for ${TAG}"
+            echo "::error::Registry portfile: ${REGISTRY_SHA}"
+            echo "::error::GitHub archive:    ${ACTUAL_SHA}"
+            echo "::error::Cold-cache vcpkg consumers would hit install failure."
+            exit 1
+          fi
+
+          echo "SHA512 verified against ${ARCHIVE_URL}"
+          echo "  ${ACTUAL_SHA}"
