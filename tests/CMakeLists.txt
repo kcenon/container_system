@@ -69,6 +69,7 @@ set(TEST_SOURCES
     serializer_factory_tests.cpp
     iterator_tests.cpp
     allocator_adapter_tests.cpp
+    message_container_serialization_tests.cpp
 )
 
 # Add async tests if coroutines are enabled
