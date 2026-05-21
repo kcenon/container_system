@@ -159,6 +159,17 @@ public:
     static void deserialize_binary_into(value_store& store,
                                         const std::vector<uint8_t>& binary_data);
 
+    /**
+     * @brief Deserialize JSON format into an existing value_store
+     * @param store Target value_store populated in place on success
+     * @param json_data JSON string produced by serialize()
+     * @throws std::runtime_error if deserialization fails
+     * @note Required because value_store is non-copyable/non-movable; on a
+     *       malformed input the target store is left unmodified.
+     */
+    static void deserialize_into(value_store& store,
+                                 std::string_view json_data);
+
 #if CONTAINER_HAS_COMMON_RESULT
     // =========================================================================
     // Result-based Deserialization (no-throw alternatives)
