@@ -5,8 +5,91 @@
 #include <kcenon/container/value_store.h>
 #include <stdexcept>
 #include <cstring>
+#include <string>
+#include <unordered_map>
+
+#ifdef __has_include
+#if __has_include(<nlohmann/json.hpp>)
+#include <nlohmann/json.hpp>
+#define HAS_NLOHMANN_JSON 1
+#else
+#define HAS_NLOHMANN_JSON -1
+#endif
+#else
+#define HAS_NLOHMANN_JSON -1
+#endif
 
 namespace kcenon::container {
+
+#if HAS_NLOHMANN_JSON == 1
+namespace {
+
+// Reconstruct a single value from its JSON object representation, mirroring
+// the format produced by value::to_json():
+//   {"name":"<name>","type":<int 0-15>,"value":<typed-json>}
+value value_from_json(const std::string& key, const nlohmann::json& node) {
+    if (!node.is_object() || !node.contains("type") || !node.contains("value")) {
+        throw std::runtime_error(
+            "value_store::deserialize() - malformed value object for key: " + key);
+    }
+
+    const std::string name = node.contains("name") && node["name"].is_string()
+                                 ? node["name"].get<std::string>()
+                                 : key;
+    const int type_int = node["type"].get<int>();
+    const nlohmann::json& v = node["value"];
+
+    switch (static_cast<value_types>(type_int)) {
+        case value_types::null_value:
+            return value(name);
+        case value_types::bool_value:
+            return value(name, v.get<bool>());
+        case value_types::short_value:
+            return value(name, static_cast<int16_t>(v.get<int>()));
+        case value_types::ushort_value:
+            return value(name, static_cast<uint16_t>(v.get<unsigned int>()));
+        case value_types::int_value:
+            return value(name, v.get<int32_t>());
+        case value_types::uint_value:
+            return value(name, v.get<uint32_t>());
+        case value_types::long_value:
+        case value_types::llong_value:
+            return value(name, v.get<int64_t>());
+        case value_types::ulong_value:
+        case value_types::ullong_value:
+            return value(name, v.get<uint64_t>());
+        case value_types::float_value:
+            return value(name, v.get<float>());
+        case value_types::double_value:
+            return value(name, v.get<double>());
+        case value_types::string_value:
+            return value(name, v.get<std::string>());
+        case value_types::bytes_value: {
+            // to_json() renders bytes as a lowercase hex string
+            const std::string hex = v.get<std::string>();
+            if (hex.size() % 2 != 0) {
+                throw std::runtime_error(
+                    "value_store::deserialize() - odd-length hex for key: " + key);
+            }
+            std::vector<uint8_t> bytes;
+            bytes.reserve(hex.size() / 2);
+            for (size_t i = 0; i < hex.size(); i += 2) {
+                bytes.push_back(static_cast<uint8_t>(
+                    std::stoul(hex.substr(i, 2), nullptr, 16)));
+            }
+            return value(name, std::move(bytes));
+        }
+        case value_types::container_value:
+        case value_types::array_value:
+        default:
+            throw std::runtime_error(
+                "value_store::deserialize() - unsupported value type for key '" + key
+                + "': " + std::to_string(type_int));
+    }
+}
+
+} // namespace
+#endif
 
 void value_store::add(const std::string& key, value val) {
     // Always acquire lock to eliminate TOCTOU vulnerability (see #190)
@@ -139,11 +222,41 @@ std::vector<uint8_t> value_store::serialize_binary_impl() const {
     return result;
 }
 
-std::unique_ptr<value_store> value_store::deserialize(std::string_view /*json_data*/) {
-    // JSON deserialization requires a JSON parser library
-    // For now, use serialize_binary/deserialize_binary for round-trip serialization
+std::unique_ptr<value_store> value_store::deserialize(std::string_view json_data) {
+#if HAS_NLOHMANN_JSON == 1
+    auto store = std::make_unique<value_store>();
+    deserialize_into(*store, json_data);
+    return store;
+#else
+    (void)json_data;
     throw std::runtime_error(
         "value_store::deserialize() requires JSON parser - use deserialize_binary() instead");
+#endif
+}
+
+void value_store::deserialize_into(value_store& store, std::string_view json_data) {
+#if HAS_NLOHMANN_JSON == 1
+    auto json_obj = nlohmann::json::parse(json_data);
+    if (!json_obj.is_object()) {
+        throw std::runtime_error(
+            "value_store::deserialize() - top-level JSON value must be an object");
+    }
+
+    // Parse into a temporary map so a malformed input leaves the target unmodified
+    std::unordered_map<std::string, value> parsed;
+    for (auto it = json_obj.begin(); it != json_obj.end(); ++it) {
+        parsed.emplace(it.key(), value_from_json(it.key(), it.value()));
+    }
+
+    // Commit parsed entries atomically once the whole document is validated
+    std::unique_lock lock(store.mutex_);
+    store.values_ = std::move(parsed);
+#else
+    (void)store;
+    (void)json_data;
+    throw std::runtime_error(
+        "value_store::deserialize() requires JSON parser - use deserialize_binary() instead");
+#endif
 }
 
 std::unique_ptr<value_store> value_store::deserialize_binary(const std::vector<uint8_t>& binary_data) {
@@ -239,12 +352,33 @@ void value_store::reset_statistics() {
 
 #if CONTAINER_HAS_COMMON_RESULT
 kcenon::common::Result<std::unique_ptr<value_store>>
-value_store::deserialize_result(std::string_view /*json_data*/) noexcept {
+value_store::deserialize_result(std::string_view json_data) noexcept {
+#if HAS_NLOHMANN_JSON == 1
+    try {
+        auto store = std::make_unique<value_store>();
+        deserialize_into(*store, json_data);
+        return kcenon::common::ok(std::move(store));
+    } catch (const std::bad_alloc&) {
+        return kcenon::common::Result<std::unique_ptr<value_store>>(
+            kcenon::common::error_info{
+                error_codes::memory_allocation_failed,
+                "value_store::deserialize_result() - memory allocation failed",
+                "container_system"});
+    } catch (const std::exception& e) {
+        return kcenon::common::Result<std::unique_ptr<value_store>>(
+            kcenon::common::error_info{
+                error_codes::deserialization_failed,
+                std::string("value_store::deserialize_result() - ") + e.what(),
+                "container_system"});
+    }
+#else
+    (void)json_data;
     return kcenon::common::Result<std::unique_ptr<value_store>>(
         kcenon::common::error_info{
             error_codes::deserialization_failed,
             "value_store::deserialize_result() requires JSON parser - use deserialize_binary_result() instead",
             "container_system"});
+#endif
 }
 
 kcenon::common::Result<std::unique_ptr<value_store>>

@@ -177,13 +177,11 @@ std::unique_ptr<message_container> message_container::deserialize(std::string_vi
         if (header.contains("version")) container->version_ = header["version"];
     }
 
-    // Deserialize payload
-    // Note: payload is already default-constructed, we modify it in place
+    // Deserialize payload in place into payload_
+    // (value_store is non-copyable/non-movable, so an in-place loader is required)
     if (json_obj.contains("payload")) {
         std::string payload_str = json_obj["payload"].dump();
-        // TODO: Implement in-place deserialization for value_store
-        // For now, this is a placeholder - actual implementation would need
-        // value_store to support in-place updates
+        value_store::deserialize_into(container->payload_, payload_str);
     }
 
     return container;
