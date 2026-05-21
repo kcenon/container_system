@@ -148,7 +148,12 @@ std::unique_ptr<value_store> value_store::deserialize(std::string_view /*json_da
 
 std::unique_ptr<value_store> value_store::deserialize_binary(const std::vector<uint8_t>& binary_data) {
     auto store = std::make_unique<value_store>();
+    deserialize_binary_into(*store, binary_data);
+    return store;
+}
 
+void value_store::deserialize_binary_into(value_store& store,
+                                          const std::vector<uint8_t>& binary_data) {
     if (binary_data.size() < 1 + sizeof(uint32_t)) {
         throw std::runtime_error("value_store::deserialize_binary() - invalid data: too small");
     }
@@ -166,6 +171,9 @@ std::unique_ptr<value_store> value_store::deserialize_binary(const std::vector<u
     uint32_t count;
     std::memcpy(&count, binary_data.data() + offset, sizeof(count));
     offset += sizeof(count);
+
+    // Parse into a temporary map so a malformed input leaves the target unmodified
+    std::unordered_map<std::string, value> parsed;
 
     // Read each key-value pair
     for (uint32_t i = 0; i < count; ++i) {
@@ -204,14 +212,16 @@ std::unique_ptr<value_store> value_store::deserialize_binary(const std::vector<u
 
         auto value_opt = value::deserialize(value_data);
         if (value_opt) {
-            store->values_[key] = std::move(*value_opt);
+            parsed[key] = std::move(*value_opt);
         } else {
             throw std::runtime_error("value_store::deserialize_binary() - failed to deserialize value for key: "
                                     + key);
         }
     }
 
-    return store;
+    // Commit parsed entries atomically once the whole buffer is validated
+    std::unique_lock lock(store.mutex_);
+    store.values_ = std::move(parsed);
 }
 
 size_t value_store::get_read_count() const {

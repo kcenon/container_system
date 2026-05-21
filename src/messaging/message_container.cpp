@@ -226,10 +226,13 @@ std::unique_ptr<message_container> message_container::deserialize_binary(const s
     // This is a simplified version - proper JSON parsing would be needed
 #endif
 
-    // Read payload data
-    // TODO: Implement in-place deserialization for value_store
-    // std::vector<uint8_t> payload_data(binary_data.begin() + 4 + header_size, binary_data.end());
-    // container->payload_ would need to be deserialized in place
+    // Read payload data and deserialize it in place into payload_
+    // (value_store is non-copyable/non-movable, so an in-place loader is required)
+    if (binary_data.size() > 4 + header_size) {
+        std::vector<uint8_t> payload_data(binary_data.begin() + 4 + header_size,
+                                          binary_data.end());
+        value_store::deserialize_binary_into(container->payload_, payload_data);
+    }
 
     return container;
 }
