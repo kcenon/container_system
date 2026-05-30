@@ -1,6 +1,20 @@
 # Container System Examples
 
-This directory contains example applications demonstrating the enhanced container system features.
+This directory contains comprehensive, real-world **examples** that combine
+multiple Container System features into complete scenarios.
+
+## Samples vs Examples
+
+The repository keeps two distinct directories with non-overlapping roles:
+
+| Directory   | Role                                                                                  |
+|-------------|---------------------------------------------------------------------------------------|
+| `samples/`  | Minimal, single-feature snippets. Quick to read, copy-pasteable, one concept each.    |
+| `examples/` | Comprehensive, real-world programs that combine multiple features (async, Asio, messaging integration, schema validation, SIMD, etc.) into complete scenarios. |
+
+Rule of thumb: if it shows **one feature** as simply as possible it belongs in
+[`samples/`](../samples/README.md); if it shows **how features work together**
+in a realistic flow it belongs here.
 
 ## Examples
 
