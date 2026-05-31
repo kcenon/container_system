@@ -4,20 +4,15 @@ name: gRPC Integration Build
 # own CMakeLists.txt that is intentionally separate from the main build, so the
 # default CI (ci.yml) does not exercise it. This dedicated job configures and
 # builds grpc/ out-of-band and runs its integration tests.
+#
+# This workflow is intentionally manual-only (workflow_dispatch). The gRPC layer
+# pulls in heavy vcpkg dependencies (grpc, protobuf) plus the kcenon-common-system
+# port, whose upstream tarball hash can drift independently of this repository.
+# Such external breakage must not gate unrelated pull requests, so the job is run
+# on demand rather than automatically on push / pull_request. Trigger it manually
+# from the Actions tab when validating changes under grpc/ or to vcpkg.json.
 
 on:
-  push:
-    branches: [ main, develop ]
-    paths:
-      - 'grpc/**'
-      - 'vcpkg.json'
-      - '.github/workflows/grpc-build.yml'
-  pull_request:
-    branches: [ main, develop ]
-    paths:
-      - 'grpc/**'
-      - 'vcpkg.json'
-      - '.github/workflows/grpc-build.yml'
   workflow_dispatch:
 
 jobs:
