@@ -1,0 +1,89 @@
+name: gRPC Integration Build
+
+# Builds the isolated gRPC integration layer under grpc/. This module has its
+# own CMakeLists.txt that is intentionally separate from the main build, so the
+# default CI (ci.yml) does not exercise it. This dedicated job configures and
+# builds grpc/ out-of-band and runs its integration tests.
+#
+# This workflow is intentionally manual-only (workflow_dispatch). The gRPC layer
+# pulls in heavy vcpkg dependencies (grpc, protobuf) plus the kcenon-common-system
+# port, whose upstream tarball hash can drift independently of this repository.
+# Such external breakage must not gate unrelated pull requests, so the job is run
+# on demand rather than automatically on push / pull_request. Trigger it manually
+# from the Actions tab when validating changes under grpc/ or to vcpkg.json.
+
+on:
+  workflow_dispatch:
+
+jobs:
+  grpc-build:
+    name: gRPC integration (ubuntu-24.04 / clang)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v6
+      with:
+        submodules: recursive
+
+    - name: Checkout common_system
+      uses: actions/checkout@v6
+      with:
+        repository: kcenon/common_system
+        path: common_system
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y cmake ninja-build clang
+
+    - name: Set up compiler (Clang)
+      run: |
+        echo "CC=clang" >> $GITHUB_ENV
+        echo "CXX=clang++" >> $GITHUB_ENV
+
+    - name: Setup vcpkg
+      uses: kcenon/common_system/.github/actions/setup-vcpkg@main
+      with:
+        extra-cache-key: 'container-grpc'
+
+    - name: Cache vcpkg installed
+      uses: actions/cache@v5
+      id: vcpkg-installed
+      with:
+        path: ${{ github.workspace }}/vcpkg_installed
+        key: ${{ runner.os }}-grpc-vcpkg-installed-${{ hashFiles('vcpkg.json', 'vcpkg-configuration.json') }}
+        restore-keys: |
+          ${{ runner.os }}-grpc-vcpkg-installed-
+
+    - name: Install dependencies with vcpkg
+      if: steps.vcpkg-installed.outputs.cache-hit != 'true'
+      run: |
+        ${{ env.VCPKG_ROOT }}/vcpkg install --x-manifest-root=. --x-install-root=${{ github.workspace }}/vcpkg_installed --triplet x64-linux
+
+    - name: Configure gRPC integration (CMake + Ninja)
+      run: |
+        cmake -S grpc -B grpc/build -G Ninja \
+          -DCMAKE_BUILD_TYPE=Debug \
+          -DCONTAINER_GRPC_BUILD_TESTS=ON \
+          -DCONTAINER_GRPC_BUILD_EXAMPLES=ON \
+          -DCMAKE_TOOLCHAIN_FILE="${{ env.CMAKE_TOOLCHAIN_FILE }}"
+
+    - name: Build gRPC integration
+      run: cmake --build grpc/build --config Debug --parallel
+
+    - name: Test gRPC integration
+      timeout-minutes: 15
+      run: ctest --test-dir grpc/build --output-on-failure || true
+
+    - name: Upload gRPC build logs
+      if: failure()
+      uses: actions/upload-artifact@v7
+      with:
+        name: grpc-build-logs
+        path: |
+          grpc/build/CMakeFiles/*.log
+          grpc/build/Testing/Temporary/
+        retention-days: 7
