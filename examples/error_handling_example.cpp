@@ -26,32 +26,43 @@ int main()
 
 	// 1. Error code message lookup
 	std::cout << "\n1. Error code messages:" << std::endl;
-	std::cout << "   Code 101: " << error_codes::get_message(101) << std::endl;
-	std::cout << "   Code 201: " << error_codes::get_message(201) << std::endl;
-	std::cout << "   Code 301: " << error_codes::get_message(301) << std::endl;
+	std::cout << "   type_mismatch: " << error_codes::get_message(error_codes::type_mismatch)
+			  << std::endl;
+	std::cout << "   deserialization_failed: "
+			  << error_codes::get_message(error_codes::deserialization_failed) << std::endl;
+	std::cout << "   schema_validation_failed: "
+			  << error_codes::get_message(error_codes::schema_validation_failed) << std::endl;
 
 	// 2. Error categories
 	std::cout << "\n2. Error categories:" << std::endl;
-	std::cout << "   101 is value error: " << (error_codes::is_value_error(101) ? "yes" : "no")
+	std::cout << "   type_mismatch is value error: "
+			  << (error_codes::is_value_error(error_codes::type_mismatch) ? "yes" : "no")
 			  << std::endl;
-	std::cout << "   201 is serialization: "
-			  << (error_codes::is_serialization_error(201) ? "yes" : "no") << std::endl;
-	std::cout << "   301 is validation: " << (error_codes::is_validation_error(301) ? "yes" : "no")
+	std::cout << "   deserialization_failed is serialization: "
+			  << (error_codes::is_serialization_error(error_codes::deserialization_failed) ? "yes" : "no")
 			  << std::endl;
-	std::cout << "   401 is resource: " << (error_codes::is_resource_error(401) ? "yes" : "no")
+	std::cout << "   schema_validation_failed is validation: "
+			  << (error_codes::is_validation_error(error_codes::schema_validation_failed) ? "yes" : "no")
 			  << std::endl;
-	std::cout << "   501 is thread: " << (error_codes::is_thread_error(501) ? "yes" : "no")
+	std::cout << "   file_not_found is resource: "
+			  << (error_codes::is_resource_error(error_codes::file_not_found) ? "yes" : "no")
+			  << std::endl;
+	std::cout << "   lock_timeout is thread: "
+			  << (error_codes::is_thread_error(error_codes::lock_timeout) ? "yes" : "no")
 			  << std::endl;
 
 	// 3. Category lookup
 	std::cout << "\n3. Category names:" << std::endl;
-	std::cout << "   Code 101 category: " << error_codes::get_category(101) << std::endl;
-	std::cout << "   Code 201 category: " << error_codes::get_category(201) << std::endl;
-	std::cout << "   Code 301 category: " << error_codes::get_category(301) << std::endl;
+	std::cout << "   type_mismatch category: "
+			  << error_codes::get_category(error_codes::type_mismatch) << std::endl;
+	std::cout << "   deserialization_failed category: "
+			  << error_codes::get_category(error_codes::deserialization_failed) << std::endl;
+	std::cout << "   schema_validation_failed category: "
+			  << error_codes::get_category(error_codes::schema_validation_failed) << std::endl;
 
 	// 4. Formatted error messages
 	std::cout << "\n4. Formatted messages:" << std::endl;
-	auto msg = error_codes::make_message(101, "username");
+	auto msg = error_codes::make_message(error_codes::type_mismatch, "username");
 	std::cout << "   " << msg << std::endl;
 
 	std::cout << "\nDone." << std::endl;
