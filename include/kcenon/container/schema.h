@@ -59,32 +59,40 @@ namespace kcenon::container
 
 	/**
 	 * @brief Error codes specific to schema validation
+	 *
+	 * These codes are surfaced through kcenon::common error_info via
+	 * container_schema::validate_result(), so they MUST live inside common's
+	 * reserved container_system band [-499, -400]. They occupy the
+	 * schema-validation sub-band (-450 to -459), distinct from
+	 * error_codes::'s validation sub-band (-410 to -419).
+	 *
+	 * @see kcenon::container::container_schema::validate_result
 	 */
 	namespace validation_codes
 	{
 		/** @brief Required field is missing from container */
-		constexpr int missing_required = 310;
+		constexpr int missing_required = -450;
 
 		/** @brief Field type does not match schema definition */
-		constexpr int type_mismatch = 311;
+		constexpr int type_mismatch = -451;
 
 		/** @brief Numeric value is outside specified range */
-		constexpr int out_of_range = 312;
+		constexpr int out_of_range = -452;
 
 		/** @brief String/bytes length is outside specified bounds */
-		constexpr int invalid_length = 313;
+		constexpr int invalid_length = -453;
 
 		/** @brief String does not match specified regex pattern */
-		constexpr int pattern_mismatch = 314;
+		constexpr int pattern_mismatch = -454;
 
 		/** @brief Value is not in the allowed values list */
-		constexpr int not_in_allowed_values = 315;
+		constexpr int not_in_allowed_values = -455;
 
 		/** @brief Custom validator returned failure */
-		constexpr int custom_validation_failed = 316;
+		constexpr int custom_validation_failed = -456;
 
 		/** @brief Nested container schema validation failed */
-		constexpr int nested_validation_failed = 317;
+		constexpr int nested_validation_failed = -457;
 
 		/**
 		 * @brief Get human-readable message for validation error code

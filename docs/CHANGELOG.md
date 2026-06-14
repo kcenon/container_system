@@ -24,6 +24,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Breaking Changes
+- **Remap error codes into common's reserved negative band** (#551): All `error_codes::` and `validation_codes::` constants are renumbered from their old positive bands (1xx value, 2xx serialization, 3xx validation, 4xx resource, 5xx thread-safety) to **negative** values inside common_system's reserved `container_system` range `[-499, -400]`.
+  - **Why**: container error codes are cast into the shared `kcenon::common::error_info.code`. common classifies any code `>= 0` as `Success` (and `> 0` as `Invalid` since common #698), so the previous positive codes were silently mis-classified instead of being recognised as `ContainerSystem`.
+  - **New sub-bands** (all distinct, within `[-499, -400]`): value `-400..-409`, validation `-410..-419`, serialization `-420..-429`, resource `-430..-439`, thread-safety `-440..-449`, schema-level `validation_codes` `-450..-459`.
+  - **Alignment**: obvious codes match `kcenon::common::error::codes::container_system::` (e.g. `type_mismatch == value_type_mismatch == -400`, `invalid_value == invalid_value_type == -401`, `serialization_failed == -420`, `deserialization_failed == -421`, `invalid_format == -422`).
+  - **`get_category(int)`** updated to the negative sub-bands; the returned category strings (`value_operation`, `serialization`, `validation`, `resource`, `thread_safety`, `unknown`) are unchanged.
+  - **BREAKING**: the numeric value of every container error code changes. Consumers that compare against literal integer codes, persist them, or transmit them across a wire MUST update. Code that uses the named constants (`error_codes::key_not_found`, etc.) requires no change.
+  - Ships as **v1.1.0**, coordinated across the ecosystem. Version not bumped here (owner's release decision).
 - **Remove Deprecated Serialization Methods** (#307): Complete removal of deprecated serialization API
   - **BREAKING**: Remove `serialize()` (void return) - Use `serialize_string(serialization_format::binary)` instead
   - **BREAKING**: Remove `serialize_array()` - Use `serialize(serialization_format::binary)` instead
