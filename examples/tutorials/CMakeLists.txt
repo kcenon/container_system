@@ -14,26 +14,26 @@ set(SAMPLE_PROGRAMS
 # Build each sample program
 foreach(SAMPLE ${SAMPLE_PROGRAMS})
     add_executable(${SAMPLE} ${SAMPLE}.cpp)
-    
+
     # Link with container library
-    target_link_libraries(${SAMPLE} 
-        PRIVATE 
+    target_link_libraries(${SAMPLE}
+        PRIVATE
             container_system
     )
-    
+
     # Set C++20 standard
     set_target_properties(${SAMPLE} PROPERTIES
         CXX_STANDARD 20
         CXX_STANDARD_REQUIRED ON
         CXX_EXTENSIONS OFF
     )
-    
+
     # Add compile definitions
     target_compile_definitions(${SAMPLE} PRIVATE
         $<$<CONFIG:Debug>:_DEBUG>
         $<$<CONFIG:Release>:NDEBUG>
     )
-    
+
     # Platform-specific settings
     if(WIN32)
         target_compile_definitions(${SAMPLE} PRIVATE
@@ -41,7 +41,7 @@ foreach(SAMPLE ${SAMPLE_PROGRAMS})
             NOMINMAX
         )
     endif()
-    
+
     # Install sample executables
     install(TARGETS ${SAMPLE}
         RUNTIME DESTINATION bin/samples

@@ -13,7 +13,7 @@
             "binaryDir": "${sourceDir}/build",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release",
-                "BUILD_WITH_COMMON_SYSTEM": "ON",
+                "KCENON_WITH_COMMON_SYSTEM": "ON",
                 "BUILD_TESTS": "OFF",
                 "BUILD_CONTAINER_SAMPLES": "OFF",
                 "CONTAINER_BUILD_INTEGRATION_TESTS": "OFF"

@@ -115,7 +115,7 @@ jobs:
       run: |
         cmake -B build -G Ninja \
           -DCMAKE_BUILD_TYPE=Release \
-          -DBUILD_WITH_COMMON_SYSTEM=ON \
+          -DKCENON_WITH_COMMON_SYSTEM=ON \
           -DBUILD_TESTS=OFF \
           -DCONTAINER_BUILD_INTEGRATION_TESTS=OFF \
           -DCONTAINER_BUILD_BENCHMARKS=OFF \
@@ -133,7 +133,7 @@ jobs:
       run: |
         cmake -B build -G Ninja `
           -DCMAKE_BUILD_TYPE=Release `
-          -DBUILD_WITH_COMMON_SYSTEM=ON `
+          -DKCENON_WITH_COMMON_SYSTEM=ON `
           -DBUILD_TESTS=OFF `
           -DCONTAINER_BUILD_INTEGRATION_TESTS=OFF `
           -DCONTAINER_BUILD_BENCHMARKS=OFF `
