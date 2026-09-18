@@ -4,6 +4,10 @@ on:
   release:
     types: [published]
 
+permissions:
+  contents: read
+  pull-requests: read
+
 jobs:
   # The reusable workflow this job calls performs SHA512 computation AND
   # verify-against-actual-archive in a single hardened step. See
@@ -22,6 +26,8 @@ jobs:
     with:
       port-name: kcenon-container-system
       version: ${{ github.event.release.tag_name }}
+      coherence-tools-ref: 6f76d9b9480d0dffc9167dc4a2ca564cde708b4b
+      tag-reality-mode: advisory
     secrets:
       REGISTRY_PAT: ${{ secrets.VCPKG_REGISTRY_PAT }}
 
