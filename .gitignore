@@ -86,3 +86,8 @@ monitoring_system/
 network_system/
 container_system/
 .npm-cache/
+
+# Coherence gate reports and Python tests
+coherence-results/
+__pycache__/
+*.pyc
