@@ -13,7 +13,7 @@ The repository keeps two distinct directories with non-overlapping roles:
 | `examples/` | Comprehensive, real-world programs that combine multiple features (async, Asio, messaging integration, schema validation, SIMD, etc.) into complete scenarios. |
 
 Rule of thumb: if it shows **one feature** as simply as possible it belongs in
-[`samples/`](../samples/README.md); if it shows **how features work together**
+[`samples/`](../examples/tutorials/README.md); if it shows **how features work together**
 in a realistic flow it belongs here.
 
 ## Examples

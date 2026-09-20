@@ -76,7 +76,7 @@ jobs:
           cmake -B build \
             -DCMAKE_TOOLCHAIN_FILE=cmake/toolchain-arm64-linux.cmake \
             -DCMAKE_BUILD_TYPE=Release \
-            -DBUILD_WITH_COMMON_SYSTEM=$BUILD_WITH_COMMON \
+            -DKCENON_WITH_COMMON_SYSTEM=$BUILD_WITH_COMMON \
             -DBUILD_TESTS=ON \
             -DBUILD_CONTAINER_SAMPLES=OFF \
             -DBUILD_CONTAINER_EXAMPLES=OFF \

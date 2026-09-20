@@ -99,7 +99,7 @@ Per-subdirectory README files documenting components outside the `docs/` tree.
 
 | # | doc_id | Topic | Authority Document | Status |
 |---|--------|-------|-------------------|--------|
-| S1 | CNT-SUB-001 | Samples overview | [samples/README.md](../samples/README.md) | Released |
+| S1 | CNT-SUB-001 | Samples overview | [examples/tutorials/README.md](../examples/tutorials/README.md) | Released |
 | S2 | CNT-SUB-002 | Examples overview | [examples/README.md](../examples/README.md) | Released |
 | S3 | CNT-SUB-003 | Benchmarks overview | [benchmarks/README.md](../benchmarks/README.md) | Released |
 | S4 | CNT-SUB-004 | gRPC integration module | [grpc/README.md](../grpc/README.md) | Released |

@@ -1,3 +1,5 @@
+include("${CMAKE_CURRENT_LIST_DIR}/KcenonDependencyOptions.cmake")
+
 # options.cmake - container_system feature toggles and option declarations
 #
 # This module declares all `option()` and CACHE variables consumed by other
@@ -14,7 +16,8 @@ option(BUILD_TESTS "Build unit tests" ON)
 option(BUILD_CONTAINER_SAMPLES "Build container system samples" ON)
 option(USE_THREAD_SAFE_OPERATIONS "Enable thread-safe operations" ON)
 option(USE_LOCKFREE_BY_DEFAULT "Use lock-free implementations by default" OFF)
-option(BUILD_WITH_COMMON_SYSTEM "Enable common_system integration" ON)
+kcenon_dependency_option(KCENON_WITH_COMMON_SYSTEM BUILD_WITH_COMMON_SYSTEM
+    "Enable common_system integration" ON)
 
 if(NOT BUILD_WITH_COMMON_SYSTEM)
     message(FATAL_ERROR "common_system integration is now mandatory for container_system.")

@@ -1,13 +1,13 @@
 # samples.cmake - samples, examples, and benchmarks subdirectories
 #
-# Conditionally includes the samples/, examples/, and benchmarks/
+# Conditionally includes the examples/tutorials/, examples/, and benchmarks/
 # subdirectories. All three are gated on NOT BUILD_CONTAINERSYSTEM_AS_SUBMODULE
 # so that downstream consumers including container_system as a submodule do
 # not pull in extra targets unexpectedly.
 
 if(NOT BUILD_CONTAINERSYSTEM_AS_SUBMODULE)
     if(BUILD_CONTAINER_SAMPLES)
-        add_subdirectory(samples)
+        add_subdirectory(examples/tutorials samples)
         message(STATUS "Container samples will be built")
     endif()
 

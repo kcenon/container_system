@@ -14,7 +14,7 @@ The repository keeps two distinct directories with non-overlapping roles:
 
 Rule of thumb: if it shows **one feature** as simply as possible it belongs in
 `samples/`; if it shows **how features work together** in a realistic flow it
-belongs in [`examples/`](../examples/README.md).
+belongs in [`examples/`](../README.md).
 
 ## Available Samples
 
@@ -99,7 +99,7 @@ cd bin/samples
 
 ### Alternative Build (samples only)
 ```bash
-cd samples
+cd examples/tutorials
 mkdir build && cd build
 cmake ..
 make
