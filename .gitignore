@@ -86,3 +86,11 @@ monitoring_system/
 network_system/
 container_system/
 .npm-cache/
+
+coherence-results/
+
+__pycache__/
+
+*.pyc
+
+!ci/*.json
