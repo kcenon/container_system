@@ -523,7 +523,7 @@ endif()
 
 if(NOT BUILD_CONTAINERSYSTEM_AS_SUBMODULE)
     if(BUILD_CONTAINER_SAMPLES)
-        add_subdirectory(samples)
+        add_subdirectory(examples/tutorials samples)
         message(STATUS "Container samples will be built")
     endif()
 
