@@ -1,0 +1,11 @@
+<map id="kcenon::container::simd::simd_support::get_best_simd_level" name="kcenon::container::simd::simd_support::get_best_simd_level">
+<area shape="rect" id="Node000001" title="Get the best available SIMD instruction set level." alt="" coords="5,124,164,179"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1container_1_1simd_1_1simd__support.html#a2b6f4b44f58f531b51599a373f66b22f" title=" " alt="" coords="212,5,371,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="125,122,211,69,220,64,222,69,213,74,128,126"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1container_1_1simd_1_1simd__support.html#a9d91f7ddb8febe6422f0d07d12d87f00" title=" " alt="" coords="212,84,371,139"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="164,133,198,127,199,132,165,139"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1container_1_1simd_1_1simd__support.html#abcb682cf76f504c42ede19a88300b4da" title=" " alt="" coords="212,163,371,217"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="165,164,199,170,198,175,164,169"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1container_1_1simd_1_1simd__support.html#aacb36815c36cfc2144a2d65ea7cfe09e" title=" " alt="" coords="212,241,371,296"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="131,177,213,226,224,232,222,237,211,231,128,181"/>
+</map>

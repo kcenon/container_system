@@ -1,0 +1,25 @@
+var searchData=
+[
+  ['scores_5fmutex_5f_0',['scores_mutex_',['../classscenarios_1_1GamingEventSystem.html#aa26711d41531c639ac4b7f54336d9a7b',1,'scenarios::GamingEventSystem']]],
+  ['sensor_5ftype_1',['sensor_type',['../structscenarios_1_1IoTDataCollectionSystem_1_1SensorReading.html#a238ac2ebbf2d072082a0ee12278049ae',1,'scenarios::IoTDataCollectionSystem::SensorReading']]],
+  ['serialization_5fcallbacks_5f_2',['serialization_callbacks_',['../classkcenon_1_1container_1_1integration_1_1messaging__integration.html#a6a3d5f8990a7f1aebd0622a33a321d03',1,'kcenon::container::integration::messaging_integration']]],
+  ['serializations_5fperformed_3',['serializations_performed',['../structkcenon_1_1container_1_1integration_1_1messaging__integration_1_1metrics.html#a4019c590894bfb2506e2c6b2a49b260a',1,'kcenon::container::integration::messaging_integration::metrics']]],
+  ['serialized_4',['serialized',['../structAdvancedContainerExample_1_1Statistics.html#adbc81b48726f6be29fa05c54d72447d1',1,'AdvancedContainerExample::Statistics']]],
+  ['serializing_5fcontainers_5',['serializing_containers',['../namespacekcenon_1_1container_1_1detail.html#a411243df15bba03c98b41a3dbd92732a',1,'kcenon::container::detail']]],
+  ['simd_5fwidth_6',['simd_width',['../structkcenon_1_1container_1_1simd_1_1scalar__simd__policy.html#a507d2bf0a81d2e2e5693eca6fe34b6c6',1,'kcenon::container::simd::scalar_simd_policy']]],
+  ['size_7',['size',['../structkcenon_1_1container_1_1thread__safe__container_1_1Statistics.html#a7e0654482150022a757ae0fb73c583ee',1,'kcenon::container::thread_safe_container::Statistics']]],
+  ['size_5foptimized_5f_8',['size_optimized_',['../classkcenon_1_1container_1_1integration_1_1messaging__container__builder.html#a00ebd6b2761f2bfda4930326437db7fc',1,'kcenon::container::integration::messaging_container_builder']]],
+  ['small_5fpool_5f_9',['small_pool_',['../classkcenon_1_1container_1_1internal_1_1pool__allocator.html#a4d21876921a1b17d09098c6a2b014030',1,'kcenon::container::internal::pool_allocator']]],
+  ['small_5fpool_5fallocs_10',['small_pool_allocs',['../structkcenon_1_1container_1_1internal_1_1pool__allocator__stats.html#a11f5e331905c5f912bd411c957ed029a',1,'kcenon::container::internal::pool_allocator_stats']]],
+  ['small_5fthreshold_11',['small_threshold',['../structkcenon_1_1container_1_1internal_1_1pool__size__class.html#afc34052b8b628fe9b744b7ee11c341f5',1,'kcenon::container::internal::pool_size_class']]],
+  ['snapshot_5f_12',['snapshot_',['../classkcenon_1_1container_1_1snapshot__reader.html#a4b7da4f898ce1f745f008c1cf4dd6836',1,'kcenon::container::snapshot_reader::snapshot_'],['../classkcenon_1_1container_1_1lockfree__container__reader.html#a9b43d2c0c2fbdcaa0db3b1a42a7fd1fb',1,'kcenon::container::lockfree_container_reader::snapshot_']]],
+  ['snapshot_5fmutex_5f_13',['snapshot_mutex_',['../classkcenon_1_1container_1_1snapshot__reader.html#a9b9bb5889244d4a75deda1e180203cac',1,'kcenon::container::snapshot_reader']]],
+  ['source_5fid_14',['SOURCE_ID',['../namespacekcenon_1_1container.html#abfdf619f67e30ed37893e39c918e8938',1,'kcenon::container']]],
+  ['source_5fsub_5fid_15',['SOURCE_SUB_ID',['../namespacekcenon_1_1container.html#adeb94cea0d8fd620660bf01b28c9503c',1,'kcenon::container']]],
+  ['speed_5foptimized_5f_16',['speed_optimized_',['../classkcenon_1_1container_1_1integration_1_1messaging__container__builder.html#a4d07d50d4d1ab9d816c9d8223dcec7f1',1,'kcenon::container::integration::messaging_container_builder']]],
+  ['start_5ftime_17',['start_time',['../structAdvancedContainerExample_1_1Statistics.html#aa38cfab24df4356a886c59109c33381c',1,'AdvancedContainerExample::Statistics']]],
+  ['start_5ftime_5f_18',['start_time_',['../classkcenon_1_1container_1_1integration_1_1container__performance__monitor.html#ad5a6c81837d88b5be78f7d1a9057e32c',1,'kcenon::container::integration::container_performance_monitor']]],
+  ['state_5f_19',['state_',['../structkcenon_1_1container_1_1async_1_1detail_1_1async__awaitable.html#aaee970f19715e373f9590c60a573710c',1,'kcenon::container::async::detail::async_awaitable::state_'],['../structkcenon_1_1container_1_1async_1_1detail_1_1executor__awaitable.html#abfd1a913f7ca3e046fde7a4604d6b596',1,'kcenon::container::async::detail::executor_awaitable::state_']]],
+  ['stats_5f_20',['stats_',['../classkcenon_1_1container_1_1internal_1_1pool__allocator.html#a1e670a60225422fd75f1ce0a8079287c',1,'kcenon::container::internal::pool_allocator::stats_'],['../classAdvancedContainerExample.html#a7234616fd4e951a59df331e2966c5436',1,'AdvancedContainerExample::stats_']]],
+  ['supported_21',['supported',['../structkcenon_1_1container_1_1simd_1_1simd__traits.html#a0ec4b9c371e308820b51f5cfe555cba9',1,'kcenon::container::simd::simd_traits']]]
+];

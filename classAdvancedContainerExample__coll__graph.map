@@ -1,0 +1,15 @@
+<map id="AdvancedContainerExample" name="AdvancedContainerExample">
+<area shape="rect" id="Node000001" title=" " alt="" coords="68,583,307,817"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,351,151,416"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="81,416,84,465,95,519,113,566,108,568,90,521,79,466,75,417"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="65,133,190,199"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="96,212,91,224,83,256,78,290,78,350,73,350,73,290,77,255,86,222,92,209"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="120,261,255,327"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="151,210,175,260,170,262,146,212"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="116,5,139,71"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="130,71,130,117,125,117,125,71"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="190,327,190,566,185,566,185,327"/>
+<area shape="rect" id="Node000006" href="$structAdvancedContainerExample_1_1Statistics.html" title=" " alt="" coords="365,440,564,520"/>
+<area shape="poly" id="edge7_Node000006_Node000005" title=" " alt="" coords="236,325,394,429,391,433,234,329"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="417,522,321,597,318,593,413,518"/>
+</map>

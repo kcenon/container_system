@@ -1,0 +1,9 @@
+<map id="kcenon::container::async::async_container" name="kcenon::container::async::async_container">
+<area shape="rect" id="Node000001" title="Async wrapper for value_container operations." alt="" coords="5,404,188,759"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="15,261,178,341"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="99,342,99,387,94,387,94,342"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="22,133,171,199"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="99,212,99,261,94,261,94,212"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="85,5,108,71"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="99,71,99,117,94,117,94,71"/>
+</map>

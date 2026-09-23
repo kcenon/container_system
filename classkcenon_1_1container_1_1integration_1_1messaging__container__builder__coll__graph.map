@@ -1,0 +1,9 @@
+<map id="kcenon::container::integration::messaging_container_builder" name="kcenon::container::integration::messaging_container_builder">
+<area shape="rect" id="Node000001" title="Builder pattern for messaging containers." alt="" coords="5,404,173,673"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="8,261,171,341"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="92,341,92,387,87,387,87,341"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="15,133,164,199"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="92,212,92,261,87,261,87,212"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="78,5,101,71"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="92,71,92,117,87,117,87,71"/>
+</map>

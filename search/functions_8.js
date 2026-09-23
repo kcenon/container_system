@@ -1,0 +1,13 @@
+var searchData=
+[
+  ['in_5fcritical_5fsection_0',['in_critical_section',['../classkcenon_1_1container_1_1epoch__manager.html#a9582621e56269303077c929e80d2981f',1,'kcenon::container::epoch_manager']]],
+  ['initial_5fsuspend_1',['initial_suspend',['../structkcenon_1_1container_1_1async_1_1detail_1_1generator__promise.html#a0cad92202b091c746e851c6f116c477d',1,'kcenon::container::async::detail::generator_promise::initial_suspend()'],['../structkcenon_1_1container_1_1async_1_1detail_1_1promise__base.html#a22b8ebd169bc57f8fa37bd8a75841bd1',1,'kcenon::container::async::detail::promise_base::initial_suspend()']]],
+  ['instance_2',['instance',['../classkcenon_1_1container_1_1async_1_1async__executor__context.html#aaa29bd13ab1e1343836a7377d73a7218',1,'kcenon::container::async::async_executor_context::instance()'],['../classkcenon_1_1container_1_1epoch__manager.html#a71d398ad55c6c5ba1cfdf2cc404a1f96',1,'kcenon::container::epoch_manager::instance()'],['../classkcenon_1_1container_1_1internal_1_1pool__allocator.html#a286495726f594c6629e638b7cda497f1',1,'kcenon::container::internal::pool_allocator::instance()']]],
+  ['is_5fcircular_3',['is_circular',['../structkcenon_1_1container_1_1detail_1_1circular__ref__guard.html#aa80391fd6f670fc92209e1aae6c9cbc9',1,'kcenon::container::detail::circular_ref_guard']]],
+  ['is_5fcompressible_4',['is_compressible',['../classkcenon_1_1container_1_1simd_1_1simd__compressor.html#a5405a6790c453c5ca3d10cf3ef60f0fc',1,'kcenon::container::simd::simd_compressor']]],
+  ['is_5fintegral_5ftype_5',['is_integral_type',['../classkcenon_1_1container_1_1value__view.html#aca4926e217ea488be2d2b2964558b4bc',1,'kcenon::container::value_view']]],
+  ['is_5fnull_6',['is_null',['../classkcenon_1_1container_1_1value.html#aaddeaf56e67ff900e832fdf0446eef53',1,'kcenon::container::value::is_null()'],['../classkcenon_1_1container_1_1value__view.html#a3630cee850cd6297c1b8c723db8edf44',1,'kcenon::container::value_view::is_null()']]],
+  ['is_5fpool_5fallocatable_7',['is_pool_allocatable',['../namespacekcenon_1_1container_1_1internal.html#a3554ff5c87adc01c075d5f65f622bf5e',1,'kcenon::container::internal']]],
+  ['is_5frunning_8',['is_running',['../classkcenon_1_1container_1_1auto__refresh__reader.html#ae2f68a4a6c06e67bf7a76793a9997d13',1,'kcenon::container::auto_refresh_reader']]],
+  ['iterator_9',['iterator',['../classkcenon_1_1container_1_1async_1_1generator_1_1iterator.html#a0cd016650549eb59a5722ee62c2c3166',1,'kcenon::container::async::generator::iterator::iterator() noexcept'],['../classkcenon_1_1container_1_1async_1_1generator_1_1iterator.html#a9e881e6264e18147d6cc6402baac731c',1,'kcenon::container::async::generator::iterator::iterator(handle_type handle) noexcept']]]
+];

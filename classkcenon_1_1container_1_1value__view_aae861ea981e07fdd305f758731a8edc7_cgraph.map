@@ -1,0 +1,13 @@
+<map id="kcenon::container::value_view::as" name="kcenon::container::value_view::as">
+<area shape="rect" id="Node000001" title="Type&#45;safe value extraction." alt="" coords="5,101,152,141"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1container_1_1value__view.html#aa7667dea4efd93bcf85a7b8a58144c23" title="Get string value as owned copy." alt="" coords="219,5,381,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="113,99,199,55,217,48,219,53,201,60,115,104"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1container_1_1value__view.html#a6c7935275e885251605467cb44f3d7d8" title="Get string value as string_view (zero&#45;copy)" alt="" coords="200,69,400,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="152,108,186,103,187,108,153,113"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1container_1_1value__view.html#a6ce4b15f64ddc56a6847a5113e36761d" title="Parse floating&#45;point value from string data." alt="" coords="203,133,397,173"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="153,129,189,135,188,140,152,135"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1container_1_1value__view.html#a006da40bd71695f9ab06a7136f018d98" title="Parse integral value from string data." alt="" coords="202,197,398,237"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="115,139,201,183,219,190,217,195,199,188,113,144"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1container_1_1value__view.html#aca4926e217ea488be2d2b2964558b4bc" title="Check if type is an integral type." alt="" coords="448,197,655,237"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="398,215,434,215,434,220,398,220"/>
+</map>

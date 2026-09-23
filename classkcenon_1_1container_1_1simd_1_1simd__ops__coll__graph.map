@@ -1,0 +1,5 @@
+<map id="kcenon::container::simd::simd_ops&lt; Policy &gt;" name="kcenon::container::simd::simd_ops&lt; Policy &gt;">
+<area shape="rect" id="Node000001" title="SIMD operations wrapper with compile&#45;time policy selection." alt="" coords="5,228,191,428"/>
+<area shape="rect" id="Node000002" href="$structkcenon_1_1container_1_1simd_1_1scalar__simd__policy.html" title="Scalar (non&#45;SIMD) implementation of operations." alt="" coords="9,5,187,165"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="101,166,101,212,95,212,95,166"/>
+</map>

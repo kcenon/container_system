@@ -1,0 +1,18 @@
+<map id="kcenon::container::integration::messaging_integration" name="kcenon::container::integration::messaging_integration">
+<area shape="rect" id="Node000001" title="Container integration manager for messaging systems." alt="" coords="153,620,378,889"/>
+<area shape="rect" id="Node000002" href="$structkcenon_1_1container_1_1integration_1_1messaging__integration_1_1metrics.html" title="Performance metrics collection." alt="" coords="17,463,181,557"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="133,556,166,605,162,608,128,559"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,261,176,327"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="42,328,24,352,15,375,12,394,15,414,24,438,30,448,25,451,19,440,10,415,6,394,9,374,19,349,38,325"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="76,133,201,199"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="124,213,105,262,100,260,119,211"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="201,5,223,71"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="203,60,168,120,163,117,198,58"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="234,133,355,199"/>
+<area shape="poly" id="edge7_Node000007_Node000005" title=" " alt="" coords="226,55,267,118,262,121,221,58"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="223,355,382,435"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="289,436,281,463,271,533,266,604,261,603,266,533,276,462,284,434"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="299,213,304,355,299,355,294,213"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="421,477,505,543"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="439,545,387,609,383,605,435,541"/>
+</map>

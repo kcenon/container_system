@@ -1,0 +1,7 @@
+<map id="kcenon::container::internal::fixed_block_pool::get_statistics" name="kcenon::container::internal::fixed_block_pool::get_statistics">
+<area shape="rect" id="Node000001" title="Get current pool statistics." alt="" coords="240,45,393,100"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1container_1_1internal_1_1pool__allocator.html#a88801d067a0807bb742843de45cd22c8" title="Get statistics from the medium pool." alt="" coords="5,5,192,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="225,59,192,52,193,47,226,53"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1container_1_1internal_1_1pool__allocator.html#ada72bedee3f594f8a2f8e0c305df8020" title="Get statistics from the small pool." alt="" coords="13,84,185,139"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="226,91,185,99,184,93,225,86"/>
+</map>

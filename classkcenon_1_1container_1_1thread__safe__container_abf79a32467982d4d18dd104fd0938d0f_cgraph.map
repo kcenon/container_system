@@ -1,0 +1,14 @@
+<map id="kcenon::container::thread_safe_container::to_json" name="kcenon::container::thread_safe_container::to_json">
+<area shape="rect" id="Node000001" title="Serialize container to JSON." alt="" coords="5,94,172,149"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1container_1_1value.html#a2a483be0c0bf1a94033976aa520df88a" title="Convert to JSON representation." alt="" coords="220,101,367,141"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="172,119,206,119,206,124,172,124"/>
+<area shape="poly" id="edge3_Node000002_Node000002" title=" " alt="" coords="257,102,254,92,260,83,273,77,293,75,316,78,329,85,326,89,315,83,293,80,275,82,264,87,260,93,262,100"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1container_1_1value.html#a860eda1e07cf129a868e145481d0bb38" title="Get the name of this value (lock&#45;free, immutable)" alt="" coords="415,5,561,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="329,99,413,55,426,49,429,54,416,60,332,104"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1container_1_1value.html#a2ed86e2c68e087e69641b7e3503fb5a3" title="Get the value_types enum (NOT variant::index()!)" alt="" coords="415,69,561,109"/>
+<area shape="poly" id="edge4_Node000002_Node000004" title=" " alt="" coords="366,107,400,101,401,106,367,112"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1container_1_1value.html#a879a4702f85fc40112b11b7c72995e80" title="Default constructor &#45; creates null value." alt="" coords="415,133,561,173"/>
+<area shape="poly" id="edge5_Node000002_Node000005" title=" " alt="" coords="367,131,401,136,400,142,366,136"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1container_1_1value.html#ada03cd91ae3bf13e87fe5aac13862555" title="Apply visitor to contained value (const)" alt="" coords="415,197,561,237"/>
+<area shape="poly" id="edge6_Node000002_Node000006" title=" " alt="" coords="332,139,416,183,429,189,426,194,413,188,329,144"/>
+</map>
