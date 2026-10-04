@@ -5,6 +5,25 @@ cmake_minimum_required(VERSION 3.16)
 # Test configuration
 enable_testing()
 
+# Message serialization tests exercise JSON deserialization unconditionally.
+# Supply the implementation dependency in test builds instead of relying on an
+# incidental system include path. Keep it private to the build, not the export.
+find_package(nlohmann_json QUIET)
+if(NOT nlohmann_json_FOUND)
+    include(FetchContent)
+    if(POLICY CMP0135)
+        cmake_policy(SET CMP0135 NEW)
+    endif()
+    FetchContent_Declare(
+        nlohmann_json
+        URL https://github.com/nlohmann/json/releases/download/v3.12.0/json.tar.xz
+        URL_HASH SHA256=42f6e95cad6ec532fd372391373363b62a14af6d771056dbfc86160e6dfff7aa
+    )
+    FetchContent_MakeAvailable(nlohmann_json)
+endif()
+target_include_directories(container_system SYSTEM PRIVATE
+    $<TARGET_PROPERTY:nlohmann_json::nlohmann_json,INTERFACE_INCLUDE_DIRECTORIES>)
+
 # Find required packages for testing
 find_package(GTest QUIET)
 if(NOT GTest_FOUND)
@@ -68,6 +87,9 @@ set(TEST_SOURCES
     policy_container_tests.cpp
     fast_parser_integration_tests.cpp
     serializer_factory_tests.cpp
+    iterator_tests.cpp
+    allocator_adapter_tests.cpp
+    message_container_serialization_tests.cpp
 )
 
 # Add async tests if coroutines are enabled

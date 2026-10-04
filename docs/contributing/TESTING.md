@@ -22,9 +22,10 @@ This document provides a comprehensive guide to the container system's testing i
 ## macOS regression checks (issue #563)
 
 Build with `BUILD_TESTS=ON`; the default and release presets disable tests.
-The test build resolves GoogleTest using an installed package first and a pinned
-FetchContent download otherwise. The separate `develop` implementation also
-declares nlohmann/json for its newer message serialization suite.
+The test build resolves GoogleTest and nlohmann/json (the latter is needed by
+the message serialization suite), using installed packages first and pinned
+FetchContent downloads otherwise. The JSON include path is private to the
+library build; this does not add a dependency to installed consumer targets.
 
 ```bash
 cmake -S . -B build-debug -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTS=ON
@@ -77,10 +78,9 @@ runners record it while checking each round trip's header and payload.
 No test failure is converted into a successful fallback build. The full CTest
 run also exposed the undeclared JSON test dependency on `develop`, two stale
 expectations that JSON parsing was unimplemented, and a message decoder that
-did not accept the JSON-string payload emitted by its own serializer. Those
-`develop`-specific JSON fixes accompany its newer deserialization API; they are
-not prerequisites for the existing `main` API. The main promotion retains its
-current source layout and applies the formatter, binary integer, and CI fixes.
+did not accept the JSON-string payload emitted by its own serializer. The
+decoder now accepts both that string and the existing object form; its encoder
+is unchanged. JSON integer decoding also preserves the fundamental type.
 
 Baseline dependencies: common_system `eeccd0dfa52d406e54b20ae94d76c103b75d4ead`
 via `COMMON_SYSTEM_ROOT`, GoogleTest v1.17.0 via FetchContent, CMake 4.3.4,

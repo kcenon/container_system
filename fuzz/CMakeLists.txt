@@ -13,11 +13,13 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
         set(FUZZ_LINK_FLAGS "-fsanitize=fuzzer,address,undefined")
 
         # Fuzz target for value deserialization
+        # Note: ${CMAKE_SOURCE_DIR}/internal was removed in the source migration
+        # (issue #533). Internal headers now ship under include/kcenon/container/internal/
+        # and are picked up via the public include directory of container_system.
         add_executable(fuzz_deserialize fuzz_deserialize.cpp)
         target_link_libraries(fuzz_deserialize PRIVATE container_system)
         target_include_directories(fuzz_deserialize PRIVATE
             ${CMAKE_SOURCE_DIR}
-            ${CMAKE_SOURCE_DIR}/internal
         )
         set_target_properties(fuzz_deserialize PROPERTIES
             COMPILE_FLAGS "${FUZZ_COMPILE_FLAGS}"
@@ -29,7 +31,6 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
         target_link_libraries(fuzz_container_deserialize PRIVATE container_system)
         target_include_directories(fuzz_container_deserialize PRIVATE
             ${CMAKE_SOURCE_DIR}
-            ${CMAKE_SOURCE_DIR}/internal
         )
         set_target_properties(fuzz_container_deserialize PROPERTIES
             COMPILE_FLAGS "${FUZZ_COMPILE_FLAGS}"

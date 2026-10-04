@@ -63,6 +63,7 @@ module deliverables that are not built by the root `CMakeLists.txt`.
 | SOUP-T01 | [Google Test](https://github.com/google/googletest) | Google | 1.17.0 | BSD-3-Clause | Unit testing framework (includes GMock) | Required |
 | SOUP-T02 | [Google Benchmark](https://github.com/google/benchmark) | Google | 1.9.5 | Apache-2.0 | Performance benchmarking framework | Not required |
 | SOUP-T03 | [Doxygen](https://www.doxygen.nl/) | Dimitri van Heesch | Latest | GPL-2.0 | API documentation generation (build tool only) | Not required |
+| SOUP-T04 | [nlohmann/json](https://github.com/nlohmann/json) | Niels Lohmann | 3.12.0 fallback (installed package preferred) | MIT | JSON deserialization exercised by test builds; SHA256-pinned FetchContent archive | Required for full tests |
 
 ---
 

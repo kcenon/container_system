@@ -1,0 +1,49 @@
+name: Docs Version Drift Check
+
+on:
+  pull_request:
+    paths:
+      - 'README.md'
+      - 'README.kr.md'
+      - 'CLAUDE.md'
+      - 'LICENSE-THIRD-PARTY'
+      - 'docs/SOUP.md'
+      - 'grpc/README.md'
+      - 'vcpkg.json'
+      - '.github/workflows/docs-verify.yml'
+      - 'scripts/verify_doc_versions.py'
+  push:
+    branches:
+      - main
+      - develop
+    paths:
+      - 'README.md'
+      - 'README.kr.md'
+      - 'CLAUDE.md'
+      - 'LICENSE-THIRD-PARTY'
+      - 'docs/SOUP.md'
+      - 'grpc/README.md'
+      - 'vcpkg.json'
+      - '.github/workflows/docs-verify.yml'
+      - 'scripts/verify_doc_versions.py'
+
+permissions:
+  contents: read
+
+jobs:
+  verify-versions:
+    name: Verify documented dependency versions match vcpkg.json
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Verify documentation versions
+        run: python3 scripts/verify_doc_versions.py

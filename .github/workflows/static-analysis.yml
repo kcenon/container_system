@@ -44,7 +44,7 @@ jobs:
           -DBUILD_TESTS=OFF \
           -DBUILD_CONTAINER_SAMPLES=OFF \
           -DBUILD_DOCUMENTATION=OFF \
-          -DBUILD_WITH_COMMON_SYSTEM=ON
+          -DKCENON_WITH_COMMON_SYSTEM=ON
 
     - name: Run clang-tidy
       continue-on-error: true  # Phase 0: Allow failures, collect baseline

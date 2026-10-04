@@ -580,7 +580,7 @@ TEST(EdgeCaseTest, MaximumValues) {
 // value_store Serialization Tests
 // ============================================================================
 
-#include "core/value_store.h"
+#include <kcenon/container/value_store.h>
 
 class ValueStoreSerializationTest : public ::testing::Test {
 protected:
@@ -678,8 +678,8 @@ TEST_F(ValueStoreSerializationTest, BinaryDeserializeInvalidData) {
     EXPECT_THROW(value_store::deserialize_binary(bad_version), std::runtime_error);
 }
 
-TEST_F(ValueStoreSerializationTest, JSONDeserializeNotImplemented) {
-    EXPECT_THROW(value_store::deserialize("{}"), std::runtime_error);
+TEST_F(ValueStoreSerializationTest, JSONDeserializeRejectsNonObject) {
+    EXPECT_THROW(value_store::deserialize("[]"), std::runtime_error);
 }
 
 TEST_F(ValueStoreSerializationTest, ThreadSafeSerialization) {
@@ -795,8 +795,8 @@ TEST_F(ValueStoreSerializationTest, BinaryDeserializeResultInvalidData) {
     EXPECT_TRUE(result3.is_err());
 }
 
-TEST_F(ValueStoreSerializationTest, JSONDeserializeResultNotImplemented) {
-    auto result = value_store::deserialize_result("{}");
+TEST_F(ValueStoreSerializationTest, JSONDeserializeResultRejectsNonObject) {
+    auto result = value_store::deserialize_result("[]");
     EXPECT_TRUE(result.is_err());
 }
 #endif
@@ -2056,7 +2056,7 @@ TEST_F(BatchOperationTest, MethodChaining) {
 // Schema Validation Tests (Issue #228)
 // ============================================================================
 
-#include "core/container/schema.h"
+#include <kcenon/container/schema.h>
 
 class SchemaValidationTest : public ::testing::Test {
 protected:

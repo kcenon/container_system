@@ -15,8 +15,8 @@
 #pragma once
 
 #include "internal/value.h"
-#include "container/result_integration.h"
-#include "container/error_codes.h"
+#include "result_integration.h"
+#include "error_codes.h"
 
 #include <memory>
 #include <vector>
@@ -147,6 +147,28 @@ public:
      * @throws std::runtime_error if deserialization fails
      */
     static std::unique_ptr<value_store> deserialize_binary(const std::vector<uint8_t>& binary_data);
+
+    /**
+     * @brief Deserialize binary format into an existing value_store
+     * @param store Target value_store populated in place on success
+     * @param binary_data Binary data
+     * @throws std::runtime_error if deserialization fails
+     * @note Required because value_store is non-copyable/non-movable; on a
+     *       malformed/truncated input the target store is left unmodified.
+     */
+    static void deserialize_binary_into(value_store& store,
+                                        const std::vector<uint8_t>& binary_data);
+
+    /**
+     * @brief Deserialize JSON format into an existing value_store
+     * @param store Target value_store populated in place on success
+     * @param json_data JSON string produced by serialize()
+     * @throws std::runtime_error if deserialization fails
+     * @note Required because value_store is non-copyable/non-movable; on a
+     *       malformed input the target store is left unmodified.
+     */
+    static void deserialize_into(value_store& store,
+                                 std::string_view json_data);
 
 #if CONTAINER_HAS_COMMON_RESULT
     // =========================================================================

@@ -14,7 +14,7 @@
  */
 
 #include <gtest/gtest.h>
-#include <internal/simd_processor.h>
+#include <kcenon/container/internal/simd_processor.h>
 #include <vector>
 #include <random>
 #include <numeric>

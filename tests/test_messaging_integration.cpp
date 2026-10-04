@@ -11,10 +11,10 @@
 #include <atomic>
 
 #ifdef HAS_MESSAGING_FEATURES
-#include "integration/messaging_integration.h"
+#include <kcenon/container/integration/messaging_integration.h>
 #endif
 
-#include "core/container.h"
+#include <kcenon/container/container.h>
 
 using namespace kcenon::container;
 

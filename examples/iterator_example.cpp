@@ -19,7 +19,7 @@
  * @see kcenon::container::value_container::const_iterator
  */
 
-#include "core/container.h"
+#include <kcenon/container/container.h>
 #include <algorithm>
 #include <iostream>
 #include <numeric>

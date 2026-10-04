@@ -10,8 +10,8 @@
 
 #include <gtest/gtest.h>
 
-#include <core/serializers/serializer_factory.h>
-#include <core/serializers/serializer_strategy.h>
+#include <kcenon/container/serializers/serializer_factory.h>
+#include <kcenon/container/serializers/serializer_strategy.h>
 #include <container.h>
 
 using namespace kcenon::container;

@@ -14,8 +14,8 @@
 #pragma once
 
 #include <container.h>
-#include <internal/value.h>
-#include <internal/thread_safe_container.h>
+#include <kcenon/container/internal/value.h>
+#include <kcenon/container/internal/thread_safe_container.h>
 #include <memory>
 #include <string>
 #include <vector>

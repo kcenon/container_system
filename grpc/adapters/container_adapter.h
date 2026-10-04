@@ -19,8 +19,8 @@
  * - Zero runtime overhead when not using gRPC
  */
 
-#include "core/container.h"
-#include "core/value_types.h"
+#include <kcenon/container/container.h>
+#include <kcenon/container/value_types.h>
 
 #include <memory>
 #include <string>

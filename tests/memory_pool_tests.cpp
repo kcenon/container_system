@@ -17,7 +17,7 @@
  */
 
 #include <gtest/gtest.h>
-#include <internal/memory_pool.h>
+#include <kcenon/container/internal/memory_pool.h>
 #include <thread>
 #include <vector>
 #include <algorithm>
@@ -509,8 +509,8 @@ TEST_F(MemoryPoolTest, ManyBlocksPerChunk) {
 // Pool Allocator Integration Tests
 // ============================================================================
 
-#include <internal/pool_allocator.h>
-#include <core/container.h>
+#include <kcenon/container/internal/pool_allocator.h>
+#include <kcenon/container/container.h>
 
 using namespace kcenon::container::internal;
 

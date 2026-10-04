@@ -18,7 +18,7 @@
 #include <vector>
 
 // Unified Result<T> integration (Issue #335)
-#include "../container/result_integration.h"
+#include "../result_integration.h"
 
 namespace kcenon::container
 {

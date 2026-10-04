@@ -15,7 +15,7 @@
  */
 
 #include <gtest/gtest.h>
-#include "core/policy_container.h"
+#include <kcenon/container/policy_container.h>
 
 #include <thread>
 #include <vector>

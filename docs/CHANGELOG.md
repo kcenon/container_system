@@ -24,6 +24,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Breaking Changes
+- **Remap error codes into common's reserved negative band** (#551): All `error_codes::` and `validation_codes::` constants are renumbered from their old positive bands (1xx value, 2xx serialization, 3xx validation, 4xx resource, 5xx thread-safety) to **negative** values inside common_system's reserved `container_system` range `[-499, -400]`.
+  - **Why**: container error codes are cast into the shared `kcenon::common::error_info.code`. common classifies any code `>= 0` as `Success` (and `> 0` as `Invalid` since common #698), so the previous positive codes were silently mis-classified instead of being recognised as `ContainerSystem`.
+  - **New sub-bands** (all distinct, within `[-499, -400]`): value `-400..-409`, validation `-410..-419`, serialization `-420..-429`, resource `-430..-439`, thread-safety `-440..-449`, schema-level `validation_codes` `-450..-459`.
+  - **Alignment**: obvious codes match `kcenon::common::error::codes::container_system::` (e.g. `type_mismatch == value_type_mismatch == -400`, `invalid_value == invalid_value_type == -401`, `serialization_failed == -420`, `deserialization_failed == -421`, `invalid_format == -422`).
+  - **`get_category(int)`** updated to the negative sub-bands; the returned category strings (`value_operation`, `serialization`, `validation`, `resource`, `thread_safety`, `unknown`) are unchanged.
+  - **BREAKING**: the numeric value of every container error code changes. Consumers that compare against literal integer codes, persist them, or transmit them across a wire MUST update. Code that uses the named constants (`error_codes::key_not_found`, etc.) requires no change.
+  - Ships as **v1.1.0**, coordinated across the ecosystem. Version not bumped here (owner's release decision).
 - **Remove Deprecated Serialization Methods** (#307): Complete removal of deprecated serialization API
   - **BREAKING**: Remove `serialize()` (void return) - Use `serialize_string(serialization_format::binary)` instead
   - **BREAKING**: Remove `serialize_array()` - Use `serialize(serialization_format::binary)` instead
@@ -66,6 +73,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - All tests now pass with `CONTAINER_NO_LEGACY_API` defined
   - Updated tests that relied on deprecated duplicate-key behavior
 
+- **Doxygen Input Paths and Install Rules Cleanup** (#536): Align Doxygen and `install(DIRECTORY ...)` rules with the canonical post-migration layout
+  - Doxyfile `INPUT` retains the canonical roots (`include/kcenon/container/`, `src/`, `examples/`, `utilities/`) and explicit `docs/*.dox` pages; stale layout-disclaimer comment removed
+  - Doxyfile `INCLUDE_PATH` repointed from removed legacy roots (`core/`, `values/`, `internal/`, `integration/`) to `include/`, `include/kcenon/container/`, and `src/`
+  - `cmake/documentation.cmake` `DOXYGEN_INPUT` repointed: removed source-root catch-all, removed non-existent root `mainpage.dox` reference, added explicit `docs/*.dox` pages, added `utilities/`
+  - `cmake/install.cmake` documentation block tightened to reflect actual install layout (canonical `include/kcenon/container/` + deprecated `include/container/`)
+  - Recorded `v1.2.0` removal milestone for the deprecated `include/container/` install rule alongside the directory itself
+  - Final sub-issue of EPIC #531 (directory layout normalization)
+
 ### Added
 - **Legacy API Deprecation Timeline** (#284): Document clear deprecation timeline in `legacy_api.h`
   - **v2.x**: Deprecated methods available by default with warnings
@@ -86,6 +101,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Align `docs/API_REFERENCE.kr.md` header version to `0.1.0` matching `vcpkg.json` and `CMakeLists.txt`
 
 ### Deprecated
+- **Legacy `include/container/` Forwarding Headers** (#534): Mark legacy forwarding headers as deprecated and document the removal target
+  - Deprecate `include/container/optimizations/fast_parser.h` — include `<kcenon/container/optimizations/fast_parser.h>` instead
+  - Mechanism: pure `#include` forwarder, so `[[deprecated]]` attribute cannot attach; uses `#pragma message` (portable across GCC, Clang, MSVC) to emit a build-time warning when consumers include the legacy path
+  - **Removal target**: scheduled for removal in the next minor release after v1.1.0
+  - In-repo legacy use migrated: `tests/fast_parser_integration_tests.cpp` now includes the canonical `<kcenon/container/...>` path
+  - Part of #531 (EPIC: directory layout normalization)
+
 - **Legacy void/bool API Methods** (#241): Mark legacy methods as deprecated in favor of Result-returning APIs
   - Deprecate `serialize()` in favor of `serialize_result()`
   - Deprecate `serialize_array()` in favor of `serialize_array_result()`

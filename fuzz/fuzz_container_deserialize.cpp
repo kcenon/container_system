@@ -10,7 +10,7 @@
 #include <cstddef>
 #include <vector>
 
-#include "internal/thread_safe_container.h"
+#include <kcenon/container/internal/thread_safe_container.h>
 
 using namespace kcenon::container;
 

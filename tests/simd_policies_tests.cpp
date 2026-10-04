@@ -17,7 +17,7 @@
  */
 
 #include <gtest/gtest.h>
-#include <internal/simd_policies.h>
+#include <kcenon/container/internal/simd_policies.h>
 #include <vector>
 #include <random>
 #include <numeric>

@@ -60,7 +60,7 @@ jobs:
         cmake -B build -S . \
           -GNinja \
           -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
-          -DBUILD_WITH_COMMON_SYSTEM=$BUILD_WITH_COMMON \
+          -DKCENON_WITH_COMMON_SYSTEM=$BUILD_WITH_COMMON \
           -DCMAKE_CXX_FLAGS="${SANITIZER_FLAGS}" \
           -DCMAKE_C_FLAGS="${SANITIZER_FLAGS}" \
           -DCMAKE_EXE_LINKER_FLAGS="-fsanitize=${{ matrix.sanitizer }}" \
