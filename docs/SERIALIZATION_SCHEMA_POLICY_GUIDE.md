@@ -241,16 +241,20 @@ Schemas reference the `value_types` enum for type checking:
 | `ushort_value` | `uint16_t` | 16-bit unsigned integer |
 | `int_value` | `int32_t` | 32-bit signed integer |
 | `uint_value` | `uint32_t` | 32-bit unsigned integer |
-| `long_value` | `int32_t` | 32-bit signed (platform alias) |
-| `ulong_value` | `uint32_t` | 32-bit unsigned (platform alias) |
-| `llong_value` | `int64_t` | 64-bit signed integer |
-| `ullong_value` | `uint64_t` | 64-bit unsigned integer |
+| `long_value` | `long` | LP64: 64-bit; LLP64: 32-bit signed |
+| `ulong_value` | `unsigned long` | LP64: 64-bit; LLP64: 32-bit unsigned |
+| `llong_value` | `long long` | 64-bit signed integer on supported platforms |
+| `ullong_value` | `unsigned long long` | 64-bit unsigned integer on supported platforms |
 | `float_value` | `float` | 32-bit floating point |
 | `double_value` | `double` | 64-bit floating point |
 | `string_value` | `std::string` | UTF-8 string |
 | `bytes_value` | `std::vector<uint8_t>` | Binary data |
 | `container_value` | `shared_ptr<value_container>` | Nested container |
 | `array_value` | *(reserved — not yet in `value_variant`)* | Array of values (planned) |
+
+`int64_t`/`uint64_t` follow their underlying fundamental type. See the
+[integer identity contract](API_REFERENCE.md#integer-identity-in-the-current-value-api)
+when specifying integer schema types across platforms.
 
 ### Validation Error Codes
 

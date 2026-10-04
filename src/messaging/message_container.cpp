@@ -180,7 +180,11 @@ std::unique_ptr<message_container> message_container::deserialize(std::string_vi
     // Deserialize payload in place into payload_
     // (value_store is non-copyable/non-movable, so an in-place loader is required)
     if (json_obj.contains("payload")) {
-        std::string payload_str = json_obj["payload"].dump();
+        // serialize() stores the payload as a JSON string; also accept the
+        // object form emitted by the fallback serializer.
+        const auto& payload = json_obj["payload"];
+        std::string payload_str = payload.is_string()
+            ? payload.get<std::string>() : payload.dump();
         value_store::deserialize_into(container->payload_, payload_str);
     }
 

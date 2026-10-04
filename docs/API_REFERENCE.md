@@ -159,8 +159,10 @@ concept ValueVariantType =
     std::same_as<std::decay_t<T>, uint16_t> ||
     std::same_as<std::decay_t<T>, int32_t> ||
     std::same_as<std::decay_t<T>, uint32_t> ||
-    std::same_as<std::decay_t<T>, int64_t> ||
-    std::same_as<std::decay_t<T>, uint64_t> ||
+    std::same_as<std::decay_t<T>, long> ||
+    std::same_as<std::decay_t<T>, unsigned long> ||
+    std::same_as<std::decay_t<T>, long long> ||
+    std::same_as<std::decay_t<T>, unsigned long long> ||
     std::same_as<std::decay_t<T>, float> ||
     std::same_as<std::decay_t<T>, double> ||
     std::same_as<std::decay_t<T>, std::string> ||
@@ -174,7 +176,8 @@ concept ValueVariantType =
 **Valid types**:
 - `std::monostate` (null)
 - `bool`
-- `int16_t`, `uint16_t`, `int32_t`, `uint32_t`, `int64_t`, `uint64_t`
+- `int16_t`, `uint16_t`, `int32_t`, `uint32_t`
+- `long`, `unsigned long`, `long long`, `unsigned long long` (including `int64_t`/`uint64_t` aliases)
 - `float`, `double`
 - `std::string`
 - `std::vector<uint8_t>` (bytes)
@@ -371,6 +374,34 @@ concept ContainerValue =
 | `Serializable` | Types with serialization | Serialization support |
 | `JsonSerializable` | Types with JSON serialization | JSON output support |
 | `ContainerValue` | Nested container types | Hierarchical data structures |
+
+---
+
+## Integer identity in the current `value` API
+
+`kcenon::container::value` and `factory::make` preserve the C++ fundamental type.
+The variant alternatives and enum indices remain fixed:
+
+| Input type | `value_types` | Index | Native width on LP64 / LLP64 |
+|---|---|---|---|
+| `long` | `long_value` | 6 | 64 / 32 bits |
+| `unsigned long` | `ulong_value` | 7 | 64 / 32 bits |
+| `long long` | `llong_value` | 8 | 64 / 64 bits |
+| `unsigned long long` | `ullong_value` | 9 | 64 / 64 bits |
+
+`int64_t` and `uint64_t` are typedefs, not distinct types. Their enum mapping
+follows the underlying type: typically `long`/`unsigned long` on Linux LP64,
+and `long long`/`unsigned long long` on Apple Clang and Windows MSVC. Use
+`std::is_same_v` to determine the mapping on a particular toolchain; width
+alone cannot distinguish `long` from `long long`. Typed getters return the
+stored alternative without numeric conversion.
+
+`value::serialize()` retains its existing native-width, native-endian numeric
+payloads and type bytes. Deserialization reads the fundamental type designated
+by the type byte, preserving both identity and value, including within arrays.
+This internal binary representation is not a portable LP64-to-LLP64 wire format;
+this contract does not change its encoding or promise cross-ABI compatibility.
+It is distinct from `value_container`'s textual `@header`/`@data` binary format.
 
 ---
 

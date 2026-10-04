@@ -18,6 +18,7 @@
 #include <kcenon/container/internal/value.h>
 
 #include <stdexcept>
+#include <limits>
 #include <string>
 #include <vector>
 
@@ -251,6 +252,36 @@ TEST(ValueStoreJsonDeserializeTest, EmptyObjectYieldsEmptyStore) {
     value_store::deserialize_into(target, "{}");
 
     EXPECT_TRUE(target.empty());
+}
+
+TEST(ValueStoreJsonDeserializeTest, PreservesFundamentalIntegerTypes) {
+    value_store source;
+    source.add("long", value("long", std::numeric_limits<long>::lowest()));
+    source.add("ulong", value("ulong", std::numeric_limits<unsigned long>::max()));
+    source.add("llong", value("llong", std::numeric_limits<long long>::lowest()));
+    source.add("ullong", value("ullong", std::numeric_limits<unsigned long long>::max()));
+
+    auto restored = value_store::deserialize(source.serialize());
+    ASSERT_NE(restored, nullptr);
+    for (const auto* key : {"long", "ulong", "llong", "ullong"}) {
+        SCOPED_TRACE(key);
+        const auto original = source.get(key);
+        const auto decoded = restored->get(key);
+        ASSERT_TRUE(original.has_value());
+        ASSERT_TRUE(decoded.has_value());
+        EXPECT_EQ(decoded->type(), original->type());
+        EXPECT_EQ(decoded->serialize(), original->serialize());
+    }
+}
+
+TEST(MessageContainerJsonTest, AcceptsObjectPayload) {
+    const auto restored = message_container::deserialize(
+        R"({"header":{"message_type":"request"},"payload":{"answer":{"name":"answer","type":4,"value":42}}})");
+    ASSERT_NE(restored, nullptr);
+    EXPECT_EQ(restored->message_type(), "request");
+    const auto answer = restored->payload().get("answer");
+    ASSERT_TRUE(answer.has_value());
+    EXPECT_EQ(answer->get<int32_t>(), std::optional<int32_t>(42));
 }
 
 // =============================================================================
