@@ -71,7 +71,9 @@ it decodes escaped braces and never interprets placeholder-like text inside
 arguments. Hosted Apple Clang 15 exposed this path's previously invalid wire
 braces. Thread stress tests synchronize startup and wait for the original work
 counts with a 10-second deadline instead of assuming scheduler progress in
-500 milliseconds. Messaging throughput remains a local baseline; shared CI
+500 milliseconds. Auto-refresh checks observe the expected value or refresh
+count within a five-second deadline instead of relying on a 50-millisecond sleep.
+Messaging throughput remains a local baseline; shared CI
 runners record it while checking each round trip's header and payload.
 No test failure is converted into a successful fallback build. The full CTest
 run also exposed the undeclared JSON test dependency on `develop`, two stale
