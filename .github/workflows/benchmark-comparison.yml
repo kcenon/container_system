@@ -100,8 +100,10 @@ jobs:
             --benchmark_report_aggregates_only=true
 
       - name: Checkout PR again for comparison script
+        env:
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
-          git checkout ${{ github.head_ref }}
+          git checkout --detach "$PR_HEAD_SHA"
 
       - name: Compare benchmark results
         id: compare
