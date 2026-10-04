@@ -177,6 +177,16 @@ foreach(TEST_SOURCE ${TEST_SOURCES})
     )
 endforeach()
 
+# Exercise the fallback even on hosts with full std::format support. This is a
+# header-only test: do not link a library built with the other formatter mode.
+add_executable(formatter_fallback_tests formatter_tests.cpp)
+target_compile_definitions(formatter_fallback_tests PRIVATE UTILITY_MODULE_HAS_STD_FORMAT=0)
+target_include_directories(formatter_fallback_tests PRIVATE
+    ${PROJECT_SOURCE_DIR} ${GTEST_INCLUDE_DIRS})
+target_link_libraries(formatter_fallback_tests PRIVATE ${GTEST_LIBRARIES} Threads::Threads)
+add_test(NAME formatter_fallback_tests COMMAND formatter_fallback_tests)
+set_tests_properties(formatter_fallback_tests PROPERTIES TIMEOUT 300)
+
 # Special configuration for performance tests
 if(TARGET performance_tests)
     set_tests_properties(performance_tests PROPERTIES
