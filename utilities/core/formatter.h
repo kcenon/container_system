@@ -50,11 +50,17 @@ public:
     template<typename OutputIt, typename... Args>
     static void format_to(OutputIt out, const std::string& format_str, Args&&... args) {
         try {
+#if defined(_LIBCPP_VERSION)
             // libc++ 220106's vformat_to can overrun its fixed iterator buffer
             // for strings at a 256-byte boundary. Use vformat's growing buffer,
             // then copy only after formatting succeeds (no partial fallback).
             const auto formatted = std::vformat(format_str, std::make_format_args(args...));
             std::copy(formatted.begin(), formatted.end(), out);
+#else
+            // Other standard libraries retain their direct output path without
+            // allocating an intermediate string for every serialization field.
+            std::vformat_to(out, format_str, std::make_format_args(args...));
+#endif
         } catch (const std::exception&) {
             // Fallback: just copy the format string
             std::copy(format_str.begin(), format_str.end(), out);

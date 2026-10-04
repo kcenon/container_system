@@ -29,12 +29,23 @@ INSTANTIATE_TEST_SUITE_P(BufferBoundaries, FormatterBufferTest,
                          testing::Values(0u, 255u, 256u, 257u, 512u, 1024u, 10u * 1024u,
                                          1024u * 1024u));
 
+TEST(FormatterTest, InvalidFormatFallsBackToFormatString)
+{
+    std::string output = "prefix:";
+    utility_module::formatter::format_to(std::back_inserter(output), "{invalid}", 42);
+    EXPECT_EQ(output, "prefix:{invalid}");
+}
+
+#if defined(_LIBCPP_VERSION) || !UTILITY_MODULE_HAS_STD_FORMAT
+// These implementations materialize the result before writing to the iterator.
+// The direct standard-library path retains its existing streaming semantics.
 TEST(FormatterTest, InvalidFormatDoesNotAppendPartialOutput)
 {
     std::string output = "prefix:";
     utility_module::formatter::format_to(std::back_inserter(output), "{} {", 42);
     EXPECT_EQ(output, "prefix:{} {");
 }
+#endif
 
 TEST(FormatterTest, EscapedBracesMatchTheWireFormat)
 {
