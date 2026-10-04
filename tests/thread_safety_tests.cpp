@@ -1505,11 +1505,16 @@ TEST(AutoRefreshReaderTest, AutoRefreshUpdatesValues) {
     // Update container
     container->set("counter", value("counter", 100));
 
-    // Wait for auto-refresh to catch the update
-    std::this_thread::sleep_for(std::chrono::milliseconds(50));
-
+    // Observe the required update instead of assuming the background thread
+    // receives CPU time within 50ms on a shared runner.
+    const auto deadline = std::chrono::steady_clock::now() + std::chrono::seconds(5);
     auto updated = reader->get<int32_t>("counter");
-    EXPECT_TRUE(updated.has_value());
+    while ((!updated.has_value() || *updated != 100) &&
+           std::chrono::steady_clock::now() < deadline) {
+        std::this_thread::sleep_for(std::chrono::milliseconds(5));
+        updated = reader->get<int32_t>("counter");
+    }
+    ASSERT_TRUE(updated.has_value());
     EXPECT_EQ(*updated, 100);
 }
 
@@ -1522,9 +1527,12 @@ TEST(AutoRefreshReaderTest, StopAndRestart) {
     EXPECT_TRUE(reader->is_running());
     size_t count_before = reader->refresh_count();
 
-    // Wait for some refreshes
-    std::this_thread::sleep_for(std::chrono::milliseconds(50));
-
+    // Require refresh progress without depending on a 50ms scheduling window.
+    const auto deadline = std::chrono::steady_clock::now() + std::chrono::seconds(5);
+    while (reader->refresh_count() <= count_before &&
+           std::chrono::steady_clock::now() < deadline) {
+        std::this_thread::sleep_for(std::chrono::milliseconds(5));
+    }
     EXPECT_GT(reader->refresh_count(), count_before);
 
     reader->stop();
@@ -1552,7 +1560,8 @@ TEST(AutoRefreshReaderTest, ManualRefreshWhileAutoRunning) {
 
     // Manual refresh should work
     reader->refresh();
-    EXPECT_EQ(reader->refresh_count(), initial_count + 1);
+    // The background thread may also refresh between these observations.
+    EXPECT_GE(reader->refresh_count(), initial_count + 1);
 
     // Update container
     container->set("value", value("value", 999));
