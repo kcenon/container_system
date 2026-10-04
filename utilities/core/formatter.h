@@ -4,16 +4,24 @@
 
 #pragma once
 
+#include <algorithm>
 #include <string>
+#include <utility>
 
 #if __has_include(<format>)
 #include <format>
 #endif
 
+#ifndef UTILITY_MODULE_HAS_STD_FORMAT
 #if defined(__cpp_lib_format) && __cpp_lib_format >= 202110L
 #define UTILITY_MODULE_HAS_STD_FORMAT 1
 #else
 #define UTILITY_MODULE_HAS_STD_FORMAT 0
+#endif
+#endif
+
+#if !UTILITY_MODULE_HAS_STD_FORMAT
+#include <array>
 #include <sstream>
 #endif
 
@@ -42,7 +50,11 @@ public:
     template<typename OutputIt, typename... Args>
     static void format_to(OutputIt out, const std::string& format_str, Args&&... args) {
         try {
-            std::vformat_to(out, format_str, std::make_format_args(args...));
+            // libc++ 220106's vformat_to can overrun its fixed iterator buffer
+            // for strings at a 256-byte boundary. Use vformat's growing buffer,
+            // then copy only after formatting succeeds (no partial fallback).
+            const auto formatted = std::vformat(format_str, std::make_format_args(args...));
+            std::copy(formatted.begin(), formatted.end(), out);
         } catch (const std::exception&) {
             // Fallback: just copy the format string
             std::copy(format_str.begin(), format_str.end(), out);
@@ -53,8 +65,24 @@ public:
 
     template<typename... Args>
     static std::string format(const std::string& format_str, Args&&... args) {
-        std::string result = format_str;
-        (replace_next(result, std::forward<Args>(args)), ...);
+        const std::array<std::string, sizeof...(Args)> values{stringify(std::forward<Args>(args))...};
+        std::string result;
+        size_t argument = 0;
+        for (size_t i = 0; i < format_str.size(); ++i) {
+            const char c = format_str[i];
+            if (c != '{' && c != '}') {
+                result += c;
+            } else if (i + 1 < format_str.size() && format_str[i + 1] == c) {
+                result += c; // Escaped {{ or }}.
+                ++i;
+            } else if (c == '{' && i + 1 < format_str.size() && format_str[i + 1] == '}' &&
+                       argument < values.size()) {
+                result += values[argument++]; // Never reparse braces inside an argument.
+                ++i;
+            } else {
+                return format_str; // Match the standard-format error fallback.
+            }
+        }
         return result;
     }
 
@@ -66,20 +94,13 @@ public:
 
 #endif
 
-    static std::string format(const std::string& format_str) {
-        return format_str;
-    }
-
 private:
 #if !UTILITY_MODULE_HAS_STD_FORMAT
     template<typename T>
-    static void replace_next(std::string& str, T&& value) {
-        auto pos = str.find("{}");
-        if (pos == std::string::npos) return;
-
+    static std::string stringify(T&& value) {
         std::ostringstream oss;
         oss << std::forward<T>(value);
-        str.replace(pos, 2, oss.str());
+        return oss.str();
     }
 #endif
 };

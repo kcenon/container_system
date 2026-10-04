@@ -53,11 +53,13 @@ value value_from_json(const std::string& key, const nlohmann::json& node) {
         case value_types::uint_value:
             return value(name, v.get<uint32_t>());
         case value_types::long_value:
+            return value(name, v.get<long>());
         case value_types::llong_value:
-            return value(name, v.get<int64_t>());
+            return value(name, v.get<long long>());
         case value_types::ulong_value:
+            return value(name, v.get<unsigned long>());
         case value_types::ullong_value:
-            return value(name, v.get<uint64_t>());
+            return value(name, v.get<unsigned long long>());
         case value_types::float_value:
             return value(name, v.get<float>());
         case value_types::double_value:

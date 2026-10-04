@@ -49,6 +49,17 @@ only by optional features, isolated module builds, or test tooling.
 
 ## Development and Test Dependencies
 
+## nlohmann/json (`BUILD_TESTS`)
+
+| Item               | Value                                          |
+|--------------------|------------------------------------------------|
+| Component          | JSON for Modern C++                            |
+| License            | MIT (Copyright 2013-2025 Niels Lohmann)         |
+| Fallback Version   | 3.12.0 (SHA256-pinned archive in tests/CMakeLists.txt) |
+| Usage              | JSON implementation exercised by serialization tests |
+| Linking            | Header-only, private library build include path |
+| BSD-3 Compatible   | Yes                                            |
+
 ## Google Test / GMock (`testing` feature)
 
 | Item               | Value                                          |
@@ -80,3 +91,4 @@ only by optional features, isolated module builds, or test tooling.
 | Protocol Buffers  | BSD-3-Clause   | Optional module | Yes              |
 | GTest/GMock       | BSD-3-Clause   | Testing  | Yes              |
 | Google Benchmark  | Apache-2.0     | Testing  | Yes              |
+| nlohmann/json     | MIT           | Test-build JSON support | Yes    |

@@ -407,8 +407,9 @@ namespace kcenon::container
             }
 
             case value_types::long_value: {
-                if (offset + sizeof(int64_t) > data.size()) return false;
-                int64_t value;
+                // Match the fundamental type and native width used by serialize_data.
+                if (offset + sizeof(long) > data.size()) return false;
+                long value;
                 std::memcpy(&value, data.data() + offset, sizeof(value));
                 offset += sizeof(value);
                 result.data_ = value;
@@ -416,27 +417,19 @@ namespace kcenon::container
             }
 
             case value_types::llong_value: {
-                if (offset + sizeof(int64_t) > data.size()) return false;
-#if defined(_MSC_VER) && _MSC_VER < 1900
-                // Old MSVC (2013-): int64_t is __int64, long long is separate
+                // Match the fundamental type and native width used by serialize_data.
+                if (offset + sizeof(long long) > data.size()) return false;
                 long long value;
                 std::memcpy(&value, data.data() + offset, sizeof(value));
                 offset += sizeof(value);
-                result.data_ = value;  // Stored at index 8 (llong_value slot)
-#else
-                // Modern platforms (macOS, Linux, MSVC 2015+): int64_t == long long
-                // llong_value uses same storage as long_value (int64_t)
-                int64_t value;
-                std::memcpy(&value, data.data() + offset, sizeof(value));
-                offset += sizeof(value);
-                result.data_ = value;  // Stored at index 6 (long_value slot)
-#endif
+                result.data_ = value;
                 return true;
             }
 
             case value_types::ulong_value: {
-                if (offset + sizeof(uint64_t) > data.size()) return false;
-                uint64_t value;
+                // Match the fundamental type and native width used by serialize_data.
+                if (offset + sizeof(unsigned long) > data.size()) return false;
+                unsigned long value;
                 std::memcpy(&value, data.data() + offset, sizeof(value));
                 offset += sizeof(value);
                 result.data_ = value;
@@ -444,21 +437,12 @@ namespace kcenon::container
             }
 
             case value_types::ullong_value: {
-                if (offset + sizeof(uint64_t) > data.size()) return false;
-#if defined(_MSC_VER) && _MSC_VER < 1900
-                // Old MSVC (2013-): uint64_t is unsigned __int64, unsigned long long is separate
+                // Match the fundamental type and native width used by serialize_data.
+                if (offset + sizeof(unsigned long long) > data.size()) return false;
                 unsigned long long value;
                 std::memcpy(&value, data.data() + offset, sizeof(value));
                 offset += sizeof(value);
-                result.data_ = value;  // Stored at index 9 (ullong_value slot)
-#else
-                // Modern platforms (macOS, Linux, MSVC 2015+): uint64_t == unsigned long long
-                // ullong_value uses same storage as ulong_value (uint64_t)
-                uint64_t value;
-                std::memcpy(&value, data.data() + offset, sizeof(value));
-                offset += sizeof(value);
-                result.data_ = value;  // Stored at index 7 (ulong_value slot)
-#endif
+                result.data_ = value;
                 return true;
             }
 

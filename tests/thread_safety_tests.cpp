@@ -1694,10 +1694,12 @@ TEST(LockFreeReaderStressTest, MixedReadWriteWithRefresh) {
     std::vector<std::thread> readers;
     std::vector<std::thread> writers;
     std::thread refresher;
+    std::barrier start(57); // 50 readers, 5 writers, refresher, and this thread.
 
     // 50 reader threads
     for (int t = 0; t < 50; ++t) {
-        readers.emplace_back([&reader, &stop_flag, &read_count, t]() {
+        readers.emplace_back([&reader, &stop_flag, &read_count, &start, t]() {
+            start.arrive_and_wait();
             while (!stop_flag.load(std::memory_order_relaxed)) {
                 int key_idx = t % 50;
                 auto val = reader.get<int32_t>("key" + std::to_string(key_idx));
@@ -1712,7 +1714,8 @@ TEST(LockFreeReaderStressTest, MixedReadWriteWithRefresh) {
 
     // 5 writer threads
     for (int t = 0; t < 5; ++t) {
-        writers.emplace_back([&container, &stop_flag, &write_count, t]() {
+        writers.emplace_back([&container, &stop_flag, &write_count, &start, t]() {
+            start.arrive_and_wait();
             int counter = 0;
             while (!stop_flag.load(std::memory_order_relaxed)) {
                 int key_idx = (t * 10 + counter) % 50;
@@ -1726,7 +1729,8 @@ TEST(LockFreeReaderStressTest, MixedReadWriteWithRefresh) {
     }
 
     // Refresh thread
-    refresher = std::thread([&reader, &stop_flag, &refresh_count]() {
+    refresher = std::thread([&reader, &stop_flag, &refresh_count, &start]() {
+        start.arrive_and_wait();
         while (!stop_flag.load(std::memory_order_relaxed)) {
             reader.refresh();
             refresh_count.fetch_add(1, std::memory_order_relaxed);
@@ -1734,8 +1738,15 @@ TEST(LockFreeReaderStressTest, MixedReadWriteWithRefresh) {
         }
     });
 
-    // Run for 500ms
+    // Run for at least 500ms, then allow a busy runner to finish the required
+    // work. The assertions measure concurrent activity, not scheduling speed.
+    start.arrive_and_wait();
+    const auto deadline = std::chrono::steady_clock::now() + std::chrono::seconds(10);
     std::this_thread::sleep_for(std::chrono::milliseconds(500));
+    while ((read_count.load() <= 100000U || write_count.load() <= 100U ||
+            refresh_count.load() <= 10U) && std::chrono::steady_clock::now() < deadline) {
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    }
     stop_flag.store(true, std::memory_order_relaxed);
 
     for (auto& t : readers) {
@@ -1774,12 +1785,20 @@ TEST(LockFreeReaderStressTest, ContinuousRefreshUnderLoad) {
                     auto val = reader->get<int32_t>("key" + std::to_string(i));
                     read_count.fetch_add(1, std::memory_order_relaxed);
                 }
+                // Let the background refresher run when 100 readers oversubscribe
+                // a small CI runner. Keep the read and refresh count requirements.
+                std::this_thread::sleep_for(std::chrono::milliseconds(1));
             }
         });
     }
 
-    // Run for 500ms with continuous auto-refresh
+    // Preserve the work requirement while allowing for scheduler contention.
+    const auto deadline = std::chrono::steady_clock::now() + std::chrono::seconds(10);
     std::this_thread::sleep_for(std::chrono::milliseconds(500));
+    while ((read_count.load() <= 100000U || reader->refresh_count() <= 20U) &&
+           std::chrono::steady_clock::now() < deadline) {
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    }
     stop_flag.store(true, std::memory_order_relaxed);
 
     for (auto& t : threads) {
@@ -1787,8 +1806,7 @@ TEST(LockFreeReaderStressTest, ContinuousRefreshUnderLoad) {
     }
 
     EXPECT_GT(read_count.load(), 100000U);  // Should have many reads
-    // Note: In sanitizer builds, overhead may reduce refresh frequency
-    // Expect at least 20 refreshes (500ms / 5ms = ~100, but sanitizer overhead reduces this)
+    // Require refresh progress under load without assuming a 5ms scheduling cadence.
     EXPECT_GT(reader->refresh_count(), 20U);
 }
 

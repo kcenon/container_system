@@ -801,21 +801,15 @@ ASSERT_EQ(arr->values.size(), 1);
 
 ### Q5: How do I handle llong/ullong on different platforms?
 
-**A:** variant_value_v2 handles this automatically:
+**A:** In the current `value` API, `long` and `long long` are distinct alternatives
+with enum indices 6 and 8; their unsigned counterparts use indices 7 and 9.
+`int64_t` aliases one of those fundamental types and retains its identity.
+It is typically `long` on Linux LP64 and `long long` on Apple Clang/MSVC.
+Deserialization preserves the encoded fundamental type rather than collapsing
+both types into `int64_t`. The internal binary payload retains native widths
+and byte order; it is not a cross-ABI interchange format.
 
-```cpp
-// On macOS/Linux: llong == int64_t (same type)
-variant_value_v2 val("num", int64_t(123));
-// Serialized as type 6 (long_value)
-
-// On Windows: llong != int64_t (different types)
-variant_value_v2 val("num", long long(123));
-// Serialized as type 8 (llong_value)
-
-// Deserialization works on ALL platforms
-// Type 6 → int64_t
-// Type 8 → int64_t (aliased on macOS/Linux)
-```
+See the [current integer identity contract](../API_REFERENCE.md#integer-identity-in-the-current-value-api).
 
 ---
 
