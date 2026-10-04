@@ -45,16 +45,19 @@ message_buffer msg;
 | `ushort_value` | 3 | `uint16_t` |
 | `int_value` | 4 | `int32_t` |
 | `uint_value` | 5 | `uint32_t` |
-| `long_value` | 6 | `int32_t` (platform) |
-| `ulong_value` | 7 | `uint32_t` (platform) |
-| `llong_value` | 8 | `int64_t` |
-| `ullong_value` | 9 | `uint64_t` |
+| `long_value` | 6 | `long` (LP64: 64-bit; LLP64: 32-bit) |
+| `ulong_value` | 7 | `unsigned long` (LP64: 64-bit; LLP64: 32-bit) |
+| `llong_value` | 8 | `long long` |
+| `ullong_value` | 9 | `unsigned long long` |
 | `float_value` | 10 | `float` |
 | `double_value` | 11 | `double` |
 | `string_value` | 12 | `std::string` |
 | `bytes_value` | 13 | `std::vector<uint8_t>` |
 | `container_value` | 14 | nested `value_container` |
 | `array_value` | 15 | array of values |
+
+Fixed-width aliases follow their underlying fundamental type; see the
+[integer identity contract](API_REFERENCE.md#integer-identity-in-the-current-value-api).
 
 Compile-time helpers:
 

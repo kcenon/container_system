@@ -19,6 +19,78 @@ category: "QUAL"
 
 This document provides a comprehensive guide to the container system's testing infrastructure, including unit tests, integration tests, performance benchmarks, and testing best practices.
 
+## macOS regression checks (issue #563)
+
+Build with `BUILD_TESTS=ON`; the default and release presets disable tests.
+The test build resolves GoogleTest using an installed package first and a pinned
+FetchContent download otherwise. The separate `develop` implementation also
+declares nlohmann/json for its newer message serialization suite.
+
+```bash
+cmake -S . -B build-debug -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTS=ON
+cmake --build build-debug --parallel
+ctest --test-dir build-debug -N
+build-debug/bin/unit_tests --gtest_filter=ContainerTest.LargeDataHandling
+ctest --test-dir build-debug -R '^(formatter_tests|variant_value_factory_tests)$' \
+  --output-on-failure --no-tests=error
+ctest --test-dir build-debug -C Debug --output-on-failure --no-tests=error
+```
+
+CTest entries are executables, not individual GoogleTest cases. `unit_tests`,
+`container_base_unit`, and `all_tests` all contain `ContainerTest.LargeDataHandling`;
+a failure in those three entries can have the same root cause. The factory suite
+is a separate executable and is not included in `all_tests`.
+
+On macOS 27.2 arm64 with Apple Clang 21.0.0 and libc++ headers 220106, both
+`develop` (`d8387628254a`) and `main` (`605a0afd76ad`) aborted in
+`value_container::datas()` while serializing the original 10 KiB payload.
+ASan identified a stack-buffer overflow in `std::vformat_to`'s iterator buffer.
+A standalone standard-library reproducer also aborted for 256-, 512-, 1024-,
+and 10240-byte string arguments followed by a suffix; `std::vformat` succeeded
+for the same inputs. This occurs before the regex parser runs and is unrelated
+to allocation limits. With libc++, the formatter now materializes the formatted
+string and copies it to the output iterator, at the cost of one temporary string.
+Other standard libraries retain their direct output path. Formatter
+regressions cover boundary sizes and 1 MiB; the container test retains 10 KiB
+round trips. Larger regex-parser scalability remains a separate concern.
+
+Both branch baselines also failed three fixed-width integer expectations.
+The [integer contract](../API_REFERENCE.md#integer-identity-in-the-current-value-api)
+preserves the underlying C++ type. Regressions cover factories, constructors,
+typed retrieval, numeric boundaries, raw decoding, truncated input, and arrays.
+They also exposed a concept omitting fundamental types and a decoder collapsing
+`long`/`long long` through `int64_t`; both now match the existing variant layout.
+
+The old CI loops selected only two binaries, skipped absent binaries, and
+suppressed failures; they never ran the standalone factory suite. Build and
+sanitizer workflows now execute registered tests, propagate failures, reject
+empty inventories, and run for PRs targeting `develop` as well as `main`.
+The formatter fallback is tested explicitly even on hosts with `std::format`;
+it decodes escaped braces and never interprets placeholder-like text inside
+arguments. Hosted Apple Clang 15 exposed this path's previously invalid wire
+braces. Thread stress tests synchronize startup and wait for the original work
+counts with a 10-second deadline instead of assuming scheduler progress in
+500 milliseconds. Auto-refresh checks observe the expected value or refresh
+count within a five-second deadline instead of relying on a 50-millisecond sleep.
+Messaging throughput remains a local baseline; shared CI
+runners record it while checking each round trip's header and payload.
+No test failure is converted into a successful fallback build. The full CTest
+run also exposed the undeclared JSON test dependency on `develop`, two stale
+expectations that JSON parsing was unimplemented, and a message decoder that
+did not accept the JSON-string payload emitted by its own serializer. Those
+`develop`-specific JSON fixes accompany its newer deserialization API; they are
+not prerequisites for the existing `main` API. The main promotion retains its
+current source layout and applies the formatter, binary integer, and CI fixes.
+
+Baseline dependencies: common_system `eeccd0dfa52d406e54b20ae94d76c103b75d4ead`
+via `COMMON_SYSTEM_ROOT`, GoogleTest v1.17.0 via FetchContent, CMake 4.3.4,
+Debug, memory pool and coroutines enabled, no sanitizer, 8176 KiB stack limit.
+Use the same dependency revisions on both branches when reproducing. For
+sanitizer validation, configure a separate build with
+`-DCMAKE_CXX_FLAGS="-fsanitize=address,undefined -fno-omit-frame-pointer"` and
+`-DCMAKE_EXE_LINKER_FLAGS="-fsanitize=address,undefined"`, then run CTest with
+`ASAN_OPTIONS=halt_on_error=1` and `UBSAN_OPTIONS=halt_on_error=1`.
+
 ## Test Architecture
 
 The container system employs a multi-layered testing strategy:

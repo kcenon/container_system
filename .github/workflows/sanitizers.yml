@@ -2,9 +2,9 @@ name: Sanitizer Tests
 
 on:
   push:
-    branches: [ main, phase-* ]
+    branches: [ main, develop, phase-* ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, develop ]
   workflow_dispatch:
 
 jobs:
@@ -77,7 +77,7 @@ jobs:
       run: |
         cd build
         echo "=== Running ${{ matrix.sanitizer }} sanitizer tests ==="
-        ctest --output-on-failure --verbose
+        ctest --output-on-failure --verbose --no-tests=error
         CTEST_EXIT_CODE=$?
 
         echo ""
@@ -94,9 +94,9 @@ jobs:
 
         echo "✅ All ${{ matrix.sanitizer }} sanitizer tests passed"
       env:
-        TSAN_OPTIONS: "halt_on_error=0 second_deadlock_stack=1 history_size=7"
-        ASAN_OPTIONS: "halt_on_error=0 detect_leaks=1"
-        UBSAN_OPTIONS: "halt_on_error=0 print_stacktrace=1"
+        TSAN_OPTIONS: "halt_on_error=1 second_deadlock_stack=1 history_size=7"
+        ASAN_OPTIONS: "halt_on_error=1 detect_leaks=1"
+        UBSAN_OPTIONS: "halt_on_error=1 print_stacktrace=1"
 
     - name: Upload sanitizer logs
       if: failure()
