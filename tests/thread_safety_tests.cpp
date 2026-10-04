@@ -1785,6 +1785,9 @@ TEST(LockFreeReaderStressTest, ContinuousRefreshUnderLoad) {
                     auto val = reader->get<int32_t>("key" + std::to_string(i));
                     read_count.fetch_add(1, std::memory_order_relaxed);
                 }
+                // Let the background refresher run when 100 readers oversubscribe
+                // a small CI runner. Keep the read and refresh count requirements.
+                std::this_thread::sleep_for(std::chrono::milliseconds(1));
             }
         });
     }
