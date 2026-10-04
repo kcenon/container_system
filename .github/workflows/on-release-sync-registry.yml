@@ -22,12 +22,12 @@ jobs:
   # is later modified. Bump this ref deliberately when accepting future
   # upstream changes.
   sync:
-    uses: kcenon/common_system/.github/workflows/sync-vcpkg-registry.yml@c90d4b828d3063989a850a785c7a60753c2b35ea
+    uses: kcenon/common_system/.github/workflows/sync-vcpkg-registry.yml@852fd616ebc9a67cd953f52c9a533da7f230c16e
     with:
       port-name: kcenon-container-system
       version: ${{ github.event.release.tag_name }}
       coherence-tools-ref: 6f76d9b9480d0dffc9167dc4a2ca564cde708b4b
-      tag-reality-mode: advisory
+      tag-reality-mode: enforcing
     secrets:
       REGISTRY_PAT: ${{ secrets.VCPKG_REGISTRY_PAT }}
 
