@@ -1,0 +1,51 @@
+<map id="kcenon::container::value_container::from_msgpack_impl" name="kcenon::container::value_container::from_msgpack_impl">
+<area shape="rect" id="Node000001" title="Internal implementation for MessagePack deserialization." alt="" coords="5,431,171,486"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1container_1_1metrics__manager.html#ae636bf31baad3c8bba0c0160bc319115" title="Get the singleton metrics instance." alt="" coords="247,5,413,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="87,431,93,357,112,256,128,202,151,149,180,99,217,55,233,43,236,48,221,59,184,102,156,151,133,204,117,257,99,358,92,431"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1container_1_1value__container.html#a33b902642c2fb70ef20ab3af5ddcc04d" title="Reinitialize the entire container to defaults." alt="" coords="235,69,425,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="90,430,101,369,123,287,139,244,160,201,186,161,217,126,232,114,236,118,220,130,190,165,165,204,144,246,128,289,106,370,95,431"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1container_1_1metrics__manager.html#ac82ccd0364f4e8b2e0c3ba91becc6ea7" title="Check if metrics collection is enabled." alt="" coords="520,155,675,210"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="90,431,100,373,122,300,138,263,159,227,185,196,217,170,251,152,288,140,325,134,364,131,439,137,507,151,506,156,439,142,364,137,326,139,289,145,253,157,220,174,189,200,164,231,143,265,127,302,105,374,95,432"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1container_1_1metrics__manager.html#a03caac9a4799d6e02748887d56f25b0e" title="Create a scoped timer if metrics are enabled." alt="" coords="219,184,441,224"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="95,430,112,387,137,334,172,280,193,256,217,234,224,229,227,233,220,238,197,259,176,283,142,337,116,389,100,432"/>
+<area shape="rect" id="Node000007" href="$classkcenon_1_1container_1_1msgpack__decoder.html#a990b0f6c7fdeece974c3bf8bd3d52599" title="Peek the type of the next value without consuming it." alt="" coords="222,248,438,288"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="103,429,148,363,180,328,217,298,228,292,230,296,220,302,184,332,152,366,107,432"/>
+<area shape="rect" id="Node000008" href="$classkcenon_1_1container_1_1msgpack__decoder.html#afbe1ffbb1d2a05601ed715affb51c596" title="Read array header and return element count." alt="" coords="241,470,419,525"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="171,469,228,478,227,484,170,474"/>
+<area shape="rect" id="Node000011" href="$classkcenon_1_1container_1_1msgpack__decoder.html#a3de850683628c1caaff3137429defc66" title="Read binary data." alt="" coords="241,549,419,603"/>
+<area shape="poly" id="edge11_Node000001_Node000011" title=" " alt="" coords="131,484,173,510,220,535,233,541,231,546,217,540,170,515,128,488"/>
+<area shape="rect" id="Node000012" href="$classkcenon_1_1container_1_1msgpack__decoder.html#aaebacc41fc8835d78fbb9703f946b68c" title="Read boolean value." alt="" coords="224,823,436,863"/>
+<area shape="poly" id="edge14_Node000001_Node000012" title=" " alt="" coords="94,486,104,550,126,635,142,680,163,724,189,765,221,802,235,814,232,818,217,806,185,769,159,727,137,682,121,636,99,551,89,487"/>
+<area shape="rect" id="Node000013" href="$classkcenon_1_1container_1_1msgpack__decoder.html#a937273c16059aa0c454073f9f13e130e" title="Read 64&#45;bit double." alt="" coords="241,693,419,747"/>
+<area shape="poly" id="edge15_Node000001_Node000013" title=" " alt="" coords="101,485,118,527,143,579,177,632,220,678,231,686,228,690,217,682,173,635,138,582,113,530,96,487"/>
+<area shape="rect" id="Node000015" href="$classkcenon_1_1container_1_1msgpack__decoder.html#a59da3048b94bfa0d1a767552ad269249" title="Read 32&#45;bit float." alt="" coords="491,732,704,772"/>
+<area shape="poly" id="edge19_Node000001_Node000015" title=" " alt="" coords="94,486,103,546,124,622,141,661,162,698,188,731,220,758,256,776,294,789,335,795,376,796,455,789,524,773,526,778,456,794,376,802,334,800,293,794,254,781,217,762,184,735,157,701,136,663,119,624,98,547,89,487"/>
+<area shape="rect" id="Node000016" href="$classkcenon_1_1container_1_1msgpack__decoder.html#ab46db8b778a17cae9fc8c90c12056074" title="Read signed integer." alt="" coords="229,628,431,668"/>
+<area shape="poly" id="edge20_Node000001_Node000016" title=" " alt="" coords="107,485,153,550,184,584,220,614,230,620,228,624,217,618,180,588,148,553,103,488"/>
+<area shape="rect" id="Node000017" href="$classkcenon_1_1container_1_1msgpack__decoder.html#a01c25a0aa0ca0861fd1e4c1726e564e0" title="Read map header and return element count." alt="" coords="241,313,419,367"/>
+<area shape="poly" id="edge24_Node000001_Node000017" title=" " alt="" coords="127,429,170,402,217,376,231,370,233,375,220,381,173,407,130,433"/>
+<area shape="rect" id="Node000018" href="$classkcenon_1_1container_1_1msgpack__decoder.html#a3082a28315b467cfcd4a92c71896597c" title="Read nil value." alt="" coords="230,887,430,927"/>
+<area shape="poly" id="edge27_Node000001_Node000018" title=" " alt="" coords="92,486,97,563,115,667,132,722,154,777,183,828,221,873,225,877,221,881,217,877,179,831,149,779,127,724,110,668,92,563,87,487"/>
+<area shape="rect" id="Node000019" href="$classkcenon_1_1container_1_1msgpack__decoder.html#a22b471e6c8e0556cb68d16b759447bfb" title="Read string value." alt="" coords="241,391,419,446"/>
+<area shape="poly" id="edge28_Node000001_Node000019" title=" " alt="" coords="170,442,227,433,228,438,171,448"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1container_1_1value__container.html#a1c086d671fcb111f801dad2084fe7c78" title="Clear all stored child values." alt="" coords="493,69,702,109"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="425,87,479,87,479,92,425,92"/>
+<area shape="poly" id="edge6_Node000006_Node000005" title=" " alt="" coords="441,192,506,187,506,193,442,198"/>
+<area shape="rect" id="Node000009" href="$classkcenon_1_1container_1_1msgpack__decoder.html#a82243e4b076af4675a9da9ad2a29bc06" title=" " alt="" coords="489,452,705,492"/>
+<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="418,486,476,481,476,486,419,492"/>
+<area shape="rect" id="Node000010" href="$classkcenon_1_1container_1_1msgpack__decoder.html#a355827bea54052485659ad617baa484b" title=" " alt="" coords="753,535,969,575"/>
+<area shape="poly" id="edge10_Node000008_Node000010" title=" " alt="" coords="420,504,740,539,739,544,419,510"/>
+<area shape="poly" id="edge12_Node000011_Node000009" title=" " alt="" coords="411,546,440,535,537,495,539,500,442,540,412,551"/>
+<area shape="poly" id="edge13_Node000011_Node000010" title=" " alt="" coords="419,570,740,557,740,562,419,575"/>
+<area shape="rect" id="Node000014" href="$classkcenon_1_1container_1_1msgpack__decoder.html#adfb2c8071bbb96cb0de7ce150b81b02e" title=" " alt="" coords="489,668,705,708"/>
+<area shape="poly" id="edge16_Node000013_Node000014" title=" " alt="" coords="418,707,476,700,476,705,419,712"/>
+<area shape="poly" id="edge17_Node000013_Node000015" title=" " alt="" coords="419,728,477,735,476,740,418,733"/>
+<area shape="poly" id="edge18_Node000015_Node000010" title=" " alt="" coords="680,730,704,718,745,687,781,652,837,584,841,588,785,655,748,691,707,722,683,734"/>
+<area shape="poly" id="edge21_Node000016_Node000009" title=" " alt="" coords="415,625,440,614,478,588,513,558,569,501,573,505,517,562,481,592,443,618,417,630"/>
+<area shape="poly" id="edge22_Node000016_Node000010" title=" " alt="" coords="430,628,739,573,740,579,431,633"/>
+<area shape="poly" id="edge23_Node000016_Node000014" title=" " alt="" coords="431,660,476,667,475,672,431,666"/>
+<area shape="poly" id="edge25_Node000017_Node000009" title=" " alt="" coords="416,365,442,376,503,409,557,442,554,447,501,413,440,381,414,370"/>
+<area shape="poly" id="edge26_Node000017_Node000010" title=" " alt="" coords="419,338,485,344,558,355,634,374,707,403,747,429,784,460,839,522,835,525,780,464,744,433,704,408,633,379,557,360,484,349,419,344"/>
+<area shape="poly" id="edge29_Node000019_Node000009" title=" " alt="" coords="419,434,484,447,483,452,418,439"/>
+<area shape="poly" id="edge30_Node000019_Node000010" title=" " alt="" coords="419,407,483,405,556,408,633,418,706,437,743,455,777,477,833,523,829,527,774,481,741,459,704,443,631,423,556,413,483,410,419,412"/>
+</map>

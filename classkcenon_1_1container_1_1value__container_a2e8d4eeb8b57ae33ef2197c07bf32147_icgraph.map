@@ -1,0 +1,11 @@
+<map id="kcenon::container::value_container::set_unit_impl" name="kcenon::container::value_container::set_unit_impl">
+<area shape="rect" id="Node000001" title="Internal implementation for setting a single optimized_value." alt="" coords="333,62,488,117"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1container_1_1value__container.html#ac52d2278e99831b6460275f0d5d87d03" title="Set a single optimized_value (unified API)" alt="" coords="119,5,274,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="319,65,263,48,265,43,321,60"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1container_1_1value__container.html#a7f901340fc36c042f133158ec39b4900" title="Set a typed value by key (unified API)" alt="" coords="119,69,274,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="319,92,274,92,274,87,319,87"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1container_1_1value__container.html#a332ed9b0f9a1ce7cc4fe4c6e907de5ee" title="Set multiple optimized_values at once (unified API)" alt="" coords="108,133,285,173"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="321,119,265,136,263,131,319,114"/>
+<area shape="rect" id="Node000004" href="$schema__validation__example_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,77,60,102"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="106,92,60,92,60,87,106,87"/>
+</map>

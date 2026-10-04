@@ -1,0 +1,28 @@
+<map id="include/kcenon/container/simd_batch.h" name="include/kcenon/container/simd_batch.h">
+<area shape="rect" id="Node000001" title="SIMD&#45;friendly batch container for trivially copyable payloads." alt="" coords="295,5,481,45"/>
+<area shape="rect" id="Node000002" href="$concepts_8h.html" title="C++20 concepts for container_system type validation." alt="" coords="301,93,393,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="380,47,362,82,357,80,376,44"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,167,85,192"/>
+<area shape="poly" id="edge14_Node000001_Node000003" title=" " alt="" coords="347,48,85,163,83,159,345,43"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="110,167,202,192"/>
+<area shape="poly" id="edge10_Node000001_Node000004" title=" " alt="" coords="361,48,187,161,184,157,358,43"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="717,167,779,192"/>
+<area shape="poly" id="edge11_Node000001_Node000007" title=" " alt="" coords="399,44,423,82,439,101,459,116,491,134,520,145,573,153,631,155,704,164,703,169,631,160,573,158,518,150,489,139,456,121,436,105,418,85,395,47"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="469,93,539,119"/>
+<area shape="poly" id="edge12_Node000001_Node000011" title=" " alt="" coords="418,43,477,83,474,88,415,48"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="563,93,623,119"/>
+<area shape="poly" id="edge13_Node000001_Node000012" title=" " alt="" coords="438,43,551,86,549,91,436,48"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="301,121,99,168,98,163,300,116"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="317,121,201,164,199,159,315,116"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="317,167,376,192"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="349,119,349,153,344,153,344,119"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="401,167,498,192"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="365,116,423,156,420,161,362,121"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="393,113,412,116,557,138,704,164,703,169,556,143,412,121,392,118"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="523,167,600,192"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="382,116,514,160,513,165,380,121"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="625,167,693,192"/>
+<area shape="poly" id="edge8_Node000002_Node000009" title=" " alt="" coords="393,115,612,164,611,169,392,120"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="227,167,293,192"/>
+<area shape="poly" id="edge9_Node000002_Node000010" title=" " alt="" coords="334,121,286,160,283,156,331,117"/>
+</map>

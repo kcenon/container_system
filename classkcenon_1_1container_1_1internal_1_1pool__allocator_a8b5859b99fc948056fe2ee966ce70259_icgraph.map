@@ -1,0 +1,5 @@
+<map id="kcenon::container::internal::pool_allocator::reset_stats" name="kcenon::container::internal::pool_allocator::reset_stats">
+<area shape="rect" id="Node000001" title="Reset statistics (for benchmarking)" alt="" coords="255,5,427,60"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1container_1_1value__container.html#a32f1091a1989c01e331cd89d8836b8a4" title="Clear memory pool (for testing/benchmarking)" alt="" coords="5,13,207,53"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="241,35,207,35,207,30,241,30"/>
+</map>

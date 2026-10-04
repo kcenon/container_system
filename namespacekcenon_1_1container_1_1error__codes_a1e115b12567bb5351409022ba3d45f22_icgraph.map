@@ -1,0 +1,19 @@
+<map id="kcenon::container::error_codes::is_category" name="kcenon::container::error_codes::is_category">
+<area shape="rect" id="Node000001" title="Check if error code is in a specific category." alt="" coords="399,133,580,173"/>
+<area shape="rect" id="Node000002" href="$namespacekcenon_1_1container_1_1error__codes.html#aff5dda87d86c3199cb204cc3e6aa8adb" title="Check if error is a resource error (&#45;430 to &#45;439)" alt="" coords="120,5,339,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="453,127,405,92,350,60,319,48,321,43,352,55,408,87,456,122"/>
+<area shape="rect" id="Node000004" href="$namespacekcenon_1_1container_1_1error__codes.html#a30605ac6fc4b9ae61ecf4c844bc4c79e" title="Check if error is a serialization error (&#45;420 to &#45;429)" alt="" coords="108,69,351,109"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="393,133,310,112,312,107,395,127"/>
+<area shape="rect" id="Node000005" href="$namespacekcenon_1_1container_1_1error__codes.html#a760e9e1f9f47281ccd59a4732bb75e55" title="Check if error is a thread safety error (&#45;440 to &#45;449)" alt="" coords="127,133,331,173"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="385,156,331,156,331,151,385,151"/>
+<area shape="rect" id="Node000006" href="$namespacekcenon_1_1container_1_1error__codes.html#af8e582f52efbcdbf5e88a81d36198f7b" title="Check if error is a validation error (&#45;410 to &#45;419)" alt="" coords="116,197,343,237"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="395,179,312,200,310,195,393,174"/>
+<area shape="rect" id="Node000007" href="$namespacekcenon_1_1container_1_1error__codes.html#a08c19553b05d516ea76e6362fdc4211c" title="Check if error is a value operation error (&#45;400 to &#45;409)" alt="" coords="130,261,329,301"/>
+<area shape="poly" id="edge9_Node000001_Node000007" title=" " alt="" coords="456,184,408,219,352,252,321,264,319,259,350,247,405,215,453,180"/>
+<area shape="rect" id="Node000003" href="$error__handling__example_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,141,60,166"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="119,54,110,60,87,78,68,101,43,142,38,139,64,98,83,75,106,55,117,49"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="134,116,109,124,61,143,59,138,107,119,132,111"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="113,156,60,156,60,151,113,151"/>
+<area shape="poly" id="edge8_Node000006_Node000003" title=" " alt="" coords="132,196,107,188,59,168,61,163,109,183,134,191"/>
+<area shape="poly" id="edge10_Node000007_Node000003" title=" " alt="" coords="117,258,106,252,83,232,64,209,38,167,43,165,68,206,87,228,110,247,119,253"/>
+</map>

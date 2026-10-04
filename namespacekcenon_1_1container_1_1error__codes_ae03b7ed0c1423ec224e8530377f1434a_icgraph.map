@@ -1,0 +1,10 @@
+<map id="kcenon::container::error_codes::get_message" name="kcenon::container::error_codes::get_message">
+<area shape="rect" id="Node000001" title="Get human&#45;readable message for an error code." alt="" coords="364,78,557,118"/>
+<area shape="rect" id="Node000002" href="$namespacekcenon_1_1container_1_1validation__codes.html#a3b8f6cdbd384af4f73a82d810aaf2cf9" title="Get human&#45;readable message for validation error code." alt="" coords="131,5,293,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="370,77,292,56,294,51,371,72"/>
+<area shape="rect" id="Node000003" href="$error__handling__example_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,115,60,140"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="351,108,61,128,60,123,350,103"/>
+<area shape="rect" id="Node000004" href="$namespacekcenon_1_1container_1_1error__codes.html#af800510ec2aa42505072819b49917363" title="Build detailed error message with context." alt="" coords="108,135,316,175"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="361,124,300,138,299,133,360,119"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="94,140,60,134,61,129,95,134"/>
+</map>

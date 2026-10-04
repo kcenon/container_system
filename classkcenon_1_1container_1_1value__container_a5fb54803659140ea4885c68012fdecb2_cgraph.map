@@ -1,0 +1,9 @@
+<map id="kcenon::container::value_container::build_index" name="kcenon::container::value_container::build_index">
+<area shape="rect" id="Node000001" title="Build the value index for lazy parsing." alt="" coords="5,37,215,77"/>
+<area shape="rect" id="Node000002" href="$namespacekcenon_1_1container.html#a4306f14e3eed794a603a62e69f08cc9f" title="Convert a string&#45;based type indicator to a value_types enum." alt="" coords="267,5,417,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="215,40,253,35,253,40,215,46"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1container_1_1value__container.html#a3eeb799ed0e74bf24123e52c637505c1" title="Returns iterator to end of values." alt="" coords="263,69,421,109"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="215,69,249,74,249,79,215,74"/>
+<area shape="rect" id="Node000003" href="$namespacekcenon_1_1container.html#a120c2fe2102afe34dad682d1921c69df" title="Compile&#45;time conversion from string to value_types." alt="" coords="469,5,631,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="417,23,455,23,455,28,417,28"/>
+</map>

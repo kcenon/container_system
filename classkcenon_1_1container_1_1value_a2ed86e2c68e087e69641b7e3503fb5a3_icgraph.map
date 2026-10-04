@@ -1,0 +1,55 @@
+<map id="kcenon::container::value::type" name="kcenon::container::value::type">
+<area shape="rect" id="Node000001" title="Get the value_types enum corresponding to the variant index." alt="" coords="996,699,1143,739"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1container_1_1value.html#ac200fda87b78dced215309f05e435825" title="Deserialize from binary format (legacy compatible)" alt="" coords="751,389,898,429"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1054,687,1013,595,983,542,946,493,906,458,864,431,867,426,909,454,950,490,987,539,1018,592,1059,685"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1container_1_1value.html#a26b8169ed46f1294680171a28b0d60e4" title="Deserialize data portion based on type." alt="" coords="227,427,401,467"/>
+<area shape="poly" id="edge11_Node000001_Node000005" title=" " alt="" coords="1054,688,1038,651,1015,610,984,570,947,538,904,518,846,502,775,488,697,477,537,461,401,453,401,448,538,456,698,472,776,483,847,497,906,513,949,533,988,566,1019,607,1043,649,1059,685"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1container_1_1value.html#a31bed15f2c2992f56f7d605b865e738d" title="Construct from value_types and raw data (legacy compatibility)" alt="" coords="5,285,152,325"/>
+<area shape="poly" id="edge30_Node000001_Node000006" title=" " alt="" coords="1061,686,1049,624,1028,543,994,457,972,416,946,378,880,304,850,277,819,255,786,237,748,221,653,190,585,172,527,161,474,156,425,157,376,165,324,178,201,222,173,235,146,252,103,287,99,283,143,248,170,231,199,217,322,173,375,160,424,152,475,151,528,156,587,167,654,185,750,216,788,232,822,250,853,273,884,300,950,375,977,413,999,455,1033,542,1055,622,1066,685"/>
+<area shape="rect" id="Node000010" href="$namespacekcenon_1_1container.html#ab354a316e3bdfcff9a7f4c91e5f1645a" title="Check if two values have the same type." alt="" coords="751,547,898,587"/>
+<area shape="poly" id="edge12_Node000001_Node000010" title=" " alt="" coords="1043,690,1001,644,975,621,947,602,897,582,899,577,949,597,978,617,1005,640,1047,687"/>
+<area shape="rect" id="Node000011" href="$classkcenon_1_1container_1_1value.html#af291c72391c68b519082868058b6d595" title="Serialize to binary format (legacy compatible)" alt="" coords="751,85,898,125"/>
+<area shape="poly" id="edge13_Node000001_Node000011" title=" " alt="" coords="1063,686,1051,566,1028,404,1012,322,994,248,971,187,946,145,924,128,897,117,899,112,927,123,950,142,976,184,999,246,1018,321,1033,403,1056,566,1068,686"/>
+<area shape="rect" id="Node000014" href="$classkcenon_1_1container_1_1value.html#a2a483be0c0bf1a94033976aa520df88a" title="Convert to JSON representation." alt="" coords="751,635,898,675"/>
+<area shape="poly" id="edge18_Node000001_Node000014" title=" " alt="" coords="982,699,947,690,898,677,899,672,949,685,983,694"/>
+<area shape="rect" id="Node000017" href="$namespacekcenon_1_1container.html#ad2dfeb8ab9e4fea301c6e1c6c0e1953e" title="Get human&#45;readable type name." alt="" coords="751,699,898,739"/>
+<area shape="poly" id="edge23_Node000001_Node000017" title=" " alt="" coords="982,722,898,722,898,717,982,717"/>
+<area shape="rect" id="Node000018" href="$classkcenon_1_1container_1_1container__schema.html#ab81e4e98cc2adf2bbe8031b4ba2b7d39" title="Validate allowed values constraint." alt="" coords="723,764,926,819"/>
+<area shape="poly" id="edge24_Node000001_Node000018" title=" " alt="" coords="988,746,919,767,917,761,987,741"/>
+<area shape="rect" id="Node000019" href="$classkcenon_1_1container_1_1container__schema.html#aa69074ca5441e03b13bc4997f53ee041" title="Validate length constraint." alt="" coords="723,843,926,897"/>
+<area shape="poly" id="edge25_Node000001_Node000019" title=" " alt="" coords="1044,752,1002,794,949,834,927,845,924,840,947,829,999,790,1041,748"/>
+<area shape="rect" id="Node000020" href="$classkcenon_1_1container_1_1container__schema.html#a0a674ca8eb408f0aa54d23bb049e8d3c" title="Validate nested schema." alt="" coords="723,921,926,976"/>
+<area shape="poly" id="edge26_Node000001_Node000020" title=" " alt="" coords="1058,754,1041,790,1018,833,987,876,950,912,928,926,925,921,946,908,983,872,1013,830,1037,788,1053,751"/>
+<area shape="rect" id="Node000021" href="$classkcenon_1_1container_1_1container__schema.html#a67741e50882a8a47e0a4de9fc1d1eed8" title="Validate pattern constraint." alt="" coords="723,1000,926,1055"/>
+<area shape="poly" id="edge27_Node000001_Node000021" title=" " alt="" coords="1065,754,1052,806,1030,869,997,934,975,964,950,991,928,1006,925,1001,946,987,971,961,992,931,1025,867,1047,804,1060,752"/>
+<area shape="rect" id="Node000022" href="$classkcenon_1_1container_1_1container__schema.html#a2c77c56ca8bdfadec1b1a2fa803f6e1b" title="Validate range constraint." alt="" coords="701,1079,948,1119"/>
+<area shape="poly" id="edge28_Node000001_Node000022" title=" " alt="" coords="1069,753,1061,820,1042,905,1027,950,1007,993,981,1034,950,1069,933,1081,930,1077,946,1065,977,1031,1002,991,1022,948,1037,904,1056,819,1064,753"/>
+<area shape="rect" id="Node000023" href="$classkcenon_1_1container_1_1container__schema.html#a3aebb72123380f2fc8fb893d1c04b89c" title="Validate type constraint." alt="" coords="705,1143,944,1183"/>
+<area shape="poly" id="edge29_Node000001_Node000023" title=" " alt="" coords="1071,753,1067,831,1051,933,1036,987,1015,1040,986,1090,950,1133,934,1145,931,1141,946,1129,982,1087,1010,1038,1031,985,1046,932,1062,830,1066,753"/>
+<area shape="rect" id="Node000003" href="$namespacekcenon_1_1container.html#affa21db254b73403074d3cacb29be54e" title="Create a copy of a value with a new name." alt="" coords="491,199,638,239"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="796,380,734,317,694,283,652,254,629,242,631,237,655,249,698,279,737,313,800,377"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1container_1_1thread__safe__container.html#a97f73aceba6779ffda6d1475911f19ed" title="Deserialize from binary." alt="" coords="481,343,648,397"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="738,398,648,385,649,380,738,393"/>
+<area shape="poly" id="edge10_Node000002_Node000005" title=" " alt="" coords="738,425,569,440,401,450,401,445,569,434,737,419"/>
+<area shape="rect" id="Node000007" href="$classkcenon_1_1container_1_1value__store.html#abee005deba1057aceb8539f9fee1af10" title="Deserialize binary format into an existing value_store." alt="" coords="476,264,653,319"/>
+<area shape="poly" id="edge7_Node000002_Node000007" title=" " alt="" coords="767,385,652,332,627,321,629,316,654,328,769,380"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="469,402,380,430,379,425,467,397"/>
+<area shape="poly" id="edge5_Node000005_Node000002" title=" " alt="" coords="414,430,587,415,751,405,751,410,587,420,415,435"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="267,422,111,327,114,322,270,418"/>
+<area shape="rect" id="Node000008" href="$classkcenon_1_1container_1_1message__container.html#a8e2ffa84222ef8b8f17762a6cec60c50" title="Deserialize from binary format." alt="" coords="200,232,428,287"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="462,281,428,277,428,271,463,276"/>
+<area shape="rect" id="Node000009" href="$classkcenon_1_1container_1_1value__store.html#aafd3002ae80cd22fdadd842ae5979aec" title="Deserialize from binary format." alt="" coords="225,311,403,365"/>
+<area shape="poly" id="edge9_Node000007_Node000009" title=" " alt="" coords="463,313,403,324,402,319,462,308"/>
+<area shape="poly" id="edge14_Node000011_Node000003" title=" " alt="" coords="766,133,612,202,610,197,764,128"/>
+<area shape="rect" id="Node000012" href="$classkcenon_1_1container_1_1thread__safe__container.html#ad91eef1b0f1f808b49432fb829f1f273" title="Serialize container to binary." alt="" coords="481,5,648,60"/>
+<area shape="poly" id="edge15_Node000011_Node000012" title=" " alt="" coords="738,84,647,58,649,53,739,78"/>
+<area shape="rect" id="Node000013" href="$classkcenon_1_1container_1_1value.html#a976ad3011c1440800dd26b7399a640e3" title="Serialize data portion based on type." alt="" coords="486,85,643,125"/>
+<area shape="poly" id="edge16_Node000011_Node000013" title=" " alt="" coords="738,116,643,116,643,110,738,111"/>
+<area shape="poly" id="edge17_Node000013_Node000011" title=" " alt="" coords="657,93,751,94,751,99,657,99"/>
+<area shape="poly" id="edge20_Node000014_Node000014" title=" " alt="" coords="866,624,851,617,825,614,801,616,787,621,782,627,785,634,779,636,777,626,784,616,800,611,825,609,853,612,868,619"/>
+<area shape="rect" id="Node000015" href="$classkcenon_1_1container_1_1thread__safe__container.html#abf79a32467982d4d18dd104fd0938d0f" title="Serialize container to JSON." alt="" coords="481,588,648,643"/>
+<area shape="poly" id="edge19_Node000014_Node000015" title=" " alt="" coords="737,645,648,631,649,626,738,639"/>
+<area shape="rect" id="Node000016" href="$classkcenon_1_1container_1_1value.html#a4ad23e08f35169edc5dc7f91f269701b" title="Convert to string representation." alt="" coords="491,691,638,731"/>
+<area shape="poly" id="edge21_Node000014_Node000016" title=" " alt="" coords="739,676,639,698,637,693,738,671"/>
+<area shape="poly" id="edge22_Node000016_Node000016" title=" " alt="" coords="607,680,592,673,565,670,540,672,526,677,520,683,523,690,518,692,515,682,523,672,539,667,565,665,594,668,610,675"/>
+</map>

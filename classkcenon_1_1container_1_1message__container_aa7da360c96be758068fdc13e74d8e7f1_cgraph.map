@@ -1,0 +1,7 @@
+<map id="kcenon::container::message_container::set_source" name="kcenon::container::message_container::set_source">
+<area shape="rect" id="Node000001" title="Set source information." alt="" coords="5,34,183,89"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1container_1_1message__container.html#a9eda7890e815014fa1f4ef5c9c84f143" title="Get source identifier." alt="" coords="231,5,449,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="182,46,216,41,217,46,183,51"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1container_1_1message__container.html#a398508d9d19feb749405a7eb6f8a7fd4" title="Get source sub&#45;identifier." alt="" coords="240,70,440,125"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="183,72,227,78,226,83,182,77"/>
+</map>

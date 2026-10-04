@@ -1,0 +1,26 @@
+<map id="include/kcenon/container/variant_helpers.h" name="include/kcenon/container/variant_helpers.h">
+<area shape="rect" id="Node000001" title=" " alt="" coords="460,5,645,45"/>
+<area shape="rect" id="Node000002" href="$types_8h.html" title=" " alt="" coords="407,93,477,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="527,48,471,87,468,83,524,43"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="585,240,643,265"/>
+<area shape="poly" id="edge11_Node000001_Node000005" title=" " alt="" coords="566,45,593,98,607,131,617,166,620,197,619,226,614,226,615,197,611,167,602,133,589,100,562,47"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="5,240,103,265"/>
+<area shape="poly" id="edge12_Node000001_Node000006" title=" " alt="" coords="460,32,370,42,269,65,218,83,168,106,122,134,81,169,72,181,65,196,58,227,53,226,60,194,67,179,77,165,119,130,166,101,216,78,267,60,370,37,460,26"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="702,93,763,119"/>
+<area shape="poly" id="edge13_Node000001_Node000011" title=" " alt="" coords="597,43,695,85,693,90,595,48"/>
+<area shape="rect" id="Node000003" href="$value__types_8h.html" title="Enumeration of the 16 supported value types in the container system." alt="" coords="92,167,205,192"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="407,118,209,166,208,161,406,113"/>
+<area shape="poly" id="edge7_Node000002_Node000005" title=" " alt="" coords="479,110,536,128,565,144,591,165,608,195,615,226,610,227,603,197,587,168,562,148,534,133,477,115"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="229,167,297,192"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="414,121,306,164,304,159,412,116"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="321,167,384,192"/>
+<area shape="poly" id="edge8_Node000002_Node000008" title=" " alt="" coords="429,121,380,160,376,156,426,117"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="409,167,475,192"/>
+<area shape="poly" id="edge9_Node000002_Node000009" title=" " alt="" coords="445,119,445,153,439,153,439,119"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="499,167,577,192"/>
+<area shape="poly" id="edge10_Node000002_Node000010" title=" " alt="" coords="459,117,513,156,510,160,456,121"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="127,240,183,265"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="152,192,156,226,150,227,147,193"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="206,187,218,189,571,242,570,248,218,195,205,193"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="135,194,82,234,79,229,132,190"/>
+</map>

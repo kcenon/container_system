@@ -1,0 +1,19 @@
+<map id="kcenon::container::value_container::reset_metrics" name="kcenon::container::value_container::reset_metrics">
+<area shape="rect" id="Node000001" title="Reset all detailed metrics." alt="" coords="5,94,172,149"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1container_1_1metrics__manager.html#ab6449943a16bad4a4fa7b5c769738279" title="Reset all metrics." alt="" coords="220,101,397,141"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="172,119,207,119,207,124,172,124"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1container_1_1metrics__manager.html#ae636bf31baad3c8bba0c0160bc319115" title="Get the singleton metrics instance." alt="" coords="449,69,614,109"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="397,106,435,101,435,106,398,111"/>
+<area shape="rect" id="Node000004" href="$structkcenon_1_1container_1_1detailed__metrics.html#aab2c1e85f459a316ba01849b3a23ba7d" title="Reset all metrics." alt="" coords="445,133,617,173"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="398,131,432,136,432,142,397,137"/>
+<area shape="rect" id="Node000005" href="$structkcenon_1_1container_1_1cache__metrics.html#ad8332bb933f1bde3c7e076b62736baf3" title="Reset all cache metrics." alt="" coords="679,5,836,45"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="596,131,616,119,631,104,639,88,648,72,664,55,672,50,675,54,667,59,652,75,644,90,635,107,619,123,599,136"/>
+<area shape="rect" id="Node000006" href="$structkcenon_1_1container_1_1latency__histogram.html#a62196219d5f39ae2191e303184fb2f32" title="Reset the histogram." alt="" coords="665,69,849,109"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="602,131,672,111,674,116,603,136"/>
+<area shape="rect" id="Node000007" href="$structkcenon_1_1container_1_1operation__counts.html#a261ea9c710a0aa9d166a32c486f8bc16" title="Reset all counters to zero." alt="" coords="670,133,845,173"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="618,151,656,151,656,156,618,156"/>
+<area shape="rect" id="Node000008" href="$structkcenon_1_1container_1_1simd__metrics.html#abe82609a4553a77345df9671d74203e9" title="Reset all SIMD metrics." alt="" coords="682,197,833,237"/>
+<area shape="poly" id="edge7_Node000004_Node000008" title=" " alt="" coords="603,171,674,191,672,196,602,176"/>
+<area shape="rect" id="Node000009" href="$structkcenon_1_1container_1_1timing__metrics.html#a8a1c5f0998daad4ee9466794ce406c9e" title="Reset all timing metrics to zero." alt="" coords="677,261,838,301"/>
+<area shape="poly" id="edge8_Node000004_Node000009" title=" " alt="" coords="558,172,606,209,667,247,680,254,678,258,664,252,603,214,555,176"/>
+</map>

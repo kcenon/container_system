@@ -1,0 +1,26 @@
+<map id="main" name="main">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,223,60,249"/>
+<area shape="rect" id="Node000002" href="$namespacekcenon_1_1container_1_1error__codes.html#a8d4e7f2f6085061f202285e5f1814df8" title="Get the category name for an error code." alt="" coords="134,5,325,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="33,223,40,190,53,147,75,102,106,62,122,50,126,54,110,66,79,105,58,149,45,192,38,224"/>
+<area shape="rect" id="Node000003" href="$namespacekcenon_1_1container_1_1error__codes.html#ae03b7ed0c1423ec224e8530377f1434a" title="Get human&#45;readable message for an error code." alt="" coords="399,92,592,132"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="34,222,42,196,56,164,77,131,107,106,144,88,183,77,224,70,265,68,345,73,414,86,413,91,344,79,265,74,225,76,184,82,146,93,109,110,81,135,61,166,47,198,39,224"/>
+<area shape="rect" id="Node000004" href="$namespacekcenon_1_1container_1_1error__codes.html#aff5dda87d86c3199cb204cc3e6aa8adb" title="Check if error is a resource error (&#45;430 to &#45;439)" alt="" coords="120,184,339,224"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="60,229,106,221,107,227,61,234"/>
+<area shape="rect" id="Node000006" href="$namespacekcenon_1_1container_1_1error__codes.html#a30605ac6fc4b9ae61ecf4c844bc4c79e" title="Check if error is a serialization error (&#45;420 to &#45;429)" alt="" coords="108,248,351,288"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="61,238,95,243,94,249,60,243"/>
+<area shape="rect" id="Node000007" href="$namespacekcenon_1_1container_1_1error__codes.html#a760e9e1f9f47281ccd59a4732bb75e55" title="Check if error is a thread safety error (&#45;440 to &#45;449)" alt="" coords="127,312,331,352"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="47,247,74,273,109,298,124,305,121,309,107,302,71,277,43,251"/>
+<area shape="rect" id="Node000008" href="$namespacekcenon_1_1container_1_1error__codes.html#af8e582f52efbcdbf5e88a81d36198f7b" title="Check if error is a validation error (&#45;410 to &#45;419)" alt="" coords="116,376,343,416"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="40,248,63,303,83,335,110,362,117,367,114,371,106,366,79,338,59,306,35,250"/>
+<area shape="rect" id="Node000009" href="$namespacekcenon_1_1container_1_1error__codes.html#a08c19553b05d516ea76e6362fdc4211c" title="Check if error is a value operation error (&#45;400 to &#45;409)" alt="" coords="130,440,329,480"/>
+<area shape="poly" id="edge11_Node000001_Node000009" title=" " alt="" coords="38,249,43,284,55,332,76,383,91,406,110,426,120,434,116,438,106,430,87,409,72,385,50,334,38,285,32,249"/>
+<area shape="rect" id="Node000010" href="$namespacekcenon_1_1container_1_1error__codes.html#af800510ec2aa42505072819b49917363" title="Build detailed error message with context." alt="" coords="125,120,333,160"/>
+<area shape="poly" id="edge13_Node000001_Node000010" title=" " alt="" coords="43,221,71,195,107,170,121,163,124,167,109,174,74,199,47,225"/>
+<area shape="rect" id="Node000005" href="$namespacekcenon_1_1container_1_1error__codes.html#a1e115b12567bb5351409022ba3d45f22" title="Check if error code is in a specific category." alt="" coords="405,312,586,352"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="321,222,352,234,411,266,460,301,457,306,408,271,350,238,319,227"/>
+<area shape="poly" id="edge6_Node000006_Node000005" title=" " alt="" coords="314,285,399,306,398,311,313,291"/>
+<area shape="poly" id="edge8_Node000007_Node000005" title=" " alt="" coords="331,329,391,329,391,335,331,335"/>
+<area shape="poly" id="edge10_Node000008_Node000005" title=" " alt="" coords="313,373,398,353,399,358,314,379"/>
+<area shape="poly" id="edge12_Node000009_Node000005" title=" " alt="" coords="319,437,350,426,408,393,457,358,460,363,411,398,352,430,321,442"/>
+<area shape="poly" id="edge14_Node000010_Node000003" title=" " alt="" coords="333,126,385,121,385,126,334,132"/>
+</map>

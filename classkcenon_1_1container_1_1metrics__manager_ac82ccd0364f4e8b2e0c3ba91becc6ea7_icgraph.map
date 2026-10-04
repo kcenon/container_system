@@ -1,0 +1,40 @@
+<map id="kcenon::container::metrics_manager::is_enabled" name="kcenon::container::metrics_manager::is_enabled">
+<area shape="rect" id="Node000001" title="Check if metrics collection is enabled." alt="" coords="885,300,1040,355"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1container_1_1value__container.html#af299da476105c06fa5e346e922cf8546" title="Internal deserialize from string." alt="" coords="361,170,567,210"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="919,293,881,265,836,242,768,220,698,206,629,197,567,193,567,188,630,192,699,201,770,215,838,237,883,261,923,289"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1container_1_1value__container.html#a64a2e0cf1ac81fe1778cbe0223a46991" title="Copy constructor from another value_container. If parse_only_header==true, only parse the header port..." alt="" coords="125,5,296,60"/>
+<area shape="poly" id="edge20_Node000001_Node000006" title=" " alt="" coords="932,291,890,243,864,220,836,200,768,165,696,134,622,109,548,89,409,59,296,43,297,38,410,54,549,83,623,104,698,129,770,160,839,196,867,216,894,239,936,287"/>
+<area shape="rect" id="Node000008" href="$classkcenon_1_1container_1_1value__container.html#a5137046f9b28d2688d593ad75f278c25" title="Internal implementation for MessagePack deserialization." alt="" coords="381,235,547,289"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="905,296,872,280,837,269,761,256,684,251,611,251,547,255,547,250,610,246,684,245,762,250,838,263,874,275,907,291"/>
+<area shape="rect" id="Node000009" href="$classkcenon_1_1container_1_1value__container.html#a1d37de7cc872619a43548cbaa6a33a0f" title="Get a single value by key (unified API)" alt="" coords="387,314,541,354"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="872,332,837,333,542,336,542,331,837,327,872,327"/>
+<area shape="rect" id="Node000010" href="$classkcenon_1_1container_1_1value__container.html#a6b466aab17cf181decbd3ede29206e45" title="Check if metrics collection is enabled." alt="" coords="653,444,799,499"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="922,366,883,397,839,427,801,446,798,442,836,422,880,393,919,362"/>
+<area shape="rect" id="Node000011" href="$classkcenon_1_1container_1_1metrics__manager.html#a03caac9a4799d6e02748887d56f25b0e" title="Create a scoped timer if metrics are enabled." alt="" coords="615,278,837,318"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="871,319,837,314,838,309,872,313"/>
+<area shape="rect" id="Node000012" href="$classkcenon_1_1container_1_1value__container.html#a2e8d4eeb8b57ae33ef2197c07bf32147" title="Internal implementation for setting a single optimized_value." alt="" coords="387,379,541,433"/>
+<area shape="poly" id="edge19_Node000001_Node000012" title=" " alt="" coords="872,344,542,397,541,391,871,339"/>
+<area shape="rect" id="Node000017" href="$classkcenon_1_1container_1_1value__container.html#ac3e1e02b2bddeb26af7739da1afefd9d" title="Move constructor." alt="" coords="641,523,811,577"/>
+<area shape="poly" id="edge21_Node000001_Node000017" title=" " alt="" coords="946,369,904,442,874,480,839,513,813,529,810,525,836,509,870,477,899,439,942,366"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1container_1_1value__container.html#a1d547082752e4c8fca46c90477c67786" title="Internal deserialize from byte array." alt="" coords="108,321,313,361"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="369,219,363,224,347,244,340,265,333,287,315,309,294,323,291,318,312,305,328,285,335,264,342,242,359,220,366,215"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1container_1_1value__container.html#a8819a190133b826922a3a87bd880d3a9" title="Construct from a serialized data string. If parse_only_header==true, only parse the header part,..." alt="" coords="125,84,296,139"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="385,168,295,140,297,135,387,163"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1container_1_1value__container.html#ad43c87b05d00ad0550566b99c20ccce4" title="Construct from a raw byte array. If parse_only_header==true, only parse the header part,..." alt="" coords="125,163,296,217"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="347,193,296,193,296,187,347,187"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="430,163,377,118,312,74,290,62,292,58,315,69,380,114,433,159"/>
+<area shape="rect" id="Node000007" href="$classkcenon_1_1container_1_1value__container.html#a39e7a4c455f4de83962907033c04f57f" title="Copy from an existing pointer. If parse_only_header==true, only parse header." alt="" coords="125,241,296,296"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="387,217,297,245,295,240,385,212"/>
+<area shape="poly" id="edge11_Node000011_Node000002" title=" " alt="" coords="673,274,566,224,532,213,534,208,568,220,675,269"/>
+<area shape="poly" id="edge12_Node000011_Node000008" title=" " alt="" coords="601,283,547,276,547,271,601,278"/>
+<area shape="poly" id="edge13_Node000011_Node000009" title=" " alt="" coords="601,318,542,326,541,321,601,313"/>
+<area shape="poly" id="edge14_Node000011_Node000012" title=" " alt="" coords="668,326,568,368,537,381,535,376,566,364,666,321"/>
+<area shape="rect" id="Node000013" href="$classkcenon_1_1container_1_1value__container.html#ac52d2278e99831b6460275f0d5d87d03" title="Set a single optimized_value (unified API)" alt="" coords="133,385,288,425"/>
+<area shape="poly" id="edge15_Node000012_Node000013" title=" " alt="" coords="373,408,288,408,288,402,373,403"/>
+<area shape="rect" id="Node000014" href="$classkcenon_1_1container_1_1value__container.html#a7f901340fc36c042f133158ec39b4900" title="Set a typed value by key (unified API)" alt="" coords="133,449,288,489"/>
+<area shape="poly" id="edge16_Node000012_Node000014" title=" " alt="" coords="374,431,289,452,288,447,373,426"/>
+<area shape="rect" id="Node000016" href="$classkcenon_1_1container_1_1value__container.html#a332ed9b0f9a1ce7cc4fe4c6e907de5ee" title="Set multiple optimized_values at once (unified API)" alt="" coords="122,513,299,553"/>
+<area shape="poly" id="edge18_Node000012_Node000016" title=" " alt="" coords="416,443,368,474,314,503,285,515,283,510,312,498,365,470,413,439"/>
+<area shape="rect" id="Node000015" href="$schema__validation__example_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,456,60,481"/>
+<area shape="poly" id="edge17_Node000014_Node000015" title=" " alt="" coords="119,471,60,471,60,466,119,466"/>
+</map>

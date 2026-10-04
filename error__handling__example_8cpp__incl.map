@@ -1,0 +1,14 @@
+<map id="examples/error_handling_example.cpp" name="examples/error_handling_example.cpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="178,5,362,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,101,100,126"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="223,48,95,98,93,93,221,43"/>
+<area shape="rect" id="Node000003" href="$error__codes_8h.html" title=" " alt="" coords="124,93,293,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="259,47,232,84,228,81,254,44"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="291,181,350,207"/>
+<area shape="poly" id="edge6_Node000001_Node000005" title=" " alt="" coords="285,45,309,92,318,131,322,167,317,167,312,132,303,94,280,47"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="369,101,449,126"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="302,43,380,91,377,96,299,48"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="160,181,257,207"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="211,134,211,167,206,167,206,134"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="237,131,294,171,291,175,234,136"/>
+</map>

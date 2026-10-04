@@ -1,0 +1,7 @@
+<map id="include/kcenon/container/internal/pool_allocator.h" name="include/kcenon/container/internal/pool_allocator.h">
+<area shape="rect" id="Node000001" title="Thread&#45;local memory pool allocator for value_container." alt="" coords="104,5,289,45"/>
+<area shape="rect" id="Node000002" href="$pool__allocator__adapter_8h.html" title="STL&#45;compatible allocator adapter over pool_allocator." alt="" coords="5,93,191,148"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="169,57,128,95,124,91,165,53"/>
+<area shape="rect" id="Node000003" href="$container_8cpp.html" title=" " alt="" coords="215,108,379,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="229,53,286,106,282,110,225,57"/>
+</map>

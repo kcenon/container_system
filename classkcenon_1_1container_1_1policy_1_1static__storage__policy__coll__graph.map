@@ -1,0 +1,15 @@
+<map id="kcenon::container::policy::static_storage_policy&lt; AllowedTypes &gt;" name="kcenon::container::policy::static_storage_policy&lt; AllowedTypes &gt;">
+<area shape="rect" id="Node000001" title="Compile&#45;time type&#45;restricted storage policy." alt="" coords="67,708,265,1083"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="99,565,233,645"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="169,645,169,692,163,692,163,645"/>
+<area shape="rect" id="Node000003" href="$structkcenon_1_1container_1_1optimized__value.html" title="Optimized value storage with Small Object Optimization." alt="" coords="5,263,164,503"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="115,502,130,540,134,550,130,552,125,542,110,504"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="45,135,124,200"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="87,200,87,247,82,247,82,200"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="19,5,150,85"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="87,99,87,134,82,134,82,99"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="188,350,309,415"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="242,430,228,484,207,542,195,566,190,564,202,540,223,483,237,428"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="237,135,260,200"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="251,200,251,333,246,333,246,200"/>
+</map>

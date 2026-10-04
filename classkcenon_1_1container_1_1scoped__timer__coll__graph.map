@@ -1,0 +1,21 @@
+<map id="kcenon::container::scoped_timer" name="kcenon::container::scoped_timer">
+<area shape="rect" id="Node000001" title="RAII timer for measuring operation latency." alt="" coords="13,1011,152,1231"/>
+<area shape="rect" id="Node000002" href="$structkcenon_1_1container_1_1latency__histogram.html" title="Approximate latency histogram using reservoir sampling." alt="" coords="192,633,362,933"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="194,933,156,997,152,995,189,930"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="176,312,346,377"/>
+<area shape="poly" id="edge11_Node000001_Node000003" title=" " alt="" coords="189,380,154,400,119,426,88,456,63,492,38,553,22,618,14,685,12,752,16,818,24,882,47,994,41,995,19,882,11,819,7,752,9,685,17,617,33,552,59,489,83,453,115,421,151,396,186,375"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="305,376,321,400,329,439,329,492,313,617,308,616,323,492,323,440,316,402,300,379"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="74,491,291,571"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="250,379,208,477,203,475,245,376"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="198,133,324,199"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="264,212,264,312,258,312,258,212"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="386,401,541,467"/>
+<area shape="poly" id="edge10_Node000008_Node000004" title=" " alt="" coords="337,204,356,221,391,265,419,314,456,400,451,402,415,317,387,268,352,224,333,208"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="139,5,162,71"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="164,51,224,119,220,123,160,54"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="20,223,134,288"/>
+<area shape="poly" id="edge8_Node000007_Node000005" title=" " alt="" coords="141,59,123,96,104,153,90,207,85,206,99,151,118,94,136,57"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="200,570,217,617,212,619,195,572"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="24,300,17,313,8,345,17,376,36,410,62,440,90,466,119,488,116,493,87,470,58,444,32,413,12,378,3,345,12,311,20,297"/>
+<area shape="poly" id="edge9_Node000002_Node000008" title=" " alt="" coords="467,467,464,517,459,545,450,572,417,633,375,688,371,685,412,630,445,570,454,544,459,516,462,466"/>
+</map>

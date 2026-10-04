@@ -1,0 +1,5 @@
+<map id="kcenon::container::error_codes::is_resource_error" name="kcenon::container::error_codes::is_resource_error">
+<area shape="rect" id="Node000001" title="Check if error is a resource error (&#45;430 to &#45;439)" alt="" coords="5,5,224,45"/>
+<area shape="rect" id="Node000002" href="$namespacekcenon_1_1container_1_1error__codes.html#a1e115b12567bb5351409022ba3d45f22" title="Check if error code is in a specific category." alt="" coords="272,5,453,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="224,23,258,23,258,28,224,28"/>
+</map>

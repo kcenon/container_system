@@ -1,0 +1,7 @@
+<map id="include/kcenon/container/internal/async/task.h" name="include/kcenon/container/internal/async/task.h">
+<area shape="rect" id="Node000001" title="C++20 coroutine task type for async operations." alt="" coords="149,5,335,45"/>
+<area shape="rect" id="Node000002" href="$async__container_8h.html" title="Async wrapper for value_container operations." alt="" coords="5,101,244,141"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="209,56,150,103,147,99,206,52"/>
+<area shape="rect" id="Node000003" href="$thread__pool__executor_8h.html" title="Thread pool executor integration for async operations." alt="" coords="268,93,453,148"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="278,52,329,91,326,95,275,56"/>
+</map>

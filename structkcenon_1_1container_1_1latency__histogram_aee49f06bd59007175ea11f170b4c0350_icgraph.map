@@ -1,0 +1,5 @@
+<map id="kcenon::container::latency_histogram::avg" name="kcenon::container::latency_histogram::avg">
+<area shape="rect" id="Node000001" title="Get average latency." alt="" coords="216,13,391,53"/>
+<area shape="rect" id="Node000002" href="$structkcenon_1_1container_1_1detailed__metrics.html#a0923fc9bbdec28120b053ec141998105" title="Calculate average serialize latency in nanoseconds." alt="" coords="5,5,168,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="202,35,168,35,168,30,202,30"/>
+</map>

@@ -1,0 +1,11 @@
+<map id="kcenon::container::async::detail::promise_type&lt; T &gt;" name="kcenon::container::async::detail::promise_type&lt; T &gt;">
+<area shape="rect" id="Node000001" title="Promise type for value&#45;returning tasks." alt="" coords="24,579,183,733"/>
+<area shape="rect" id="Node000002" href="$structkcenon_1_1container_1_1async_1_1detail_1_1promise__base.html" title="Base promise type with common functionality." alt="" coords="5,389,201,529"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="106,543,106,578,101,578,101,543"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="31,261,176,327"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="106,327,106,373,101,373,101,327"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="41,133,166,199"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="106,213,106,261,101,261,101,213"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="92,5,115,71"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="106,71,106,117,101,117,101,71"/>
+</map>

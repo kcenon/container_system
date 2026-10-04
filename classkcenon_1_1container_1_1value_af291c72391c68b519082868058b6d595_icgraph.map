@@ -1,0 +1,10 @@
+<map id="kcenon::container::value::serialize" name="kcenon::container::value::serialize">
+<area shape="rect" id="Node000001" title="Serialize to binary format (legacy compatible)" alt="" coords="220,113,367,153"/>
+<area shape="rect" id="Node000002" href="$namespacekcenon_1_1container.html#affa21db254b73403074d3cacb29be54e" title="Create a copy of a value with a new name." alt="" coords="15,5,162,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="251,108,171,60,145,48,147,43,173,55,254,103"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1container_1_1thread__safe__container.html#ad91eef1b0f1f808b49432fb829f1f273" title="Serialize container to binary." alt="" coords="5,70,172,125"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="206,121,172,115,173,109,207,115"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1container_1_1value.html#a976ad3011c1440800dd26b7399a640e3" title="Serialize data portion based on type." alt="" coords="10,149,167,189"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="214,159,168,167,167,162,213,153"/>
+<area shape="poly" id="edge4_Node000004_Node000001" title=" " alt="" coords="168,144,219,135,220,140,169,149"/>
+</map>

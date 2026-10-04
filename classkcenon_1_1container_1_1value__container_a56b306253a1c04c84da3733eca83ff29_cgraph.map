@@ -1,0 +1,5 @@
+<map id="kcenon::container::value_container::metrics_to_prometheus" name="kcenon::container::value_container::metrics_to_prometheus">
+<area shape="rect" id="Node000001" title="Export metrics in Prometheus format." alt="" coords="5,5,188,60"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1container_1_1metrics__manager.html#ae636bf31baad3c8bba0c0160bc319115" title="Get the singleton metrics instance." alt="" coords="236,13,401,53"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="188,30,222,30,222,35,188,35"/>
+</map>

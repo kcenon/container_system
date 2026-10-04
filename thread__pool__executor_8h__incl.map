@@ -1,0 +1,32 @@
+<map id="include/kcenon/container/internal/async/thread_pool_executor.h" name="include/kcenon/container/internal/async/thread_pool_executor.h">
+<area shape="rect" id="Node000001" title="Thread pool executor integration for async operations." alt="" coords="353,5,538,60"/>
+<area shape="rect" id="Node000002" href="$task_8h.html" title="C++20 coroutine task type for async operations." alt="" coords="319,108,382,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="418,62,375,101,372,97,415,58"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,181,88,207"/>
+<area shape="poly" id="edge10_Node000001_Node000003" title=" " alt="" coords="369,63,240,110,85,178,83,173,238,106,367,58"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="113,181,199,207"/>
+<area shape="poly" id="edge11_Node000001_Node000004" title=" " alt="" coords="383,63,284,110,230,143,184,175,181,171,227,139,281,106,380,58"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="224,181,299,207"/>
+<area shape="poly" id="edge15_Node000001_Node000005" title=" " alt="" coords="379,62,342,83,309,110,287,139,272,170,267,167,282,136,305,106,339,79,377,58"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="499,181,591,207"/>
+<area shape="poly" id="edge17_Node000001_Node000007" title=" " alt="" coords="444,60,443,96,447,115,454,132,475,156,502,173,499,177,472,160,450,135,442,116,438,97,438,60"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="616,181,683,207"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="456,59,472,96,484,115,499,131,543,154,604,176,602,181,541,159,496,135,480,118,468,99,451,61"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="509,108,595,133"/>
+<area shape="poly" id="edge12_Node000001_Node000010" title=" " alt="" coords="480,58,528,97,525,101,476,62"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="620,108,681,133"/>
+<area shape="poly" id="edge13_Node000001_Node000011" title=" " alt="" coords="509,58,612,100,610,105,507,63"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="705,108,783,133"/>
+<area shape="poly" id="edge14_Node000001_Node000012" title=" " alt="" coords="537,58,693,102,691,107,536,63"/>
+<area shape="rect" id="Node000013" title=" " alt="" coords="807,108,871,133"/>
+<area shape="poly" id="edge16_Node000001_Node000013" title=" " alt="" coords="539,50,794,105,793,110,538,55"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="320,132,102,182,101,177,319,127"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="320,136,201,179,200,174,318,131"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="338,135,288,175,285,170,335,131"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="415,181,475,207"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="367,131,420,171,417,175,364,135"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="383,131,502,174,500,179,381,136"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="323,181,391,207"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="354,133,358,168,352,168,349,134"/>
+<area shape="poly" id="edge8_Node000002_Node000009" title=" " alt="" coords="383,127,603,178,602,184,382,132"/>
+</map>

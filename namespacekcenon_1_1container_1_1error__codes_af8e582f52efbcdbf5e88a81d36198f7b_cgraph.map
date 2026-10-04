@@ -1,0 +1,5 @@
+<map id="kcenon::container::error_codes::is_validation_error" name="kcenon::container::error_codes::is_validation_error">
+<area shape="rect" id="Node000001" title="Check if error is a validation error (&#45;410 to &#45;419)" alt="" coords="5,5,232,45"/>
+<area shape="rect" id="Node000002" href="$namespacekcenon_1_1container_1_1error__codes.html#a1e115b12567bb5351409022ba3d45f22" title="Check if error code is in a specific category." alt="" coords="280,5,461,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="232,23,266,23,266,28,232,28"/>
+</map>

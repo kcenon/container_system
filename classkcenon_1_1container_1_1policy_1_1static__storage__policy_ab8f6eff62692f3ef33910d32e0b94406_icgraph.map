@@ -1,0 +1,7 @@
+<map id="kcenon::container::policy::static_storage_policy::is_variant_type_allowed" name="kcenon::container::policy::static_storage_policy::is_variant_type_allowed">
+<area shape="rect" id="Node000001" title="Runtime check if variant contains an allowed type." alt="" coords="213,38,388,107"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1container_1_1policy_1_1static__storage__policy.html#afed8de8db9120d1bf694939d841b9691" title="Set a value by key (StoragePolicy interface)" alt="" coords="5,5,165,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="199,57,165,50,166,45,200,51"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1container_1_1policy_1_1static__storage__policy.html#a903ae7d9af526f3c1a726a697fd1aa93" title="Set a value by key (move semantics)" alt="" coords="5,84,165,139"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="200,93,166,100,165,94,199,88"/>
+</map>

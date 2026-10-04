@@ -1,0 +1,5 @@
+<map id="kcenon::container::convert_value_type" name="kcenon::container::convert_value_type">
+<area shape="rect" id="Node000001" title="Convert a value_types enum to its associated string indicator." alt="" coords="5,5,156,45"/>
+<area shape="rect" id="Node000002" href="$namespacekcenon_1_1container.html#ac16d98e512f67b747de1e3d987dee32b" title="Compile&#45;time conversion from value_types to string." alt="" coords="204,5,365,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="156,23,190,23,190,28,156,28"/>
+</map>

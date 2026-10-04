@@ -1,0 +1,5 @@
+<map id="kcenon::container::epoch_manager::enter_critical" name="kcenon::container::epoch_manager::enter_critical">
+<area shape="rect" id="Node000001" title="Enter critical section (pin to current epoch)" alt="" coords="249,5,417,60"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1container_1_1epoch__guard.html#ace0d944b96ab30f8a667de3641897d29" title="Enter critical section." alt="" coords="5,13,201,53"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="236,35,202,35,202,30,236,30"/>
+</map>

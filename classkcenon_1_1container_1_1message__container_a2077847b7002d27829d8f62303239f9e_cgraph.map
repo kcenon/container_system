@@ -1,0 +1,9 @@
+<map id="kcenon::container::message_container::deserialize" name="kcenon::container::message_container::deserialize">
+<area shape="rect" id="Node000001" title="Deserialize from JSON string." alt="" coords="5,69,233,109"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1container_1_1value__store.html#aa2d44751e6437d05667701d84954f5d9" title="Deserialize JSON format into an existing value_store." alt="" coords="281,5,491,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="203,67,288,46,290,51,204,72"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1container_1_1value__store.html#a99cd7f04037af03a3ee7296435f6c562" title="Get a value by key." alt="" coords="313,69,459,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="233,87,299,87,299,92,233,92"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1container_1_1message__container.html#a644ff5b88d2159015c7035c70aff44f4" title="Get mutable reference to payload." alt="" coords="281,133,491,173"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="204,107,290,128,288,133,203,112"/>
+</map>

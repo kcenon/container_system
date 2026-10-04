@@ -1,0 +1,7 @@
+<map id="kcenon::container::value_store::serialize_impl" name="kcenon::container::value_store::serialize_impl">
+<area shape="rect" id="Node000001" title=" " alt="" coords="475,5,672,45"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1container_1_1value__store.html#a7a4c33c17f21ea871623c2a7260ac24a" title="Serialize to JSON string." alt="" coords="265,5,427,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="461,28,427,28,427,23,461,23"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1container_1_1message__container.html#ab61ae7f3fd6aaf7778c9d62ce2465cdc" title="Serialize to JSON string (header + payload)" alt="" coords="5,5,217,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="251,28,218,28,218,23,251,23"/>
+</map>

@@ -1,0 +1,24 @@
+<map id="main" name="main">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,291,60,317"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1container_1_1value__store.html#aa2e67a3e569c8b49bdb2aba93566ac79" title="Add a value with a key." alt="" coords="140,5,287,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="31,291,34,247,43,184,53,150,66,116,83,84,106,55,126,41,129,45,110,59,88,87,71,118,58,151,49,185,39,247,37,291"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1container_1_1value__store.html#a492598c1b779db3f690e09f49da25c0a" title="Clear all values." alt="" coords="140,69,287,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="33,291,39,257,51,211,73,162,88,139,106,119,126,106,129,110,110,123,92,143,78,165,56,213,44,258,38,292"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1container_1_1value__store.html#a61cbd104e910273668bd8983fb47a43d" title="Check if a key exists." alt="" coords="133,133,294,173"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="36,290,60,239,81,209,106,183,119,175,122,180,110,187,85,212,65,241,41,292"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1container_1_1value__store.html#a18be99e391cd0cfa47ec7ca930e53636" title="Check if store is empty." alt="" coords="139,197,287,237"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="50,289,107,254,137,240,140,245,109,258,53,293"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1container_1_1value__store.html#a163ccffe39c9605044c5089bd98f8091" title="Get number of stored values." alt="" coords="367,227,513,267"/>
+<area shape="poly" id="edge11_Node000001_Node000006" title=" " alt="" coords="60,298,353,256,353,261,61,303"/>
+<area shape="rect" id="Node000007" href="$classkcenon_1_1container_1_1value__store.html#a99cd7f04037af03a3ee7296435f6c562" title="Get a value by key." alt="" coords="140,312,287,352"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="61,305,127,316,126,321,60,311"/>
+<area shape="rect" id="Node000008" href="$classkcenon_1_1container_1_1value__store.html#a11bab21c531d0506aad19b304719d651" title="Get number of read operations." alt="" coords="110,376,317,416"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="48,315,75,339,109,362,123,368,121,373,107,366,72,343,45,319"/>
+<area shape="rect" id="Node000009" href="$classkcenon_1_1container_1_1value__store.html#aa395ec23c66151266474bab2ad01aa49" title="Get number of write operations." alt="" coords="108,440,319,480"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="41,316,64,369,84,400,110,426,117,431,114,435,106,430,80,403,60,372,36,318"/>
+<area shape="rect" id="Node000010" href="$classkcenon_1_1container_1_1value__store.html#a198bf5a57f57dcf9a4a8a0f547235a68" title="Remove a value by key." alt="" coords="135,504,291,544"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="38,317,44,351,56,398,77,447,92,470,110,490,124,501,121,505,106,494,88,473,73,450,51,400,38,352,33,318"/>
+<area shape="rect" id="Node000011" href="$classkcenon_1_1container_1_1value__store.html#ae942fbd0cf1a7e83851969fed4d91455" title="Reset statistics." alt="" coords="111,568,316,608"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="36,317,38,362,48,426,57,460,70,494,87,526,110,554,114,558,110,562,106,558,83,529,65,496,52,462,43,427,33,362,31,317"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="288,224,353,233,353,238,287,230"/>
+</map>

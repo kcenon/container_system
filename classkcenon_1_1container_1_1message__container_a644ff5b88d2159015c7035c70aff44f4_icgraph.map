@@ -1,0 +1,5 @@
+<map id="kcenon::container::message_container::payload" name="kcenon::container::message_container::payload">
+<area shape="rect" id="Node000001" title="Get mutable reference to payload." alt="" coords="281,5,491,45"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1container_1_1message__container.html#a2077847b7002d27829d8f62303239f9e" title="Deserialize from JSON string." alt="" coords="5,5,233,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="267,28,234,28,234,23,267,23"/>
+</map>

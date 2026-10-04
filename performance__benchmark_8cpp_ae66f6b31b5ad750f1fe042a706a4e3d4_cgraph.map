@@ -1,0 +1,17 @@
+<map id="main" name="main">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,109,60,134"/>
+<area shape="rect" id="Node000002" href="$classperformance__benchmark.html#a128a3a8b21bfcca9c18aae2c3f508cbb" title=" " alt="" coords="108,101,293,141"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="60,119,94,119,94,124,60,124"/>
+<area shape="rect" id="Node000003" href="$classperformance__benchmark.html#a2e1ccd549d570cf4f38b0d1a6cb9363b" title=" " alt="" coords="349,5,569,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="240,99,340,55,363,47,365,52,342,60,243,104"/>
+<area shape="rect" id="Node000005" href="$classperformance__benchmark.html#a85e1c1cd4153e0f0109e8f479382930e" title=" " alt="" coords="341,69,576,109"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="293,107,327,103,328,108,294,113"/>
+<area shape="rect" id="Node000006" href="$classperformance__benchmark.html#a579b5a66cd4ff3b698c58bcd3e5b1cc3" title=" " alt="" coords="363,133,554,173"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="294,130,350,137,349,142,293,135"/>
+<area shape="rect" id="Node000008" href="$classperformance__benchmark.html#a39463b56632dc62b3c5d219847056ea3" title=" " alt="" coords="364,197,553,237"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="243,139,342,183,365,191,363,196,340,188,240,144"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1container_1_1value.html#a4e33ba7afe24f791441c69fc13ab9698" title="Type&#45;safe getter with optional return." alt="" coords="643,5,790,45"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="569,23,629,23,629,28,569,28"/>
+<area shape="rect" id="Node000007" href="$classperformance__benchmark.html#aa616aa0ded66e79c56eafd3ade1bea2c" title=" " alt="" coords="624,133,809,173"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="554,151,611,151,611,156,554,156"/>
+</map>

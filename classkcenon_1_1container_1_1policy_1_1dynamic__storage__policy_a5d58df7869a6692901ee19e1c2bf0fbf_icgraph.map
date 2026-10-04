@@ -1,0 +1,13 @@
+<map id="kcenon::container::policy::dynamic_storage_policy::find_by_key" name="kcenon::container::policy::dynamic_storage_policy::find_by_key">
+<area shape="rect" id="Node000001" title=" " alt="" coords="233,163,413,217"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1container_1_1policy_1_1dynamic__storage__policy.html#abee9d8a3384f5968dd4d0e63eaabb59b" title="Check if a key exists." alt="" coords="5,5,185,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="284,155,238,113,184,74,164,63,167,58,187,69,241,109,287,151"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1container_1_1policy_1_1dynamic__storage__policy.html#a9588795155572ef1a8d15388001a9db3" title="Get a value by key." alt="" coords="5,84,185,139"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="230,161,174,141,176,136,231,156"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1container_1_1policy_1_1dynamic__storage__policy.html#aa44ec93856dc2f238dfa95d33d3e0aaf" title="Remove a value by key." alt="" coords="5,163,185,217"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="219,193,185,193,185,187,219,187"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1container_1_1policy_1_1dynamic__storage__policy.html#aed70c4dbf8f9f088ae606ffb5b38aaa3" title="Set or update a value by key." alt="" coords="5,241,185,296"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="231,224,176,244,174,239,230,219"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1container_1_1policy_1_1dynamic__storage__policy.html#a55e58c38a64a895be8936136887d0fef" title="Set or update a value by key (move semantics)" alt="" coords="5,320,185,375"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="286,229,240,270,187,310,164,322,162,318,184,305,237,266,283,225"/>
+</map>

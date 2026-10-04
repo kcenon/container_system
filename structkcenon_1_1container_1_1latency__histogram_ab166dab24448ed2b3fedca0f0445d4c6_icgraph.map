@@ -1,0 +1,5 @@
+<map id="kcenon::container::latency_histogram::record" name="kcenon::container::latency_histogram::record">
+<area shape="rect" id="Node000001" title="Record a latency sample." alt="" coords="271,5,463,45"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1container_1_1scoped__timer.html#a599093406b40c10d9917d981109d77fc" title=" " alt="" coords="5,5,223,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="257,28,223,28,223,23,257,23"/>
+</map>

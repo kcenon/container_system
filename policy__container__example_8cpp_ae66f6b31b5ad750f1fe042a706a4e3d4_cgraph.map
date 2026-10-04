@@ -1,0 +1,7 @@
+<map id="main" name="main">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,45,60,70"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1container_1_1basic__value__container.html#ae20bcc6a785800720fc15b14481179cf" title="Set a typed value by key." alt="" coords="111,5,306,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="60,50,97,43,98,48,61,55"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1container_1_1basic__value__container.html#a5ec6e65ce786678b9223277920e2f8d9" title="Get number of values." alt="" coords="108,69,309,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="61,60,95,66,94,71,60,65"/>
+</map>
