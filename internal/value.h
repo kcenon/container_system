@@ -30,8 +30,8 @@ namespace kcenon::container
     // Note: Positions 6-9 in ValueVariant use unaliased C++ fundamental types
     // (long, unsigned long, long long, unsigned long long) instead of
     // int64_t/uint64_t. This avoids duplicate-type issues in std::variant
-    // because int64_t is a typedef for long long on most platforms, which
-    // would conflict with a separate long long entry. Using the unaliased
+    // because int64_t aliases long or long long depending on the platform,
+    // and would duplicate one of those entries. Using the unaliased
     // types ensures they are always distinct in the C++ type system:
     // - LP64 (macOS/Linux): long=64bit, long long=64bit (distinct types)
     // - LLP64 (Windows): long=32bit, long long=64bit (distinct types)
@@ -177,14 +177,16 @@ namespace kcenon::container
         std::string_view name() const noexcept { return name_; }
 
         /**
-         * @brief Get the value_types enum (NOT variant::index()!)
+         * @brief Get the value_types enum corresponding to the variant index
          *
          * IMPORTANT: This returns the logical type, which matches:
          * - value_types enum (0-15)
          * - Wire format type byte
          * - Legacy system type
          *
-         * On platforms where llong == int64_t, llong_value returns as long_value.
+         * Fixed-width aliases follow their underlying fundamental type:
+         * int64_t maps to long_value when it aliases long, and to llong_value
+         * when it aliases long long. Unsigned aliases follow the same rule.
          */
         value_types type() const;
 

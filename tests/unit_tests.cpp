@@ -306,21 +306,21 @@ TEST_F(ContainerTest, ContainerCopy) {
     EXPECT_TRUE(ov_is_null(shallow_val)); // No values in shallow copy
 }
 
-// Large data handling test - validates serialization of large data
-// Note: Using 10KB instead of 1MB to avoid stack overflow in std::regex
-// under AddressSanitizer (regex uses backtracking which is stack-intensive)
+// Exercise the formatter's former 256-byte buffer boundary and the original
+// 10 KiB payload without depending on a particular standard library's buffers.
 TEST_F(ContainerTest, LargeDataHandling) {
-    // Create large string (10KB - large enough to test but safe for ASAN)
-    std::string large_data(10 * 1024, 'X'); // 10KB of X's
-    std::string key = "large";
+    for (const size_t size : {255u, 256u, 257u, 512u, 10u * 1024u}) {
+        SCOPED_TRACE(size);
+        const std::string large_data(size, 'X');
+        container->set("large", large_data);
 
-    container->set(key, large_data);
-
-    // Serialize and deserialize - parse_only_header=false to parse values too
-    std::string serialized = container->serialize_string(value_container::serialization_format::binary).value();
-    auto restored = std::make_unique<value_container>(serialized, false);
-
-    EXPECT_EQ(ov_to_string(restored->get("large")), large_data);
+        auto serialized = container->serialize_string(value_container::serialization_format::binary);
+        ASSERT_TRUE(serialized.is_ok()) << serialized.error().message;
+        value_container restored;
+        auto result = restored.deserialize_result(serialized.value(), false);
+        ASSERT_TRUE(result.is_ok()) << result.error().message;
+        EXPECT_EQ(ov_to_string(restored.get("large")), large_data);
+    }
 }
 
 // ============================================================================

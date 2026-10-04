@@ -108,7 +108,8 @@ concept TriviallyCopyable = std::is_trivially_copyable_v<T>;
  * Valid types include:
  * - std::monostate (null)
  * - bool
- * - int16_t, uint16_t, int32_t, uint32_t, int64_t, uint64_t
+ * - int16_t, uint16_t, int32_t, uint32_t
+ * - long, unsigned long, long long, unsigned long long (including int64_t/uint64_t aliases)
  * - float, double
  * - std::string
  * - std::vector<uint8_t> (bytes)
@@ -129,8 +130,10 @@ concept ValueVariantType =
     std::same_as<std::decay_t<T>, uint16_t> ||
     std::same_as<std::decay_t<T>, int32_t> ||
     std::same_as<std::decay_t<T>, uint32_t> ||
-    std::same_as<std::decay_t<T>, int64_t> ||
-    std::same_as<std::decay_t<T>, uint64_t> ||
+    std::same_as<std::decay_t<T>, long> ||
+    std::same_as<std::decay_t<T>, unsigned long> ||
+    std::same_as<std::decay_t<T>, long long> ||
+    std::same_as<std::decay_t<T>, unsigned long long> ||
     std::same_as<std::decay_t<T>, float> ||
     std::same_as<std::decay_t<T>, double> ||
     std::same_as<std::decay_t<T>, std::string> ||

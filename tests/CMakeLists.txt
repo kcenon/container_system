@@ -56,6 +56,7 @@ set(TEST_SOURCES
     thread_safety_tests.cpp
     test_long_range_checking.cpp
     variant_value_factory_tests.cpp
+    formatter_tests.cpp
     memory_pool_tests.cpp
     simd_tests.cpp
     simd_policies_tests.cpp

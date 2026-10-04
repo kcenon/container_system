@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [ main, phase-* ]
+    branches: [ main, develop, phase-* ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, develop ]
 
 jobs:
   build:
@@ -151,31 +151,13 @@ jobs:
     - name: Test (vcpkg - Unix)
       if: runner.os != 'Windows' && steps.build_vcpkg_unix.outcome == 'success'
       timeout-minutes: 10
-      run: |
-        cd build
-        for test in bin/unit_tests bin/test_messaging_integration; do
-          if [ -f "$test" ]; then
-            echo "Running $(basename $test)..."
-            $test || echo "Test failed but continuing..."
-          fi
-        done
+      run: ctest --test-dir build -C Debug --output-on-failure --no-tests=error
 
     - name: Test (vcpkg - Windows)
       if: runner.os == 'Windows' && steps.build_vcpkg_windows.outcome == 'success'
       timeout-minutes: 10
       shell: pwsh
-      run: |
-        cd build
-        $tests = @("bin\unit_tests.exe", "bin\test_messaging_integration.exe")
-        foreach ($test in $tests) {
-          if (Test-Path $test) {
-            Write-Host "Running $(Split-Path $test -Leaf)..."
-            & $test
-            if ($LASTEXITCODE -ne 0) {
-              Write-Host "Test failed but continuing..."
-            }
-          }
-        }
+      run: ctest --test-dir build -C Debug --output-on-failure --no-tests=error
 
     - name: Build application (fallback - Unix)
       if: runner.os != 'Windows' && steps.build_vcpkg_unix.outcome != 'success'
@@ -217,31 +199,13 @@ jobs:
     - name: Test (fallback - Unix)
       if: runner.os != 'Windows' && steps.build_vcpkg_unix.outcome != 'success'
       timeout-minutes: 10
-      run: |
-        cd build
-        for test in bin/unit_tests bin/test_messaging_integration; do
-          if [ -f "$test" ]; then
-            echo "Running $(basename $test)..."
-            $test || echo "Test failed but continuing..."
-          fi
-        done
+      run: ctest --test-dir build -C Debug --output-on-failure --no-tests=error
 
     - name: Test (fallback - Windows)
       if: runner.os == 'Windows' && steps.build_vcpkg_windows.outcome != 'success'
       timeout-minutes: 10
       shell: pwsh
-      run: |
-        cd build
-        $tests = @("bin\unit_tests.exe", "bin\test_messaging_integration.exe")
-        foreach ($test in $tests) {
-          if (Test-Path $test) {
-            Write-Host "Running $(Split-Path $test -Leaf)..."
-            & $test
-            if ($LASTEXITCODE -ne 0) {
-              Write-Host "Test failed but continuing..."
-            }
-          }
-        }
+      run: ctest --test-dir build -C Debug --output-on-failure --no-tests=error
 
     - name: Upload build artifacts
       if: failure()
@@ -269,7 +233,7 @@ jobs:
             env: "ASAN_OPTIONS=detect_leaks=1:strict_string_checks=1:detect_stack_use_after_return=1:check_initialization_order=1:strict_init_order=1"
           - name: UndefinedBehaviorSanitizer
             flags: "-fsanitize=undefined -fno-omit-frame-pointer -g -O1"
-            env: "UBSAN_OPTIONS=print_stacktrace=1:halt_on_error=0"
+            env: "UBSAN_OPTIONS=print_stacktrace=1:halt_on_error=1"
 
     steps:
     - name: Checkout code
@@ -311,16 +275,8 @@ jobs:
     - name: Run tests with ${{ matrix.sanitizer.name }}
       timeout-minutes: 10
       run: |
-        cd build
         export ${{ matrix.sanitizer.env }}
-        # Run core tests only - following monitoring_system pattern
-        # Sanitizers add overhead, but direct execution is simpler
-        for test in bin/unit_tests bin/test_messaging_integration; do
-          if [ -f "$test" ]; then
-            echo "Running $(basename $test) with ${{ matrix.sanitizer.name }}..."
-            ./$test
-          fi
-        done
+        ctest --test-dir build -C Debug --output-on-failure --no-tests=error
 
     - name: Upload sanitizer logs
       if: always()

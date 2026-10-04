@@ -6,10 +6,59 @@ Copyright (c) 2024, All rights reserved.
 
 #include "internal/variant_value_factory.h"
 #include <gtest/gtest.h>
+#include <cstring>
+#include <limits>
 #include <string>
+#include <type_traits>
 #include <vector>
 
 using namespace kcenon::container;
+
+namespace {
+// Fixed-width typedefs retain the identity of their underlying C++ type.
+constexpr auto int64_type =
+    std::is_same_v<int64_t, long> ? value_types::long_value : value_types::llong_value;
+constexpr auto uint64_type =
+    std::is_same_v<uint64_t, unsigned long> ? value_types::ulong_value : value_types::ullong_value;
+static_assert(std::is_same_v<int64_t, long> || std::is_same_v<int64_t, long long>);
+static_assert(std::is_same_v<uint64_t, unsigned long> ||
+              std::is_same_v<uint64_t, unsigned long long>);
+
+template <typename T> void expect_integer_round_trip(value_types expected_type)
+{
+    for (const T input : {std::numeric_limits<T>::lowest(), T{0}, std::numeric_limits<T>::max()})
+    {
+        SCOPED_TRACE(input);
+        const value direct("integer", input);
+        const auto made = factory::make("integer", input);
+        EXPECT_EQ(direct.type(), expected_type);
+        EXPECT_EQ(made.type(), expected_type);
+        ASSERT_EQ(direct.get<T>(), std::optional<T>(input));
+        ASSERT_EQ(made.template get<T>(), std::optional<T>(input));
+
+        const auto bytes = made.serialize();
+        ASSERT_EQ(bytes.size(), sizeof(uint32_t) + made.name().size() + 1 + sizeof(T));
+        EXPECT_EQ(bytes[sizeof(uint32_t) + made.name().size()],
+                  static_cast<uint8_t>(expected_type));
+        auto restored = value::deserialize(bytes);
+        ASSERT_TRUE(restored.has_value());
+        EXPECT_EQ(restored->name(), "integer");
+        EXPECT_EQ(restored->type(), expected_type);
+        EXPECT_EQ(restored->template get<T>(), std::optional<T>(input));
+
+        // Explicit raw types must retain their identity, too.
+        std::vector<uint8_t> raw(sizeof(T));
+        std::memcpy(raw.data(), &input, sizeof(T));
+        const auto from_raw = make_value_from_raw("integer", expected_type, raw);
+        EXPECT_EQ(from_raw.type(), expected_type);
+        EXPECT_EQ(from_raw.get<T>(), std::optional<T>(input));
+
+        auto truncated = bytes;
+        truncated.pop_back();
+        EXPECT_FALSE(value::deserialize(truncated).has_value());
+    }
+}
+} // namespace
 
 // ============================================================================
 // Modern factory API tests (factory::make, factory::make_null)
@@ -31,7 +80,7 @@ TEST(ModernFactoryTest, MakeWithInt) {
 
 TEST(ModernFactoryTest, MakeWithInt64) {
     auto v = factory::make("large", int64_t{1234567890123456LL});
-    EXPECT_EQ(v.type(), value_types::long_value);
+    EXPECT_EQ(v.type(), int64_type);
     EXPECT_EQ(v.get<int64_t>().value(), 1234567890123456LL);
 }
 
@@ -200,18 +249,18 @@ TEST(ValueConstructorTest, UIntValue) {
     EXPECT_EQ(result.value(), 999999u);
 }
 
-TEST(ValueConstructorTest, LongValue) {
+TEST(ValueConstructorTest, Int64Value) {
     auto v = value("timestamp", int64_t{1234567890123456LL});
-    EXPECT_EQ(v.type(), value_types::long_value);
+    EXPECT_EQ(v.type(), int64_type);
 
     auto result = v.get<int64_t>();
     ASSERT_TRUE(result.has_value());
     EXPECT_EQ(result.value(), 1234567890123456LL);
 }
 
-TEST(ValueConstructorTest, ULongValue) {
+TEST(ValueConstructorTest, UInt64Value) {
     auto v = value("big_number", uint64_t{18446744073709551615ULL});
-    EXPECT_EQ(v.type(), value_types::ulong_value);
+    EXPECT_EQ(v.type(), uint64_type);
 
     auto result = v.get<uint64_t>();
     ASSERT_TRUE(result.has_value());
@@ -227,7 +276,43 @@ TEST(ValueConstructorTest, FloatValue) {
     EXPECT_FLOAT_EQ(result.value(), 3.14159f);
 }
 
-TEST(ValueConstructorTest, DoubleValue) {
+TEST(IntegerContractTest, FundamentalTypesAndFixedWidthAliases)
+{
+    expect_integer_round_trip<long>(value_types::long_value);
+    expect_integer_round_trip<unsigned long>(value_types::ulong_value);
+    expect_integer_round_trip<long long>(value_types::llong_value);
+    expect_integer_round_trip<unsigned long long>(value_types::ullong_value);
+    expect_integer_round_trip<int64_t>(int64_type);
+    expect_integer_round_trip<uint64_t>(uint64_type);
+}
+
+TEST(IntegerContractTest, ArrayPreservesIntegerTypesAndFollowingValues)
+{
+    const auto original = factory::make_array(
+        "integers", {value("long", std::numeric_limits<long>::lowest()),
+                     value("ulong", std::numeric_limits<unsigned long>::max()),
+                     value("llong", std::numeric_limits<long long>::lowest()),
+                     value("ullong", std::numeric_limits<unsigned long long>::max()),
+                     value("tail", std::string("after the integers"))});
+    auto restored = value::deserialize(original.serialize());
+    ASSERT_TRUE(restored.has_value());
+    auto array = restored->get<array_variant>();
+    ASSERT_TRUE(array.has_value());
+    ASSERT_EQ(array->values.size(), 5u);
+    EXPECT_EQ(array->values[0]->get<long>(),
+              std::optional<long>(std::numeric_limits<long>::lowest()));
+    EXPECT_EQ(array->values[1]->get<unsigned long>(),
+              std::optional<unsigned long>(std::numeric_limits<unsigned long>::max()));
+    EXPECT_EQ(array->values[2]->get<long long>(),
+              std::optional<long long>(std::numeric_limits<long long>::lowest()));
+    EXPECT_EQ(array->values[3]->get<unsigned long long>(),
+              std::optional<unsigned long long>(std::numeric_limits<unsigned long long>::max()));
+    EXPECT_EQ(array->values[4]->get<std::string>(),
+              std::optional<std::string>("after the integers"));
+}
+
+TEST(ValueConstructorTest, DoubleValue)
+{
     auto v = value("e", 2.718281828459045);
     EXPECT_EQ(v.type(), value_types::double_value);
 
