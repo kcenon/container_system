@@ -87,6 +87,7 @@ jobs:
           ls -t baseline_*.json | tail -n +11 | xargs -r rm
 
       - name: Commit baseline update
+        if: ${{ !github.ref_protected }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -106,3 +107,9 @@ jobs:
             baseline.json
             docs/performance/BASELINE.md
           retention-days: 90
+
+      - name: Report baseline for protected branch
+        if: github.ref_protected
+        run: |
+          echo "The generated benchmark baseline is available in the performance-baseline artifact." >> "$GITHUB_STEP_SUMMARY"
+          echo "Apply baseline changes through a pull request so the required checks can run." >> "$GITHUB_STEP_SUMMARY"
