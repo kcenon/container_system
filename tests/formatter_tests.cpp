@@ -29,11 +29,24 @@ INSTANTIATE_TEST_SUITE_P(BufferBoundaries, FormatterBufferTest,
                          testing::Values(0u, 255u, 256u, 257u, 512u, 1024u, 10u * 1024u,
                                          1024u * 1024u));
 
-#if UTILITY_MODULE_HAS_STD_FORMAT
 TEST(FormatterTest, InvalidFormatDoesNotAppendPartialOutput)
 {
     std::string output = "prefix:";
     utility_module::formatter::format_to(std::back_inserter(output), "{} {", 42);
     EXPECT_EQ(output, "prefix:{} {");
 }
-#endif
+
+TEST(FormatterTest, EscapedBracesMatchTheWireFormat)
+{
+    std::string output;
+    utility_module::formatter::format_to(std::back_inserter(output), "@header={{{{");
+    utility_module::formatter::format_to(std::back_inserter(output), "[{},{}];", 5, "request");
+    utility_module::formatter::format_to(std::back_inserter(output), "}}}};");
+    EXPECT_EQ(output, "@header={{[5,request];}};");
+    EXPECT_EQ(utility_module::formatter::format("{{literal}}"), "{literal}");
+}
+
+TEST(FormatterTest, BracesInsideArgumentsRemainLiteral)
+{
+    EXPECT_EQ(utility_module::formatter::format("{}:{}", "literal{}", 42), "literal{}:42");
+}

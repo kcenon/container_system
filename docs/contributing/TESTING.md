@@ -64,6 +64,13 @@ The old CI loops selected only two binaries, skipped absent binaries, and
 suppressed failures; they never ran the standalone factory suite. Build and
 sanitizer workflows now execute registered tests, propagate failures, reject
 empty inventories, and run for PRs targeting `develop` as well as `main`.
+The formatter fallback is tested explicitly even on hosts with `std::format`;
+it decodes escaped braces and never interprets placeholder-like text inside
+arguments. Hosted Apple Clang 15 exposed this path's previously invalid wire
+braces. Thread stress tests synchronize startup and wait for the original work
+counts with a 10-second deadline instead of assuming scheduler progress in
+500 milliseconds. Messaging throughput remains a local baseline; shared CI
+runners record it while checking each round trip's header and payload.
 No test failure is converted into a successful fallback build. The full CTest
 run also exposed the undeclared JSON test dependency on `develop`, two stale
 expectations that JSON parsing was unimplemented, and a message decoder that
