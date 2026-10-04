@@ -95,3 +95,5 @@ release identity or the generated port archive hash fails validation. The reusab
 workflow is pinned to the reviewed revision that implements both stages.
 The release-triggered workflow checks an already published tag; its enforcing
 prepublication boundary is the registry sync.
+
+<!-- Temporary docs-only input for common_system#701 required-check visibility verification. -->
