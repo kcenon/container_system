@@ -22,14 +22,16 @@ def generate_value_corpus(output_dir: Path):
     # 3 = ushort_value (uint16)
     # 4 = int_value (int32)
     # 5 = uint_value (uint32)
-    # 6 = llong_value (int64)
-    # 7 = ullong_value (uint64)
-    # 8 = float_value
-    # 9 = double_value
-    # 10 = bytes_value
-    # 11 = string_value
-    # 12 = container_value
-    # 13 = array_value
+    # 6 = long_value (native width)
+    # 7 = ulong_value (native width)
+    # 8 = llong_value (int64)
+    # 9 = ullong_value (uint64)
+    # 10 = float_value
+    # 11 = double_value
+    # 12 = string_value
+    # 13 = bytes_value
+    # 14 = container_value
+    # 15 = array_value
 
     def make_value(name: bytes, type_byte: int, data: bytes) -> bytes:
         """Create a serialized value."""
@@ -63,33 +65,43 @@ def generate_value_corpus(output_dir: Path):
     with open(output_dir / "uint32_value", "wb") as f:
         f.write(make_value(b"uint", 5, struct.pack("<I", 0xDEADBEEF)))
 
+    (output_dir / "long_value").write_bytes(make_value(b"long", 6, struct.pack("@l", -1234567)))
+    (output_dir / "ulong_value").write_bytes(make_value(b"ulong", 7, struct.pack("@L", 1234567)))
+
     # Int64 value
     with open(output_dir / "int64_value", "wb") as f:
-        f.write(make_value(b"llong", 6, struct.pack("<q", -9223372036854775807)))
+        f.write(make_value(b"llong", 8, struct.pack("<q", -9223372036854775807)))
 
     # Uint64 value
     with open(output_dir / "uint64_value", "wb") as f:
-        f.write(make_value(b"ullong", 7, struct.pack("<Q", 0xDEADBEEFCAFEBABE)))
+        f.write(make_value(b"ullong", 9, struct.pack("<Q", 0xDEADBEEFCAFEBABE)))
 
     # Float value
     with open(output_dir / "float_value", "wb") as f:
-        f.write(make_value(b"float", 8, struct.pack("<f", 3.14159)))
+        f.write(make_value(b"float", 10, struct.pack("<f", 3.14159)))
 
     # Double value
     with open(output_dir / "double_value", "wb") as f:
-        f.write(make_value(b"double", 9, struct.pack("<d", 2.718281828459045)))
+        f.write(make_value(b"double", 11, struct.pack("<d", 2.718281828459045)))
 
     # String value
     test_string = b"Hello, World!"
     string_data = struct.pack("<I", len(test_string)) + test_string
     with open(output_dir / "string_value", "wb") as f:
-        f.write(make_value(b"string", 11, string_data))
+        f.write(make_value(b"string", 12, string_data))
 
     # Bytes value
     test_bytes = bytes(range(256))
     bytes_data = struct.pack("<I", len(test_bytes)) + test_bytes
     with open(output_dir / "bytes_value", "wb") as f:
-        f.write(make_value(b"bytes", 10, bytes_data))
+        f.write(make_value(b"bytes", 13, bytes_data))
+
+    child = make_value(b"item", 4, struct.pack("<i", 42))
+    (output_dir / "array_value").write_bytes(make_value(b"array", 15, struct.pack("<I", 1) + child))
+    container = (struct.pack("<I", 1) + struct.pack("<I", 1) + b"x"
+                 + struct.pack("<I", len(child)) + child)
+    (output_dir / "container_value").write_bytes(
+        make_value(b"container", 14, struct.pack("<I", len(container)) + container))
 
     # Edge cases
     with open(output_dir / "empty", "wb") as f:
@@ -141,7 +153,7 @@ def generate_container_corpus(output_dir: Path):
         values = [
             make_value(b"int_val", 4, struct.pack("<i", 123)),
             make_value(b"bool_val", 1, bytes([1])),
-            make_value(b"str_val", 11, struct.pack("<I", 4) + b"test"),
+            make_value(b"str_val", 12, struct.pack("<I", 4) + b"test"),
         ]
         f.write(make_container(values))
 
@@ -163,11 +175,21 @@ def generate_container_corpus(output_dir: Path):
     print(f"Generated {len(list(output_dir.iterdir()))} seed files in {output_dir}")
 
 
+def generate_depth_corpus(output_dir: Path):
+    """Exercise recursion beyond the ordinary mutation length limit."""
+    output_dir.mkdir(parents=True, exist_ok=True)
+    prefix = struct.pack("=I", 0) + bytes([15]) + struct.pack("=I", 1)
+    leaf = struct.pack("=I", 0) + bytes([0])
+    for depth in (63, 64, 100000):
+        (output_dir / f"nested_arrays_{depth}").write_bytes(prefix * depth + leaf)
+
+
 def main():
     base_dir = Path("corpus")
 
     generate_value_corpus(base_dir / "deserialize")
     generate_container_corpus(base_dir / "container")
+    generate_depth_corpus(base_dir / "depth")
 
     print("\nCorpus generation complete!")
     print(f"Total files: {sum(1 for _ in base_dir.rglob('*') if _.is_file())}")

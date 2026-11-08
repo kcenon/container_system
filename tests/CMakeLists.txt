@@ -70,6 +70,7 @@ endif()
 # Test source files
 set(TEST_SOURCES
     unit_tests.cpp
+    deserialization_limits_tests.cpp
     test_messaging_integration.cpp
     performance_tests.cpp
     thread_safety_tests.cpp
@@ -176,6 +177,8 @@ foreach(TEST_SOURCE ${TEST_SOURCES})
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     )
 endforeach()
+
+set_tests_properties(deserialization_limits_tests PROPERTIES LABELS "security;regression")
 
 # Exercise the fallback even on hosts with full std::format support. This is a
 # header-only test: do not link a library built with the other formatter mode.

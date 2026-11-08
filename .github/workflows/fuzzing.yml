@@ -6,9 +6,10 @@ on:
   pull_request:
     branches: [main]
     paths:
-      - 'internal/**'
-      - 'core/**'
+      - 'src/**'
+      - 'include/**'
       - 'fuzz/**'
+      - '.github/workflows/fuzzing.yml'
   workflow_dispatch:
     inputs:
       fuzz_duration:
@@ -56,45 +57,48 @@ jobs:
             -DBUILD_CONTAINER_SAMPLES=OFF
 
       - name: Build fuzz targets
+        id: build_fuzz
         run: cmake --build build --target fuzz_deserialize fuzz_container_deserialize
+
+      - name: Run depth regression corpus
+        shell: bash
+        run: |
+          for seed in corpus/depth/*; do
+            ./build/bin/fuzz_deserialize "$seed" -runs=1 -max_len=1048576
+          done
 
       - name: Run value deserialize fuzzing
         id: fuzz_value
-        continue-on-error: true
+        shell: bash
+        env:
+          FUZZ_DURATION: ${{ github.event.inputs.fuzz_duration || '300' }}
         run: |
-          DURATION=${{ github.event.inputs.fuzz_duration || '300' }}
-          echo "Running fuzz_deserialize for ${DURATION} seconds..."
-          timeout ${DURATION} ./build/fuzz/fuzz_deserialize corpus/deserialize \
+          if [[ ! "$FUZZ_DURATION" =~ ^[1-9][0-9]{0,2}$ ]] || (( FUZZ_DURATION > 600 )); then
+            echo "Invalid fuzz duration (expected 1..600 seconds)"
+            exit 1
+          fi
+          ./build/bin/fuzz_deserialize corpus/deserialize \
+            -max_total_time="$FUZZ_DURATION" \
             -max_len=4096 \
             -print_final_stats=1 \
-            2>&1 | tee fuzz_deserialize.log || true
-
-          # Check for crashes
-          if ls crash-* 1> /dev/null 2>&1; then
-            echo "crash_found=true" >> $GITHUB_OUTPUT
-            echo "::error::Crash found in fuzz_deserialize"
-          else
-            echo "crash_found=false" >> $GITHUB_OUTPUT
-          fi
+            2>&1 | tee fuzz_deserialize.log
 
       - name: Run container deserialize fuzzing
         id: fuzz_container
-        continue-on-error: true
+        if: ${{ !cancelled() && steps.build_fuzz.outcome == 'success' }}
+        shell: bash
+        env:
+          FUZZ_DURATION: ${{ github.event.inputs.fuzz_duration || '300' }}
         run: |
-          DURATION=${{ github.event.inputs.fuzz_duration || '300' }}
-          echo "Running fuzz_container_deserialize for ${DURATION} seconds..."
-          timeout ${DURATION} ./build/fuzz/fuzz_container_deserialize corpus/container \
+          if [[ ! "$FUZZ_DURATION" =~ ^[1-9][0-9]{0,2}$ ]] || (( FUZZ_DURATION > 600 )); then
+            echo "Invalid fuzz duration (expected 1..600 seconds)"
+            exit 1
+          fi
+          ./build/bin/fuzz_container_deserialize corpus/container \
+            -max_total_time="$FUZZ_DURATION" \
             -max_len=8192 \
             -print_final_stats=1 \
-            2>&1 | tee fuzz_container.log || true
-
-          # Check for crashes
-          if ls crash-* 1> /dev/null 2>&1; then
-            echo "crash_found=true" >> $GITHUB_OUTPUT
-            echo "::error::Crash found in fuzz_container_deserialize"
-          else
-            echo "crash_found=false" >> $GITHUB_OUTPUT
-          fi
+            2>&1 | tee fuzz_container.log
 
       - name: Check for crashes
         run: |
@@ -111,27 +115,37 @@ jobs:
 
       - name: Generate summary
         if: always()
+        env:
+          FUZZ_STATUS: ${{ job.status }}
         run: |
-          echo "## Fuzzing Results" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-
-          if ls crash-* 1> /dev/null 2>&1; then
-            echo ":x: **Crashes detected**" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "| File | Size |" >> $GITHUB_STEP_SUMMARY
-            echo "|------|------|" >> $GITHUB_STEP_SUMMARY
-            for crash in crash-*; do
-              size=$(stat -c%s "$crash" 2>/dev/null || stat -f%z "$crash")
-              echo "| $crash | $size bytes |" >> $GITHUB_STEP_SUMMARY
-            done
-          else
-            echo ":white_check_mark: **No crashes found**" >> $GITHUB_STEP_SUMMARY
-          fi
-
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### Corpus Statistics" >> $GITHUB_STEP_SUMMARY
-          echo "- Deserialize corpus: $(ls corpus/deserialize 2>/dev/null | wc -l) files" >> $GITHUB_STEP_SUMMARY
-          echo "- Container corpus: $(ls corpus/container 2>/dev/null | wc -l) files" >> $GITHUB_STEP_SUMMARY
+          shopt -s nullglob
+          crashes=(crash-* leak-* timeout-*)
+          values=(corpus/deserialize/*)
+          containers=(corpus/container/*)
+          depths=(corpus/depth/*)
+          {
+            echo "## Fuzzing Results"
+            echo ""
+            if (( ${#crashes[@]} > 0 )); then
+              echo ":x: **Crashes detected**"
+              echo ""
+              echo "| File | Size |"
+              echo "|------|------|"
+              for crash in "${crashes[@]}"; do
+                size=$(stat -c%s "$crash")
+                printf '| %s | %s bytes |\n' "$crash" "$size"
+              done
+            elif [ "$FUZZ_STATUS" = success ]; then
+              echo ":white_check_mark: **No crashes found**"
+            else
+              echo ":x: **Fuzzing did not complete successfully; inspect job logs**"
+            fi
+            echo ""
+            echo "### Corpus Statistics"
+            echo "- Deserialize corpus: ${#values[@]} files"
+            echo "- Container corpus: ${#containers[@]} files"
+            echo "- Depth regression corpus: ${#depths[@]} files"
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload corpus
         if: always()
