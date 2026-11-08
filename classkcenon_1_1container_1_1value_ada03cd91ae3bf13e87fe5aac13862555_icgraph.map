@@ -1,0 +1,21 @@
+<map id="kcenon::container::value::visit" name="kcenon::container::value::visit">
+<area shape="rect" id="Node000001" title="Apply visitor to contained value (const)" alt="" coords="638,144,784,189"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1container_1_1value.html#a976ad3011c1440800dd26b7399a640e3" title="Serialize data portion based on type." alt="" coords="434,44,590,89"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="648,136,558,92,559,87,654,136"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1container_1_1value.html#a2a483be0c0bf1a94033976aa520df88a" title="Convert to JSON representation." alt="" coords="440,144,585,189"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="620,167,586,169,585,164,625,166"/>
+<area shape="rect" id="Node000008" href="$classkcenon_1_1container_1_1value.html#a4ad23e08f35169edc5dc7f91f269701b" title="Convert to string representation." alt="" coords="230,223,376,267"/>
+<area shape="poly" id="edge11_Node000001_Node000008" title=" " alt="" coords="626,192,591,204,478,225,376,239,375,234,477,219,590,198,621,193"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1container_1_1value.html#af291c72391c68b519082868058b6d595" title="Serialize to binary format (legacy compatible)" alt="" coords="230,44,376,89"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="416,76,377,78,376,72,421,75"/>
+<area shape="poly" id="edge5_Node000003_Node000002" title=" " alt="" coords="391,55,436,57,431,58,392,60"/>
+<area shape="rect" id="Node000004" href="$namespacekcenon_1_1container.html#affa21db254b73403074d3cacb29be54e" title="Create a copy of a value with a new name." alt="" coords="16,5,161,50"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="213,52,162,43,161,38,218,49"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1container_1_1thread__safe__container.html#ad91eef1b0f1f808b49432fb829f1f273" title="Serialize container to binary." alt="" coords="5,74,172,136"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="212,84,173,92,171,88,217,81"/>
+<area shape="poly" id="edge8_Node000006_Node000006" title=" " alt="" coords="542,128,532,125,512,123,494,125,482,129,478,135,479,145,474,142,473,134,479,125,492,119,512,117,533,120,548,129"/>
+<area shape="rect" id="Node000007" href="$classkcenon_1_1container_1_1thread__safe__container.html#abf79a32467982d4d18dd104fd0938d0f" title="Serialize container to JSON." alt="" coords="220,113,386,174"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="421,157,387,155,386,150,427,157"/>
+<area shape="poly" id="edge9_Node000006_Node000008" title=" " alt="" coords="439,194,365,225,364,219,434,195"/>
+<area shape="poly" id="edge10_Node000008_Node000008" title=" " alt="" coords="335,207,324,204,303,201,283,203,271,208,267,214,267,224,263,221,261,213,268,204,282,198,303,196,326,199,341,208"/>
+</map>

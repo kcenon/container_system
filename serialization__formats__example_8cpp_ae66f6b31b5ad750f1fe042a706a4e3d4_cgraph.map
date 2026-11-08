@@ -1,0 +1,20 @@
+<map id="main" name="main">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,108,60,135"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1container_1_1serializer__factory.html#a364a5e4e62e4e657d5ab460863059f45" title="Create a serializer for the specified format." alt="" coords="112,5,257,67"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="57,105,106,77,116,73,113,77,109,81,61,109"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1container_1_1serializer__factory.html#af18b28207e01cf68a3502431bc9058ba" title="Check if a format is supported for serialization." alt="" coords="112,91,257,152"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="59,119,98,120,94,123,61,124"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1container_1_1value__container.html#a7f901340fc36c042f133158ec39b4900" title="Set a typed value by key (unified API)" alt="" coords="108,176,261,221"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="57,133,109,162,121,169,115,170,106,167,58,139"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1container_1_1value__container.html#a2e8d4eeb8b57ae33ef2197c07bf32147" title="Internal implementation for setting a single optimized_value." alt="" coords="309,168,462,230"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="261,196,296,198,291,200,262,201"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1container_1_1metrics__manager.html#ae636bf31baad3c8bba0c0160bc319115" title="Get the singleton metrics instance." alt="" coords="539,82,703,126"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="457,165,509,143,541,133,546,131,511,148,459,170"/>
+<area shape="rect" id="Node000007" href="$classkcenon_1_1container_1_1metrics__manager.html#ac82ccd0364f4e8b2e0c3ba91becc6ea7" title="Check if metrics collection is enabled." alt="" coords="780,207,934,268"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="462,185,589,176,661,178,732,187,777,201,771,201,731,192,661,184,589,182,463,190"/>
+<area shape="rect" id="Node000008" href="$structkcenon_1_1container_1_1optimized__value.html#a84f53d8c6ffca0fb27598ff4e82f00b2" title=" " alt="" coords="547,201,695,263"/>
+<area shape="poly" id="edge7_Node000005_Node000008" title=" " alt="" coords="463,207,534,219,529,220,463,212"/>
+<area shape="rect" id="Node000009" href="$classkcenon_1_1container_1_1metrics__manager.html#a03caac9a4799d6e02748887d56f25b0e" title="Create a scoped timer if metrics are enabled." alt="" coords="510,287,732,332"/>
+<area shape="poly" id="edge8_Node000005_Node000009" title=" " alt="" coords="432,228,512,272,528,281,522,281,509,277,431,233"/>
+<area shape="poly" id="edge9_Node000009_Node000007" title=" " alt="" coords="696,284,762,266,767,265,697,289"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="kcenon::container::value_container::get_pool_stats" name="kcenon::container::value_container::get_pool_stats">
+<area shape="rect" id="Node000001" title="Get memory pool statistics." alt="" coords="5,5,160,67"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1container_1_1internal_1_1pool__allocator.html#a286495726f594c6629e638b7cda497f1" title="Get the singleton instance." alt="" coords="208,5,379,67"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="160,34,195,36,189,36,160,39"/>
+</map>

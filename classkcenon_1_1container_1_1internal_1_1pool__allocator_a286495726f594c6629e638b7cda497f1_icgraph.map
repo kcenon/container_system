@@ -1,0 +1,15 @@
+<map id="kcenon::container::internal::pool_allocator::instance" name="kcenon::container::internal::pool_allocator::instance">
+<area shape="rect" id="Node000001" title="Get the singleton instance." alt="" coords="254,203,425,264"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1container_1_1internal_1_1pool__allocator__adapter.html#a80505e1eba26e613a2190c7edd783790" title="Allocate storage for n objects of type T." alt="" coords="20,5,191,67"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="307,190,262,135,234,106,204,81,188,70,187,65,207,77,238,103,266,132,312,190"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1container_1_1value__container.html#a32f1091a1989c01e331cd89d8836b8a4" title="Clear memory pool (for testing/benchmarking)" alt="" coords="5,91,206,136"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="281,195,204,151,179,139,178,134,207,146,286,193"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1container_1_1internal_1_1pool__allocator__adapter.html#a86db32626d9f47712772a4968199385f" title="Deallocate storage previously obtained from allocate." alt="" coords="20,160,191,222"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="236,216,192,209,191,204,241,214"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1container_1_1value__container.html#a6f2dec078702d0901875bd966e7e1156" title="Get memory pool statistics." alt="" coords="28,245,183,307"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="236,253,184,265,182,260,241,250"/>
+<area shape="rect" id="Node000006" href="$namespacekcenon_1_1container_1_1internal.html#abebb3c37d4faed2c5003ff0d4175eaa6" title="Allocate and construct an object using pool allocation." alt="" coords="22,331,189,376"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="281,274,207,321,180,333,177,328,204,316,285,272"/>
+<area shape="rect" id="Node000007" href="$namespacekcenon_1_1container_1_1internal.html#a9d198c1a3abd7ed2124e093fa709fcb0" title="Destroy and deallocate an object allocated with pool_allocate." alt="" coords="14,400,197,445"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="313,276,267,336,239,365,207,390,186,402,184,397,204,386,235,361,263,333,308,278"/>
+</map>

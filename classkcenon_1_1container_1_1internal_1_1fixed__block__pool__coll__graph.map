@@ -1,0 +1,16 @@
+<map id="kcenon::container::internal::fixed_block_pool" name="kcenon::container::internal::fixed_block_pool">
+<area shape="rect" id="Node000001" title=" " alt="" coords="119,644,319,934"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="61,490,228,579"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="158,576,175,628,169,627,157,581"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,335,148,425"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="96,422,121,474,116,475,96,427"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="8,143,154,215"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="46,231,45,240,39,275,45,311,54,335,48,336,40,312,33,275,40,238,47,225"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="145,5,163,78"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="144,62,110,129,105,127,145,57"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="167,239,285,311"/>
+<area shape="poly" id="edge6_Node000006_Node000005" title=" " alt="" coords="163,70,213,223,207,223,163,75"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="224,324,216,394,207,431,195,467,182,491,177,489,190,465,202,430,211,393,223,329"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="252,498,333,570"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="284,568,268,630,263,627,281,573"/>
+</map>

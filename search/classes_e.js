@@ -1,0 +1,19 @@
+var searchData=
+[
+  ['scalar_5fsimd_5fpolicy_0',['scalar_simd_policy',['../structkcenon_1_1container_1_1simd_1_1scalar__simd__policy.html',1,'kcenon::container::simd']]],
+  ['scoped_5ftimer_1',['scoped_timer',['../classkcenon_1_1container_1_1scoped__timer.html',1,'kcenon::container']]],
+  ['sensorreading_2',['SensorReading',['../structscenarios_1_1IoTDataCollectionSystem_1_1SensorReading.html',1,'scenarios::IoTDataCollectionSystem']]],
+  ['serializer_5ffactory_3',['serializer_factory',['../classkcenon_1_1container_1_1serializer__factory.html',1,'kcenon::container']]],
+  ['serializer_5fstrategy_4',['serializer_strategy',['../classkcenon_1_1container_1_1serializer__strategy.html',1,'kcenon::container']]],
+  ['simd_5fbatch_5',['simd_batch',['../classkcenon_1_1container_1_1core_1_1simd__batch.html',1,'kcenon::container::core']]],
+  ['simd_5fcompressor_6',['simd_compressor',['../classkcenon_1_1container_1_1simd_1_1simd__compressor.html',1,'kcenon::container::simd']]],
+  ['simd_5fmetrics_7',['simd_metrics',['../structkcenon_1_1container_1_1simd__metrics.html',1,'kcenon::container']]],
+  ['simd_5fops_8',['simd_ops',['../classkcenon_1_1container_1_1simd_1_1simd__ops.html',1,'kcenon::container::simd']]],
+  ['simd_5fprocessor_9',['simd_processor',['../classkcenon_1_1container_1_1simd_1_1simd__processor.html',1,'kcenon::container::simd']]],
+  ['simd_5fsupport_10',['simd_support',['../classkcenon_1_1container_1_1simd_1_1simd__support.html',1,'kcenon::container::simd']]],
+  ['simd_5ftraits_11',['simd_traits',['../structkcenon_1_1container_1_1simd_1_1simd__traits.html',1,'kcenon::container::simd']]],
+  ['snapshot_5freader_12',['snapshot_reader',['../classkcenon_1_1container_1_1snapshot__reader.html',1,'kcenon::container']]],
+  ['static_5fstorage_5fpolicy_13',['static_storage_policy',['../classkcenon_1_1container_1_1policy_1_1static__storage__policy.html',1,'kcenon::container::policy']]],
+  ['statistics_14',['Statistics',['../structAdvancedContainerExample_1_1Statistics.html',1,'AdvancedContainerExample::Statistics'],['../structkcenon_1_1container_1_1thread__safe__container_1_1Statistics.html',1,'kcenon::container::thread_safe_container::Statistics']]],
+  ['statistics_15',['statistics',['../structkcenon_1_1container_1_1internal_1_1fixed__block__pool_1_1statistics.html',1,'kcenon::container::internal::fixed_block_pool']]]
+];

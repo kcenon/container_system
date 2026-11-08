@@ -1,0 +1,10 @@
+<map id="kcenon::container::epoch_guard::~epoch_guard" name="kcenon::container::epoch_guard::~epoch_guard">
+<area shape="rect" id="Node000001" title="Exit critical section." alt="" coords="5,64,212,109"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1container_1_1epoch__manager.html#a1d549f3a6f6d25a0550563e348c5d041" title="Exit critical section." alt="" coords="275,5,433,67"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="211,63,262,55,257,57,213,68"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1container_1_1epoch__manager.html#a71d398ad55c6c5ba1cfdf2cc404a1f96" title="Get the singleton instance." alt="" coords="260,115,448,160"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="212,106,247,115,242,115,212,111"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1container_1_1epoch__manager.html#a1fc36326f6c18419fbfd0f11ceabe9df" title="Get thread&#45;local epoch reference." alt="" coords="496,14,717,58"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="433,34,483,36,478,37,434,39"/>
+<area shape="poly" id="edge4_Node000004_Node000004" title=" " alt="" coords="308,113,306,105,314,96,330,90,354,89,380,91,398,100,392,100,379,96,354,94,331,96,317,101,311,107,312,116"/>
+</map>

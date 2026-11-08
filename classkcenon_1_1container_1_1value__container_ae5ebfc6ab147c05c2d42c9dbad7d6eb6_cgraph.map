@@ -1,0 +1,11 @@
+<map id="kcenon::container::value_container::remove_batch" name="kcenon::container::value_container::remove_batch">
+<area shape="rect" id="Node000001" title="Remove multiple keys at once." alt="" coords="5,40,232,85"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1container_1_1value__container.html#a28e620f9002e59c73b0429d4cfd5bf9f" title=" " alt="" coords="280,32,484,93"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="232,60,266,62,261,63,233,65"/>
+<area shape="rect" id="Node000003" href="$namespacekcenon_1_1container.html#a4306f14e3eed794a603a62e69f08cc9f" title="Convert a string&#45;based type indicator to a value_types enum." alt="" coords="536,5,685,50"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="484,44,518,42,523,41,485,49"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1container_1_1value__container.html#a3eeb799ed0e74bf24123e52c637505c1" title="Returns iterator to end of values." alt="" coords="532,75,689,119"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="484,75,519,83,514,83,484,81"/>
+<area shape="rect" id="Node000004" href="$namespacekcenon_1_1container.html#a120c2fe2102afe34dad682d1921c69df" title="Compile&#45;time conversion from string to value_types." alt="" coords="737,5,898,50"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="686,25,724,27,719,28,686,30"/>
+</map>

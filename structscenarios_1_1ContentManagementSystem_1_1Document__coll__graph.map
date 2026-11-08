@@ -1,0 +1,14 @@
+<map id="scenarios::ContentManagementSystem::Document" name="scenarios::ContentManagementSystem::Document">
+<area shape="rect" id="Node000001" title=" " alt="" coords="113,447,330,536"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="204,160,279,232"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="263,229,273,256,273,273,267,328,256,383,243,432,238,429,251,381,262,327,268,273,268,256,261,234"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="66,303,241,376"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="211,234,197,257,179,290,174,287,193,255,214,230"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="178,5,305,95"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="242,107,244,160,239,159,241,112"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="170,373,198,432,192,432,168,378"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="5,160,123,232"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="71,244,83,272,109,303,104,304,79,274,71,249"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="55,14,74,86"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="64,83,67,143,62,143,64,89"/>
+</map>

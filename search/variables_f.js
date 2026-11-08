@@ -1,0 +1,24 @@
+var searchData=
+[
+  ['raw_5fdata_5fptr_5f_0',['raw_data_ptr_',['../classkcenon_1_1container_1_1value__container.html#a2f2589303feef39af6dc3a7eb41ed9e4',1,'kcenon::container::value_container']]],
+  ['read_5fcount_1',['read_count',['../structkcenon_1_1container_1_1thread__safe__container_1_1Statistics.html#aef67b485a230890f03062aac22e6132e',1,'kcenon::container::thread_safe_container::Statistics']]],
+  ['read_5fcount_5f_2',['read_count_',['../classkcenon_1_1container_1_1thread__safe__container.html#aa7b388098b2e7f1dd8ae6f17192f42c9',1,'kcenon::container::thread_safe_container::read_count_'],['../classkcenon_1_1container_1_1value.html#ae909bff92413c57e42a8326a3385df09',1,'kcenon::container::value::read_count_'],['../classkcenon_1_1container_1_1value__store.html#a09e02090c2e05ec4cfd4d36a449dc1db',1,'kcenon::container::value_store::read_count_']]],
+  ['read_5flatency_3',['read_latency',['../structkcenon_1_1container_1_1detailed__metrics.html#a5523bdb50bebe2001d86b2d0e81ac603',1,'kcenon::container::detailed_metrics']]],
+  ['reader_5f_4',['reader_',['../classkcenon_1_1container_1_1auto__refresh__reader.html#ae58de2c224a279cfa10eb312bf2660ad',1,'kcenon::container::auto_refresh_reader']]],
+  ['readings_5fcollected_5f_5',['readings_collected_',['../classscenarios_1_1IoTDataCollectionSystem.html#aee944ea58cbccfefc31f761912cecd02',1,'scenarios::IoTDataCollectionSystem']]],
+  ['reads_6',['reads',['../structkcenon_1_1container_1_1operation__counts.html#a3ddabb049667a103d3c596ced556cb92',1,'kcenon::container::operation_counts']]],
+  ['ready_5f_7',['ready_',['../structkcenon_1_1container_1_1async_1_1detail_1_1async__state.html#a98100d5a30712c13319df30b990d44e5',1,'kcenon::container::async::detail::async_state::ready_'],['../structkcenon_1_1container_1_1async_1_1detail_1_1executor__state.html#a65c7597c46aeb8900161cfbc805ac140',1,'kcenon::container::async::detail::executor_state::ready_']]],
+  ['reclaimed_5fcount_5f_8',['reclaimed_count_',['../classkcenon_1_1container_1_1epoch__manager.html#a540190057ff418893eaaf6810d992e91',1,'kcenon::container::epoch_manager']]],
+  ['refresh_5fcount_5f_9',['refresh_count_',['../classkcenon_1_1container_1_1lockfree__container__reader.html#aa992cbcdcd9db7d03499db56728da782',1,'kcenon::container::lockfree_container_reader']]],
+  ['refresh_5finterval_5f_10',['refresh_interval_',['../classkcenon_1_1container_1_1auto__refresh__reader.html#a95f036da6c97594bd16b6c09bdc79daf',1,'kcenon::container::auto_refresh_reader']]],
+  ['refresh_5fthread_5f_11',['refresh_thread_',['../classkcenon_1_1container_1_1auto__refresh__reader.html#a510dd243dc0d42be8df7df89ccfb8572',1,'kcenon::container::auto_refresh_reader']]],
+  ['required_12',['required',['../structkcenon_1_1container_1_1container__schema_1_1field__def.html#ad3eff91610913755bf07f89403c12815',1,'kcenon::container::container_schema::field_def']]],
+  ['reservoir_13',['reservoir',['../structkcenon_1_1container_1_1latency__histogram.html#a9f59e586fd3688927c5dfa9fe06e6d31',1,'kcenon::container::latency_histogram']]],
+  ['reservoir_5fcount_14',['reservoir_count',['../structkcenon_1_1container_1_1latency__histogram.html#ae67db474c8f762bdb743ae407c56bfc0',1,'kcenon::container::latency_histogram']]],
+  ['resource_5fexhausted_15',['resource_exhausted',['../namespacekcenon_1_1container_1_1error__codes.html#a067f5b66344c1d2eb33249658dff4e70',1,'kcenon::container::error_codes']]],
+  ['result_5f_16',['result_',['../structkcenon_1_1container_1_1async_1_1detail_1_1async__state.html#a22d85267debc87cb8ecd82513a4743bf',1,'kcenon::container::async::detail::async_state::result_'],['../structkcenon_1_1container_1_1async_1_1detail_1_1promise__type.html#a758d6fea83872bc0796fe65782fb0406',1,'kcenon::container::async::detail::promise_type::result_'],['../structkcenon_1_1container_1_1async_1_1detail_1_1executor__state.html#ac730aaf7e2aac798d05b3a75276ee328',1,'kcenon::container::async::detail::executor_state::result_']]],
+  ['result_5fsize_5f_17',['result_size_',['../classkcenon_1_1container_1_1integration_1_1container__performance__monitor.html#a66fe91946988fba446412d4e3f139d33',1,'kcenon::container::integration::container_performance_monitor']]],
+  ['retire_5fmutex_5f_18',['retire_mutex_',['../classkcenon_1_1container_1_1epoch__manager.html#a155401ee8e4c4ae6a8e9f1d06e728e90',1,'kcenon::container::epoch_manager']]],
+  ['retired_5f_19',['retired_',['../classkcenon_1_1container_1_1epoch__manager.html#a0ead8b69a057223a74ec51a30027e129',1,'kcenon::container::epoch_manager']]],
+  ['running_5f_20',['running_',['../classkcenon_1_1container_1_1auto__refresh__reader.html#a2e41ee1fcce6e662a522790144fb7c49',1,'kcenon::container::auto_refresh_reader::running_'],['../classAdvancedContainerExample.html#a43832c8ab438ac26e34a62588d153a56',1,'AdvancedContainerExample::running_']]]
+];

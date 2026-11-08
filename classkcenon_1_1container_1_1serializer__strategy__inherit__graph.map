@@ -1,0 +1,11 @@
+<map id="kcenon::container::serializer_strategy" name="kcenon::container::serializer_strategy">
+<area shape="rect" id="Node000001" title="Abstract base class for serialization strategies." alt="" coords="263,5,432,251"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1container_1_1binary__serializer.html" title="Binary format serializer." alt="" coords="5,299,161,455"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="250,220,163,305,159,301,254,216"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1container_1_1json__serializer.html" title="JSON format serializer." alt="" coords="186,299,328,455"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="299,263,287,301,283,297,296,267"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1container_1_1msgpack__serializer.html" title="MessagePack format serializer." alt="" coords="352,299,526,455"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="399,263,413,300,408,298,397,267"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1container_1_1xml__serializer.html" title="XML format serializer." alt="" coords="551,299,691,455"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="444,211,540,297,553,311,548,310,536,301,442,216"/>
+</map>

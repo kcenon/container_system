@@ -1,0 +1,14 @@
+<map id="kcenon::container::value_container::set_all" name="kcenon::container::value_container::set_all">
+<area shape="rect" id="Node000001" title="Set multiple optimized_values at once (unified API)" alt="" coords="5,100,182,145"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1container_1_1value__container.html#a2e8d4eeb8b57ae33ef2197c07bf32147" title="Internal implementation for setting a single optimized_value." alt="" coords="230,92,383,153"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="181,120,216,121,211,123,183,125"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1container_1_1metrics__manager.html#ae636bf31baad3c8bba0c0160bc319115" title="Get the singleton metrics instance." alt="" coords="460,5,624,50"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="377,89,430,67,467,55,462,57,432,71,380,93"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1container_1_1metrics__manager.html#ac82ccd0364f4e8b2e0c3ba91becc6ea7" title="Check if metrics collection is enabled." alt="" coords="700,130,855,192"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="383,109,510,100,582,102,653,110,697,125,692,124,652,116,581,107,510,105,384,114"/>
+<area shape="rect" id="Node000005" href="$structkcenon_1_1container_1_1optimized__value.html#a84f53d8c6ffca0fb27598ff4e82f00b2" title=" " alt="" coords="468,125,616,186"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="383,130,455,143,450,143,383,136"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1container_1_1metrics__manager.html#a03caac9a4799d6e02748887d56f25b0e" title="Create a scoped timer if metrics are enabled." alt="" coords="431,211,652,255"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="353,151,432,196,448,205,443,204,430,201,352,156"/>
+<area shape="poly" id="edge6_Node000006_Node000004" title=" " alt="" coords="617,207,683,189,688,189,618,213"/>
+</map>

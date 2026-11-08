@@ -1,0 +1,8 @@
+<map id="kcenon::container::async::executor_context_guard::~executor_context_guard" name="kcenon::container::async::executor_context_guard::~executor_context_guard">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,72,246,134"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1container_1_1async_1_1async__executor__context.html#aaa29bd13ab1e1343836a7377d73a7218" title="Get the singleton instance." alt="" coords="294,29,462,91"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="246,80,281,76,276,78,247,85"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1container_1_1async_1_1async__executor__context.html#a6aa7ded365213c43ab65c925c7c180e2" title="Set the global executor." alt="" coords="294,115,462,176"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="246,121,281,129,276,129,246,126"/>
+<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="329,28,330,19,339,10,355,5,378,3,404,5,422,15,417,15,403,11,378,8,356,10,342,15,334,21,333,31"/>
+</map>

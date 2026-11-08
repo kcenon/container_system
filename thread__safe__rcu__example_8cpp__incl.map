@@ -1,0 +1,17 @@
+<map id="examples/thread_safe_rcu_example.cpp" name="examples/thread_safe_rcu_example.cpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="266,5,432,50"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,98,99,126"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="271,53,115,96,113,91,270,48"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="123,98,189,126"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="301,50,202,94,200,89,295,51"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="214,98,293,126"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="327,49,282,90,279,85,322,51"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="318,98,381,126"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="351,48,351,84,347,81,347,52"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="406,98,464,126"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="373,48,412,87,407,86,371,53"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="488,98,552,126"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="395,48,482,91,476,91,394,53"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="576,98,638,126"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="418,48,564,96,558,96,417,53"/>
+</map>

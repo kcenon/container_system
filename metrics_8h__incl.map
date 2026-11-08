@@ -1,0 +1,17 @@
+<map id="include/kcenon/container/metrics.h" name="include/kcenon/container/metrics.h">
+<area shape="rect" id="Node000001" title=" " alt="" coords="210,5,395,50"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,98,72,126"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="233,53,87,98,86,93,232,48"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="95,98,160,126"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="259,50,170,94,168,89,254,51"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="184,98,250,126"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="283,49,243,89,241,85,278,51"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="273,98,332,126"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="304,48,305,84,300,81,301,52"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="356,98,412,126"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="325,48,363,87,358,86,323,53"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="435,98,519,126"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="349,48,438,91,433,91,348,53"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="543,98,606,126"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="375,48,530,96,525,97,374,53"/>
+</map>

@@ -1,0 +1,29 @@
+<map id="main" name="main">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,214,60,242"/>
+<area shape="rect" id="Node000002" href="$classscenarios_1_1ContentManagementSystem.html#ac381fb4cf74f4df16cb0b900fa6e6a2d" title=" " alt="" coords="108,90,339,134"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="41,213,68,178,106,145,118,140,115,144,109,149,71,182,45,215"/>
+<area shape="rect" id="Node000007" href="$classscenarios_1_1FinancialTransactionSystem.html#aef874f8cd076e20d24cd29b2f724864a" title=" " alt="" coords="112,159,335,220"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="58,221,98,213,94,217,62,225"/>
+<area shape="rect" id="Node000009" href="$classscenarios_1_1GamingEventSystem.html#ad3cfd4bf8a91bcfc503171191396b5d2" title=" " alt="" coords="109,244,338,289"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="59,231,98,239,94,242,61,236"/>
+<area shape="rect" id="Node000013" href="$classscenarios_1_1IoTDataCollectionSystem.html#af1b110c2ff3ed8f9c0b7e480593c10db" title=" " alt="" coords="113,340,334,385"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="46,240,75,269,109,299,161,332,156,334,106,304,71,273,46,245"/>
+<area shape="rect" id="Node000003" href="$classscenarios_1_1ContentManagementSystem.html#a9d93d1d6bf4cf1f678941f4dd2b746b0" title=" " alt="" coords="387,5,615,67"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="306,87,374,70,370,73,309,92"/>
+<area shape="rect" id="Node000004" href="$classscenarios_1_1ContentManagementSystem.html#a6975d3a43b1e3d4046b4b4cb6bca535d" title=" " alt="" coords="387,91,615,136"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="339,110,374,112,369,114,340,115"/>
+<area shape="rect" id="Node000005" href="$classscenarios_1_1ContentManagementSystem.html#aef3b7b96cf92379c055400a8378098b1" title=" " alt="" coords="663,91,917,136"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="615,111,650,113,645,114,616,116"/>
+<area shape="rect" id="Node000006" href="$classscenarios_1_1ContentManagementSystem.html#aa18c95e9e6175d7a8a46e9e06fa0d39a" title=" " alt="" coords="965,91,1193,136"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="917,111,951,113,946,114,918,116"/>
+<area shape="rect" id="Node000008" href="$classscenarios_1_1FinancialTransactionSystem.html#a37cbcf1e27f0bcafcd915047004bd726" title=" " alt="" coords="390,164,613,209"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="335,186,376,187,371,189,336,191"/>
+<area shape="rect" id="Node000010" href="$classscenarios_1_1GamingEventSystem.html#a6ca25899e45597bb3011f1085c1b0166" title=" " alt="" coords="387,234,615,278"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="337,260,374,260,369,262,338,265"/>
+<area shape="rect" id="Node000011" href="$classscenarios_1_1GamingEventSystem.html#a3403e62957e14344283e707976f4380b" title=" " alt="" coords="387,303,615,348"/>
+<area shape="poly" id="edge10_Node000009_Node000011" title=" " alt="" coords="332,287,380,299,375,300,332,292"/>
+<area shape="rect" id="Node000012" href="$classscenarios_1_1GamingEventSystem.html#a59259bf430f8d9addd2901141209351c" title=" " alt="" coords="674,303,906,348"/>
+<area shape="poly" id="edge11_Node000011_Node000012" title=" " alt="" coords="615,323,661,325,656,326,616,328"/>
+<area shape="rect" id="Node000014" href="$classscenarios_1_1IoTDataCollectionSystem.html#ab3378a367ae308589f4081b80596d143" title=" " alt="" coords="398,372,605,417"/>
+<area shape="poly" id="edge13_Node000013_Node000014" title=" " alt="" coords="335,373,385,381,380,381,335,378"/>
+</map>

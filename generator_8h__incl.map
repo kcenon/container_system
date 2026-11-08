@@ -1,0 +1,15 @@
+<map id="include/kcenon/container/internal/async/generator.h" name="include/kcenon/container/internal/async/generator.h">
+<area shape="rect" id="Node000001" title="C++20 coroutine generator for lazy sequence generation." alt="" coords="202,5,398,50"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,98,88,126"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="233,53,102,95,101,90,232,48"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="112,98,197,126"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="264,50,192,92,190,88,259,51"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="221,98,290,126"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="291,49,272,86,268,82,286,52"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="314,98,374,126"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="313,48,332,85,327,83,310,53"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="398,98,490,126"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="339,48,410,90,405,90,337,53"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="514,98,590,126"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="367,48,501,93,496,94,366,53"/>
+</map>

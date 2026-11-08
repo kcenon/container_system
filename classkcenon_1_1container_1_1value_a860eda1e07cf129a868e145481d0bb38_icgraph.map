@@ -1,0 +1,31 @@
+<map id="kcenon::container::value::name" name="kcenon::container::value::name">
+<area shape="rect" id="Node000001" title="Get the name of this value (lock&#45;free, immutable)" alt="" coords="913,240,1058,285"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1container_1_1value.html#ac200fda87b78dced215309f05e435825" title="Deserialize from binary format (legacy compatible)" alt="" coords="709,163,854,207"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="907,234,842,211,843,205,913,234"/>
+<area shape="rect" id="Node000010" href="$classkcenon_1_1container_1_1thread__safe__container.html#ac3a10d5cffc4c1e8d8e255b7322e85a6" title="Set a value directly using variant value." alt="" coords="698,232,865,293"/>
+<area shape="poly" id="edge11_Node000001_Node000010" title=" " alt="" coords="895,263,865,265,865,260,900,262"/>
+<area shape="rect" id="Node000011" href="$classkcenon_1_1container_1_1value.html#a2a483be0c0bf1a94033976aa520df88a" title="Convert to JSON representation." alt="" coords="709,341,854,386"/>
+<area shape="poly" id="edge12_Node000001_Node000011" title=" " alt="" coords="927,291,829,343,827,338,922,293"/>
+<area shape="rect" id="Node000003" href="$namespacekcenon_1_1container.html#affa21db254b73403074d3cacb29be54e" title="Create a copy of a value with a new name." alt="" coords="490,5,635,50"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="748,151,704,108,649,65,629,53,629,48,652,60,708,104,754,151"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1container_1_1thread__safe__container.html#a97f73aceba6779ffda6d1475911f19ed" title="Deserialize from binary." alt="" coords="479,74,645,136"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="701,157,646,138,646,133,707,157"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1container_1_1value.html#a26b8169ed46f1294680171a28b0d60e4" title="Deserialize data portion based on type." alt="" coords="226,163,398,207"/>
+<area shape="poly" id="edge10_Node000002_Node000005" title=" " alt="" coords="691,194,399,195,399,190,695,191"/>
+<area shape="rect" id="Node000007" href="$classkcenon_1_1container_1_1value__store.html#abee005deba1057aceb8539f9fee1af10" title="Deserialize binary format into an existing value_store." alt="" coords="474,234,650,296"/>
+<area shape="poly" id="edge7_Node000002_Node000007" title=" " alt="" coords="702,214,650,236,648,231,707,212"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="462,138,386,164,383,160,466,135"/>
+<area shape="poly" id="edge5_Node000005_Node000002" title=" " alt="" coords="414,175,710,177,706,180,414,180"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1container_1_1value.html#a31bed15f2c2992f56f7d605b865e738d" title="Construct from value_types and raw data (legacy compatibility)" alt="" coords="5,163,151,207"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="209,187,152,187,150,183,213,183"/>
+<area shape="rect" id="Node000008" href="$classkcenon_1_1container_1_1message__container.html#a8e2ffa84222ef8b8f17762a6cec60c50" title="Deserialize from binary format." alt="" coords="199,233,426,294"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="456,265,427,267,426,262,461,264"/>
+<area shape="rect" id="Node000009" href="$classkcenon_1_1container_1_1value__store.html#aafd3002ae80cd22fdadd842ae5979aec" title="Deserialize from binary format." alt="" coords="224,318,400,380"/>
+<area shape="poly" id="edge9_Node000007_Node000009" title=" " alt="" coords="456,301,402,322,400,317,461,299"/>
+<area shape="poly" id="edge14_Node000011_Node000011" title=" " alt="" coords="813,325,802,322,781,320,763,322,751,327,746,333,747,342,743,339,741,331,748,322,761,317,782,315,803,317,818,326"/>
+<area shape="rect" id="Node000012" href="$classkcenon_1_1container_1_1thread__safe__container.html#abf79a32467982d4d18dd104fd0938d0f" title="Serialize container to JSON." alt="" coords="479,326,645,388"/>
+<area shape="poly" id="edge13_Node000011_Node000012" title=" " alt="" coords="691,361,646,362,646,357,696,361"/>
+<area shape="rect" id="Node000013" href="$classkcenon_1_1container_1_1value.html#a4ad23e08f35169edc5dc7f91f269701b" title="Convert to string representation." alt="" coords="490,436,635,481"/>
+<area shape="poly" id="edge15_Node000011_Node000013" title=" " alt="" coords="716,392,617,438,615,433,711,393"/>
+<area shape="poly" id="edge16_Node000013_Node000013" title=" " alt="" coords="596,420,585,417,562,415,542,417,529,421,524,427,525,437,521,434,519,426,526,417,541,411,562,409,586,412,602,421"/>
+</map>

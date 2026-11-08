@@ -1,0 +1,15 @@
+<map id="kcenon::container::rcu_value&lt; T &gt;" name="kcenon::container::rcu_value&lt; T &gt;">
+<area shape="rect" id="Node000001" title="Lock&#45;free value wrapper using Read&#45;Copy&#45;Update (RCU) pattern." alt="" coords="106,417,283,752"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="6,280,191,352"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="111,350,131,402,126,402,111,355"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="124,5,142,78"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="122,49,102,62,71,82,40,110,17,144,10,163,8,178,17,214,31,241,50,266,45,268,26,244,12,216,3,179,5,161,12,141,36,106,68,78,99,57,125,45"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="60,143,206,215"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="133,75,136,126,130,126,133,80"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="230,143,351,215"/>
+<area shape="poly" id="edge7_Node000006_Node000003" title=" " alt="" coords="142,48,239,131,234,133,142,53"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="120,232,110,281,105,280,121,227"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="215,280,366,352"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="279,350,262,403,258,401,277,355"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="291,227,293,281,288,280,290,232"/>
+</map>

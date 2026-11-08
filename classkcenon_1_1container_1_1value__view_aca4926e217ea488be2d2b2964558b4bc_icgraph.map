@@ -1,0 +1,7 @@
+<map id="kcenon::container::value_view::is_integral_type" name="kcenon::container::value_view::is_integral_type">
+<area shape="rect" id="Node000001" title="Check if type is an integral type." alt="" coords="442,5,648,50"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1container_1_1value__view.html#a006da40bd71695f9ab06a7136f018d98" title="Parse integral value from string data." alt="" coords="199,5,394,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="424,28,395,30,394,25,429,28"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1container_1_1value__view.html#aae861ea981e07fdd305f758731a8edc7" title="Type&#45;safe value extraction." alt="" coords="5,5,151,50"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="181,28,151,30,151,25,186,27"/>
+</map>

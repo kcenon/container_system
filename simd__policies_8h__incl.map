@@ -1,0 +1,23 @@
+<map id="include/kcenon/container/internal/simd_policies.h" name="include/kcenon/container/internal/simd_policies.h">
+<area shape="rect" id="Node000001" title="Compile&#45;time SIMD policy selection for vectorized operations." alt="" coords="369,5,553,50"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,98,90,126"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="369,49,105,100,104,95,368,43"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="114,98,184,126"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="380,51,199,100,198,95,375,50"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="208,98,274,126"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="405,50,289,96,287,90,400,51"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="298,98,363,126"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="429,50,365,92,363,87,424,51"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="386,98,445,126"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="451,49,432,86,428,82,447,52"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="469,98,543,126"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="474,48,494,85,489,83,471,53"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="568,98,642,126"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="500,48,571,90,566,90,498,53"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="667,98,719,126"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="523,48,655,96,650,96,522,53"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="743,98,840,126"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="549,48,731,95,726,95,548,53"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="864,98,943,126"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="554,41,851,97,846,98,553,46"/>
+</map>

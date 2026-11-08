@@ -1,0 +1,27 @@
+<map id="kcenon::container::get_type_from_string" name="kcenon::container::get_type_from_string">
+<area shape="rect" id="Node000001" title="Compile&#45;time conversion from string to value_types." alt="" coords="986,125,1146,170"/>
+<area shape="rect" id="Node000002" href="$namespacekcenon_1_1container.html#a4306f14e3eed794a603a62e69f08cc9f" title="Convert a string&#45;based type indicator to a value_types enum." alt="" coords="788,125,938,170"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="968,148,939,150,938,145,973,147"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1container_1_1value__container.html#a5fb54803659140ea4885c68012fdecb2" title="Build the value index for lazy parsing." alt="" coords="532,56,740,101"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="771,121,712,104,712,99,776,120"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1container_1_1value__container.html#a3d5b5a38f09acaeda31be2711bd38e72" title="Returns only the data portion&#39;s serialized string, if fully parsed." alt="" coords="552,125,721,170"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="771,148,722,150,721,145,776,147"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1container_1_1value__container.html#a28e620f9002e59c73b0429d4cfd5bf9f" title=" " alt="" coords="534,194,738,256"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="783,175,730,196,728,191,778,176"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1container_1_1value__container.html#a3e908ea65c84ee47f13c21d82c9af6ef" title="Force building the value index for lazy parsing." alt="" coords="282,48,460,109"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="514,79,460,81,459,76,519,77"/>
+<area shape="rect" id="Node000007" href="$classkcenon_1_1container_1_1value__container.html#af299da476105c06fa5e346e922cf8546" title="Internal deserialize from string." alt="" coords="269,168,473,213"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="516,210,474,206,473,201,521,209"/>
+<area shape="rect" id="Node000013" href="$classkcenon_1_1container_1_1value__container.html#ae5ebfc6ab147c05c2d42c9dbad7d6eb6" title="Remove multiple keys at once." alt="" coords="258,237,484,282"/>
+<area shape="poly" id="edge12_Node000006_Node000013" title=" " alt="" coords="516,241,485,247,484,242,521,240"/>
+<area shape="rect" id="Node000008" href="$classkcenon_1_1container_1_1value__container.html#a1d547082752e4c8fca46c90477c67786" title="Internal deserialize from byte array." alt="" coords="5,5,210,50"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="310,160,256,123,241,107,232,92,223,78,208,64,190,53,188,48,211,60,227,75,237,89,246,104,259,119,315,159"/>
+<area shape="rect" id="Node000009" href="$classkcenon_1_1container_1_1value__container.html#a8819a190133b826922a3a87bd880d3a9" title="Construct from a serialized data string. If parse_only_header==true, only parse the header part,..." alt="" coords="23,74,192,136"/>
+<area shape="poly" id="edge8_Node000007_Node000009" title=" " alt="" coords="283,164,193,135,192,130,287,161"/>
+<area shape="rect" id="Node000010" href="$classkcenon_1_1container_1_1value__container.html#ad43c87b05d00ad0550566b99c20ccce4" title="Construct from a raw byte array. If parse_only_header==true, only parse the header part,..." alt="" coords="23,160,192,221"/>
+<area shape="poly" id="edge9_Node000007_Node000010" title=" " alt="" coords="251,192,193,193,192,188,256,189"/>
+<area shape="rect" id="Node000011" href="$classkcenon_1_1container_1_1value__container.html#a64a2e0cf1ac81fe1778cbe0223a46991" title="Copy constructor from another value_container. If parse_only_header==true, only parse the header port..." alt="" coords="23,245,192,306"/>
+<area shape="poly" id="edge10_Node000007_Node000011" title=" " alt="" coords="278,219,258,228,194,249,191,244,257,222,283,217"/>
+<area shape="rect" id="Node000012" href="$classkcenon_1_1container_1_1value__container.html#a39e7a4c455f4de83962907033c04f57f" title="Copy from an existing pointer. If parse_only_header==true, only parse header." alt="" coords="23,330,192,392"/>
+<area shape="poly" id="edge11_Node000007_Node000012" title=" " alt="" coords="264,220,260,227,242,249,236,272,229,296,212,320,194,334,191,329,208,316,224,293,231,270,238,247,256,223,260,223"/>
+</map>

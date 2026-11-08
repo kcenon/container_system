@@ -1,0 +1,35 @@
+<map id="kcenon::container::validation_error::validation_error" name="kcenon::container::validation_error::validation_error">
+<area shape="rect" id="Node000001" title=" " alt="" coords="530,312,765,357"/>
+<area shape="rect" id="Node000002" href="$structkcenon_1_1container_1_1validation__error.html#aa870c9ada3dd0cab6a628ba48fbb51ac" title="Create error for custom validation failure." alt="" coords="300,5,480,67"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="628,297,605,251,572,193,530,134,480,81,467,70,466,65,484,77,534,130,576,190,610,249,633,299"/>
+<area shape="rect" id="Node000004" href="$structkcenon_1_1container_1_1validation__error.html#a404636344da214f626223aaba07a4592" title="Create error for invalid length." alt="" coords="302,91,478,152"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="617,301,558,235,521,199,480,166,465,156,464,150,484,162,524,195,562,231,623,301"/>
+<area shape="rect" id="Node000006" href="$structkcenon_1_1container_1_1validation__error.html#a949b41884896fd2ea21339ef5a09f8d1" title="Create error for missing required field." alt="" coords="299,176,482,238"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="587,305,481,252,459,241,459,236,483,247,592,304"/>
+<area shape="rect" id="Node000008" href="$structkcenon_1_1container_1_1validation__error.html#a39e261dcb0115b258ebf127c09adaba4" title="Create error for nested validation failure." alt="" coords="302,261,478,323"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="512,313,479,309,478,304,517,312"/>
+<area shape="rect" id="Node000010" href="$structkcenon_1_1container_1_1validation__error.html#a8819ff3d6c3911501246d80e91fbfd7b" title="Create error for value not in allowed list." alt="" coords="314,347,467,408"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="512,358,468,367,467,362,517,356"/>
+<area shape="rect" id="Node000012" href="$structkcenon_1_1container_1_1validation__error.html#ae69ac02722d718245ee6c17889d5cc5e" title="Create error for out of range value." alt="" coords="314,432,467,494"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="592,364,483,423,460,434,458,429,481,418,588,366"/>
+<area shape="rect" id="Node000014" href="$structkcenon_1_1container_1_1validation__error.html#a25d68bd18c663aeac78f585904b54367" title="Create error for pattern mismatch." alt="" coords="301,517,480,579"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="622,368,562,438,524,475,484,508,466,519,463,514,480,503,521,471,558,434,618,370"/>
+<area shape="rect" id="Node000016" href="$structkcenon_1_1container_1_1validation__error.html#a24bc793e9b607f1a736e9c63a0fb626c" title="Create error for type mismatch." alt="" coords="310,603,471,664"/>
+<area shape="poly" id="edge15_Node000001_Node000016" title=" " alt="" coords="633,370,610,421,576,479,534,539,484,593,468,605,466,600,480,589,530,536,572,477,605,419,629,373"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1container_1_1container__schema.html#a7aaa5c579f44bfd66a222b06707aac74" title="Validate custom validators." alt="" coords="27,5,229,67"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="282,38,230,38,228,34,287,35"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1container_1_1container__schema.html#aa69074ca5441e03b13bc4997f53ee041" title="Validate length constraint." alt="" coords="27,91,229,152"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="285,123,231,124,228,119,289,120"/>
+<area shape="rect" id="Node000007" href="$classkcenon_1_1container_1_1container__schema.html#adf488360870455ebbc6841a39711a986" title="Validate a container and collect all errors." alt="" coords="16,184,240,229"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="281,208,242,209,239,204,285,205"/>
+<area shape="rect" id="Node000009" href="$classkcenon_1_1container_1_1container__schema.html#a0a674ca8eb408f0aa54d23bb049e8d3c" title="Validate nested schema." alt="" coords="27,261,229,323"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="285,294,230,295,228,290,289,291"/>
+<area shape="rect" id="Node000011" href="$classkcenon_1_1container_1_1container__schema.html#ab81e4e98cc2adf2bbe8031b4ba2b7d39" title="Validate allowed values constraint." alt="" coords="27,347,229,408"/>
+<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="296,379,230,380,228,375,300,376"/>
+<area shape="rect" id="Node000013" href="$classkcenon_1_1container_1_1container__schema.html#a2c77c56ca8bdfadec1b1a2fa803f6e1b" title="Validate range constraint." alt="" coords="5,440,251,485"/>
+<area shape="poly" id="edge12_Node000012_Node000013" title=" " alt="" coords="296,464,252,465,250,460,301,462"/>
+<area shape="rect" id="Node000015" href="$classkcenon_1_1container_1_1container__schema.html#a67741e50882a8a47e0a4de9fc1d1eed8" title="Validate pattern constraint." alt="" coords="27,517,229,579"/>
+<area shape="poly" id="edge14_Node000014_Node000015" title=" " alt="" coords="282,549,229,551,228,546,287,547"/>
+<area shape="rect" id="Node000017" href="$classkcenon_1_1container_1_1container__schema.html#a3aebb72123380f2fc8fb893d1c04b89c" title="Validate type constraint." alt="" coords="9,611,247,656"/>
+<area shape="poly" id="edge16_Node000016_Node000017" title=" " alt="" coords="292,634,247,636,247,631,297,633"/>
+</map>

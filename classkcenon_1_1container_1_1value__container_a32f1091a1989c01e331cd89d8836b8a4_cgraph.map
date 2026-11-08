@@ -1,0 +1,7 @@
+<map id="kcenon::container::value_container::clear_pool" name="kcenon::container::value_container::clear_pool">
+<area shape="rect" id="Node000001" title="Clear memory pool (for testing/benchmarking)" alt="" coords="5,56,206,101"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1container_1_1internal_1_1pool__allocator.html#a286495726f594c6629e638b7cda497f1" title="Get the singleton instance." alt="" coords="254,5,425,67"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="205,58,241,54,236,55,207,63"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1container_1_1internal_1_1pool__allocator.html#a8b5859b99fc948056fe2ee966ce70259" title="Reset statistics (for benchmarking)" alt="" coords="254,91,425,152"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="206,95,241,103,236,103,206,100"/>
+</map>

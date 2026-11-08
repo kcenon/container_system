@@ -1,0 +1,9 @@
+<map id="kcenon::container::async::detail::promise_base" name="kcenon::container::async::detail::promise_base">
+<area shape="rect" id="Node000001" title="Base promise type with common functionality." alt="" coords="5,417,198,574"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="31,280,172,352"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="103,349,104,401,99,400,101,355"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="41,143,162,215"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="102,227,104,281,99,280,101,232"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="92,5,111,78"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="102,75,104,126,99,126,101,80"/>
+</map>

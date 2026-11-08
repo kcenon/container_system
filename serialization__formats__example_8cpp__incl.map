@@ -1,0 +1,29 @@
+<map id="examples/serialization_formats_example.cpp" name="examples/serialization_formats_example.cpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="482,5,652,50"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,106,99,134"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="479,38,309,62,210,79,111,101,101,103,98,99,110,95,209,74,309,56,483,35"/>
+<area shape="rect" id="Node000003" href="$serializer__factory_8h.html" title=" " alt="" coords="123,98,328,143"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="483,52,322,96,320,91,487,49"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="743,266,801,294"/>
+<area shape="poly" id="edge15_Node000001_Node000007" title=" " alt="" coords="652,28,692,35,732,48,768,68,798,96,809,115,814,136,813,179,803,220,788,255,784,251,798,218,808,178,809,136,804,117,794,100,765,72,730,53,691,40,653,33"/>
+<area shape="rect" id="Node000010" href="$binary__serializer_8h.html" title=" " alt="" coords="351,98,556,143"/>
+<area shape="poly" id="edge10_Node000001_Node000010" title=" " alt="" coords="542,49,494,90,491,86,537,52"/>
+<area shape="rect" id="Node000011" href="$json__serializer_8h.html" title=" " alt="" coords="579,98,784,143"/>
+<area shape="poly" id="edge12_Node000001_Node000011" title=" " alt="" coords="594,48,645,89,640,88,593,53"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="859,106,938,134"/>
+<area shape="poly" id="edge14_Node000001_Node000012" title=" " alt="" coords="652,46,841,95,852,101,847,101,839,101,652,51"/>
+<area shape="rect" id="Node000004" href="$serializer__strategy_8h.html" title=" " alt="" coords="377,191,530,218"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="286,141,405,184,400,186,286,146"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="222,266,298,294"/>
+<area shape="poly" id="edge9_Node000003_Node000006" title=" " alt="" coords="232,141,256,252,251,251,228,145"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="333,266,398,294"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="440,218,394,259,391,254,435,220"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="421,218,309,263,307,258,416,219"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="511,216,730,268,725,269,510,222"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="422,266,484,294"/>
+<area shape="poly" id="edge7_Node000004_Node000008" title=" " alt="" coords="455,217,455,252,451,249,451,221"/>
+<area shape="rect" id="Node000009" href="$result__integration_8h.html" title=" " alt="" coords="509,266,670,294"/>
+<area shape="poly" id="edge8_Node000004_Node000009" title=" " alt="" coords="478,216,554,259,549,258,477,221"/>
+<area shape="poly" id="edge11_Node000010_Node000004" title=" " alt="" coords="455,141,456,177,451,174,452,145"/>
+<area shape="poly" id="edge13_Node000011_Node000004" title=" " alt="" coords="623,143,505,188,503,183,618,144"/>
+</map>

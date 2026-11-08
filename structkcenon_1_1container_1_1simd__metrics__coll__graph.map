@@ -1,0 +1,9 @@
+<map id="kcenon::container::simd_metrics" name="kcenon::container::simd_metrics">
+<area shape="rect" id="Node000001" title="SIMD utilization metrics." alt="" coords="21,451,157,652"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,280,172,352"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="89,349,91,435,86,434,88,354"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="28,143,150,215"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="89,227,91,281,86,280,88,232"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="79,5,98,78"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="89,75,91,126,86,126,88,80"/>
+</map>

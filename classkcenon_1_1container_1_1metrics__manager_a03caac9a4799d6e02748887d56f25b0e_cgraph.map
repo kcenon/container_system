@@ -1,0 +1,5 @@
+<map id="kcenon::container::metrics_manager::make_timer" name="kcenon::container::metrics_manager::make_timer">
+<area shape="rect" id="Node000001" title="Create a scoped timer if metrics are enabled." alt="" coords="5,14,227,58"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1container_1_1metrics__manager.html#ac82ccd0364f4e8b2e0c3ba91becc6ea7" title="Check if metrics collection is enabled." alt="" coords="275,5,429,67"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="227,34,262,36,256,36,227,39"/>
+</map>

@@ -1,0 +1,17 @@
+<map id="include/kcenon/container/internal/async/task.h" name="include/kcenon/container/internal/async/task.h">
+<area shape="rect" id="Node000001" title="C++20 coroutine task type for async operations." alt="" coords="257,5,441,50"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,98,88,126"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="269,53,103,98,102,93,268,48"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="112,98,197,126"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="300,50,201,94,199,89,295,51"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="221,98,296,126"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="328,49,286,89,283,85,323,51"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="320,98,379,126"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="351,48,351,84,347,81,347,52"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="404,98,495,126"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="376,48,424,88,419,87,375,53"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="520,98,587,126"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="404,48,509,92,504,92,403,53"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="611,98,677,126"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="428,48,598,97,593,97,427,53"/>
+</map>

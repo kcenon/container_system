@@ -1,0 +1,9 @@
+<map id="scenarios::IoTDataCollectionSystem" name="scenarios::IoTDataCollectionSystem">
+<area shape="rect" id="Node000001" title="IoT Data Collection System." alt="" coords="5,434,202,546"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="38,280,169,352"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="105,350,106,418,101,417,102,355"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="43,143,164,215"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="104,227,106,281,101,280,103,232"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="94,5,113,78"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="104,75,106,126,101,126,103,80"/>
+</map>

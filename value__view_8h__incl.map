@@ -1,0 +1,19 @@
+<map id="include/kcenon/container/internal/value_view.h" name="include/kcenon/container/internal/value_view.h">
+<area shape="rect" id="Node000001" title="Zero&#45;copy value view for efficient data access." alt="" coords="168,5,352,50"/>
+<area shape="rect" id="Node000002" href="$value__types_8h.html" title="Enumeration of the 16 supported value types in the container system." alt="" coords="63,98,187,126"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="222,52,161,92,158,87,226,49"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="5,174,64,201"/>
+<area shape="poly" id="edge5_Node000001_Node000004" title=" " alt="" coords="165,40,136,49,105,61,77,78,53,100,44,113,39,128,35,159,30,157,34,126,39,110,48,96,74,74,103,56,135,44,169,37"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="177,174,273,201"/>
+<area shape="poly" id="edge6_Node000001_Node000005" title=" " alt="" coords="257,49,234,160,229,157,253,52"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="262,98,327,126"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="270,48,286,84,280,83,268,53"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="351,98,425,126"/>
+<area shape="poly" id="edge8_Node000001_Node000007" title=" " alt="" coords="294,48,357,89,352,90,293,53"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="449,98,540,126"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="322,48,445,92,440,93,322,53"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="98,174,153,201"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="127,124,128,159,123,157,123,128"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="111,125,64,166,61,162,106,127"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="144,124,198,164,193,165,142,129"/>
+</map>

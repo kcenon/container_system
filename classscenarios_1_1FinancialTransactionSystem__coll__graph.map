@@ -1,0 +1,11 @@
+<map id="scenarios::FinancialTransactionSystem" name="scenarios::FinancialTransactionSystem">
+<area shape="rect" id="Node000001" title="Financial Transaction Processing System." alt="" coords="62,434,274,563"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,280,136,352"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="65,349,68,381,75,409,80,420,75,421,70,411,62,382,64,355"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="10,143,132,215"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="71,227,73,280,68,280,70,232"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="61,5,80,78"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="71,75,73,126,68,126,70,80"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="226,280,307,352"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="261,350,252,382,240,412,234,422,230,418,235,409,247,380,257,354"/>
+</map>

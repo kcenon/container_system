@@ -1,0 +1,8 @@
+<map id="kcenon::container::value_store::size" name="kcenon::container::value_store::size">
+<area shape="rect" id="Node000001" title="Get number of stored values." alt="" coords="303,36,448,81"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1container_1_1value__store.html#a18be99e391cd0cfa47ec7ca930e53636" title="Check if store is empty." alt="" coords="108,5,255,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="285,45,256,42,256,37,290,44"/>
+<area shape="rect" id="Node000003" href="$value__store__example_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,44,60,72"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="285,62,255,65,108,65,60,63,60,57,108,60,255,60,290,61"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="90,47,61,55,59,50,95,45"/>
+</map>

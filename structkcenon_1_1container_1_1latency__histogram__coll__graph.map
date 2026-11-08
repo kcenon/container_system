@@ -1,0 +1,18 @@
+<map id="kcenon::container::latency_histogram" name="kcenon::container::latency_histogram">
+<area shape="rect" id="Node000001" title="Approximate latency histogram using reservoir sampling." alt="" coords="139,682,308,1017"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="151,335,318,408"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="235,405,231,666,225,665,232,410"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="350,528,564,617"/>
+<area shape="poly" id="edge5_Node000005_Node000002" title=" " alt="" coords="261,405,304,453,354,502,373,518,367,519,350,506,300,457,261,410"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="174,143,295,215"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="235,227,237,336,232,335,234,232"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="5,432,157,504"/>
+<area shape="poly" id="edge9_Node000007_Node000003" title=" " alt="" coords="168,228,159,241,132,289,111,341,97,391,89,432,84,432,92,390,106,339,127,287,155,237,170,223"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="300,5,318,78"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="299,62,265,129,260,126,301,57"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="350,239,460,311"/>
+<area shape="poly" id="edge7_Node000006_Node000004" title=" " alt="" coords="319,62,387,223,382,224,318,68"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="423,615,321,738,317,735,419,619"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="415,323,452,528,447,528,413,328"/>
+<area shape="poly" id="edge8_Node000001_Node000007" title=" " alt="" coords="75,501,74,558,75,588,81,617,103,673,133,728,128,728,98,675,76,618,70,588,68,558,75,506"/>
+</map>

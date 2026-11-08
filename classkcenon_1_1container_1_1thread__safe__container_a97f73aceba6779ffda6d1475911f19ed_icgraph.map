@@ -1,0 +1,19 @@
+<map id="kcenon::container::thread_safe_container::deserialize" name="kcenon::container::thread_safe_container::deserialize">
+<area shape="rect" id="Node000001" title="Deserialize from binary." alt="" coords="919,37,1085,98"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1container_1_1value.html#a26b8169ed46f1294680171a28b0d60e4" title="Deserialize data portion based on type." alt="" coords="698,75,871,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="906,81,872,88,871,83,901,81"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1container_1_1value.html#ac200fda87b78dced215309f05e435825" title="Deserialize from binary format (legacy compatible)" alt="" coords="505,44,650,89"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="680,91,650,88,651,83,686,91"/>
+<area shape="rect" id="Node000008" href="$classkcenon_1_1container_1_1value.html#a31bed15f2c2992f56f7d605b865e738d" title="Construct from value_types and raw data (legacy compatibility)" alt="" coords="505,113,650,158"/>
+<area shape="poly" id="edge9_Node000002_Node000008" title=" " alt="" coords="686,116,651,125,650,119,680,116"/>
+<area shape="poly" id="edge4_Node000003_Node000001" title=" " alt="" coords="666,60,698,60,871,60,921,64,915,64,871,65,698,65,666,66"/>
+<area shape="poly" id="edge8_Node000003_Node000002" title=" " alt="" coords="665,68,700,75,695,75,665,73"/>
+<area shape="rect" id="Node000004" href="$namespacekcenon_1_1container.html#affa21db254b73403074d3cacb29be54e" title="Create a copy of a value with a new name." alt="" coords="296,5,442,50"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="487,50,442,44,442,38,492,50"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1container_1_1value__store.html#abee005deba1057aceb8539f9fee1af10" title="Deserialize binary format into an existing value_store." alt="" coords="281,74,457,136"/>
+<area shape="poly" id="edge5_Node000003_Node000005" title=" " alt="" coords="487,83,458,91,457,86,493,82"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1container_1_1message__container.html#a8e2ffa84222ef8b8f17762a6cec60c50" title="Deserialize from binary format." alt="" coords="5,32,233,93"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="262,88,233,84,233,79,268,87"/>
+<area shape="rect" id="Node000007" href="$classkcenon_1_1container_1_1value__store.html#aafd3002ae80cd22fdadd842ae5979aec" title="Deserialize from binary format." alt="" coords="31,117,207,178"/>
+<area shape="poly" id="edge7_Node000005_Node000007" title=" " alt="" coords="262,123,208,135,207,130,268,122"/>
+</map>

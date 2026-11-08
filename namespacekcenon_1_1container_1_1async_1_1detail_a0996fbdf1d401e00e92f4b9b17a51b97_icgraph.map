@@ -1,0 +1,21 @@
+<map id="kcenon::container::async::detail::make_async_awaitable" name="kcenon::container::async::detail::make_async_awaitable">
+<area shape="rect" id="Node000001" title=" " alt="" coords="243,339,391,400"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1container_1_1async_1_1async__container.html#a45371c1c466c1df0c24fd9b8cc4f12c6" title="Deserialize from byte array asynchronously." alt="" coords="13,5,187,67"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="305,323,291,269,269,205,236,139,216,108,193,81,182,70,181,65,197,77,220,105,241,136,274,203,296,268,310,324"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1container_1_1async_1_1async__container.html#a074228c60032a7e2f068572cdb0a9956" title="Deserialize container progressively from chunks." alt="" coords="13,91,187,152"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="296,324,256,245,227,203,193,166,181,156,179,150,196,162,231,200,260,242,301,324"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1container_1_1async_1_1async__container.html#a882bc6d869353f54d6fab7f8f0da1fc4" title="Deserialize from string asynchronously." alt="" coords="5,176,195,238"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="277,328,239,289,193,252,177,241,176,236,196,247,242,285,282,327"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1container_1_1async_1_1async__container.html#a5e6aa3705e36f5fa2890bd019c35f37e" title="Load container from file asynchronously." alt="" coords="13,261,187,323"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="226,339,188,326,186,321,231,337"/>
+<area shape="rect" id="Node000006" href="$namespacekcenon_1_1container_1_1async.html#ae36cba6f38751df0dbfc3a4dcfbc06bd" title="Read file contents asynchronously." alt="" coords="16,347,184,392"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="225,371,186,372,184,367,230,368"/>
+<area shape="rect" id="Node000007" href="$classkcenon_1_1container_1_1async_1_1async__container.html#af28bc529d491d29db2de4e478a4a40da" title="Save container to file asynchronously." alt="" coords="13,416,187,478"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="226,403,189,418,185,414,230,399"/>
+<area shape="rect" id="Node000008" href="$classkcenon_1_1container_1_1async_1_1async__container.html#a7260301421018408dba943b42cf93353" title="Serialize container to byte array asynchronously." alt="" coords="13,501,187,563"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="278,414,242,454,196,492,178,503,175,499,193,487,239,450,281,410"/>
+<area shape="rect" id="Node000009" href="$classkcenon_1_1container_1_1async_1_1async__container.html#ac2ce0ee12beaca738e2310c922fb906e" title="Serialize container to string asynchronously." alt="" coords="13,587,187,648"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="300,413,260,497,231,539,196,577,182,588,178,584,193,573,227,536,256,494,297,417"/>
+<area shape="rect" id="Node000010" href="$namespacekcenon_1_1container_1_1async.html#af8d255691e37c9285372dbbf5c75e739" title="Write data to file asynchronously." alt="" coords="14,672,186,717"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="310,414,297,472,275,538,242,604,221,635,196,662,181,674,178,670,193,658,217,631,238,601,270,536,292,471,307,418"/>
+</map>

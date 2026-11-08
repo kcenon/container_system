@@ -1,0 +1,15 @@
+<map id="include/kcenon/container/serializers/binary_serializer.h" name="include/kcenon/container/serializers/binary_serializer.h">
+<area shape="rect" id="Node000001" title=" " alt="" coords="117,5,332,50"/>
+<area shape="rect" id="Node000002" href="$serializer__strategy_8h.html" title=" " alt="" coords="148,98,301,126"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="226,48,227,84,222,81,223,53"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,174,71,201"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="192,129,86,170,84,165,190,124"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="94,174,171,201"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="211,125,162,166,159,162,206,127"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="196,174,254,201"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="227,124,227,159,222,157,223,128"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="278,174,340,201"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="241,124,285,164,280,163,239,129"/>
+<area shape="rect" id="Node000007" href="$result__integration_8h.html" title=" " alt="" coords="364,174,525,201"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="264,124,394,168,388,169,264,129"/>
+</map>

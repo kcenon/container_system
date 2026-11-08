@@ -1,0 +1,7 @@
+<map id="scenarios::IoTDataCollectionSystem::SensorReading" name="scenarios::IoTDataCollectionSystem::SensorReading">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,298,202,410"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="66,144,142,216"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="105,214,106,282,101,281,102,219"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="40,5,168,95"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="104,107,106,145,101,144,103,112"/>
+</map>

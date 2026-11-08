@@ -1,0 +1,32 @@
+<map id="kcenon::container::detailed_metrics" name="kcenon::container::detailed_metrics">
+<area shape="rect" id="Node000001" title="Complete detailed metrics structure." alt="" coords="655,1459,855,1637"/>
+<area shape="rect" id="Node000002" href="$structkcenon_1_1container_1_1operation__counts.html" title="Operation counter metrics for container operations." alt="" coords="675,805,835,984"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="757,982,757,1442,752,1441,753,985"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="510,335,677,408"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="676,385,713,403,742,430,755,457,764,494,773,586,772,690,767,789,762,787,767,690,767,586,759,495,750,459,738,433,710,407,677,390"/>
+<area shape="rect" id="Node000006" href="$structkcenon_1_1container_1_1timing__metrics.html" title="Timing metrics for container operations." alt="" coords="842,805,988,984"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="675,376,738,383,800,394,853,409,873,419,888,430,896,448,902,480,911,572,917,789,912,788,906,572,897,481,891,450,883,433,871,423,851,414,799,399,737,388,678,381"/>
+<area shape="rect" id="Node000007" href="$structkcenon_1_1container_1_1latency__histogram.html" title="Approximate latency histogram using reservoir sampling." alt="" coords="265,1008,434,1343"/>
+<area shape="poly" id="edge8_Node000007_Node000003" title=" " alt="" coords="554,410,497,475,468,515,445,559,429,619,411,727,375,992,369,990,406,726,424,618,440,557,464,512,493,471,557,405"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="5,625,219,714"/>
+<area shape="poly" id="edge10_Node000008_Node000003" title=" " alt="" coords="509,384,409,404,366,418,338,434,329,445,324,457,323,482,322,508,317,522,307,536,290,547,274,551,257,553,239,560,201,586,168,614,163,612,198,582,236,555,256,548,273,546,288,542,304,532,312,520,317,507,317,482,319,456,324,443,334,430,364,413,408,399,513,381"/>
+<area shape="rect" id="Node000011" href="$structkcenon_1_1container_1_1simd__metrics.html" title="SIMD utilization metrics." alt="" coords="984,1075,1120,1276"/>
+<area shape="poly" id="edge16_Node000011_Node000003" title=" " alt="" coords="675,369,774,371,881,380,931,388,975,398,1011,412,1035,430,1062,464,1084,500,1102,538,1116,578,1134,662,1139,749,1135,834,1125,917,1110,993,1092,1060,1088,1057,1104,992,1119,916,1130,834,1134,749,1128,663,1111,580,1097,540,1080,502,1058,467,1032,434,1008,417,974,403,930,393,880,385,774,377,678,374"/>
+<area shape="rect" id="Node000012" href="$structkcenon_1_1container_1_1cache__metrics.html" title="Cache efficiency metrics." alt="" coords="557,558,732,781"/>
+<area shape="poly" id="edge18_Node000012_Node000003" title=" " alt="" coords="591,405,592,467,598,533,599,542,594,541,593,534,586,467,590,410"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="237,143,358,215"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="363,220,542,334,537,337,365,226"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="152,446,304,519"/>
+<area shape="poly" id="edge14_Node000010_Node000004" title=" " alt="" coords="299,227,297,315,290,362,277,409,257,448,252,446,272,407,285,361,292,314,299,232"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="206,5,224,78"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="224,55,270,128,265,129,224,60"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="68,239,178,311"/>
+<area shape="poly" id="edge12_Node000009_Node000005" title=" " alt="" coords="205,54,190,75,172,103,148,164,134,223,129,222,143,163,167,100,185,72,207,50"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="909,982,889,1152,870,1249,847,1343,808,1445,804,1442,842,1342,865,1247,883,1151,906,986"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="418,1340,452,1390,490,1433,524,1459,562,1481,642,1517,637,1517,559,1486,521,1464,487,1437,447,1393,416,1345"/>
+<area shape="poly" id="edge9_Node000007_Node000008" title=" " alt="" coords="114,711,121,769,131,838,150,912,178,982,213,1038,256,1088,251,1090,209,1041,173,985,144,914,126,839,116,770,113,716"/>
+<area shape="poly" id="edge11_Node000008_Node000009" title=" " alt="" coords="122,324,116,625,111,625,121,329"/>
+<area shape="poly" id="edge13_Node000007_Node000010" title=" " alt="" coords="236,516,320,991,315,991,233,521"/>
+<area shape="poly" id="edge15_Node000001_Node000011" title=" " alt="" coords="1013,1274,970,1358,943,1399,913,1436,869,1477,867,1472,909,1433,938,1396,965,1355,1009,1277"/>
+<area shape="poly" id="edge17_Node000001_Node000012" title=" " alt="" coords="647,779,662,1038,677,1191,699,1342,723,1443,718,1441,694,1343,671,1191,656,1039,644,783"/>
+</map>

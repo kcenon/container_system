@@ -1,0 +1,10 @@
+<map id="kcenon::container::async::detail::executor_awaitable&lt; T &gt;" name="kcenon::container::async::detail::executor_awaitable&lt; T &gt;">
+<area shape="rect" id="Node000001" title="Awaitable that runs work using an executor or fallback thread." alt="" coords="9,485,173,770"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,314,176,420"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="91,417,93,469,88,469,90,423"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="81,5,100,78"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="86,75,83,143,83,223,87,298,81,298,77,223,78,143,86,80"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="126,143,272,215"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="99,52,163,129,158,131,100,57"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="170,230,123,315,118,313,172,225"/>
+</map>

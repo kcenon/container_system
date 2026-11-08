@@ -1,0 +1,23 @@
+<map id="kcenon::container::policy::indexed_storage_policy" name="kcenon::container::policy::indexed_storage_policy">
+<area shape="rect" id="Node000001" title="Hash&#45;indexed storage policy for O(1) lookup performance." alt="" coords="137,803,338,1132"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="93,640,224,729"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="171,726,189,787,184,786,170,732"/>
+<area shape="rect" id="Node000003" href="$structkcenon_1_1container_1_1optimized__value.html" title="Optimized value storage with Small Object Optimization." alt="" coords="5,281,162,549"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="100,546,118,606,126,625,120,625,113,608,100,552"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="123,144,199,216"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="148,219,142,241,134,266,129,265,137,239,149,214"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="248,631,389,738"/>
+<area shape="poly" id="edge8_Node000008_Node000004" title=" " alt="" coords="182,213,194,240,206,295,209,344,202,429,199,469,200,511,210,556,232,606,240,620,234,620,227,609,205,557,195,511,193,469,197,428,204,344,201,296,189,241,182,219"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="97,5,225,95"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="161,107,164,144,159,144,161,112"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="280,379,397,452"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="311,467,263,551,196,642,191,639,259,548,314,462"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="382,144,401,216"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="381,190,362,211,342,241,334,271,330,303,332,363,327,362,325,303,329,270,337,239,358,208,384,186"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="422,371,562,460"/>
+<area shape="poly" id="edge11_Node000009_Node000007" title=" " alt="" coords="401,200,469,356,464,356,401,206"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="305,735,292,788,287,785,302,740"/>
+<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="476,471,450,541,431,576,410,609,388,633,384,630,406,606,427,574,445,539,473,476"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="542,144,562,216"/>
+<area shape="poly" id="edge10_Node000009_Node000010" title=" " alt="" coords="544,214,510,355,505,353,542,219"/>
+</map>

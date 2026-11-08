@@ -1,0 +1,11 @@
+<map id="kcenon::container::value_container::read_lock_guard" name="kcenon::container::value_container::read_lock_guard">
+<area shape="rect" id="Node000001" title=" " alt="" coords="27,434,179,608"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="27,280,179,369"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="104,366,106,418,101,417,102,372"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,143,137,215"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="79,212,92,263,87,264,79,217"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="160,143,315,215"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="193,228,146,282,142,279,196,224"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="228,5,247,78"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="238,75,240,127,235,126,237,80"/>
+</map>

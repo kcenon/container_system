@@ -1,0 +1,30 @@
+<map id="kcenon::container::value_container::deserialize" name="kcenon::container::value_container::deserialize">
+<area shape="rect" id="Node000001" title="Internal deserialize from byte array." alt="" coords="5,246,210,290"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1container_1_1value__container.html#af299da476105c06fa5e346e922cf8546" title="Internal deserialize from string." alt="" coords="258,211,462,256"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="209,252,244,248,240,251,211,257"/>
+<area shape="rect" id="Node000013" href="$namespaceutility__module_1_1convert__string.html#a7d6521990cee9f09ed9d5e405cd88c45" title=" " alt="" coords="274,280,446,325"/>
+<area shape="poly" id="edge15_Node000001_Node000013" title=" " alt="" coords="210,280,261,288,256,290,210,285"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1container_1_1value__container.html#a28e620f9002e59c73b0429d4cfd5bf9f" title=" " alt="" coords="518,5,723,67"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="378,209,433,148,469,114,508,83,529,73,525,76,512,88,472,118,436,152,381,213"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1container_1_1value__container.html#a3eeb799ed0e74bf24123e52c637505c1" title="Returns iterator to end of values." alt="" coords="805,83,962,128"/>
+<area shape="poly" id="edge6_Node000002_Node000006" title=" " alt="" coords="383,209,437,165,472,144,509,127,581,108,655,98,726,94,792,97,787,98,726,100,655,103,582,113,511,132,475,148,441,170,386,213"/>
+<area shape="rect" id="Node000007" href="$classkcenon_1_1container_1_1metrics__manager.html#ae636bf31baad3c8bba0c0160bc319115" title="Get the singleton metrics instance." alt="" coords="538,142,703,186"/>
+<area shape="poly" id="edge7_Node000002_Node000007" title=" " alt="" coords="446,208,526,189,521,191,448,213"/>
+<area shape="rect" id="Node000008" href="$classkcenon_1_1container_1_1value__container.html#a33b902642c2fb70ef20ab3af5ddcc04d" title="Reinitialize the entire container to defaults." alt="" coords="526,280,715,325"/>
+<area shape="poly" id="edge8_Node000002_Node000008" title=" " alt="" coords="447,254,522,276,517,276,447,259"/>
+<area shape="rect" id="Node000010" href="$classkcenon_1_1container_1_1metrics__manager.html#ac82ccd0364f4e8b2e0c3ba91becc6ea7" title="Check if metrics collection is enabled." alt="" coords="806,371,961,432"/>
+<area shape="poly" id="edge10_Node000002_Node000010" title=" " alt="" coords="443,254,464,266,480,284,488,303,496,320,511,335,561,355,633,371,794,394,789,394,632,376,559,360,509,340,491,323,483,305,475,287,460,270,442,259"/>
+<area shape="rect" id="Node000011" href="$classkcenon_1_1container_1_1metrics__manager.html#a03caac9a4799d6e02748887d56f25b0e" title="Create a scoped timer if metrics are enabled." alt="" coords="510,400,731,445"/>
+<area shape="poly" id="edge11_Node000002_Node000011" title=" " alt="" coords="446,254,464,266,476,281,483,295,489,324,494,352,501,366,512,380,526,393,521,391,508,383,496,369,489,354,484,325,478,297,472,284,460,270,445,259"/>
+<area shape="rect" id="Node000012" href="$classkcenon_1_1container_1_1value__container.html#a6908a2f491af6eaa0a80114fca24ddf5" title=" " alt="" coords="530,211,711,256"/>
+<area shape="poly" id="edge13_Node000002_Node000012" title=" " alt="" coords="462,231,517,233,512,234,463,236"/>
+<area shape="rect" id="Node000004" href="$namespacekcenon_1_1container.html#a4306f14e3eed794a603a62e69f08cc9f" title="Convert a string&#45;based type indicator to a value_types enum." alt="" coords="809,14,958,58"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="723,34,796,35,791,37,724,39"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="723,61,792,81,787,81,724,66"/>
+<area shape="rect" id="Node000005" href="$namespacekcenon_1_1container.html#a120c2fe2102afe34dad682d1921c69df" title="Compile&#45;time conversion from string to value_types." alt="" coords="1036,14,1196,58"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="958,34,1023,36,1018,37,959,39"/>
+<area shape="rect" id="Node000009" href="$classkcenon_1_1container_1_1value__container.html#a1c086d671fcb111f801dad2084fe7c78" title="Clear all stored child values." alt="" coords="779,280,988,325"/>
+<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="716,300,766,303,761,303,716,305"/>
+<area shape="poly" id="edge12_Node000011_Node000010" title=" " alt="" coords="732,411,788,409,793,409,732,416"/>
+<area shape="poly" id="edge14_Node000012_Node000006" title=" " alt="" coords="701,208,730,196,786,167,835,138,840,136,789,171,732,201,703,213"/>
+</map>

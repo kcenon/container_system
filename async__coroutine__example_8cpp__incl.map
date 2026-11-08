@@ -1,0 +1,19 @@
+<map id="examples/async_coroutine_example.cpp" name="examples/async_coroutine_example.cpp">
+<area shape="rect" id="Node000001" title="C++20 coroutine&#45;based async serialization, file I/O, and streaming." alt="" coords="274,5,469,50"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,98,85,126"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="286,53,100,99,99,94,284,48"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="108,98,184,126"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="315,50,198,95,196,90,309,51"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="208,98,271,126"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="339,50,274,92,272,87,334,51"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="295,98,360,126"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="362,49,344,86,340,82,358,52"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="384,98,447,126"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="385,48,404,85,399,83,382,53"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="472,98,546,126"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="409,48,477,90,471,89,407,53"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="570,98,659,126"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="437,48,564,93,558,93,436,53"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="684,98,777,126"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="467,48,671,96,665,97,467,53"/>
+</map>

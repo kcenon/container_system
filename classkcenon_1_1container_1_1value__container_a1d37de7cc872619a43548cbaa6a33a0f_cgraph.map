@@ -1,0 +1,10 @@
+<map id="kcenon::container::value_container::get" name="kcenon::container::value_container::get">
+<area shape="rect" id="Node000001" title="Get a single value by key (unified API)" alt="" coords="5,65,160,110"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1container_1_1metrics__manager.html#ae636bf31baad3c8bba0c0160bc319115" title="Get the singleton metrics instance." alt="" coords="236,5,400,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="159,66,223,51,219,54,161,71"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1container_1_1metrics__manager.html#ac82ccd0364f4e8b2e0c3ba91becc6ea7" title="Check if metrics collection is enabled." alt="" coords="477,88,631,149"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="160,90,463,110,461,115,160,95"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1container_1_1metrics__manager.html#a03caac9a4799d6e02748887d56f25b0e" title="Create a scoped timer if metrics are enabled." alt="" coords="208,125,429,170"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="160,105,216,120,210,121,160,110"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="429,131,459,130,464,130,430,137"/>
+</map>

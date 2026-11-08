@@ -1,0 +1,27 @@
+<map id="kcenon::container::array_variant" name="kcenon::container::array_variant">
+<area shape="rect" id="Node000001" title="Recursive array type for variant." alt="" coords="490,1389,624,1634"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="474,1217,640,1324"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="559,1321,560,1373,555,1371,556,1326"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="391,1063,561,1152"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="498,1149,526,1203,521,1202,497,1155"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1container_1_1value.html" title="Enhanced type&#45;safe value with perfect legacy compatibility." alt="" coords="180,545,339,964"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="340,898,426,1038,434,1049,429,1049,422,1040,339,904"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="31,352,107,425"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="87,421,175,586,170,587,87,427"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="5,143,133,232"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="69,244,72,353,67,353,69,250"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="131,352,263,425"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="203,421,224,528,218,528,203,427"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="287,352,438,425"/>
+<area shape="poly" id="edge7_Node000004_Node000008" title=" " alt="" coords="354,421,326,529,321,528,352,427"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="328,151,450,224"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="362,240,360,257,355,306,359,353,354,353,350,306,355,255,364,235"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="505,5,524,78"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="504,53,454,103,425,139,421,136,450,100,507,48"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="442,256,587,328"/>
+<area shape="poly" id="edge11_Node000011_Node000010" title=" " alt="" coords="515,75,517,239,512,238,514,80"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="617,449,735,521"/>
+<area shape="poly" id="edge13_Node000012_Node000010" title=" " alt="" coords="524,52,556,100,593,190,625,281,667,433,661,432,620,282,588,192,551,103,524,58"/>
+<area shape="poly" id="edge10_Node000003_Node000011" title=" " alt="" coords="498,340,484,394,473,449,463,537,458,627,457,803,465,955,474,1064,469,1063,459,955,452,803,453,627,458,537,468,448,479,393,496,345"/>
+<area shape="poly" id="edge12_Node000002_Node000012" title=" " alt="" coords="678,533,678,655,669,820,659,912,645,1007,626,1102,601,1194,591,1219,587,1216,596,1192,621,1101,640,1006,654,912,663,819,673,655,676,539"/>
+</map>

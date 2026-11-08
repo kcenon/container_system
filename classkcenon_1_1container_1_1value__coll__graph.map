@@ -1,0 +1,15 @@
+<map id="kcenon::container::value" name="kcenon::container::value">
+<area shape="rect" id="Node000001" title="Enhanced type&#45;safe value with perfect legacy compatibility." alt="" coords="118,451,277,870"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="31,297,107,369"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="83,367,114,441,109,442,83,372"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,143,133,232"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="69,244,72,297,67,297,69,250"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="131,297,263,369"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="198,367,200,435,195,434,197,372"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="287,297,438,369"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="346,367,287,489,282,487,343,372"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="302,151,423,224"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="363,236,365,298,360,297,362,241"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="353,5,372,78"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="363,75,365,135,360,134,362,80"/>
+</map>

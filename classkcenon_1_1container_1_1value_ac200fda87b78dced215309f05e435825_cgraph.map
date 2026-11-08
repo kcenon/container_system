@@ -1,0 +1,18 @@
+<map id="kcenon::container::value::deserialize" name="kcenon::container::value::deserialize">
+<area shape="rect" id="Node000001" title="Deserialize from binary format (legacy compatible)" alt="" coords="5,138,151,182"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1container_1_1value.html#a26b8169ed46f1294680171a28b0d60e4" title="Deserialize data portion based on type." alt="" coords="199,138,371,182"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="151,166,186,168,181,170,152,171"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1container_1_1value.html#a2ed86e2c68e087e69641b7e3503fb5a3" title="Get the value_types enum corresponding to the variant index." alt="" coords="430,246,575,290"/>
+<area shape="poly" id="edge9_Node000001_Node000005" title=" " alt="" coords="151,179,199,192,416,246,412,250,198,197,151,184"/>
+<area shape="rect" id="Node000007" href="$classkcenon_1_1container_1_1value.html#a860eda1e07cf129a868e145481d0bb38" title="Get the name of this value (lock&#45;free, immutable)" alt="" coords="212,258,358,302"/>
+<area shape="poly" id="edge8_Node000001_Node000007" title=" " alt="" coords="112,180,200,237,223,251,218,250,197,241,111,186"/>
+<area shape="poly" id="edge5_Node000002_Node000001" title=" " alt="" coords="196,152,167,154,166,149,201,150"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1container_1_1detail_1_1deserialization__guard.html#a5d807368f7571713fabb205633c1a6eb" title=" " alt="" coords="421,91,583,152"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="371,142,408,138,403,139,372,147"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1container_1_1thread__safe__container.html#a97f73aceba6779ffda6d1475911f19ed" title="Deserialize from binary." alt="" coords="419,5,585,67"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="321,135,418,77,424,76,429,73,420,81,323,140"/>
+<area shape="poly" id="edge6_Node000002_Node000005" title=" " alt="" coords="336,180,372,199,420,231,432,239,427,238,418,236,370,204,336,186"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1container_1_1value.html#a879a4702f85fc40112b11b7c72995e80" title="Default constructor &#45; creates null value." alt="" coords="430,176,575,221"/>
+<area shape="poly" id="edge7_Node000002_Node000006" title=" " alt="" coords="372,173,417,183,412,184,372,178"/>
+<area shape="poly" id="edge4_Node000004_Node000001" title=" " alt="" coords="418,63,167,137,165,132,419,58"/>
+</map>

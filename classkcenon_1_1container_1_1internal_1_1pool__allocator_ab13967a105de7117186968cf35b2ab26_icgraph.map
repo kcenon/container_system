@@ -1,0 +1,9 @@
+<map id="kcenon::container::internal::pool_allocator::deallocate" name="kcenon::container::internal::pool_allocator::deallocate">
+<area shape="rect" id="Node000001" title="Deallocate memory to the appropriate pool." alt="" coords="236,83,407,144"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1container_1_1internal_1_1pool__allocator__adapter.html#a86db32626d9f47712772a4968199385f" title="Deallocate storage previously obtained from allocate." alt="" coords="11,5,182,67"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="218,80,183,68,182,63,224,78"/>
+<area shape="rect" id="Node000003" href="$namespacekcenon_1_1container_1_1internal.html#abebb3c37d4faed2c5003ff0d4175eaa6" title="Allocate and construct an object using pool allocation." alt="" coords="13,91,180,136"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="218,114,180,116,180,111,223,113"/>
+<area shape="rect" id="Node000004" href="$namespacekcenon_1_1container_1_1internal.html#a9d198c1a3abd7ed2124e093fa709fcb0" title="Destroy and deallocate an object allocated with pool_allocate." alt="" coords="5,160,188,205"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="223,144,172,162,171,157,218,145"/>
+</map>

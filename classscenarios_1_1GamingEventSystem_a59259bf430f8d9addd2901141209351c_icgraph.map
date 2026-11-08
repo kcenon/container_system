@@ -1,0 +1,9 @@
+<map id="scenarios::GamingEventSystem::send_achievement_notification" name="scenarios::GamingEventSystem::send_achievement_notification">
+<area shape="rect" id="Node000001" title=" " alt="" coords="660,5,893,50"/>
+<area shape="rect" id="Node000002" href="$classscenarios_1_1GamingEventSystem.html#a3403e62957e14344283e707976f4380b" title=" " alt="" coords="384,5,612,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="642,28,613,30,613,25,647,28"/>
+<area shape="rect" id="Node000003" href="$classscenarios_1_1GamingEventSystem.html#ad3cfd4bf8a91bcfc503171191396b5d2" title=" " alt="" coords="108,5,336,50"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="366,28,336,30,336,25,371,28"/>
+<area shape="rect" id="Node000004" href="$real__world__scenarios_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,14,60,42"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="89,29,60,30,60,25,94,27"/>
+</map>

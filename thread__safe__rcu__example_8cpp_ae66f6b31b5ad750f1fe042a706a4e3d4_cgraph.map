@@ -1,0 +1,20 @@
+<map id="main" name="main">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,108,60,136"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1container_1_1value__container.html#a8d1853335d8549d55ebea0590fb76a81" title="Create a copy of this container. If containing_values == false, the returned container only has the h..." alt="" coords="108,31,272,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="58,108,107,85,122,80,119,84,109,90,62,112"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1container_1_1value__container.html#a7f901340fc36c042f133158ec39b4900" title="Set a typed value by key (unified API)" alt="" coords="113,100,266,145"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="59,120,100,121,96,124,61,125"/>
+<area shape="rect" id="Node000009" href="$classkcenon_1_1container_1_1value__container.html#a9392457b3796bf29b7948ad8765577ce" title="Returns number of values in container." alt="" coords="110,169,270,214"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="60,132,109,155,123,162,118,163,107,159,60,138"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1container_1_1value__container.html#a2e8d4eeb8b57ae33ef2197c07bf32147" title="Internal implementation for setting a single optimized_value." alt="" coords="320,92,473,153"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="266,120,307,122,302,123,267,125"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1container_1_1metrics__manager.html#ae636bf31baad3c8bba0c0160bc319115" title="Get the singleton metrics instance." alt="" coords="550,5,714,50"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="468,89,520,67,552,57,557,55,522,71,470,94"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1container_1_1metrics__manager.html#ac82ccd0364f4e8b2e0c3ba91becc6ea7" title="Check if metrics collection is enabled." alt="" coords="791,130,945,192"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="473,109,600,100,672,102,743,110,788,125,782,124,742,116,672,107,600,105,474,114"/>
+<area shape="rect" id="Node000007" href="$structkcenon_1_1container_1_1optimized__value.html#a84f53d8c6ffca0fb27598ff4e82f00b2" title=" " alt="" coords="558,125,706,186"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="474,130,545,143,540,143,474,136"/>
+<area shape="rect" id="Node000008" href="$classkcenon_1_1container_1_1metrics__manager.html#a03caac9a4799d6e02748887d56f25b0e" title="Create a scoped timer if metrics are enabled." alt="" coords="521,211,743,255"/>
+<area shape="poly" id="edge7_Node000004_Node000008" title=" " alt="" coords="443,151,523,196,539,205,533,204,520,201,442,156"/>
+<area shape="poly" id="edge8_Node000008_Node000006" title=" " alt="" coords="707,207,773,189,778,189,708,213"/>
+</map>
