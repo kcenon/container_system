@@ -38,7 +38,7 @@ jobs:
           - os: windows-2022
             compiler: msvc
             triplet: x64-windows
-          - os: macos-14
+          - os: macos-15
             compiler: clang
             triplet: arm64-osx
 
