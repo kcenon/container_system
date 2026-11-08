@@ -16,6 +16,29 @@ All rights reserved.
 namespace kcenon::container
 {
     namespace detail {
+        // Shared by array and nested-container recursion, including legacy
+        // constructors. RAII restores the per-thread budget on every exit.
+        thread_local size_t deserialization_depth = 0;
+
+        class deserialization_guard {
+        public:
+            deserialization_guard()
+                : active_(deserialization_depth < value::max_deserialization_depth) {
+                if (active_) ++deserialization_depth;
+            }
+
+            ~deserialization_guard() {
+                if (active_) --deserialization_depth;
+            }
+
+            deserialization_guard(const deserialization_guard&) = delete;
+            deserialization_guard& operator=(const deserialization_guard&) = delete;
+            bool active() const { return active_; }
+
+        private:
+            bool active_ = false;
+        };
+
         // Thread-local set for detecting circular references during serialization
         thread_local std::set<const void*> serializing_containers;
 
@@ -360,6 +383,9 @@ namespace kcenon::container
                                             value_types type,
                                             const std::vector<uint8_t>& data,
                                             size_t& offset) {
+        detail::deserialization_guard guard;
+        if (!guard.active()) return false;
+
         switch (type) {
             case value_types::null_value:
                 result.data_.emplace<0>();  // null is at index 0
@@ -503,6 +529,7 @@ namespace kcenon::container
                                                     data.begin() + offset + size);
                 offset += size;
                 auto container = thread_safe_container::deserialize(container_data);
+                if (!container) return false;
                 result.data_ = container;
                 return true;
             }
@@ -512,6 +539,11 @@ namespace kcenon::container
                 uint32_t count;
                 std::memcpy(&count, data.data() + offset, sizeof(count));
                 offset += sizeof(count);
+
+                // Every child needs at least a name length and a type byte.
+                // Validate before reserve() to reject impossible allocations.
+                constexpr size_t minimum_value_size = sizeof(uint32_t) + sizeof(uint8_t);
+                if (count > (data.size() - offset) / minimum_value_size) return false;
 
                 array_variant arr;
                 arr.values.reserve(count);

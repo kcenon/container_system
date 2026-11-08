@@ -12,6 +12,12 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
         set(FUZZ_COMPILE_FLAGS "-fsanitize=fuzzer,address,undefined -fno-omit-frame-pointer")
         set(FUZZ_LINK_FLAGS "-fsanitize=fuzzer,address,undefined")
 
+        # Instrument the parser implementation, not only the thin harnesses.
+        # Keep libFuzzer's main confined to the two fuzz executables.
+        target_compile_options(container_system PRIVATE
+            -fsanitize=fuzzer-no-link,address,undefined -fno-omit-frame-pointer)
+        target_link_options(container_system INTERFACE -fsanitize=address,undefined)
+
         # Fuzz target for value deserialization
         # Note: ${CMAKE_SOURCE_DIR}/internal was removed in the source migration
         # (issue #533). Internal headers now ship under include/kcenon/container/internal/

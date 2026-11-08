@@ -327,9 +327,8 @@ namespace kcenon::container
             offset += value_len;
 
             auto value_opt = value::deserialize(value_data);
-            if (value_opt) {
-                container->values_[key] = std::move(*value_opt);
-            }
+            if (!value_opt) return nullptr;
+            container->values_[key] = std::move(*value_opt);
         }
         
         return container;

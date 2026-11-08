@@ -280,9 +280,14 @@ namespace kcenon::container
          * - New value serialized data
          * - Legacy value class serialized data
          *
+         * Rejects inputs requiring more than max_deserialization_depth nested
+         * values, including arrays and nested containers.
+         *
          * @return std::optional containing value if deserialization succeeds
          */
         static std::optional<value> deserialize(const std::vector<uint8_t>& data);
+
+        static constexpr size_t max_deserialization_depth = 64;
 
         /**
          * @brief Get read/write statistics
