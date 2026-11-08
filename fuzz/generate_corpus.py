@@ -137,7 +137,12 @@ def generate_container_corpus(output_dir: Path):
     def make_container(values: list) -> bytes:
         """Create a serialized container."""
         count = struct.pack("<I", len(values))
-        return count + b"".join(values)
+        entries = []
+        for index, value in enumerate(values):
+            key = f"value_{index}".encode("ascii")
+            entries.append(struct.pack("<I", len(key)) + key
+                           + struct.pack("<I", len(value)) + value)
+        return count + b"".join(entries)
 
     # Empty container
     with open(output_dir / "empty_container", "wb") as f:
